@@ -1,0 +1,19 @@
+---
+title: "Shixiang Wang"
+image: "shixiang.png"
+links:
+  - label: Twitter
+    url: "https://twitter.com/WangShxiang"
+  - label: GitHub
+    url: "https://github.com/ShixiangWang"
+  - label: YuQue
+    url: "https://www.yuque.com/shixiangwang"
+  - label: Google Scholar
+    url: "https://scholar.google.com/citations?user=FvNp0NkAAAAJ&hl=en"
+  - label: Email
+    url: "w_shixiang@163.com"
+output:
+  postcards::jolla_blue
+---
+
+Trained in Xue-Song Liu lab (@ShanghaiTech University) for 5 years, I am now a PhD focus on cancer genomics and immunotherapy. I deeply love my wife Mia Zhou and open source tools for scientific research. 
