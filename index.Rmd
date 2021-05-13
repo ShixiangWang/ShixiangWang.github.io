@@ -8,6 +8,8 @@ links:
     url: "https://github.com/ShixiangWang"
   - label: YuQue
     url: "https://www.yuque.com/shixiangwang"
+  - label: Archive
+    url: "https://shixiangwang.github.io/home"
   - label: Google Scholar
     url: "https://scholar.google.com/citations?user=FvNp0NkAAAAJ&hl=en"
   - label: Email
