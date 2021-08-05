@@ -1,0 +1,92 @@
+title = "ShixiangWang\n王诗翔"
+baseurl = "https://shixiangwang.github.io/blog"
+relativeurls = true
+languageCode = "en-us"
+theme = "hyde"
+googleAnalytics = ""
+disqusShortname = ""
+ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown$", "_cache$", "\\.knit\\.md$", "\\.utf8\\.md$"]
+rssLimit = 10
+publishDir = "docs"
+
+
+[permalinks]
+    post = "blog/:slug/"
+    blog = "blog/:slug/"
+
+[[menu.main]]
+    name = "Blog"
+    weight = 1
+    identifier = "blog"
+    url = "/blog/"
+[[menu.main]]
+    name = "About"
+    weight = -1
+    url = "/about/"
+[[menu.main]]
+    name = "Projects"
+    weight = 3
+    url = "/project/"
+[[menu.main]]
+    name = "Shiny Apps"
+    weight = 4
+    url = "http://42.192.87.178:3838/"
+[[menu.main]]
+    name = "Talks"
+    weight = 5
+    url = "/talk/"
+[[menu.main]]
+    name = "Discuss with me?"
+    weight = 6
+    url = "https://github.com/ShixiangWang/self-study/discussions"
+
+[[menu.contact]]
+    name = "Email"
+    weight = 3
+    url = "mailto:shixiang1994wang@gmail.com"
+[[menu.contact]]
+    name = "GitHub"
+    weight = 2
+    url = "https://github.com/ShixiangWang"
+[[menu.contact]]
+    name = "Twitter"
+    weight = 1
+    url = "https://twitter.com/WangShxiang"
+[[menu.contact]]
+    name = "Bandcamp"
+    weight = 100
+    url = "https://shixiangwang.github.io/home/logo/qrcode.jpg"
+
+[author]
+    image = "https://avatars.githubusercontent.com/u/25057508?v=4"
+
+[params]
+    description = "Bioinformatics Scholar. Cancer Researcher. Data Scientist. #rstats #golang. Always learning something new."
+    author = "Shixiang Wang"
+    EnableEmoji = true
+    #contactHeader = "Links"
+    n_posts_front = 5
+    show_projects_front = true
+    n_projects_front = 5
+    show_talks_front = true
+    n_talks_front = 5
+
+    # Twitter Card info
+    twitterAuthor = "@WangShxiang"
+    twitterSite = "https://shixiangwang.github.io/blog"
+    twitterImage = "/apple-touch-icon-152x152.png"
+
+    # hyde
+    # themeColor = "base16-solarized-garrick"
+    themeColor = "restyled-garrick"
+    customCss = ["css/hamburgers.css", "css/custom.css"]
+
+    # options for highlight.js (version, additional languages, and theme)
+    # import minified languages to /js/highlight.js/{version}/languages
+    highlightjsVersion = "9.11.0"
+    highlightjsCDN = "/js"
+    highlightjsLang = ["r", "yaml", "bash", "tex", "sql", "markdown"]
+    highlightjsTheme = "github"
+
+    MathJaxCDN = "https://cdn.bootcss.com"
+    MathJaxVersion = "2.7.1"

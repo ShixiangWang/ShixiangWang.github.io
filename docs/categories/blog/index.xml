@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Blog on ShixiangWang
+王诗翔</title>
+    <link>/categories/blog/</link>
+    <description>Recent content in Blog on ShixiangWang
+王诗翔</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 16 Mar 2021 00:00:00 +0000</lastBuildDate><atom:link href="/categories/blog/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Questions, answers, and reprexes</title>
+      <link>/blog/questions-answers-and-reprexes/</link>
+      <pubDate>Tue, 16 Mar 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/questions-answers-and-reprexes/</guid>
+      <description>I stumbled into a niche YouTube genre: Web Development online instructors (a.k.a content creators) challenge each other to “CSS Battles”.
+Turns out they are fascinating videos where experienced programmers talk and fumble their way through their coding.
+As they talked through their thought processes, I thought about the questions we ask when our code goes wrong and the answers we get when we reprex.
+ CSS Battle with The CSS King     I challenged The CSS King to a CSS Battle on YouTube   I’ve thought a lot about this video since I watched it.</description>
+    </item>
+    
+  </channel>
+</rss>
