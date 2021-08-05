@@ -1,5 +1,6 @@
 ---
 date: {{ .Date }}
+author: 王诗翔
 description: "post description"
 twitterImage: "/path/to/image.png"
 rmd_source: ""

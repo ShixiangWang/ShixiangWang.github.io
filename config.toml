@@ -10,9 +10,19 @@ rssLimit = 10
 publishDir = "docs"
 
 [markup]
+[markup.highlight]
+  codeFences = true
+  guessSyntax = true
+  lineNoStart = 1
+  lineNos = true
+  lineNumbersInTable = true
+  noClasses = true
+  style = "pygments"
+  tabWidth = 2
+
 [markup.goldmark]
 [markup.goldmark.renderer]
-unsafe = true
+  unsafe = true
 
 [permalinks]
     post = "blog/:slug/"
@@ -87,10 +97,10 @@ unsafe = true
 
     # options for highlight.js (version, additional languages, and theme)
     # import minified languages to /js/highlight.js/{version}/languages
-    highlightjsVersion = "9.11.0"
-    highlightjsCDN = "/js"
-    highlightjsLang = ["r", "yaml", "bash", "tex", "sql", "markdown"]
-    highlightjsTheme = "github"
+    #highlightjsVersion = "9.11.0"
+    #highlightjsCDN = "/js"
+    #highlightjsLang = ["r", "yaml", "bash", "tex", "sql", "markdown"]
+    #highlightjsTheme = "github"
 
     MathJaxCDN = "https://cdn.bootcss.com"
     MathJaxVersion = "2.7.1"

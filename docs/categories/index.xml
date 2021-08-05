@@ -8,7 +8,25 @@
 王诗翔</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 16 Mar 2021 00:00:00 +0000</lastBuildDate><atom:link href="/categories/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 05 Aug 2021 00:00:00 +0000</lastBuildDate><atom:link href="/categories/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>LeetCode</title>
+      <link>/categories/leetcode/</link>
+      <pubDate>Thu, 05 Aug 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/categories/leetcode/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>存档</title>
+      <link>/categories/%E5%AD%98%E6%A1%A3/</link>
+      <pubDate>Thu, 05 Aug 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/categories/%E5%AD%98%E6%A1%A3/</guid>
+      <description></description>
+    </item>
+    
     <item>
       <title>Blog</title>
       <link>/categories/blog/</link>

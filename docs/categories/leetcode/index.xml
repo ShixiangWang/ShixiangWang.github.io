@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>R on ShixiangWang
+    <title>LeetCode on ShixiangWang
 王诗翔</title>
-    <link>/tags/r/</link>
-    <description>Recent content in R on ShixiangWang
+    <link>/categories/leetcode/</link>
+    <description>Recent content in LeetCode on ShixiangWang
 王诗翔</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 05 Aug 2021 00:00:00 +0000</lastBuildDate><atom:link href="/tags/r/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 05 Aug 2021 00:00:00 +0000</lastBuildDate><atom:link href="/categories/leetcode/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>LeetCode：0001-两数之和</title>
       <link>/blog/leetcode-0001-two-sum/</link>
@@ -26,16 +26,6 @@
 1 2 3  输入：nums = [2,7,11,15], target = 9 输出：[0,1] 解释：因为 nums[0] + nums[1] == 9 ，返回 [0, 1] 。   题解 顺序扫描数组，对每一个元素，在map中找能组合给定值的另一半数字，如果找到了，直接返回2个数字的下标即可。如果找不到，就把这个数字存入map中，等待扫到“另一半”数字的时候，再取出来返回结果。
 这种解法将数据扫描一遍必然得到结果，所以时间复杂度是O(n)。
 Go 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21  package main import &amp;#34;fmt&amp;#34; func twoSum(nums []int, target int) []int { m := make(map[int]int) for i := 0; i &amp;lt; len(nums); i++ { another := target - nums[i] if _, ok := m[another]; ok { return []int{m[another], i} } m[nums[i]] = i } return nil } func main() { fmt.</description>
-    </item>
-    
-    <item>
-      <title>:cake: shrtcts</title>
-      <link>/project/shrtcts/</link>
-      <pubDate>Sun, 13 Sep 2020 00:00:00 +0000</pubDate>
-      
-      <guid>/project/shrtcts/</guid>
-      <description>Redirecting to https://pkg.garrickadenbuie.com/shrtcts&amp;hellip;
-window.location.href = &#34;https://pkg.garrickadenbuie.com/shrtcts&#34;;  </description>
     </item>
     
   </channel>

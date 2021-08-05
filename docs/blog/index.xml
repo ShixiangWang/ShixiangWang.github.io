@@ -5,10 +5,38 @@
     <description>Recent posts from Garrick Aden-Buie</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 16 Mar 2021 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 05 Aug 2021 00:00:00 +0000</lastBuildDate>
     
         <atom:link href="/blog/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>LeetCode：0001-两数之和</title>
+      <link>/blog/leetcode-0001-two-sum/</link>
+      <pubDate>Thu, 05 Aug 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/leetcode-0001-two-sum/</guid>
+      <description>难度：简单。
+参考：
+  https://leetcode-cn.com/problems/two-sum
+  https://books.halfrost.com/leetcode/ChapterFour/0001~0099/0001.Two-Sum/
+  代码仓库：https://github.com/ShixiangWang/LeetCode
+问题 给定一个整数数组nums和一个整数目标值target，请你在该数组中找出 和为目标值target 的那两个整数，并返回它们的数组下标。
+你可以假设每种输入只会对应一个答案。但是，数组中同一个元素在答案里不能重复出现。
+示例：
+1 2 3  输入：nums = [2,7,11,15], target = 9 输出：[0,1] 解释：因为 nums[0] &#43; nums[1] == 9 ，返回 [0, 1] 。   题解 顺序扫描数组，对每一个元素，在map中找能组合给定值的另一半数字，如果找到了，直接返回2个数字的下标即可。如果找不到，就把这个数字存入map中，等待扫到“另一半”数字的时候，再取出来返回结果。
+这种解法将数据扫描一遍必然得到结果，所以时间复杂度是O(n)。
+Go 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21  package main import &amp;amp;#34;fmt&amp;amp;#34; func twoSum(nums []int, target int) []int { m := make(map[int]int) for i := 0; i &amp;amp;lt; len(nums); i&#43;&#43; { another := target - nums[i] if _, ok := m[another]; ok { return []int{m[another], i} } m[nums[i]] = i } return nil } func main() { fmt.</description>
+    </item>
+    
+    <item>
+      <title>旧文存档</title>
+      <link>/blog/blog-archives/</link>
+      <pubDate>Thu, 05 Aug 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/blog-archives/</guid>
+      <description> GitHub Home 博客：https://shixiangwang.github.io/home 语雀：https://www.yuque.com/shixiangwang 我来：https://www.wolai.com/sCHoE8HyUFnDEuCrth7PZG  </description>
+    </item>
     
     <item>
       <title>RMarkdown template from my reference blog</title>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>blog on ShixiangWang
+王诗翔</title>
+    <link>/tags/blog/</link>
+    <description>Recent content in blog on ShixiangWang
+王诗翔</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 05 Aug 2021 00:00:00 +0000</lastBuildDate><atom:link href="/tags/blog/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>旧文存档</title>
+      <link>/blog/blog-archives/</link>
+      <pubDate>Thu, 05 Aug 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/blog-archives/</guid>
+      <description> GitHub Home 博客：https://shixiangwang.github.io/home 语雀：https://www.yuque.com/shixiangwang 我来：https://www.wolai.com/sCHoE8HyUFnDEuCrth7PZG  </description>
+    </item>
+    
+  </channel>
+</rss>
