@@ -79,11 +79,11 @@ publishDir = "docs"
     author = "Shixiang Wang"
     EnableEmoji = true
     #contactHeader = "Links"
-    n_posts_front = 5
+    n_posts_front = 3
     show_projects_front = true
-    n_projects_front = 5
+    n_projects_front = 3
     show_talks_front = true
-    n_talks_front = 5
+    n_talks_front = 3
 
     # Twitter Card info
     twitterAuthor = "@WangShxiang"

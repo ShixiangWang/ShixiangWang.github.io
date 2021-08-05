@@ -7,7 +7,7 @@
 			<section class='recent recent-projects'>
 				<h2><a href={{ relURL "project" }}>Projects</a></h2>
 				<ul class="posts">
-					{{ range first (.Site.Params.n_projects_front | default 10) (where .Data.Pages "Section" "project") }}
+					{{ range first (.Site.Params.n_projects_front | default 10) (where .Site.RegularPages "Section" "project") }}
 					<li>
 						<a class="post-title" href="{{ .RelPermalink | replaceRE "/$" "" }}">{{ .Title | emojify }}</a>
 						<span class="post-date">{{ .Description }}</span>
@@ -27,7 +27,7 @@
 			<section class="recent">
 				<h2><a href={{ relURL "blog" }}>Recent Posts</a></h2>
 				<ul class="posts">
-					{{ range first (.Site.Params.n_posts_front | default 10) (where .Data.Pages "Section" "blog") }}
+					{{ range first (.Site.Params.n_posts_front | default 10) (where .Site.RegularPages "Section" "blog") }}
 					<li>
 						<a class="post-title" href="{{ .RelPermalink | replaceRE "/$" "" }}">{{ .Title }}</a>
 						<time class="post-date" datetime="{{ .Date.Format "2006-01-02T15:04:05Z" }}">{{ .Date.Format "Monday, 2 January 2006" }}</time>
@@ -48,7 +48,7 @@
 			<section class='recent recent-talks'>
 				<h2><a href={{ relURL "talk" }}>Talks</a></h2>
 				<ul class="posts">
-					{{ range first (.Site.Params.n_talks_front | default 10) (where .Data.Pages "Section" "talk") }}
+					{{ range first (.Site.Params.n_talks_front | default 10) (where .Site.RegularPages "Section" "talk") }}
 					<li>
 						<a class="post-title" href="{{ .RelPermalink | replaceRE "/$" "" }}">{{ .Title | emojify }}</a>
 						<span class="post-date">
