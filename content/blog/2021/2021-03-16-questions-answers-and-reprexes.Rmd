@@ -1,5 +1,5 @@
 ---
-title: Questions, answers, and reprexes
+title: RMarkdown template from my reference blog
 author: Garrick Aden-Buie
 date: '2021-03-16'
 slug: questions-answers-and-reprexes
