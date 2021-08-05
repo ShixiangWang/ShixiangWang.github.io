@@ -111,84 +111,39 @@
 <p>给定一个整数数组<code>nums</code>和一个整数目标值<code>target</code>，请你在该数组中找出 和为目标值<code>target</code> 的那两个整数，并返回它们的数组下标。</p>
 <p>你可以假设每种输入只会对应一个答案。但是，数组中同一个元素在答案里不能重复出现。</p>
 <p>示例：</p>
-<div class="highlight"><div style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2">
-<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
-<pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
-</span></code></pre></td>
-<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-<pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-fallback" data-lang="fallback">输入：nums = [2,7,11,15], target = 9
-输出：[0,1]
-解释：因为 nums[0] + nums[1] == 9 ，返回 [0, 1] 。
-</code></pre></td></tr></table>
-</div>
-</div><h2 id="题解">题解</h2>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-fallback" data-lang="fallback"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>输入：nums = [2,7,11,15], target = 9
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>输出：[0,1]
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>解释：因为 nums[0] + nums[1] == 9 ，返回 [0, 1] 。
+</code></pre></div><h2 id="题解">题解</h2>
 <p>顺序扫描数组，对每一个元素，在<code>map</code>中找能组合给定值的另一半数字，如果找到了，直接返回<code>2</code>个数字的下标即可。如果找不到，就把这个数字存入<code>map</code>中，等待扫到“另一半”数字的时候，再取出来返回结果。</p>
 <p>这种解法将数据扫描一遍必然得到结果，所以时间复杂度是<code>O(n)</code>。</p>
 <h3 id="go">Go</h3>
-<div class="highlight"><div style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2">
-<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
-<pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21
-</span></code></pre></td>
-<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-<pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-go" data-lang="go"><span style="color:#008000;font-weight:bold">package</span> main
-
-<span style="color:#008000;font-weight:bold">import</span> <span style="color:#ba2121">&#34;fmt&#34;</span>
-
-<span style="color:#008000;font-weight:bold">func</span> <span style="color:#00f">twoSum</span>(nums []<span style="color:#b00040">int</span>, target <span style="color:#b00040">int</span>) []<span style="color:#b00040">int</span> {
-  m <span style="color:#666">:=</span> <span style="color:#008000">make</span>(<span style="color:#008000;font-weight:bold">map</span>[<span style="color:#b00040">int</span>]<span style="color:#b00040">int</span>)
-  <span style="color:#008000;font-weight:bold">for</span> i <span style="color:#666">:=</span> <span style="color:#666">0</span>; i &lt; <span style="color:#008000">len</span>(nums); i<span style="color:#666">++</span> {
-    another <span style="color:#666">:=</span> target <span style="color:#666">-</span> nums[i]
-    <span style="color:#008000;font-weight:bold">if</span> _, ok <span style="color:#666">:=</span> m[another]; ok {
-      <span style="color:#008000;font-weight:bold">return</span> []<span style="color:#b00040">int</span>{m[another], i}
-    }
-    m[nums[i]] = i
-  }
-  <span style="color:#008000;font-weight:bold">return</span> <span style="color:#008000;font-weight:bold">nil</span>
-}
-
-<span style="color:#008000;font-weight:bold">func</span> <span style="color:#00f">main</span>() {
-  fmt.<span style="color:#00f">Println</span>(<span style="color:#00f">twoSum</span>([]<span style="color:#b00040">int</span>{<span style="color:#666">2</span>, <span style="color:#666">7</span>, <span style="color:#666">11</span>, <span style="color:#666">15</span>}, <span style="color:#666">9</span>))
-  fmt.<span style="color:#00f">Println</span>(<span style="color:#00f">twoSum</span>([]<span style="color:#b00040">int</span>{<span style="color:#666">3</span>, <span style="color:#666">2</span>, <span style="color:#666">4</span>}, <span style="color:#666">6</span>))
-}
-
-</code></pre></td></tr></table>
-</div>
-</div><p>运行结果：</p>
-<div class="highlight"><div style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2">
-<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
-<pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
-</span></code></pre></td>
-<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-<pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-Bash" data-lang="Bash"><span style="color:#666">[</span>Running<span style="color:#666">]</span> go run <span style="color:#ba2121">&#34;/Users/wsx/Documents/GitHub/LeetCode/LeetCode/leetcode/0001-two-sum/main.go&#34;</span>
-<span style="color:#666">[</span><span style="color:#666">0</span> 1<span style="color:#666">]</span>
-<span style="color:#666">[</span><span style="color:#666">1</span> 2<span style="color:#666">]</span>
-</code></pre></td></tr></table>
-</div>
-</div><h3 id="r">R</h3>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-go" data-lang="go"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#008000;font-weight:bold">package</span> main
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span style="color:#008000;font-weight:bold">import</span> <span style="color:#ba2121">&#34;fmt&#34;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span><span style="color:#008000;font-weight:bold">func</span> <span style="color:#00f">twoSum</span>(nums []<span style="color:#b00040">int</span>, target <span style="color:#b00040">int</span>) []<span style="color:#b00040">int</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>  m <span style="color:#666">:=</span> <span style="color:#008000">make</span>(<span style="color:#008000;font-weight:bold">map</span>[<span style="color:#b00040">int</span>]<span style="color:#b00040">int</span>)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>  <span style="color:#008000;font-weight:bold">for</span> i <span style="color:#666">:=</span> <span style="color:#666">0</span>; i &lt; <span style="color:#008000">len</span>(nums); i<span style="color:#666">++</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>    another <span style="color:#666">:=</span> target <span style="color:#666">-</span> nums[i]
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>    <span style="color:#008000;font-weight:bold">if</span> _, ok <span style="color:#666">:=</span> m[another]; ok {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>      <span style="color:#008000;font-weight:bold">return</span> []<span style="color:#b00040">int</span>{m[another], i}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>    }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>    m[nums[i]] = i
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>  }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>  <span style="color:#008000;font-weight:bold">return</span> <span style="color:#008000;font-weight:bold">nil</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span><span style="color:#008000;font-weight:bold">func</span> <span style="color:#00f">main</span>() {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span>  fmt.<span style="color:#00f">Println</span>(<span style="color:#00f">twoSum</span>([]<span style="color:#b00040">int</span>{<span style="color:#666">2</span>, <span style="color:#666">7</span>, <span style="color:#666">11</span>, <span style="color:#666">15</span>}, <span style="color:#666">9</span>))
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span>  fmt.<span style="color:#00f">Println</span>(<span style="color:#00f">twoSum</span>([]<span style="color:#b00040">int</span>{<span style="color:#666">3</span>, <span style="color:#666">2</span>, <span style="color:#666">4</span>}, <span style="color:#666">6</span>))
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span>
+</code></pre></div><p>运行结果：</p>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-Bash" data-lang="Bash"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#666">[</span>Running<span style="color:#666">]</span> go run <span style="color:#ba2121">&#34;/Users/wsx/Documents/GitHub/LeetCode/LeetCode/leetcode/0001-two-sum/main.go&#34;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span style="color:#666">[</span><span style="color:#666">0</span> 1<span style="color:#666">]</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span style="color:#666">[</span><span style="color:#666">1</span> 2<span style="color:#666">]</span>
+</code></pre></div><h3 id="r">R</h3>
 <p>依据题解和Go的实现思路，不难写出R的对应程序。不过考虑到语言之间的差异，值得注意的有几点：</p>
 <ol>
 <li>
@@ -198,62 +153,29 @@
 <p>R是以1作为索引起始，为了保持结果一致，最后返回值统一减去1。</p>
 </li>
 </ol>
-<div class="highlight"><div style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2">
-<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
-<pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
-</span></code></pre></td>
-<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-<pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-R" data-lang="R">twoSum <span style="color:#666">&lt;-</span> <span style="color:#00f">function</span>(nums, target) {
-  <span style="color:#408080;font-style:italic"># stopifnot(length(target) == 1, is.numeric(nums), is.numeric(target))</span>
-  m <span style="color:#666">&lt;-</span> <span style="color:#00f">c</span>()
-  <span style="color:#00f">for </span>(i in <span style="color:#00f">seq_along</span>(nums)) {
-    another <span style="color:#666">&lt;-</span> target <span style="color:#666">-</span> nums[i]
-    <span style="color:#00f">if </span>(<span style="color:#00f">length</span>(m) <span style="color:#666">&gt;</span> <span style="color:#666">0</span> <span style="color:#666">&amp;&amp;</span> <span style="color:#666">!</span><span style="color:#00f">is.na</span>(m<span style="color:#00f">[as.character</span>(another)])) {
-      <span style="color:#00f">return</span>(<span style="color:#00f">c</span>(<span style="color:#00f">as.integer</span>(m<span style="color:#00f">[as.character</span>(another)]), i) <span style="color:#666">-</span> <span style="color:#666">1L</span>) <span style="color:#408080;font-style:italic"># R 是1开始索引的编程语言，这里做一个-1处理</span>
-    }
-    m<span style="color:#00f">[as.character</span>(nums[i])] <span style="color:#666">=</span> i
-  }
-  <span style="color:#00f">return</span>(<span style="color:#008000;font-weight:bold">NULL</span>)
-}
-
-<span style="color:#00f">cat</span>(<span style="color:#00f">twoSum</span>(<span style="color:#00f">c</span>(<span style="color:#666">2</span>, <span style="color:#666">7</span>, <span style="color:#666">11</span>, <span style="color:#666">15</span>), <span style="color:#666">9</span>))
-<span style="color:#00f">cat</span>(<span style="color:#ba2121">&#34;\n&#34;</span>)
-<span style="color:#00f">cat</span>(<span style="color:#00f">twoSum</span>(<span style="color:#00f">c</span>(<span style="color:#666">3</span>, <span style="color:#666">2</span>, <span style="color:#666">4</span>), <span style="color:#666">6</span>))
-
-</code></pre></td></tr></table>
-</div>
-</div><p>运行结果：</p>
-<div class="highlight"><div style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2">
-<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
-<pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
-</span></code></pre></td>
-<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-<pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-Bash" data-lang="Bash"><span style="color:#666">[</span>Running<span style="color:#666">]</span> Rscript <span style="color:#ba2121">&#34;/Users/wsx/Documents/GitHub/LeetCode/LeetCode/leetcode/0001-two-sum/main.R&#34;</span>
-Using library: /Users/wsx/Library/R
-<span style="color:#666">0</span> <span style="color:#666">1</span>
-<span style="color:#666">1</span> <span style="color:#666">2</span>
-</code></pre></td></tr></table>
-</div>
-</div>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-R" data-lang="R"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span>twoSum <span style="color:#666">&lt;-</span> <span style="color:#00f">function</span>(nums, target) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>  <span style="color:#408080;font-style:italic"># stopifnot(length(target) == 1, is.numeric(nums), is.numeric(target))</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>  m <span style="color:#666">&lt;-</span> <span style="color:#00f">c</span>()
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>  <span style="color:#00f">for </span>(i in <span style="color:#00f">seq_along</span>(nums)) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>    another <span style="color:#666">&lt;-</span> target <span style="color:#666">-</span> nums[i]
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>    <span style="color:#00f">if </span>(<span style="color:#00f">length</span>(m) <span style="color:#666">&gt;</span> <span style="color:#666">0</span> <span style="color:#666">&amp;&amp;</span> <span style="color:#666">!</span><span style="color:#00f">is.na</span>(m<span style="color:#00f">[as.character</span>(another)])) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>      <span style="color:#00f">return</span>(<span style="color:#00f">c</span>(<span style="color:#00f">as.integer</span>(m<span style="color:#00f">[as.character</span>(another)]), i) <span style="color:#666">-</span> <span style="color:#666">1L</span>) <span style="color:#408080;font-style:italic"># R 是1开始索引的编程语言，这里做一个-1处理</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>    }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>    m<span style="color:#00f">[as.character</span>(nums[i])] <span style="color:#666">=</span> i
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>  }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>  <span style="color:#00f">return</span>(<span style="color:#008000;font-weight:bold">NULL</span>)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span><span style="color:#00f">cat</span>(<span style="color:#00f">twoSum</span>(<span style="color:#00f">c</span>(<span style="color:#666">2</span>, <span style="color:#666">7</span>, <span style="color:#666">11</span>, <span style="color:#666">15</span>), <span style="color:#666">9</span>))
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span><span style="color:#00f">cat</span>(<span style="color:#ba2121">&#34;\n&#34;</span>)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span><span style="color:#00f">cat</span>(<span style="color:#00f">twoSum</span>(<span style="color:#00f">c</span>(<span style="color:#666">3</span>, <span style="color:#666">2</span>, <span style="color:#666">4</span>), <span style="color:#666">6</span>))
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span>
+</code></pre></div><p>运行结果：</p>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-Bash" data-lang="Bash"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#666">[</span>Running<span style="color:#666">]</span> Rscript <span style="color:#ba2121">&#34;/Users/wsx/Documents/GitHub/LeetCode/LeetCode/leetcode/0001-two-sum/main.R&#34;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>Using library: /Users/wsx/Library/R
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span style="color:#666">0</span> <span style="color:#666">1</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span style="color:#666">1</span> <span style="color:#666">2</span>
+</code></pre></div>
 				</div>
 				<footer class="footer">
 				  <hr>
@@ -376,7 +298,7 @@ Using library: /Users/wsx/Library/R
 		  <footer>
   <script src="../../js/jquery-latest.js"></script>
 <script src="../../js/featherlight.min.js" type="text/javascript" charset="utf-8"></script>
-
+<script type="text/javascript" src="//rf.revolvermaps.com/0/0/6.js?i=5y123gpci0a&amp;m=0&amp;c=ff0000&amp;cr1=ffffff&amp;f=georgia&amp;l=1" async="async"></script>
   
   
   
