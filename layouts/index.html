@@ -13,7 +13,7 @@
 						<span class="post-date">{{ .Description }}</span>
 					</li>
 					{{ end }}
-					{{ if ge (len $projectPages) .Site.Params.n_projects_front }}
+					{{ if ge (len (where .Site.RegularPages "Section" "project")) .Site.Params.n_projects_front }}
 					<li style="list-style: none">
 					  <a href={{ relURL "project" }} style="color: #9a9a9a">More projects...</a>
 					</li>
@@ -33,7 +33,7 @@
 						<time class="post-date" datetime="{{ .Date.Format "2006-01-02T15:04:05Z" }}">{{ .Date.Format "Monday, 2 January 2006" }}</time>
 					</li>
 					{{ end }}
-					{{ if ge (len $blogPages) .Site.Params.n_posts_front }}
+					{{ if ge (len (where .Site.RegularPages "Section" "blog")) .Site.Params.n_posts_front }}
 					<li style="list-style: none">
 					  <a href={{ relURL "blog" }} style="color: #9a9a9a">More posts...</a>
 					</li>
@@ -56,7 +56,7 @@
 						</span>
 					</li>
 					{{ end }}
-					{{ if ge (len $talkPages) .Site.Params.n_talks_front }}
+					{{ if ge (len (where .Site.RegularPages "Section" "talk")) .Site.Params.n_talks_front }}
 					<li style="list-style: none">
 					  <a href={{ relURL "talk" }} style="color: #9a9a9a">More talks...</a>
 					</li>
