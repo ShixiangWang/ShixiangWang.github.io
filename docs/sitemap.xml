@@ -58,6 +58,11 @@
   </url>
   
   <url>
+    <loc>/about/</loc>
+    <lastmod>2021-01-01T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
     <loc>/tags/bioconductor/</loc>
     <lastmod>2020-10-09T00:00:00+00:00</lastmod>
   </url>
@@ -88,11 +93,6 @@
   </url>
   
   <url>
-    <loc>/tags/addin/</loc>
-    <lastmod>2020-09-13T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
     <loc>/categories/project/</loc>
     <lastmod>2020-09-13T00:00:00+00:00</lastmod>
   </url>
@@ -104,21 +104,6 @@
   
   <url>
     <loc>/tags/r/</loc>
-    <lastmod>2020-09-13T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/tags/r-package/</loc>
-    <lastmod>2020-09-13T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/tags/rstudio/</loc>
-    <lastmod>2020-09-13T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/tags/shortcuts/</loc>
     <lastmod>2020-09-13T00:00:00+00:00</lastmod>
   </url>
   

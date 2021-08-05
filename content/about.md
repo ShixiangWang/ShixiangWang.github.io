@@ -1,7 +1,7 @@
 ---
 title: "About Me"
 slug: about
-date: 2021-08-05T19:25:00+00:00
+date: 2021-01-01
 type: page
 ---
 
