@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>neopeptides on ShixiangWang
+王诗翔</title>
+    <link>/tags/neopeptides/</link>
+    <description>Recent content in neopeptides on ShixiangWang
+王诗翔</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 05 Aug 2021 00:00:00 +0000</lastBuildDate><atom:link href="/tags/neopeptides/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>:package: neopeptides</title>
+      <link>/project/neopeptides/</link>
+      <pubDate>Thu, 05 Aug 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/project/neopeptides/</guid>
+      <description> Project repo: https://github.com/ShixiangWang/neopeptides Paper: Revisiting neoantigen depletion signal in the untreated cancer genome. Shixiang Wang, Xuan Wang, Tao Wu, Zaoke He, Huimin Li, Xiaoqin Sun, Xue-Song Liu bioRxiv 2020.05.11.089540; doi: https://doi.org/10.1101/2020.05.11.089540.  </description>
+    </item>
+    
+  </channel>
+</rss>

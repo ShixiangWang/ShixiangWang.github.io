@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>ABSOLUTE on ShixiangWang
+王诗翔</title>
+    <link>/tags/absolute/</link>
+    <description>Recent content in ABSOLUTE on ShixiangWang
+王诗翔</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 05 Aug 2021 00:00:00 +0000</lastBuildDate><atom:link href="/tags/absolute/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>:package: DoAbsolute</title>
+      <link>/project/doabsolute/</link>
+      <pubDate>Thu, 05 Aug 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/project/doabsolute/</guid>
+      <description> Project repo: https://github.com/ShixiangWang/DoAbsolute Please cite the following paper if you use the tool:  Wang, Shixiang, et al. &amp;ldquo;The predictive power of tumor mutational burden in lung cancer immunotherapy response is influenced by patients&#39; sex.&amp;rdquo; International journal of cancer (2019). Carter, Scott L., et al. “Absolute quantification of somatic DNA alterations in human cancer.” Nature biotechnology 30.5 (2012): 413.    </description>
+    </item>
+    
+  </channel>
+</rss>

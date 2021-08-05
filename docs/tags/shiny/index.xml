@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Shiny on ShixiangWang
+王诗翔</title>
+    <link>/tags/shiny/</link>
+    <description>Recent content in Shiny on ShixiangWang
+王诗翔</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 05 Aug 2021 00:00:00 +0000</lastBuildDate><atom:link href="/tags/shiny/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>:package: UCSCXenaShiny</title>
+      <link>/project/ucscxenashiny/</link>
+      <pubDate>Thu, 05 Aug 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/project/ucscxenashiny/</guid>
+      <description> Project repo: https://github.com/openbiox/UCSCXenaShiny/ Paper: Shixiang Wang#, Yi Xiong#, Longfei Zhao#, Kai Gu#, Yin Li, Fei Zhao, Jianfeng Li, Mingjie Wang, Haitao Wang, Ziyu Tao, Tao Wu, Yichao Zheng, Xuejun Li, Xue-Song Liu, UCSCXenaShiny: An R/CRAN Package for Interactive Analysis of UCSC Xena Data, Bioinformatics, 2021;, btab561, https://doi.org/10.1093/bioinformatics/btab561.  </description>
+    </item>
+    
+  </channel>
+</rss>

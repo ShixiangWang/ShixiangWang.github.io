@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>book on ShixiangWang
+王诗翔</title>
+    <link>/tags/book/</link>
+    <description>Recent content in book on ShixiangWang
+王诗翔</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 05 Aug 2021 00:00:00 +0000</lastBuildDate><atom:link href="/tags/book/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>:book: Cookbook for R 中文版</title>
+      <link>/project/cookbook4r-zh/</link>
+      <pubDate>Thu, 05 Aug 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/project/cookbook4r-zh/</guid>
+      <description> Read online: https://openbiox.github.io/Cookbook-for-R-Chinese/ Project repo: https://github.com/openbiox/Cookbook-for-R-Chinese  </description>
+    </item>
+    
+    <item>
+      <title>:book: 极客R：数据分析之道</title>
+      <link>/project/geekr/</link>
+      <pubDate>Thu, 05 Aug 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/project/geekr/</guid>
+      <description>考虑到市面上已经有不少类似的书了，以及本人工作情况，目前项目已经停止。前面部分基础章节供初学者学习使用。
+ Project repo: https://github.com/ShixiangWang/geek-r-tutorial  </description>
+    </item>
+    
+  </channel>
+</rss>

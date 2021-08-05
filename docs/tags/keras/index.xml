@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>keras on ShixiangWang
+王诗翔</title>
+    <link>/tags/keras/</link>
+    <description>Recent content in keras on ShixiangWang
+王诗翔</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 05 Aug 2021 00:00:00 +0000</lastBuildDate><atom:link href="/tags/keras/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>:package: sigminer.prediction</title>
+      <link>/project/sigminer-prediction/</link>
+      <pubDate>Thu, 05 Aug 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/project/sigminer-prediction/</guid>
+      <description> Project repo: https://github.com/ShixiangWang/sigminer.prediction Paper: Wang S, Li H, Song M, Tao Z, Wu T, He Z, et al. (2021) Copy number signature analysis tool and its application in prostate cancer reveals distinct mutational processes and clinical outcomes. PLoS Genet 17(5): e1009557. https://doi.org/10.1371/journal.pgen.1009557.  </description>
+    </item>
+    
+  </channel>
+</rss>

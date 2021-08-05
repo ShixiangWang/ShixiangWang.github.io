@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>pipeline on ShixiangWang
+王诗翔</title>
+    <link>/tags/pipeline/</link>
+    <description>Recent content in pipeline on ShixiangWang
+王诗翔</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 05 Aug 2021 00:00:00 +0000</lastBuildDate><atom:link href="/tags/pipeline/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>:package: sigminer &amp; :arrow_heading_down: sigflow</title>
+      <link>/project/sigminer-and-sigflow/</link>
+      <pubDate>Thu, 05 Aug 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/project/sigminer-and-sigflow/</guid>
+      <description>sigminer is an R package and sigflow is the CLI implementation for its core analysis features.
+ Project repo  sigminer: https://github.com/ShixiangWang/sigminer sigflow: https://github.com/ShixiangWang/sigflow   Papers  Wang S, Li H, Song M, Tao Z, Wu T, He Z, et al. (2021) Copy number signature analysis tool and its application in prostate cancer reveals distinct mutational processes and clinical outcomes. PLoS Genet 17(5): e1009557. https://doi.org/10.1371/journal.pgen.1009557. Shixiang Wang, Ziyu Tao, Tao Wu, Xue-Song Liu, Sigflow: An Automated And Comprehensive Pipeline For Cancer Genome Mutational Signature Analysis, Bioinformatics, btaa895.</description>
+    </item>
+    
+  </channel>
+</rss>

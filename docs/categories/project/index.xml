@@ -8,15 +8,97 @@
 王诗翔</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 13 Sep 2020 00:00:00 +0000</lastBuildDate><atom:link href="/categories/project/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 05 Aug 2021 00:00:00 +0000</lastBuildDate><atom:link href="/categories/project/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>:cake: shrtcts</title>
-      <link>/project/shrtcts/</link>
-      <pubDate>Sun, 13 Sep 2020 00:00:00 +0000</pubDate>
+      <title>:book: Cookbook for R 中文版</title>
+      <link>/project/cookbook4r-zh/</link>
+      <pubDate>Thu, 05 Aug 2021 00:00:00 +0000</pubDate>
       
-      <guid>/project/shrtcts/</guid>
-      <description>Redirecting to https://pkg.garrickadenbuie.com/shrtcts&amp;hellip;
-window.location.href = &#34;https://pkg.garrickadenbuie.com/shrtcts&#34;;  </description>
+      <guid>/project/cookbook4r-zh/</guid>
+      <description> Read online: https://openbiox.github.io/Cookbook-for-R-Chinese/ Project repo: https://github.com/openbiox/Cookbook-for-R-Chinese  </description>
+    </item>
+    
+    <item>
+      <title>:book: 极客R：数据分析之道</title>
+      <link>/project/geekr/</link>
+      <pubDate>Thu, 05 Aug 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/project/geekr/</guid>
+      <description>考虑到市面上已经有不少类似的书了，以及本人工作情况，目前项目已经停止。前面部分基础章节供初学者学习使用。
+ Project repo: https://github.com/ShixiangWang/geek-r-tutorial  </description>
+    </item>
+    
+    <item>
+      <title>:heart: R Search Extension</title>
+      <link>/project/r-search-extension/</link>
+      <pubDate>Thu, 05 Aug 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/project/r-search-extension/</guid>
+      <description> Project repo: https://github.com/ShixiangWang/r-search-extension  </description>
+    </item>
+    
+    <item>
+      <title>:package: DoAbsolute</title>
+      <link>/project/doabsolute/</link>
+      <pubDate>Thu, 05 Aug 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/project/doabsolute/</guid>
+      <description> Project repo: https://github.com/ShixiangWang/DoAbsolute Please cite the following paper if you use the tool:  Wang, Shixiang, et al. &amp;ldquo;The predictive power of tumor mutational burden in lung cancer immunotherapy response is influenced by patients&#39; sex.&amp;rdquo; International journal of cancer (2019). Carter, Scott L., et al. “Absolute quantification of somatic DNA alterations in human cancer.” Nature biotechnology 30.5 (2012): 413.    </description>
+    </item>
+    
+    <item>
+      <title>:package: ezcox</title>
+      <link>/project/ezcox/</link>
+      <pubDate>Thu, 05 Aug 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/project/ezcox/</guid>
+      <description> Project repo: https://github.com/ShixiangWang/ezcox Cite the paper if you use this tool: Wang, Shixiang, et al. “The predictive power of tumor mutational burden in lung cancer immunotherapy response is influenced by patients’ sex.” International journal of cancer (2019).  </description>
+    </item>
+    
+    <item>
+      <title>:package: flymaps</title>
+      <link>/project/flymaps/</link>
+      <pubDate>Thu, 05 Aug 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/project/flymaps/</guid>
+      <description>This is a toy project.
+ Project repo: https://github.com/ShixiangWang/flymaps  </description>
+    </item>
+    
+    <item>
+      <title>:package: IDConverter</title>
+      <link>/project/idconverter/</link>
+      <pubDate>Thu, 05 Aug 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/project/idconverter/</guid>
+      <description> Project repo: https://github.com/ShixiangWang/IDConverter  </description>
+    </item>
+    
+    <item>
+      <title>:package: install_GISTIC</title>
+      <link>/project/install_gistic2/</link>
+      <pubDate>Thu, 05 Aug 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/project/install_gistic2/</guid>
+      <description> Project repo: https://github.com/ShixiangWang/install_GISTIC  </description>
+    </item>
+    
+    <item>
+      <title>:package: loon</title>
+      <link>/project/loon/</link>
+      <pubDate>Thu, 05 Aug 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/project/loon/</guid>
+      <description> Project repo: https://github.com/ShixiangWang/loon  </description>
+    </item>
+    
+    <item>
+      <title>:package: metawho</title>
+      <link>/project/metawho/</link>
+      <pubDate>Thu, 05 Aug 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/project/metawho/</guid>
+      <description> Project repo: https://github.com/ShixiangWang/metawho Paper: Wang, Shixiang, et al. “The predictive power of tumor mutational burden in lung cancer immunotherapy response is influenced by patients’ sex.” International journal of cancer (2019). Journal of Open Source Software, 4(40), 1627, https://doi.org/10.21105/joss.01627.  </description>
     </item>
     
   </channel>

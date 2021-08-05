@@ -10,6 +10,15 @@
     <language>en-us</language>
     <lastBuildDate>Thu, 05 Aug 2021 00:00:00 +0000</lastBuildDate><atom:link href="/tags/index.xml" rel="self" type="application/rss+xml" />
     <item>
+      <title>ABSOLUTE</title>
+      <link>/tags/absolute/</link>
+      <pubDate>Thu, 05 Aug 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/absolute/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title>algo</title>
       <link>/tags/algo/</link>
       <pubDate>Thu, 05 Aug 2021 00:00:00 +0000</pubDate>
@@ -28,6 +37,42 @@
     </item>
     
     <item>
+      <title>book</title>
+      <link>/tags/book/</link>
+      <pubDate>Thu, 05 Aug 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/book/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Cox</title>
+      <link>/tags/cox/</link>
+      <pubDate>Thu, 05 Aug 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/cox/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>docker</title>
+      <link>/tags/docker/</link>
+      <pubDate>Thu, 05 Aug 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/docker/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>GISTIC2</title>
+      <link>/tags/gistic2/</link>
+      <pubDate>Thu, 05 Aug 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/gistic2/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title>golang</title>
       <link>/tags/golang/</link>
       <pubDate>Thu, 05 Aug 2021 00:00:00 +0000</pubDate>
@@ -37,47 +82,20 @@
     </item>
     
     <item>
-      <title>R</title>
-      <link>/tags/r/</link>
+      <title>Google Scholar</title>
+      <link>/tags/google-scholar/</link>
       <pubDate>Thu, 05 Aug 2021 00:00:00 +0000</pubDate>
       
-      <guid>/tags/r/</guid>
+      <guid>/tags/google-scholar/</guid>
       <description></description>
     </item>
     
     <item>
-      <title>Learning</title>
-      <link>/tags/learning/</link>
-      <pubDate>Tue, 16 Mar 2021 00:00:00 +0000</pubDate>
+      <title>ID转换</title>
+      <link>/tags/id%E8%BD%AC%E6%8D%A2/</link>
+      <pubDate>Thu, 05 Aug 2021 00:00:00 +0000</pubDate>
       
-      <guid>/tags/learning/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Bioconductor</title>
-      <link>/tags/bioconductor/</link>
-      <pubDate>Fri, 09 Oct 2020 00:00:00 +0000</pubDate>
-      
-      <guid>/tags/bioconductor/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Bioinformatics</title>
-      <link>/tags/bioinformatics/</link>
-      <pubDate>Fri, 09 Oct 2020 00:00:00 +0000</pubDate>
-      
-      <guid>/tags/bioinformatics/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Research</title>
-      <link>/tags/research/</link>
-      <pubDate>Fri, 09 Oct 2020 00:00:00 +0000</pubDate>
-      
-      <guid>/tags/research/</guid>
+      <guid>/tags/id%E8%BD%AC%E6%8D%A2/</guid>
       <description></description>
     </item>
     

@@ -3,6 +3,91 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>/project/cookbook4r-zh/</loc>
+    <lastmod>2021-08-05T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/project/geekr/</loc>
+    <lastmod>2021-08-05T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/project/r-search-extension/</loc>
+    <lastmod>2021-08-05T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/project/doabsolute/</loc>
+    <lastmod>2021-08-05T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/project/ezcox/</loc>
+    <lastmod>2021-08-05T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/project/flymaps/</loc>
+    <lastmod>2021-08-05T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/project/idconverter/</loc>
+    <lastmod>2021-08-05T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/project/install_gistic2/</loc>
+    <lastmod>2021-08-05T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/project/loon/</loc>
+    <lastmod>2021-08-05T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/project/metawho/</loc>
+    <lastmod>2021-08-05T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/project/neopeptides/</loc>
+    <lastmod>2021-08-05T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/project/sigminer-and-sigflow/</loc>
+    <lastmod>2021-08-05T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/project/sigminer-prediction/</loc>
+    <lastmod>2021-08-05T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/project/tinyscholar/</loc>
+    <lastmod>2021-08-05T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/project/ucscxenashiny/</loc>
+    <lastmod>2021-08-05T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/project/ucscxenatools/</loc>
+    <lastmod>2021-08-05T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/absolute/</loc>
+    <lastmod>2021-08-05T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
     <loc>/tags/algo/</loc>
     <lastmod>2021-08-05T00:00:00+00:00</lastmod>
   </url>
@@ -18,12 +103,47 @@
   </url>
   
   <url>
+    <loc>/tags/book/</loc>
+    <lastmod>2021-08-05T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
     <loc>/categories/</loc>
     <lastmod>2021-08-05T00:00:00+00:00</lastmod>
   </url>
   
   <url>
+    <loc>/tags/cox/</loc>
+    <lastmod>2021-08-05T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/docker/</loc>
+    <lastmod>2021-08-05T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/gistic2/</loc>
+    <lastmod>2021-08-05T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
     <loc>/tags/golang/</loc>
+    <lastmod>2021-08-05T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/google-scholar/</loc>
+    <lastmod>2021-08-05T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/id%E8%BD%AC%E6%8D%A2/</loc>
+    <lastmod>2021-08-05T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/keras/</loc>
     <lastmod>2021-08-05T00:00:00+00:00</lastmod>
   </url>
   
@@ -38,7 +158,52 @@
   </url>
   
   <url>
+    <loc>/tags/meta-analysis/</loc>
+    <lastmod>2021-08-05T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/mutational-signature/</loc>
+    <lastmod>2021-08-05T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/neopeptides/</loc>
+    <lastmod>2021-08-05T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/package/</loc>
+    <lastmod>2021-08-05T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/pipeline/</loc>
+    <lastmod>2021-08-05T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/categories/project/</loc>
+    <lastmod>2021-08-05T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/project/</loc>
+    <lastmod>2021-08-05T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/python/</loc>
+    <lastmod>2021-08-05T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
     <loc>/tags/r/</loc>
+    <lastmod>2021-08-05T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/shiny/</loc>
     <lastmod>2021-08-05T00:00:00+00:00</lastmod>
   </url>
   
@@ -48,7 +213,27 @@
   </url>
   
   <url>
+    <loc>/tags/sigminer/</loc>
+    <lastmod>2021-08-05T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/ssh/</loc>
+    <lastmod>2021-08-05T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
     <loc>/tags/</loc>
+    <lastmod>2021-08-05T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/ucsc-xena/</loc>
+    <lastmod>2021-08-05T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/vscode/</loc>
     <lastmod>2021-08-05T00:00:00+00:00</lastmod>
   </url>
   
@@ -59,6 +244,11 @@
   
   <url>
     <loc>/blog/blog-archives/</loc>
+    <lastmod>2021-08-05T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/%E6%B5%8F%E8%A7%88%E5%99%A8%E6%8F%92%E4%BB%B6/</loc>
     <lastmod>2021-08-05T00:00:00+00:00</lastmod>
   </url>
   
@@ -105,21 +295,6 @@
   <url>
     <loc>/talk/</loc>
     <lastmod>2020-10-09T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/project/shrtcts/</loc>
-    <lastmod>2020-09-13T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/categories/project/</loc>
-    <lastmod>2020-09-13T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/project/</loc>
-    <lastmod>2020-09-13T00:00:00+00:00</lastmod>
   </url>
   
 </urlset>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>meta-analysis on ShixiangWang
+王诗翔</title>
+    <link>/tags/meta-analysis/</link>
+    <description>Recent content in meta-analysis on ShixiangWang
+王诗翔</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 05 Aug 2021 00:00:00 +0000</lastBuildDate><atom:link href="/tags/meta-analysis/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>:package: metawho</title>
+      <link>/project/metawho/</link>
+      <pubDate>Thu, 05 Aug 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/project/metawho/</guid>
+      <description> Project repo: https://github.com/ShixiangWang/metawho Paper: Wang, Shixiang, et al. “The predictive power of tumor mutational burden in lung cancer immunotherapy response is influenced by patients’ sex.” International journal of cancer (2019). Journal of Open Source Software, 4(40), 1627, https://doi.org/10.21105/joss.01627.  </description>
+    </item>
+    
+  </channel>
+</rss>
