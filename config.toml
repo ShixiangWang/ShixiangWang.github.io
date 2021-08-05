@@ -54,11 +54,11 @@ publishDir = "docs"
     weight = 6
     url = "https://github.com/ShixiangWang/self-study/discussions"
 [[menu.main]]
-    name = "Mirror[1]"
+    name = "Mirror #1"
     weight = 7
     url = "https://shixiangwang.netlify.app/"
 [[menu.main]]
-    name = "Mirror[2]"
+    name = "Mirror #2"
     weight = 7
     url = "https://shixiangwang.github.io/"
 
