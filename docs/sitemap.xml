@@ -3,6 +3,46 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>/categories/blog/</loc>
+    <lastmod>2021-08-06T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/blog/</loc>
+    <lastmod>2021-08-06T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/categories/</loc>
+    <lastmod>2021-08-06T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/hpc/</loc>
+    <lastmod>2021-08-06T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/</loc>
+    <lastmod>2021-08-06T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/slurm/</loc>
+    <lastmod>2021-08-06T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/blog/slurm-tricks/</loc>
+    <lastmod>2021-08-06T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/</loc>
+    <lastmod>2021-08-06T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
     <loc>/project/cookbook4r-zh/</loc>
     <lastmod>2021-08-05T00:00:00+00:00</lastmod>
   </url>
@@ -98,17 +138,7 @@
   </url>
   
   <url>
-    <loc>/blog/</loc>
-    <lastmod>2021-08-05T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
     <loc>/tags/book/</loc>
-    <lastmod>2021-08-05T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/categories/</loc>
     <lastmod>2021-08-05T00:00:00+00:00</lastmod>
   </url>
   
@@ -208,22 +238,12 @@
   </url>
   
   <url>
-    <loc>/</loc>
-    <lastmod>2021-08-05T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
     <loc>/tags/sigminer/</loc>
     <lastmod>2021-08-05T00:00:00+00:00</lastmod>
   </url>
   
   <url>
     <loc>/tags/ssh/</loc>
-    <lastmod>2021-08-05T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/tags/</loc>
     <lastmod>2021-08-05T00:00:00+00:00</lastmod>
   </url>
   
@@ -250,11 +270,6 @@
   <url>
     <loc>/tags/%E6%B5%8F%E8%A7%88%E5%99%A8%E6%8F%92%E4%BB%B6/</loc>
     <lastmod>2021-08-05T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/categories/blog/</loc>
-    <lastmod>2021-03-16T00:00:00+00:00</lastmod>
   </url>
   
   <url>

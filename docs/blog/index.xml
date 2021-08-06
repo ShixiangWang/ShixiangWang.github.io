@@ -5,10 +5,23 @@
     <description>Recent posts from Garrick Aden-Buie</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 05 Aug 2021 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 06 Aug 2021 00:00:00 +0000</lastBuildDate>
     
         <atom:link href="/blog/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Slurm使用技巧</title>
+      <link>/blog/slurm-tricks/</link>
+      <pubDate>Fri, 06 Aug 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/slurm-tricks/</guid>
+      <description>Slurm的官方文档在：https://slurm.schedmd.com/。
+这篇文章记录下我在工作中使用经常用到，但是一般的初级文档不会涉及的内容、操作。
+系统节点资源概览 一般我们输入sinfo，只能看到非常精简的节点信息：
+1$ sinfo 2PARTITION AVAIL TIMELIMIT NODES STATE NODELIST 3cn up infinite 1 mix cn03 4cn up infinite 2 alloc cn[01-02] 5cn up infinite 15 idle cn[04-18] 6fat up infinite 1 idle fat01 7gpu* up infinite 1 idle gpu01 我们可以添加几个选项来获得一个更为完备的信息：
+1$ sinfo -Nel 2Fri Aug 6 15:54:17 2021 3NODELIST NODES PARTITION STATE CPUS S:C:T MEMORY TMP_DISK WEIGHT AVAIL_FE REASON 4cn01 1 cn allocated 80 80:1:1 771000 0 1 (null) none 5cn02 1 cn allocated 80 80:1:1 771000 0 1 (null) none 6cn03 1 cn mixed 80 80:1:1 771000 0 1 (null) none 7cn04 1 cn idle 80 80:1:1 771000 0 1 (null) none 8cn05 1 cn idle 80 80:1:1 771000 0 1 (null) none 9cn06 1 cn idle 80 80:1:1 771000 0 1 (null) none 10cn07 1 cn idle 80 80:1:1 771000 0 1 (null) none 11cn08 1 cn idle 80 80:1:1 771000 0 1 (null) none 12cn09 1 cn idle 80 80:1:1 771000 0 1 (null) none 13cn10 1 cn idle 80 80:1:1 771000 0 1 (null) none 14cn11 1 cn idle 80 80:1:1 771000 0 1 (null) none 15cn12 1 cn idle 80 80:1:1 771000 0 1 (null) none 16cn13 1 cn idle 80 80:1:1 771000 0 1 (null) none 17cn14 1 cn idle 80 80:1:1 771000 0 1 (null) none 18cn15 1 cn idle 80 80:1:1 771000 0 1 (null) none 19cn16 1 cn idle 80 80:1:1 771000 0 1 (null) none 20cn17 1 cn idle 80 80:1:1 771000 0 1 (null) none 21cn18 1 cn idle 80 80:1:1 771000 0 1 (null) none 22fat01 1 fat idle 80 80:1:1 296649 0 1 (null) none 23gpu01 1 gpu* idle 40 40:1:1 772000 0 1 (null) none 全部的选项介绍在文档sinfo中。</description>
+    </item>
     
     <item>
       <title>LeetCode：0001-两数之和</title>
@@ -44,10 +57,10 @@ Go 1package main 2 3import &amp;amp;#34;fmt&amp;amp;#34; 4 5func twoSum(nums []i
       <pubDate>Tue, 16 Mar 2021 00:00:00 +0000</pubDate>
       
       <guid>/blog/questions-answers-and-reprexes/</guid>
-      <description>I stumbled into a niche YouTube genre: Web Development online instructors (a.k.a content creators) challenge each other to “CSS Battles”.
-Turns out they are fascinating videos where experienced programmers talk and fumble their way through their coding.
-As they talked through their thought processes, I thought about the questions we ask when our code goes wrong and the answers we get when we reprex.
- CSS Battle with The CSS King     I challenged The CSS King to a CSS Battle on YouTube   I’ve thought a lot about this video since I watched it.</description>
+      <description>I stumbled into a niche YouTube genre:Web Development online instructors (a.k.a content creators)challenge each other to “CSS Battles”.
+Turns out they are fascinating videoswhere experienced programmers talk and fumbletheir way through their coding.
+As they talked through their thought processes,I thought about the questions we askwhen our code goes wrongand the answers we get when we reprex.
+CSS Battle with The CSS King  I challenged The CSS King to a CSS Battle on YouTubeI’ve thought a lot about this video since I watched it.</description>
     </item>
     
   </channel>

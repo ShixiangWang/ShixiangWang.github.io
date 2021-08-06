@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en-US">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1">
+
+		
+		<title>Slurm使用技巧 &middot; ShixiangWang
+王诗翔</title>
+		
+		<meta property="og:title" content="Slurm使用技巧 - ShixiangWang
+王诗翔">
+		
+		<meta property="og:type" content="article">
+		
+
+		
+			
+			<meta property="description" content="介绍下自己在使用slurm进行工作的一些经验和技巧。">
+			<meta property="og:description" content="介绍下自己在使用slurm进行工作的一些经验和技巧。">
+			
+			
+    	<meta property="twitter:card" content="summary">
+  		<meta property="twitter:image" content="/apple-touch-icon-152x152.png">
+			
+		
+
+		
+		<meta property="keywords" content ="slurm">
+		
+		
+		<meta name="twitter:creator" content="@WangShxiang">
+		<meta name="twitter:site" content="https://shixiangwang.github.io">
+		
+		
+		
+
+
+
+
+
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+		<link rel="stylesheet" href="../../css/poole.css">
+		<link rel="stylesheet" href="../../css/syntax.css">
+		<link rel="stylesheet" href="../../css/hyde.css">
+		
+		
+		<link rel="stylesheet" href="../../css/hamburgers.css">
+		
+		<link rel="stylesheet" href="../../css/custom.css">
+		
+		
+
+<link rel="apple-touch-icon-precomposed" sizes="57x57" href="../../apple-touch-icon-57x57.png" />
+<link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../apple-touch-icon-114x114.png" />
+<link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../apple-touch-icon-72x72.png" />
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../apple-touch-icon-144x144.png" />
+<link rel="apple-touch-icon-precomposed" sizes="120x120" href="../../apple-touch-icon-120x120.png" />
+<link rel="apple-touch-icon-precomposed" sizes="152x152" href="../../apple-touch-icon-152x152.png" />
+<link rel="icon" type="image/png" href="../../favicon-32x32.png" sizes="32x32" />
+<link rel="icon" type="image/png" href="../../favicon-16x16.png" sizes="16x16" />
+<meta name="application-name" content="Garrick Aden-Buie"/>
+<meta name="msapplication-TileColor" content="#002B36" />
+<meta name="msapplication-TileImage" content="/mstile-144x144.png" />
+<meta name="theme-color" content="#ffffff">
+
+<meta name="mobile-web-app-capable" content="yes">
+
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-title" content="Garrick Aden-Buie">
+
+<link href="../../css/featherlight.min.css" type="text/css" rel="stylesheet" />
+
+<script async defer src="https://buttons.github.io/buttons.js"></script>
+
+<script defer src="../../js/van11y-accessible-hide-show-aria.min.js"></script>
+
+<script defer src="../../js/toc.js"></script>
+
+
+
+		<link href="../../blog/slurm-tricks" rel="canonical">
+	</head>
+
+	<body class="restyled-garrick  h-entry">
+		<main class="content container" role="main">
+			<article class="post">
+				<header>
+					<a class="u-url" href="../../blog/slurm-tricks">
+						<h1 class="post-title p-name">Slurm使用技巧</h1>
+					</a>
+					<h3 class="post-author">王诗翔</h3>
+					<time class="post-date dt-published" datetime="2021-08-06T00:00:00Z">Friday, 6 August 2021</time>
+					
+				</header>
+				<div class="post-content e-content">
+					<p>Slurm的官方文档在：<a href="https://slurm.schedmd.com/">https://slurm.schedmd.com/</a>。</p>
+<p>这篇文章记录下我在工作中使用经常用到，但是一般的初级文档不会涉及的内容、操作。</p>
+<h2 id="系统节点资源概览">系统节点资源概览</h2>
+<p>一般我们输入<code>sinfo</code>，只能看到非常精简的节点信息：</p>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>$ sinfo
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>PARTITION AVAIL  TIMELIMIT  NODES  STATE NODELIST
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>cn           up   infinite      <span style="color:#666">1</span>    mix cn03
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>cn           up   infinite      <span style="color:#666">2</span>  alloc cn<span style="color:#666">[</span>01-02<span style="color:#666">]</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>cn           up   infinite     <span style="color:#666">15</span>   idle cn<span style="color:#666">[</span>04-18<span style="color:#666">]</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span>fat          up   infinite      <span style="color:#666">1</span>   idle fat01
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7</span>gpu*         up   infinite      <span style="color:#666">1</span>   idle gpu01
+</code></pre></div><p>我们可以添加几个选项来获得一个更为完备的信息：</p>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span>$ sinfo -Nel
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>Fri Aug  <span style="color:#666">6</span> 15:54:17 <span style="color:#666">2021</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>NODELIST   NODES PARTITION       STATE CPUS    S:C:T MEMORY TMP_DISK WEIGHT AVAIL_FE REASON              
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>cn01           <span style="color:#666">1</span>        cn   allocated   <span style="color:#666">80</span>   80:1:1 <span style="color:#666">771000</span>        <span style="color:#666">0</span>      <span style="color:#666">1</span>   <span style="color:#666">(</span>null<span style="color:#666">)</span> none                
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>cn02           <span style="color:#666">1</span>        cn   allocated   <span style="color:#666">80</span>   80:1:1 <span style="color:#666">771000</span>        <span style="color:#666">0</span>      <span style="color:#666">1</span>   <span style="color:#666">(</span>null<span style="color:#666">)</span> none                
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>cn03           <span style="color:#666">1</span>        cn       mixed   <span style="color:#666">80</span>   80:1:1 <span style="color:#666">771000</span>        <span style="color:#666">0</span>      <span style="color:#666">1</span>   <span style="color:#666">(</span>null<span style="color:#666">)</span> none                
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>cn04           <span style="color:#666">1</span>        cn        idle   <span style="color:#666">80</span>   80:1:1 <span style="color:#666">771000</span>        <span style="color:#666">0</span>      <span style="color:#666">1</span>   <span style="color:#666">(</span>null<span style="color:#666">)</span> none                
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>cn05           <span style="color:#666">1</span>        cn        idle   <span style="color:#666">80</span>   80:1:1 <span style="color:#666">771000</span>        <span style="color:#666">0</span>      <span style="color:#666">1</span>   <span style="color:#666">(</span>null<span style="color:#666">)</span> none                
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>cn06           <span style="color:#666">1</span>        cn        idle   <span style="color:#666">80</span>   80:1:1 <span style="color:#666">771000</span>        <span style="color:#666">0</span>      <span style="color:#666">1</span>   <span style="color:#666">(</span>null<span style="color:#666">)</span> none                
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>cn07           <span style="color:#666">1</span>        cn        idle   <span style="color:#666">80</span>   80:1:1 <span style="color:#666">771000</span>        <span style="color:#666">0</span>      <span style="color:#666">1</span>   <span style="color:#666">(</span>null<span style="color:#666">)</span> none                
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>cn08           <span style="color:#666">1</span>        cn        idle   <span style="color:#666">80</span>   80:1:1 <span style="color:#666">771000</span>        <span style="color:#666">0</span>      <span style="color:#666">1</span>   <span style="color:#666">(</span>null<span style="color:#666">)</span> none                
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>cn09           <span style="color:#666">1</span>        cn        idle   <span style="color:#666">80</span>   80:1:1 <span style="color:#666">771000</span>        <span style="color:#666">0</span>      <span style="color:#666">1</span>   <span style="color:#666">(</span>null<span style="color:#666">)</span> none                
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>cn10           <span style="color:#666">1</span>        cn        idle   <span style="color:#666">80</span>   80:1:1 <span style="color:#666">771000</span>        <span style="color:#666">0</span>      <span style="color:#666">1</span>   <span style="color:#666">(</span>null<span style="color:#666">)</span> none                
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>cn11           <span style="color:#666">1</span>        cn        idle   <span style="color:#666">80</span>   80:1:1 <span style="color:#666">771000</span>        <span style="color:#666">0</span>      <span style="color:#666">1</span>   <span style="color:#666">(</span>null<span style="color:#666">)</span> none                
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>cn12           <span style="color:#666">1</span>        cn        idle   <span style="color:#666">80</span>   80:1:1 <span style="color:#666">771000</span>        <span style="color:#666">0</span>      <span style="color:#666">1</span>   <span style="color:#666">(</span>null<span style="color:#666">)</span> none                
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span>cn13           <span style="color:#666">1</span>        cn        idle   <span style="color:#666">80</span>   80:1:1 <span style="color:#666">771000</span>        <span style="color:#666">0</span>      <span style="color:#666">1</span>   <span style="color:#666">(</span>null<span style="color:#666">)</span> none                
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span>cn14           <span style="color:#666">1</span>        cn        idle   <span style="color:#666">80</span>   80:1:1 <span style="color:#666">771000</span>        <span style="color:#666">0</span>      <span style="color:#666">1</span>   <span style="color:#666">(</span>null<span style="color:#666">)</span> none                
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span>cn15           <span style="color:#666">1</span>        cn        idle   <span style="color:#666">80</span>   80:1:1 <span style="color:#666">771000</span>        <span style="color:#666">0</span>      <span style="color:#666">1</span>   <span style="color:#666">(</span>null<span style="color:#666">)</span> none                
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span>cn16           <span style="color:#666">1</span>        cn        idle   <span style="color:#666">80</span>   80:1:1 <span style="color:#666">771000</span>        <span style="color:#666">0</span>      <span style="color:#666">1</span>   <span style="color:#666">(</span>null<span style="color:#666">)</span> none                
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span>cn17           <span style="color:#666">1</span>        cn        idle   <span style="color:#666">80</span>   80:1:1 <span style="color:#666">771000</span>        <span style="color:#666">0</span>      <span style="color:#666">1</span>   <span style="color:#666">(</span>null<span style="color:#666">)</span> none                
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span>cn18           <span style="color:#666">1</span>        cn        idle   <span style="color:#666">80</span>   80:1:1 <span style="color:#666">771000</span>        <span style="color:#666">0</span>      <span style="color:#666">1</span>   <span style="color:#666">(</span>null<span style="color:#666">)</span> none                
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span>fat01          <span style="color:#666">1</span>       fat        idle   <span style="color:#666">80</span>   80:1:1 <span style="color:#666">296649</span>        <span style="color:#666">0</span>      <span style="color:#666">1</span>   <span style="color:#666">(</span>null<span style="color:#666">)</span> none                
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23</span>gpu01          <span style="color:#666">1</span>      gpu*        idle   <span style="color:#666">40</span>   40:1:1 <span style="color:#666">772000</span>        <span style="color:#666">0</span>      <span style="color:#666">1</span>   <span style="color:#666">(</span>null<span style="color:#666">)</span> none   
+</code></pre></div><p>全部的选项介绍在文档<a href="https://slurm.schedmd.com/sinfo.html"><em>sinfo</em></a>中。</p>
+<h2 id="job-array">Job Array</h2>
+<p>之前使用PBS任务系统工作过，没有看到可以快速提交和处理相似任务脚本的命令，我手动写过脚本去批量生成任务然后提交。这种工作其实
+很常见，例如要处理好几百个样本，每个样本都需要跑某一（多）个软件程序。因此每个样本处理可能除了文件名不同，
+其需要的计算资源是一致的。</p>
+<p><a href="https://portal.supercomputing.wales/index.php/index/slurm/interactive-use-job-arrays/batch-submission-of-serial-jobs-for-parallel-execution/"><em>Batch Submission of Serial Jobs for Parallel Execution</em></a>这篇文章介绍了3种处理策略，我最喜欢最后一种，因为官方工具原生支持了批处理任务的提交。</p>
+<p>下面是来自<a href="https://portal.supercomputing.wales/index.php/index/slurm/interactive-use-job-arrays/job-arrays/"><em>Job Arrays</em></a>一文的例子，我们可以直接拿来作模板使用。</p>
+<p><code>array.sh</code>：</p>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#bc7a00">#!/bin/bash
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span style="color:#bc7a00"></span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span style="color:#408080;font-style:italic">#SBATCH -J arraytest</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span><span style="color:#408080;font-style:italic">#SBATCH --array=0-4</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span><span style="color:#408080;font-style:italic">#SBATCH -o output-%A_%a-%J.o</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span><span style="color:#408080;font-style:italic">#SBATCH -n 1</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span><span style="color:#008000">echo</span> SLURM_JOB_ID <span style="color:#19177c">$SLURM_JOB_ID</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span style="color:#008000">echo</span> SLURM_ARRAY_JOB_ID <span style="color:#19177c">$SLURM_ARRAY_JOB_ID</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span style="color:#008000">echo</span> SLURM_ARRAY_TASK_ID <span style="color:#19177c">$SLURM_ARRAY_TASK_ID</span>
+</code></pre></div><p>这个脚本的核心在<code>--array</code>选项，它定义了一个数组，这个数组的每个元素会传入到<code>$SLURM_ARRAY_TASK_ID</code>这个变量中，利用这个变量我们就能处理不同样本的任务。该选项也可以在<code>sbatch</code>提交任务时指定，非常灵活。
+在头文件中定义的资源是每个任务通用的，比如上面指定使用一个CPU，那么有100个任务的话，每个任务1个，就是100个。</p>
+<p>日志文件会是下面的格式：</p>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-fallback" data-lang="fallback"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>output-231_0-232.o
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>output-231_1-233.o
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>output-231_2-234.o
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>output-231_3-235.o
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>output-231_4-231.o
+</code></pre></div><p>输出文件内容会是下面的信息格式。</p>
+<p><code>output-231_1-233.o</code>：</p>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-fallback" data-lang="fallback"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>SLURM_JOB_ID 233
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>SLURM_ARRAY_JOB_ID 231
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>SLURM_ARRAY_TASK_ID 1
+</code></pre></div><p>相关环境变量汇总如下：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">BASH Environment Variable</th>
+<th style="text-align:left">SBATCH Field Code</th>
+<th style="text-align:left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">$SLURM_JOB_ID</td>
+<td style="text-align:left">%J</td>
+<td style="text-align:left">Job identifier</td>
+</tr>
+<tr>
+<td style="text-align:left">$SLURM_ARRAY_JOB_ID</td>
+<td style="text-align:left">%A</td>
+<td style="text-align:left">Array parent job identifier</td>
+</tr>
+<tr>
+<td style="text-align:left">$SLURM_ARRAY_TASK_ID</td>
+<td style="text-align:left">%a</td>
+<td style="text-align:left">Array job iteration index</td>
+</tr>
+<tr>
+<td style="text-align:left">$SLURM_ARRAY_TASK_COUNT</td>
+<td style="text-align:left"></td>
+<td style="text-align:left">Number of indexes (tasks) in the job array</td>
+</tr>
+<tr>
+<td style="text-align:left">$SLURM_ARRAY_TASK_MAX</td>
+<td style="text-align:left"></td>
+<td style="text-align:left">Maximum array index</td>
+</tr>
+<tr>
+<td style="text-align:left">$SLURM_ARRAY_TASK_MIN</td>
+<td style="text-align:left"></td>
+<td style="text-align:left">Minimum array index</td>
+</tr>
+</tbody>
+</table>
+<p>更多的控制需要看<a href="https://slurm.schedmd.com/job_array.html"><em>Job Array Support</em></a>这篇文档。</p>
+
+				</div>
+				<footer class="footer">
+				  <hr>
+<div class="post-tags">
+
+<p>
+  <svg xmlns="http://www.w3.org/2000/svg" class="octicon" width="20" height="24" viewBox="0 0 14 16"><path fill-rule="evenodd" d="M8 2H6V0h2v2zm4 5H2c-.55 0-1-.45-1-1V4c0-.55.45-1 1-1h10l2 2-2 2zM8 4H6v2h2V4zM6 16h2V8H6v8z"/></svg>
+	
+	<a class="p-category" href="../../categories/blog/">Blog</a>
+</p>
+
+
+<p>
+  <svg xmlns="http://www.w3.org/2000/svg" class="octicon" width="20" height="24" viewBox="0 0 15 16"><path fill-rule="evenodd" d="M7.73 1.73C7.26 1.26 6.62 1 5.96 1H3.5C2.13 1 1 2.13 1 3.5v2.47c0 .66.27 1.3.73 1.77l6.06 6.06c.39.39 1.02.39 1.41 0l4.59-4.59a.996.996 0 0 0 0-1.41L7.73 1.73zM2.38 7.09c-.31-.3-.47-.7-.47-1.13V3.5c0-.88.72-1.59 1.59-1.59h2.47c.42 0 .83.16 1.13.47l6.14 6.13-4.73 4.73-6.13-6.15zM3.01 3h2v2H3V3h.01z"/></svg>
+	
+	<a class="p-tag" href="../../tags/hpc/">HPC</a><a class="p-tag" href="../../tags/slurm/">slurm</a>
+
+</p>
+</div>
+
+				</footer>
+			</article>
+		</main>
+			  <button class="hamburger hamburger--arrow is-active" type="button" onclick="document.getElementsByClassName('sidebar')[0].classList.toggle('collapsed');document.getElementsByClassName('content')[0].classList.toggle('expanded');document.getElementsByClassName('hamburger')[0].classList.toggle('is-active');document.getElementsByClassName('hamburger-inner')[0].classList.toggle('is-active')">
+      <span class="hamburger-box">
+        <span class="hamburger-inner"></span>
+      </span>
+    </button>
+		<aside class="sidebar">
+			<div class="container sidebar-sticky">
+				<header class="sidebar-about h-card vcard p-author">
+					
+					<a class="u-url u-uid" rel="me" href="../../">
+						<img class="u-photo" src="https://avatars.githubusercontent.com/u/25057508?v=4" width=128 height=128 />
+					</a>
+					
+
+					
+					<span class="site-title u-name fn">
+					  <a class="u-url u-uid" rel="me" href="../../">ShixiangWang
+王诗翔</a>
+				  </span>
+					
+
+					<p class="lead p-note">
+						 Bioinformatics Scholar. Cancer Researcher. Data Scientist. #rstats #golang. Always learning something new. 
+					</p>
+
+					<nav>
+						<ul class="sidebar-nav">
+							
+							<li><a href="../../about/"> About </a></li>
+							
+							<li><a href="../../blog/"> Blog </a></li>
+							
+							<li><a href="../../project/"> Projects </a></li>
+							
+							<li><a href="http://42.192.87.178:3838/"> Shiny Apps </a></li>
+							
+							<li><a href="../../talk/"> Talks </a></li>
+							
+							<li><a href="https://github.com/ShixiangWang/self-study/discussions"> Discuss with me? </a></li>
+							
+							<li><a href="https://shixiangwang.netlify.app/"> Mirror #1 </a></li>
+							
+							<li><a href="https://shixiangwang.github.io/"> Mirror #2 </a></li>
+							
+						</ul>
+					</nav>
+
+					
+						<div class="contact">
+						  
+							<ul class="contact-list">
+								
+								<li>
+									
+									  
+		  							  <a href="https://twitter.com/WangShxiang" class="u-url url" rel="me" title="Twitter" aria-label="Twitter">
+		  						    <i class='fab fa-twitter fa-fw'></i>
+		  							  </a>
+		  						  
+								
+								</li>
+								
+								<li>
+									
+									  
+		  							  <a href="https://github.com/ShixiangWang" class="u-url url" rel="me" title="GitHub" aria-label="GitHub">
+		  						    <i class='fab fa-github fa-fw'></i>
+		  							  </a>
+		  						  
+								
+								</li>
+								
+								<li>
+									
+		  							<a href="mailto:shixiang1994wang@gmail.com" class="u-email email" rel="me" title="Email" aria-label="Email">
+		  							<i class='fa fa-envelope fa-fw'></i>
+		  							  
+		  							</a>
+									
+								</li>
+								
+								<li>
+									
+									  
+		  							  <a href="https://shixiangwang.github.io/home/logo/qrcode.jpg" class="u-url url" rel="me" title="Bandcamp" aria-label="Bandcamp">
+		  						    <i class='fab fa-bandcamp fa-fw'></i>
+		  							  </a>
+		  						  
+								
+								</li>
+								
+							</ul>
+						</div>
+					
+				</header>
+
+				<footer>&copy; 2021. All rights reserved. </footer>
+				 <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+            <span id="busuanzi_container_site_pv">本站总访问量&nbsp;<span id="busuanzi_value_site_pv"></span>&nbsp;次</span>
+			</div>
+		</aside>
+
+		  <footer>
+  <script src="../../js/jquery-latest.js"></script>
+<script src="../../js/featherlight.min.js" type="text/javascript" charset="utf-8"></script>
+
+  
+  
+  
+
+  <script src="//cdn.bootcss.com/highlight.js//highlight.min.js"></script>
+  
+  
+  
+  <script>hljs.configure({languages: []}); hljs.initHighlightingOnLoad();</script>
+  
+
+ 
+  
+
+  
+  </footer>
+  </body>
+</html>
+
+	</body>
+</html>

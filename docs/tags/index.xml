@@ -8,7 +8,25 @@
 王诗翔</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 05 Aug 2021 00:00:00 +0000</lastBuildDate><atom:link href="/tags/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 06 Aug 2021 00:00:00 +0000</lastBuildDate><atom:link href="/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>HPC</title>
+      <link>/tags/hpc/</link>
+      <pubDate>Fri, 06 Aug 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/hpc/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>slurm</title>
+      <link>/tags/slurm/</link>
+      <pubDate>Fri, 06 Aug 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/slurm/</guid>
+      <description></description>
+    </item>
+    
     <item>
       <title>ABSOLUTE</title>
       <link>/tags/absolute/</link>
@@ -78,24 +96,6 @@
       <pubDate>Thu, 05 Aug 2021 00:00:00 +0000</pubDate>
       
       <guid>/tags/golang/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Google Scholar</title>
-      <link>/tags/google-scholar/</link>
-      <pubDate>Thu, 05 Aug 2021 00:00:00 +0000</pubDate>
-      
-      <guid>/tags/google-scholar/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>ID转换</title>
-      <link>/tags/id%E8%BD%AC%E6%8D%A2/</link>
-      <pubDate>Thu, 05 Aug 2021 00:00:00 +0000</pubDate>
-      
-      <guid>/tags/id%E8%BD%AC%E6%8D%A2/</guid>
       <description></description>
     </item>
     
