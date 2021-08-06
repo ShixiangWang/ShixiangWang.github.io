@@ -25,7 +25,6 @@
 		{{ if .RSSLink }}
 		<link href="{{ .RSSLink | relURL }}" rel="alternate" type="application/rss+xml" title="{{ .Site.Title }}" />
 		{{ end }}
-		{{ partial "head_highlightjs" . }}
 
 		<link rel="stylesheet" href='{{ "font-awesome/css/font-awesome.min.css" | absURL }}' type="text/css">
 		<link rel="stylesheet" href="/css/poole.css">
