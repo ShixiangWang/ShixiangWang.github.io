@@ -4,6 +4,7 @@ author: 王诗翔
 date: '2021-08-05'
 slug: leetcode-0001-two-sum
 categories:
+  - Blog
   - LeetCode
 tags:
   - R

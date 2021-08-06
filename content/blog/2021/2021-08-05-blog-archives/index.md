@@ -4,6 +4,7 @@ author: 王诗翔
 date: '2021-08-05'
 slug: blog-archives
 categories:
+  - Blog
   - 存档
 tags:
   - blog
