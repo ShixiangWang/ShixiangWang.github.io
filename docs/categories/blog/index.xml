@@ -8,7 +8,19 @@
 王诗翔</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 06 Aug 2021 00:00:00 +0000</lastBuildDate><atom:link href="/categories/blog/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 08 Aug 2021 00:00:00 +0000</lastBuildDate><atom:link href="/categories/blog/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Jupyter Notebook 插件配置</title>
+      <link>/blog/jupyter-notebook-plugin-configs/</link>
+      <pubDate>Sun, 08 Aug 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/jupyter-notebook-plugin-configs/</guid>
+      <description>安装命令：
+1pip3 install -U jupyter_contrib_nbextensions 2jupyter contrib nbextension install --user 3pip3 install -U jupyter_nbextensions_configurator 4jupyter nbextensions_configurator enable --user 5 6pip3 install -U qgrid # 动态操作 DataFrame 7jupyter nbextension enable --py --sys-prefix qgrid 8jupyter nbextension enable --py --sys-prefix widgetsnbextension 如果要修改主题：
+1pip3 install -U jupyterthemes 网址：https://github.com/dunovank/jupyter-themes
+激活的插件：</description>
+    </item>
+    
     <item>
       <title>Slurm使用技巧</title>
       <link>/blog/slurm-tricks/</link>
@@ -56,10 +68,10 @@ Go 1package main 2 3import &amp;#34;fmt&amp;#34; 4 5func twoSum(nums []int, targ
       <pubDate>Tue, 16 Mar 2021 00:00:00 +0000</pubDate>
       
       <guid>/blog/questions-answers-and-reprexes/</guid>
-      <description>I stumbled into a niche YouTube genre:Web Development online instructors (a.k.a content creators)challenge each other to “CSS Battles”.
-Turns out they are fascinating videoswhere experienced programmers talk and fumbletheir way through their coding.
-As they talked through their thought processes,I thought about the questions we askwhen our code goes wrongand the answers we get when we reprex.
-CSS Battle with The CSS King  I challenged The CSS King to a CSS Battle on YouTubeI’ve thought a lot about this video since I watched it.</description>
+      <description>I stumbled into a niche YouTube genre: Web Development online instructors (a.k.a content creators) challenge each other to “CSS Battles”.
+Turns out they are fascinating videos where experienced programmers talk and fumble their way through their coding.
+As they talked through their thought processes, I thought about the questions we ask when our code goes wrong and the answers we get when we reprex.
+ CSS Battle with The CSS King     I challenged The CSS King to a CSS Battle on YouTube   I’ve thought a lot about this video since I watched it.</description>
     </item>
     
   </channel>
