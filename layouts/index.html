@@ -30,7 +30,7 @@
 					{{ range first (.Site.Params.n_posts_front | default 10) (where .Site.RegularPages "Section" "blog") }}
 					<li>
 						<a class="post-title" href="{{ .RelPermalink | replaceRE "/$" "" }}">{{ .Title }}</a>
-						<time class="post-date" datetime="{{ .Date.Format "2006-01-02T15:04:05Z" }}">{{ .Date.Format "Monday, 2 January 2006" }}</time>
+						<time class="post-date" datetime="{{ .Date.Format "2006-01-02T15:04:05Z" }}">&nbsp;&nbsp;{{ .Description }} <small>[{{ .Date.Format "Monday, 2 January 2006" }}]</small></time>
 					</li>
 					{{ end }}
 					{{ if ge (len $blogPages) .Site.Params.n_posts_front }}
