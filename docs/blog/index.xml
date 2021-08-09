@@ -69,10 +69,10 @@ Go 1package main 2 3import &amp;amp;#34;fmt&amp;amp;#34; 4 5func twoSum(nums []i
       <pubDate>Tue, 16 Mar 2021 00:00:00 +0000</pubDate>
       
       <guid>/blog/questions-answers-and-reprexes/</guid>
-      <description>I stumbled into a niche YouTube genre: Web Development online instructors (a.k.a content creators) challenge each other to “CSS Battles”.
-Turns out they are fascinating videos where experienced programmers talk and fumble their way through their coding.
-As they talked through their thought processes, I thought about the questions we ask when our code goes wrong and the answers we get when we reprex.
- CSS Battle with The CSS King     I challenged The CSS King to a CSS Battle on YouTube   I’ve thought a lot about this video since I watched it.</description>
+      <description>I stumbled into a niche YouTube genre:Web Development online instructors (a.k.a content creators)challenge each other to “CSS Battles”.
+Turns out they are fascinating videoswhere experienced programmers talk and fumbletheir way through their coding.
+As they talked through their thought processes,I thought about the questions we askwhen our code goes wrongand the answers we get when we reprex.
+CSS Battle with The CSS King  I challenged The CSS King to a CSS Battle on YouTubeI’ve thought a lot about this video since I watched it.</description>
     </item>
     
   </channel>
