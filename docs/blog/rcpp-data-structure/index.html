@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en-US">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1">
+
+		
+		<title>Rcpp：数据结构 &middot; ShixiangWang
+王诗翔</title>
+		
+		<meta property="og:title" content="Rcpp：数据结构 - ShixiangWang
+王诗翔">
+		
+		<meta property="og:type" content="article">
+		
+
+		
+			
+			<meta property="description" content="post description">
+			<meta property="og:description" content="post description">
+			
+			
+    	<meta property="twitter:card" content="summary">
+  		<meta property="twitter:image" content="/apple-touch-icon-152x152.png">
+			
+		
+
+		
+		<meta property="keywords" content ="rstats">
+		
+		
+		<meta name="twitter:creator" content="@WangShxiang">
+		<meta name="twitter:site" content="https://shixiangwang.github.io">
+		
+		
+
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+		<link rel="stylesheet" href="../../css/poole.css">
+		<link rel="stylesheet" href="../../css/syntax.css">
+		<link rel="stylesheet" href="../../css/hyde.css">
+		
+		
+		<link rel="stylesheet" href="../../css/hamburgers.css">
+		
+		<link rel="stylesheet" href="../../css/custom.css">
+		
+		
+
+<link rel="apple-touch-icon-precomposed" sizes="57x57" href="../../apple-touch-icon-57x57.png" />
+<link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../apple-touch-icon-114x114.png" />
+<link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../apple-touch-icon-72x72.png" />
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../apple-touch-icon-144x144.png" />
+<link rel="apple-touch-icon-precomposed" sizes="120x120" href="../../apple-touch-icon-120x120.png" />
+<link rel="apple-touch-icon-precomposed" sizes="152x152" href="../../apple-touch-icon-152x152.png" />
+<link rel="icon" type="image/png" href="../../favicon-32x32.png" sizes="32x32" />
+<link rel="icon" type="image/png" href="../../favicon-16x16.png" sizes="16x16" />
+<meta name="application-name" content="Garrick Aden-Buie"/>
+<meta name="msapplication-TileColor" content="#002B36" />
+<meta name="msapplication-TileImage" content="/mstile-144x144.png" />
+<meta name="theme-color" content="#ffffff">
+
+<meta name="mobile-web-app-capable" content="yes">
+
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-title" content="Garrick Aden-Buie">
+
+<link href="../../css/featherlight.min.css" type="text/css" rel="stylesheet" />
+
+<script async defer src="https://buttons.github.io/buttons.js"></script>
+
+<script defer src="../../js/van11y-accessible-hide-show-aria.min.js"></script>
+
+<script defer src="../../js/toc.js"></script>
+
+
+
+		<link href="../../blog/rcpp-data-structure" rel="canonical">
+	</head>
+
+	<body class="restyled-garrick  h-entry">
+		<main class="content container" role="main">
+			<article class="post">
+				<header>
+					<a class="u-url" href="../../blog/rcpp-data-structure">
+						<h1 class="post-title p-name">Rcpp：数据结构</h1>
+					</a>
+					<h3 class="post-author">王诗翔</h3>
+					<time class="post-date dt-published" datetime="2021-08-09T00:00:00Z">Monday, 9 August 2021</time>
+					
+				</header>
+				<div class="post-content e-content">
+					<h2 id="robject类">RObject类</h2>
+<p>RObject类在Rcpp类系统中占核心地位。虽然它不是面向用户的，但为接下来的所有类提供了公共的数据结构，它是构建Rcpp API的基础类。</p>
+<p>每一个RObject类实例都封装了一个R对象，而每个对象在内部可以表示为一个SEXP：一个指向S表达式对象的指针。</p>
+<p>基于它的用户可见（可使用）的类：</p>
+<ul>
+<li>
+<p>IntegerVector对应整型向量。</p>
+</li>
+<li>
+<p>NumericVector对应数值向量。</p>
+</li>
+<li>
+<p>LogicalVector对应逻辑值向量。</p>
+</li>
+<li>
+<p>CharacterVector对应Character向量。</p>
+</li>
+<li>
+<p>GenericVector对应List类型的泛型向量。</p>
+</li>
+<li>
+<p>ExpressionVector对应表达式类型向量。</p>
+</li>
+<li>
+<p>RawVector对应raw类型向量。</p>
+</li>
+</ul>
+<p>对于整型和数值型，我们还有IntegerMatrix和NumericMatrix对应R中的数值矩阵。</p>
+<p>下面我们通过整型向量来了解它们。</p>
+<h2 id="integervector类">IntegerVector类</h2>
+<p>模板函数<code>as&lt;&gt;()</code>用于从R转换到C++，而<code>wrap()</code>函数的方向相反。</p>
+<blockquote>
+<p>实际大多数使用情况下，我们已经不需要显式地进行转换处理，该过程会在底层自动完成。</p>
+</blockquote>
+<h3 id="示例返回完美数">示例：返回完美数</h3>
+<p>什么是完美数：</p>
+<p><a href="https://baike.baidu.com/item/%E5%AE%8C%E5%85%A8%E6%95%B0/370913?fromtitle=%E5%AE%8C%E7%BE%8E%E6%95%B0&amp;fromid=871560&amp;fr=aladdin">https://baike.baidu.com/item/完全数/370913?fromtitle=完美数&amp;fromid=871560&amp;fr=aladdin</a></p>
+<p>代码：</p>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-R" data-lang="R"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#00f">library</span>(Rcpp)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span style="color:#00f">library</span>(inline)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>src <span style="color:#666">&lt;-</span> <span style="color:#ba2121">&#39;
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span><span style="color:#ba2121">  Rcpp::IntegerVector epn(4);
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span><span style="color:#ba2121">  epn[0] = 6;
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span><span style="color:#ba2121">  epn[1] = 14;
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span><span style="color:#ba2121">  epn[2] = 496;
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span style="color:#ba2121">  epn[3] = 8182;
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span style="color:#ba2121">  return epn;
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span><span style="color:#ba2121">&#39;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>func <span style="color:#666">&lt;-</span> <span style="color:#00f">cxxfunction</span>(<span style="color:#00f">signature</span>(), src, plugin <span style="color:#666">=</span> <span style="color:#ba2121">&#34;Rcpp&#34;</span>)
+</code></pre></div><p>调用：</p>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-R" data-lang="R"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#666">&gt;</span> <span style="color:#00f">func</span>()
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>[1]    <span style="color:#666">6</span>   <span style="color:#666">14</span>  <span style="color:#666">496</span> <span style="color:#666">8182</span>
+</code></pre></div><h3 id="示例使用输入">示例：使用输入</h3>
+<p>求乘积。</p>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-R" data-lang="R"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span>src <span style="color:#666">&lt;-</span> <span style="color:#ba2121">&#39;
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span style="color:#ba2121">  Rcpp::IntegerVector vec(vx);
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span style="color:#ba2121">  int prod = 1;
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span><span style="color:#ba2121">  for (int i=0; i&lt;vec.size(); i++) {
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span><span style="color:#ba2121">  prod *= vec[i];
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span><span style="color:#ba2121">  }
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span><span style="color:#ba2121">  return Rcpp::wrap(prod);
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span><span style="color:#ba2121">&#39;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>func <span style="color:#666">&lt;-</span> <span style="color:#00f">cxxfunction</span>(<span style="color:#00f">signature</span>(vx<span style="color:#666">=</span><span style="color:#ba2121">&#34;integer&#34;</span>), src, plugin <span style="color:#666">=</span> <span style="color:#ba2121">&#34;Rcpp&#34;</span>)
+</code></pre></div><p>调用：</p>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-R" data-lang="R"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#666">&gt;</span> <span style="color:#00f">func</span>(<span style="color:#666">1</span><span style="color:#666">:</span><span style="color:#666">3</span>)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>[1] <span style="color:#666">6</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span style="color:#666">&gt;</span> <span style="color:#00f">func</span>(<span style="color:#666">1</span><span style="color:#666">:</span><span style="color:#666">10</span>)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>[1] <span style="color:#666">3628800</span>
+</code></pre></div><h3 id="示例使用错误的输入">示例：使用错误的输入</h3>
+<p>当我们使用浮点数据时，看看结果是怎样的：</p>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-R" data-lang="R"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#666">&gt;</span> <span style="color:#00f">func</span>(<span style="color:#00f">seq</span>(<span style="color:#666">1.0</span>, <span style="color:#666">1.9</span>, by <span style="color:#666">=</span> <span style="color:#666">0.1</span>))
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>[1] <span style="color:#666">1</span>
+</code></pre></div><p>我们得到了一个错误的结果！原因是输入的浮点数被强制转换为了整数，因此1.0到1.9都变成了1。</p>
+<h2 id="named类">Named类</h2>
+<p>Named类是一个辅助类，<strong>用于设定键值对中的键</strong> 。我们简单看看它在R中的示例：</p>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-R" data-lang="R"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#666">&gt;</span> someVec <span style="color:#666">&lt;-</span> <span style="color:#00f">c</span>(mean <span style="color:#666">=</span> <span style="color:#666">1.2</span>, sd <span style="color:#666">=</span> <span style="color:#666">3</span>, dim <span style="color:#666">=</span> <span style="color:#666">4</span>)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span style="color:#666">&gt;</span> someVec
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>mean   sd  dim 
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span> <span style="color:#666">1.2</span>  <span style="color:#666">3.0</span>  <span style="color:#666">4.0</span> 
+</code></pre></div><p>向量中的每一个元素被赋予了一个对应的标签。Named类允许我们对C++创建的对象做类似的事情。</p>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-R" data-lang="R"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#666">&gt;</span> src <span style="color:#666">&lt;-</span> <span style="color:#ba2121">&#39;
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span style="color:#ba2121">+   Rcpp::NumericVector x =
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span style="color:#ba2121">+     Rcpp::NumericVector::create(
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span><span style="color:#ba2121">+     Rcpp::Named(&#34;mean&#34;) = 1.2,
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span><span style="color:#ba2121">+     Rcpp::Named(&#34;sd&#34;) = 3,
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span><span style="color:#ba2121">+     Rcpp::Named(&#34;dim&#34;) = 4);
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span><span style="color:#ba2121">+   return x;
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span><span style="color:#ba2121">+ &#39;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span style="color:#666">&gt;</span> 
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span style="color:#666">&gt;</span> func <span style="color:#666">&lt;-</span> <span style="color:#00f">cxxfunction</span>(<span style="color:#00f">signature</span>(), src, plugin <span style="color:#666">=</span> <span style="color:#ba2121">&#34;Rcpp&#34;</span>)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span><span style="color:#666">&gt;</span> <span style="color:#00f">func</span>()
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>mean   sd  dim 
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span> <span style="color:#666">1.2</span>  <span style="color:#666">3.0</span>  <span style="color:#666">4.0</span> 
+</code></pre></div><p>上述构造可以简写为：</p>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-R" data-lang="R"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>src <span style="color:#666">&lt;-</span> <span style="color:#ba2121">&#39;
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span style="color:#ba2121">  Rcpp::NumericVector x =
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span style="color:#ba2121">    Rcpp::NumericVector::create(
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span style="color:#ba2121">    _[&#34;mean&#34;] = 1.2,
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span><span style="color:#ba2121">    _[&#34;sd&#34;] = 3,
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span><span style="color:#ba2121">    _[&#34;dim&#34;] = 4);
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7</span><span style="color:#ba2121">  return x;
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">8</span><span style="color:#ba2121">&#39;</span>
+</code></pre></div><h2 id="list类又名genericvector类">List类，又名GenericVector类</h2>
+<p>这是最一般的数据类型，它可以包含其他数据类型，就行R中的list()函数一样。</p>
+<p>由于可以保存不同类型的数据对象，List很适合用于R到C++之间的参数传递。</p>
+<h2 id="dataframe类">DataFrame类</h2>
+<p>数据框是R中最常用的数据类型，在Rcpp中当然也进行了支持。下面是一个示例：</p>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-R" data-lang="R"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#666">&gt;</span> src <span style="color:#666">&lt;-</span> <span style="color:#ba2121">&#39;
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span style="color:#ba2121">+   Rcpp::IntegerVector v = Rcpp::IntegerVector::create(7,8,9);
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span style="color:#ba2121">+   std::vector&lt;std::string&gt; s(3);
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span><span style="color:#ba2121">+   s[0] = &#34;x&#34;;
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span><span style="color:#ba2121">+   s[1] = &#34;y&#34;;
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span><span style="color:#ba2121">+   s[2] = &#34;z&#34;;
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span><span style="color:#ba2121">+   return Rcpp::DataFrame::create(
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span><span style="color:#ba2121">+     Rcpp::Named(&#34;a&#34;) = v,
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span style="color:#ba2121">+     Rcpp::Named(&#34;b&#34;) = s);
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span style="color:#ba2121">+ &#39;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span><span style="color:#666">&gt;</span> 
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span><span style="color:#666">&gt;</span> func <span style="color:#666">&lt;-</span> <span style="color:#00f">cxxfunction</span>(<span style="color:#00f">signature</span>(), src, plugin <span style="color:#666">=</span> <span style="color:#ba2121">&#34;Rcpp&#34;</span>)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span><span style="color:#666">&gt;</span> <span style="color:#00f">func</span>()
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>  a b
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span><span style="color:#666">1</span> <span style="color:#666">7</span> x
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span><span style="color:#666">2</span> <span style="color:#666">8</span> y
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span><span style="color:#666">3</span> <span style="color:#666">9</span> z
+</code></pre></div><h2 id="其他复杂类型">其他复杂类型</h2>
+<p>其他比较复杂的R对象类型在Rcpp中也能找到对应的类型，包括函数、环境、S4对象等。其声明示例大致如下：</p>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-C++" data-lang="C++"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span>Rcpp<span style="color:#666">::</span>Function rt(<span style="color:#ba2121">&#34;rt&#34;</span>); <span style="color:#408080;font-style:italic">// 声明rt函数为R中的rt函数
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span style="color:#408080;font-style:italic"></span>Rcpp<span style="color:#666">::</span>Environment stats(<span style="color:#ba2121">&#34;package:stats&#34;</span>); <span style="color:#408080;font-style:italic">// 使用R的stats环境并获取其中的rnorm函数
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span style="color:#408080;font-style:italic"></span>Rcpp<span style="color:#666">::</span>Function rnorm <span style="color:#666">=</span> stats[<span style="color:#ba2121">&#34;rnorm&#34;</span>]; 
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>S4 <span style="color:#00f">foo</span>(x); <span style="color:#408080;font-style:italic">// S4 类
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span><span style="color:#408080;font-style:italic"></span>foo.slot(<span style="color:#ba2121">&#34;.Data&#34;</span>) <span style="color:#666">=</span> <span style="color:#ba2121">&#34;foooo&#34;</span>;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span><span style="color:#408080;font-style:italic">// 一些检测方法
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span><span style="color:#408080;font-style:italic"></span>RObject <span style="color:#00f">y</span>(x);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>y.isS4();
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>y.hasSlot(<span style="color:#ba2121">&#34;z&#34;</span>);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>y.slot(<span style="color:#ba2121">&#34;z&#34;</span>); <span style="color:#408080;font-style:italic">// 获取z数据槽 
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span><span style="color:#408080;font-style:italic"></span>
+</code></pre></div>
+				</div>
+				<footer class="footer">
+				  <hr>
+<div class="post-tags">
+
+<p>
+  <svg xmlns="http://www.w3.org/2000/svg" class="octicon" width="20" height="24" viewBox="0 0 14 16"><path fill-rule="evenodd" d="M8 2H6V0h2v2zm4 5H2c-.55 0-1-.45-1-1V4c0-.55.45-1 1-1h10l2 2-2 2zM8 4H6v2h2V4zM6 16h2V8H6v8z"/></svg>
+	
+	<a class="p-category" href="../../categories/blog/">Blog</a>
+</p>
+
+
+<p>
+  <svg xmlns="http://www.w3.org/2000/svg" class="octicon" width="20" height="24" viewBox="0 0 15 16"><path fill-rule="evenodd" d="M7.73 1.73C7.26 1.26 6.62 1 5.96 1H3.5C2.13 1 1 2.13 1 3.5v2.47c0 .66.27 1.3.73 1.77l6.06 6.06c.39.39 1.02.39 1.41 0l4.59-4.59a.996.996 0 0 0 0-1.41L7.73 1.73zM2.38 7.09c-.31-.3-.47-.7-.47-1.13V3.5c0-.88.72-1.59 1.59-1.59h2.47c.42 0 .83.16 1.13.47l6.14 6.13-4.73 4.73-6.13-6.15zM3.01 3h2v2H3V3h.01z"/></svg>
+	
+	<a class="p-tag" href="../../tags/r/">R</a><a class="p-tag" href="../../tags/rcpp/">Rcpp</a><a class="p-tag" href="../../tags/%E5%AD%A6%E4%B9%A0/">学习</a>
+
+</p>
+</div>
+
+				</footer>
+			</article>
+		</main>
+			  <button class="hamburger hamburger--arrow is-active" type="button" onclick="document.getElementsByClassName('sidebar')[0].classList.toggle('collapsed');document.getElementsByClassName('content')[0].classList.toggle('expanded');document.getElementsByClassName('hamburger')[0].classList.toggle('is-active');document.getElementsByClassName('hamburger-inner')[0].classList.toggle('is-active')">
+      <span class="hamburger-box">
+        <span class="hamburger-inner"></span>
+      </span>
+    </button>
+		<aside class="sidebar">
+			<div class="container sidebar-sticky">
+				<header class="sidebar-about h-card vcard p-author">
+					
+					<a class="u-url u-uid" rel="me" href="../../">
+						<img class="u-photo" src="https://avatars.githubusercontent.com/u/25057508?v=4" width=128 height=128 />
+					</a>
+					
+
+					
+					<span class="site-title u-name fn">
+					  <a class="u-url u-uid" rel="me" href="../../">ShixiangWang
+王诗翔</a>
+				  </span>
+					
+
+					<p class="lead p-note">
+						 Bioinformatics Scholar. Cancer Researcher. Data Scientist. #rstats #golang. Always learning something new. 
+					</p>
+
+					<nav>
+						<ul class="sidebar-nav">
+							
+							<li><a href="../../about/"> About </a></li>
+							
+							<li><a href="../../blog/"> Blog </a></li>
+							
+							<li><a href="../../project/"> Projects </a></li>
+							
+							<li><a href="http://42.192.87.178:3838/"> Shiny Apps </a></li>
+							
+							<li><a href="../../talk/"> Talks </a></li>
+							
+							<li><a href="https://github.com/ShixiangWang/self-study/discussions"> Discuss with me? </a></li>
+							
+							<li><a href="https://shixiangwang.netlify.app/"> Mirror #1 </a></li>
+							
+							<li><a href="https://shixiangwang.github.io/"> Mirror #2 </a></li>
+							
+						</ul>
+					</nav>
+
+					
+						<div class="contact">
+						  
+							<ul class="contact-list">
+								
+								<li>
+									
+									  
+		  							  <a href="https://twitter.com/WangShxiang" class="u-url url" rel="me" title="Twitter" aria-label="Twitter">
+		  						    <i class='fab fa-twitter fa-fw'></i>
+		  							  </a>
+		  						  
+								
+								</li>
+								
+								<li>
+									
+									  
+		  							  <a href="https://github.com/ShixiangWang" class="u-url url" rel="me" title="GitHub" aria-label="GitHub">
+		  						    <i class='fab fa-github fa-fw'></i>
+		  							  </a>
+		  						  
+								
+								</li>
+								
+								<li>
+									
+		  							<a href="mailto:shixiang1994wang@gmail.com" class="u-email email" rel="me" title="Email" aria-label="Email">
+		  							<i class='fa fa-envelope fa-fw'></i>
+		  							  
+		  							</a>
+									
+								</li>
+								
+								<li>
+									
+									  
+		  							  <a href="https://shixiangwang.github.io/home/logo/qrcode.jpg" class="u-url url" rel="me" title="Bandcamp" aria-label="Bandcamp">
+		  						    <i class='fab fa-bandcamp fa-fw'></i>
+		  							  </a>
+		  						  
+								
+								</li>
+								
+							</ul>
+						</div>
+					
+				</header>
+
+				<footer>&copy; 2021. All rights reserved. </footer>
+				 <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+            <span id="busuanzi_container_site_pv">本站总访问量&nbsp;<span id="busuanzi_value_site_pv"></span>&nbsp;次</span>
+			</div>
+		</aside>
+
+		  <footer>
+  <script src="../../js/jquery-latest.js"></script>
+<script src="../../js/featherlight.min.js" type="text/javascript" charset="utf-8"></script>
+
+  
+
+  
+  </footer>
+  </body>
+</html>
+
+	</body>
+</html>

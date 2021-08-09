@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en-US">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1">
+
+		
+		<title>使用Circle-Map Realign鉴定环形DNA &middot; ShixiangWang
+王诗翔</title>
+		
+		<meta property="og:title" content="使用Circle-Map Realign鉴定环形DNA - ShixiangWang
+王诗翔">
+		
+		<meta property="og:type" content="article">
+		
+
+		
+			
+			<meta property="description" content="根据官方教程学习使用软件。">
+			<meta property="og:description" content="根据官方教程学习使用软件。">
+			
+			
+    	<meta property="twitter:card" content="summary">
+  		<meta property="twitter:image" content="/apple-touch-icon-152x152.png">
+			
+		
+
+		
+		
+		<meta name="twitter:creator" content="@WangShxiang">
+		<meta name="twitter:site" content="https://shixiangwang.github.io">
+		
+		
+
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+		<link rel="stylesheet" href="../../css/poole.css">
+		<link rel="stylesheet" href="../../css/syntax.css">
+		<link rel="stylesheet" href="../../css/hyde.css">
+		
+		
+		<link rel="stylesheet" href="../../css/hamburgers.css">
+		
+		<link rel="stylesheet" href="../../css/custom.css">
+		
+		
+
+<link rel="apple-touch-icon-precomposed" sizes="57x57" href="../../apple-touch-icon-57x57.png" />
+<link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../apple-touch-icon-114x114.png" />
+<link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../apple-touch-icon-72x72.png" />
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../apple-touch-icon-144x144.png" />
+<link rel="apple-touch-icon-precomposed" sizes="120x120" href="../../apple-touch-icon-120x120.png" />
+<link rel="apple-touch-icon-precomposed" sizes="152x152" href="../../apple-touch-icon-152x152.png" />
+<link rel="icon" type="image/png" href="../../favicon-32x32.png" sizes="32x32" />
+<link rel="icon" type="image/png" href="../../favicon-16x16.png" sizes="16x16" />
+<meta name="application-name" content="Garrick Aden-Buie"/>
+<meta name="msapplication-TileColor" content="#002B36" />
+<meta name="msapplication-TileImage" content="/mstile-144x144.png" />
+<meta name="theme-color" content="#ffffff">
+
+<meta name="mobile-web-app-capable" content="yes">
+
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-title" content="Garrick Aden-Buie">
+
+<link href="../../css/featherlight.min.css" type="text/css" rel="stylesheet" />
+
+<script async defer src="https://buttons.github.io/buttons.js"></script>
+
+<script defer src="../../js/van11y-accessible-hide-show-aria.min.js"></script>
+
+<script defer src="../../js/toc.js"></script>
+
+
+
+		<link href="../../blog/use-circle-map-for-detecting-eccdna" rel="canonical">
+	</head>
+
+	<body class="restyled-garrick  h-entry">
+		<main class="content container" role="main">
+			<article class="post">
+				<header>
+					<a class="u-url" href="../../blog/use-circle-map-for-detecting-eccdna">
+						<h1 class="post-title p-name">使用Circle-Map Realign鉴定环形DNA</h1>
+					</a>
+					<h3 class="post-author">王诗翔</h3>
+					<time class="post-date dt-published" datetime="2021-08-09T00:00:00Z">Monday, 9 August 2021</time>
+					
+				</header>
+				<div class="post-content e-content">
+					<p>2021/07/23 19:39</p>
+<blockquote>
+<p>原文：<a href="https://github.com/iprada/Circle-Map/wiki/Tutorial:-Identification-of-circular-DNA-using-Circle-Map-Realign">https://github.com/iprada/Circle-Map/wiki/Tutorial:-Identification-of-circular-DNA-using-Circle-Map-Realign</a></p>
+</blockquote>
+<p>这是一个教程，一步一步地解释如何从原始数据(fastq文件)到一个可解释的，标签分离的bed文件指示染色体坐标的DNA环。为了制作教程，我们模拟了Illumina读取来自人类基因组未知区域的环形DNA。本教程的目的是使用Circle-Map来提取环形DNA的来源。</p>
+<h2 id="依赖">依赖</h2>
+<ul>
+<li>
+<p>GNU/Linux</p>
+</li>
+<li>
+<p>BWA</p>
+</li>
+<li>
+<p>samtools</p>
+</li>
+<li>
+<p>Circle-Map</p>
+</li>
+</ul>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>conda install -c bioconda bwa samtools
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>pip3 install Circle-Map
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>pip3 install <span style="color:#19177c">biopython</span><span style="color:#666">==</span>1.77 <span style="color:#408080;font-style:italic"># 不安装这个版本目前使用会报错</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>
+</code></pre></div><h2 id="第一步准备和下载数据">第一步：准备和下载数据</h2>
+<h3 id="下载原始数据">下载原始数据</h3>
+<p>直接克隆仓库：</p>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-Bash" data-lang="Bash"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>git clone https://github.com/iprada/Circle-Map
+</code></pre></div><h3 id="下载和准备参考基因组">下载和准备参考基因组</h3>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>wget http://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/hg38.fa.gz
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>gunzip -d hg38.fa.gz
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>bwa index hg38.fa
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>samtools faidx hg38.fa
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span>
+</code></pre></div><h2 id="第二步比对到参考基因组">第二步：比对到参考基因组</h2>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#008000">cd</span> Circle-Map/tutorial/
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>bwa mem -q ~/data/refs/hg38.fa unknown_circle_reads_1.fastq unknown_circle_reads_2.fastq &gt; unknown_circle.sam
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>
+</code></pre></div><p>这就产生了一个SAM文件，其中包含了关于reads在哪里以及如何与基因组对齐的信息。</p>
+<ul>
+<li>
+<p>我们<strong>使用</strong> <strong>-q</strong> <strong>选项（query name sorted）为BWA中的拆分读对比对分配独立的映射质量分数</strong> 。这可以改进Circle-Map概率模型中断点图权值的估计。</p>
+</li>
+<li>
+<p><code>-t</code>可以指定多线程。</p>
+</li>
+</ul>
+<h2 id="第三步准备circle-map所需的文件">第三步：准备Circle-Map所需的文件</h2>
+<p>按read名排序并转换为BAM：</p>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>samtools sort -n -o qname_unknown_circle.bam unknown_circle.sam
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>
+</code></pre></div><p><strong>Circle-Map利用该文件提取环形DNA候选reads，并估计先验分布的参数。</strong></p>
+<p>我们还需要按最左边的映射坐标对SAM文件进行排序：</p>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>samtools sort -o sorted_unknown_circle.bam unknown_circle.sam
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>
+</code></pre></div><p>Circle-Map使用这个文件来计算基因组覆盖率指标。</p>
+<ul>
+<li><code>-@</code> 选项指定多线程。</li>
+</ul>
+<p>现在，我们将使用Circle-Map提取环形DNA重排的reads（部分映射reads和不一致reads对）：</p>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>Circle-Map ReadExtractor -i qname_unknown_circle.bam -o circular_read_candidates.bam
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>
+</code></pre></div><p>这一步报错了，安装github上最新版本也没有解决。</p>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>$ Circle-Map ReadExtractor -i qname_unknown_circle.bam -o circular_read_candidates.bam
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span style="color:#666">[</span>E::idx_find_and_load<span style="color:#666">]</span> Could not retrieve index file <span style="color:#008000;font-weight:bold">for</span> <span style="color:#ba2121">&#39;/public/home/zhaoqi/test/Circle-Map/tutorial/qname_unknown_circle.bam&#39;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>Extracting circular structural variants
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>finished extracting reads. Elapsed time: 0.00025257269541422524 mins
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>Thanks <span style="color:#008000;font-weight:bold">for</span> using Circle-Map
+</code></pre></div><blockquote>
+<p>已提交 issue，先试着后面的步骤能否走下去。</p>
+</blockquote>
+<blockquote>
+<p><strong>实践证明这里的错误似乎可以忽略（因为参考数据可以得到示例的结果）</strong> 。</p>
+</blockquote>
+<p>按坐标排序：</p>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-BASH" data-lang="BASH"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>samtools sort -o sort_circular_read_candidates.bam circular_read_candidates.bam
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>
+</code></pre></div><p>构建索引：</p>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>samtools index sort_circular_read_candidates.bam
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>samtools index sorted_unknown_circle.bam
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>
+</code></pre></div><h2 id="第四步检测环形dna">第四步：检测环形DNA</h2>
+<p>所需要的文件：</p>
+<ul>
+<li>
+<p><strong>sort_circular_read_candidates.bam</strong> : The circular DNA read candidates. Used for detecting the circular DNA</p>
+</li>
+<li>
+<p><strong>qname_unknown_circle.bam</strong> : The read name sorted BAM file. Used for calculating the realignment prior</p>
+</li>
+<li>
+<p><strong>sorted_unknown_circle.bam</strong> : The coordinate sorted BAM. Used for calculating circular DNA coverage metrics</p>
+</li>
+<li>
+<p><strong>hg38.fa</strong> : Reference sequence. Used for realignment of the partially mapped reads.</p>
+</li>
+</ul>
+<p>执行命令：</p>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>Circle-Map Realign -i sort_circular_read_candidates.bam -qbam qname_unknown_circle.bam -sbam sorted_unknown_circle.bam -fasta ~/data/refs/hg38.fa -o my_unknown_circle.bed
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>
+</code></pre></div><ul>
+<li>使用 <code>-t</code> 指定多线程。</li>
+</ul>
+<p>这里运行时报错没有bedtools，补装软件：</p>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>mamba install -c bioconda bedtools
+</code></pre></div><p>能看到结果：</p>
+<p><img src="https://gitee.com/ShixiangWang/ImageCollection/raw/master/png/20210809122747.png" alt=""></p>
+<p>对比参考输出：</p>
+<p><img src="https://gitee.com/ShixiangWang/ImageCollection/raw/master/png/20210809122755.png" alt=""></p>
+<p>除了第一个坐标大了1位，其他结果一样。</p>
+
+				</div>
+				<footer class="footer">
+				  <hr>
+<div class="post-tags">
+
+<p>
+  <svg xmlns="http://www.w3.org/2000/svg" class="octicon" width="20" height="24" viewBox="0 0 14 16"><path fill-rule="evenodd" d="M8 2H6V0h2v2zm4 5H2c-.55 0-1-.45-1-1V4c0-.55.45-1 1-1h10l2 2-2 2zM8 4H6v2h2V4zM6 16h2V8H6v8z"/></svg>
+	
+	<a class="p-category" href="../../categories/blog/">Blog</a>
+</p>
+
+
+<p>
+  <svg xmlns="http://www.w3.org/2000/svg" class="octicon" width="20" height="24" viewBox="0 0 15 16"><path fill-rule="evenodd" d="M7.73 1.73C7.26 1.26 6.62 1 5.96 1H3.5C2.13 1 1 2.13 1 3.5v2.47c0 .66.27 1.3.73 1.77l6.06 6.06c.39.39 1.02.39 1.41 0l4.59-4.59a.996.996 0 0 0 0-1.41L7.73 1.73zM2.38 7.09c-.31-.3-.47-.7-.47-1.13V3.5c0-.88.72-1.59 1.59-1.59h2.47c.42 0 .83.16 1.13.47l6.14 6.13-4.73 4.73-6.13-6.15zM3.01 3h2v2H3V3h.01z"/></svg>
+	
+	<a class="p-tag" href="../../tags/bioinformatics/">Bioinformatics</a><a class="p-tag" href="../../tags/%E5%AD%A6%E4%B9%A0/">学习</a>
+
+</p>
+</div>
+
+				</footer>
+			</article>
+		</main>
+			  <button class="hamburger hamburger--arrow is-active" type="button" onclick="document.getElementsByClassName('sidebar')[0].classList.toggle('collapsed');document.getElementsByClassName('content')[0].classList.toggle('expanded');document.getElementsByClassName('hamburger')[0].classList.toggle('is-active');document.getElementsByClassName('hamburger-inner')[0].classList.toggle('is-active')">
+      <span class="hamburger-box">
+        <span class="hamburger-inner"></span>
+      </span>
+    </button>
+		<aside class="sidebar">
+			<div class="container sidebar-sticky">
+				<header class="sidebar-about h-card vcard p-author">
+					
+					<a class="u-url u-uid" rel="me" href="../../">
+						<img class="u-photo" src="https://avatars.githubusercontent.com/u/25057508?v=4" width=128 height=128 />
+					</a>
+					
+
+					
+					<span class="site-title u-name fn">
+					  <a class="u-url u-uid" rel="me" href="../../">ShixiangWang
+王诗翔</a>
+				  </span>
+					
+
+					<p class="lead p-note">
+						 Bioinformatics Scholar. Cancer Researcher. Data Scientist. #rstats #golang. Always learning something new. 
+					</p>
+
+					<nav>
+						<ul class="sidebar-nav">
+							
+							<li><a href="../../about/"> About </a></li>
+							
+							<li><a href="../../blog/"> Blog </a></li>
+							
+							<li><a href="../../project/"> Projects </a></li>
+							
+							<li><a href="http://42.192.87.178:3838/"> Shiny Apps </a></li>
+							
+							<li><a href="../../talk/"> Talks </a></li>
+							
+							<li><a href="https://github.com/ShixiangWang/self-study/discussions"> Discuss with me? </a></li>
+							
+							<li><a href="https://shixiangwang.netlify.app/"> Mirror #1 </a></li>
+							
+							<li><a href="https://shixiangwang.github.io/"> Mirror #2 </a></li>
+							
+						</ul>
+					</nav>
+
+					
+						<div class="contact">
+						  
+							<ul class="contact-list">
+								
+								<li>
+									
+									  
+		  							  <a href="https://twitter.com/WangShxiang" class="u-url url" rel="me" title="Twitter" aria-label="Twitter">
+		  						    <i class='fab fa-twitter fa-fw'></i>
+		  							  </a>
+		  						  
+								
+								</li>
+								
+								<li>
+									
+									  
+		  							  <a href="https://github.com/ShixiangWang" class="u-url url" rel="me" title="GitHub" aria-label="GitHub">
+		  						    <i class='fab fa-github fa-fw'></i>
+		  							  </a>
+		  						  
+								
+								</li>
+								
+								<li>
+									
+		  							<a href="mailto:shixiang1994wang@gmail.com" class="u-email email" rel="me" title="Email" aria-label="Email">
+		  							<i class='fa fa-envelope fa-fw'></i>
+		  							  
+		  							</a>
+									
+								</li>
+								
+								<li>
+									
+									  
+		  							  <a href="https://shixiangwang.github.io/home/logo/qrcode.jpg" class="u-url url" rel="me" title="Bandcamp" aria-label="Bandcamp">
+		  						    <i class='fab fa-bandcamp fa-fw'></i>
+		  							  </a>
+		  						  
+								
+								</li>
+								
+							</ul>
+						</div>
+					
+				</header>
+
+				<footer>&copy; 2021. All rights reserved. </footer>
+				 <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+            <span id="busuanzi_container_site_pv">本站总访问量&nbsp;<span id="busuanzi_value_site_pv"></span>&nbsp;次</span>
+			</div>
+		</aside>
+
+		  <footer>
+  <script src="../../js/jquery-latest.js"></script>
+<script src="../../js/featherlight.min.js" type="text/javascript" charset="utf-8"></script>
+
+  
+
+  
+  </footer>
+  </body>
+</html>
+
+	</body>
+</html>

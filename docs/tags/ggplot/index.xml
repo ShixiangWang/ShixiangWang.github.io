@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>ggplot on ShixiangWang
+王诗翔</title>
+    <link>/tags/ggplot/</link>
+    <description>Recent content in ggplot on ShixiangWang
+王诗翔</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Mon, 09 Aug 2021 00:00:00 +0000</lastBuildDate><atom:link href="/tags/ggplot/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>ggplot构建新图形元素</title>
+      <link>/blog/ggplot-build-new-object/</link>
+      <pubDate>Mon, 09 Aug 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/ggplot-build-new-object/</guid>
+      <description>2021/05/24 19:35
+ 原文：https://bookdown.org/rdpeng/RProgDA/building-new-graphical-elements.html
+ 由ggplot构造的数据图中的关键元素包括geoms（几何对象）和stats（统计变换）。事实上，ggplot2包具有强大的功能，允许用户制作各种有趣而丰富的数据图形。这些图形可以通过组合调用各种geom_*和stat_*函数(以及其他类函数)来实现。
+为什么要构造新的图形元素？
+  实现ggplot2目前不存在的特性。
+  简化复杂的工作流。如果你总是发现自己在用重复的代码绘制类似的图形元素。
+  创建新的geoms和stats可以简化代码，让用户轻松调整情节的某些元素，而不必每次都费劲地处理整个代码。
+构造一个geom ggplot2中的新geoms继承自一个名为Geom的顶级类，并使用两步流程构造：
+  ggproto()函数用于构造一个与新的geom对应的新类。这个新类指定了许多属性和函数，这些属性和函数描述了如何在图上绘制数据。
+  geom_*函数被构造为标准函数。这个函数返回一个层，该层可以添加到使用ggplot()函数创建的plot中。
+  新的geom类的基本设置如下所示：
+1GeomNEW &amp;lt;- ggproto(&amp;#34;GeomNEW&amp;#34;, Geom, 2 required_aes = &amp;lt;a character vector of required aesthetics&amp;gt;, 3 default_aes = aes(&amp;lt;default values for certain aesthetics&amp;gt;), 4 draw_key = &amp;lt;a function used to draw the key in the legend&amp;gt;, 5 draw_panel = function(data, panel_scales, coord) { 6 ## 返回一个grid grob对象的函数 7 ## 是绘图真正工作的地方 8 } 9) 所需的美学映射应该很简单——例如，如果你的新geom生成了一种特殊的散点图，那么你可能需要x和y映射。美学映射的默认值可以包括绘图符号如形状、颜色等内容。</description>
+    </item>
+    
+  </channel>
+</rss>

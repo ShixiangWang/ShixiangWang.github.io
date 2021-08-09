@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>可视化 on ShixiangWang
+王诗翔</title>
+    <link>/tags/%E5%8F%AF%E8%A7%86%E5%8C%96/</link>
+    <description>Recent content in 可视化 on ShixiangWang
+王诗翔</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Mon, 09 Aug 2021 00:00:00 +0000</lastBuildDate><atom:link href="/tags/%E5%8F%AF%E8%A7%86%E5%8C%96/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>grid 1：图形对象grobs</title>
+      <link>/blog/grobs/</link>
+      <pubDate>Mon, 09 Aug 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/grobs/</guid>
+      <description>学习材料：https://bookdown.org/rdpeng/RProgDA/the-grid-package.html#grobs
+grobs 是 grid 绘图系统中图形对象的表示，即 graphics + objects = grobs
+grobs 的创建通常使用以 Grob 作为后缀的函数们，包括circleGrob, linesGrob, polygonGrob, rasterGrob, rectGrob, segmentsGrob, legendGrob, xaxisGrob, and yaxisGrob 等等。 gridExtra 包定义了更多的图形对象。
+下面是一个绘圆的示例：
+1library(grid) 2my_circle &amp;lt;- circleGrob(x = 0.5, y = 0.5, r = 0.5, 3 gp = gpar(col = &amp;#34;gray&amp;#34;, lty = 3)) 每个图形对象有自带的参数，比如圆有它的中心，半径。而不同的对象有相同的一些参数设定，包括颜色、线型、大小等等，这通过 gpar 函数进行设定。
+再创建图形对象后，使用 grid.draw() 将图形绘制出来。
+1grid.draw(my_circle) 多个图形对象可以叠加，而且叠加后可以修改原来的图形对象。
+1my_circle &amp;lt;- circleGrob(name = &amp;#34;my_circle&amp;#34;, 2 x = 0.5, y = 0.5, r = 0.</description>
+    </item>
+    
+    <item>
+      <title>grid 2：视图 viewports</title>
+      <link>/blog/viewports/</link>
+      <pubDate>Mon, 09 Aug 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/viewports/</guid>
+      <description>原文：https://bookdown.org/rdpeng/RProgDA/the-grid-package.html#viewports
+ 视图是什么 视图是绘图窗口，我们可以将其移进或移出，以方便使用grid包定制绘图。我们可以导航到其中一个视图，进行一些更改，然后弹出并导航到另一个视图。简而言之，视图提供了一种在绘图（可以想象为一个画板）的不同子空间（不同的层，如果了解ggplot2，采用图层概念理解它）中导航和工作的方法。
+下面是一个例子，我们在整个图形的右上角绘制一个棒棒图：
+1# 默认，grid会初始化第一个视图 2grid.draw(rectGrob()) 3# 创建一个小的视图 4# 指定新视图的位置，X为0.5，Y为0.5，视图高宽都为0.5 5sample_vp &amp;lt;- viewport(x = 0.5, y = 0.5, 6 width = 0.5, height = 0.5, 7 just = c(&amp;#34;left&amp;#34;, &amp;#34;bottom&amp;#34;)) # 位置校正参数 8# 导航视图：上面只是定义了一个视图对象 9# 我们可以想象为一个大画板是一张白纸 10# 我们上面准备了一张小的白纸 11# 而 push 的目的就是把小的白纸放到大白纸的对应位置 12# 接下来的绘图动作就是在小的白纸上进行的 13pushViewport(sample_vp) 14grid.draw(roundrectGrob()) 15grid.draw(lollipop) 16# 弹出最上层的视图 17popViewport()  棒棒图的绘制见「R」grid 图形对象 grobs一文末尾。
+ 视图的just参数 值得注意的是这里的just参数：它定义了新的视图是如何在旧（大） 的视图上摆放的。这里的c(&amp;quot;left&amp;quot;, &amp;quot;bottom&amp;quot;)指定了小的视图的左侧和下侧与其坐标单位0.5, 0.5对齐。我们看看修改下该参数的效果：
+1grid.draw(rectGrob()) 2sample_vp &amp;lt;- viewport(x = 0.5, y = 0.</description>
+    </item>
+    
+    <item>
+      <title>grid 3：图形坐标系统</title>
+      <link>/blog/coords/</link>
+      <pubDate>Mon, 09 Aug 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/coords/</guid>
+      <description>绘图时，我们需要坐标才能准确地对要绘制的对象进行定位。在 grid 包中，有多种绘图坐标系统，选择一个合适的加以利用可以帮助我们更好地绘制图形。
+坐标系统不同的单位：
+  native 单位：根据数据值。
+  n pc单位：将整个（笛卡尔）坐标系缩放为0到1范围。
+  实际尺寸单位：包括英寸、厘米、毫米。
+  例如，下面的绘图同时用到了前两者：
+1ex_vp &amp;lt;- viewport(x = 0.5, y = 0.5, # npc 单位 2 just = c(&amp;#34;center&amp;#34;, &amp;#34;center&amp;#34;), 3 height = 0.8, width = 0.8, 4 xscale = c(0, 100), yscale = c(0, 10)) # 设定native单位 5pushViewport(ex_vp) 6grid.draw(rectGrob()) 7grid.draw(circleGrob(x = unit(20, &amp;#34;native&amp;#34;), y = unit(5, &amp;#34;native&amp;#34;), # 根据native单位绘图 8 r = 0.1, gp = gpar(fill = &amp;#34;lightblue&amp;#34;))) 9grid.</description>
+    </item>
+    
+    <item>
+      <title>grid 4：gridExtra包</title>
+      <link>/blog/grid-4-gridextra%E5%8C%85/</link>
+      <pubDate>Mon, 09 Aug 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/grid-4-gridextra%E5%8C%85/</guid>
+      <description>gridExtra包提供了grid系统的有用拓展，包括对grobs对象的操作方法和其他一些grobs对象。
+grid.arrange()可以绘制多个对象：
+1library(gridExtra) 2grid.arrange(lollipop, circleGrob(), 3 rectGrob(), lollipop, 4 ncol = 2) 由于ggplot2也是基于grid系统的，所以我们可以使用该函数对ggplot对象组合排序：
+1time_vs_shots &amp;lt;- ggplot(worldcup, aes(x = Time, y = Shots)) + 2 geom_point() 3player_positions &amp;lt;- ggplot(worldcup, aes(x = Position)) + 4 geom_bar() 5 6grid.arrange(time_vs_shots, player_positions, ncol = 2) 使用layout_matrix选项可以进行更自定义控制：
+1grid.arrange(time_vs_shots, player_positions, 2 layout_matrix = matrix(c(1, 2, 2), ncol = 3)) 包括图形填充：
+1grid.arrange(time_vs_shots, player_positions, 2 layout_matrix = matrix(c(1, NA, NA, NA, 2, 2), 3 byrow = TRUE, ncol = 3)) 使用tableGrob()函数，我们可以在图中嵌入表格。下面是一个略微复杂的例子：</description>
+    </item>
+    
+  </channel>
+</rss>

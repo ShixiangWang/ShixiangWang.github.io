@@ -8,94 +8,94 @@
 王诗翔</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 08 Aug 2021 00:00:00 +0000</lastBuildDate><atom:link href="/tags/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 09 Aug 2021 00:00:00 +0000</lastBuildDate><atom:link href="/tags/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>Jupyter</title>
-      <link>/tags/jupyter/</link>
-      <pubDate>Sun, 08 Aug 2021 00:00:00 +0000</pubDate>
+      <title>Bash</title>
+      <link>/tags/bash/</link>
+      <pubDate>Mon, 09 Aug 2021 00:00:00 +0000</pubDate>
       
-      <guid>/tags/jupyter/</guid>
+      <guid>/tags/bash/</guid>
       <description></description>
     </item>
     
     <item>
-      <title>配置</title>
-      <link>/tags/%E9%85%8D%E7%BD%AE/</link>
-      <pubDate>Sun, 08 Aug 2021 00:00:00 +0000</pubDate>
+      <title>Bioinformatics</title>
+      <link>/tags/bioinformatics/</link>
+      <pubDate>Mon, 09 Aug 2021 00:00:00 +0000</pubDate>
       
-      <guid>/tags/%E9%85%8D%E7%BD%AE/</guid>
+      <guid>/tags/bioinformatics/</guid>
       <description></description>
     </item>
     
     <item>
-      <title>HPC</title>
-      <link>/tags/hpc/</link>
-      <pubDate>Fri, 06 Aug 2021 00:00:00 +0000</pubDate>
+      <title>ggplot</title>
+      <link>/tags/ggplot/</link>
+      <pubDate>Mon, 09 Aug 2021 00:00:00 +0000</pubDate>
       
-      <guid>/tags/hpc/</guid>
+      <guid>/tags/ggplot/</guid>
       <description></description>
     </item>
     
     <item>
-      <title>slurm</title>
-      <link>/tags/slurm/</link>
-      <pubDate>Fri, 06 Aug 2021 00:00:00 +0000</pubDate>
+      <title>grid</title>
+      <link>/tags/grid/</link>
+      <pubDate>Mon, 09 Aug 2021 00:00:00 +0000</pubDate>
       
-      <guid>/tags/slurm/</guid>
+      <guid>/tags/grid/</guid>
       <description></description>
     </item>
     
     <item>
-      <title>ABSOLUTE</title>
-      <link>/tags/absolute/</link>
-      <pubDate>Thu, 05 Aug 2021 00:00:00 +0000</pubDate>
+      <title>Linux</title>
+      <link>/tags/linux/</link>
+      <pubDate>Mon, 09 Aug 2021 00:00:00 +0000</pubDate>
       
-      <guid>/tags/absolute/</guid>
+      <guid>/tags/linux/</guid>
       <description></description>
     </item>
     
     <item>
-      <title>algo</title>
-      <link>/tags/algo/</link>
-      <pubDate>Thu, 05 Aug 2021 00:00:00 +0000</pubDate>
+      <title>R</title>
+      <link>/tags/r/</link>
+      <pubDate>Mon, 09 Aug 2021 00:00:00 +0000</pubDate>
       
-      <guid>/tags/algo/</guid>
+      <guid>/tags/r/</guid>
       <description></description>
     </item>
     
     <item>
-      <title>blog</title>
-      <link>/tags/blog/</link>
-      <pubDate>Thu, 05 Aug 2021 00:00:00 +0000</pubDate>
+      <title>Rcpp</title>
+      <link>/tags/rcpp/</link>
+      <pubDate>Mon, 09 Aug 2021 00:00:00 +0000</pubDate>
       
-      <guid>/tags/blog/</guid>
+      <guid>/tags/rcpp/</guid>
       <description></description>
     </item>
     
     <item>
-      <title>book</title>
-      <link>/tags/book/</link>
-      <pubDate>Thu, 05 Aug 2021 00:00:00 +0000</pubDate>
+      <title>Unix</title>
+      <link>/tags/unix/</link>
+      <pubDate>Mon, 09 Aug 2021 00:00:00 +0000</pubDate>
       
-      <guid>/tags/book/</guid>
+      <guid>/tags/unix/</guid>
       <description></description>
     </item>
     
     <item>
-      <title>Cox</title>
-      <link>/tags/cox/</link>
-      <pubDate>Thu, 05 Aug 2021 00:00:00 +0000</pubDate>
+      <title>可视化</title>
+      <link>/tags/%E5%8F%AF%E8%A7%86%E5%8C%96/</link>
+      <pubDate>Mon, 09 Aug 2021 00:00:00 +0000</pubDate>
       
-      <guid>/tags/cox/</guid>
+      <guid>/tags/%E5%8F%AF%E8%A7%86%E5%8C%96/</guid>
       <description></description>
     </item>
     
     <item>
-      <title>docker</title>
-      <link>/tags/docker/</link>
-      <pubDate>Thu, 05 Aug 2021 00:00:00 +0000</pubDate>
+      <title>学习</title>
+      <link>/tags/%E5%AD%A6%E4%B9%A0/</link>
+      <pubDate>Mon, 09 Aug 2021 00:00:00 +0000</pubDate>
       
-      <guid>/tags/docker/</guid>
+      <guid>/tags/%E5%AD%A6%E4%B9%A0/</guid>
       <description></description>
     </item>
     

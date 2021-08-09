@@ -8,7 +8,53 @@
 王诗翔</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 05 Aug 2021 00:00:00 +0000</lastBuildDate><atom:link href="/tags/r/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 09 Aug 2021 00:00:00 +0000</lastBuildDate><atom:link href="/tags/r/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>ggplot构建新图形元素</title>
+      <link>/blog/ggplot-build-new-object/</link>
+      <pubDate>Mon, 09 Aug 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/ggplot-build-new-object/</guid>
+      <description>2021/05/24 19:35
+ 原文：https://bookdown.org/rdpeng/RProgDA/building-new-graphical-elements.html
+ 由ggplot构造的数据图中的关键元素包括geoms（几何对象）和stats（统计变换）。事实上，ggplot2包具有强大的功能，允许用户制作各种有趣而丰富的数据图形。这些图形可以通过组合调用各种geom_*和stat_*函数(以及其他类函数)来实现。
+为什么要构造新的图形元素？
+  实现ggplot2目前不存在的特性。
+  简化复杂的工作流。如果你总是发现自己在用重复的代码绘制类似的图形元素。
+  创建新的geoms和stats可以简化代码，让用户轻松调整情节的某些元素，而不必每次都费劲地处理整个代码。
+构造一个geom ggplot2中的新geoms继承自一个名为Geom的顶级类，并使用两步流程构造：
+  ggproto()函数用于构造一个与新的geom对应的新类。这个新类指定了许多属性和函数，这些属性和函数描述了如何在图上绘制数据。
+  geom_*函数被构造为标准函数。这个函数返回一个层，该层可以添加到使用ggplot()函数创建的plot中。
+  新的geom类的基本设置如下所示：
+1GeomNEW &amp;lt;- ggproto(&amp;#34;GeomNEW&amp;#34;, Geom, 2 required_aes = &amp;lt;a character vector of required aesthetics&amp;gt;, 3 default_aes = aes(&amp;lt;default values for certain aesthetics&amp;gt;), 4 draw_key = &amp;lt;a function used to draw the key in the legend&amp;gt;, 5 draw_panel = function(data, panel_scales, coord) { 6 ## 返回一个grid grob对象的函数 7 ## 是绘图真正工作的地方 8 } 9) 所需的美学映射应该很简单——例如，如果你的新geom生成了一种特殊的散点图，那么你可能需要x和y映射。美学映射的默认值可以包括绘图符号如形状、颜色等内容。</description>
+    </item>
+    
+    <item>
+      <title>Rcpp：数据结构</title>
+      <link>/blog/rcpp-data-structure/</link>
+      <pubDate>Mon, 09 Aug 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/rcpp-data-structure/</guid>
+      <description>RObject类 RObject类在Rcpp类系统中占核心地位。虽然它不是面向用户的，但为接下来的所有类提供了公共的数据结构，它是构建Rcpp API的基础类。
+每一个RObject类实例都封装了一个R对象，而每个对象在内部可以表示为一个SEXP：一个指向S表达式对象的指针。
+基于它的用户可见（可使用）的类：
+  IntegerVector对应整型向量。
+  NumericVector对应数值向量。
+  LogicalVector对应逻辑值向量。
+  CharacterVector对应Character向量。
+  GenericVector对应List类型的泛型向量。
+  ExpressionVector对应表达式类型向量。
+  RawVector对应raw类型向量。
+  对于整型和数值型，我们还有IntegerMatrix和NumericMatrix对应R中的数值矩阵。
+下面我们通过整型向量来了解它们。
+IntegerVector类 模板函数as&amp;lt;&amp;gt;()用于从R转换到C++，而wrap()函数的方向相反。
+ 实际大多数使用情况下，我们已经不需要显式地进行转换处理，该过程会在底层自动完成。
+ 示例：返回完美数 什么是完美数：
+https://baike.baidu.com/item/完全数/370913?fromtitle=完美数&amp;amp;fromid=871560&amp;amp;fr=aladdin
+代码：
+1library(Rcpp) 2library(inline) 3 4src &amp;lt;- &amp;#39; 5Rcpp::IntegerVector epn(4); 6epn[0] = 6; 7epn[1] = 14; 8epn[2] = 496; 9epn[3] = 8182; 10return epn; 11&amp;#39; 12 13func &amp;lt;- cxxfunction(signature(), src, plugin = &amp;#34;Rcpp&amp;#34;) 调用：</description>
+    </item>
+    
     <item>
       <title>:book: Cookbook for R 中文版</title>
       <link>/project/cookbook4r-zh/</link>
@@ -80,25 +126,6 @@
       
       <guid>/project/metawho/</guid>
       <description> Project repo: https://github.com/ShixiangWang/metawho Paper: Wang, Shixiang, et al. “The predictive power of tumor mutational burden in lung cancer immunotherapy response is influenced by patients’ sex.” International journal of cancer (2019). Journal of Open Source Software, 4(40), 1627, https://doi.org/10.21105/joss.01627.  </description>
-    </item>
-    
-    <item>
-      <title>:package: neopeptides</title>
-      <link>/project/neopeptides/</link>
-      <pubDate>Thu, 05 Aug 2021 00:00:00 +0000</pubDate>
-      
-      <guid>/project/neopeptides/</guid>
-      <description> Project repo: https://github.com/ShixiangWang/neopeptides Paper: Revisiting neoantigen depletion signal in the untreated cancer genome. Shixiang Wang, Xuan Wang, Tao Wu, Zaoke He, Huimin Li, Xiaoqin Sun, Xue-Song Liu bioRxiv 2020.05.11.089540; doi: https://doi.org/10.1101/2020.05.11.089540.  </description>
-    </item>
-    
-    <item>
-      <title>:package: sigminer &amp; :arrow_heading_down: sigflow</title>
-      <link>/project/sigminer-and-sigflow/</link>
-      <pubDate>Thu, 05 Aug 2021 00:00:00 +0000</pubDate>
-      
-      <guid>/project/sigminer-and-sigflow/</guid>
-      <description>sigminer is an R package and sigflow is the CLI implementation for its core analysis features.
- Project repo  sigminer: https://github.com/ShixiangWang/sigminer sigflow: https://github.com/ShixiangWang/sigflow   Papers  Wang S, Li H, Song M, Tao Z, Wu T, He Z, et al. (2021) Copy number signature analysis tool and its application in prostate cancer reveals distinct mutational processes and clinical outcomes. PLoS Genet 17(5): e1009557. https://doi.org/10.1371/journal.pgen.1009557. Shixiang Wang, Ziyu Tao, Tao Wu, Xue-Song Liu, Sigflow: An Automated And Comprehensive Pipeline For Cancer Genome Mutational Signature Analysis, Bioinformatics, btaa895.</description>
     </item>
     
   </channel>

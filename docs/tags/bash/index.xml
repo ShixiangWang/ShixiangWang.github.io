@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Bash on ShixiangWang
+王诗翔</title>
+    <link>/tags/bash/</link>
+    <description>Recent content in Bash on ShixiangWang
+王诗翔</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Mon, 09 Aug 2021 00:00:00 +0000</lastBuildDate><atom:link href="/tags/bash/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Unix：Bash编程</title>
+      <link>/blog/unix-bash-programming/</link>
+      <pubDate>Mon, 09 Aug 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/unix-bash-programming/</guid>
+      <description>原文：https://seankross.com/the-unix-workbench/bash-programming.html
+ 数学 创建math.sh：
+1#!/usr/bin/env bash 2# File: math.sh 3 4expr 5 + 2 5expr 5 - 2 6expr 5 \* 2 # 转义 7expr 5 / 2 保存然后运行：
+1$ bash math.sh 27 33 410 52 ⚠️注意，bash使用整除法。求余使用%符号。
+如果我们想要进行更为复杂的数学计算，使用bc命令。
+创建文件bigmath.sh：
+1#!/usr/bin/env bash 2# File: bigmath.sh 3 4echo &amp;#34;22 / 7&amp;#34; | bc -l 5echo &amp;#34;4.2 * 9.15&amp;#34; | bc -l 6echo &amp;#34;(6.5 / 0.5) + (6 * 2.2)&amp;#34; | bc -l 结果：</description>
+    </item>
+    
+  </channel>
+</rss>

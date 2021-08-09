@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en-US">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1">
+
+		
+		<title>ggplot构建新图形元素 &middot; ShixiangWang
+王诗翔</title>
+		
+		<meta property="og:title" content="ggplot构建新图形元素 - ShixiangWang
+王诗翔">
+		
+		<meta property="og:type" content="article">
+		
+
+		
+			
+			<meta property="description" content="学习如何创建一个新的图形元素。">
+			<meta property="og:description" content="学习如何创建一个新的图形元素。">
+			
+			
+    	<meta property="twitter:card" content="summary">
+  		<meta property="twitter:image" content="/apple-touch-icon-152x152.png">
+			
+		
+
+		
+		<meta property="keywords" content ="rstats">
+		
+		
+		<meta name="twitter:creator" content="@WangShxiang">
+		<meta name="twitter:site" content="https://shixiangwang.github.io">
+		
+		
+
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+		<link rel="stylesheet" href="../../css/poole.css">
+		<link rel="stylesheet" href="../../css/syntax.css">
+		<link rel="stylesheet" href="../../css/hyde.css">
+		
+		
+		<link rel="stylesheet" href="../../css/hamburgers.css">
+		
+		<link rel="stylesheet" href="../../css/custom.css">
+		
+		
+
+<link rel="apple-touch-icon-precomposed" sizes="57x57" href="../../apple-touch-icon-57x57.png" />
+<link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../apple-touch-icon-114x114.png" />
+<link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../apple-touch-icon-72x72.png" />
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../apple-touch-icon-144x144.png" />
+<link rel="apple-touch-icon-precomposed" sizes="120x120" href="../../apple-touch-icon-120x120.png" />
+<link rel="apple-touch-icon-precomposed" sizes="152x152" href="../../apple-touch-icon-152x152.png" />
+<link rel="icon" type="image/png" href="../../favicon-32x32.png" sizes="32x32" />
+<link rel="icon" type="image/png" href="../../favicon-16x16.png" sizes="16x16" />
+<meta name="application-name" content="Garrick Aden-Buie"/>
+<meta name="msapplication-TileColor" content="#002B36" />
+<meta name="msapplication-TileImage" content="/mstile-144x144.png" />
+<meta name="theme-color" content="#ffffff">
+
+<meta name="mobile-web-app-capable" content="yes">
+
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-title" content="Garrick Aden-Buie">
+
+<link href="../../css/featherlight.min.css" type="text/css" rel="stylesheet" />
+
+<script async defer src="https://buttons.github.io/buttons.js"></script>
+
+<script defer src="../../js/van11y-accessible-hide-show-aria.min.js"></script>
+
+<script defer src="../../js/toc.js"></script>
+
+
+
+		<link href="../../blog/ggplot-build-new-object" rel="canonical">
+	</head>
+
+	<body class="restyled-garrick  h-entry">
+		<main class="content container" role="main">
+			<article class="post">
+				<header>
+					<a class="u-url" href="../../blog/ggplot-build-new-object">
+						<h1 class="post-title p-name">ggplot构建新图形元素</h1>
+					</a>
+					<h3 class="post-author">王诗翔</h3>
+					<time class="post-date dt-published" datetime="2021-08-09T00:00:00Z">Monday, 9 August 2021</time>
+					
+				</header>
+				<div class="post-content e-content">
+					<p>2021/05/24 19:35</p>
+<blockquote>
+<p>原文：<a href="https://bookdown.org/rdpeng/RProgDA/building-new-graphical-elements.html">https://bookdown.org/rdpeng/RProgDA/building-new-graphical-elements.html</a></p>
+</blockquote>
+<p>由ggplot构造的数据图中的关键元素包括geoms（几何对象）和stats（统计变换）。事实上，ggplot2包具有强大的功能，允许用户制作各种有趣而丰富的数据图形。这些图形可以通过组合调用各种<code>geom_*</code>和<code>stat_*</code>函数(以及其他类函数)来实现。</p>
+<p>为什么要构造新的图形元素？</p>
+<ol>
+<li>
+<p>实现ggplot2目前不存在的特性。</p>
+</li>
+<li>
+<p>简化复杂的工作流。如果你总是发现自己在用重复的代码绘制类似的图形元素。</p>
+</li>
+</ol>
+<p>创建新的geoms和stats可以简化代码，让用户轻松调整情节的某些元素，而不必每次都费劲地处理整个代码。</p>
+<h2 id="构造一个geom">构造一个geom</h2>
+<p>ggplot2中的新geoms继承自一个名为Geom的顶级类，并使用两步流程构造：</p>
+<ol>
+<li>
+<p><code>ggproto()</code>函数用于构造一个与新的geom对应的新类。这个新类指定了许多属性和函数，这些属性和函数描述了如何在图上绘制数据。</p>
+</li>
+<li>
+<p><code>geom_*</code>函数被构造为标准函数。这个函数返回一个层，该层可以添加到使用<code>ggplot()</code>函数创建的plot中。</p>
+</li>
+</ol>
+<p>新的geom类的基本设置如下所示：</p>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-R" data-lang="R"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>GeomNEW <span style="color:#666">&lt;-</span> <span style="color:#00f">ggproto</span>(<span style="color:#ba2121">&#34;GeomNEW&#34;</span>, Geom,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>        required_aes <span style="color:#666">=</span> <span style="color:#666">&lt;</span>a character vector of required aesthetics<span style="color:#666">&gt;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>        default_aes <span style="color:#666">=</span> <span style="color:#00f">aes</span>(<span style="color:#666">&lt;</span>default values for certain aesthetics<span style="color:#666">&gt;</span>),
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>        draw_key <span style="color:#666">=</span> <span style="color:#666">&lt;</span>a function used to draw the key in the legend<span style="color:#666">&gt;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>        draw_panel <span style="color:#666">=</span> <span style="color:#00f">function</span>(data, panel_scales, coord) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span>                <span style="color:#408080;font-style:italic">## 返回一个grid grob对象的函数</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7</span>                <span style="color:#408080;font-style:italic">## 是绘图真正工作的地方</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">8</span>        }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">9</span>)
+</code></pre></div><p>所需的美学映射应该很简单——例如，如果你的新geom生成了一种特殊的散点图，那么你可能需要x和y映射。美学映射的默认值可以包括绘图符号如形状、颜色等内容。</p>
+<p><strong>实现</strong> <strong>draw_panel</strong> <strong>函数是创建一个新的geom的难点。在这里，你必须对grid包有一定的了解，才能访问基于grid系统的ggplot2图的底层元素。但是，你可以通过了解一些grid元素来实现一些可行的绘图内容。</strong></p>
+<p><code>draw_panel</code>函数有三个参数。<code>data</code>元素是一个<code>data.frame</code>，其中包含每个指定美学映射的一列，<code>panel_scales</code>是一个包含关于当前面板的x和y比例信息的列表，<code>coord</code>是一个描述绘图坐标系的对象。<code>coord</code>和<code>panel_scales</code>对象除了转换数据以便绘制数据之外，没有什么用处。</p>
+<p>下面是一个例子：</p>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-R" data-lang="R"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#00f">library</span>(grid)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>GeomMyPoint <span style="color:#666">&lt;-</span> <span style="color:#00f">ggproto</span>(<span style="color:#ba2121">&#34;GeomMyPoint&#34;</span>, Geom,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>        required_aes <span style="color:#666">=</span> <span style="color:#00f">c</span>(<span style="color:#ba2121">&#34;x&#34;</span>, <span style="color:#ba2121">&#34;y&#34;</span>),
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>        default_aes <span style="color:#666">=</span> <span style="color:#00f">aes</span>(shape <span style="color:#666">=</span> <span style="color:#666">1</span>),
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>        draw_key <span style="color:#666">=</span> draw_key_point,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>        draw_panel <span style="color:#666">=</span> <span style="color:#00f">function</span>(data, panel_scales, coord) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>                <span style="color:#408080;font-style:italic">## 先转换数据</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>                coords <span style="color:#666">&lt;-</span> coord<span style="color:#666">$</span><span style="color:#00f">transform</span>(data, panel_scales)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>                
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>                <span style="color:#408080;font-style:italic">## 打印 &#39;coords&#39; 对象</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>                <span style="color:#00f">str</span>(coords)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>                
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>                <span style="color:#408080;font-style:italic">## 构造一个 grid grob</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>                <span style="color:#00f">pointsGrob</span>(
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>                        x <span style="color:#666">=</span> coords<span style="color:#666">$</span>x,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span>                        y <span style="color:#666">=</span> coords<span style="color:#666">$</span>y,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span>                        pch <span style="color:#666">=</span> coords<span style="color:#666">$</span>shape
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span>                )
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span>        })
+</code></pre></div><p>除了创建一个新的Geom类之外，你还需要创建实际的函数，该函数将基于你的Geom规范构建一个层。在这里，我们将这个新函数称为<code>geom_mypoint()</code>，它是仿造在<code>geom_point()</code>函数构建的。</p>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-R" data-lang="R"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span>geom_mypoint <span style="color:#666">&lt;-</span> <span style="color:#00f">function</span>(mapping <span style="color:#666">=</span> <span style="color:#008000;font-weight:bold">NULL</span>, data <span style="color:#666">=</span> <span style="color:#008000;font-weight:bold">NULL</span>, stat <span style="color:#666">=</span> <span style="color:#ba2121">&#34;identity&#34;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>                         position <span style="color:#666">=</span> <span style="color:#ba2121">&#34;identity&#34;</span>, na.rm <span style="color:#666">=</span> <span style="color:#008000;font-weight:bold">FALSE</span>, 
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>                         show.legend <span style="color:#666">=</span> <span style="color:#008000;font-weight:bold">NA</span>, inherit.aes <span style="color:#666">=</span> <span style="color:#008000;font-weight:bold">TRUE</span>, <span style="color:#008000;font-weight:bold">...</span>) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>        ggplot2<span style="color:#666">::</span><span style="color:#00f">layer</span>(
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>                geom <span style="color:#666">=</span> GeomMyPoint, mapping <span style="color:#666">=</span> mapping,  <span style="color:#408080;font-style:italic"># 注意这里的 geom 设定为上面构造的类</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>                data <span style="color:#666">=</span> data, stat <span style="color:#666">=</span> stat, position <span style="color:#666">=</span> position, 
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>                show.legend <span style="color:#666">=</span> show.legend, inherit.aes <span style="color:#666">=</span> inherit.aes,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>                params <span style="color:#666">=</span> <span style="color:#00f">list</span>(na.rm <span style="color:#666">=</span> na.rm, <span style="color:#008000;font-weight:bold">...</span>)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>        )
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>} 
+</code></pre></div><p>现在我们就可以把这个函数应用起来了：</p>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-R" data-lang="R"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#00f">ggplot</span>(data <span style="color:#666">=</span> worldcup, <span style="color:#00f">aes</span>(Time, Shots)) <span style="color:#666">+</span> <span style="color:#00f">geom_mypoint</span>()
+</code></pre></div><p><img src="https://gitee.com/ShixiangWang/ImageCollection/raw/master/png/20210809122057.png" alt=""></p>
+<p>文字输出：</p>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-R" data-lang="R"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#ba2121">&#39;data.frame&#39;</span><span style="color:#666">:</span>   <span style="color:#666">595</span> obs. of  <span style="color:#666">5</span> variables<span style="color:#666">:</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span> <span style="color:#666">$</span> x    <span style="color:#666">:</span> num  <span style="color:#666">0.0694</span> <span style="color:#666">0.6046</span> <span style="color:#666">0.3314</span> <span style="color:#666">0.4752</span> <span style="color:#666">0.1174</span> <span style="color:#008000;font-weight:bold">...</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span> <span style="color:#666">$</span> y    <span style="color:#666">:</span> num  <span style="color:#666">0.0455</span> <span style="color:#666">0.0455</span> <span style="color:#666">0.0455</span> <span style="color:#666">0.0791</span> <span style="color:#666">0.1128</span> <span style="color:#008000;font-weight:bold">...</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span> <span style="color:#666">$</span> PANEL<span style="color:#666">:</span> Factor w<span style="color:#666">/</span> <span style="color:#666">1</span> level <span style="color:#ba2121">&#34;1&#34;</span><span style="color:#666">:</span> <span style="color:#666">1</span> <span style="color:#666">1</span> <span style="color:#666">1</span> <span style="color:#666">1</span> <span style="color:#666">1</span> <span style="color:#666">1</span> <span style="color:#666">1</span> <span style="color:#666">1</span> <span style="color:#666">1</span> <span style="color:#666">1</span> <span style="color:#008000;font-weight:bold">...</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span> <span style="color:#666">$</span> group<span style="color:#666">:</span> int  <span style="color:#666">-1</span> <span style="color:#666">-1</span> <span style="color:#666">-1</span> <span style="color:#666">-1</span> <span style="color:#666">-1</span> <span style="color:#666">-1</span> <span style="color:#666">-1</span> <span style="color:#666">-1</span> <span style="color:#666">-1</span> <span style="color:#666">-1</span> <span style="color:#008000;font-weight:bold">...</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span> <span style="color:#666">$</span> shape<span style="color:#666">:</span> num  <span style="color:#666">1</span> <span style="color:#666">1</span> <span style="color:#666">1</span> <span style="color:#666">1</span> <span style="color:#666">1</span> <span style="color:#666">1</span> <span style="color:#666">1</span> <span style="color:#666">1</span> <span style="color:#666">1</span> <span style="color:#666">1</span> <span style="color:#008000;font-weight:bold">...</span>
+</code></pre></div><p>从<code>str()</code>输出中，我们可以看到coords对象包含了x和y映射，以及我们指定为默认的形状映射。注意，x和y都被重新调整为0到1之间。这是标准化的坐标体系。</p>
+<h2 id="例子自动化透明geom">例子：自动化透明geom</h2>
+<p>ggplot2散点图默认使用实心圆，数据多时便造成重叠问题。一个解决方案是我们构造一个能自动化增加透明度的几何对象，当数据少时，保持较高的不透明度，而数据多时则提高透明度。</p>
+<p>先构造geom类：</p>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-R" data-lang="R"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span>GeomAutoTransparent <span style="color:#666">&lt;-</span> <span style="color:#00f">ggproto</span>(<span style="color:#ba2121">&#34;GeomAutoTransparent&#34;</span>, Geom,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>        required_aes <span style="color:#666">=</span> <span style="color:#00f">c</span>(<span style="color:#ba2121">&#34;x&#34;</span>, <span style="color:#ba2121">&#34;y&#34;</span>),
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>        default_aes <span style="color:#666">=</span> <span style="color:#00f">aes</span>(shape <span style="color:#666">=</span> <span style="color:#666">19</span>),
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>        draw_key <span style="color:#666">=</span> draw_key_point,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>        draw_panel <span style="color:#666">=</span> <span style="color:#00f">function</span>(data, panel_scales, coord) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>                <span style="color:#408080;font-style:italic">## 首先转换数据</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>                coords <span style="color:#666">&lt;-</span> coord<span style="color:#666">$</span><span style="color:#00f">transform</span>(data, panel_scales)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>                
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>                <span style="color:#408080;font-style:italic">## 基于数据点设定透明度</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>                n <span style="color:#666">&lt;-</span> <span style="color:#00f">nrow</span>(data)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>                <span style="color:#00f">if</span>(n <span style="color:#666">&gt;</span> <span style="color:#666">100</span> <span style="color:#666">&amp;&amp;</span> n <span style="color:#666">&lt;=</span> <span style="color:#666">200</span>)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>                        coords<span style="color:#666">$</span>alpha <span style="color:#666">&lt;-</span> <span style="color:#666">0.3</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>                else <span style="color:#00f">if</span>(n <span style="color:#666">&gt;</span> <span style="color:#666">200</span>)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>                        coords<span style="color:#666">$</span>alpha <span style="color:#666">&lt;-</span> <span style="color:#666">0.15</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>                else
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span>                        coords<span style="color:#666">$</span>alpha <span style="color:#666">&lt;-</span> <span style="color:#666">1</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span>                <span style="color:#408080;font-style:italic">## Construct a grid grob</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span>                grid<span style="color:#666">::</span><span style="color:#00f">pointsGrob</span>(
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span>                        x <span style="color:#666">=</span> coords<span style="color:#666">$</span>x,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span>                        y <span style="color:#666">=</span> coords<span style="color:#666">$</span>y,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span>                        pch <span style="color:#666">=</span> coords<span style="color:#666">$</span>shape,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span>                        gp <span style="color:#666">=</span> grid<span style="color:#666">::</span><span style="color:#00f">gpar</span>(alpha <span style="color:#666">=</span> coords<span style="color:#666">$</span>alpha)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23</span>                )
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24</span>        })
+</code></pre></div><p>接着创建一个<code>geom_</code>函数：</p>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-R" data-lang="R"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span>geom_transparent <span style="color:#666">&lt;-</span> <span style="color:#00f">function</span>(mapping <span style="color:#666">=</span> <span style="color:#008000;font-weight:bold">NULL</span>, data <span style="color:#666">=</span> <span style="color:#008000;font-weight:bold">NULL</span>, stat <span style="color:#666">=</span> <span style="color:#ba2121">&#34;identity&#34;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>                         position <span style="color:#666">=</span> <span style="color:#ba2121">&#34;identity&#34;</span>, na.rm <span style="color:#666">=</span> <span style="color:#008000;font-weight:bold">FALSE</span>, 
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>                         show.legend <span style="color:#666">=</span> <span style="color:#008000;font-weight:bold">NA</span>, inherit.aes <span style="color:#666">=</span> <span style="color:#008000;font-weight:bold">TRUE</span>, <span style="color:#008000;font-weight:bold">...</span>) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>        ggplot2<span style="color:#666">::</span><span style="color:#00f">layer</span>(
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>                geom <span style="color:#666">=</span> GeomAutoTransparent, mapping <span style="color:#666">=</span> mapping,  
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>                data <span style="color:#666">=</span> data, stat <span style="color:#666">=</span> stat, position <span style="color:#666">=</span> position, 
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>                show.legend <span style="color:#666">=</span> show.legend, inherit.aes <span style="color:#666">=</span> inherit.aes,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>                params <span style="color:#666">=</span> <span style="color:#00f">list</span>(na.rm <span style="color:#666">=</span> na.rm, <span style="color:#008000;font-weight:bold">...</span>)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>        )
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>}
+</code></pre></div><p>现在我们可以使用它了：</p>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-R" data-lang="R"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#00f">ggplot</span>(data <span style="color:#666">=</span> worldcup, <span style="color:#00f">aes</span>(Time, Shots)) <span style="color:#666">+</span> <span style="color:#00f">geom_transparent</span>()
+</code></pre></div><p><img src="https://gitee.com/ShixiangWang/ImageCollection/raw/master/png/20210809122106.png" alt=""></p>
+<p>我们将数据点减少：</p>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-R" data-lang="R"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#00f">ggplot</span>(data <span style="color:#666">=</span> <span style="color:#00f">sample_n</span>(worldcup, <span style="color:#666">50</span>), <span style="color:#00f">aes</span>(Time, Shots)) <span style="color:#666">+</span> 
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>        <span style="color:#00f">geom_transparent</span>()
+</code></pre></div><p><img src="https://gitee.com/ShixiangWang/ImageCollection/raw/master/png/20210809122114.png" alt=""></p>
+<p>分面图也通过了向量化机制进行工作：</p>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-R" data-lang="R"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#00f">ggplot</span>(data <span style="color:#666">=</span> worldcup, <span style="color:#00f">aes</span>(Time, Shots)) <span style="color:#666">+</span> 
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>        <span style="color:#00f">geom_transparent</span>() <span style="color:#666">+</span> 
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>        <span style="color:#00f">facet_wrap</span>(<span style="color:#666">~</span> Position, ncol <span style="color:#666">=</span> <span style="color:#666">2</span>) <span style="color:#666">+</span> 
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>        newtheme
+</code></pre></div><p><img src="https://gitee.com/ShixiangWang/ImageCollection/raw/master/png/20210809122120.png" alt=""></p>
+<p>在这种情况下创建geom的优点是，它对计算进行了抽象，无需每次修改数据，并允许在绘图代码中进行更简单的通信。</p>
+<h2 id="构建一个统计变换-stat">构建一个统计变换 stat</h2>
+<p>除了geom，我们还可以在ggplot2中构建一个新的stat，它可以用来<strong>抽象出在绘图中创建/绘制geom时可能需要的任何计算</strong> 。将geom可能需要的任何复杂计算分离出来，可以简化以后编写geom的过程。</p>
+<p>创建一个stat看起来有点像创建一个geom，但需要指定不同的函数和类。与创建geom类似，我们需要使用<code>ggproto()</code>函数创建一个通常从Stat类继承的新类。然后，我们需要指定一个<code>stat_*</code>函数，它将创建ggplot2和相关<code>geom_*</code>函数使用的层。</p>
+<p>下面是模板：</p>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-R" data-lang="R"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>StatNEW <span style="color:#666">&lt;-</span> <span style="color:#00f">ggproto</span>(<span style="color:#ba2121">&#34;StatNEW&#34;</span>, Stat,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>                   compute_group <span style="color:#666">=</span> <span style="color:#666">&lt;</span>a function that does computations<span style="color:#666">&gt;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>                   default_aes <span style="color:#666">=</span> <span style="color:#00f">aes</span>(<span style="color:#666">&lt;</span>default values for certain aesthetics<span style="color:#666">&gt;</span>),
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>                   required_aes <span style="color:#666">=</span> <span style="color:#666">&lt;</span>a character vector of required aesthetics<span style="color:#666">&gt;</span>)
+</code></pre></div><p><strong>stat的最终目标是以某种方式呈现数据，使其适合绘图</strong> 。为此，<code>compute_group()</code>函数必须返回一个<code>data.frame</code>，以便ggplot2（通常需要<code>data.frame</code>）中的绘图机制知道该做什么。</p>
+<p>如果你的stat输出可以作为一个标准的/已经存在的geom的输入，那么你就不需要编写一个自定义的geom。你的stat只需要以现有geom能够识别的方式格式化它的输出。例如，如果你希望以一种特殊的方式呈现数据，但最终将其绘制为多边形，则可以利用现有的<code>geom_polygon()</code>函数。</p>
+<h2 id="例子标准置信区间">例子：标准置信区间</h2>
+<p>在数据分析或统计建模过程中，一个常见的任务是绘制一组参数估计数以及这些点的95%置信区间。给定一个估计值和一个标准误差，基本统计理论认为，我们可以用估计值加上/减去1.96倍的标准误差来近似这个参数的95%置信区间。我们可以构建一个简单的统计，它采用一个估计和标准误差，并构建<code>geom_segment()</code>所需的数据，以便绘制大约95%的置信区间。</p>
+<p>让我们用R自带的空气质量数据集来计算臭氧的月平均水平以及这些月平均水平的标准误差。</p>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-R" data-lang="R"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#00f">library</span>(datasets)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span style="color:#00f">library</span>(dplyr)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span style="color:#00f">data</span>(<span style="color:#ba2121">&#34;airquality&#34;</span>)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>monthly <span style="color:#666">&lt;-</span> dplyr<span style="color:#666">::</span><span style="color:#00f">group_by</span>(airquality, Month) <span style="color:#666">%&gt;%</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>        dplyr<span style="color:#666">::</span><span style="color:#00f">summarize</span>(ozone <span style="color:#666">=</span> <span style="color:#00f">mean</span>(Ozone, na.rm <span style="color:#666">=</span> <span style="color:#008000;font-weight:bold">TRUE</span>),
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>                  stderr <span style="color:#666">=</span> <span style="color:#00f">sd</span>(Ozone, na.rm <span style="color:#666">=</span> <span style="color:#008000;font-weight:bold">TRUE</span>) <span style="color:#666">/</span> <span style="color:#00f">sqrt</span>(<span style="color:#00f">sum</span>(<span style="color:#666">!</span><span style="color:#00f">is.na</span>(Ozone))))
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>monthly
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span><span style="color:#408080;font-style:italic"># A tibble: 5 x 3</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>  Month ozone stderr
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>  <span style="color:#666">&lt;</span>int<span style="color:#666">&gt;</span> <span style="color:#666">&lt;</span>dbl<span style="color:#666">&gt;</span>  <span style="color:#666">&lt;</span>dbl<span style="color:#666">&gt;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span><span style="color:#666">1</span>     <span style="color:#666">5</span>  <span style="color:#666">23.6</span>   <span style="color:#666">4.36</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span><span style="color:#666">2</span>     <span style="color:#666">6</span>  <span style="color:#666">29.4</span>   <span style="color:#666">6.07</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span><span style="color:#666">3</span>     <span style="color:#666">7</span>  <span style="color:#666">59.1</span>   <span style="color:#666">6.20</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span><span style="color:#666">4</span>     <span style="color:#666">8</span>  <span style="color:#666">60.0</span>   <span style="color:#666">7.78</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span><span style="color:#666">5</span>     <span style="color:#666">9</span>  <span style="color:#666">31.4</span>   <span style="color:#666">4.48</span>
+</code></pre></div><p>下面是一个简单图形：</p>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-R" data-lang="R"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#00f">ggplot</span>(monthly, <span style="color:#00f">aes</span>(x <span style="color:#666">=</span> Month, y <span style="color:#666">=</span> ozone)) <span style="color:#666">+</span> 
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>        <span style="color:#00f">geom_point</span>() <span style="color:#666">+</span> 
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>        <span style="color:#00f">ylab</span>(<span style="color:#ba2121">&#34;Ozone (ppb)&#34;</span>)
+</code></pre></div><p><img src="https://gitee.com/ShixiangWang/ImageCollection/raw/master/png/20210809122127.png" alt=""></p>
+<p>但是上面的图并没有显示我们所期望的月均值的变化。我们可以创建一个stat来完成这项工作，并将信息提供给<code>geom_segment()</code>。首先，我们需要回忆一下，<code>geom_segment()</code>需要美学映射x、xend、y和yend，它们指定每个线段的开始和结束点。因此，我们的stat也应该指定这些信息。在<code>ggproto()</code>调用中定义的<code>compute_group()</code>函数应该提供这个功能。</p>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-R" data-lang="R"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span>StatConfint <span style="color:#666">&lt;-</span> <span style="color:#00f">ggproto</span>(<span style="color:#ba2121">&#34;StatConfint&#34;</span>, Stat,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>                       compute_group <span style="color:#666">=</span> <span style="color:#00f">function</span>(data, scales) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>                               <span style="color:#408080;font-style:italic">## Compute the line segment endpoints</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>                               x <span style="color:#666">&lt;-</span> data<span style="color:#666">$</span>x
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>                               xend <span style="color:#666">&lt;-</span> data<span style="color:#666">$</span>x
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>                               y <span style="color:#666">&lt;-</span> data<span style="color:#666">$</span>y <span style="color:#666">-</span> <span style="color:#666">1.96</span> <span style="color:#666">*</span> data<span style="color:#666">$</span>stderr
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>                               yend <span style="color:#666">&lt;-</span> data<span style="color:#666">$</span>y <span style="color:#666">+</span> <span style="color:#666">1.96</span> <span style="color:#666">*</span> data<span style="color:#666">$</span>stderr
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>                               
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>                               <span style="color:#408080;font-style:italic">## Return a new data frame</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>                               <span style="color:#00f">data.frame</span>(x <span style="color:#666">=</span> x, xend <span style="color:#666">=</span> xend,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>                                          y <span style="color:#666">=</span> y, yend <span style="color:#666">=</span> yend)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>                       },
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>                       required_aes <span style="color:#666">=</span> <span style="color:#00f">c</span>(<span style="color:#ba2121">&#34;x&#34;</span>, <span style="color:#ba2121">&#34;y&#34;</span>, <span style="color:#ba2121">&#34;stderr&#34;</span>)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>)
+</code></pre></div><p>接下来我们定义一个单独的<code>stat_*</code>函数来构造可叠加的层：</p>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-R" data-lang="R"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span>stat_confint <span style="color:#666">&lt;-</span> <span style="color:#00f">function</span>(mapping <span style="color:#666">=</span> <span style="color:#008000;font-weight:bold">NULL</span>, data <span style="color:#666">=</span> <span style="color:#008000;font-weight:bold">NULL</span>, geom <span style="color:#666">=</span> <span style="color:#ba2121">&#34;segment&#34;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>                           position <span style="color:#666">=</span> <span style="color:#ba2121">&#34;identity&#34;</span>, na.rm <span style="color:#666">=</span> <span style="color:#008000;font-weight:bold">FALSE</span>, 
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>                           show.legend <span style="color:#666">=</span> <span style="color:#008000;font-weight:bold">NA</span>, inherit.aes <span style="color:#666">=</span> <span style="color:#008000;font-weight:bold">TRUE</span>, <span style="color:#008000;font-weight:bold">...</span>) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>        ggplot2<span style="color:#666">::</span><span style="color:#00f">layer</span>(
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>                stat <span style="color:#666">=</span> StatConfInt, 
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>                data <span style="color:#666">=</span> data, 
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>                mapping <span style="color:#666">=</span> mapping, 
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>                geom <span style="color:#666">=</span> geom, 
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>                position <span style="color:#666">=</span> position, 
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>                show.legend <span style="color:#666">=</span> show.legend, 
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>                inherit.aes <span style="color:#666">=</span> inherit.aes,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>                params <span style="color:#666">=</span> <span style="color:#00f">list</span>(na.rm <span style="color:#666">=</span> na.rm, <span style="color:#008000;font-weight:bold">...</span>)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>        )
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>}
+</code></pre></div><p>这样我们就可以使用它了：</p>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-R" data-lang="R"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#00f">ggplot</span>(data <span style="color:#666">=</span> monthly, <span style="color:#00f">aes</span>(x <span style="color:#666">=</span> Month, y <span style="color:#666">=</span> ozone, stderr <span style="color:#666">=</span> stderr)) <span style="color:#666">+</span> 
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>        <span style="color:#00f">geom_point</span>() <span style="color:#666">+</span> 
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>        <span style="color:#00f">ylab</span>(<span style="color:#ba2121">&#34;Ozone (ppb)&#34;</span>) <span style="color:#666">+</span> 
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>        <span style="color:#00f">geom_segment</span>(stat <span style="color:#666">=</span> <span style="color:#ba2121">&#34;confint&#34;</span>)
+</code></pre></div><p><img src="https://gitee.com/ShixiangWang/ImageCollection/raw/master/png/20210809122134.png" alt=""></p>
+<h2 id="结合geom和stat">结合geom和stat</h2>
+<p>结合geoms和stats，你可以创建新的图形元素，并使用你定义的特殊计算。此外，如果你需要一些自定义绘图，而现有的<code>geom</code>不能立即处理，那么你可以考虑编写一个单独的geom来处理由你的统计计算出的数据。在本节中，我们将展示如何结合统计和geom来创建自定义绘图。</p>
+<p>我们将使用的示例是创建一个“瘦盒图”，它看起来像这样。</p>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-R" data-lang="R"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#408080;font-style:italic">## This code is not runnable yet!</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span style="color:#00f">library</span>(ggplot2)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span style="color:#00f">library</span>(datasets)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span style="color:#00f">data</span>(airquality)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span><span style="color:#00f">mutate</span>(airquality, Month <span style="color:#666">=</span> <span style="color:#00f">factor</span>(Month)) <span style="color:#666">%&gt;%</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span>        <span style="color:#00f">ggplot</span>(<span style="color:#00f">aes</span>(Month, Ozone)) <span style="color:#666">+</span> 
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7</span>        <span style="color:#00f">geom_skinnybox</span>()
+</code></pre></div><p><img src="https://gitee.com/ShixiangWang/ImageCollection/raw/master/png/20210809122140.png" alt=""></p>
+<p>这个boxplot与传统的boxplot（例如<code>geom_boxplot()</code>）在以下方面有所不同：</p>
+<ol>
+<li>
+<p>“须”延伸到数据的最小值和最大值。</p>
+</li>
+<li>
+<p>中位数用点表示，而不是直线。</p>
+</li>
+<li>
+<p>这里没有一个方框表示第25和第75百分位数之间的区域。</p>
+</li>
+</ol>
+<p>首先，我们可以创建一个stat，从数据中计算相关的汇总统计：最小值、第一个四分位数、中位数、第三个四分位数和最大值。</p>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-R" data-lang="R"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span>StatSkinnybox <span style="color:#666">&lt;-</span> <span style="color:#00f">ggproto</span>(<span style="color:#ba2121">&#34;StatSkinnybox&#34;</span>, Stat, 
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>                         compute_group <span style="color:#666">=</span> <span style="color:#00f">function</span>(data, scales) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>                                 probs <span style="color:#666">&lt;-</span> <span style="color:#00f">c</span>(<span style="color:#666">0</span>, <span style="color:#666">0.25</span>, <span style="color:#666">0.5</span>, <span style="color:#666">0.75</span>, <span style="color:#666">1</span>)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>                                 qq <span style="color:#666">&lt;-</span> <span style="color:#00f">quantile</span>(data<span style="color:#666">$</span>y, probs, na.rm <span style="color:#666">=</span> <span style="color:#008000;font-weight:bold">TRUE</span>) 
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>                                 out <span style="color:#666">&lt;-</span> qq <span style="color:#666">%&gt;%</span> as.list <span style="color:#666">%&gt;%</span> data.frame
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>                                 <span style="color:#00f">names</span>(out) <span style="color:#666">&lt;-</span> <span style="color:#00f">c</span>(<span style="color:#ba2121">&#34;ymin&#34;</span>, <span style="color:#ba2121">&#34;lower&#34;</span>, <span style="color:#ba2121">&#34;middle&#34;</span>, 
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>                                                 <span style="color:#ba2121">&#34;upper&#34;</span>, <span style="color:#ba2121">&#34;ymax&#34;</span>)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>                                 out<span style="color:#666">$</span>x <span style="color:#666">&lt;-</span> data<span style="color:#666">$</span>x[1]
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>                                 out
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>                         },
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>                         required_aes <span style="color:#666">=</span> <span style="color:#00f">c</span>(<span style="color:#ba2121">&#34;x&#34;</span>, <span style="color:#ba2121">&#34;y&#34;</span>)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>                         )
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>stat_skinnybox <span style="color:#666">&lt;-</span> <span style="color:#00f">function</span>(mapping <span style="color:#666">=</span> <span style="color:#008000;font-weight:bold">NULL</span>, data <span style="color:#666">=</span> <span style="color:#008000;font-weight:bold">NULL</span>, geom <span style="color:#666">=</span> <span style="color:#ba2121">&#34;skinnybox&#34;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>                           position <span style="color:#666">=</span> <span style="color:#ba2121">&#34;identity&#34;</span>, show.legend <span style="color:#666">=</span> <span style="color:#008000;font-weight:bold">NA</span>, 
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span>                           outliers <span style="color:#666">=</span> <span style="color:#008000;font-weight:bold">TRUE</span>, inherit.aes <span style="color:#666">=</span> <span style="color:#008000;font-weight:bold">TRUE</span>, <span style="color:#008000;font-weight:bold">...</span>) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span>        ggplot2<span style="color:#666">::</span><span style="color:#00f">layer</span>(
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span>                stat <span style="color:#666">=</span> StatSkinnybox, 
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span>                data <span style="color:#666">=</span> data, 
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span>                mapping <span style="color:#666">=</span> mapping, 
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span>                geom <span style="color:#666">=</span> geom, 
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span>                position <span style="color:#666">=</span> position, 
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23</span>                show.legend <span style="color:#666">=</span> show.legend, 
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24</span>                inherit.aes <span style="color:#666">=</span> inherit.aes,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25</span>                params <span style="color:#666">=</span> <span style="color:#00f">list</span>(outliers <span style="color:#666">=</span> outliers, <span style="color:#008000;font-weight:bold">...</span>)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26</span>        )        
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27</span>}
+</code></pre></div><p>有了可用来处理数据的统计，我们就可以继续编写geom了。这组函数负责在绘图区域中绘制适当的图形。首先，我们可以使用<code>ggproto()</code>函数创建GeomSkinnybox类。在这里，关键函数是<code>draw_panel()</code>函数，由于代码的长度，我们单独实现它。注意，在<code>draw_panel_function()</code>函数中，我们需要手动调整boxplot的“lower”、“upper”和“middle”部分，否则它们将不会出现在绘图中（它们将在错误的单元中）。</p>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-R" data-lang="R"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#00f">library</span>(scales)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>draw_panel_function <span style="color:#666">&lt;-</span> <span style="color:#00f">function</span>(data, panel_scales, coord) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>        coords <span style="color:#666">&lt;-</span> coord<span style="color:#666">$</span><span style="color:#00f">transform</span>(data, panel_scales) <span style="color:#666">%&gt;%</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>                <span style="color:#00f">mutate</span>(lower <span style="color:#666">=</span> <span style="color:#00f">rescale</span>(lower, from <span style="color:#666">=</span> panel_scales<span style="color:#666">$</span>y.range),
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>                       upper <span style="color:#666">=</span> <span style="color:#00f">rescale</span>(upper, from <span style="color:#666">=</span> panel_scales<span style="color:#666">$</span>y.range),
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>                       middle <span style="color:#666">=</span> <span style="color:#00f">rescale</span>(middle, from <span style="color:#666">=</span> panel_scales<span style="color:#666">$</span>y.range))
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>        med <span style="color:#666">&lt;-</span> <span style="color:#00f">pointsGrob</span>(x <span style="color:#666">=</span> coords<span style="color:#666">$</span>x,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>                          y <span style="color:#666">=</span> coords<span style="color:#666">$</span>middle,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>                          pch <span style="color:#666">=</span> coords<span style="color:#666">$</span>shape)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>        lower <span style="color:#666">&lt;-</span> <span style="color:#00f">segmentsGrob</span>(x0 <span style="color:#666">=</span> coords<span style="color:#666">$</span>x,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>                              x1 <span style="color:#666">=</span> coords<span style="color:#666">$</span>x,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>                              y0 <span style="color:#666">=</span> coords<span style="color:#666">$</span>ymin,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>                              y1 <span style="color:#666">=</span> coords<span style="color:#666">$</span>lower,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>                              gp <span style="color:#666">=</span> <span style="color:#00f">gpar</span>(lwd <span style="color:#666">=</span> coords<span style="color:#666">$</span>size))
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>        upper <span style="color:#666">&lt;-</span> <span style="color:#00f">segmentsGrob</span>(x0 <span style="color:#666">=</span> coords<span style="color:#666">$</span>x,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span>                              x1 <span style="color:#666">=</span> coords<span style="color:#666">$</span>x,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span>                              y0 <span style="color:#666">=</span> coords<span style="color:#666">$</span>upper,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span>                              y1 <span style="color:#666">=</span> coords<span style="color:#666">$</span>ymax,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span>                              gp <span style="color:#666">=</span> <span style="color:#00f">gpar</span>(lwd <span style="color:#666">=</span> coords<span style="color:#666">$</span>size))
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span>        <span style="color:#00f">gTree</span>(children <span style="color:#666">=</span> <span style="color:#00f">gList</span>(med, lower, upper))
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23</span>GeomSkinnybox <span style="color:#666">&lt;-</span> <span style="color:#00f">ggproto</span>(<span style="color:#ba2121">&#34;GeomSkinnybox&#34;</span>, Geom,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24</span>                         required_aes <span style="color:#666">=</span> <span style="color:#00f">c</span>(<span style="color:#ba2121">&#34;x&#34;</span>, <span style="color:#ba2121">&#34;ymin&#34;</span>, <span style="color:#ba2121">&#34;lower&#34;</span>, <span style="color:#ba2121">&#34;middle&#34;</span>, 
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25</span>                                          <span style="color:#ba2121">&#34;upper&#34;</span>, <span style="color:#ba2121">&#34;ymax&#34;</span>),
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26</span>                         default_aes <span style="color:#666">=</span> <span style="color:#00f">aes</span>(shape <span style="color:#666">=</span> <span style="color:#666">19</span>, lwd <span style="color:#666">=</span> <span style="color:#666">2</span>),
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27</span>                         draw_key <span style="color:#666">=</span> draw_key_point,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28</span>                         draw_panel <span style="color:#666">=</span> draw_panel_function
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29</span>                         )
+</code></pre></div><p>最后，我们实现<code>geom_skinnybox()</code>函数，它从<code>stat_skinnybox()</code>函数和GeomSkinnybox类中绘制。</p>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-R" data-lang="R"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span>geom_skinnybox <span style="color:#666">&lt;-</span> <span style="color:#00f">function</span>(mapping <span style="color:#666">=</span> <span style="color:#008000;font-weight:bold">NULL</span>, data <span style="color:#666">=</span> <span style="color:#008000;font-weight:bold">NULL</span>, stat <span style="color:#666">=</span> <span style="color:#ba2121">&#34;skinnybox&#34;</span>, 
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>                           position <span style="color:#666">=</span> <span style="color:#ba2121">&#34;identity&#34;</span>, show.legend <span style="color:#666">=</span> <span style="color:#008000;font-weight:bold">NA</span>, 
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>                           na.rm <span style="color:#666">=</span> <span style="color:#008000;font-weight:bold">FALSE</span>, inherit.aes <span style="color:#666">=</span> <span style="color:#008000;font-weight:bold">TRUE</span>, <span style="color:#008000;font-weight:bold">...</span>) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>        <span style="color:#00f">layer</span>(
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>                data <span style="color:#666">=</span> data, 
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>                mapping <span style="color:#666">=</span> mapping,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>                stat <span style="color:#666">=</span> stat,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>                geom <span style="color:#666">=</span> GeomSkinnybox,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>                position <span style="color:#666">=</span> position,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>                show.legend <span style="color:#666">=</span> show.legend,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>                inherit.aes <span style="color:#666">=</span> inherit.aes,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>                params <span style="color:#666">=</span> <span style="color:#00f">list</span>(na.rm <span style="color:#666">=</span> na.rm, <span style="color:#008000;font-weight:bold">...</span>)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>        )
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>}
+</code></pre></div><p>这样我们就可以使用它了：</p>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-R" data-lang="R"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#00f">mutate</span>(airquality, Month <span style="color:#666">=</span> <span style="color:#00f">factor</span>(Month)) <span style="color:#666">%&gt;%</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>        <span style="color:#00f">ggplot</span>(<span style="color:#00f">aes</span>(Month, Ozone)) <span style="color:#666">+</span> 
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>        <span style="color:#00f">geom_skinnybox</span>()
+</code></pre></div><p><img src="https://gitee.com/ShixiangWang/ImageCollection/raw/master/png/20210809122148.png" alt=""></p>
+
+				</div>
+				<footer class="footer">
+				  <hr>
+<div class="post-tags">
+
+<p>
+  <svg xmlns="http://www.w3.org/2000/svg" class="octicon" width="20" height="24" viewBox="0 0 14 16"><path fill-rule="evenodd" d="M8 2H6V0h2v2zm4 5H2c-.55 0-1-.45-1-1V4c0-.55.45-1 1-1h10l2 2-2 2zM8 4H6v2h2V4zM6 16h2V8H6v8z"/></svg>
+	
+	<a class="p-category" href="../../categories/blog/">Blog</a>
+</p>
+
+
+<p>
+  <svg xmlns="http://www.w3.org/2000/svg" class="octicon" width="20" height="24" viewBox="0 0 15 16"><path fill-rule="evenodd" d="M7.73 1.73C7.26 1.26 6.62 1 5.96 1H3.5C2.13 1 1 2.13 1 3.5v2.47c0 .66.27 1.3.73 1.77l6.06 6.06c.39.39 1.02.39 1.41 0l4.59-4.59a.996.996 0 0 0 0-1.41L7.73 1.73zM2.38 7.09c-.31-.3-.47-.7-.47-1.13V3.5c0-.88.72-1.59 1.59-1.59h2.47c.42 0 .83.16 1.13.47l6.14 6.13-4.73 4.73-6.13-6.15zM3.01 3h2v2H3V3h.01z"/></svg>
+	
+	<a class="p-tag" href="../../tags/r/">R</a><a class="p-tag" href="../../tags/ggplot/">ggplot</a><a class="p-tag" href="../../tags/%E5%AD%A6%E4%B9%A0/">学习</a>
+
+</p>
+</div>
+
+				</footer>
+			</article>
+		</main>
+			  <button class="hamburger hamburger--arrow is-active" type="button" onclick="document.getElementsByClassName('sidebar')[0].classList.toggle('collapsed');document.getElementsByClassName('content')[0].classList.toggle('expanded');document.getElementsByClassName('hamburger')[0].classList.toggle('is-active');document.getElementsByClassName('hamburger-inner')[0].classList.toggle('is-active')">
+      <span class="hamburger-box">
+        <span class="hamburger-inner"></span>
+      </span>
+    </button>
+		<aside class="sidebar">
+			<div class="container sidebar-sticky">
+				<header class="sidebar-about h-card vcard p-author">
+					
+					<a class="u-url u-uid" rel="me" href="../../">
+						<img class="u-photo" src="https://avatars.githubusercontent.com/u/25057508?v=4" width=128 height=128 />
+					</a>
+					
+
+					
+					<span class="site-title u-name fn">
+					  <a class="u-url u-uid" rel="me" href="../../">ShixiangWang
+王诗翔</a>
+				  </span>
+					
+
+					<p class="lead p-note">
+						 Bioinformatics Scholar. Cancer Researcher. Data Scientist. #rstats #golang. Always learning something new. 
+					</p>
+
+					<nav>
+						<ul class="sidebar-nav">
+							
+							<li><a href="../../about/"> About </a></li>
+							
+							<li><a href="../../blog/"> Blog </a></li>
+							
+							<li><a href="../../project/"> Projects </a></li>
+							
+							<li><a href="http://42.192.87.178:3838/"> Shiny Apps </a></li>
+							
+							<li><a href="../../talk/"> Talks </a></li>
+							
+							<li><a href="https://github.com/ShixiangWang/self-study/discussions"> Discuss with me? </a></li>
+							
+							<li><a href="https://shixiangwang.netlify.app/"> Mirror #1 </a></li>
+							
+							<li><a href="https://shixiangwang.github.io/"> Mirror #2 </a></li>
+							
+						</ul>
+					</nav>
+
+					
+						<div class="contact">
+						  
+							<ul class="contact-list">
+								
+								<li>
+									
+									  
+		  							  <a href="https://twitter.com/WangShxiang" class="u-url url" rel="me" title="Twitter" aria-label="Twitter">
+		  						    <i class='fab fa-twitter fa-fw'></i>
+		  							  </a>
+		  						  
+								
+								</li>
+								
+								<li>
+									
+									  
+		  							  <a href="https://github.com/ShixiangWang" class="u-url url" rel="me" title="GitHub" aria-label="GitHub">
+		  						    <i class='fab fa-github fa-fw'></i>
+		  							  </a>
+		  						  
+								
+								</li>
+								
+								<li>
+									
+		  							<a href="mailto:shixiang1994wang@gmail.com" class="u-email email" rel="me" title="Email" aria-label="Email">
+		  							<i class='fa fa-envelope fa-fw'></i>
+		  							  
+		  							</a>
+									
+								</li>
+								
+								<li>
+									
+									  
+		  							  <a href="https://shixiangwang.github.io/home/logo/qrcode.jpg" class="u-url url" rel="me" title="Bandcamp" aria-label="Bandcamp">
+		  						    <i class='fab fa-bandcamp fa-fw'></i>
+		  							  </a>
+		  						  
+								
+								</li>
+								
+							</ul>
+						</div>
+					
+				</header>
+
+				<footer>&copy; 2021. All rights reserved. </footer>
+				 <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+            <span id="busuanzi_container_site_pv">本站总访问量&nbsp;<span id="busuanzi_value_site_pv"></span>&nbsp;次</span>
+			</div>
+		</aside>
+
+		  <footer>
+  <script src="../../js/jquery-latest.js"></script>
+<script src="../../js/featherlight.min.js" type="text/javascript" charset="utf-8"></script>
+
+  
+
+  
+  </footer>
+  </body>
+</html>
+
+	</body>
+</html>
