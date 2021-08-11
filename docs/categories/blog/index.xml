@@ -8,7 +8,29 @@
 王诗翔</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 09 Aug 2021 00:00:00 +0000</lastBuildDate><atom:link href="/categories/blog/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 11 Aug 2021 00:00:00 +0000</lastBuildDate><atom:link href="/categories/blog/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>深度学习数学基础</title>
+      <link>/blog/math-basics-for-dl/</link>
+      <pubDate>Wed, 11 Aug 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/math-basics-for-dl/</guid>
+      <description>本文来自《动手学习深度学习》附录。很久之前就摘录了，总觉得某一天用得上，不厌其烦地搬运了。 参考https://blog.csdn.net/xm_ovo/article/details/107536132一文对公式进行了正确的换行处理，以保持与简书相同的阅读效果。
+  本文总结了本书中涉及的有关线性代数、微分和概率的基础知识。
+线性代数 下面分别概括了向量、矩阵、运算、范数、特征向量和特征值的概念。
+向量 本书中的向量指的是列向量。一个$n$维向量$\boldsymbol{x}$的表达式可写成
+$$ \boldsymbol{x} = \begin{bmatrix} x_{1} \\
+x_{2} \\
+\vdots \\
+x_{n} \end{bmatrix}, $$
+其中$x_1, \ldots, x_n$是向量的元素。我们将各元素均为实数的$n$维向量$\boldsymbol{x}$记作$\boldsymbol{x} \in \mathbb{R}^{n}$或$\boldsymbol{x} \in \mathbb{R}^{n \times 1}$。
+矩阵 一个$m$行$n$列矩阵的表达式可写成
+$$ \boldsymbol{X} = \begin{bmatrix} x_{11} &amp;amp; x_{12} &amp;amp; \dots &amp;amp; x_{1n} \\
+x_{21} &amp;amp; x_{22} &amp;amp; \dots &amp;amp; x_{2n} \\
+\vdots &amp;amp; \vdots &amp;amp; \ddots &amp;amp; \vdots \\
+x_{m1} &amp;amp; x_{m2} &amp;amp; \dots &amp;amp; x_{mn} \end{bmatrix}, $$</description>
+    </item>
+    
     <item>
       <title>ggplot构建新图形元素</title>
       <link>/blog/ggplot-build-new-object/</link>
@@ -170,18 +192,6 @@ https://baike.baidu.com/item/完全数/370913?fromtitle=完美数&amp;amp;fromid
   1conda install -c bioconda bwa samtools 2pip3 install Circle-Map 3pip3 install biopython==1.77 # 不安装这个版本目前使用会报错 4 第一步：准备和下载数据 下载原始数据 直接克隆仓库：
 1git clone https://github.com/iprada/Circle-Map 下载和准备参考基因组 1wget http://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/hg38.fa.gz 2gunzip -d hg38.fa.gz 3 4bwa index hg38.fa 5samtools faidx hg38.fa 6 第二步：比对到参考基因组 1cd Circle-Map/tutorial/ 2bwa mem -q ~/data/refs/hg38.fa unknown_circle_reads_1.fastq unknown_circle_reads_2.fastq &amp;gt; unknown_circle.sam 3 这就产生了一个SAM文件，其中包含了关于reads在哪里以及如何与基因组对齐的信息。
   我们使用 -q 选项（query name sorted）为BWA中的拆分读对比对分配独立的映射质量分数 。这可以改进Circle-Map概率模型中断点图权值的估计。</description>
-    </item>
-    
-    <item>
-      <title>Jupyter Notebook 插件配置</title>
-      <link>/blog/jupyter-notebook-plugin-configs/</link>
-      <pubDate>Sun, 08 Aug 2021 00:00:00 +0000</pubDate>
-      
-      <guid>/blog/jupyter-notebook-plugin-configs/</guid>
-      <description>安装命令：
-1pip3 install -U jupyter_contrib_nbextensions 2jupyter contrib nbextension install --user 3pip3 install -U jupyter_nbextensions_configurator 4jupyter nbextensions_configurator enable --user 5 6pip3 install -U qgrid # 动态操作 DataFrame 7jupyter nbextension enable --py --sys-prefix qgrid 8jupyter nbextension enable --py --sys-prefix widgetsnbextension 如果要修改主题：
-1pip3 install -U jupyterthemes 网址：https://github.com/dunovank/jupyter-themes
-激活的插件：</description>
     </item>
     
   </channel>

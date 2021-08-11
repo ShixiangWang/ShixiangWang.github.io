@@ -8,7 +8,25 @@
 王诗翔</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 09 Aug 2021 00:00:00 +0000</lastBuildDate><atom:link href="/tags/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 11 Aug 2021 00:00:00 +0000</lastBuildDate><atom:link href="/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>数学</title>
+      <link>/tags/%E6%95%B0%E5%AD%A6/</link>
+      <pubDate>Wed, 11 Aug 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/%E6%95%B0%E5%AD%A6/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>深度学习</title>
+      <link>/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/</link>
+      <pubDate>Wed, 11 Aug 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/</guid>
+      <description></description>
+    </item>
+    
     <item>
       <title>Bash</title>
       <link>/tags/bash/</link>
@@ -78,24 +96,6 @@
       <pubDate>Mon, 09 Aug 2021 00:00:00 +0000</pubDate>
       
       <guid>/tags/unix/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>可视化</title>
-      <link>/tags/%E5%8F%AF%E8%A7%86%E5%8C%96/</link>
-      <pubDate>Mon, 09 Aug 2021 00:00:00 +0000</pubDate>
-      
-      <guid>/tags/%E5%8F%AF%E8%A7%86%E5%8C%96/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>学习</title>
-      <link>/tags/%E5%AD%A6%E4%B9%A0/</link>
-      <pubDate>Mon, 09 Aug 2021 00:00:00 +0000</pubDate>
-      
-      <guid>/tags/%E5%AD%A6%E4%B9%A0/</guid>
       <description></description>
     </item>
     

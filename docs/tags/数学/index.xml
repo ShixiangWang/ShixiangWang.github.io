@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>数学 on ShixiangWang
+王诗翔</title>
+    <link>/tags/%E6%95%B0%E5%AD%A6/</link>
+    <description>Recent content in 数学 on ShixiangWang
+王诗翔</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 11 Aug 2021 00:00:00 +0000</lastBuildDate><atom:link href="/tags/%E6%95%B0%E5%AD%A6/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>深度学习数学基础</title>
+      <link>/blog/math-basics-for-dl/</link>
+      <pubDate>Wed, 11 Aug 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/math-basics-for-dl/</guid>
+      <description>本文来自《动手学习深度学习》附录。很久之前就摘录了，总觉得某一天用得上，不厌其烦地搬运了。 参考https://blog.csdn.net/xm_ovo/article/details/107536132一文对公式进行了正确的换行处理，以保持与简书相同的阅读效果。
+  本文总结了本书中涉及的有关线性代数、微分和概率的基础知识。
+线性代数 下面分别概括了向量、矩阵、运算、范数、特征向量和特征值的概念。
+向量 本书中的向量指的是列向量。一个$n$维向量$\boldsymbol{x}$的表达式可写成
+$$ \boldsymbol{x} = \begin{bmatrix} x_{1} \\
+x_{2} \\
+\vdots \\
+x_{n} \end{bmatrix}, $$
+其中$x_1, \ldots, x_n$是向量的元素。我们将各元素均为实数的$n$维向量$\boldsymbol{x}$记作$\boldsymbol{x} \in \mathbb{R}^{n}$或$\boldsymbol{x} \in \mathbb{R}^{n \times 1}$。
+矩阵 一个$m$行$n$列矩阵的表达式可写成
+$$ \boldsymbol{X} = \begin{bmatrix} x_{11} &amp;amp; x_{12} &amp;amp; \dots &amp;amp; x_{1n} \\
+x_{21} &amp;amp; x_{22} &amp;amp; \dots &amp;amp; x_{2n} \\
+\vdots &amp;amp; \vdots &amp;amp; \ddots &amp;amp; \vdots \\
+x_{m1} &amp;amp; x_{m2} &amp;amp; \dots &amp;amp; x_{mn} \end{bmatrix}, $$</description>
+    </item>
+    
+  </channel>
+</rss>

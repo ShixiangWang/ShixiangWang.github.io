@@ -3,27 +3,52 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>/categories/blog/</loc>
+    <lastmod>2021-08-11T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/blog/</loc>
+    <lastmod>2021-08-11T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/categories/</loc>
+    <lastmod>2021-08-11T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/</loc>
+    <lastmod>2021-08-11T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/</loc>
+    <lastmod>2021-08-11T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/%E6%95%B0%E5%AD%A6/</loc>
+    <lastmod>2021-08-11T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/</loc>
+    <lastmod>2021-08-11T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/blog/math-basics-for-dl/</loc>
+    <lastmod>2021-08-11T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
     <loc>/tags/bash/</loc>
     <lastmod>2021-08-09T00:00:00+00:00</lastmod>
   </url>
   
   <url>
     <loc>/tags/bioinformatics/</loc>
-    <lastmod>2021-08-09T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/categories/blog/</loc>
-    <lastmod>2021-08-09T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/blog/</loc>
-    <lastmod>2021-08-09T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/categories/</loc>
     <lastmod>2021-08-09T00:00:00+00:00</lastmod>
   </url>
   
@@ -79,16 +104,6 @@
   
   <url>
     <loc>/blog/rcpp-data-structure/</loc>
-    <lastmod>2021-08-09T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/</loc>
-    <lastmod>2021-08-09T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/tags/</loc>
     <lastmod>2021-08-09T00:00:00+00:00</lastmod>
   </url>
   

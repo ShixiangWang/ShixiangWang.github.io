@@ -103,12 +103,3 @@ publishDir = "docs"
     themeColor = "restyled-garrick"
     customCss = ["css/hamburgers.css", "css/custom.css"]
 
-    # options for highlight.js (version, additional languages, and theme)
-    # import minified languages to /js/highlight.js/{version}/languages
-    #highlightjsVersion = "9.11.0"
-    #highlightjsCDN = "/js"
-    #highlightjsLang = ["r", "yaml", "bash", "tex", "sql", "markdown"]
-    #highlightjsTheme = "github"
-
-    MathJaxCDN = "https://cdn.bootcss.com"
-    MathJaxVersion = "2.7.1"
