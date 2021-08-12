@@ -19,6 +19,24 @@
     </item>
     
     <item>
+      <title>Bioinformatics</title>
+      <link>/tags/bioinformatics/</link>
+      <pubDate>Thu, 12 Aug 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/bioinformatics/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>R</title>
+      <link>/tags/r/</link>
+      <pubDate>Thu, 12 Aug 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/r/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title>RNA-seq</title>
       <link>/tags/rna-seq/</link>
       <pubDate>Thu, 12 Aug 2021 00:00:00 +0000</pubDate>
@@ -55,15 +73,6 @@
     </item>
     
     <item>
-      <title>Bioinformatics</title>
-      <link>/tags/bioinformatics/</link>
-      <pubDate>Mon, 09 Aug 2021 00:00:00 +0000</pubDate>
-      
-      <guid>/tags/bioinformatics/</guid>
-      <description></description>
-    </item>
-    
-    <item>
       <title>ggplot</title>
       <link>/tags/ggplot/</link>
       <pubDate>Mon, 09 Aug 2021 00:00:00 +0000</pubDate>
@@ -87,15 +96,6 @@
       <pubDate>Mon, 09 Aug 2021 00:00:00 +0000</pubDate>
       
       <guid>/tags/linux/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>R</title>
-      <link>/tags/r/</link>
-      <pubDate>Mon, 09 Aug 2021 00:00:00 +0000</pubDate>
-      
-      <guid>/tags/r/</guid>
       <description></description>
     </item>
     

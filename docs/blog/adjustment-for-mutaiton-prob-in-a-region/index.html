@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en-US">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1">
+
+		
+		<title>关于区间突变概率计算理解的纠正 &middot; ShixiangWang
+王诗翔</title>
+		
+		<meta property="og:title" content="关于区间突变概率计算理解的纠正 - ShixiangWang
+王诗翔">
+		
+		<meta property="og:type" content="article">
+		
+
+		
+			
+			<meta property="description" content="学习有时候就是在跟自己反复较量。">
+			<meta property="og:description" content="学习有时候就是在跟自己反复较量。">
+			
+			
+    	<meta property="twitter:card" content="summary">
+  		<meta property="twitter:image" content="/apple-touch-icon-152x152.png">
+			
+		
+
+		
+		
+		<meta name="twitter:creator" content="@WangShxiang">
+		<meta name="twitter:site" content="https://shixiangwang.github.io">
+		
+		
+
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+		<link rel="stylesheet" href="../../css/poole.css">
+		<link rel="stylesheet" href="../../css/syntax.css">
+		<link rel="stylesheet" href="../../css/hyde.css">
+		
+		
+		<link rel="stylesheet" href="../../css/hamburgers.css">
+		
+		<link rel="stylesheet" href="../../css/custom.css">
+		
+		
+
+<link rel="apple-touch-icon-precomposed" sizes="57x57" href="../../apple-touch-icon-57x57.png" />
+<link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../apple-touch-icon-114x114.png" />
+<link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../apple-touch-icon-72x72.png" />
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../apple-touch-icon-144x144.png" />
+<link rel="apple-touch-icon-precomposed" sizes="120x120" href="../../apple-touch-icon-120x120.png" />
+<link rel="apple-touch-icon-precomposed" sizes="152x152" href="../../apple-touch-icon-152x152.png" />
+<link rel="icon" type="image/png" href="../../favicon-32x32.png" sizes="32x32" />
+<link rel="icon" type="image/png" href="../../favicon-16x16.png" sizes="16x16" />
+<meta name="application-name" content="Garrick Aden-Buie"/>
+<meta name="msapplication-TileColor" content="#002B36" />
+<meta name="msapplication-TileImage" content="/mstile-144x144.png" />
+<meta name="theme-color" content="#ffffff">
+
+<meta name="mobile-web-app-capable" content="yes">
+
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-title" content="Garrick Aden-Buie">
+
+<link href="../../css/featherlight.min.css" type="text/css" rel="stylesheet" />
+
+<script async defer src="https://buttons.github.io/buttons.js"></script>
+
+<script defer src="../../js/van11y-accessible-hide-show-aria.min.js"></script>
+
+<script defer src="../../js/toc.js"></script>
+
+
+
+		<link href="../../blog/adjustment-for-mutaiton-prob-in-a-region" rel="canonical">
+	</head>
+
+	<body class="restyled-garrick  h-entry">
+		<main class="content container" role="main">
+			<article class="post">
+				<header>
+					<a class="u-url" href="../../blog/adjustment-for-mutaiton-prob-in-a-region">
+						<h1 class="post-title p-name">关于区间突变概率计算理解的纠正</h1>
+					</a>
+					<h3 class="post-author">王诗翔</h3>
+					<time class="post-date dt-published" datetime="2021-08-12T00:00:00Z">Thursday, 12 August 2021</time>
+					
+				</header>
+				<div class="post-content e-content">
+					<blockquote>
+<p>资料来源：<a href="https://www.huber.embl.de/msmb/Chap-Generative.html">https://www.huber.embl.de/msmb/Chap-Generative.html</a>，我把资料中的情景更改了下。</p>
+</blockquote>
+<p>假设50个样本有100个碱基，单个位点有百分之一的突变率，汇总50个样本，我们期望在任何给定位置，50个样本观测到突变次数的总和服从具有参数为0.5的泊松分布。</p>
+<p>一个随机的图如下：</p>
+<p><img src="https://gitee.com/ShixiangWang/ImageCollection/raw/master/png/20210812200203.png" alt="image-20210812200203540"></p>
+<p>现在让我们假设实际观测的图如下：</p>
+<p><img src="https://gitee.com/ShixiangWang/ImageCollection/raw/master/png/20210812200244.png" alt="image-20210812200244466"></p>
+<p>这种情况的概率是多少呢？</p>
+<p>让我们先看一下至少出现7次的概率：
+$$
+\begin{equation*}
+P(X\geq 7)= \sum_{k=7}^\infty P(X=k).
+\end{equation*}
+$$
+它可以转变为1减去出现少于7次的概率。</p>
+<p>在R里面可以计算：</p>
+<p><img src="https://gitee.com/ShixiangWang/ImageCollection/raw/master/png/20210812200533.png" alt="image-20210812200423825"></p>
+<p>我们假设我们最后要计算得到的概率为$\epsilon$：
+$$
+\begin{equation*}
+\epsilon=P(X\geq 7)=1-P(X\leq 6)\simeq10^{-6}.
+\end{equation*}
+$$</p>
+<p><strong>停！上面是错误的计算！</strong></p>
+<p>上面我们看了100个位置，寻找最大值并发现它是7，这种情况下出现7的概率比单个位置出现7的概率要大！</p>
+<p>这里我们使用极端值分析，先对每个位置出现的次数排序，然后重新命名。</p>
+<p><img src="https://gitee.com/ShixiangWang/ImageCollection/raw/master/png/20210812200945.png" alt="image-20210812200945523"></p>
+<p>那么最大值出现至少7次的概率可以采用互补计算：
+$$
+\begin{equation*}
+\begin{aligned}
+P(x_{(100)}\geq 7)
+&amp;=&amp;1-P(x_{(100)} \leq 6)\\<br>
+&amp;=&amp;1-P(x_{(1)}\leq 6 )\times P(x_{(2)}\leq 6 )\times \cdots \times P(x_{(100)} \leq 6 )\\<br>
+&amp;=&amp;1-P(x_1\leq 6 )\times P(x_2\leq 6 )\times \cdots \times P(x_{100}\leq 6 )\\<br>
+&amp;=&amp;1-\prod_{i=1}^{100} P(x_i \leq 6 ).\end{aligned}
+\end{equation*}
+$$
+由于100个事件是独立的，所以转换为：
+$$
+\begin{equation*}
+\prod_{i=1}^{100} P(x_i \leq 6)=
+\left(P(x_i \leq 6)\right)^{100}=
+\left(1-\epsilon\right)^{100}.
+\end{equation*}
+$$
+为了计算这个值，我们使用二项公式然后进行逼近计算：</p>
+<p><img src="https://gitee.com/ShixiangWang/ImageCollection/raw/master/png/20210812201240.png" alt="image-20210812201240461"></p>
+<p>那么最后的概率是1减去这个值，所以结果是$10^{-4}$。</p>
+<p>我们还可以进一步通过蒙特卡洛模拟计算该值：</p>
+<p><img src="https://gitee.com/ShixiangWang/ImageCollection/raw/master/png/20210812201455.png" alt="image-20210812201455190"></p>
+<p>这个结果与我们前面的计算基本一致。</p>
+
+				</div>
+				<footer class="footer">
+				  <hr>
+<div class="post-tags">
+
+<p>
+  <svg xmlns="http://www.w3.org/2000/svg" class="octicon" width="20" height="24" viewBox="0 0 14 16"><path fill-rule="evenodd" d="M8 2H6V0h2v2zm4 5H2c-.55 0-1-.45-1-1V4c0-.55.45-1 1-1h10l2 2-2 2zM8 4H6v2h2V4zM6 16h2V8H6v8z"/></svg>
+	
+	<a class="p-category" href="../../categories/blog/">Blog</a>
+</p>
+
+
+<p>
+  <svg xmlns="http://www.w3.org/2000/svg" class="octicon" width="20" height="24" viewBox="0 0 15 16"><path fill-rule="evenodd" d="M7.73 1.73C7.26 1.26 6.62 1 5.96 1H3.5C2.13 1 1 2.13 1 3.5v2.47c0 .66.27 1.3.73 1.77l6.06 6.06c.39.39 1.02.39 1.41 0l4.59-4.59a.996.996 0 0 0 0-1.41L7.73 1.73zM2.38 7.09c-.31-.3-.47-.7-.47-1.13V3.5c0-.88.72-1.59 1.59-1.59h2.47c.42 0 .83.16 1.13.47l6.14 6.13-4.73 4.73-6.13-6.15zM3.01 3h2v2H3V3h.01z"/></svg>
+	
+	<a class="p-tag" href="../../tags/r/">R</a><a class="p-tag" href="../../tags/bioinformatics/">Bioinformatics</a>
+
+</p>
+</div>
+
+				</footer>
+			</article>
+		</main>
+			  <button class="hamburger hamburger--arrow is-active" type="button" onclick="document.getElementsByClassName('sidebar')[0].classList.toggle('collapsed');document.getElementsByClassName('content')[0].classList.toggle('expanded');document.getElementsByClassName('hamburger')[0].classList.toggle('is-active');document.getElementsByClassName('hamburger-inner')[0].classList.toggle('is-active')">
+      <span class="hamburger-box">
+        <span class="hamburger-inner"></span>
+      </span>
+    </button>
+		<aside class="sidebar">
+			<div class="container sidebar-sticky">
+				<header class="sidebar-about h-card vcard p-author">
+					
+					<a class="u-url u-uid" rel="me" href="../../">
+						<img class="u-photo" src="https://avatars.githubusercontent.com/u/25057508?v=4" width=128 height=128 />
+					</a>
+					
+
+					
+					<span class="site-title u-name fn">
+					  <a class="u-url u-uid" rel="me" href="../../">ShixiangWang
+王诗翔</a>
+				  </span>
+					
+
+					<p class="lead p-note">
+						 Bioinformatics Scholar. Cancer Researcher. Data Scientist. #rstats #golang. Always learning something new. 
+					</p>
+
+					<nav>
+						<ul class="sidebar-nav">
+							
+							<li><a href="../../about/"> About </a></li>
+							
+							<li><a href="../../blog/"> Blog </a></li>
+							
+							<li><a href="../../project/"> Projects </a></li>
+							
+							<li><a href="http://42.192.87.178:3838/"> Shiny Apps </a></li>
+							
+							<li><a href="../../talk/"> Talks </a></li>
+							
+							<li><a href="https://github.com/ShixiangWang/self-study/discussions"> Discuss with me? </a></li>
+							
+							<li><a href="https://shixiangwang.netlify.app/"> Mirror #1 </a></li>
+							
+							<li><a href="https://shixiangwang.github.io/"> Mirror #2 </a></li>
+							
+						</ul>
+					</nav>
+
+					
+						<div class="contact">
+						  
+							<ul class="contact-list">
+								
+								<li>
+									
+									  
+		  							  <a href="https://twitter.com/WangShxiang" class="u-url url" rel="me" title="Twitter" aria-label="Twitter">
+		  						    <i class='fab fa-twitter fa-fw'></i>
+		  							  </a>
+		  						  
+								
+								</li>
+								
+								<li>
+									
+									  
+		  							  <a href="https://github.com/ShixiangWang" class="u-url url" rel="me" title="GitHub" aria-label="GitHub">
+		  						    <i class='fab fa-github fa-fw'></i>
+		  							  </a>
+		  						  
+								
+								</li>
+								
+								<li>
+									
+		  							<a href="mailto:shixiang1994wang@gmail.com" class="u-email email" rel="me" title="Email" aria-label="Email">
+		  							<i class='fa fa-envelope fa-fw'></i>
+		  							  
+		  							</a>
+									
+								</li>
+								
+								<li>
+									
+									  
+		  							  <a href="https://shixiangwang.github.io/home/logo/qrcode.jpg" class="u-url url" rel="me" title="Bandcamp" aria-label="Bandcamp">
+		  						    <i class='fab fa-bandcamp fa-fw'></i>
+		  							  </a>
+		  						  
+								
+								</li>
+								
+							</ul>
+						</div>
+					
+				</header>
+
+				<footer>&copy; 2021. All rights reserved. </footer>
+				 <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+            <span id="busuanzi_container_site_pv">本站总访问量&nbsp;<span id="busuanzi_value_site_pv"></span>&nbsp;次</span>
+			</div>
+		</aside>
+
+		  <footer>
+  <script src="../../js/jquery-latest.js"></script>
+<script src="../../js/featherlight.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+
+<script>
+MathJax = {
+  tex: {
+    inlineMath: [['$', '$'], ['\\(', '\\)']]
+  }
+};
+</script>
+<script type="text/javascript" id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+  
+  </footer>
+  </body>
+</html>
+
+	</body>
+</html>

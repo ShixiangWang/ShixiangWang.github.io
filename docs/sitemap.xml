@@ -8,6 +8,11 @@
   </url>
   
   <url>
+    <loc>/tags/bioinformatics/</loc>
+    <lastmod>2021-08-12T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
     <loc>/categories/blog/</loc>
     <lastmod>2021-08-12T00:00:00+00:00</lastmod>
   </url>
@@ -19,6 +24,11 @@
   
   <url>
     <loc>/categories/</loc>
+    <lastmod>2021-08-12T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/r/</loc>
     <lastmod>2021-08-12T00:00:00+00:00</lastmod>
   </url>
   
@@ -48,6 +58,11 @@
   </url>
   
   <url>
+    <loc>/blog/adjustment-for-mutaiton-prob-in-a-region/</loc>
+    <lastmod>2021-08-12T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
     <loc>/tags/%E7%AC%94%E8%AE%B0/</loc>
     <lastmod>2021-08-12T00:00:00+00:00</lastmod>
   </url>
@@ -70,11 +85,6 @@
   <url>
     <loc>/blog/math-basics-for-dl/</loc>
     <lastmod>2021-08-11T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/tags/bioinformatics/</loc>
-    <lastmod>2021-08-09T00:00:00+00:00</lastmod>
   </url>
   
   <url>
@@ -114,11 +124,6 @@
   
   <url>
     <loc>/tags/linux/</loc>
-    <lastmod>2021-08-09T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/tags/r/</loc>
     <lastmod>2021-08-09T00:00:00+00:00</lastmod>
   </url>
   
