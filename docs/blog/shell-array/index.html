@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en-US">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1">
+
+		
+		<title>Shell：使用数组 &middot; ShixiangWang
+王诗翔</title>
+		
+		<meta property="og:title" content="Shell：使用数组 - ShixiangWang
+王诗翔">
+		
+		<meta property="og:type" content="article">
+		
+
+		
+			
+			<meta property="description" content="生成和操作shell数组。">
+			<meta property="og:description" content="生成和操作shell数组。">
+			
+			
+    	<meta property="twitter:card" content="summary">
+  		<meta property="twitter:image" content="/apple-touch-icon-152x152.png">
+			
+		
+
+		
+		<meta property="keywords" content ="bash">
+		
+		
+		<meta name="twitter:creator" content="@WangShxiang">
+		<meta name="twitter:site" content="https://shixiangwang.github.io">
+		
+		
+
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+		<link rel="stylesheet" href="../../css/poole.css">
+		<link rel="stylesheet" href="../../css/syntax.css">
+		<link rel="stylesheet" href="../../css/hyde.css">
+		
+		
+		<link rel="stylesheet" href="../../css/hamburgers.css">
+		
+		<link rel="stylesheet" href="../../css/custom.css">
+		
+		
+
+<link rel="apple-touch-icon-precomposed" sizes="57x57" href="../../apple-touch-icon-57x57.png" />
+<link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../apple-touch-icon-114x114.png" />
+<link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../apple-touch-icon-72x72.png" />
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../apple-touch-icon-144x144.png" />
+<link rel="apple-touch-icon-precomposed" sizes="120x120" href="../../apple-touch-icon-120x120.png" />
+<link rel="apple-touch-icon-precomposed" sizes="152x152" href="../../apple-touch-icon-152x152.png" />
+<link rel="icon" type="image/png" href="../../favicon-32x32.png" sizes="32x32" />
+<link rel="icon" type="image/png" href="../../favicon-16x16.png" sizes="16x16" />
+<meta name="application-name" content="Garrick Aden-Buie"/>
+<meta name="msapplication-TileColor" content="#002B36" />
+<meta name="msapplication-TileImage" content="/mstile-144x144.png" />
+<meta name="theme-color" content="#ffffff">
+
+<meta name="mobile-web-app-capable" content="yes">
+
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-title" content="Garrick Aden-Buie">
+
+<link href="../../css/featherlight.min.css" type="text/css" rel="stylesheet" />
+
+<script async defer src="https://buttons.github.io/buttons.js"></script>
+
+<script defer src="../../js/van11y-accessible-hide-show-aria.min.js"></script>
+
+<script defer src="../../js/toc.js"></script>
+
+
+
+		<link href="../../blog/shell-array" rel="canonical">
+	</head>
+
+	<body class="restyled-garrick  h-entry">
+		<main class="content container" role="main">
+			<article class="post">
+				<header>
+					<a class="u-url" href="../../blog/shell-array">
+						<h1 class="post-title p-name">Shell：使用数组</h1>
+					</a>
+					<h3 class="post-author">王诗翔</h3>
+					<time class="post-date dt-published" datetime="2021-08-12T00:00:00Z">Thursday, 12 August 2021</time>
+					
+				</header>
+				<div class="post-content e-content">
+					<p>之前使用Shell编程很少使用到数组，最近尝试使用后发现它在某些情况下非常有用。
+这里简单介绍如何生成和使用数组。</p>
+<h2 id="生成数组">生成数组</h2>
+<p>我们只要将一组空格分隔的序列用括号括起来，就生成了一个数组。</p>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#19177c">array</span><span style="color:#666">=(</span>a b c d e f g<span style="color:#666">)</span>
+</code></pre></div><h2 id="使用数组">使用数组</h2>
+<h3 id="输出数组">输出数组</h3>
+<p>使用<code>${array[*]}</code>或<code>${array[@]}</code>输出全部元素：</p>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>bash-3.2$ <span style="color:#008000">echo</span> <span style="color:#b68;font-weight:bold">${</span><span style="color:#19177c">array</span>[*]<span style="color:#b68;font-weight:bold">}</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>a b c d e f g
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>bash-3.2$ <span style="color:#008000">echo</span> <span style="color:#b68;font-weight:bold">${</span><span style="color:#19177c">array</span>[@]<span style="color:#b68;font-weight:bold">}</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>a b c d e f g
+</code></pre></div><p>在<code>array</code>前加<code>#</code>输出元素个数：</p>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>bash-3.2$ <span style="color:#008000">echo</span> <span style="color:#b68;font-weight:bold">${#</span><span style="color:#19177c">array</span>[*]<span style="color:#b68;font-weight:bold">}</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span style="color:#666">7</span>
+</code></pre></div><p>获取元素将<code>*</code>改成索引，记得是从0开始：</p>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>bash-3.2$ <span style="color:#008000">echo</span> <span style="color:#b68;font-weight:bold">${</span><span style="color:#19177c">array</span>[1]<span style="color:#b68;font-weight:bold">}</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>b
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>bash-3.2$ <span style="color:#008000">echo</span> <span style="color:#b68;font-weight:bold">${</span><span style="color:#19177c">array</span>[2]<span style="color:#b68;font-weight:bold">}</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>c
+</code></pre></div><p>注意在非引用的情况下不需要美元符号和花括号，例如修改元素：</p>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>bash-3.2$ array<span style="color:#666">[</span>2<span style="color:#666">]=</span>ff
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>bash-3.2$ <span style="color:#008000">echo</span> <span style="color:#b68;font-weight:bold">${</span><span style="color:#19177c">array</span>[2]<span style="color:#b68;font-weight:bold">}</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>ff
+</code></pre></div><p>迭代数组：</p>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#408080;font-style:italic">#for i in &#34;${!array[@]}&#34;; do </span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span style="color:#408080;font-style:italic">#  printf &#34;%s\t%s\n&#34; &#34;$i&#34; &#34;${array[$i]}&#34;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span style="color:#408080;font-style:italic">#done</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>bash-3.2$ <span style="color:#008000;font-weight:bold">for</span> i in <span style="color:#ba2121">&#34;</span><span style="color:#b68;font-weight:bold">${</span>!array[@]<span style="color:#b68;font-weight:bold">}</span><span style="color:#ba2121">&#34;</span>; <span style="color:#008000;font-weight:bold">do</span> 
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>&gt;   <span style="color:#008000">printf</span> <span style="color:#ba2121">&#34;%s\t%s\n&#34;</span> <span style="color:#ba2121">&#34;</span><span style="color:#19177c">$i</span><span style="color:#ba2121">&#34;</span> <span style="color:#ba2121">&#34;</span><span style="color:#b68;font-weight:bold">${</span><span style="color:#19177c">array</span>[<span style="color:#19177c">$i</span>]<span style="color:#b68;font-weight:bold">}</span><span style="color:#ba2121">&#34;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>&gt; <span style="color:#008000;font-weight:bold">done</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>0	 a
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>1	 b
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>2	 ff
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>3	 d
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>4	 e
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>5	 f
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>6	 g
+</code></pre></div><p>注意我们常用的序列生成命令<code>seq</code>并不会生成一个数组，哪怕你可以迭代它：</p>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span>bash-3.2$ <span style="color:#008000">echo</span> <span style="color:#ba2121">`</span>seq <span style="color:#666">1</span> 10<span style="color:#ba2121">`</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span style="color:#666">1</span> <span style="color:#666">2</span> <span style="color:#666">3</span> <span style="color:#666">4</span> <span style="color:#666">5</span> <span style="color:#666">6</span> <span style="color:#666">7</span> <span style="color:#666">8</span> <span style="color:#666">9</span> <span style="color:#666">10</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>bash-3.2$ <span style="color:#19177c">a2</span><span style="color:#666">=</span><span style="color:#ba2121">`</span>seq <span style="color:#666">1</span> 10<span style="color:#ba2121">`</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>bash-3.2$ <span style="color:#008000">echo</span> <span style="color:#b68;font-weight:bold">${</span><span style="color:#19177c">a2</span><span style="color:#b68;font-weight:bold">}</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span><span style="color:#666">1</span> <span style="color:#666">2</span> <span style="color:#666">3</span> <span style="color:#666">4</span> <span style="color:#666">5</span> <span style="color:#666">6</span> <span style="color:#666">7</span> <span style="color:#666">8</span> <span style="color:#666">9</span> <span style="color:#666">10</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>bash-3.2$ <span style="color:#008000">echo</span> <span style="color:#19177c">$a2</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span><span style="color:#666">1</span> <span style="color:#666">2</span> <span style="color:#666">3</span> <span style="color:#666">4</span> <span style="color:#666">5</span> <span style="color:#666">6</span> <span style="color:#666">7</span> <span style="color:#666">8</span> <span style="color:#666">9</span> <span style="color:#666">10</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>bash-3.2$ <span style="color:#008000">echo</span> <span style="color:#b68;font-weight:bold">${</span><span style="color:#19177c">a2</span>[1]<span style="color:#b68;font-weight:bold">}</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>bash-3.2$ <span style="color:#008000">echo</span> <span style="color:#b68;font-weight:bold">${</span><span style="color:#19177c">a2</span>[2]<span style="color:#b68;font-weight:bold">}</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>bash-3.2$ <span style="color:#008000">echo</span> <span style="color:#b68;font-weight:bold">${</span><span style="color:#19177c">a2</span>[0]<span style="color:#b68;font-weight:bold">}</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span><span style="color:#666">1</span> <span style="color:#666">2</span> <span style="color:#666">3</span> <span style="color:#666">4</span> <span style="color:#666">5</span> <span style="color:#666">6</span> <span style="color:#666">7</span> <span style="color:#666">8</span> <span style="color:#666">9</span> <span style="color:#666">10</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>bash-3.2$ <span style="color:#008000;font-weight:bold">for</span> i in <span style="color:#19177c">$a2</span>; <span style="color:#008000;font-weight:bold">do</span> <span style="color:#008000">echo</span> <span style="color:#19177c">$i</span>; <span style="color:#008000;font-weight:bold">done</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span><span style="color:#666">1</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span><span style="color:#666">2</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span><span style="color:#666">3</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span><span style="color:#666">4</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span><span style="color:#666">5</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span><span style="color:#666">6</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span><span style="color:#666">7</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span><span style="color:#666">8</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23</span><span style="color:#666">9</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24</span><span style="color:#666">10</span>
+</code></pre></div><p>下一节我们再看如何转换。</p>
+<h2 id="数据处理中利用数组">数据处理中利用数组</h2>
+<p>如果你有一定的数据分析经验，会比较容易发现上面的知识并不能带来什么用处。
+在数据处理中使用数组，我们需要掌握一点技巧。</p>
+<h3 id="以可编程的方式引用数组元素">以可编程的方式引用数组元素</h3>
+<p>在实际处理时，我们一般不可能会手动地指定元素在所在数组中的索引。所以，我们需要一种办法做到。</p>
+<p>其实也很简单，将索引直接用Shell变量替换即可：</p>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>bash-3.2$ <span style="color:#19177c">idx</span><span style="color:#666">=</span><span style="color:#666">2</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>bash-3.2$ <span style="color:#008000">echo</span> <span style="color:#b68;font-weight:bold">${</span><span style="color:#19177c">array</span>[<span style="color:#19177c">$idx</span>]<span style="color:#b68;font-weight:bold">}</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>ff
+</code></pre></div><p>使用时一定要注意不同符号的位置关系。</p>
+<h3 id="序列转换为数组">序列转换为数组</h3>
+<p>我们先看看怎么将<code>a2</code>转换为数组。</p>
+<p>将序列转换为数组，还是使用<code>()</code>。</p>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span>bash-3.2$ <span style="color:#008000">echo</span> <span style="color:#19177c">$a2</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span style="color:#666">1</span> <span style="color:#666">2</span> <span style="color:#666">3</span> <span style="color:#666">4</span> <span style="color:#666">5</span> <span style="color:#666">6</span> <span style="color:#666">7</span> <span style="color:#666">8</span> <span style="color:#666">9</span> <span style="color:#666">10</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>bash-3.2$ <span style="color:#19177c">a3</span><span style="color:#666">=(</span><span style="color:#19177c">$a2</span><span style="color:#666">)</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>bash-3.2$ <span style="color:#008000">echo</span> <span style="color:#19177c">$a3</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span><span style="color:#666">1</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>bash-3.2$ <span style="color:#008000">echo</span> <span style="color:#b68;font-weight:bold">${#</span><span style="color:#19177c">a2</span>[*]<span style="color:#b68;font-weight:bold">}</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span><span style="color:#666">1</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>bash-3.2$ <span style="color:#008000">echo</span> <span style="color:#b68;font-weight:bold">${#</span><span style="color:#19177c">a3</span>[*]<span style="color:#b68;font-weight:bold">}</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span style="color:#666">10</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>bash-3.2$ <span style="color:#008000">echo</span> <span style="color:#b68;font-weight:bold">${</span><span style="color:#19177c">a3</span>[*]<span style="color:#b68;font-weight:bold">}</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span><span style="color:#666">1</span> <span style="color:#666">2</span> <span style="color:#666">3</span> <span style="color:#666">4</span> <span style="color:#666">5</span> <span style="color:#666">6</span> <span style="color:#666">7</span> <span style="color:#666">8</span> <span style="color:#666">9</span> <span style="color:#666">10</span>
+</code></pre></div><blockquote>
+<p>注意美元符两侧不要加引号。</p>
+</blockquote>
+<p>这样我们就能够愉快地将命令生成的序列数组化，然后单个获取和操作其中的元素了：</p>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>bash-3.2$ touch file<span style="color:#666">{</span>1..10<span style="color:#666">}</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>bash-3.2$ <span style="color:#19177c">files</span><span style="color:#666">=(</span><span style="color:#ba2121">`</span>ls file*<span style="color:#ba2121">`</span><span style="color:#666">)</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>bash-3.2$ <span style="color:#008000">echo</span> <span style="color:#b68;font-weight:bold">${</span><span style="color:#19177c">files</span>[3]<span style="color:#b68;font-weight:bold">}</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>file3
+</code></pre></div>
+				</div>
+				<footer class="footer">
+				  <hr>
+<div class="post-tags">
+
+<p>
+  <svg xmlns="http://www.w3.org/2000/svg" class="octicon" width="20" height="24" viewBox="0 0 14 16"><path fill-rule="evenodd" d="M8 2H6V0h2v2zm4 5H2c-.55 0-1-.45-1-1V4c0-.55.45-1 1-1h10l2 2-2 2zM8 4H6v2h2V4zM6 16h2V8H6v8z"/></svg>
+	
+	<a class="p-category" href="../../categories/blog/">Blog</a>
+</p>
+
+
+<p>
+  <svg xmlns="http://www.w3.org/2000/svg" class="octicon" width="20" height="24" viewBox="0 0 15 16"><path fill-rule="evenodd" d="M7.73 1.73C7.26 1.26 6.62 1 5.96 1H3.5C2.13 1 1 2.13 1 3.5v2.47c0 .66.27 1.3.73 1.77l6.06 6.06c.39.39 1.02.39 1.41 0l4.59-4.59a.996.996 0 0 0 0-1.41L7.73 1.73zM2.38 7.09c-.31-.3-.47-.7-.47-1.13V3.5c0-.88.72-1.59 1.59-1.59h2.47c.42 0 .83.16 1.13.47l6.14 6.13-4.73 4.73-6.13-6.15zM3.01 3h2v2H3V3h.01z"/></svg>
+	
+	<a class="p-tag" href="../../tags/bash/">Bash</a>
+
+</p>
+</div>
+
+				</footer>
+			</article>
+		</main>
+			  <button class="hamburger hamburger--arrow is-active" type="button" onclick="document.getElementsByClassName('sidebar')[0].classList.toggle('collapsed');document.getElementsByClassName('content')[0].classList.toggle('expanded');document.getElementsByClassName('hamburger')[0].classList.toggle('is-active');document.getElementsByClassName('hamburger-inner')[0].classList.toggle('is-active')">
+      <span class="hamburger-box">
+        <span class="hamburger-inner"></span>
+      </span>
+    </button>
+		<aside class="sidebar">
+			<div class="container sidebar-sticky">
+				<header class="sidebar-about h-card vcard p-author">
+					
+					<a class="u-url u-uid" rel="me" href="../../">
+						<img class="u-photo" src="https://avatars.githubusercontent.com/u/25057508?v=4" width=128 height=128 />
+					</a>
+					
+
+					
+					<span class="site-title u-name fn">
+					  <a class="u-url u-uid" rel="me" href="../../">ShixiangWang
+王诗翔</a>
+				  </span>
+					
+
+					<p class="lead p-note">
+						 Bioinformatics Scholar. Cancer Researcher. Data Scientist. #rstats #golang. Always learning something new. 
+					</p>
+
+					<nav>
+						<ul class="sidebar-nav">
+							
+							<li><a href="../../about/"> About </a></li>
+							
+							<li><a href="../../blog/"> Blog </a></li>
+							
+							<li><a href="../../project/"> Projects </a></li>
+							
+							<li><a href="http://42.192.87.178:3838/"> Shiny Apps </a></li>
+							
+							<li><a href="../../talk/"> Talks </a></li>
+							
+							<li><a href="https://github.com/ShixiangWang/self-study/discussions"> Discuss with me? </a></li>
+							
+							<li><a href="https://shixiangwang.netlify.app/"> Mirror #1 </a></li>
+							
+							<li><a href="https://shixiangwang.github.io/"> Mirror #2 </a></li>
+							
+						</ul>
+					</nav>
+
+					
+						<div class="contact">
+						  
+							<ul class="contact-list">
+								
+								<li>
+									
+									  
+		  							  <a href="https://twitter.com/WangShxiang" class="u-url url" rel="me" title="Twitter" aria-label="Twitter">
+		  						    <i class='fab fa-twitter fa-fw'></i>
+		  							  </a>
+		  						  
+								
+								</li>
+								
+								<li>
+									
+									  
+		  							  <a href="https://github.com/ShixiangWang" class="u-url url" rel="me" title="GitHub" aria-label="GitHub">
+		  						    <i class='fab fa-github fa-fw'></i>
+		  							  </a>
+		  						  
+								
+								</li>
+								
+								<li>
+									
+		  							<a href="mailto:shixiang1994wang@gmail.com" class="u-email email" rel="me" title="Email" aria-label="Email">
+		  							<i class='fa fa-envelope fa-fw'></i>
+		  							  
+		  							</a>
+									
+								</li>
+								
+								<li>
+									
+									  
+		  							  <a href="https://shixiangwang.github.io/home/logo/qrcode.jpg" class="u-url url" rel="me" title="Bandcamp" aria-label="Bandcamp">
+		  						    <i class='fab fa-bandcamp fa-fw'></i>
+		  							  </a>
+		  						  
+								
+								</li>
+								
+							</ul>
+						</div>
+					
+				</header>
+
+				<footer>&copy; 2021. All rights reserved. </footer>
+				 <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+            <span id="busuanzi_container_site_pv">本站总访问量&nbsp;<span id="busuanzi_value_site_pv"></span>&nbsp;次</span>
+			</div>
+		</aside>
+
+		  <footer>
+  <script src="../../js/jquery-latest.js"></script>
+<script src="../../js/featherlight.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+
+<script>
+MathJax = {
+  tex: {
+    inlineMath: [['$', '$'], ['\\(', '\\)']]
+  }
+};
+</script>
+<script type="text/javascript" id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+  
+  </footer>
+  </body>
+</html>
+
+	</body>
+</html>

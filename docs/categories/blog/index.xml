@@ -22,6 +22,22 @@ rRNA 这里有几个点：
     </item>
     
     <item>
+      <title>Shell：使用数组</title>
+      <link>/blog/shell-array/</link>
+      <pubDate>Thu, 12 Aug 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/shell-array/</guid>
+      <description>之前使用Shell编程很少使用到数组，最近尝试使用后发现它在某些情况下非常有用。 这里简单介绍如何生成和使用数组。
+生成数组 我们只要将一组空格分隔的序列用括号括起来，就生成了一个数组。
+1array=(a b c d e f g) 使用数组 输出数组 使用${array[*]}或${array[@]}输出全部元素：
+1bash-3.2$ echo ${array[*]} 2a b c d e f g 3bash-3.2$ echo ${array[@]} 4a b c d e f g 在array前加#输出元素个数：
+1bash-3.2$ echo ${#array[*]} 27 获取元素将*改成索引，记得是从0开始：
+1bash-3.2$ echo ${array[1]} 2b 3bash-3.2$ echo ${array[2]} 4c 注意在非引用的情况下不需要美元符号和花括号，例如修改元素：
+1bash-3.2$ array[2]=ff 2bash-3.2$ echo ${array[2]} 3ff 迭代数组：
+1#for i in &amp;#34;${!array[@]}&amp;#34;; do  2# printf &amp;#34;%s\t%s\n&amp;#34; &amp;#34;$i&amp;#34; &amp;#34;${array[$i]}&amp;#34; 3#done 4 5bash-3.2$ for i in &amp;#34;${!</description>
+    </item>
+    
+    <item>
       <title>深度学习数学基础</title>
       <link>/blog/math-basics-for-dl/</link>
       <pubDate>Wed, 11 Aug 2021 00:00:00 +0000</pubDate>
@@ -161,31 +177,6 @@ https://baike.baidu.com/item/完全数/370913?fromtitle=完美数&amp;amp;fromid
 如果我们想要进行更为复杂的数学计算，使用bc命令。
 创建文件bigmath.sh：
 1#!/usr/bin/env bash 2# File: bigmath.sh 3 4echo &amp;#34;22 / 7&amp;#34; | bc -l 5echo &amp;#34;4.2 * 9.15&amp;#34; | bc -l 6echo &amp;#34;(6.5 / 0.5) + (6 * 2.2)&amp;#34; | bc -l 结果：</description>
-    </item>
-    
-    <item>
-      <title>Unix：Make</title>
-      <link>/blog/unix-make/</link>
-      <pubDate>Mon, 09 Aug 2021 00:00:00 +0000</pubDate>
-      
-      <guid>/blog/unix-make/</guid>
-      <description>2021/05/26 22:01
- 原文：https://seankross.com/the-unix-workbench/working-with-unix.html#make
- 从前没有网页浏览器、文件浏览器、开始菜单或搜索栏。当有人启动电脑时，他们得到的是一个shell提示符，他们做的所有工作都是从这个提示符开始的。那时候，人们仍然喜欢共享软件，但总是存在软件应该如何安装的问题。make程序是解决这个问题的最好的尝试，make的优雅使它至今仍被广泛使用。make的指导设计目标是为了安装一些新软件:
-  将所有的依赖下载到一个目录。
-  cd进入目录。
-  运行make。
-  这是通过指定一个名为makefile的文件来实现的，该文件描述了不同文件和程序之间的关系 。除了安装程序之外，make对于自动创建文档也很有用。让我们构建一个makefile，它创建一个readme.txt文件，该文件自动填充有关当前目录的一些信息。
-首先进入目录并创建一个文件：
-1▶ cd ~/Documents/test 2▶ nano makefile 填入如下内容：
-1draft_journal_entry.txt: 2 touch draft_journal_entry.txt 上面简单的makefile说明了一个规则，它的一般格式如下：
-1[target]: [dependencies...] 2 [commands...] 在这个简单的示例中，我们创建了以draft_journal_entry.txt为目标的文件，该文件是作为命令的结果创建的。需要注意的是，目标下的任何命令都必须用Tab缩进。如果我们不使用Tab 来缩进命令，那么make将失败。让我们保存并关闭makefile，然后我们可以在控制台中运行以下命令：
-1▶ ls 2makefile 然后使用下面的操作查看make使用方式：
-1▶ make draft_journal_entry.txt 2touch draft_journal_entry.txt 3▶ ls 4draft_journal_entry.txt makefile 在我们为draft_journal_entry.txt目标定义的规则下缩进的命令已经执行，所以现在draft_journal_entry.txt存在！让我们再次运行相同的make命令：
-1▶ make draft_journal_entry.txt 2make: `draft_journal_entry.txt&amp;#39; is up to date. 因为目标文件已经存在，所以没有采取任何操作，相反，我们被告知，draft_journal_entry.txt的规则是“最新的”(没有什么需要做的)。
-如果我们看一下我们之前草拟的一般规则格式，我们可以看到我们没有为该规则指定任何依赖项。依赖项是目标在构建时所依赖的文件。如果自上次为目标运行make以来，依赖项已经更新，则目标不是“最新的”。这意味着下次为该目标运行make时将运行该目标的命令。通过这种方式，对依赖项的更改被合并到目标中。为了避免不必要地运行命令，这些命令只在依赖项改变时运行，或者当目标根本不存在时运行。
-让我们更新makefile，以包含自动生成的readme.txt。首先，让我们添加文件：
-1▶ echo &amp;#34;1. 2017-06-15-In-Boston&amp;#34; &amp;gt; toc.txt makefile修改为：</description>
     </item>
     
   </channel>

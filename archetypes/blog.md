@@ -13,9 +13,14 @@ editor_options:
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(
-  echo = FALSE, warning = FALSE, message = FALSE,
-  fig.width = 9, fig.height = 10
+  echo = TRUE, warning = FALSE, message = FALSE,
+  fig.width = 9, fig.height = 10, comment = "out", 
 )
+knitr::opts_chunk$set(engine.opts = list(bash = "-l"))
+knitr::knit_hooks$set(
+  prompt = function(before, options, envir) {
+    options(prompt = if (options$engine %in% c('sh','bash')) '$ ' else 'R> ')
+})
 options(htmltools.dir.version = TRUE)
 
 # If using lightbox for plots, set `fig.show = FALSE`

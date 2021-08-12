@@ -8,7 +8,23 @@
 王诗翔</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 09 Aug 2021 00:00:00 +0000</lastBuildDate><atom:link href="/tags/bash/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 12 Aug 2021 00:00:00 +0000</lastBuildDate><atom:link href="/tags/bash/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Shell：使用数组</title>
+      <link>/blog/shell-array/</link>
+      <pubDate>Thu, 12 Aug 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/shell-array/</guid>
+      <description>之前使用Shell编程很少使用到数组，最近尝试使用后发现它在某些情况下非常有用。 这里简单介绍如何生成和使用数组。
+生成数组 我们只要将一组空格分隔的序列用括号括起来，就生成了一个数组。
+1array=(a b c d e f g) 使用数组 输出数组 使用${array[*]}或${array[@]}输出全部元素：
+1bash-3.2$ echo ${array[*]} 2a b c d e f g 3bash-3.2$ echo ${array[@]} 4a b c d e f g 在array前加#输出元素个数：
+1bash-3.2$ echo ${#array[*]} 27 获取元素将*改成索引，记得是从0开始：
+1bash-3.2$ echo ${array[1]} 2b 3bash-3.2$ echo ${array[2]} 4c 注意在非引用的情况下不需要美元符号和花括号，例如修改元素：
+1bash-3.2$ array[2]=ff 2bash-3.2$ echo ${array[2]} 3ff 迭代数组：
+1#for i in &amp;#34;${!array[@]}&amp;#34;; do  2# printf &amp;#34;%s\t%s\n&amp;#34; &amp;#34;$i&amp;#34; &amp;#34;${array[$i]}&amp;#34; 3#done 4 5bash-3.2$ for i in &amp;#34;${!</description>
+    </item>
+    
     <item>
       <title>Unix：Bash编程</title>
       <link>/blog/unix-bash-programming/</link>
