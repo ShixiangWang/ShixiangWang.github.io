@@ -8,7 +8,19 @@
 王诗翔</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 11 Aug 2021 00:00:00 +0000</lastBuildDate><atom:link href="/categories/blog/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 12 Aug 2021 00:00:00 +0000</lastBuildDate><atom:link href="/categories/blog/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>RNAseq原理与分析课程笔记</title>
+      <link>/blog/rnaseq-cource-notes/</link>
+      <pubDate>Thu, 12 Aug 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/rnaseq-cource-notes/</guid>
+      <description>很久之前在腾讯课堂购买了孟浩巍的RNAseq课程，讲解的挺细致完备的。这里主要是很少做这样的分析，所以一方面扫盲，一方面记录下其中重要的点（自己不知道的）或者值得拓展了解的知识点。
+参考基因组与基因分布 拼装失败的地方大都是rRNA位置区域，与后面的内容对应。
+rRNA 这里有几个点：
+ 一个DNA分子是比一个氨基酸大的 rRNA是集中分布的 rRNA在全部RNA中的占比很高，达80%左右。所以mRNA测序要么富集poly-A，要么去掉rRNA。  测序的概念 双端测序涉及到两端的转换。补个截图增强理解。</description>
+    </item>
+    
     <item>
       <title>深度学习数学基础</title>
       <link>/blog/math-basics-for-dl/</link>
@@ -174,24 +186,6 @@ https://baike.baidu.com/item/完全数/370913?fromtitle=完美数&amp;amp;fromid
 如果我们看一下我们之前草拟的一般规则格式，我们可以看到我们没有为该规则指定任何依赖项。依赖项是目标在构建时所依赖的文件。如果自上次为目标运行make以来，依赖项已经更新，则目标不是“最新的”。这意味着下次为该目标运行make时将运行该目标的命令。通过这种方式，对依赖项的更改被合并到目标中。为了避免不必要地运行命令，这些命令只在依赖项改变时运行，或者当目标根本不存在时运行。
 让我们更新makefile，以包含自动生成的readme.txt。首先，让我们添加文件：
 1▶ echo &amp;#34;1. 2017-06-15-In-Boston&amp;#34; &amp;gt; toc.txt makefile修改为：</description>
-    </item>
-    
-    <item>
-      <title>使用Circle-Map Realign鉴定环形DNA</title>
-      <link>/blog/use-circle-map-for-detecting-eccdna/</link>
-      <pubDate>Mon, 09 Aug 2021 00:00:00 +0000</pubDate>
-      
-      <guid>/blog/use-circle-map-for-detecting-eccdna/</guid>
-      <description>2021/07/23 19:39
- 原文：https://github.com/iprada/Circle-Map/wiki/Tutorial:-Identification-of-circular-DNA-using-Circle-Map-Realign
- 这是一个教程，一步一步地解释如何从原始数据(fastq文件)到一个可解释的，标签分离的bed文件指示染色体坐标的DNA环。为了制作教程，我们模拟了Illumina读取来自人类基因组未知区域的环形DNA。本教程的目的是使用Circle-Map来提取环形DNA的来源。
-依赖   GNU/Linux
-  BWA
-  samtools
-  Circle-Map
-  1conda install -c bioconda bwa samtools 2pip3 install Circle-Map 3pip3 install biopython==1.77 # 不安装这个版本目前使用会报错 4 第一步：准备和下载数据 下载原始数据 直接克隆仓库：
-1git clone https://github.com/iprada/Circle-Map 下载和准备参考基因组 1wget http://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/hg38.fa.gz 2gunzip -d hg38.fa.gz 3 4bwa index hg38.fa 5samtools faidx hg38.fa 6 第二步：比对到参考基因组 1cd Circle-Map/tutorial/ 2bwa mem -q ~/data/refs/hg38.fa unknown_circle_reads_1.fastq unknown_circle_reads_2.fastq &amp;gt; unknown_circle.sam 3 这就产生了一个SAM文件，其中包含了关于reads在哪里以及如何与基因组对齐的信息。
-  我们使用 -q 选项（query name sorted）为BWA中的拆分读对比对分配独立的映射质量分数 。这可以改进Circle-Map概率模型中断点图权值的估计。</description>
     </item>
     
   </channel>

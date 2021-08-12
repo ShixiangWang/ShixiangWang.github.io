@@ -8,13 +8,22 @@
 王诗翔</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 11 Aug 2021 00:00:00 +0000</lastBuildDate><atom:link href="/categories/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 12 Aug 2021 00:00:00 +0000</lastBuildDate><atom:link href="/categories/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Blog</title>
       <link>/categories/blog/</link>
-      <pubDate>Wed, 11 Aug 2021 00:00:00 +0000</pubDate>
+      <pubDate>Thu, 12 Aug 2021 00:00:00 +0000</pubDate>
       
       <guid>/categories/blog/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>课程</title>
+      <link>/categories/%E8%AF%BE%E7%A8%8B/</link>
+      <pubDate>Thu, 12 Aug 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/categories/%E8%AF%BE%E7%A8%8B/</guid>
       <description></description>
     </item>
     

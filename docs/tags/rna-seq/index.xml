@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>RNA-seq on ShixiangWang
+王诗翔</title>
+    <link>/tags/rna-seq/</link>
+    <description>Recent content in RNA-seq on ShixiangWang
+王诗翔</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 12 Aug 2021 00:00:00 +0000</lastBuildDate><atom:link href="/tags/rna-seq/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>RNAseq原理与分析课程笔记</title>
+      <link>/blog/rnaseq-cource-notes/</link>
+      <pubDate>Thu, 12 Aug 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/rnaseq-cource-notes/</guid>
+      <description>很久之前在腾讯课堂购买了孟浩巍的RNAseq课程，讲解的挺细致完备的。这里主要是很少做这样的分析，所以一方面扫盲，一方面记录下其中重要的点（自己不知道的）或者值得拓展了解的知识点。
+参考基因组与基因分布 拼装失败的地方大都是rRNA位置区域，与后面的内容对应。
+rRNA 这里有几个点：
+ 一个DNA分子是比一个氨基酸大的 rRNA是集中分布的 rRNA在全部RNA中的占比很高，达80%左右。所以mRNA测序要么富集poly-A，要么去掉rRNA。  测序的概念 双端测序涉及到两端的转换。补个截图增强理解。</description>
+    </item>
+    
+  </channel>
+</rss>
