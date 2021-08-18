@@ -19,3 +19,9 @@ tags:
 rsync -avLr --progress huaxi:/remote_dir/ ./local_dir
 ```
 
+## 从bed文件指定的区域提取bam结果
+
+```bash
+samtools view -@ 4 -bhL ../regions_to_check_in_bam.bed /public/home/zhaoxxx.bam > xxx.bam
+```
+

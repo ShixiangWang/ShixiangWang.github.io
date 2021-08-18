@@ -16,7 +16,7 @@
       
       <guid>/blog/unix-working-tricks/</guid>
       <description>远程传输和备份文件（夹） 使用scp无法续传，使用rsync更好。
-1rsync -avLr --progress huaxi:/remote_dir/ ./local_dir </description>
+1rsync -avLr --progress huaxi:/remote_dir/ ./local_dir 从bed文件指定的区域提取bam结果 1samtools view -@ 4 -bhL ../regions_to_check_in_bam.bed /public/home/zhaoxxx.bam &amp;gt; xxx.bam </description>
     </item>
     
     <item>

@@ -92,6 +92,8 @@
 					<h2 id="远程传输和备份文件夹">远程传输和备份文件（夹）</h2>
 <p>使用<code>scp</code>无法续传，使用<code>rsync</code>更好。</p>
 <div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>rsync -avLr --progress huaxi:/remote_dir/ ./local_dir
+</code></pre></div><h2 id="从bed文件指定的区域提取bam结果">从bed文件指定的区域提取bam结果</h2>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>samtools view -@ <span style="color:#666">4</span> -bhL ../regions_to_check_in_bam.bed /public/home/zhaoxxx.bam &gt; xxx.bam
 </code></pre></div>
 				</div>
 				<footer class="footer">
