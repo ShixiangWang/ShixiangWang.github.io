@@ -8,7 +8,17 @@
 王诗翔</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 12 Aug 2021 00:00:00 +0000</lastBuildDate><atom:link href="/categories/blog/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 18 Aug 2021 00:00:00 +0000</lastBuildDate><atom:link href="/categories/blog/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Shell：工具工作技巧备忘</title>
+      <link>/blog/unix-working-tricks/</link>
+      <pubDate>Wed, 18 Aug 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/unix-working-tricks/</guid>
+      <description>远程传输和备份文件（夹） 使用scp无法续传，使用rsync更好。
+1rsync -avLr --progress huaxi:/remote_dir/ ./local_dir </description>
+    </item>
+    
     <item>
       <title>RNAseq原理与分析课程笔记</title>
       <link>/blog/rnaseq-cource-notes/</link>
@@ -159,32 +169,6 @@ grid.arrange()可以绘制多个对象：
 1time_vs_shots &amp;lt;- ggplot(worldcup, aes(x = Time, y = Shots)) + 2 geom_point() 3player_positions &amp;lt;- ggplot(worldcup, aes(x = Position)) + 4 geom_bar() 5 6grid.arrange(time_vs_shots, player_positions, ncol = 2) 使用layout_matrix选项可以进行更自定义控制：
 1grid.arrange(time_vs_shots, player_positions, 2 layout_matrix = matrix(c(1, 2, 2), ncol = 3)) 包括图形填充：
 1grid.arrange(time_vs_shots, player_positions, 2 layout_matrix = matrix(c(1, NA, NA, NA, 2, 2), 3 byrow = TRUE, ncol = 3)) 使用tableGrob()函数，我们可以在图中嵌入表格。下面是一个略微复杂的例子：</description>
-    </item>
-    
-    <item>
-      <title>Rcpp：数据结构</title>
-      <link>/blog/rcpp-data-structure/</link>
-      <pubDate>Mon, 09 Aug 2021 00:00:00 +0000</pubDate>
-      
-      <guid>/blog/rcpp-data-structure/</guid>
-      <description>RObject类 RObject类在Rcpp类系统中占核心地位。虽然它不是面向用户的，但为接下来的所有类提供了公共的数据结构，它是构建Rcpp API的基础类。
-每一个RObject类实例都封装了一个R对象，而每个对象在内部可以表示为一个SEXP：一个指向S表达式对象的指针。
-基于它的用户可见（可使用）的类：
-  IntegerVector对应整型向量。
-  NumericVector对应数值向量。
-  LogicalVector对应逻辑值向量。
-  CharacterVector对应Character向量。
-  GenericVector对应List类型的泛型向量。
-  ExpressionVector对应表达式类型向量。
-  RawVector对应raw类型向量。
-  对于整型和数值型，我们还有IntegerMatrix和NumericMatrix对应R中的数值矩阵。
-下面我们通过整型向量来了解它们。
-IntegerVector类 模板函数as&amp;lt;&amp;gt;()用于从R转换到C++，而wrap()函数的方向相反。
- 实际大多数使用情况下，我们已经不需要显式地进行转换处理，该过程会在底层自动完成。
- 示例：返回完美数 什么是完美数：
-https://baike.baidu.com/item/完全数/370913?fromtitle=完美数&amp;amp;fromid=871560&amp;amp;fr=aladdin
-代码：
-1library(Rcpp) 2library(inline) 3 4src &amp;lt;- &amp;#39; 5Rcpp::IntegerVector epn(4); 6epn[0] = 6; 7epn[1] = 14; 8epn[2] = 496; 9epn[3] = 8182; 10return epn; 11&amp;#39; 12 13func &amp;lt;- cxxfunction(signature(), src, plugin = &amp;#34;Rcpp&amp;#34;) 调用：</description>
     </item>
     
   </channel>
