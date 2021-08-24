@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en-US">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1">
+
+		
+		<title>使用modules包来组织R的函数集合 &middot; ShixiangWang
+王诗翔</title>
+		
+		<meta property="og:title" content="使用modules包来组织R的函数集合 - ShixiangWang
+王诗翔">
+		
+		<meta property="og:type" content="article">
+		
+
+		
+			
+			<meta property="description" content="modules包介绍和使用">
+			<meta property="og:description" content="modules包介绍和使用">
+			
+			
+    	<meta property="twitter:card" content="summary">
+  		<meta property="twitter:image" content="/apple-touch-icon-152x152.png">
+			
+		
+
+		
+		<meta property="keywords" content ="rstats">
+		
+		
+		<meta name="twitter:creator" content="@WangShxiang">
+		<meta name="twitter:site" content="https://shixiangwang.github.io">
+		
+		
+
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+		<link rel="stylesheet" href="../../css/poole.css">
+		<link rel="stylesheet" href="../../css/syntax.css">
+		<link rel="stylesheet" href="../../css/hyde.css">
+		
+		
+		<link rel="stylesheet" href="../../css/hamburgers.css">
+		
+		<link rel="stylesheet" href="../../css/custom.css">
+		
+		
+
+<link rel="apple-touch-icon-precomposed" sizes="57x57" href="../../apple-touch-icon-57x57.png" />
+<link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../apple-touch-icon-114x114.png" />
+<link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../apple-touch-icon-72x72.png" />
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../apple-touch-icon-144x144.png" />
+<link rel="apple-touch-icon-precomposed" sizes="120x120" href="../../apple-touch-icon-120x120.png" />
+<link rel="apple-touch-icon-precomposed" sizes="152x152" href="../../apple-touch-icon-152x152.png" />
+<link rel="icon" type="image/png" href="../../favicon-32x32.png" sizes="32x32" />
+<link rel="icon" type="image/png" href="../../favicon-16x16.png" sizes="16x16" />
+<meta name="application-name" content="Garrick Aden-Buie"/>
+<meta name="msapplication-TileColor" content="#002B36" />
+<meta name="msapplication-TileImage" content="/mstile-144x144.png" />
+<meta name="theme-color" content="#ffffff">
+
+<meta name="mobile-web-app-capable" content="yes">
+
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-title" content="Garrick Aden-Buie">
+
+<link href="../../css/featherlight.min.css" type="text/css" rel="stylesheet" />
+
+<script async defer src="https://buttons.github.io/buttons.js"></script>
+
+<script defer src="../../js/van11y-accessible-hide-show-aria.min.js"></script>
+
+<script defer src="../../js/toc.js"></script>
+
+
+
+		<link href="../../blog/use-modules-to-organize-r-functions" rel="canonical">
+	</head>
+
+	<body class="restyled-garrick  h-entry">
+		<main class="content container" role="main">
+			<article class="post">
+				<header>
+					<a class="u-url" href="../../blog/use-modules-to-organize-r-functions">
+						<h1 class="post-title p-name">使用modules包来组织R的函数集合</h1>
+					</a>
+					<h3 class="post-author">王诗翔</h3>
+					<time class="post-date dt-published" datetime="2021-08-24T00:00:00Z">Tuesday, 24 August 2021</time>
+					
+				</header>
+				<div class="post-content e-content">
+					<p>接触过Python的朋友肯定对模块很熟悉，R的代码组织方式以包为主。但基于文件的模块形式也是可以实现的，<a href="https://github.com/klmr/modules">modules</a> 包提供了这种支持。</p>
+<h2 id="安装和使用">安装和使用</h2>
+<p>直接从CRAN下载即可：</p>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-r" data-lang="r"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#00f">install.packages</span>(<span style="color:#ba2121">&#34;modules&#34;</span>)
+</code></pre></div><p>使用了解2个函数的使用就可以了。</p>
+<p>一是<code>import()</code>，用于替换<code>library()</code>加载包。</p>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-r" data-lang="r"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#666">&gt;</span> <span style="color:#00f">library</span>(modules)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span style="color:#666">&gt;</span> gp <span style="color:#666">=</span> <span style="color:#00f">import</span>(<span style="color:#ba2121">&#39;ggplot2&#39;</span>)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span style="color:#00f">Masking </span>(modules<span style="color:#666">:</span>ggplot2)<span style="color:#666">:</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>  `Position` from<span style="color:#666">:</span> base
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span><span style="color:#666">&gt;</span> <span style="color:#00f">args</span>(gp<span style="color:#666">$</span>ggplot)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span><span style="color:#00f">function </span>(data <span style="color:#666">=</span> <span style="color:#008000;font-weight:bold">NULL</span>, mapping <span style="color:#666">=</span> <span style="color:#00f">aes</span>(), <span style="color:#008000;font-weight:bold">...</span>, environment <span style="color:#666">=</span> <span style="color:#00f">parent.frame</span>()) 
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span><span style="color:#008000;font-weight:bold">NULL</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span><span style="color:#666">&gt;</span> <span style="color:#00f">args</span>(ggplot)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span style="color:#00f">function </span>(data <span style="color:#666">=</span> <span style="color:#008000;font-weight:bold">NULL</span>, mapping <span style="color:#666">=</span> <span style="color:#00f">aes</span>(), <span style="color:#008000;font-weight:bold">...</span>, environment <span style="color:#666">=</span> <span style="color:#00f">parent.frame</span>()) 
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span style="color:#008000;font-weight:bold">NULL</span>
+</code></pre></div><p>这样我们可以直接使用这个函数，也可以通过<code>gp</code>这个对象去访问可用的函数。</p>
+<p>如果不想要在全局直接访问包内的函数，在导入时设定<code>attach=FALSE</code>。</p>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-r" data-lang="r"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#666">&gt;</span> dp <span style="color:#666">&lt;-</span> <span style="color:#00f">import</span>(dplyr, attach <span style="color:#666">=</span> <span style="color:#008000;font-weight:bold">FALSE</span>)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span style="color:#00f">Masking </span>(modules<span style="color:#666">:</span>dplyr)<span style="color:#666">:</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>  `intersect` from<span style="color:#666">:</span> base
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>  `setdiff` from<span style="color:#666">:</span> base
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>  `setequal` from<span style="color:#666">:</span> base
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>  `union` from<span style="color:#666">:</span> base
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span><span style="color:#666">&gt;</span> select
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>错误<span style="color:#666">:</span> 找不到对象<span style="color:#ba2121">&#39;select&#39;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span style="color:#666">&gt;</span> dp<span style="color:#666">$</span>select
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span style="color:#00f">function </span>(.data, <span style="color:#008000;font-weight:bold">...</span>) 
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>{
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>    <span style="color:#00f">UseMethod</span>(<span style="color:#ba2121">&#34;select&#34;</span>)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span><span style="color:#666">&lt;</span>bytecode<span style="color:#666">:</span> <span style="color:#666">0x7fe5671213f8</span><span style="color:#666">&gt;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span><span style="color:#666">&lt;</span>environment<span style="color:#666">:</span> namespace<span style="color:#666">:</span>dplyr<span style="color:#666">&gt;</span>
+</code></pre></div><p>除了导入包，也可以导入具体的包的某个/些函数：</p>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-r" data-lang="r"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#666">&gt;</span> slt <span style="color:#666">&lt;-</span> <span style="color:#00f">import</span>(dplyr, select)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>Replacing attached import<span style="color:#666">/</span>use on search path for<span style="color:#666">:</span> modules<span style="color:#666">:</span>dplyr.
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span style="color:#666">&gt;</span> slt<span style="color:#666">$</span>select
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span style="color:#00f">function </span>(.data, <span style="color:#008000;font-weight:bold">...</span>) 
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>{
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span>    <span style="color:#00f">UseMethod</span>(<span style="color:#ba2121">&#34;select&#34;</span>)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7</span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">8</span><span style="color:#666">&lt;</span>bytecode<span style="color:#666">:</span> <span style="color:#666">0x7fe5671213f8</span><span style="color:#666">&gt;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">9</span><span style="color:#666">&lt;</span>environment<span style="color:#666">:</span> namespace<span style="color:#666">:</span>dplyr<span style="color:#666">&gt;</span>
+</code></pre></div><p>我看中的其实不是上面这些特性，而是它可以将文件里写好的函数整体加载为模块对象。</p>
+<p>接下来介绍第二个函数。</p>
+<h2 id="use将代码文件加载为模块"><code>use()</code>将代码文件加载为模块</h2>
+<p>最近使用GitHub page的时候发现它的访问速度相当可观，哪怕GitHub主站点本身网络我们国内访问时好时坏。
+所以，如果我将代码文件放到GitHub上，国内任何的读者应该是可以快速地通过GitHub page访问到其内容。
+那么，利用GitHub page加上这里介绍的<code>use()</code>函数构建一个可实时获取的代码库是可能的。对于小的脚本函数，
+写一个文件总是比写一个包简单轻量。</p>
+<p>基于上面的思想，我将去年写的R包安装以及TCGA样本名重过滤等几个函数单独通过GitHub page进行了部署。</p>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-r" data-lang="r"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#666">&gt;</span> tcga <span style="color:#666">&lt;-</span> modules<span style="color:#666">::</span><span style="color:#00f">use</span>(<span style="color:#ba2121">&#34;https://biosisyphus.github.io/Rlib/tcga.R&#34;</span>)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span style="color:#666">&gt;</span> tcga<span style="color:#666">$</span><span style="color:#00f">filterReplicates</span>(tsb <span style="color:#666">=</span> <span style="color:#00f">c</span>(<span style="color:#ba2121">&#34;TCGA-55-7913-01B-11D-2237-01&#34;</span>, <span style="color:#ba2121">&#34;TCGA-55-7913-01B-11X-2237-01&#34;</span>, <span style="color:#ba2121">&#34;TCGA-55-7913-01B-11D-2237-01&#34;</span>))
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>ooo Filter barcodes successfully<span style="color:#666">!</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>[1] <span style="color:#ba2121">&#34;TCGA-55-7913-01B-11D-2237-01&#34;</span>
+</code></pre></div><p>目前放置的几个代码文件都可以在代码库<a href="https://github.com/BioSisyphus/Rlib">https://github.com/BioSisyphus/Rlib</a>中查看。</p>
+<p>这里一个对绝大部分读者有用的函数是<code>install()</code>，它之前被放在R包<code>wfun</code>中。我前几天把它重新进行了迁移和修改。
+该模块可以替换<code>BiocManager::install()</code>工作，可以从CRAN/BioC/GitHub/Gitee/目录等地方安装包。代码核心其实
+就是各种情况的检查，优先使用适合的包和函数进行下载、安装。它的存在就是方便国内使用者，特别是
+初学者简便地下载、安装包。</p>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-r" data-lang="r"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span>install <span style="color:#666">&lt;-</span> modules<span style="color:#666">::</span><span style="color:#00f">use</span>(<span style="color:#ba2121">&#34;https://biosisyphus.github.io/Rlib/install.R&#34;</span>)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span style="color:#666">&gt;</span> install<span style="color:#666">$</span><span style="color:#00f">install</span>(<span style="color:#ba2121">&#34;tidyverse/ggplot2&#34;</span>)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>载入需要的名字空间：remotes
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>Required package remotes has been installed.
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>Installing from GitHub mirrors...
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>试开URL’https<span style="color:#666">://</span>codeload.github.com<span style="color:#666">/</span>tidyverse<span style="color:#666">/</span>ggplot2<span style="color:#666">/</span>zip<span style="color:#666">/</span>HEAD<span style="color:#ba2121">&#39;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>downloaded <span style="color:#666">3.3</span> MB
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>载入需要的名字空间：pkgbuild
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>Required package pkgbuild has been installed.
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>✓  checking for file ‘<span style="color:#666">/</span>Volumes<span style="color:#666">/</span>Extra<span style="color:#666">/</span>R<span style="color:#666">/</span>Rtmp<span style="color:#666">/</span>RtmpobJHhN<span style="color:#666">/</span>filed328f28489<span style="color:#666">/</span>ggplot2<span style="color:#666">-</span>HEAD<span style="color:#666">/</span>DESCRIPTION’ <span style="color:#008000;font-weight:bold">...</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>─  preparing ‘ggplot2’<span style="color:#666">:</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>✓  checking DESCRIPTION meta<span style="color:#666">-</span>information <span style="color:#008000;font-weight:bold">...</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>─  checking for LF line<span style="color:#666">-</span>endings in source and make files and shell <span style="color:#00f">scripts </span>(<span style="color:#666">412</span>ms)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>─  checking for empty or unneeded directories
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span>─  building ‘ggplot2_3.3.5.9000.tar.gz’
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span>   
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span>将程序包安装入‘<span style="color:#666">/</span>Volumes<span style="color:#666">/</span>Extra<span style="color:#666">/</span>R<span style="color:#666">/</span>R_Library’
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span>(因为‘lib’没有被指定)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span>Using library<span style="color:#666">:</span> <span style="color:#666">/</span>Volumes<span style="color:#666">/</span>Extra<span style="color:#666">/</span>R<span style="color:#666">/</span>R_Library
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span>Using temp directory<span style="color:#666">:</span> <span style="color:#666">/</span>Volumes<span style="color:#666">/</span>Extra<span style="color:#666">/</span>R<span style="color:#666">/</span>Rtmp<span style="color:#666">/</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span><span style="color:#666">*</span> installing <span style="color:#666">*</span>source<span style="color:#666">*</span> package ‘ggplot2’ <span style="color:#008000;font-weight:bold">...</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23</span><span style="color:#666">**</span> using staged installation
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24</span><span style="color:#666">**</span> R
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25</span><span style="color:#666">**</span> data
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26</span><span style="color:#666">***</span> moving datasets to lazyload DB
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27</span><span style="color:#666">**</span> inst
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28</span><span style="color:#666">**</span> byte<span style="color:#666">-</span>compile and prepare package for lazy loading
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29</span>Using library<span style="color:#666">:</span> <span style="color:#666">/</span>Volumes<span style="color:#666">/</span>Extra<span style="color:#666">/</span>R<span style="color:#666">/</span>R_Library
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30</span>Using temp directory<span style="color:#666">:</span> <span style="color:#666">/</span>Volumes<span style="color:#666">/</span>Extra<span style="color:#666">/</span>R<span style="color:#666">/</span>Rtmp<span style="color:#666">/</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">31</span><span style="color:#666">**</span> help
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">32</span><span style="color:#666">***</span> installing help indices
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">33</span><span style="color:#666">***</span> copying figures
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">34</span><span style="color:#666">**</span> building package indices
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">35</span>Using library<span style="color:#666">:</span> <span style="color:#666">/</span>Volumes<span style="color:#666">/</span>Extra<span style="color:#666">/</span>R<span style="color:#666">/</span>R_Library
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">36</span>Using temp directory<span style="color:#666">:</span> <span style="color:#666">/</span>Volumes<span style="color:#666">/</span>Extra<span style="color:#666">/</span>R<span style="color:#666">/</span>Rtmp<span style="color:#666">/</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">37</span><span style="color:#666">**</span> installing vignettes
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">38</span><span style="color:#666">**</span> testing if installed package can be loaded from temporary location
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">39</span>Using library<span style="color:#666">:</span> <span style="color:#666">/</span>Volumes<span style="color:#666">/</span>Extra<span style="color:#666">/</span>R<span style="color:#666">/</span>R_Library
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">40</span>Using temp directory<span style="color:#666">:</span> <span style="color:#666">/</span>Volumes<span style="color:#666">/</span>Extra<span style="color:#666">/</span>R<span style="color:#666">/</span>Rtmp<span style="color:#666">/</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">41</span><span style="color:#666">**</span> testing if installed package can be loaded from final location
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">42</span>Using library<span style="color:#666">:</span> <span style="color:#666">/</span>Volumes<span style="color:#666">/</span>Extra<span style="color:#666">/</span>R<span style="color:#666">/</span>R_Library
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">43</span>Using temp directory<span style="color:#666">:</span> <span style="color:#666">/</span>Volumes<span style="color:#666">/</span>Extra<span style="color:#666">/</span>R<span style="color:#666">/</span>Rtmp<span style="color:#666">/</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">44</span><span style="color:#666">**</span> testing if installed package keeps a record of temporary installation path
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">45</span><span style="color:#666">*</span> <span style="color:#00f">DONE </span>(ggplot2)
+</code></pre></div><p>考虑到该函数的常用性，如果你觉得这个函数好用，可以使用下面的命令将其保存到本地并进行配置：</p>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-r" data-lang="r"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>install<span style="color:#666">$</span><span style="color:#00f">save</span>()
+</code></pre></div><p>这样你每次打开RStudio，<code>install</code>模块总是在存在。</p>
+<p>如果代码库中程序存在问题，或者你有好的反馈，欢迎file issue。</p>
+
+				</div>
+				<footer class="footer">
+				  <hr>
+<div class="post-tags">
+
+<p>
+  <svg xmlns="http://www.w3.org/2000/svg" class="octicon" width="20" height="24" viewBox="0 0 14 16"><path fill-rule="evenodd" d="M8 2H6V0h2v2zm4 5H2c-.55 0-1-.45-1-1V4c0-.55.45-1 1-1h10l2 2-2 2zM8 4H6v2h2V4zM6 16h2V8H6v8z"/></svg>
+	
+	<a class="p-category" href="../../categories/blog/">Blog</a>
+</p>
+
+
+<p>
+  <svg xmlns="http://www.w3.org/2000/svg" class="octicon" width="20" height="24" viewBox="0 0 15 16"><path fill-rule="evenodd" d="M7.73 1.73C7.26 1.26 6.62 1 5.96 1H3.5C2.13 1 1 2.13 1 3.5v2.47c0 .66.27 1.3.73 1.77l6.06 6.06c.39.39 1.02.39 1.41 0l4.59-4.59a.996.996 0 0 0 0-1.41L7.73 1.73zM2.38 7.09c-.31-.3-.47-.7-.47-1.13V3.5c0-.88.72-1.59 1.59-1.59h2.47c.42 0 .83.16 1.13.47l6.14 6.13-4.73 4.73-6.13-6.15zM3.01 3h2v2H3V3h.01z"/></svg>
+	
+	<a class="p-tag" href="../../tags/r/">R</a><a class="p-tag" href="../../tags/%E5%BC%80%E5%8F%91/">开发</a>
+
+</p>
+</div>
+
+				</footer>
+			</article>
+		</main>
+			  <button class="hamburger hamburger--arrow is-active" type="button" onclick="document.getElementsByClassName('sidebar')[0].classList.toggle('collapsed');document.getElementsByClassName('content')[0].classList.toggle('expanded');document.getElementsByClassName('hamburger')[0].classList.toggle('is-active');document.getElementsByClassName('hamburger-inner')[0].classList.toggle('is-active')">
+      <span class="hamburger-box">
+        <span class="hamburger-inner"></span>
+      </span>
+    </button>
+		<aside class="sidebar">
+			<div class="container sidebar-sticky">
+				<header class="sidebar-about h-card vcard p-author">
+					
+					<a class="u-url u-uid" rel="me" href="../../">
+						<img class="u-photo" src="https://avatars.githubusercontent.com/u/25057508?v=4" width=128 height=128 />
+					</a>
+					
+
+					
+					<span class="site-title u-name fn">
+					  <a class="u-url u-uid" rel="me" href="../../">ShixiangWang
+王诗翔</a>
+				  </span>
+					
+
+					<p class="lead p-note">
+						 Bioinformatics Scholar. Cancer Researcher. Data Scientist. #rstats #golang. Always learning something new. 
+					</p>
+
+					<nav>
+						<ul class="sidebar-nav">
+							
+							<li><a href="../../about/"> About </a></li>
+							
+							<li><a href="../../blog/"> Blog </a></li>
+							
+							<li><a href="../../project/"> Projects </a></li>
+							
+							<li><a href="http://42.192.87.178:3838/"> Shiny Apps </a></li>
+							
+							<li><a href="../../talk/"> Talks </a></li>
+							
+							<li><a href="https://github.com/ShixiangWang/self-study/discussions"> Discuss with me? </a></li>
+							
+							<li><a href="https://shixiangwang.netlify.app/"> Mirror #1 </a></li>
+							
+							<li><a href="https://shixiangwang.github.io/"> Mirror #2 </a></li>
+							
+						</ul>
+					</nav>
+
+					
+						<div class="contact">
+						  
+							<ul class="contact-list">
+								
+								<li>
+									
+									  
+		  							  <a href="https://twitter.com/WangShxiang" class="u-url url" rel="me" title="Twitter" aria-label="Twitter">
+		  						    <i class='fab fa-twitter fa-fw'></i>
+		  							  </a>
+		  						  
+								
+								</li>
+								
+								<li>
+									
+									  
+		  							  <a href="https://github.com/ShixiangWang" class="u-url url" rel="me" title="GitHub" aria-label="GitHub">
+		  						    <i class='fab fa-github fa-fw'></i>
+		  							  </a>
+		  						  
+								
+								</li>
+								
+								<li>
+									
+		  							<a href="mailto:shixiang1994wang@gmail.com" class="u-email email" rel="me" title="Email" aria-label="Email">
+		  							<i class='fa fa-envelope fa-fw'></i>
+		  							  
+		  							</a>
+									
+								</li>
+								
+								<li>
+									
+									  
+		  							  <a href="https://shixiangwang.github.io/home/logo/qrcode.jpg" class="u-url url" rel="me" title="Bandcamp" aria-label="Bandcamp">
+		  						    <i class='fab fa-bandcamp fa-fw'></i>
+		  							  </a>
+		  						  
+								
+								</li>
+								
+							</ul>
+						</div>
+					
+				</header>
+
+				<footer>&copy; 2021. All rights reserved. </footer>
+				 <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+            <span id="busuanzi_container_site_pv">本站总访问量&nbsp;<span id="busuanzi_value_site_pv"></span>&nbsp;次</span>
+			</div>
+		</aside>
+
+		  <footer>
+  <script src="../../js/jquery-latest.js"></script>
+<script src="../../js/featherlight.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+
+<script>
+MathJax = {
+  tex: {
+    inlineMath: [['$', '$'], ['\\(', '\\)']]
+  }
+};
+</script>
+<script type="text/javascript" id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+  
+  </footer>
+  </body>
+</html>
+
+	</body>
+</html>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>开发 on ShixiangWang
+王诗翔</title>
+    <link>/tags/%E5%BC%80%E5%8F%91/</link>
+    <description>Recent content in 开发 on ShixiangWang
+王诗翔</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 24 Aug 2021 00:00:00 +0000</lastBuildDate><atom:link href="/tags/%E5%BC%80%E5%8F%91/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>使用modules包来组织R的函数集合</title>
+      <link>/blog/use-modules-to-organize-r-functions/</link>
+      <pubDate>Tue, 24 Aug 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/use-modules-to-organize-r-functions/</guid>
+      <description>接触过Python的朋友肯定对模块很熟悉，R的代码组织方式以包为主。但基于文件的模块形式也是可以实现的，modules 包提供了这种支持。
+安装和使用 直接从CRAN下载即可：
+1install.packages(&amp;#34;modules&amp;#34;) 使用了解2个函数的使用就可以了。
+一是import()，用于替换library()加载包。
+1&amp;gt; library(modules) 2&amp;gt; gp = import(&amp;#39;ggplot2&amp;#39;) 3Masking (modules:ggplot2): 4 `Position` from: base 5&amp;gt; args(gp$ggplot) 6function (data = NULL, mapping = aes(), ..., environment = parent.frame()) 7NULL 8&amp;gt; args(ggplot) 9function (data = NULL, mapping = aes(), ..., environment = parent.frame()) 10NULL 这样我们可以直接使用这个函数，也可以通过gp这个对象去访问可用的函数。
+如果不想要在全局直接访问包内的函数，在导入时设定attach=FALSE。
+1&amp;gt; dp &amp;lt;- import(dplyr, attach = FALSE) 2Masking (modules:dplyr): 3 `intersect` from: base 4 `setdiff` from: base 5 `setequal` from: base 6 `union` from: base 7&amp;gt; select 8错误: 找不到对象&amp;#39;select&amp;#39; 9&amp;gt; dp$select 10function (.</description>
+    </item>
+    
+  </channel>
+</rss>

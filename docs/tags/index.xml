@@ -8,7 +8,25 @@
 王诗翔</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 18 Aug 2021 00:00:00 +0000</lastBuildDate><atom:link href="/tags/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 24 Aug 2021 00:00:00 +0000</lastBuildDate><atom:link href="/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>R</title>
+      <link>/tags/r/</link>
+      <pubDate>Tue, 24 Aug 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/r/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>开发</title>
+      <link>/tags/%E5%BC%80%E5%8F%91/</link>
+      <pubDate>Tue, 24 Aug 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/%E5%BC%80%E5%8F%91/</guid>
+      <description></description>
+    </item>
+    
     <item>
       <title>Bash</title>
       <link>/tags/bash/</link>
@@ -46,15 +64,6 @@
     </item>
     
     <item>
-      <title>R</title>
-      <link>/tags/r/</link>
-      <pubDate>Thu, 12 Aug 2021 00:00:00 +0000</pubDate>
-      
-      <guid>/tags/r/</guid>
-      <description></description>
-    </item>
-    
-    <item>
       <title>RNA-seq</title>
       <link>/tags/rna-seq/</link>
       <pubDate>Thu, 12 Aug 2021 00:00:00 +0000</pubDate>
@@ -87,15 +96,6 @@
       <pubDate>Wed, 11 Aug 2021 00:00:00 +0000</pubDate>
       
       <guid>/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>ggplot</title>
-      <link>/tags/ggplot/</link>
-      <pubDate>Mon, 09 Aug 2021 00:00:00 +0000</pubDate>
-      
-      <guid>/tags/ggplot/</guid>
       <description></description>
     </item>
     
