@@ -5,10 +5,25 @@
     <description>Recent posts from Garrick Aden-Buie</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 24 Aug 2021 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 25 Aug 2021 00:00:00 +0000</lastBuildDate>
     
         <atom:link href="/blog/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>CentOS/Redhat R包使用最新的gcc编译</title>
+      <link>/blog/use-new-gcc-on-centos-for-r/</link>
+      <pubDate>Wed, 25 Aug 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/use-new-gcc-on-centos-for-r/</guid>
+      <description>R包在Linux下编译不通过，原因是gcc版本太低怎么办？
+一些有C&#43;&#43;代码的R包可能会用到一些新的C&#43;&#43;特性，需要C&#43;&#43;11或者C&#43;&#43;14。这个问题通常在CentOS/红帽系统上出现，因为系统稳定的要求，这个系列的系统它的C&#43;&#43;版本很低。 但请读者前往注意了别自己编译新版本的gcc，然后替换掉系统的。这种操作我试过几次，系统基本上就崩掉了。
+正确的解决方式是安装独立的gcc，通过环境变量引用和使用它。
+在Root用户下操作：
+1yum install centos-release-scl 2yum install devtoolset-9 然后在你使用R的用户下操作：
+1# If you use your non-root account to install packages,  2# change /root to /home/your_id in the following command 3mkdir -p /root/.R 4vi /root/.R/Makevars 将下面的内容写入打开的文件，然后保存：
+1CXX11=/opt/rh/devtoolset-9/root/usr/bin/g&#43;&#43; -std=c&#43;&#43;11 -fPIC 2CXX14=/opt/rh/devtoolset-9/root/usr/bin/g&#43;&#43; -std=c&#43;&#43;14 -fPIC </description>
+    </item>
     
     <item>
       <title>使用modules包来组织R的函数集合</title>

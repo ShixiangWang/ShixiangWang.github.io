@@ -8,7 +8,22 @@
 王诗翔</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 24 Aug 2021 00:00:00 +0000</lastBuildDate><atom:link href="/categories/blog/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 25 Aug 2021 00:00:00 +0000</lastBuildDate><atom:link href="/categories/blog/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>CentOS/Redhat R包使用最新的gcc编译</title>
+      <link>/blog/use-new-gcc-on-centos-for-r/</link>
+      <pubDate>Wed, 25 Aug 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/use-new-gcc-on-centos-for-r/</guid>
+      <description>R包在Linux下编译不通过，原因是gcc版本太低怎么办？
+一些有C++代码的R包可能会用到一些新的C++特性，需要C++11或者C++14。这个问题通常在CentOS/红帽系统上出现，因为系统稳定的要求，这个系列的系统它的C++版本很低。 但请读者前往注意了别自己编译新版本的gcc，然后替换掉系统的。这种操作我试过几次，系统基本上就崩掉了。
+正确的解决方式是安装独立的gcc，通过环境变量引用和使用它。
+在Root用户下操作：
+1yum install centos-release-scl 2yum install devtoolset-9 然后在你使用R的用户下操作：
+1# If you use your non-root account to install packages,  2# change /root to /home/your_id in the following command 3mkdir -p /root/.R 4vi /root/.R/Makevars 将下面的内容写入打开的文件，然后保存：
+1CXX11=/opt/rh/devtoolset-9/root/usr/bin/g++ -std=c++11 -fPIC 2CXX14=/opt/rh/devtoolset-9/root/usr/bin/g++ -std=c++14 -fPIC </description>
+    </item>
+    
     <item>
       <title>使用modules包来组织R的函数集合</title>
       <link>/blog/use-modules-to-organize-r-functions/</link>
@@ -155,21 +170,6 @@ grobs 的创建通常使用以 Grob 作为后缀的函数们，包括circleGrob,
 1# 默认，grid会初始化第一个视图 2grid.draw(rectGrob()) 3# 创建一个小的视图 4# 指定新视图的位置，X为0.5，Y为0.5，视图高宽都为0.5 5sample_vp &amp;lt;- viewport(x = 0.5, y = 0.5, 6 width = 0.5, height = 0.5, 7 just = c(&amp;#34;left&amp;#34;, &amp;#34;bottom&amp;#34;)) # 位置校正参数 8# 导航视图：上面只是定义了一个视图对象 9# 我们可以想象为一个大画板是一张白纸 10# 我们上面准备了一张小的白纸 11# 而 push 的目的就是把小的白纸放到大白纸的对应位置 12# 接下来的绘图动作就是在小的白纸上进行的 13pushViewport(sample_vp) 14grid.draw(roundrectGrob()) 15grid.draw(lollipop) 16# 弹出最上层的视图 17popViewport()  棒棒图的绘制见「R」grid 图形对象 grobs一文末尾。
  视图的just参数 值得注意的是这里的just参数：它定义了新的视图是如何在旧（大） 的视图上摆放的。这里的c(&amp;quot;left&amp;quot;, &amp;quot;bottom&amp;quot;)指定了小的视图的左侧和下侧与其坐标单位0.5, 0.5对齐。我们看看修改下该参数的效果：
 1grid.draw(rectGrob()) 2sample_vp &amp;lt;- viewport(x = 0.5, y = 0.</description>
-    </item>
-    
-    <item>
-      <title>grid 3：图形坐标系统</title>
-      <link>/blog/coords/</link>
-      <pubDate>Mon, 09 Aug 2021 00:00:00 +0000</pubDate>
-      
-      <guid>/blog/coords/</guid>
-      <description>绘图时，我们需要坐标才能准确地对要绘制的对象进行定位。在 grid 包中，有多种绘图坐标系统，选择一个合适的加以利用可以帮助我们更好地绘制图形。
-坐标系统不同的单位：
-  native 单位：根据数据值。
-  n pc单位：将整个（笛卡尔）坐标系缩放为0到1范围。
-  实际尺寸单位：包括英寸、厘米、毫米。
-  例如，下面的绘图同时用到了前两者：
-1ex_vp &amp;lt;- viewport(x = 0.5, y = 0.5, # npc 单位 2 just = c(&amp;#34;center&amp;#34;, &amp;#34;center&amp;#34;), 3 height = 0.8, width = 0.8, 4 xscale = c(0, 100), yscale = c(0, 10)) # 设定native单位 5pushViewport(ex_vp) 6grid.draw(rectGrob()) 7grid.draw(circleGrob(x = unit(20, &amp;#34;native&amp;#34;), y = unit(5, &amp;#34;native&amp;#34;), # 根据native单位绘图 8 r = 0.1, gp = gpar(fill = &amp;#34;lightblue&amp;#34;))) 9grid.</description>
     </item>
     
   </channel>
