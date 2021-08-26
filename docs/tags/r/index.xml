@@ -8,7 +8,18 @@
 王诗翔</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 24 Aug 2021 00:00:00 +0000</lastBuildDate><atom:link href="/tags/r/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 26 Aug 2021 00:00:00 +0000</lastBuildDate><atom:link href="/tags/r/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>解决由于网络问题导致的stringi安装失败问题</title>
+      <link>/blog/install-stringi-when-bad-acess-to-gh/</link>
+      <pubDate>Thu, 26 Aug 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/install-stringi-when-bad-acess-to-gh/</guid>
+      <description>这是一个我每次重装R，或者在新的系统上使用R进行包安装，都会遇到的问题。
+stringi是tidyverse的一个核心包，基本上必装。但由于gayhub经常访问有问题，这个包安装时所需要的依赖文件会下载不了。 解决的办法是手动下载，然后进行安装：
+1wget https://github.com/gagolews/stringi/archive/master.zip -O stringi.zip 2# 如果上面github的链接无法下载，尝试： 3# wget https://download.fastgit.org/gagolews/stringi/archive/master.zip -O stringi.zip 4unzip stringi.zip 5sed -i &amp;#39;/\/icu..\/data/d&amp;#39; stringi-master/.Rbuildignore 6R CMD build stringi-master 7R CMD INSTALL stringi*.tar.gz 参考：https://stackoverflow.com/questions/31942322/how-to-install-stringi-from-local-file-absolutely-no-internet-access#</description>
+    </item>
+    
     <item>
       <title>使用modules包来组织R的函数集合</title>
       <link>/blog/use-modules-to-organize-r-functions/</link>
@@ -137,15 +148,6 @@ https://baike.baidu.com/item/完全数/370913?fromtitle=完美数&amp;amp;fromid
       
       <guid>/project/ezcox/</guid>
       <description> Project repo: https://github.com/ShixiangWang/ezcox Cite the paper if you use this tool: Wang, Shixiang, et al. “The predictive power of tumor mutational burden in lung cancer immunotherapy response is influenced by patients’ sex.” International journal of cancer (2019).  </description>
-    </item>
-    
-    <item>
-      <title>:package: IDConverter</title>
-      <link>/project/idconverter/</link>
-      <pubDate>Thu, 05 Aug 2021 00:00:00 +0000</pubDate>
-      
-      <guid>/project/idconverter/</guid>
-      <description> Project repo: https://github.com/ShixiangWang/IDConverter  </description>
     </item>
     
   </channel>

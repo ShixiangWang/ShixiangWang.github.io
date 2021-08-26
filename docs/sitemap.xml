@@ -4,17 +4,42 @@
   
   <url>
     <loc>/categories/blog/</loc>
-    <lastmod>2021-08-25T00:00:00+00:00</lastmod>
+    <lastmod>2021-08-26T00:00:00+00:00</lastmod>
   </url>
   
   <url>
     <loc>/blog/</loc>
-    <lastmod>2021-08-25T00:00:00+00:00</lastmod>
+    <lastmod>2021-08-26T00:00:00+00:00</lastmod>
   </url>
   
   <url>
     <loc>/categories/</loc>
-    <lastmod>2021-08-25T00:00:00+00:00</lastmod>
+    <lastmod>2021-08-26T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/r/</loc>
+    <lastmod>2021-08-26T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/</loc>
+    <lastmod>2021-08-26T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/</loc>
+    <lastmod>2021-08-26T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/blog/install-stringi-when-bad-acess-to-gh/</loc>
+    <lastmod>2021-08-26T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/%E9%85%8D%E7%BD%AE/</loc>
+    <lastmod>2021-08-26T00:00:00+00:00</lastmod>
   </url>
   
   <url>
@@ -28,28 +53,8 @@
   </url>
   
   <url>
-    <loc>/</loc>
-    <lastmod>2021-08-25T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/tags/</loc>
-    <lastmod>2021-08-25T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
     <loc>/tags/unix/</loc>
     <lastmod>2021-08-25T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/tags/%E9%85%8D%E7%BD%AE/</loc>
-    <lastmod>2021-08-25T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/tags/r/</loc>
-    <lastmod>2021-08-24T00:00:00+00:00</lastmod>
   </url>
   
   <url>

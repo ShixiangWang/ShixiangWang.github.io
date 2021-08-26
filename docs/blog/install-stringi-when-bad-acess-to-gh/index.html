@@ -5,10 +5,10 @@
 		<meta name="viewport" content="width=device-width,initial-scale=1">
 
 		
-		<title>配置 &middot; ShixiangWang
+		<title>解决由于网络问题导致的stringi安装失败问题 &middot; ShixiangWang
 王诗翔</title>
 		
-		<meta property="og:title" content="配置 - ShixiangWang
+		<meta property="og:title" content="解决由于网络问题导致的stringi安装失败问题 - ShixiangWang
 王诗翔">
 		
 		<meta property="og:type" content="article">
@@ -16,9 +16,8 @@
 
 		
 			
-			 
-			<meta property="description" content="Post by Shixiang Wang on Thursday, August 26, 2021">
-			<meta property="og:description" content="Post by Shixiang Wang on Thursday, August 26, 2021">
+			<meta property="description" content="每次重装R，都会碰到的问题">
+			<meta property="og:description" content="每次重装R，都会碰到的问题">
 			
 			
     	<meta property="twitter:card" content="summary">
@@ -31,9 +30,6 @@
 		<meta name="twitter:creator" content="@WangShxiang">
 		<meta name="twitter:site" content="https://shixiangwang.github.io">
 		
-		
-		<link href="../../tags/%E9%85%8D%E7%BD%AE/index.xml" rel="alternate" type="application/rss+xml" title="ShixiangWang
-王诗翔" />
 		
 
 		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
@@ -73,41 +69,61 @@
 
 <script defer src="../../js/van11y-accessible-hide-show-aria.min.js"></script>
 
+<script defer src="../../js/toc.js"></script>
 
 
-		<link href="../../tags/%E9%85%8D%E7%BD%AE/" rel="canonical">
+
+		<link href="../../blog/install-stringi-when-bad-acess-to-gh" rel="canonical">
 	</head>
 
-  <body class="restyled-garrick ">
+	<body class="restyled-garrick  h-entry">
 		<main class="content container" role="main">
-		
-      
-      <h1 class="page-title">配置</h1>
-      <div class="archive">
-        
-        <h2 class="archive-title">2021</h2>
-        
-          <article class="archive-item">
-            <a href="../../blog/install-stringi-when-bad-acess-to-gh/" class="archive-item-link">解决由于网络问题导致的stringi安装失败问题</a>
-            <time class="pull-right post-list">Aug 26</time>
-          </article>
-        
-          <article class="archive-item">
-            <a href="../../blog/use-new-gcc-on-centos-for-r/" class="archive-item-link">CentOS/Redhat R包使用最新的gcc编译</a>
-            <time class="pull-right post-list">Aug 25</time>
-          </article>
-        
-          <article class="archive-item">
-            <a href="../../blog/jupyter-notebook-plugin-configs/" class="archive-item-link">Jupyter Notebook 插件配置</a>
-            <time class="pull-right post-list">Aug 08</time>
-          </article>
-        
-        
-      </div>
-      
+			<article class="post">
+				<header>
+					<a class="u-url" href="../../blog/install-stringi-when-bad-acess-to-gh">
+						<h1 class="post-title p-name">解决由于网络问题导致的stringi安装失败问题</h1>
+					</a>
+					<h3 class="post-author">王诗翔</h3>
+					<time class="post-date dt-published" datetime="2021-08-26T00:00:00Z">Thursday, 26 August 2021</time>
+					
+				</header>
+				<div class="post-content e-content">
+					<p>这是一个我每次重装R，或者在新的系统上使用R进行包安装，都会遇到的问题。</p>
+<p><code>stringi</code>是tidyverse的一个核心包，基本上必装。但由于gayhub经常访问有问题，这个包安装时所需要的依赖文件会下载不了。
+解决的办法是手动下载，然后进行安装：</p>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>wget https://github.com/gagolews/stringi/archive/master.zip -O stringi.zip
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span style="color:#408080;font-style:italic"># 如果上面github的链接无法下载，尝试：</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span style="color:#408080;font-style:italic"># wget https://download.fastgit.org/gagolews/stringi/archive/master.zip -O stringi.zip</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>unzip stringi.zip
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>sed -i <span style="color:#ba2121">&#39;/\/icu..\/data/d&#39;</span> stringi-master/.Rbuildignore
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span>R CMD build stringi-master
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7</span>R CMD INSTALL stringi*.tar.gz
+</code></pre></div><p>参考：<a href="https://stackoverflow.com/questions/31942322/how-to-install-stringi-from-local-file-absolutely-no-internet-access#">https://stackoverflow.com/questions/31942322/how-to-install-stringi-from-local-file-absolutely-no-internet-access#</a></p>
 
+				</div>
+				<footer class="footer">
+				  <hr>
+<div class="post-tags">
+
+<p>
+  <svg xmlns="http://www.w3.org/2000/svg" class="octicon" width="20" height="24" viewBox="0 0 14 16"><path fill-rule="evenodd" d="M8 2H6V0h2v2zm4 5H2c-.55 0-1-.45-1-1V4c0-.55.45-1 1-1h10l2 2-2 2zM8 4H6v2h2V4zM6 16h2V8H6v8z"/></svg>
+	
+	<a class="p-category" href="../../categories/blog/">Blog</a>
+</p>
+
+
+<p>
+  <svg xmlns="http://www.w3.org/2000/svg" class="octicon" width="20" height="24" viewBox="0 0 15 16"><path fill-rule="evenodd" d="M7.73 1.73C7.26 1.26 6.62 1 5.96 1H3.5C2.13 1 1 2.13 1 3.5v2.47c0 .66.27 1.3.73 1.77l6.06 6.06c.39.39 1.02.39 1.41 0l4.59-4.59a.996.996 0 0 0 0-1.41L7.73 1.73zM2.38 7.09c-.31-.3-.47-.7-.47-1.13V3.5c0-.88.72-1.59 1.59-1.59h2.47c.42 0 .83.16 1.13.47l6.14 6.13-4.73 4.73-6.13-6.15zM3.01 3h2v2H3V3h.01z"/></svg>
+	
+	<a class="p-tag" href="../../tags/%E9%85%8D%E7%BD%AE/">配置</a><a class="p-tag" href="../../tags/r/">R</a>
+
+</p>
+</div>
+
+				</footer>
+			</article>
 		</main>
-  	  <button class="hamburger hamburger--arrow is-active" type="button" onclick="document.getElementsByClassName('sidebar')[0].classList.toggle('collapsed');document.getElementsByClassName('content')[0].classList.toggle('expanded');document.getElementsByClassName('hamburger')[0].classList.toggle('is-active');document.getElementsByClassName('hamburger-inner')[0].classList.toggle('is-active')">
+			  <button class="hamburger hamburger--arrow is-active" type="button" onclick="document.getElementsByClassName('sidebar')[0].classList.toggle('collapsed');document.getElementsByClassName('content')[0].classList.toggle('expanded');document.getElementsByClassName('hamburger')[0].classList.toggle('is-active');document.getElementsByClassName('hamburger-inner')[0].classList.toggle('is-active')">
       <span class="hamburger-box">
         <span class="hamburger-inner"></span>
       </span>
@@ -208,6 +224,26 @@
             <span id="busuanzi_container_site_pv">本站总访问量&nbsp;<span id="busuanzi_value_site_pv"></span>&nbsp;次</span>
 			</div>
 		</aside>
+
+		  <footer>
+  <script src="../../js/jquery-latest.js"></script>
+<script src="../../js/featherlight.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+
+<script>
+MathJax = {
+  tex: {
+    inlineMath: [['$', '$'], ['\\(', '\\)']]
+  }
+};
+</script>
+<script type="text/javascript" id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+  
+  </footer>
+  </body>
+</html>
 
 	</body>
 </html>

@@ -8,7 +8,18 @@
 王诗翔</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 25 Aug 2021 00:00:00 +0000</lastBuildDate><atom:link href="/categories/blog/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 26 Aug 2021 00:00:00 +0000</lastBuildDate><atom:link href="/categories/blog/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>解决由于网络问题导致的stringi安装失败问题</title>
+      <link>/blog/install-stringi-when-bad-acess-to-gh/</link>
+      <pubDate>Thu, 26 Aug 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/install-stringi-when-bad-acess-to-gh/</guid>
+      <description>这是一个我每次重装R，或者在新的系统上使用R进行包安装，都会遇到的问题。
+stringi是tidyverse的一个核心包，基本上必装。但由于gayhub经常访问有问题，这个包安装时所需要的依赖文件会下载不了。 解决的办法是手动下载，然后进行安装：
+1wget https://github.com/gagolews/stringi/archive/master.zip -O stringi.zip 2# 如果上面github的链接无法下载，尝试： 3# wget https://download.fastgit.org/gagolews/stringi/archive/master.zip -O stringi.zip 4unzip stringi.zip 5sed -i &amp;#39;/\/icu..\/data/d&amp;#39; stringi-master/.Rbuildignore 6R CMD build stringi-master 7R CMD INSTALL stringi*.tar.gz 参考：https://stackoverflow.com/questions/31942322/how-to-install-stringi-from-local-file-absolutely-no-internet-access#</description>
+    </item>
+    
     <item>
       <title>CentOS/Redhat R包使用最新的gcc编译</title>
       <link>/blog/use-new-gcc-on-centos-for-r/</link>
@@ -156,20 +167,6 @@ grobs 的创建通常使用以 Grob 作为后缀的函数们，包括circleGrob,
 再创建图形对象后，使用 grid.draw() 将图形绘制出来。
 1grid.draw(my_circle) 多个图形对象可以叠加，而且叠加后可以修改原来的图形对象。
 1my_circle &amp;lt;- circleGrob(name = &amp;#34;my_circle&amp;#34;, 2 x = 0.5, y = 0.5, r = 0.</description>
-    </item>
-    
-    <item>
-      <title>grid 2：视图 viewports</title>
-      <link>/blog/viewports/</link>
-      <pubDate>Mon, 09 Aug 2021 00:00:00 +0000</pubDate>
-      
-      <guid>/blog/viewports/</guid>
-      <description>原文：https://bookdown.org/rdpeng/RProgDA/the-grid-package.html#viewports
- 视图是什么 视图是绘图窗口，我们可以将其移进或移出，以方便使用grid包定制绘图。我们可以导航到其中一个视图，进行一些更改，然后弹出并导航到另一个视图。简而言之，视图提供了一种在绘图（可以想象为一个画板）的不同子空间（不同的层，如果了解ggplot2，采用图层概念理解它）中导航和工作的方法。
-下面是一个例子，我们在整个图形的右上角绘制一个棒棒图：
-1# 默认，grid会初始化第一个视图 2grid.draw(rectGrob()) 3# 创建一个小的视图 4# 指定新视图的位置，X为0.5，Y为0.5，视图高宽都为0.5 5sample_vp &amp;lt;- viewport(x = 0.5, y = 0.5, 6 width = 0.5, height = 0.5, 7 just = c(&amp;#34;left&amp;#34;, &amp;#34;bottom&amp;#34;)) # 位置校正参数 8# 导航视图：上面只是定义了一个视图对象 9# 我们可以想象为一个大画板是一张白纸 10# 我们上面准备了一张小的白纸 11# 而 push 的目的就是把小的白纸放到大白纸的对应位置 12# 接下来的绘图动作就是在小的白纸上进行的 13pushViewport(sample_vp) 14grid.draw(roundrectGrob()) 15grid.draw(lollipop) 16# 弹出最上层的视图 17popViewport()  棒棒图的绘制见「R」grid 图形对象 grobs一文末尾。
- 视图的just参数 值得注意的是这里的just参数：它定义了新的视图是如何在旧（大） 的视图上摆放的。这里的c(&amp;quot;left&amp;quot;, &amp;quot;bottom&amp;quot;)指定了小的视图的左侧和下侧与其坐标单位0.5, 0.5对齐。我们看看修改下该参数的效果：
-1grid.draw(rectGrob()) 2sample_vp &amp;lt;- viewport(x = 0.5, y = 0.</description>
     </item>
     
   </channel>
