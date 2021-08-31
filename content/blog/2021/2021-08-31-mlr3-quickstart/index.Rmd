@@ -1,0 +1,88 @@
+---
+title: mlr3（一）快速入门
+author: 王诗翔
+date: '2021-08-31'
+slug: mlr3-quickstart
+categories:
+  - Blog
+tags:
+  - R
+  - mlr3
+  - 机器学习
+description: 翻译与笔记
+keywords: rstats
+editor_options:
+  chunk_output_type: console
+---
+
+<!-- Links -->
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo = TRUE, warning = FALSE, message = FALSE,
+  fig.width = 9, fig.height = 10, comment = "out"
+)
+knitr::opts_chunk$set(engine.opts = list(bash = "-l"))
+knitr::knit_hooks$set(
+  prompt = function(before, options, envir) {
+    options(prompt = if (options$engine %in% c('sh','bash')) '$ ' else 'R> ')
+})
+options(htmltools.dir.version = TRUE)
+
+# If using lightbox for plots, set `fig.show = FALSE`
+# Usage: lightbox_img(knitr::fig_chunk("chunk-name", "png"))
+lightbox_img <- function(url, alt = "", caption = "", preview = TRUE) {
+  if (preview) {
+    glue::glue(
+      '<a href="{url}" data-featherlight="image">
+      <div class="figure">
+      <img src="{url}" alt="{alt}">
+      <p class="caption">{caption}</p>
+      </div>
+      </a>
+      '
+    )
+  } else {
+    if (alt == "") alt <- "static image of the plot"
+    glue::glue('<a href="{url}" data-featherlight="image">{alt}</a>')
+  }
+}
+```
+
+来源：<https://mlr3book.mlr-org.com/quickstart.html>
+
+安装包：
+
+```{r, eval = FALSE}
+install.packages("mlr3")
+```
+
+作为一个30秒的介绍性示例，我们将在虹膜数据集的前120行训练决策树模型，并对最后30行进行预测，测量训练模型的准确性。
+
+```{r}
+library("mlr3")
+task = tsk("iris")
+learner = lrn("classif.rpart")
+
+# 为任务的一个子集（前120行）训练这个学习者的模型
+learner$train(task, row_ids = 1:120)
+# 决策树模型
+learner$model
+```
+
+进行预测：
+
+```{r}
+predictions = learner$predict(task, row_ids = 121:150)
+predictions
+```
+
+查看我们的模型在测试数据集上的精度：
+
+```{r}
+# accuracy of our model on the test set of the final 30 rows
+predictions$score(msr("classif.acc"))
+```
+
+更多的示例可以在[mlr3gallery](https://mlr3gallery.mlr-org.com/)中找到，该gallery是用例和示例的集合。在学习mlr3时，我们强烈建议你打印一些[备忘单](https://cheatsheets.mlr-org.com/)。
+

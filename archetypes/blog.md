@@ -14,7 +14,7 @@ editor_options:
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(
   echo = TRUE, warning = FALSE, message = FALSE,
-  fig.width = 9, fig.height = 10, comment = "out", 
+  fig.width = 9, fig.height = 10, comment = "out"
 )
 knitr::opts_chunk$set(engine.opts = list(bash = "-l"))
 knitr::knit_hooks$set(
