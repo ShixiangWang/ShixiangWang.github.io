@@ -1,0 +1,41 @@
+---
+title: PR曲线与AUC
+author: 王诗翔
+date: '2021-08-31'
+slug: pr-curve-and-auc-value
+categories:
+  - Blog
+tags:
+  - R
+  - 机器学习
+---
+
+这里直接使用ROCR包提供的数据作为示例：
+
+```{r}
+library(ROCR)
+data(ROCR.simple)
+pred <- prediction(ROCR.simple$predictions, ROCR.simple$labels)
+perf <- performance(pred,"tpr","fpr")
+plot(perf)
+## precision/recall curve (x-axis: recall, y-axis: precision)
+perf1 <- performance(pred, "prec", "rec")
+plot(perf1, xlim = c(0, 1), ylim = c(0, 1))
+```
+
+使用 `PRROC` 包获取PR AUC值并且绘图：
+
+```{r}
+pr <- PRROC::pr.curve(ROCR.simple$predictions, weights.class0 = ROCR.simple$labels, curve = TRUE)
+pr
+plot(pr)
+```
+
+
+不要把标签顺序搞错了。
+
+```{r}
+pr <- PRROC::pr.curve(ROCR.simple$labels, weights.class0 = ROCR.simple$predictions, curve = TRUE)
+plot(pr)
+```
+
