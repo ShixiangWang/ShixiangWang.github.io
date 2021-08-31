@@ -376,13 +376,67 @@ GBM（Gradient Boosting Machine）是另一种基于Boosting思想的集成算�
 
 ### 时间序列
 
+时间序列分析的的目的是**挖掘时间序列中隐含的信息与模式，并借此对此序列数据进行评估以及对系列的后续走 势进行预测**。
+
+**统计量**
+
+![image-20210831170042445](https://gitee.com/ShixiangWang/ImageCollection/raw/master/png/202108311700583.png)
+
+
+
+**白噪声**
+
+![image-20210831180141782](https://gitee.com/ShixiangWang/ImageCollection/raw/master/png/202108311801867.png)
+
+**随机游走**
+
+![image-20210831180247104](https://gitee.com/ShixiangWang/ImageCollection/raw/master/png/202108311802180.png)
+
+**平稳性**
+
+![image-20210831180533072](https://gitee.com/ShixiangWang/ImageCollection/raw/master/png/202108311805144.png)
+
 
 
 ### ARIMA模型
 
+![image-20210831184628255](https://gitee.com/ShixiangWang/ImageCollection/raw/master/png/202108311846324.png)
+
+**AR模型**
+
+![image-20210831184711316](https://gitee.com/ShixiangWang/ImageCollection/raw/master/png/202108311847398.png)
+
+**MA模型**
+
+![image-20210831184747678](https://gitee.com/ShixiangWang/ImageCollection/raw/master/png/202108311847781.png)
+
+**ARMA模型**
+
+![image-20210831184856392](https://gitee.com/ShixiangWang/ImageCollection/raw/master/png/202108311848486.png)
+
+**ARIMA模型**
+
+![image-20210831185008498](https://gitee.com/ShixiangWang/ImageCollection/raw/master/png/202108311850581.png)
+
+![image-20210831185126923](https://gitee.com/ShixiangWang/ImageCollection/raw/master/png/202108311851960.png)
+
+![image-20210831185218265](https://gitee.com/ShixiangWang/ImageCollection/raw/master/png/202108311852333.png)
+
 
 
 ### 季节性分析
+
+一个季节性时间序列包含一个趋势部分，一个季节性部分和一个不规则部分。分解时间序列就意味着要把时间序列分解称为这三个部分，也就是估计出这三个部分。
+
+![image-20210831185352667](https://gitee.com/ShixiangWang/ImageCollection/raw/master/png/202108311853754.png)
+
+![image-20210831185424704](https://gitee.com/ShixiangWang/ImageCollection/raw/master/png/202108311854735.png)
+
+![image-20210831185447342](https://gitee.com/ShixiangWang/ImageCollection/raw/master/png/202108311854381.png)
+
+其他时间序列分析工具：
+
+![image-20210831185524027](https://gitee.com/ShixiangWang/ImageCollection/raw/master/png/202108311855061.png)
 
 
 
@@ -392,9 +446,35 @@ GBM（Gradient Boosting Machine）是另一种基于Boosting思想的集成算�
 
 ### K-means
 
+![image-20210831185611747](https://gitee.com/ShixiangWang/ImageCollection/raw/master/png/202108311856824.png)
+
+![image-20210831185636367](https://gitee.com/ShixiangWang/ImageCollection/raw/master/png/202108311856406.png)
+
+![image-20210831185705805](https://gitee.com/ShixiangWang/ImageCollection/raw/master/png/202108311857847.png)
+
+![image-20210831185723252](https://gitee.com/ShixiangWang/ImageCollection/raw/master/png/202108311857302.png)
+
+![image-20210831185800524](https://gitee.com/ShixiangWang/ImageCollection/raw/master/png/202108311858562.png)
+
+![image-20210831185818721](https://gitee.com/ShixiangWang/ImageCollection/raw/master/png/202108311858755.png)
+
+![image-20210831185836433](https://gitee.com/ShixiangWang/ImageCollection/raw/master/png/202108311858485.png)
+
+
+
 
 
 ### 层次聚类
+
+![image-20210831185903944](https://gitee.com/ShixiangWang/ImageCollection/raw/master/png/202108311859987.png)
+
+![image-20210831190054649](https://gitee.com/ShixiangWang/ImageCollection/raw/master/png/202108311900744.png)
+
+![image-20210831190110573](https://gitee.com/ShixiangWang/ImageCollection/raw/master/png/202108311901617.png)
+
+![image-20210831190150937](https://gitee.com/ShixiangWang/ImageCollection/raw/master/png/202108311901974.png)
+
+
 
 
 
@@ -402,3 +482,80 @@ GBM（Gradient Boosting Machine）是另一种基于Boosting思想的集成算�
 
 
 
+![image-20210831190243908](https://gitee.com/ShixiangWang/ImageCollection/raw/master/png/202108311902950.png)
+
+![image-20210831190306506](https://gitee.com/ShixiangWang/ImageCollection/raw/master/png/202108311903562.png)
+
+![image-20210831190335268](https://gitee.com/ShixiangWang/ImageCollection/raw/master/png/202108311903318.png)
+
+![image-20210831190351658](https://gitee.com/ShixiangWang/ImageCollection/raw/master/png/202108311903710.png)
+
+![image-20210831190410164](https://gitee.com/ShixiangWang/ImageCollection/raw/master/png/202108311904222.png)
+
+![image-20210831190455194](https://gitee.com/ShixiangWang/ImageCollection/raw/master/png/202108311904249.png)
+
+![image-20210831190512088](https://gitee.com/ShixiangWang/ImageCollection/raw/master/png/202108311905129.png)
+
+![image-20210831190524525](https://gitee.com/ShixiangWang/ImageCollection/raw/master/png/202108311905577.png)
+
+另外的介绍帮助理解：[深入浅出——基于密度的聚类方法](https://cloud.tencent.com/developer/article/1052203)
+
+
+
+
+
+## 其他算法
+
+
+
+### 自然语言处理
+
+![image-20210831190719751](https://gitee.com/ShixiangWang/ImageCollection/raw/master/png/202108311907866.png)
+
+![image-20210831190735064](https://gitee.com/ShixiangWang/ImageCollection/raw/master/png/202108311907110.png)
+
+![image-20210831190753697](https://gitee.com/ShixiangWang/ImageCollection/raw/master/png/202108311907742.png)
+
+![image-20210831190851366](https://gitee.com/ShixiangWang/ImageCollection/raw/master/png/202108311908456.png)
+
+![image-20210831190945081](https://gitee.com/ShixiangWang/ImageCollection/raw/master/png/202108311909123.png)
+
+![image-20210831191007150](https://gitee.com/ShixiangWang/ImageCollection/raw/master/png/202108311910182.png)
+
+
+
+**TF-IDF算法**
+
+![image-20210831191243387](https://gitee.com/ShixiangWang/ImageCollection/raw/master/png/202108311912506.png)
+
+![image-20210831191339275](https://gitee.com/ShixiangWang/ImageCollection/raw/master/png/202108311913331.png)
+
+**主题模型**
+
+![image-20210831191428810](https://gitee.com/ShixiangWang/ImageCollection/raw/master/png/202108311914867.png)
+
+![image-20210831191447903](https://gitee.com/ShixiangWang/ImageCollection/raw/master/png/202108311914956.png)
+
+![image-20210831191513492](https://gitee.com/ShixiangWang/ImageCollection/raw/master/png/202108311915541.png)
+
+
+
+### 异常检测
+
+异常检测（Anomaly Detection）是指对不符合预期模式或数据集中异常项目、事件或观测值的识别。通常异常的样本可能会导致银行欺诈、结构缺陷、医疗问题、文本错误等不同类型的问题。异常也被称为离群值、噪声、偏差和例外。
+
+![image-20210831191556939](https://gitee.com/ShixiangWang/ImageCollection/raw/master/png/202108311915053.png)
+
+![image-20210831191615786](https://gitee.com/ShixiangWang/ImageCollection/raw/master/png/202108311916836.png)
+
+
+
+**箱线图**
+
+![image-20210831191658573](https://gitee.com/ShixiangWang/ImageCollection/raw/master/png/202108311916699.png)
+
+![image-20210831191728523](https://gitee.com/ShixiangWang/ImageCollection/raw/master/png/202108311917569.png)
+
+![image-20210831191747482](https://gitee.com/ShixiangWang/ImageCollection/raw/master/png/202108311917530.png)
+
+![image-20210831191841470](https://gitee.com/ShixiangWang/ImageCollection/raw/master/png/202108311918525.png)

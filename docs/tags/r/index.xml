@@ -8,7 +8,18 @@
 王诗翔</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 30 Aug 2021 00:00:00 +0000</lastBuildDate><atom:link href="/tags/r/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 31 Aug 2021 00:00:00 +0000</lastBuildDate><atom:link href="/tags/r/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>PR曲线与AUC</title>
+      <link>/blog/pr-curve-and-auc-value/</link>
+      <pubDate>Tue, 31 Aug 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/pr-curve-and-auc-value/</guid>
+      <description>这里直接使用ROCR包提供的数据作为示例：
+library(ROCR) data(ROCR.simple) pred &amp;lt;- prediction(ROCR.simple$predictions, ROCR.simple$labels) perf &amp;lt;- performance(pred,&amp;quot;tpr&amp;quot;,&amp;quot;fpr&amp;quot;) plot(perf) ## precision/recall curve (x-axis: recall, y-axis: precision) perf1 &amp;lt;- performance(pred, &amp;quot;prec&amp;quot;, &amp;quot;rec&amp;quot;) plot(perf1, xlim = c(0, 1), ylim = c(0, 1)) 使用 PRROC 包获取PR AUC值并且绘图：
+pr &amp;lt;- PRROC::pr.curve(ROCR.simple$predictions, weights.class0 = ROCR.simple$labels, curve = TRUE) pr ## ## Precision-recall curve ## ## Area under curve (Integral): ## 0.7815038 ## ## Area under curve (Davis &amp;amp; Goadrich): ## 0.7814246 ## ## Curve for scores from 0.</description>
+    </item>
+    
     <item>
       <title>《R语言数据科学导论》笔记</title>
       <link>/blog/note-for-r-data-science-intro/</link>
@@ -149,15 +160,6 @@ https://baike.baidu.com/item/完全数/370913?fromtitle=完美数&amp;amp;fromid
       
       <guid>/project/r-search-extension/</guid>
       <description> Project repo: https://github.com/ShixiangWang/r-search-extension  </description>
-    </item>
-    
-    <item>
-      <title>:package: DoAbsolute</title>
-      <link>/project/doabsolute/</link>
-      <pubDate>Thu, 05 Aug 2021 00:00:00 +0000</pubDate>
-      
-      <guid>/project/doabsolute/</guid>
-      <description> Project repo: https://github.com/ShixiangWang/DoAbsolute Please cite the following paper if you use the tool:  Wang, Shixiang, et al. &amp;ldquo;The predictive power of tumor mutational burden in lung cancer immunotherapy response is influenced by patients&#39; sex.&amp;rdquo; International journal of cancer (2019). Carter, Scott L., et al. “Absolute quantification of somatic DNA alterations in human cancer.” Nature biotechnology 30.5 (2012): 413.    </description>
     </item>
     
   </channel>
