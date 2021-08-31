@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>forestmodel on ShixiangWang
+王诗翔</title>
+    <link>/tags/forestmodel/</link>
+    <description>Recent content in forestmodel on ShixiangWang
+王诗翔</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 31 Aug 2021 00:00:00 +0000</lastBuildDate><atom:link href="/tags/forestmodel/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>forestmodel给多水平变量添加整体p值</title>
+      <link>/blog/forestmode-set-overall-pva-for-variable-with-multiple-levels/</link>
+      <pubDate>Tue, 31 Aug 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/forestmode-set-overall-pva-for-variable-with-multiple-levels/</guid>
+      <description>前段时间收到来信：
+1Hi Shixiang 2 3I am writing to you about the forestmodel package in R. 4 5Thank you so much for the wonderful package that you created. 6 7I was wondering if there is a way to display the wald test p-value which is important for variables that have more than two levels. I tried to work around the code but did not find a way out. 8 9Best 10Aniket 我不是作者，搞错了人，问我干啥呢～自个提问嘛</description>
+    </item>
+    
+  </channel>
+</rss>
