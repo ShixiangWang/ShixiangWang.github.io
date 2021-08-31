@@ -8,7 +8,26 @@
 王诗翔</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 26 Aug 2021 00:00:00 +0000</lastBuildDate><atom:link href="/categories/blog/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 30 Aug 2021 00:00:00 +0000</lastBuildDate><atom:link href="/categories/blog/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>《R语言数据科学导论》笔记</title>
+      <link>/blog/note-for-r-data-science-intro/</link>
+      <pubDate>Mon, 30 Aug 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/note-for-r-data-science-intro/</guid>
+      <description>原始资料来源：https://github.com/leovan/data-science-introduction-with-r
+特征工程 特征工程是将原始数据转换成特征的过程。更通俗地说，特征工程就是人工设计模型的输入变量 x的过程。
+主要分为：
+ 数据预处理 特征提取和选择 特征变换和编码 特征监控  数据预处理 对赃数据进行清洗，包括括缺失，噪声，不一致等等一系列问题数据。
+剔除处理：
+ 样本去重。同一个ID出现多次重复记录。 特征去重。例如月收入和年收入，它们都是用于表征收入特征，关系只差常数倍。 常量特征剔除。即常量或方差近似为0的特征。caret包中的nearZeroVar()可以帮助我们识别该类特征。  缺失值处理：
+ 探索缺失值：mice包的md.pattern()，VIM包的aggr()/marginplot()。 处理：  删除法，可以直接使用na.omit()。 插补法，如果该特征对最终的预测结果影响较小，则我们可以直接删除该特征；相反如果该特征对预测结果影响较大，直接删除会对模型造成较大的影 响，此时我们需要利用其它的方法对该特征的缺失值进行填补。其中最简单的方式是利用均值，中位数或众数等统计量对其进行简单插补。这种插补方法是建立在完全随机缺失的前提假设下，同时会造成变量方差变小。    异常值是指样本中存在的同样本整体差异较大的数据。
+分为2类：
+采样是一种常见的预处理技术。
+ 随机采样。每个样本单位被抽中的概率相等，样本的每个单位完全独立，彼此间无一定的关联性和排斥性。 分层采样。将抽样单位按某种特征或某种规则划分为不同的层，然后从不同的层中独立、随机地抽取样本。从而保证样本的结构与总体的结构比较相近，从而提高估计的精度。可以利用sampling::strata()。 欠采样和过采样。我们经常会碰到不同分类的样本比例相差较大的问题，这种问题会对我们构建模型造成很大的影响，因此从数据角度出发，我们可以利用欠采样或过采样处理这种现象。可以利用ROSE::ovun.sample()。  特征变换和编码 无量纲化 通过归一化，我们可以消除不同量纲下的数据对最终结果的影响。
+1normalize &amp;lt;- function(x) { 2 # 计算极值 3 x_min &amp;lt;- min(x) 4 x_max &amp;lt;- max(x) 5 # 归一化 6 x_n &amp;lt;- (x - x_min) / 7 (x_max - x_min) 8 # 将极值作为结果的属性 9 attr(x_n, 10 &amp;#39;min&amp;#39;) &amp;lt;- x_min 11 attr(x_n, 12 &amp;#39;max&amp;#39;) &amp;lt;- x_max 13 # 返回归一化后结果 14 x_n 15} 标准化。</description>
+    </item>
+    
     <item>
       <title>解决由于网络问题导致的stringi安装失败问题</title>
       <link>/blog/install-stringi-when-bad-acess-to-gh/</link>
@@ -151,22 +170,6 @@ x_{m1} &amp;amp; x_{m2} &amp;amp; \dots &amp;amp; x_{mn} \end{bmatrix}, $$</desc
   geom_*函数被构造为标准函数。这个函数返回一个层，该层可以添加到使用ggplot()函数创建的plot中。
   新的geom类的基本设置如下所示：
 1GeomNEW &amp;lt;- ggproto(&amp;#34;GeomNEW&amp;#34;, Geom, 2 required_aes = &amp;lt;a character vector of required aesthetics&amp;gt;, 3 default_aes = aes(&amp;lt;default values for certain aesthetics&amp;gt;), 4 draw_key = &amp;lt;a function used to draw the key in the legend&amp;gt;, 5 draw_panel = function(data, panel_scales, coord) { 6 ## 返回一个grid grob对象的函数 7 ## 是绘图真正工作的地方 8 } 9) 所需的美学映射应该很简单——例如，如果你的新geom生成了一种特殊的散点图，那么你可能需要x和y映射。美学映射的默认值可以包括绘图符号如形状、颜色等内容。</description>
-    </item>
-    
-    <item>
-      <title>grid 1：图形对象grobs</title>
-      <link>/blog/grobs/</link>
-      <pubDate>Mon, 09 Aug 2021 00:00:00 +0000</pubDate>
-      
-      <guid>/blog/grobs/</guid>
-      <description>学习材料：https://bookdown.org/rdpeng/RProgDA/the-grid-package.html#grobs
-grobs 是 grid 绘图系统中图形对象的表示，即 graphics + objects = grobs
-grobs 的创建通常使用以 Grob 作为后缀的函数们，包括circleGrob, linesGrob, polygonGrob, rasterGrob, rectGrob, segmentsGrob, legendGrob, xaxisGrob, and yaxisGrob 等等。 gridExtra 包定义了更多的图形对象。
-下面是一个绘圆的示例：
-1library(grid) 2my_circle &amp;lt;- circleGrob(x = 0.5, y = 0.5, r = 0.5, 3 gp = gpar(col = &amp;#34;gray&amp;#34;, lty = 3)) 每个图形对象有自带的参数，比如圆有它的中心，半径。而不同的对象有相同的一些参数设定，包括颜色、线型、大小等等，这通过 gpar 函数进行设定。
-再创建图形对象后，使用 grid.draw() 将图形绘制出来。
-1grid.draw(my_circle) 多个图形对象可以叠加，而且叠加后可以修改原来的图形对象。
-1my_circle &amp;lt;- circleGrob(name = &amp;#34;my_circle&amp;#34;, 2 x = 0.5, y = 0.5, r = 0.</description>
     </item>
     
   </channel>

@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en-US">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1">
+
+		
+		<title>《R语言数据科学导论》笔记 &middot; ShixiangWang
+王诗翔</title>
+		
+		<meta property="og:title" content="《R语言数据科学导论》笔记 - ShixiangWang
+王诗翔">
+		
+		<meta property="og:type" content="article">
+		
+
+		
+			
+			<meta property="description" content="之前视频介绍的笔记后续">
+			<meta property="og:description" content="之前视频介绍的笔记后续">
+			
+			
+    	<meta property="twitter:card" content="summary">
+  		<meta property="twitter:image" content="/apple-touch-icon-152x152.png">
+			
+		
+
+		
+		
+		<meta name="twitter:creator" content="@WangShxiang">
+		<meta name="twitter:site" content="https://shixiangwang.github.io">
+		
+		
+
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+		<link rel="stylesheet" href="../../css/poole.css">
+		<link rel="stylesheet" href="../../css/syntax.css">
+		<link rel="stylesheet" href="../../css/hyde.css">
+		
+		
+		<link rel="stylesheet" href="../../css/hamburgers.css">
+		
+		<link rel="stylesheet" href="../../css/custom.css">
+		
+		
+
+<link rel="apple-touch-icon-precomposed" sizes="57x57" href="../../apple-touch-icon-57x57.png" />
+<link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../apple-touch-icon-114x114.png" />
+<link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../apple-touch-icon-72x72.png" />
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../apple-touch-icon-144x144.png" />
+<link rel="apple-touch-icon-precomposed" sizes="120x120" href="../../apple-touch-icon-120x120.png" />
+<link rel="apple-touch-icon-precomposed" sizes="152x152" href="../../apple-touch-icon-152x152.png" />
+<link rel="icon" type="image/png" href="../../favicon-32x32.png" sizes="32x32" />
+<link rel="icon" type="image/png" href="../../favicon-16x16.png" sizes="16x16" />
+<meta name="application-name" content="Garrick Aden-Buie"/>
+<meta name="msapplication-TileColor" content="#002B36" />
+<meta name="msapplication-TileImage" content="/mstile-144x144.png" />
+<meta name="theme-color" content="#ffffff">
+
+<meta name="mobile-web-app-capable" content="yes">
+
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-title" content="Garrick Aden-Buie">
+
+<link href="../../css/featherlight.min.css" type="text/css" rel="stylesheet" />
+
+<script async defer src="https://buttons.github.io/buttons.js"></script>
+
+<script defer src="../../js/van11y-accessible-hide-show-aria.min.js"></script>
+
+<script defer src="../../js/toc.js"></script>
+
+
+
+		<link href="../../blog/note-for-r-data-science-intro" rel="canonical">
+	</head>
+
+	<body class="restyled-garrick  h-entry">
+		<main class="content container" role="main">
+			<article class="post">
+				<header>
+					<a class="u-url" href="../../blog/note-for-r-data-science-intro">
+						<h1 class="post-title p-name">《R语言数据科学导论》笔记</h1>
+					</a>
+					<h3 class="post-author">王诗翔</h3>
+					<time class="post-date dt-published" datetime="2021-08-30T00:00:00Z">Monday, 30 August 2021</time>
+					
+				</header>
+				<div class="post-content e-content">
+					<p>原始资料来源：<a href="https://github.com/leovan/data-science-introduction-with-r">https://github.com/leovan/data-science-introduction-with-r</a></p>
+<h2 id="特征工程">特征工程</h2>
+<p><a href="http://machinelearningmastery.com/discover-feature-engineering-how-to-engineer-features-and-how-to-get-good-at-it/">特征工程是将原始数据转换成特征的过程</a>。更通俗地说，<a href="https://www.quora.com/What-is-feature-engineering">特征工程就是人工设计模型的输入变量 x的过程</a>。</p>
+<p>主要分为：</p>
+<ul>
+<li>数据预处理</li>
+<li>特征提取和选择</li>
+<li>特征变换和编码</li>
+<li>特征监控</li>
+</ul>
+<h3 id="数据预处理">数据预处理</h3>
+<p>对赃数据进行清洗，包括括缺失，噪声，不一致等等一系列问题数据。</p>
+<p>剔除处理：</p>
+<ul>
+<li>样本去重。同一个ID出现多次重复记录。</li>
+<li>特征去重。例如月收入和年收入，它们都是用于表征收入特征，关系只差常数倍。</li>
+<li>常量特征剔除。即常量或方差近似为0的特征。<code>caret</code>包中的<code>nearZeroVar()</code>可以帮助我们识别该类特征。</li>
+</ul>
+<p><img src="https://gitee.com/ShixiangWang/ImageCollection/raw/master/png/202108301437688.png" alt="image-20210830143700530"></p>
+<p>缺失值处理：</p>
+<ul>
+<li>探索缺失值：<code>mice</code>包的<code>md.pattern()</code>，<code>VIM</code>包的<code>aggr()/marginplot()</code>。</li>
+<li>处理：
+<ul>
+<li>删除法，可以直接使用<code>na.omit()</code>。</li>
+<li>插补法，如果该特征对最终的预测结果影响较小，则我们可以直接删除该特征；相反如果该特征对预测结果影响较大，直接删除会对模型造成较大的影 响，此时我们需要利用其它的方法对该特征的缺失值进行填补。其中<strong>最简单的方式是利用均值，中位数或众数等统计量对其进行简单插补</strong>。这种插补方法是建立在完全随机缺失的前提假设下，同时会造成变量方差变小。</li>
+</ul>
+</li>
+</ul>
+<p>异常值是指样本中存在的同样本整体差异较大的数据。</p>
+<p>分为2类：</p>
+<p><img src="https://gitee.com/ShixiangWang/ImageCollection/raw/master/png/202108301442306.png" alt="image-20210830144222267"></p>
+<p>采样是一种常见的预处理技术。</p>
+<ul>
+<li>随机采样。每个样本单位被抽中的概率相等，样本的每个单位完全独立，彼此间无一定的关联性和排斥性。</li>
+<li>分层采样。将抽样单位按某种特征或某种规则划分为不同的层，然后从不同的层中独立、随机地抽取样本。从而保证样本的结构与总体的结构比较相近，从而提高估计的精度。可以利用<code>sampling::strata()</code>。</li>
+<li>欠采样和过采样。我们经常会碰到不同分类的样本比例相差较大的问题，这种问题会对我们构建模型造成很大的影响，因此从数据角度出发，我们可以利用欠采样或过采样处理这种现象。可以利用<code>ROSE::ovun.sample()</code>。</li>
+</ul>
+<h3 id="特征变换和编码">特征变换和编码</h3>
+<h4 id="无量纲化">无量纲化</h4>
+<p>通过归一化，我们可以消除不同量纲下的数据对最终结果的影响。</p>
+<p><img src="https://gitee.com/ShixiangWang/ImageCollection/raw/master/png/202108301502946.png" alt="image-20210830150239893"></p>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-R" data-lang="R"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span>normalize <span style="color:#666">&lt;-</span> <span style="color:#00f">function</span>(x) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>  <span style="color:#408080;font-style:italic"># 计算极值</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>  x_min <span style="color:#666">&lt;-</span> <span style="color:#00f">min</span>(x)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>  x_max <span style="color:#666">&lt;-</span> <span style="color:#00f">max</span>(x)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>  <span style="color:#408080;font-style:italic"># 归一化</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>  x_n <span style="color:#666">&lt;-</span> (x <span style="color:#666">-</span> x_min) <span style="color:#666">/</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>  (x_max <span style="color:#666">-</span> x_min)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>  <span style="color:#408080;font-style:italic"># 将极值作为结果的属性</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>  <span style="color:#00f">attr</span>(x_n,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>  <span style="color:#ba2121">&#39;min&#39;</span>) <span style="color:#666">&lt;-</span> x_min
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>  <span style="color:#00f">attr</span>(x_n,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>  <span style="color:#ba2121">&#39;max&#39;</span>) <span style="color:#666">&lt;-</span> x_max
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>  <span style="color:#408080;font-style:italic"># 返回归一化后结果</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>  x_n
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>}
+</code></pre></div><p><strong>标准化。</strong></p>
+<p><img src="https://gitee.com/ShixiangWang/ImageCollection/raw/master/png/202108301504156.png" alt="image-20210830150431122"></p>
+<p>注意标准化在机器学习中的作用。</p>
+<p><img src="https://gitee.com/ShixiangWang/ImageCollection/raw/master/png/202108301506237.png" alt="image-20210830150640191"></p>
+<p><strong>离散化。</strong></p>
+<p><img src="https://gitee.com/ShixiangWang/ImageCollection/raw/master/png/202108301507333.png" alt="image-20210830150739289"></p>
+<p><strong>哑变量化（也称热编码，one-hot encoding）</strong></p>
+<p>在R语言中对包括因子类型变量数据建模时，一般会将其自动处理为虚拟变量或哑变 量，这样我们就可以将因子类型的数据转化为数值型数据使用。</p>
+<p>使用<code>caret::dummyVars()</code>和<code>mltools::one_hot()</code>可以进行编码。</p>
+<h3 id="特征提取选择和监控">特征提取、选择和监控</h3>
+<p>提取：</p>
+<p><img src="https://gitee.com/ShixiangWang/ImageCollection/raw/master/png/202108301510152.png" alt="image-20210830151058102"></p>
+<p>选择：</p>
+<p><img src="https://gitee.com/ShixiangWang/ImageCollection/raw/master/png/202108301511506.png" alt="image-20210830151156466"></p>
+<p><img src="https://gitee.com/ShixiangWang/ImageCollection/raw/master/png/202108301514590.png" alt="image-20210830151427543"></p>
+<p>监控：</p>
+<p><img src="https://gitee.com/ShixiangWang/ImageCollection/raw/master/png/202108301515126.png" alt="image-20210830151504088"></p>
+<h2 id="模型评估和超参数优化">模型评估和超参数优化</h2>
+<h3 id="模型性能评估">模型性能评估</h3>
+<p>对学习器的泛化性能进行评估，不仅需要有效可行的实验评估方法，还需要有衡量模型泛化能力的评价标准，也就是性能度量（performance measure）。</p>
+<p>注意，模型的“好坏”是相对的，什么样的模型时好的，不仅仅取决于算法和数据，还决定于任务需求。</p>
+<h4 id="回归">回归</h4>
+<p><img src="https://gitee.com/ShixiangWang/ImageCollection/raw/master/png/202108301521133.png" alt="image-20210830152129078"></p>
+<p><img src="https://gitee.com/ShixiangWang/ImageCollection/raw/master/png/202108301521004.png" alt="image-20210830152154964"></p>
+<p><img src="https://gitee.com/ShixiangWang/ImageCollection/raw/master/png/202108301523867.png" alt="image-20210830152318825"></p>
+<h4 id="分类">分类</h4>
+<p>分类问题可以划分为两类：二分类问题和多分类问题。两种不同的分类问题的性能评估方法略有不同，相对而言二分类问题的评估指标体系更为复杂一些。</p>
+<p><img src="https://gitee.com/ShixiangWang/ImageCollection/raw/master/png/202108301524182.png" alt="image-20210830152425137"></p>
+<p><img src="https://gitee.com/ShixiangWang/ImageCollection/raw/master/png/202108301524620.png" alt="image-20210830152453581"></p>
+<p><img src="https://gitee.com/ShixiangWang/ImageCollection/raw/master/png/202108301526152.png" alt="image-20210830152618119"></p>
+<p><img src="https://gitee.com/ShixiangWang/ImageCollection/raw/master/png/202108301527310.png" alt="image-20210830152715277"></p>
+<p><img src="https://gitee.com/ShixiangWang/ImageCollection/raw/master/png/202108301527423.png" alt="image-20210830152739393"></p>
+<p><img src="https://gitee.com/ShixiangWang/ImageCollection/raw/master/png/202108301528494.png" alt="image-20210830152800453"></p>
+<p><img src="https://gitee.com/ShixiangWang/ImageCollection/raw/master/png/202108301528401.png" alt="image-20210830152833365"></p>
+<p><img src="https://gitee.com/ShixiangWang/ImageCollection/raw/master/png/202108301528792.png" alt="image-20210830152852762"></p>
+<h4 id="聚类">聚类</h4>
+<p><img src="https://gitee.com/ShixiangWang/ImageCollection/raw/master/png/202108301529564.png" alt="image-20210830152926518"></p>
+<p><img src="https://gitee.com/ShixiangWang/ImageCollection/raw/master/png/202108301529490.png" alt="image-20210830152951463"></p>
+<p><img src="https://gitee.com/ShixiangWang/ImageCollection/raw/master/png/202108301530118.png" alt="image-20210830153010085"></p>
+<p><img src="https://gitee.com/ShixiangWang/ImageCollection/raw/master/png/202108301530497.png" alt="image-20210830153049450"></p>
+<h3 id="模型生成和选择">模型生成和选择</h3>
+<h4 id="拟合">拟合</h4>
+<p><img src="https://gitee.com/ShixiangWang/ImageCollection/raw/master/png/202108301531666.png" alt="image-20210830153139617"></p>
+<h4 id="评估">评估</h4>
+<p>通常，我们可以通过实验测试来对学习器的泛化误差进行评估并进而做出选择。为此，需使用一个测试集（testing set）来测试学习器对新样本的判别能力，然后<strong>以测试集上的测试误差（testing error）作为泛化误差的近似</strong>。通常，我们假设测试样本也是 从样本真实分布中独立同分布采样而来。但需要注意，测试集应该尽可能与训练集互斥，<strong>即测试样本尽量不在训练集中出现、未在训练过程中使用过。若测试样本被用作训练了，则得到的将是过于“乐观”的估计结果。</strong></p>
+<p>方法：</p>
+<ul>
+<li>留出法 hold-out</li>
+<li>交叉验证法 cross-validation，特例为留一法 leave-one-out</li>
+<li>自助法 bootstrapping（有放回采样到原始数据集大小）</li>
+</ul>
+<p><img src="https://gitee.com/ShixiangWang/ImageCollection/raw/master/png/202108301541618.png" alt="image-20210830154138560"></p>
+<h4 id="偏差和方差">偏差和方差</h4>
+<p>对学习算法除了通过实验估计其泛化性能，我们往往还希望了解它“为什么”具有这样 的性能。偏差-方差分解（bias-variance decomposition）是解释学习算法泛化性能的一 种重要工具，它试图对学习算法的期望泛化错误率进行拆解。</p>
+<p><img src="https://gitee.com/ShixiangWang/ImageCollection/raw/master/png/202108301543288.png" alt="image-20210830154315241"></p>
+<p><img src="https://gitee.com/ShixiangWang/ImageCollection/raw/master/png/202108301544664.png" alt="image-20210830154418622"></p>
+<p><img src="https://gitee.com/ShixiangWang/ImageCollection/raw/master/png/202108301545958.png" alt="image-20210830154522924"></p>
+<h3 id="超参数优化">超参数优化</h3>
+<p>模型的参数和超参数二者有着本质上的区别：<strong>模型参数是模型内部的配置变量，可以用数据估计模型参数的值，例如：回归中的权重，决策树分类点的阈值等；模型超参数是模型外部的配置，必须手动设置参数的值</strong>，例如：随机森林树的个数，聚类方法 里面类的个数，或者主题模型里面主题的个数等。</p>
+<p>常用的超参数优化方法有：</p>
+<ul>
+<li>搜索算法：网格搜索，随机搜索等</li>
+<li>进化和群体算法：遗传算法，粒子群算法等</li>
+<li>贝叶斯优化</li>
+</ul>
+<h4 id="网格搜索">网格搜索</h4>
+<p>网格搜索法算法就是通过交叉验证的方法去寻找最优的模型参数。模型的每个参数有很多个候选值，我们每个参数组合做一次交叉验证，最后得出交叉验证分数最高的，就是我们的最优参数。</p>
+<p><img src="https://gitee.com/ShixiangWang/ImageCollection/raw/master/png/202108301547592.png" alt="image-20210830154746534"></p>
+<h2 id="分类算法">分类算法</h2>
+<h3 id="逻辑回归">逻辑回归</h3>
+<p>方程：</p>
+<p><img src="https://gitee.com/ShixiangWang/ImageCollection/raw/master/png/202108301549332.png" alt="image-20210830154955269"></p>
+<p><img src="https://gitee.com/ShixiangWang/ImageCollection/raw/master/png/202108301550989.png" alt="image-20210830155021964"></p>
+<p><img src="https://gitee.com/ShixiangWang/ImageCollection/raw/master/png/202108301551840.png" alt="image-20210830155139809"></p>
+<h3 id="决策树">决策树</h3>
+<p><img src="https://gitee.com/ShixiangWang/ImageCollection/raw/master/png/202108301553175.png" alt="image-20210830155354135"></p>
+<p>决策树（Decision Tree）是机器学习和数据挖掘中的一套分类和回归方法。决策树是由节点和有向边构成的树形分类模型，<strong>其中树的叶子节点表示某个分类，非叶子结点表示一个用于树枝分叉的特征属性</strong>。</p>
+<p>决策树的生成主要有三个步骤：</p>
+<ul>
+<li>特征的选择：特征选择是指从数据集中的多个属性特种中选择具有分类能力的特 征。不同的特征选择策略将导致不同决策树的生成。</li>
+<li>决策树生成：决策树生成是指利用选择的特征，递归的构建决策树。</li>
+<li>决策树剪枝：决策树剪枝是指为了 防止过拟合现象，对于过于复杂的决策树进行简化的过程。</li>
+</ul>
+<h4 id="特征选择">特征选择</h4>
+<p>在构建决策树时，会有两个基本问题：</p>
+<ol>
+<li>依次选择哪些特征作为划分节点，才能够保证每个节点都能够具有最好的分类能力？</li>
+<li>对于连续型变量，选择什么值作为划分依据？</li>
+</ol>
+<p>决策树主要从信息论的角度处理这两个问题，具体的选择依据有<strong>信息增益，信息增益率和Gini系数</strong>等。</p>
+<h4 id="熵-entropy">熵 Entropy</h4>
+<p><img src="https://gitee.com/ShixiangWang/ImageCollection/raw/master/png/202108301555139.png" alt="image-20210830155554091"></p>
+<h4 id="信息增益">信息增益</h4>
+<p><img src="https://gitee.com/ShixiangWang/ImageCollection/raw/master/png/202108301556391.png" alt="image-20210830155655322"></p>
+<p><img src="https://gitee.com/ShixiangWang/ImageCollection/raw/master/png/202108301601363.png" alt="image-20210830160127323"></p>
+<h4 id="gini指数">Gini指数</h4>
+<p><img src="https://gitee.com/ShixiangWang/ImageCollection/raw/master/png/202108301602868.png" alt="image-20210830160233813"></p>
+<h4 id="连续型数据处理">连续型数据处理</h4>
+<p>把需要处理的样本（对应根节点）或样本子集（对应子 树）按照连续变量的大小从小到大进行排序，假设该属性对应的不同的属性值一共有N个，那么总共有N-1个可能的候选分割阈值点，每个候选的分割阈值点的值为上述排序后的属性值链表中两两前后连续元素的中点，那么我们的任务就是从这个N-1个候选分割阈值点中选出一个，使得前面提到的信息论标准最大。</p>
+<h4 id="决策树生成-cart">决策树生成 CART</h4>
+<p><img src="https://gitee.com/ShixiangWang/ImageCollection/raw/master/png/202108301605069.png" alt="image-20210830160525019"></p>
+<h4 id="剪枝">剪枝</h4>
+<p>决策树对于训练样本来说，可以得到一个100%准确的分类器。算法生成的决策树非常的详细而且庞大，每个属性都被详细地加以考虑。但是如果训练样本中包含了一些错误，按照前面的算法，这些错误也会100%被决策树学习了，这就<strong>产生了过拟合现象</strong>。 因此，为了解决这个问题，<strong>我们需要对生成的决策树进行简化，这个简化的过程就称之为剪枝。</strong></p>
+<p><img src="https://gitee.com/ShixiangWang/ImageCollection/raw/master/png/202108301606762.png" alt="image-20210830160650700"></p>
+<h3 id="集成学习">集成学习</h3>
+<p>传统的机器学习算法（例如：决策树，人工神经网络，支持向量机，朴素贝叶斯等） 的目标都是寻找一个最优的分类器尽可能的将训练数据分开。<strong>集成学习（Ensemble Learning）算法的基本思想就是通过将多个分类器组合，从而实现一个预测效果更好的集成分类器</strong>。集成算法可以说从一方面验证了中国的一句老话：三个臭皮匠，赛过诸葛亮。</p>
+<p><img src="https://gitee.com/ShixiangWang/ImageCollection/raw/master/png/202108301610683.png" alt="image-20210830161053614"></p>
+<p>（纠正：是算法不是算分）</p>
+<p><img src="https://gitee.com/ShixiangWang/ImageCollection/raw/master/png/202108301611212.png" alt="image-20210830161128156"></p>
+<h4 id="bagging">Bagging</h4>
+<p><img src="https://gitee.com/ShixiangWang/ImageCollection/raw/master/png/202108301612736.png" alt="image-20210830161249666"></p>
+<p><img src="https://gitee.com/ShixiangWang/ImageCollection/raw/master/png/202108301613363.png" alt="image-20210830161328306"></p>
+<p><strong>随机森林</strong></p>
+<p>随机森林（Random Forests）是一种利用决策树作为基学习器的Bagging集成学习算法。</p>
+<p>过程：</p>
+<p><img src="https://gitee.com/ShixiangWang/ImageCollection/raw/master/png/202108301615808.png" alt="image-20210830161500768"></p>
+<p><img src="https://gitee.com/ShixiangWang/ImageCollection/raw/master/png/202108301615222.png" alt="image-20210830161526190"></p>
+<h4 id="boosting">Boosting</h4>
+<p>Boosting是一种提升算法，可以将弱的学习算法提升（boost）为强的学习算法。其基本思路如下：</p>
+<ol>
+<li>利用初始训练样本集训练得到一个基学习器。</li>
+<li>提高被基学习器误分的样本的权重，使得那些被错误分类的样本在下一轮训练中可以得到更大的关注，利用调整后的样本训练得到下一个基学习器。</li>
+<li>重复上述步骤，直到得出M个学习器。</li>
+<li>对于分类问题，采用有权重的投票方式；对于回归问题，采用加权平均得到预测值。</li>
+</ol>
+<p><strong>Adaboost</strong></p>
+<p><img src="https://gitee.com/ShixiangWang/ImageCollection/raw/master/png/202108301619769.png" alt="image-20210830161946718"></p>
+<p><strong>GBM</strong></p>
+<p>GBM（Gradient Boosting Machine）是另一种基于Boosting思想的集成算法，GBM还有很多其他的叫法，例如：GBDT，GBRT，MART等等。GBM算法由3个主要概念构成： Gradient Boosting（GB），Regression Decision Tree（DT或RT）和Shrinkage。</p>
+<p><strong>从GBM的众多别名中可以看出，GBM中使用的决策树并非我们最常用的分类树，而是回归树。</strong></p>
+<p>对于Gradient Boosting而言，首先，Boosting并不是Adaboost中的Boost的概念，也不是 Random Forest中的重抽样。在Adaboost中，Boost是指在生成每个新的基学习器，根据上一轮基学习器分类对错对训练集设置不同的权重，<strong>使得在上一轮中分类错误的样本在生成新的基学习器时更被重视</strong>。GBM中在应用Boost概念时，每一轮所使用的数据集<strong>没有经过重抽样，也没有更新样本的权重，而是每一轮选择了不同的回归的目标值</strong>，即上一轮计算得出的残差（Residual）。其次，Gradient是指在新一轮中在残差减少的梯度（Gradient）上建立新的基学习器。</p>
+<p><img src="https://gitee.com/ShixiangWang/ImageCollection/raw/master/png/202108301632426.png" alt="image-20210830163219346"></p>
+<p><img src="https://gitee.com/ShixiangWang/ImageCollection/raw/master/png/202108301633020.png" alt="image-20210830163345971"></p>
+<p><img src="https://gitee.com/ShixiangWang/ImageCollection/raw/master/png/202108301634957.png" alt="image-20210830163406919"></p>
+<p><img src="https://gitee.com/ShixiangWang/ImageCollection/raw/master/png/202108301634900.png" alt="image-20210830163459847"></p>
+<h4 id="stacking">Stacking</h4>
+<p><img src="https://gitee.com/ShixiangWang/ImageCollection/raw/master/png/202108301635429.png" alt="image-20210830163550353"></p>
+<h2 id="时间序列算法">时间序列算法</h2>
+<h3 id="时间序列">时间序列</h3>
+<h3 id="arima模型">ARIMA模型</h3>
+<h3 id="季节性分析">季节性分析</h3>
+<h2 id="聚类算法">聚类算法</h2>
+<h3 id="k-means">K-means</h3>
+<h3 id="层次聚类">层次聚类</h3>
+<h3 id="基于密度的聚类">基于密度的聚类</h3>
+
+				</div>
+				<footer class="footer">
+				  <hr>
+<div class="post-tags">
+
+<p>
+  <svg xmlns="http://www.w3.org/2000/svg" class="octicon" width="20" height="24" viewBox="0 0 14 16"><path fill-rule="evenodd" d="M8 2H6V0h2v2zm4 5H2c-.55 0-1-.45-1-1V4c0-.55.45-1 1-1h10l2 2-2 2zM8 4H6v2h2V4zM6 16h2V8H6v8z"/></svg>
+	
+	<a class="p-category" href="../../categories/blog/">Blog</a>
+</p>
+
+
+<p>
+  <svg xmlns="http://www.w3.org/2000/svg" class="octicon" width="20" height="24" viewBox="0 0 15 16"><path fill-rule="evenodd" d="M7.73 1.73C7.26 1.26 6.62 1 5.96 1H3.5C2.13 1 1 2.13 1 3.5v2.47c0 .66.27 1.3.73 1.77l6.06 6.06c.39.39 1.02.39 1.41 0l4.59-4.59a.996.996 0 0 0 0-1.41L7.73 1.73zM2.38 7.09c-.31-.3-.47-.7-.47-1.13V3.5c0-.88.72-1.59 1.59-1.59h2.47c.42 0 .83.16 1.13.47l6.14 6.13-4.73 4.73-6.13-6.15zM3.01 3h2v2H3V3h.01z"/></svg>
+	
+	<a class="p-tag" href="../../tags/r/">R</a><a class="p-tag" href="../../tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/">机器学习</a>
+
+</p>
+</div>
+
+				</footer>
+			</article>
+		</main>
+			  <button class="hamburger hamburger--arrow is-active" type="button" onclick="document.getElementsByClassName('sidebar')[0].classList.toggle('collapsed');document.getElementsByClassName('content')[0].classList.toggle('expanded');document.getElementsByClassName('hamburger')[0].classList.toggle('is-active');document.getElementsByClassName('hamburger-inner')[0].classList.toggle('is-active')">
+      <span class="hamburger-box">
+        <span class="hamburger-inner"></span>
+      </span>
+    </button>
+		<aside class="sidebar">
+			<div class="container sidebar-sticky">
+				<header class="sidebar-about h-card vcard p-author">
+					
+					<a class="u-url u-uid" rel="me" href="../../">
+						<img class="u-photo" src="https://avatars.githubusercontent.com/u/25057508?v=4" width=128 height=128 />
+					</a>
+					
+
+					
+					<span class="site-title u-name fn">
+					  <a class="u-url u-uid" rel="me" href="../../">ShixiangWang
+王诗翔</a>
+				  </span>
+					
+
+					<p class="lead p-note">
+						 Bioinformatics Scholar. Cancer Researcher. Data Scientist. #rstats #golang. Always learning something new. 
+					</p>
+
+					<nav>
+						<ul class="sidebar-nav">
+							
+							<li><a href="../../about/"> About </a></li>
+							
+							<li><a href="../../blog/"> Blog </a></li>
+							
+							<li><a href="../../project/"> Projects </a></li>
+							
+							<li><a href="http://42.192.87.178:3838/"> Shiny Apps </a></li>
+							
+							<li><a href="../../talk/"> Talks </a></li>
+							
+							<li><a href="https://github.com/ShixiangWang/self-study/discussions"> Discuss with me? </a></li>
+							
+							<li><a href="https://shixiangwang.netlify.app/"> Mirror #1 </a></li>
+							
+							<li><a href="https://shixiangwang.github.io/"> Mirror #2 </a></li>
+							
+						</ul>
+					</nav>
+
+					
+						<div class="contact">
+						  
+							<ul class="contact-list">
+								
+								<li>
+									
+									  
+		  							  <a href="https://twitter.com/WangShxiang" class="u-url url" rel="me" title="Twitter" aria-label="Twitter">
+		  						    <i class='fab fa-twitter fa-fw'></i>
+		  							  </a>
+		  						  
+								
+								</li>
+								
+								<li>
+									
+									  
+		  							  <a href="https://github.com/ShixiangWang" class="u-url url" rel="me" title="GitHub" aria-label="GitHub">
+		  						    <i class='fab fa-github fa-fw'></i>
+		  							  </a>
+		  						  
+								
+								</li>
+								
+								<li>
+									
+		  							<a href="mailto:shixiang1994wang@gmail.com" class="u-email email" rel="me" title="Email" aria-label="Email">
+		  							<i class='fa fa-envelope fa-fw'></i>
+		  							  
+		  							</a>
+									
+								</li>
+								
+								<li>
+									
+									  
+		  							  <a href="https://shixiangwang.github.io/home/logo/qrcode.jpg" class="u-url url" rel="me" title="Bandcamp" aria-label="Bandcamp">
+		  						    <i class='fab fa-bandcamp fa-fw'></i>
+		  							  </a>
+		  						  
+								
+								</li>
+								
+							</ul>
+						</div>
+					
+				</header>
+
+				<footer>&copy; 2021. All rights reserved. </footer>
+				 <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+            <span id="busuanzi_container_site_pv">本站总访问量&nbsp;<span id="busuanzi_value_site_pv"></span>&nbsp;次</span>
+			</div>
+		</aside>
+
+		  <footer>
+  <script src="../../js/jquery-latest.js"></script>
+<script src="../../js/featherlight.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+
+<script>
+MathJax = {
+  tex: {
+    inlineMath: [['$', '$'], ['\\(', '\\)']]
+  }
+};
+</script>
+<script type="text/javascript" id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+  
+  </footer>
+  </body>
+</html>
+
+	</body>
+</html>
