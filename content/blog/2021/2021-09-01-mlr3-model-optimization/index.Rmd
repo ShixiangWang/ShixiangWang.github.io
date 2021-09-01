@@ -1,0 +1,437 @@
+---
+title: mlr3（三）模型优化
+author: 王诗翔
+date: '2021-09-01'
+slug: mlr3-model-optimization
+categories:
+  - Blog
+tags:
+  - R
+  - mlr3
+  - 机器学习
+rmd_source: ''
+keywords: rstats
+editor_options:
+  chunk_output_type: console
+---
+
+<!-- Links -->
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo = TRUE, warning = FALSE, message = FALSE,
+  fig.width = 7, fig.height = 6
+)
+
+options(htmltools.dir.version = TRUE)
+
+# If using lightbox for plots, set `fig.show = FALSE`
+# Usage: lightbox_img(knitr::fig_chunk("chunk-name", "png"))
+lightbox_img <- function(url, alt = "", caption = "", preview = TRUE) {
+  if (preview) {
+    glue::glue(
+      '<a href="{url}" data-featherlight="image">
+      <div class="figure">
+      <img src="{url}" alt="{alt}">
+      <p class="caption">{caption}</p>
+      </div>
+      </a>
+      '
+    )
+  } else {
+    if (alt == "") alt <- "static image of the plot"
+    glue::glue('<a href="{url}" data-featherlight="image">{alt}</a>')
+  }
+}
+```
+
+来源：<https://mlr3book.mlr-org.com/optimization.html>
+
+**模型优化**
+
+机器学习算法为其超参数设置了默认值。不管怎样，用户需要更改这些超参数，以在给定的数据集上实现最佳性能。不建议手动选择超参数值，因为这种方法很少能获得最佳性能。为了证实所选超参数（=调优）的有效性，建议进行数据驱动的优化。为了优化机器学习算法，必须指定（1）搜索空间，（2）优化算法(又称调优方法)，（3）评估方法，即重采样策略，（4）性能度量。
+
+总而言之，关于调优的小节介绍：
+
+- 进行经验超参数选择
+- 选择优化算法
+- 简洁地指定搜索空间
+- 触发调优
+- 自动调优
+
+本小节还需要包mlr3tuning，这是一个支持超参数调优的扩展包。
+
+**特征选择**
+
+本章的第二部分介绍特征选择，也称为变量选择。特征选择是寻找数据相关特征子集的过程。执行选择的一些原因：
+
+- 增强模型的可解释性
+- 加速模型拟合
+- 通过降低数据中的噪声来提高学习性能
+
+在本文中，我们主要集中在最后一个方面。有不同的方法来识别相关的特征。在特征选择的分章中，我们强调了三种方法：
+
+- 运用过滤算法根据分数独立地选择特征
+- 根据变量重要性过滤选择特征
+- 包装器方法迭代地选择特性以优化性能度量
+
+注意，过滤器不需要学习器。变量重要性过滤器需要一个学习器，该学习器在训练时可以计算特征的重要性值。获得的重要值可用于数据子集，然后可用于训练学习器。包装器方法可以用于任何学习器，但需要对学习器进行多次训练。
+
+
+**嵌套重采样**
+
+为了更好地估计泛化性能并避免数据泄漏，外部（性能）和内部（调优/特征选择）重采样过程都是必要的。本章将讨论以下特点：
+
+- 嵌套重采样中的内重采样和外重采样策略
+- 嵌套重采样的执行
+- 执行重采样迭代的评估
+
+本小节将提供如何实现嵌套重采样的说明，包括mlr3中的内重采样和外重采样。
+
+## 超参数调优
+
+超参数是机器学习模型的二阶参数，虽然在模型估计过程中往往没有明确优化，但会对模型的结果和预测性能产生重要影响。通常，超参数在训练模型之前是固定的。但是，由于模型的输出可能对超参数的规范很敏感，因此通常建议对哪些超参数设置可以产生更好的模型性能做出明智的决定。在许多情况下，超参数设置可能是预先选择的，但在将模型拟合到训练数据上之前，尝试不同的设置可能是有利的。这个过程通常被称为模型“调优”。
+
+超参数调优是通过mlr3tuning扩展包支持的。下面是这个过程的说明：
+
+![](https://mlr3book.mlr-org.com/images/tuning_process.svg)
+
+mlr3tuning的核心是R6类：
+
+TuningInstanceSingleCrit，TuningInstanceMultiCrit：这两个类描述调优问题并存储结果。
+
+Tuner：这个类是调优算法实现的基类。
+
+### TuningInstance\* 类
+
+下面的小节审查了皮马印度糖尿病数据集上的简单分类树的优化。
+
+```{r}
+library("mlr3verse")
+task = tsk("pima")
+print(task)
+```
+
+我们使用rpart中的分类树，并选择我们想要调优的超参数的子集。这通常被称为“调优空间”。
+
+```{r}
+learner = lrn("classif.rpart")
+learner$param_set
+```
+
+这里，我们选择调优两个参数：
+
+- 复杂度 `cp`
+- 终止准则 `minsplit`
+
+调优空间需要有边界，因此需要设置上下限：
+
+```{r}
+search_space = ps(
+  cp = p_dbl(lower = 0.001, upper = 0.1),
+  minsplit = p_int(lower = 1, upper = 10)
+)
+search_space
+```
+
+接下来，我们需要明确如何评估性能。为此，我们需要选择重采样策略和性能度量。
+
+```{r}
+hout = rsmp("holdout")
+measure = msr("classif.ce")
+```
+
+最后，必须选择可用的预算来解决这个调优实例。这是通过选择一个可用的终结者：
+
+- 在给定时间后终止 TerminatorClockTime
+- 在给定的迭代量之后终止 TerminatorEvals
+- 在达到特定性能后终止 TerminatorPerfReached
+- 当优化没有改善时终止 TerminatorStagnation
+- 以ALL或ANY的方式组合上述内容 TerminatorCombo
+
+在这篇简短的介绍中，我们指定了20次计算的预算，然后把所有东西放在一个TuningInstanceSingleCrit中：
+
+```{r}
+library("mlr3tuning")
+
+evals20 = trm("evals", n_evals = 20)
+
+instance = TuningInstanceSingleCrit$new(
+  task = task,
+  learner = learner,
+  resampling = hout,
+  measure = measure,
+  search_space = search_space,
+  terminator = evals20
+)
+instance
+```
+
+要开始调优，我们仍然需要选择应该如何进行优化。换句话说，我们需要通过Tuner类选择优化算法。
+
+
+### Tuner 类
+
+以下算法目前在mlr3调优中实现：
+
+- 网格搜索 TunerGridSearch
+- 随机搜索 TunerRandomSearch
+- 广义模拟退火 TunerGenSA
+- 非线性最优化 TunerNLoptr
+
+在本例中，我们将使用一个简单的网格搜索，网格分辨率为5。
+
+```{r}
+tuner = tnr("grid_search", resolution = 5)
+```
+
+
+由于我们只有数值参数，TunerGridSearch将在各自的上界和下界之间创建一个等距网格。由于我们有两个分辨率为5的超参数，二维网格由5^2=25个配置组成。每个配置都作为先前定义的学习器的超参数设置，然后使用提供的重采样将其拟合到任务上。所有配置都将由调优器检查（以随机顺序），直到所有配置都被评估或终结者发出耗尽预算的信号。
+
+### 触发调优
+
+要开始调优，只需将TuningInstanceSingleCrit传递给初始化的Tuner的`$optimize()`方法。调谐器的工作过程如下：
+
+1. Tuner建议至少一个超参数配置（Tuner可能建议多个点来改善并行性，这可以通过设置batch_size进行控制）。
+2. 对于每个配置，给定的学习器使用提供的重采样将其分派到任务上。所有计算都存储在TuningInstanceSingleCrit的存档中。
+3. 如果预算耗尽，终结者会被询问。如果预算未耗尽，则使用第一步重新启动，直到耗尽为止。
+4. 确定具有最佳观察性能的配置。
+5. 在实例对象中存储最佳配置结果。可以从实例访问最佳超参数设置(`$result_learner_param_vals`)和相应的测量性能(`$result_y`)。
+
+```{r}
+tuner$optimize(instance)
+```
+
+```{r}
+instance$result_learner_param_vals
+instance$result_y
+```
+
+我们可以调查所有进行的重采样，因为它们存储在TuningInstanceSingleCrit的存档中，可以使用`as.data.table()`访问：
+
+```{r}
+as.data.table(instance$archive)
+```
+
+总之，在终结者停止调优之前，网格搜索以随机顺序评估20/25个不同的网格配置。
+
+相关的重采样迭代可以在BenchmarkResult中访问:
+
+```{r}
+instance$archive$benchmark_result
+```
+
+
+uhash列将重新采样迭代链接到`instance$archive$data`中已评估的配置。例如，可以对所包含的ResampleResults进行不同的评分。
+
+```{r}
+instance$archive$benchmark_result$score(msr("classif.acc"))
+```
+
+现在，优化的超参数可以使用之前创建的Learner，设置返回的超参数，并在完整的数据集上训练它。
+
+```{r}
+learner$param_set$values = instance$result_learner_param_vals
+learner$train(task)
+```
+
+经过训练的模型现在可以用来对外部数据进行预测。注意，应该避免根据任务中出现的观察结果进行预测。模型在调优期间已经看到了这些观察结果，因此结果在统计上是有偏差的。因此，由此产生的性能度量将过于乐观。相反，为了获得当前任务的统计无偏性能估计，需要嵌套重采样。
+
+### 自动化调优
+
+AutoTuner包装了一个学习器，并通过对给定超参数集的自动调优增强了它。因为AutoTuner本身继承自Learner基类，所以它可以像任何其他学习器一样使用。类似于前面的小节，创建了一个新的分类树学习器。这个分类树学习器使用内部重采样(holdout)自动调整参数cp和minsplit。我们创建了一个允许10次计算的终止符，并使用一个简单的随机搜索作为调优算法：
+
+```{r}
+learner = lrn("classif.rpart")
+search_space = ps(
+  cp = p_dbl(lower = 0.001, upper = 0.1),
+  minsplit = p_int(lower = 1, upper = 10)
+)
+terminator = trm("evals", n_evals = 10)
+tuner = tnr("random_search")
+
+at = AutoTuner$new(
+  learner = learner,
+  resampling = rsmp("holdout"),
+  measure = msr("classif.ce"),
+  search_space = search_space,
+  terminator = terminator,
+  tuner = tuner
+)
+at
+```
+
+我们现在可以像使用其他学习者一样使用学习者，调用`$train()`和`$predict()`方法。
+
+```{r}
+at$train(task)
+```
+
+我们也可以将它传递给`resample()`和`benchmark()`。这被称为嵌套重采样，下一章将对此进行讨论。
+
+## 搜索空间调优
+
+在运行优化时，务必告知优化算法哪些超参数是有效的。这里每个超参数的名称、类型和有效范围都很重要。所有这些信息都与ParamSet类的对象进行通信，ParamSet类在paradox中定义。虽然可以使用它的`$new`构造函数创建paramset对象，但是使用ps快捷键要短得多，可读性也强得多，这将在这里介绍。
+
+注意，ParamSet对象存在于两个上下文中。首先，参数集对象用于定义学习器（和其他对象）的有效参数设置空间。其次，它们用于定义用于调优的搜索空间。我们主要对后者感兴趣。例如，我们可以考虑rpart学习器classif的minsplit参数。与学习器相关联的参数集有一个下限，但没有上限。但是，为了优化该值，必须给出一个上下限，因为优化搜索空间需要有界。对于初学者或PipeOp对象，通常使用“无界”参数集。然而，在这里，我们将主要关注于创建可用于调优的“有边界的”参数集。有关使用参数集为用例定义参数范围的更多细节，请参阅深入的paradox章节。
+
+### 创建 ParamSet
+
+一个空的ParamSet——还不是很有用——可以只用ps调用来构造：
+
+```{r}
+library("mlr3verse")
+
+search_space = ps()
+print(search_space)
+```
+
+ps接受被转换为参数的命名参数。classif.svm学习器可能的搜索空间举例：
+
+```{r}
+search_space = ps(
+  cost = p_dbl(lower = 0.1, upper = 10),
+  kernel = p_fct(levels = c("polynomial", "radial"))
+)
+print(search_space)
+```
+
+可用的参数构造器：
+
+| Constructor |             Description              |            Is bounded?             |                       Underlying Class                       |
+| :---------: | :----------------------------------: | :--------------------------------: | :----------------------------------------------------------: |
+|   `p_dbl`   |   Real valued parameter (“double”)   | When `upper` and `lower` are given | [`ParamDbl`](https://paradox.mlr-org.com/reference/ParamDbl.html) |
+|   `p_int`   |          Integer parameter           | When `upper` and `lower` are given | [`ParamInt`](https://paradox.mlr-org.com/reference/ParamInt.html) |
+|   `p_fct`   | Discrete valued parameter (“factor”) |               Always               | [`ParamFct`](https://paradox.mlr-org.com/reference/ParamFct.html) |
+|   `p_lgl`   |     Logical / Boolean parameter      |               Always               | [`ParamLgl`](https://paradox.mlr-org.com/reference/ParamLgl.html) |
+|   `p_uty`   |          Untyped parameter           |               Never                | [`ParamUty`](https://paradox.mlr-org.com/reference/ParamUty.html) |
+
+
+这些构造函数接收以下的参数：
+
+- lower, upper：上下边界
+- levels：因子水平
+- trafo：转换函数
+- depends：依赖
+- tags：有关参数的进一步信息，例如由 hyperband 使用的参数
+- default：值对应于未给出参数时的默认行为。不用于调优搜索空间
+- special_vals：除通常接受的参数值外的有效值。不用于调优搜索空间
+- custom_check：检查给定给p_uty的值是否有效的函数。不用于调优搜索空间。
+
+lower、upper或level形参总是在各自构造函数的第一个(或第二个)位置，所以最好在定义ParamSet时省略它们，以提高简洁性：
+
+```{r}
+search_space = ps(cost = p_dbl(0.1, 10), kernel = p_fct(c("polynomial", "radial")))
+```
+
+### 转换
+
+我们可以使用paradox函数generate_design_grid来查看网格搜索将评估的值。(我们在这里使用`rbindlist()`，因为`$transpose()`的结果是一个更难读的列表。另一方面，如果我们没有使用`$transpose()`，我们在这里研究的转换就不会应用。)
+
+```{r}
+library("data.table")
+rbindlist(generate_design_grid(search_space, 3)$transpose())
+```
+
+我们注意到cost参数是线性的。然而，我们假设，0.1和1之间的成本差异应该具有与1和10之间的差异类似的效果。因此，在对数尺度上调整它更有意义。这是通过使用转换(trafo)完成的。这是一个被调谐器采样后应用于参数的函数。我们可以在对数尺度上调整cost，方法是在线性尺度上抽样[- 1,1]，然后从这个值计算10^x。
+
+```{r}
+search_space = ps(
+  cost = p_dbl(-1, 1, trafo = function(x) 10^x),
+  kernel = p_fct(c("polynomial", "radial"))
+)
+rbindlist(generate_design_grid(search_space, 3)$transpose())
+```
+
+甚至可以将另一个转换作为一个整体附加到ParamSet上，在执行单个参数的转换之后执行该转换。它通过.extra_trafo参数给出，应该是一个带有参数x和param_set的函数，接受x中的参数值列表并返回修改后的列表。此转换可以访问评估的所有参数值，并通过交互修改它们。甚至可以添加或删除参数。(下面是一个有点傻的例子。)
+
+```{r}
+search_space = ps(
+  cost = p_dbl(-1, 1, trafo = function(x) 10^x),
+  kernel = p_fct(c("polynomial", "radial")),
+  .extra_trafo = function(x, param_set) {
+    if (x$kernel == "polynomial") {
+      x$cost = x$cost * 2
+    }
+    x
+  }
+)
+rbindlist(generate_design_grid(search_space, 3)$transpose())
+```
+
+搜索空间参数的可用类型是有限的：连续、整数、离散和逻辑标量。然而，有许多机器学习算法采用其他类型的参数，例如向量或函数。这些参数不能在搜索空间参数集中定义，通常在学习器的参数集中以 ParamUty的形式给出。在尝试对这些超参数进行调优时，需要执行更改参数类型的Transformation。
+
+一个例子就是SVM的`class.weights`参数，它采用一个命名的类权重向量，每个目标类有一个条目。
+
+```{r}
+search_space = ps(
+  class.weights = p_dbl(0.1, 0.9, trafo = function(x) c(spam = x, nonspam = 1 - x))
+)
+generate_design_grid(search_space, 3)$transpose()
+```
+
+### 自动化因子水平转换
+
+一个常见的用例是必须指定一个应该全部尝试（或从其中取样）的值列表。有一种情况是，超参数接受函数对象作为值，应该尝试某个函数列表。也可能是应该尝试选择一个特殊的数值。为此，p_fct构造函数的级别参数可以是一个不是字符向量的值，而是其他的值。例如，如果cost参数只有0.1、3和10应该尝试，即使是在进行随机搜索时，那么下面的搜索空间可以实现：
+
+```{r}
+search_space = ps(
+  cost = p_fct(c(0.1, 3, 10)),
+  kernel = p_fct(c("polynomial", "radial"))
+)
+rbindlist(generate_design_grid(search_space, 3)$transpose())
+```
+
+这等价于：
+
+```{r}
+search_space = ps(
+  cost = p_fct(c("0.1", "3", "10"),
+    trafo = function(x) list(`0.1` = 0.1, `3` = 3, `10` = 10)[[x]]),
+  kernel = p_fct(c("polynomial", "radial"))
+)
+rbindlist(generate_design_grid(search_space, 3)$transpose())
+```
+
+这可能看起来很愚蠢，但考虑到阶乘优化参数总是字符值，这是有意义的：
+
+```{r}
+search_space = ps(
+  cost = p_fct(c(0.1, 3, 10)),
+  kernel = p_fct(c("polynomial", "radial"))
+)
+typeof(search_space$params$cost$levels)
+```
+
+但是，请注意，这会导致一个“无序”超参数。使用参数排序信息的优化算法（如遗传算法或基于模型的优化）在这样做时，性能会更差。对于这些算法，用更合适的流量定义p_dbl或p_int可能更有意义。
+
+如果只有少量的情况，也可以这样设定：
+
+```{r}
+search_space = ps(
+  class.weights = p_fct(
+    list(
+      candidate_a = c(spam = 0.5, nonspam = 0.5),
+      candidate_b = c(spam = 0.3, nonspam = 0.7)
+    )
+  )
+)
+generate_design_grid(search_space)$transpose()
+```
+
+### 参数依赖
+
+有些参数只有在另一个参数具有某个值或多个值中的一个时才相关。例如，支持向量机的度参数只在核为“多项式”时有效。这可以使用depends参数指定。该表达式必须包含其他参数，其形式为`<param> == <scalar>`，`<param> %in% <vector>`，或由&&链接的这些参数的倍数。要调优度参数，需要执行以下操作：
+
+```{r}
+search_space = ps(
+  cost = p_dbl(-1, 1, trafo = function(x) 10^x),
+  kernel = p_fct(c("polynomial", "radial")),
+  degree = p_int(1, 3, depends = kernel == "polynomial")
+)
+rbindlist(generate_design_grid(search_space, 3)$transpose(), fill = TRUE)
+```
+
+### 从其他参数集创建调优参数集
+
+
