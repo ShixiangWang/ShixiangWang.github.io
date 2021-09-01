@@ -1,0 +1,100 @@
+---
+title: R小技巧：分组应用和排序去重的应用与比较
+author: 王诗翔
+date: '2021-09-01'
+slug: r-tricks-remove-duplicates-after-ordering
+categories:
+  - Blog
+tags:
+  - R
+  - algo
+description: 快在思想，不在编程语言。
+rmd_source: ''
+keywords: rstats
+editor_options:
+  chunk_output_type: console
+---
+
+<script src="{{< blogdown/postref >}}index_files/header-attrs-2.10/header-attrs.js"></script>
+
+
+<!-- Links -->
+<div id="问题与方案" class="section level2">
+<h2>问题与方案</h2>
+<p>假设我们有这样一个数据集：</p>
+<pre class="r"><code>df &lt;- data.frame(
+  c1 = c(&quot;a&quot;, &quot;a&quot;, &quot;a&quot;, &quot;b&quot;, &quot;b&quot;, &quot;c&quot;),
+  c2 = c(1, 3, 2, 1, 4, 2)
+)
+
+df</code></pre>
+<pre><code>out   c1 c2
+out 1  a  1
+out 2  a  3
+out 3  a  2
+out 4  b  1
+out 5  b  4
+out 6  c  2</code></pre>
+<p>如果我们想保留每个c1分类和分类下的最大值，你会怎么操作？</p>
+<p>思考一分钟。</p>
+<p>如果使用惯了<code>tidyverse</code>套装，我们脑子里容易冒出来的是这样的解法：使用分组应用。</p>
+<pre class="r"><code>library(dplyr)</code></pre>
+<pre class="r"><code>df |&gt; 
+  group_by(c1) |&gt; 
+  summarize(c2 = max(c2, na.rm = TRUE))</code></pre>
+<pre><code>out # A tibble: 3 × 2
+out   c1       c2
+out   &lt;chr&gt; &lt;dbl&gt;
+out 1 a         3
+out 2 b         4
+out 3 c         2</code></pre>
+<p>在数据不是特别大的时候，使用这种策略没有任何问题。但如果分组有成千上万，分组的时间代价就很高了。有没有其他的方式可以解决该问题呢？</p>
+<p>其实处理这种去重问题，特别还涉及到排序，我们可以采用先排序再去重的方式解决。</p>
+<p>那么解决的方案就成了：</p>
+<pre class="r"><code>df |&gt; 
+  arrange(desc(c2))|&gt; 
+  distinct(c1, .keep_all = TRUE)</code></pre>
+<pre><code>out   c1 c2
+out 1  b  4
+out 2  a  3
+out 3  c  2</code></pre>
+</div>
+<div id="哪个更快" class="section level2">
+<h2>哪个更快？</h2>
+<p>如果想知道哪一个方案更快，我们需要构造一个模拟数据集进行测试。</p>
+<pre class="r"><code>n &lt;- 10000000
+ng &lt;- 100
+gs &lt;- expand.grid(LETTERS, 1:50) |&gt;
+  mutate(g = paste0(Var1, Var2)) |&gt;
+  pull(g) |&gt; head(ng)
+
+set.seed(2021)
+data &lt;- data.frame(
+  g = sample(gs, size = n, replace = TRUE),
+  val = rnorm(n, sd = 100)
+)</code></pre>
+<p>分别包装2种解法：</p>
+<pre class="r"><code>solution1 &lt;- function(df) {
+  df |&gt; 
+    group_by(g) |&gt; 
+    summarize(val = max(val, na.rm = TRUE))
+}
+
+solution2 &lt;- function(df) {
+  df |&gt; 
+    arrange(desc(val))|&gt; 
+    distinct(g, .keep_all = TRUE)
+}</code></pre>
+<p>使用专门的测试包进行测试：</p>
+<pre class="r"><code>rv &lt;- microbenchmark::microbenchmark(
+  solu1 = solution1(data),
+  solu2 = solution2(data),
+  times = 100
+)</code></pre>
+<pre class="r"><code>plot(rv)</code></pre>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-8-1.png" width="864" /></p>
+<p>可以看的出来，在这个只有2个变量的数据集测试中，第一种方法远快于第二种方法。
+但注意，这里其实存在很多的变量，包括数据的行数、分组数目、以及实际情况下数据集的变量数目。
+哪种更适合需要根据现实场景进行测试考察。</p>
+<p>本文的重点是，问题的解决之道往往不只一种，当程序慢下来的时候，我们不要忘记思考和尝试其他的方案。</p>
+</div>

@@ -5,10 +5,23 @@
     <description>Recent posts from Garrick Aden-Buie</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 31 Aug 2021 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 01 Sep 2021 00:00:00 +0000</lastBuildDate>
     
         <atom:link href="/blog/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>R小技巧：分组应用和排序去重的应用与比较</title>
+      <link>/blog/r-tricks-remove-duplicates-after-ordering/</link>
+      <pubDate>Wed, 01 Sep 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/r-tricks-remove-duplicates-after-ordering/</guid>
+      <description>问题与方案 假设我们有这样一个数据集：
+df &amp;amp;lt;- data.frame( c1 = c(&amp;amp;quot;a&amp;amp;quot;, &amp;amp;quot;a&amp;amp;quot;, &amp;amp;quot;a&amp;amp;quot;, &amp;amp;quot;b&amp;amp;quot;, &amp;amp;quot;b&amp;amp;quot;, &amp;amp;quot;c&amp;amp;quot;), c2 = c(1, 3, 2, 1, 4, 2) ) df out c1 c2 out 1 a 1 out 2 a 3 out 3 a 2 out 4 b 1 out 5 b 4 out 6 c 2 如果我们想保留每个c1分类和分类下的最大值，你会怎么操作？
+思考一分钟。
+如果使用惯了tidyverse套装，我们脑子里容易冒出来的是这样的解法：使用分组应用。
+library(dplyr) df |&amp;amp;gt; group_by(c1) |&amp;amp;gt; summarize(c2 = max(c2, na.rm = TRUE)) out # A tibble: 3 × 2 out c1 c2 out &amp;amp;lt;chr&amp;amp;gt; &amp;amp;lt;dbl&amp;amp;gt; out 1 a 3 out 2 b 4 out 3 c 2 在数据不是特别大的时候，使用这种策略没有任何问题。但如果分组有成千上万，分组的时间代价就很高了。有没有其他的方式可以解决该问题呢？</description>
+    </item>
     
     <item>
       <title>forestmodel给多水平变量添加整体p值</title>
