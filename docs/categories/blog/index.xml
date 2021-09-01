@@ -10,6 +10,36 @@
     <language>en-us</language>
     <lastBuildDate>Wed, 01 Sep 2021 00:00:00 +0000</lastBuildDate><atom:link href="/categories/blog/index.xml" rel="self" type="application/rss+xml" />
     <item>
+      <title>mlr3（二）基础</title>
+      <link>/blog/mlr3-basics/</link>
+      <pubDate>Wed, 01 Sep 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/mlr3-basics/</guid>
+      <description>来源：https://mlr3book.mlr-org.com/basics.html
+本文将教你基本的mlr3知识，以及它的R6类和操作以用于机器学习。典型的机器学习工作流是这样的:
+ Figure 1: 机器学习流程 source: https://mlr3book.mlr-org.com/images/ml_abstraction.svg  mlr3将数据封装在任务中，并将其分解为互不重叠的训练集和测试集。由于我们感兴趣的模型外推到新的数据，而不仅仅是记忆训练数据，独立的测试数据允许客观地评估模型的泛化。训练数据被提供给一个机器学习算法，在mlr3中我们称之为learner。learner利用训练数据建立输入特征与输出目标值之间关系的模型。然后使用该模型对测试数据进行预测，并将其与参考真值进行比较，以评估模型的质量。mlr3提供了许多不同的度量方法，根据预测值和实际值之间的差异来量化模型的执行情况。通常这是一个数字分数。
+将数据分割为训练集和测试集、建立模型并对其进行评估的过程可能会重复多次，每次从原始数据中重新采样不同的训练集和测试集。多重重采样迭代允许我们对特定类型的模型获得更好、更一般化的性能估计，因为它是在不同的条件下测试的，而且由于数据重采样的特定方式，它不太容易产生偏差。
+在许多情况下，这个简单的工作流不足以处理真实世界的数据，可能需要规范化（标准化）、缺失值的输入或特征选择。我们将在以后介绍更复杂的工作流程。
+本文涵盖以下小主题：
+任务：
+任务用元信息封装数据，比如预测目标列的名称。我们将介绍如何：
+ 访问预定义的任务 指定一个任务类型 创建一个任务 使用任务的API工作 为任务的行和列分配角色 实施任务mutator 获取存储在任务中的数据  学习器
+学习器封装机器学习算法来训练模型并对任务进行预测。它们由R和其他包提供。我们将介绍如何：
+ 访问随mlr3而来的分类和回归学习器集合，并检索特定的学习器 访问学习器的超参数值集并修改它们  如何修改和扩展学习器涵盖在补充高级技术部分。
+训练和预测
+关于训练和预测方法的部分说明了如何使用任务和学习器训练模型并对新数据集进行预测。特别地，我们将介绍如何：
+ 正确设置任务和学习器 为一项任务设置训练和测试分割（集） 在训练集上训练学习器以生成模型 生成测试集的预测 通过比较预测值和实际值来评估模型的性能  重采样
+重采样是一种创建训练和测试分割（集）的方法。我们将介绍：
+ 访问和选择重采样策略 通过应用重采样实例化分割到训练集和测试集 执行重采样以获得结果  关于重采样的附加信息可以在嵌套重采样部分和模型优化一章中找到。
+基准测试
+基准测试用于比较不同模型的性能，例如不同学习器训练的模型，不同任务训练的模型，或不同重采样方法训练的模型。我们介绍如何
+ 创建一个基准设计 执行设计并汇总结果 将基准测试对象转换为重采样对象  二分类
+二值分类是分类的一种特殊情况，预测的目标变量只有两个可能的值。在这种情况下，还需要考虑其他因素。特别是：
+ ROC曲线和预测一个类和另一个类的阈值 阈值调整  在详细介绍如何使用mlr3进行机器学习之前，我们先简要介绍一下R6，因为它是R相对较新的一部分。mlr3严重依赖于R6，它提供的所有基本构造都是R6类：
+ 任务 task 学习器 learner 测量 measure 重采样 resamplings  快速R6入门介绍 R6是R最新的面向对象编程(OO)方言之一。它解决了R中早期OO实现的缺点，比如我们在mlr中使用的S3。如果你以前做过面向对象编程，那么R6应该很熟悉。我们关注的是R6的部分，你需要知道在这里使用mlr3。</description>
+    </item>
+    
+    <item>
       <title>R小技巧：分组应用和排序去重的应用与比较</title>
       <link>/blog/r-tricks-remove-duplicates-after-ordering/</link>
       <pubDate>Wed, 01 Sep 2021 00:00:00 +0000</pubDate>
@@ -123,18 +153,6 @@ stringi是tidyverse的一个核心包，基本上必装。但由于gayhub经常�
       <guid>/blog/unix-working-tricks/</guid>
       <description>远程传输和备份文件（夹） 使用scp无法续传，使用rsync更好。
 1rsync -avLr --progress huaxi:/remote_dir/ ./local_dir 从bed文件指定的区域提取bam结果 1samtools view -@ 4 -bhL ../regions_to_check_in_bam.bed /public/home/zhaoxxx.bam &amp;gt; xxx.bam </description>
-    </item>
-    
-    <item>
-      <title>RNAseq原理与分析课程笔记</title>
-      <link>/blog/rnaseq-cource-notes/</link>
-      <pubDate>Thu, 12 Aug 2021 00:00:00 +0000</pubDate>
-      
-      <guid>/blog/rnaseq-cource-notes/</guid>
-      <description>很久之前在腾讯课堂购买了孟浩巍的RNAseq课程，讲解的挺细致完备的。这里主要是很少做这样的分析，所以一方面扫盲，一方面记录下其中重要的点（自己不知道的）或者值得拓展了解的知识点。
-参考基因组与基因分布 拼装失败的地方大都是rRNA位置区域，与后面的内容对应。
-rRNA 这里有几个点：
- 一个DNA分子是比一个氨基酸大的 rRNA是集中分布的 rRNA在全部RNA中的占比很高，达80%左右。所以mRNA测序要么富集poly-A，要么去掉rRNA。  测序的概念 双端测序涉及到两端的转换。补个截图增强理解。</description>
     </item>
     
   </channel>

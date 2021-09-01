@@ -1,0 +1,1221 @@
+---
+title: mlr3（二）基础
+author: 王诗翔
+date: '2021-09-01'
+slug: mlr3-basics
+categories:
+  - Blog
+tags:
+  - R
+  - mlr3
+  - 机器学习
+description: 翻译与笔记
+keywords: rstats
+editor_options:
+  chunk_output_type: console
+---
+
+<script src="{{< blogdown/postref >}}index_files/header-attrs-2.10/header-attrs.js"></script>
+
+
+<!-- Links -->
+<p>来源：<a href="https://mlr3book.mlr-org.com/basics.html" class="uri">https://mlr3book.mlr-org.com/basics.html</a></p>
+<p>本文将教你基本的mlr3知识，以及它的R6类和操作以用于机器学习。典型的机器学习工作流是这样的:</p>
+<div class="figure"><span style="display:block;" id="fig:unnamed-chunk-1"></span>
+<img src="https://mlr3book.mlr-org.com/images/ml_abstraction.svg" alt="机器学习流程 source: https://mlr3book.mlr-org.com/images/ml_abstraction.svg"  />
+<p class="caption">
+Figure 1: 机器学习流程 source: <a href="https://mlr3book.mlr-org.com/images/ml_abstraction.svg" class="uri">https://mlr3book.mlr-org.com/images/ml_abstraction.svg</a>
+</p>
+</div>
+<p>mlr3将数据封装在任务中，并将其分解为互不重叠的训练集和测试集。由于我们感兴趣的模型外推到新的数据，而不仅仅是记忆训练数据，独立的测试数据允许客观地评估模型的泛化。训练数据被提供给一个机器学习算法，在mlr3中我们称之为learner。learner利用训练数据建立输入特征与输出目标值之间关系的模型。然后使用该模型对测试数据进行预测，并将其与参考真值进行比较，以评估模型的质量。mlr3提供了许多不同的度量方法，根据预测值和实际值之间的差异来量化模型的执行情况。通常这是一个数字分数。</p>
+<p>将数据分割为训练集和测试集、建立模型并对其进行评估的过程可能会重复多次，每次从原始数据中重新采样不同的训练集和测试集。多重重采样迭代允许我们对特定类型的模型获得更好、更一般化的性能估计，因为它是在不同的条件下测试的，而且由于数据重采样的特定方式，它不太容易产生偏差。</p>
+<p>在许多情况下，这个简单的工作流不足以处理真实世界的数据，可能需要规范化（标准化）、缺失值的输入或特征选择。我们将在以后介绍更复杂的工作流程。</p>
+<p>本文涵盖以下小主题：</p>
+<p><strong>任务</strong>：</p>
+<p>任务用元信息封装数据，比如预测目标列的名称。我们将介绍如何：</p>
+<ul>
+<li>访问预定义的任务</li>
+<li>指定一个任务类型</li>
+<li>创建一个任务</li>
+<li>使用任务的API工作</li>
+<li>为任务的行和列分配角色</li>
+<li>实施任务mutator</li>
+<li>获取存储在任务中的数据</li>
+</ul>
+<p><strong>学习器</strong></p>
+<p>学习器封装机器学习算法来训练模型并对任务进行预测。它们由R和其他包提供。我们将介绍如何：</p>
+<ul>
+<li>访问随mlr3而来的分类和回归学习器集合，并检索特定的学习器</li>
+<li>访问学习器的超参数值集并修改它们</li>
+</ul>
+<p>如何修改和扩展学习器涵盖在<a href="https://mlr3book.mlr-org.com/extending.html#extending-learners">补充高级技术</a>部分。</p>
+<p><strong>训练和预测</strong></p>
+<p>关于训练和预测方法的部分说明了如何使用任务和学习器训练模型并对新数据集进行预测。特别地，我们将介绍如何：</p>
+<ul>
+<li>正确设置任务和学习器</li>
+<li>为一项任务设置训练和测试分割（集）</li>
+<li>在训练集上训练学习器以生成模型</li>
+<li>生成测试集的预测</li>
+<li>通过比较预测值和实际值来评估模型的性能</li>
+</ul>
+<p><strong>重采样</strong></p>
+<p>重采样是一种创建训练和测试分割（集）的方法。我们将介绍：</p>
+<ul>
+<li>访问和选择重采样策略</li>
+<li>通过应用重采样实例化分割到训练集和测试集</li>
+<li>执行重采样以获得结果</li>
+</ul>
+<p>关于重采样的附加信息可以在<a href="https://mlr3book.mlr-org.com/optimization.html#optimization">嵌套重采样部分和模型优化</a>一章中找到。</p>
+<p><strong>基准测试</strong></p>
+<p>基准测试用于比较不同模型的性能，例如不同学习器训练的模型，不同任务训练的模型，或不同重采样方法训练的模型。我们介绍如何</p>
+<ul>
+<li>创建一个基准设计</li>
+<li>执行设计并汇总结果</li>
+<li>将基准测试对象转换为重采样对象</li>
+</ul>
+<p><strong>二分类</strong></p>
+<p>二值分类是分类的一种特殊情况，预测的目标变量只有两个可能的值。在这种情况下，还需要考虑其他因素。特别是：</p>
+<ul>
+<li>ROC曲线和预测一个类和另一个类的阈值</li>
+<li>阈值调整</li>
+</ul>
+<p>在详细介绍如何使用mlr3进行机器学习之前，我们先简要介绍一下R6，因为它是R相对较新的一部分。mlr3严重依赖于R6，它提供的所有基本构造都是R6类：</p>
+<ul>
+<li>任务 task</li>
+<li>学习器 learner</li>
+<li>测量 measure</li>
+<li>重采样 resamplings</li>
+</ul>
+<div id="快速r6入门介绍" class="section level2">
+<h2>快速R6入门介绍</h2>
+<p>R6是R最新的面向对象编程(OO)方言之一。它解决了R中早期OO实现的缺点，比如我们在mlr中使用的S3。如果你以前做过面向对象编程，那么R6应该很熟悉。我们关注的是R6的部分，你需要知道在这里使用mlr3。</p>
+<ul>
+<li><p>对象是通过调用<code>R6::R6Class()</code>对象的构造函数创建的，特别是初始化方法<code>$new()</code>。例如，<code>foo = foo $new(bar = 1)</code>创建一个<code>foo</code>类的新对象，将构造函数的<code>bar</code>参数设置为值<code>1</code>。mlr3中的大多数对象都是通过特殊函数（例如<code>lrn(“regr.rpart”)</code>）创建的，这些函数也被称为sugar函数。</p></li>
+<li><p>对象具有可变状态，该状态封装在它们的字段中，可以通过dollar操作符访问。我们可以通过<code>Foo$bar</code>访问Foo类中的bar值，并通过赋值字段设置其值，例如<code>Foo$bar = 2</code>。</p></li>
+<li><p>除了字段之外，对象还公开了一些方法，这些方法允许检查对象的状态、检索信息或执行可能改变对象内部状态的操作。例如，学习者的<code>$train</code>方法通过建立和存储一个训练过的模型来改变学习者的内部状态，然后使用该模型对给定的数据进行预测。</p></li>
+<li><p>对象可以有公共和私有的字段和方法。公共字段和方法定义了与对象交互的API。私有方法只有在你想要扩展mlr3时才有用，比如新学习器。</p></li>
+<li><p>R6对象是内部环境，因此具有引用语义。例如，<code>foo2 = foo</code>并不是在<code>foo2</code>中创建<code>foo</code>的副本，而是对相同实际对象的另一个引用。设置<code>foo$bar = 3</code>也会将<code>foo2$bar</code>改为3，反之亦然。</p></li>
+<li><p>要复制对象，使用<code>$clone()</code>方法和嵌套对象的<code>deep = TRUE</code>参数，例如，<code>foo2 = foo$clone(deep = TRUE)</code>。</p></li>
+</ul>
+<p>关于R6的更多细节，请查阅<a href="https://r6.r-lib.org/">R6的vignette</a>，特别是<a href="https://r6.r-lib.org/articles/Introduction.html">介绍</a>。</p>
+</div>
+<div id="任务" class="section level2">
+<h2>任务</h2>
+<p>任务是包含定义机器学习问题的（通常是表格）数据和附加元数据的对象。例如，元数据是用于监督机器学习问题的目标变量的名称，或数据集的类型（例如空间数据或生存数据）。此信息用于可在任务上执行的特定操作。</p>
+<div id="任务类型" class="section level3">
+<h3>任务类型</h3>
+<p>要从<code>data.frame()</code>，<code>data.table()</code>或<code>Matrix()</code>创建任务，首先需要选择正确的任务类型：</p>
+<ul>
+<li><strong>分类任务</strong>：目标是一个字符串或因子标签，只有几个不同的值。</li>
+</ul>
+<p>→ <a href="https://mlr3.mlr-org.com/reference/TaskClassif.html">TaskClassif</a></p>
+<ul>
+<li><strong>回归任务</strong>：目标是一个连续数值向量。</li>
+</ul>
+<p>→ <a href="https://mlr3.mlr-org.com/reference/TaskRegr.html">TaskRegr</a></p>
+<ul>
+<li><strong>生存任务</strong>：目标是某一事件的(右审查)时间。更多的审查类型目前正在发展中。</li>
+</ul>
+<p>→ <a href="https://mlr3proba.mlr-org.com/reference/TaskSurv.html">mlr3proba::TaskSurv</a> 在拓展包 <a href="https://mlr3proba.mlr-org.com/">mlr3proba</a> 中。</p>
+<ul>
+<li><strong>密度任务</strong>：一个评估密度的非监督任务。</li>
+</ul>
+<p>→ <a href="https://mlr3proba.mlr-org.com/reference/TaskDens.html">mlr3proba::TaskDens</a> 在拓展包 <a href="https://mlr3proba.mlr-org.com/">mlr3proba</a> 中。</p>
+<ul>
+<li>聚类任务：一种非监督任务类型；没有目标，目的是在特性空间中识别相似的组。</li>
+</ul>
+<p>→ <a href="https://mlr3cluster.mlr-org.com/reference/TaskClust.html">mlr3cluster::TaskClust</a> 在拓展包 <a href="https://mlr3cluster.mlr-org.com/">mlr3cluster</a> 中。</p>
+<ul>
+<li>空间任务：任务中的观察具有时空信息（例如坐标）。</li>
+</ul>
+<p>→ <a href="https://www.rdocumentation.org/packages/mlr3spatiotempcv/topics/TaskRegrST">mlr3spatiotempcv::TaskRegrST</a> 或 <a href="https://www.rdocumentation.org/packages/mlr3spatiotempcv/topics/TaskClassifST">mlr3spatiotempcv::TaskClassifST</a> 在拓展包 <a href="https://mlr3spatiotempcv.mlr-org.com/">mlr3spatiotempcv</a> 中。</p>
+<ul>
+<li>有序回归任务：目标是有序的。</li>
+</ul>
+<p>→ TaskOrdinal 在拓展包 <a href="https://github.com/mlr-org/mlr3ordinal">mlr3ordinal</a> 中。</p>
+</div>
+<div id="任务创建" class="section level3">
+<h3>任务创建</h3>
+<p>作为一个例子，我们将使用包数据集中的mtcars数据集创建一个回归任务，并预测数值目标变量“mpg”（每加仑英里数）。为简洁起见，我们只考虑数据集中的前两个特性。</p>
+<p>首先载入数据：</p>
+<pre class="r"><code>data(&quot;mtcars&quot;, package = &quot;datasets&quot;)
+data = mtcars[, 1:3]
+str(data)</code></pre>
+<pre><code>out &#39;data.frame&#39;:   32 obs. of  3 variables:
+out  $ mpg : num  21 21 22.8 21.4 18.7 18.1 14.3 24.4 22.8 19.2 ...
+out  $ cyl : num  6 6 4 6 8 6 8 4 4 6 ...
+out  $ disp: num  160 160 108 258 360 ...</code></pre>
+<p>接下来，我们创建一个回归任务，即构造一个R6类<code>TaskRegr</code>的新实例。通常，这是通过调用构造函数<code>TaskRegr$new()</code>来实现的。相反，我们调用转换器<code>as_task_regr()</code>来将我们的<code>data.frame()</code>作为数据存储到任务中，并提供以下信息：</p>
+<ul>
+<li><p><code>x</code>：要转换的对象。适用于在DataBackendDataTable类中实现的<code>data.frame()/data.table()/tibble()</code>抽象数据后端。DataBackendDataTable允许通过扩展包mlr3db连接到内存不足的存储系统，如SQL服务器。</p></li>
+<li><p><code>target</code>：回归问题的目标列的名称。</p></li>
+<li><p><code>id</code>(可选)：任务的任意标识符，用于绘图和汇总。如果未提供，将使用<code>x</code>的替换名称。</p></li>
+</ul>
+<pre class="r"><code>library(&quot;mlr3&quot;)
+
+task_mtcars = as_task_regr(data, target = &quot;mpg&quot;, id = &quot;cars&quot;)
+print(task_mtcars)</code></pre>
+<pre><code>out &lt;TaskRegr:cars&gt; (32 x 3)
+out * Target: mpg
+out * Properties: -
+out * Features (2):
+out   - dbl (2): cyl, disp</code></pre>
+<p><code>print()</code>方法给出任务的简短总结：它有32个观察值和3列，其中2列是特征。</p>
+<p>我们可以对任务数据进行可视化：</p>
+<pre class="r"><code>library(&quot;mlr3viz&quot;)
+autoplot(task_mtcars, type = &quot;pairs&quot;)</code></pre>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-4-1.png" width="864" /></p>
+<p>请注意，与单独加载所有扩展包相比，加载mlr3verse包通常更方便。mlr3verse导入大部分mlr3包并重新导出用于常规机器学习和数据科学任务的函数。</p>
+</div>
+<div id="预定义内置任务" class="section level3">
+<h3>预定义（内置）任务</h3>
+<p>mlr3带有一些预定义的机器学习任务。所有任务都存储在名为<code>mlr_tasks</code>的R6 <code>Dictionary</code>（键值存储）中。打印它将给出关键字（数据集的名称）：</p>
+<pre class="r"><code>mlr_tasks</code></pre>
+<pre><code>out &lt;DictionaryTask&gt; with 11 stored values
+out Keys: boston_housing, breast_cancer, german_credit, iris, mtcars,
+out   penguins, pima, sonar, spam, wine, zoo</code></pre>
+<p>通过将字典转换为<code>data.table()</code>对象，我们可以获得更多关于示例任务的信息总结:</p>
+<pre class="r"><code>as.data.table(mlr_tasks)</code></pre>
+<pre><code>out                key task_type nrow ncol properties lgl int dbl chr fct ord pxc
+out  1: boston_housing      regr  506   19              0   3  13   0   2   0   0
+out  2:  breast_cancer   classif  683   10   twoclass   0   0   0   0   0   9   0
+out  3:  german_credit   classif 1000   21   twoclass   0   3   0   0  14   3   0
+out  4:           iris   classif  150    5 multiclass   0   0   4   0   0   0   0
+out  5:         mtcars      regr   32   11              0   0  10   0   0   0   0
+out  6:       penguins   classif  344    8 multiclass   0   3   2   0   2   0   0
+out  7:           pima   classif  768    9   twoclass   0   0   8   0   0   0   0
+out  8:          sonar   classif  208   61   twoclass   0   0  60   0   0   0   0
+out  9:           spam   classif 4601   58   twoclass   0   0  57   0   0   0   0
+out 10:           wine   classif  178   14 multiclass   0   2  11   0   0   0   0
+out 11:            zoo   classif  101   17 multiclass  15   1   0   0   0   0   0</code></pre>
+<p>在上面的显示中，列“lgl”(逻辑)、“int”(整数)、“dbl”(双精度)、“chr”(字符)、“fct”(因子)、“ord”(有序因子)和“pxc”(POSIXct时间)显示了具有相应存储类型的数据集中特征的数量。</p>
+<p>要从字典中获取任务，可以使用mlr_tasks类中的<code>$get()</code>方法，并将返回值赋给一个新对象。由于mlr3将它的大多数对象实例安排在字典中，提取是如此常见的任务，因此有一个快捷方式：函数<code>tsk()</code>。在这里，我们从包palmerpenguins中检索palmerpenguins任务：</p>
+<pre class="r"><code>task_penguins = tsk(&quot;penguins&quot;)
+print(task_penguins)</code></pre>
+<pre><code>out &lt;TaskClassif:penguins&gt; (344 x 8)
+out * Target: species
+out * Properties: multiclass
+out * Features (7):
+out   - int (3): body_mass, flipper_length, year
+out   - dbl (2): bill_depth, bill_length
+out   - fct (2): island, sex</code></pre>
+<p>注意，像mlr_tasks这样的字典可以由扩展包<strong>填充</strong>。例如，mlr3data提供了更多的示例和玩具任务用于回归和分类，而mlr3proba则提供了额外的生存和密度估计任务。当我们加载mlr3verse包时，这两个包都会被加载，所以我们在这里执行，并再次查看可用的任务：</p>
+<pre class="r"><code>library(&quot;mlr3verse&quot;)
+as.data.table(mlr_tasks)[, 1:4]</code></pre>
+<pre><code>out                key task_type  nrow ncol
+out  1:           actg      surv  1151   13
+out  2:   bike_sharing      regr 17379   14
+out  3: boston_housing      regr   506   19
+out  4:  breast_cancer   classif   683   10
+out  5:       faithful      dens   272    1
+out  6:           gbcs      surv   686   10
+out  7:  german_credit   classif  1000   21
+out  8:          grace      surv  1000    8
+out  9:           ilpd   classif   583   11
+out 10:           iris   classif   150    5
+out 11:     kc_housing      regr 21613   20
+out 12:           lung      surv   228   10
+out 13:      moneyball      regr  1232   15
+out 14:         mtcars      regr    32   11
+out 15:      optdigits   classif  5620   65
+out 16:       penguins   classif   344    8
+out 17:           pima   classif   768    9
+out 18:         precip      dens    70    1
+out 19:           rats      surv   300    5
+out 20:          sonar   classif   208   61
+out 21:           spam   classif  4601   58
+out 22:        titanic   classif  1309   11
+out 23:   unemployment      surv  3343    6
+out 24:      usarrests     clust    50    4
+out 25:           whas      surv   481   11
+out 26:           wine   classif   178   14
+out 27:            zoo   classif   101   17
+out                key task_type  nrow ncol</code></pre>
+<blockquote>
+<p>这里还挺有意思的，多个包怎么共用和补充同一个对象的？</p>
+</blockquote>
+<p>要获得关于各自任务的更多信息，可以在<code>mlr_tasks_[id]</code>下找到相应的手册页，例如<a href="https://mlr3.mlr-org.com/reference/mlr_tasks_german_credit.html">mlr_tasks_german_credit</a>。</p>
+</div>
+<div id="任务api" class="section level3">
+<h3>任务API</h3>
+<p>可以使用任务的公共字段和方法查询所有任务属性和特征。方法还可用于更改存储的数据和任务的行为。</p>
+<div id="获取数据" class="section level4">
+<h4>获取数据</h4>
+<p>存储在任务中的数据可以直接从字段中检索，例如：</p>
+<pre class="r"><code>task_mtcars</code></pre>
+<pre><code>out &lt;TaskRegr:cars&gt; (32 x 3)
+out * Target: mpg
+out * Properties: -
+out * Features (2):
+out   - dbl (2): cyl, disp</code></pre>
+<pre class="r"><code>task_mtcars$nrow</code></pre>
+<pre><code>out [1] 32</code></pre>
+<pre class="r"><code>task_mtcars$ncol</code></pre>
+<pre><code>out [1] 3</code></pre>
+<p>通过对象的方法可以获得更多的信息，例如：</p>
+<pre class="r"><code>task_mtcars$data()</code></pre>
+<pre><code>out      mpg cyl  disp
+out  1: 21.0   6 160.0
+out  2: 21.0   6 160.0
+out  3: 22.8   4 108.0
+out  4: 21.4   6 258.0
+out  5: 18.7   8 360.0
+out  6: 18.1   6 225.0
+out  7: 14.3   8 360.0
+out  8: 24.4   4 146.7
+out  9: 22.8   4 140.8
+out 10: 19.2   6 167.6
+out 11: 17.8   6 167.6
+out 12: 16.4   8 275.8
+out 13: 17.3   8 275.8
+out 14: 15.2   8 275.8
+out 15: 10.4   8 472.0
+out 16: 10.4   8 460.0
+out 17: 14.7   8 440.0
+out 18: 32.4   4  78.7
+out 19: 30.4   4  75.7
+out 20: 33.9   4  71.1
+out 21: 21.5   4 120.1
+out 22: 15.5   8 318.0
+out 23: 15.2   8 304.0
+out 24: 13.3   8 350.0
+out 25: 19.2   8 400.0
+out 26: 27.3   4  79.0
+out 27: 26.0   4 120.3
+out 28: 30.4   4  95.1
+out 29: 15.8   8 351.0
+out 30: 19.7   6 145.0
+out 31: 15.0   8 301.0
+out 32: 21.4   4 121.0
+out      mpg cyl  disp</code></pre>
+<p>在mlr3中，每一行(观察)都有一个唯一的标识符，存储为一个整数。这些可以作为参数传递给<code>$data()</code>方法以选择特定的行：</p>
+<pre class="r"><code>head(task_mtcars$row_ids)</code></pre>
+<pre><code>out [1] 1 2 3 4 5 6</code></pre>
+<pre class="r"><code># retrieve data for rows with ids 1, 5, and 10
+task_mtcars$data(rows = c(1, 5, 10))</code></pre>
+<pre><code>out     mpg cyl  disp
+out 1: 21.0   6 160.0
+out 2: 18.7   8 360.0
+out 3: 19.2   6 167.6</code></pre>
+<p>注意，尽管行id通常只是从1到<code>nrow(data)</code>的序列，但它们只能保证是唯一的自然数。请记住这一点，特别是当你使用存储在真实数据库管理系统中的数据时。</p>
+<p>与行id类似，目标列和特征列也有惟一标识符，即名称。它们的名称可以通过公共槽<code>$feature_names</code>和<code>$target_names</code>访问。这里，“目标”指的是我们想要预测的变量，“特征”指的是任务的预测变量。</p>
+<pre class="r"><code>task_mtcars$feature_names</code></pre>
+<pre><code>out [1] &quot;cyl&quot;  &quot;disp&quot;</code></pre>
+<pre class="r"><code>task_mtcars$target_names</code></pre>
+<pre><code>out [1] &quot;mpg&quot;</code></pre>
+<p>当选择数据的子集时，row_id和列名可以组合：</p>
+<pre class="r"><code># retrieve data for rows 1, 5, and 10 and only select column &quot;mpg&quot;
+task_mtcars$data(rows = c(1, 5, 10), cols = &quot;mpg&quot;)</code></pre>
+<pre><code>out     mpg
+out 1: 21.0
+out 2: 18.7
+out 3: 19.2</code></pre>
+<p>要从任务中提取完整的数据，还可以简单地将其转换为<code>data.table</code>：</p>
+<pre class="r"><code>summary(as.data.table(task_mtcars))</code></pre>
+<pre><code>out       mpg             cyl             disp      
+out  Min.   :10.40   Min.   :4.000   Min.   : 71.1  
+out  1st Qu.:15.43   1st Qu.:4.000   1st Qu.:120.8  
+out  Median :19.20   Median :6.000   Median :196.3  
+out  Mean   :20.09   Mean   :6.188   Mean   :230.7  
+out  3rd Qu.:22.80   3rd Qu.:8.000   3rd Qu.:326.0  
+out  Max.   :33.90   Max.   :8.000   Max.   :472.0</code></pre>
+</div>
+<div id="角色行和列" class="section level4">
+<h4>角色（行和列）</h4>
+<p>可以将不同的角色分配给行和列。这些角色影响任务对不同操作的行为。我们已经在目标和特性列中看到了这一点，它们有不同的用途。</p>
+<p>例如，前面构造的mtcars任务有以下列角色：</p>
+<pre class="r"><code>print(task_mtcars$col_roles)</code></pre>
+<pre><code>out $feature
+out [1] &quot;cyl&quot;  &quot;disp&quot;
+out 
+out $target
+out [1] &quot;mpg&quot;
+out 
+out $name
+out character(0)
+out 
+out $order
+out character(0)
+out 
+out $stratum
+out character(0)
+out 
+out $group
+out character(0)
+out 
+out $weight
+out character(0)</code></pre>
+<p>列也可以没有角色（被忽略）或有多个角色。要将mtcars的行名作为附加特性添加到数据表中，我们首先将它们作为常规列添加到数据表中，然后使用新列重新创建任务。</p>
+<pre class="r"><code># with `keep.rownames`, data.table stores the row names in an extra column &quot;rn&quot;
+data = as.data.table(datasets::mtcars[, 1:3], keep.rownames = TRUE)
+task_mtcars = as_task_regr(data, target = &quot;mpg&quot;, id = &quot;cars&quot;)
+
+# there is a new feature called &quot;rn&quot;
+task_mtcars$feature_names</code></pre>
+<pre><code>out [1] &quot;cyl&quot;  &quot;disp&quot; &quot;rn&quot;</code></pre>
+<p>行名现在是一个特性，其值存储在列“rn”中。我们在这里列这一栏仅仅是为了教育目的。<strong>一般来说，使用唯一标识每一行的特性是没有意义的</strong>。此外，字符数据类型将导致许多类型的机器学习算法的问题。</p>
+<p>另一方面，标识符可能有助于标记图中的点，例如识别和标记离群点。因此，我们将改变rn列的角色，从特性列表中删除它，并分配新的角色“name”。有两种方法可以做到：</p>
+<ol style="list-style-type: decimal">
+<li>使用任务方法<code>$set_col_roles()</code>(推荐)。</li>
+<li>只需修改字段<code>$col_roles</code>，它是列名向量的命名列表。这个列表中的每个向量对应于一个列角色，该向量中包含的列名被指定为具有该角色。</li>
+</ol>
+<pre class="r"><code># supported column roles, see ?Task
+names(task_mtcars$col_roles)</code></pre>
+<pre><code>out [1] &quot;feature&quot; &quot;target&quot;  &quot;name&quot;    &quot;order&quot;   &quot;stratum&quot; &quot;group&quot;   &quot;weight&quot;</code></pre>
+<pre class="r"><code># assign column &quot;rn&quot; the role &quot;name&quot;, remove from other roles
+task_mtcars$set_col_roles(&quot;rn&quot;, roles = &quot;name&quot;)
+
+# note that &quot;rn&quot; not listed as feature anymore
+task_mtcars$feature_names</code></pre>
+<pre><code>out [1] &quot;cyl&quot;  &quot;disp&quot;</code></pre>
+<pre class="r"><code># &quot;rn&quot; also does not appear anymore when we access the data
+task_mtcars$data(rows = 1:2)</code></pre>
+<pre><code>out    mpg cyl disp
+out 1:  21   6  160
+out 2:  21   6  160</code></pre>
+<pre class="r"><code>task_mtcars$head(2)</code></pre>
+<pre><code>out    mpg cyl disp
+out 1:  21   6  160
+out 2:  21   6  160</code></pre>
+<p>更改角色并不会更改底层数据，它只是更新底层数据上的视图。上面的代码中没有复制数据。但是视图被就地更改，即任务对象本身被修改。</p>
+<p>与列一样，也可以将不同的角色分配给行。</p>
+<p>行可以有两个不同的角色：</p>
+<ol style="list-style-type: decimal">
+<li>角色<code>use</code>：通常用于模型拟合的行（尽管它们也可以用作重采样中的测试集）。默认角色。</li>
+<li>角色<code>validation</code>：不用于训练的行。在任务创建期间，目标列中缺少值的行将自动设置为验证角色。</li>
+</ol>
+<p>有几个原因解释为什么区别对待它们：</p>
+<ol style="list-style-type: decimal">
+<li>通常，在外部验证集上验证最终模型以识别可能的过拟合是很好的做法。</li>
+<li>有些观察结果可能没有标记，例如在Kaggle比赛中。这些观察结果不能用于训练模型，但可以用于获得预测。</li>
+</ol>
+</div>
+<div id="任务调整器" class="section level4">
+<h4>任务调整器</h4>
+<p>如上所示，修改<code>$col_roles</code>或<code>$row_roles</code>(通过<code>set_col_roles()</code>/<code>set_row_roles()</code>或直接通过修改命名列表)会改变数据的视图。附加的便利方法<code>$filter()</code>基于行id对当前视图进行子集设置，而<code>$select()</code>基于特征名称对视图进行子集设置。</p>
+<pre class="r"><code>task_penguins = tsk(&quot;penguins&quot;)
+task_penguins$select(c(&quot;body_mass&quot;, &quot;flipper_length&quot;)) # keep only these features
+task_penguins$filter(1:3) # keep only these rows
+task_penguins$head()</code></pre>
+<pre><code>out    species body_mass flipper_length
+out 1:  Adelie      3750            181
+out 2:  Adelie      3800            186
+out 3:  Adelie      3250            195</code></pre>
+<p>虽然上面讨论的方法允许将数据子集化，但是<code>$rbind()</code>和<code>$cbind()</code>方法允许向任务添加额外的行和列。同样，原始数据没有改变。附加的行或列只添加到数据视图中。</p>
+<pre class="r"><code>task_penguins$cbind(data.frame(letters = letters[1:3])) # add column foo</code></pre>
+</div>
+<div id="可视化任务" class="section level4">
+<h4>可视化任务</h4>
+<p>mlr3viz包为在mlr3中实现的许多类提供了绘图工具。可用的绘图类型依赖于继承的类，但所有绘图都作为ggplot2对象返回，可以很容易地自定义。</p>
+<p>关于分类任务(从TaskClassif继承)，请参阅<a href="https://mlr3viz.mlr-org.com/reference/autoplot.TaskClassif.html"><code>mlr3viz::autoplot</code></a>的文档查看实现的绘图类型。以下是一些给人留下印象的例子：</p>
+<pre class="r"><code>library(&quot;mlr3viz&quot;)
+
+# get the pima indians task
+task = tsk(&quot;pima&quot;)
+
+# subset task to only use the 3 first features
+task$select(head(task$feature_names, 3))
+
+# default plot: class frequencies
+autoplot(task)</code></pre>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-20-1.png" width="864" /></p>
+<pre class="r"><code># pairs plot (requires package GGally)
+autoplot(task, type = &quot;pairs&quot;)</code></pre>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-21-1.png" width="864" /></p>
+<pre class="r"><code># duo plot (requires package GGally)
+autoplot(task, type = &quot;duo&quot;)</code></pre>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-22-1.png" width="864" /></p>
+<p>当然，你也可以对回归任务(从TaskRegr继承)执行同样的操作。</p>
+<pre class="r"><code>library(&quot;mlr3viz&quot;)
+
+# get the complete mtcars task
+task = tsk(&quot;mtcars&quot;)
+
+# subset task to only use the 3 first features
+task$select(head(task$feature_names, 3))
+
+# default plot: boxplot of target variable
+autoplot(task)</code></pre>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-23-1.png" width="864" /></p>
+<pre class="r"><code># pairs plot (requires package GGally)
+autoplot(task, type = &quot;pairs&quot;)</code></pre>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-24-1.png" width="864" /></p>
+</div>
+</div>
+</div>
+<div id="学习器" class="section level2">
+<h2>学习器</h2>
+<p>类学习对象Learner为许多流行的机器学习算法提供了一个统一的接口。它们包括训练和预测任务模型的方法，并提供关于学习者的元信息，如你可以设置的超参数。</p>
+<p>每个学习器的基类是Learner，用于回归的是LearnerRegr，用于分类的是LearnerClassif。扩展包继承自学习器基类，例如<code>mlr3proba::LearnerSurv</code>或<code>mlr3cluster::LearnerClust</code>。与Task相反，通常不需要创建自定义学习器，这是一个<a href="https://mlr3book.mlr-org.com/extending.html#extending-learners">更高级的主题</a>。</p>
+<p>所有的学习器在一个两阶段的过程中工作：</p>
+<div class="figure"><span style="display:block;" id="fig:unnamed-chunk-25"></span>
+<img src="https://mlr3book.mlr-org.com/images/learner.svg" alt="学习器 source: https://mlr3book.mlr-org.com/images/learner.svg"  />
+<p class="caption">
+Figure 2: 学习器 source: <a href="https://mlr3book.mlr-org.com/images/learner.svg" class="uri">https://mlr3book.mlr-org.com/images/learner.svg</a>
+</p>
+</div>
+<ul>
+<li><strong>训练阶段</strong>：训练数据（特征和目标）被传递给学习器的<code>$train()</code>函数，该函数训练并存储一个模型，即目标和特征之间的关系。</li>
+<li><strong>预测阶段</strong>：一个新的数据片段，即推断数据，被传递给学习器的<code>$predict()</code>方法。第一步训练的模型用于预测缺失的目标特征，例如分类问题的标签或回归问题的数值结果。</li>
+</ul>
+<div id="预定义的学习器" class="section level3">
+<h3>预定义的学习器</h3>
+<p>mlr3包附带了以下最小的分类和回归学习器集合，以避免不必要的依赖：</p>
+<ul>
+<li><a href="https://mlr3.mlr-org.com/reference/mlr_learners_classif.featureless.html">mlr_learners_classif.featureless</a>：简单的基线分类学习器(继承自LearnerClassif)。在默认情况下，它会不断预测训练集中出现频率最高的标签。</li>
+<li><a href="https://mlr3.mlr-org.com/reference/mlr_learners_regr.featureless.html">mlr_learners_regr.featureless</a>：简单基线回归学习器(从LearnerRegr继承)。在默认情况下，它不断地预测训练集中结果的均值。</li>
+<li><a href="https://mlr3.mlr-org.com/reference/mlr_learners_classif.rpart.html">mlr_learners_classif.rpart</a>：rpart包提供的单一的分类树。</li>
+<li><a href="https://mlr3.mlr-org.com/reference/mlr_learners_regr.rpart.html">mlr_learners_regr.rpart</a>：rpart包提供的单一的回归树。</li>
+</ul>
+<p>这组基线学习器通常不足以进行真实的数据分析。因此，我们挑选了最流行的机器学习方法的一个实现，并将它们连接到mlr3learners包中：</p>
+<ul>
+<li>线性与逻辑回归</li>
+<li>惩罚广义线性模型</li>
+<li>k近邻回归与分类</li>
+<li>Kriging</li>
+<li>线性和二次判别分析</li>
+<li>朴素贝叶斯</li>
+<li>支持向量机</li>
+<li>梯度提升</li>
+<li>用于回归、分类和生存的随机森林</li>
+</ul>
+<p>更多的机器学习方法和替代实现被收集在<a href="https://github.com/mlr-org/mlr3extralearners/">mlr3extralearners</a>中。</p>
+<p>在<a href="https://mlr3extralearners.mlr-org.com/articles/learners/list_learners.html">这个交互式列表</a>中给出了所有包中已实现的学习者的完整列表，也通过<code>mlr3extralearners::list_mlr3learners()</code>给出。</p>
+<p><a href="https://mlr3extralearners.mlr-org.com/articles/learners/learner_status.html">这里</a>列出了所有学习器的最新构建状态。</p>
+<p>要为预定义的学习器之一创建对象，你需要访问<code>mlr_learners Dictionary</code>，该Dictionary与mlr_tasks类似，通过扩展包自动填充更多学习器。</p>
+<pre class="r"><code># load most mlr3 packages to populate the dictionary
+library(&quot;mlr3verse&quot;)
+mlr_learners</code></pre>
+<pre><code>out &lt;DictionaryLearner&gt; with 51 stored values
+out Keys: classif.cv_glmnet, classif.debug, classif.featureless,
+out   classif.glmnet, classif.kknn, classif.lda, classif.log_reg,
+out   classif.multinom, classif.naive_bayes, classif.nnet, classif.qda,
+out   classif.ranger, classif.rpart, classif.svm, classif.xgboost,
+out   clust.agnes, clust.ap, clust.cmeans, clust.cobweb, clust.dbscan,
+out   clust.diana, clust.em, clust.fanny, clust.featureless, clust.ff,
+out   clust.kkmeans, clust.kmeans, clust.MBatchKMeans, clust.meanshift,
+out   clust.pam, clust.SimpleKMeans, clust.xmeans, dens.hist, dens.kde,
+out   regr.cv_glmnet, regr.featureless, regr.glmnet, regr.kknn, regr.km,
+out   regr.lm, regr.ranger, regr.rpart, regr.svm, regr.xgboost, surv.coxph,
+out   surv.cv_glmnet, surv.glmnet, surv.kaplan, surv.ranger, surv.rpart,
+out   surv.xgboost</code></pre>
+<p>要从字典中获取对象，可以使用<code>lrn()</code>或通用的<code>mlr_learners$get()</code>方法，例如<code>lrn("class.rpart")</code>。</p>
+</div>
+<div id="学习器api" class="section level3">
+<h3>学习器API</h3>
+<p>每个学习器提供以下元信息：</p>
+<ul>
+<li><code>feature_types</code>：学习器能够处理的特征类型。</li>
+<li><code>packages</code>：用这个学习器训练模型并进行预测所需的软件包。</li>
+<li><code>properties</code>：附加属性和功能。例如，如果一个学习器能够处理缺失的特征值，那么他就具有“缺失”属性；如果它计算并允许根据数据提取特征相对重要性，那么他就具有“重要性”属性。在<a href="https://mlr3.mlr-org.com/reference/mlr_reflections.html#examples">mlr3的文档</a>中有一个完整的列表。</li>
+<li><code>predict_types</code>：可能的预测类型。例如，分类学习器可以预测标签(“响应”)或概率(“概率”)。有关可能的预测类型的完整列表，请参阅<a href="https://mlr3.mlr-org.com/reference/mlr_reflections.html#examples">mlr3文档</a>。</li>
+</ul>
+<p>你可以使用它的id来检索一个特定的学习器：</p>
+<pre class="r"><code>learner = lrn(&quot;classif.rpart&quot;)
+print(learner)</code></pre>
+<pre><code>out &lt;LearnerClassifRpart:classif.rpart&gt;
+out * Model: -
+out * Parameters: xval=0
+out * Packages: rpart
+out * Predict Type: response
+out * Feature types: logical, integer, numeric, factor, ordered
+out * Properties: importance, missings, multiclass, selected_features,
+out   twoclass, weights</code></pre>
+<p><code>param_set</code>字段存储了学习者超参数的描述、它们的范围、默认值和当前值：</p>
+<pre class="r"><code>learner$param_set</code></pre>
+<pre><code>out &lt;ParamSet&gt;
+out                 id    class lower upper nlevels        default value
+out  1:             cp ParamDbl     0     1     Inf           0.01      
+out  2:     keep_model ParamLgl    NA    NA       2          FALSE      
+out  3:     maxcompete ParamInt     0   Inf     Inf              4      
+out  4:       maxdepth ParamInt     1    30      30             30      
+out  5:   maxsurrogate ParamInt     0   Inf     Inf              5      
+out  6:      minbucket ParamInt     1   Inf     Inf &lt;NoDefault[3]&gt;      
+out  7:       minsplit ParamInt     1   Inf     Inf             20      
+out  8: surrogatestyle ParamInt     0     1       2              0      
+out  9:   usesurrogate ParamInt     0     2       3              2      
+out 10:           xval ParamInt     0   Inf     Inf             10     0</code></pre>
+<p>当前超参数值集存储在param_set字段的values字段中。你可以通过为该字段指定一个命名列表来更改当前的超参数值：</p>
+<pre class="r"><code>learner$param_set$values = list(cp = 0.01, xval = 0)
+learner</code></pre>
+<pre><code>out &lt;LearnerClassifRpart:classif.rpart&gt;
+out * Model: -
+out * Parameters: cp=0.01, xval=0
+out * Packages: rpart
+out * Predict Type: response
+out * Feature types: logical, integer, numeric, factor, ordered
+out * Properties: importance, missings, multiclass, selected_features,
+out   twoclass, weights</code></pre>
+<pre class="r"><code>learner$param_set</code></pre>
+<pre><code>out &lt;ParamSet&gt;
+out                 id    class lower upper nlevels        default value
+out  1:             cp ParamDbl     0     1     Inf           0.01  0.01
+out  2:     keep_model ParamLgl    NA    NA       2          FALSE      
+out  3:     maxcompete ParamInt     0   Inf     Inf              4      
+out  4:       maxdepth ParamInt     1    30      30             30      
+out  5:   maxsurrogate ParamInt     0   Inf     Inf              5      
+out  6:      minbucket ParamInt     1   Inf     Inf &lt;NoDefault[3]&gt;      
+out  7:       minsplit ParamInt     1   Inf     Inf             20      
+out  8: surrogatestyle ParamInt     0     1       2              0      
+out  9:   usesurrogate ParamInt     0     2       3              2      
+out 10:           xval ParamInt     0   Inf     Inf             10     0</code></pre>
+<p><strong>注意，这个操作只是覆盖了之前设置的所有参数</strong>。如果你只是想添加一个新的超参数，检索当前的参数值集，修改命名列表并将其写回学习器：</p>
+<pre class="r"><code>pv = learner$param_set$values
+pv$cp = 0.02
+learner$param_set$values = pv</code></pre>
+<p>这会将cp更新到0.02，并保留先前设置的参数xval。</p>
+<p>注意，<code>lrn()</code>函数还接受额外的参数，然后用于一次性更新学习器的超参数或设置字段：</p>
+<pre class="r"><code>learner = lrn(&quot;classif.rpart&quot;, id = &quot;rp&quot;, cp = 0.001)
+learner$id</code></pre>
+<pre><code>out [1] &quot;rp&quot;</code></pre>
+<pre class="r"><code>learner$param_set$values</code></pre>
+<pre><code>out $xval
+out [1] 0
+out 
+out $cp
+out [1] 0.001</code></pre>
+</div>
+</div>
+<div id="训练预测和评分" class="section level2">
+<h2>训练、预测和评分</h2>
+<p>在本节中，我们将解释如何使用任务和学习器来训练模型并预测到新数据集。在使用帝企鹅数据集和rpart学习器的监督分类上证明了这一概念，该学习器构建了一个单一的分类树。</p>
+<p>训练学习器意味着将模型拟合到给定的数据集。随后，我们想要预测新的观测结果的标签。这些预测将与参考真值进行比较，以评估模型的预测性能。</p>
+<div id="创建任务和学习器对象" class="section level3">
+<h3>创建任务和学习器对象</h3>
+<p>首先，我们加载mlr3verse包。</p>
+<pre class="r"><code>library(&quot;mlr3verse&quot;)</code></pre>
+<p>接下来，我们分别从mlr_tasks（使用快捷方式<code>tsk()</code>）和mlr_learners（使用快捷方式<code>lrn()</code>）中检索任务和学习器：</p>
+<pre class="r"><code>task = tsk(&quot;penguins&quot;)
+
+learner = lrn(&quot;classif.rpart&quot;)</code></pre>
+</div>
+<div id="设置任务的训练和测试集" class="section level3">
+<h3>设置任务的训练和测试集</h3>
+<p>在大部分数据上进行训练是很常见的。在这里，我们使用了所有可用观测值的<code>80%</code>，并对剩下的<code>20%</code>进行预测。为此，我们创建两个索引向量：</p>
+<pre class="r"><code>train_set = sample(task$nrow, 0.8 * task$nrow)
+test_set = setdiff(seq_len(task$nrow), train_set)</code></pre>
+<p>后面我们将学习mlr3如何基于不同的重采样策略自动创建训练集和测试集。</p>
+</div>
+<div id="训练学习器" class="section level3">
+<h3>训练学习器</h3>
+<p>字段<code>$model</code>存储在培训步骤中生成的模型。在对学习对象调用<code>$train()</code>方法之前，该字段是<code>NULL</code>：</p>
+<pre class="r"><code>learner$model</code></pre>
+<pre><code>out NULL</code></pre>
+<p>接下来，调用学习者的<code>$train()</code>方法，使用sonar任务的训练集对分类树进行训练：</p>
+<pre class="r"><code>learner$train(task, row_ids = train_set)</code></pre>
+<p>这个操作可以就地修改学习器。我们现在可以通过字段<code>$model</code>访问存储的模型：</p>
+<pre class="r"><code>print(learner$model)</code></pre>
+<pre><code>out n= 275 
+out 
+out node), split, n, loss, yval, (yprob)
+out       * denotes terminal node
+out 
+out 1) root 275 157 Adelie (0.429090909 0.192727273 0.378181818)  
+out   2) flipper_length&lt; 206.5 167  50 Adelie (0.700598802 0.293413174 0.005988024)  
+out     4) bill_length&lt; 43.3 117   3 Adelie (0.974358974 0.025641026 0.000000000) *
+out     5) bill_length&gt;=43.3 50   4 Chinstrap (0.060000000 0.920000000 0.020000000) *
+out   3) flipper_length&gt;=206.5 108   5 Gentoo (0.009259259 0.037037037 0.953703704)  
+out     6) bill_depth&gt;=17.15 7   3 Chinstrap (0.142857143 0.571428571 0.285714286) *
+out     7) bill_depth&lt; 17.15 101   0 Gentoo (0.000000000 0.000000000 1.000000000) *</code></pre>
+</div>
+<div id="预测" class="section level3">
+<h3>预测</h3>
+<p>模型训练完成后，我们使用剩下的部分数据进行预测。记住，我们最初在train_set和test_set中分割数据。</p>
+<pre class="r"><code>prediction = learner$predict(task, row_ids = test_set)
+print(prediction)</code></pre>
+<pre><code>out &lt;PredictionClassif&gt; for 69 observations:
+out     row_ids     truth  response
+out           4    Adelie    Adelie
+out           6    Adelie    Adelie
+out          13    Adelie    Adelie
+out ---                            
+out         340 Chinstrap Chinstrap
+out         342 Chinstrap Chinstrap
+out         344 Chinstrap Chinstrap</code></pre>
+<p>Learner的<code>$predict()</code>方法返回一个Prediction对象。更准确地说，LearnerClassif返回PredictionClassif对象。</p>
+<p>预测对象保存测试数据的行id、目标列各自的真实标签和各自的预测。提取此信息的最简单方法是将Prediction对象转换为<code>data.table()</code>：</p>
+<pre class="r"><code>head(as.data.table(prediction))</code></pre>
+<pre><code>out    row_ids  truth response
+out 1:       4 Adelie   Adelie
+out 2:       6 Adelie   Adelie
+out 3:      13 Adelie   Adelie
+out 4:      16 Adelie   Adelie
+out 5:      17 Adelie   Adelie
+out 6:      27 Adelie   Adelie</code></pre>
+<p>对于分类，还可以提取混淆矩阵：</p>
+<pre class="r"><code>prediction$confusion</code></pre>
+<pre><code>out            truth
+out response    Adelie Chinstrap Gentoo
+out   Adelie        32         2      0
+out   Chinstrap      2        13      0
+out   Gentoo         0         0     20</code></pre>
+</div>
+<div id="修改预测类型" class="section level3">
+<h3>修改预测类型</h3>
+<p>分类学习者默认预测类标签。然而，许多分类器还通过提供后验概率告诉你他们对预测标签的确定程度。要切换到预测这些概率，LearnerClassif的predict_type字段必须在训练前从“response”更改为“probb”：</p>
+<pre class="r"><code>learner$predict_type = &quot;prob&quot;
+
+# re-fit the model
+learner$train(task, row_ids = train_set)
+
+# rebuild prediction object
+prediction = learner$predict(task, row_ids = test_set)</code></pre>
+<p>预测对象现在包含所有类标签的概率：</p>
+<pre class="r"><code># data.table conversion
+head(as.data.table(prediction))</code></pre>
+<pre><code>out    row_ids  truth response prob.Adelie prob.Chinstrap prob.Gentoo
+out 1:       4 Adelie   Adelie    0.974359     0.02564103           0
+out 2:       6 Adelie   Adelie    0.974359     0.02564103           0
+out 3:      13 Adelie   Adelie    0.974359     0.02564103           0
+out 4:      16 Adelie   Adelie    0.974359     0.02564103           0
+out 5:      17 Adelie   Adelie    0.974359     0.02564103           0
+out 6:      27 Adelie   Adelie    0.974359     0.02564103           0</code></pre>
+<pre class="r"><code># directly access the predicted labels:
+head(prediction$response)</code></pre>
+<pre><code>out [1] Adelie Adelie Adelie Adelie Adelie Adelie
+out Levels: Adelie Chinstrap Gentoo</code></pre>
+<pre class="r"><code># directly access the matrix of probabilities:
+head(prediction$prob)</code></pre>
+<pre><code>out        Adelie  Chinstrap Gentoo
+out [1,] 0.974359 0.02564103      0
+out [2,] 0.974359 0.02564103      0
+out [3,] 0.974359 0.02564103      0
+out [4,] 0.974359 0.02564103      0
+out [5,] 0.974359 0.02564103      0
+out [6,] 0.974359 0.02564103      0</code></pre>
+<p>与预测概率类似，许多回归学习器通过将预测类型设置为“se”来支持提取标准误差估计。</p>
+</div>
+<div id="可视化预测" class="section level3">
+<h3>可视化预测</h3>
+<p>与绘制任务类似，mlr3viz为Prediction对象提供了<code>autoplot()</code>方法。所有可用的类型分别在<code>autoplot.PredictionClassif()</code>或<code>autoplot.PredictionRegr()</code>的手册页中列出。</p>
+<pre class="r"><code>task = tsk(&quot;penguins&quot;)
+learner = lrn(&quot;classif.rpart&quot;, predict_type = &quot;prob&quot;)
+learner$train(task)
+prediction = learner$predict(task)
+autoplot(prediction)</code></pre>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-43-1.png" width="864" /></p>
+</div>
+<div id="性能评估" class="section level3">
+<h3>性能评估</h3>
+<p>建模的最后一步通常是性能评估。为了评估预测的质量，将预测标签与真实标签进行比较。这个比较是如何计算的由度量定义，度量由Measure对象给出。注意，如果在没有目标列的数据集上进行预测，即没有真正的标签，则无法计算性能。</p>
+<p>预定义的可用度量存储在mlr_measures中（使用方便的<code>msr()</code>）:</p>
+<pre class="r"><code>mlr_measures</code></pre>
+<pre><code>out &lt;DictionaryMeasure&gt; with 84 stored values
+out Keys: aic, bic, classif.acc, classif.auc, classif.bacc, classif.bbrier,
+out   classif.ce, classif.costs, classif.dor, classif.fbeta, classif.fdr,
+out   classif.fn, classif.fnr, classif.fomr, classif.fp, classif.fpr,
+out   classif.logloss, classif.mbrier, classif.mcc, classif.npv,
+out   classif.ppv, classif.prauc, classif.precision, classif.recall,
+out   classif.sensitivity, classif.specificity, classif.tn, classif.tnr,
+out   classif.tp, classif.tpr, clust.ch, clust.db, clust.dunn,
+out   clust.silhouette, debug, dens.logloss, oob_error, regr.bias,
+out   regr.ktau, regr.mae, regr.mape, regr.maxae, regr.medae, regr.medse,
+out   regr.mse, regr.msle, regr.pbias, regr.rae, regr.rmse, regr.rmsle,
+out   regr.rrse, regr.rse, regr.rsq, regr.sae, regr.smape, regr.srho,
+out   regr.sse, selected_features, surv.brier, surv.calib_alpha,
+out   surv.calib_beta, surv.chambless_auc, surv.cindex, surv.dcalib,
+out   surv.graf, surv.hung_auc, surv.intlogloss, surv.logloss, surv.mae,
+out   surv.mse, surv.nagelk_r2, surv.oquigley_r2, surv.rmse, surv.schmid,
+out   surv.song_auc, surv.song_tnr, surv.song_tpr, surv.uno_auc,
+out   surv.uno_tnr, surv.uno_tpr, surv.xu_r2, time_both, time_predict,
+out   time_train</code></pre>
+<p>我们选择准确性(classif.acc)作为具体的性能度量，并调用Prediction对象的<code>$score()</code>方法来量化预测性能。</p>
+<pre class="r"><code>measure = msr(&quot;classif.acc&quot;)
+print(measure)</code></pre>
+<pre><code>out &lt;MeasureClassifSimple:classif.acc&gt;
+out * Packages: mlr3measures
+out * Range: [0, 1]
+out * Minimize: FALSE
+out * Parameters: list()
+out * Properties: -
+out * Predict type: response</code></pre>
+<pre class="r"><code>prediction$score(measure)</code></pre>
+<pre><code>out classif.acc 
+out   0.9651163</code></pre>
+</div>
+</div>
+<div id="重采样" class="section level2">
+<h2>重采样</h2>
+<p>重采样策略通常用来评估学习算法的性能。mlr3包含了以下预定义的重采样策略：</p>
+<ul>
+<li><a href="https://mlr3.mlr-org.com/reference/mlr_resamplings_cv.html">交叉验证 - cv</a></li>
+<li><a href="https://mlr3.mlr-org.com/reference/mlr_resamplings_loo.html">留一交叉验证 - loo</a></li>
+<li><a href="https://mlr3.mlr-org.com/reference/mlr_resamplings_repeated_cv.html">重复交叉验证 - repeated_cv</a></li>
+<li><a href="https://mlr3.mlr-org.com/reference/mlr_resamplings_bootstrap.html">bootstrapping - bootstrap</a></li>
+<li><a href="https://mlr3.mlr-org.com/reference/mlr_resamplings_subsampling.html">二次抽样 - subsampling</a></li>
+<li><a href="https://mlr3.mlr-org.com/reference/mlr_resamplings_holdout.html">holdout - holdout</a></li>
+<li><a href="https://mlr3.mlr-org.com/reference/mlr_resamplings_insample.html">样本重采样 - insample</a></li>
+<li><a href="https://mlr3.mlr-org.com/reference/mlr_resamplings_custom.html">自定义重采样 - custom</a></li>
+</ul>
+<p>以下部分提供了如何设置和选择重采样策略以及如何随后实例化重采样过程的指导。</p>
+<p>以下是重采样过程的图示：</p>
+<div class="figure"><span style="display:block;" id="fig:unnamed-chunk-47"></span>
+<img src="https://mlr3book.mlr-org.com/images/ml_abstraction.svg" alt="机器学习流程 source: https://mlr3book.mlr-org.com/images/ml_abstraction.svg"  />
+<p class="caption">
+Figure 3: 机器学习流程 source: <a href="https://mlr3book.mlr-org.com/images/ml_abstraction.svg" class="uri">https://mlr3book.mlr-org.com/images/ml_abstraction.svg</a>
+</p>
+</div>
+<div id="设置" class="section level3">
+<h3>设置</h3>
+<p>在本例中，我们再次使用了penguins任务和rpart包中的一个简单分类树。</p>
+<pre class="r"><code>library(&quot;mlr3verse&quot;)
+
+task = tsk(&quot;penguins&quot;)
+learner = lrn(&quot;classif.rpart&quot;)</code></pre>
+<p>在对数据集执行重采样时，我们首先需要定义应该使用哪种方法。mlr3重采样策略及其参数可以通过查看数据进行查询。mlr_resamplings字典的表输出：</p>
+<pre class="r"><code>as.data.table(mlr_resamplings)</code></pre>
+<pre><code>out            key        params iters
+out 1:   bootstrap ratio,repeats    30
+out 2:      custom                  NA
+out 3:   custom_cv                  NA
+out 4:          cv         folds    10
+out 5:     holdout         ratio     1
+out 6:    insample                   1
+out 7:         loo                  NA
+out 8: repeated_cv folds,repeats   100
+out 9: subsampling ratio,repeats    30</code></pre>
+<p>用于特殊用例的额外重采样方法将通过扩展包提供，例如用于空间数据的<a href="https://github.com/mlr-org/mlr3spatiotemporal">mlr3spatiotemporal</a>。</p>
+<p>在前面进行的模型拟合相当于“holdout 重采样”，所以让我们首先考虑这个。同样，我们可以通过<code>$get()</code>或方便的function <code>rsmp()</code>从字典mlr_resamplings中检索元素：</p>
+<pre class="r"><code>resampling = rsmp(&quot;holdout&quot;)
+print(resampling)</code></pre>
+<pre><code>out &lt;ResamplingHoldout&gt; with 1 iterations
+out * Instantiated: FALSE
+out * Parameters: ratio=0.6667</code></pre>
+<p>注意<code>$is_instantiated</code>字段被设置为FALSE。这意味着我们还没有在数据集上实际应用该策略。在下一节实例化中对数据集应用该策略。</p>
+<p>默认情况下，我们得到<code>.66/.33</code>数据的分割。有两种方法可以改变比例：</p>
+<ol style="list-style-type: decimal">
+<li>使用命名列表覆盖<code>$param_set$values</code>中的槽：</li>
+</ol>
+<pre class="r"><code>resampling$param_set$values = list(ratio = 0.8)</code></pre>
+<ol start="2" style="list-style-type: decimal">
+<li>使用时直接指定重采样参数：</li>
+</ol>
+<pre class="r"><code>rsmp(&quot;holdout&quot;, ratio = 0.8)</code></pre>
+<pre><code>out &lt;ResamplingHoldout&gt; with 1 iterations
+out * Instantiated: FALSE
+out * Parameters: ratio=0.8</code></pre>
+</div>
+<div id="实例化" class="section level3">
+<h3>实例化</h3>
+<p>到目前为止，我们只是设置和选择了重采样策略。</p>
+<p>为了实际执行分割并获得训练和测试分割的指标，重采样需要一个Task。通过调用<code>instantiate()</code>方法，我们将数据的索引分解为用于训练集和测试集的索引。这些结果索引存储在Resampling对象中。为了更好地说明以下操作，我们切换到一个3折交叉验证：</p>
+<pre class="r"><code>resampling = rsmp(&quot;cv&quot;, folds = 3)
+resampling$instantiate(task)
+resampling$iters</code></pre>
+<pre><code>out [1] 3</code></pre>
+<pre class="r"><code>str(resampling$train_set(1))</code></pre>
+<pre><code>out  int [1:229] 1 2 7 8 9 13 14 18 23 27 ...</code></pre>
+<pre class="r"><code>str(resampling$test_set(1))</code></pre>
+<pre><code>out  int [1:115] 3 4 6 10 12 17 20 25 26 28 ...</code></pre>
+<p>请注意，如果你想以公平的方式比较多个学习器，则必须对每个学习器使用相同的实例化重采样。下一节基准测试将讨论一种大大简化多个学习器之间比较的方法。</p>
+</div>
+<div id="执行" class="section level3">
+<h3>执行</h3>
+<p>对于一个任务，一个学习者和一个重采样对象，我们可以调用<code>resample()</code>，它根据给定的重采样策略重复地将学习器应用于手头的任务。这又创建了一个ResampleResult对象。我们告诉<code>resample()</code>通过将store_models选项设置为true来保留拟合的模型，然后开始计算：</p>
+<pre class="r"><code>task = tsk(&quot;penguins&quot;)
+learner = lrn(&quot;classif.rpart&quot;, maxdepth = 3, predict_type = &quot;prob&quot;)
+resampling = rsmp(&quot;cv&quot;, folds = 3)
+
+rr = resample(task, learner, resampling, store_models = TRUE)</code></pre>
+<pre><code>out INFO  [20:10:12.090] [mlr3]  Applying learner &#39;classif.rpart&#39; on task &#39;penguins&#39; (iter 2/3) 
+out INFO  [20:10:12.129] [mlr3]  Applying learner &#39;classif.rpart&#39; on task &#39;penguins&#39; (iter 3/3) 
+out INFO  [20:10:12.158] [mlr3]  Applying learner &#39;classif.rpart&#39; on task &#39;penguins&#39; (iter 1/3)</code></pre>
+<pre class="r"><code>print(rr)</code></pre>
+<pre><code>out &lt;ResampleResult&gt; of 3 iterations
+out * Task: penguins
+out * Learner: classif.rpart
+out * Warnings: 0 in 0 iterations
+out * Errors: 0 in 0 iterations</code></pre>
+<p>rr存储返回的ResampleResult提供了各种getter方法来访问存储的信息：</p>
+<ul>
+<li>计算所有重采样迭代的平均性能：</li>
+</ul>
+<pre class="r"><code>rr$aggregate(msr(&quot;classif.ce&quot;))</code></pre>
+<pre><code>out classif.ce 
+out 0.06969235</code></pre>
+<ul>
+<li>提取单个重采样迭代的性能：</li>
+</ul>
+<pre class="r"><code>rr$score(msr(&quot;classif.ce&quot;))</code></pre>
+<pre><code>out                 task  task_id                   learner    learner_id
+out 1: &lt;TaskClassif[47]&gt; penguins &lt;LearnerClassifRpart[36]&gt; classif.rpart
+out 2: &lt;TaskClassif[47]&gt; penguins &lt;LearnerClassifRpart[36]&gt; classif.rpart
+out 3: &lt;TaskClassif[47]&gt; penguins &lt;LearnerClassifRpart[36]&gt; classif.rpart
+out            resampling resampling_id iteration              prediction
+out 1: &lt;ResamplingCV[19]&gt;            cv         1 &lt;PredictionClassif[19]&gt;
+out 2: &lt;ResamplingCV[19]&gt;            cv         2 &lt;PredictionClassif[19]&gt;
+out 3: &lt;ResamplingCV[19]&gt;            cv         3 &lt;PredictionClassif[19]&gt;
+out    classif.ce
+out 1: 0.09565217
+out 2: 0.06956522
+out 3: 0.04385965</code></pre>
+<ul>
+<li>检查警告或错误：</li>
+</ul>
+<pre class="r"><code>rr$warnings</code></pre>
+<pre><code>out Empty data.table (0 rows and 2 cols): iteration,msg</code></pre>
+<pre class="r"><code>rr$errors</code></pre>
+<pre><code>out Empty data.table (0 rows and 2 cols): iteration,msg</code></pre>
+<p>提取并检查重采样分割：</p>
+<pre class="r"><code>rr$resampling</code></pre>
+<pre><code>out &lt;ResamplingCV&gt; with 3 iterations
+out * Instantiated: TRUE
+out * Parameters: folds=3</code></pre>
+<pre class="r"><code>rr$resampling$iters</code></pre>
+<pre><code>out [1] 3</code></pre>
+<pre class="r"><code>str(rr$resampling$test_set(1))</code></pre>
+<pre><code>out  int [1:115] 5 7 10 11 13 15 17 18 19 24 ...</code></pre>
+<pre class="r"><code>str(rr$resampling$train_set(1))</code></pre>
+<pre><code>out  int [1:229] 1 2 3 4 6 8 12 20 21 28 ...</code></pre>
+<ul>
+<li>检索特定迭代的学习器并检查它：</li>
+</ul>
+<pre class="r"><code>lrn = rr$learners[[1]]
+lrn$model</code></pre>
+<pre><code>out n= 229 
+out 
+out node), split, n, loss, yval, (yprob)
+out       * denotes terminal node
+out 
+out  1) root 229 128 Adelie (0.441048035 0.179039301 0.379912664)  
+out    2) flipper_length&lt; 206 139  39 Adelie (0.719424460 0.273381295 0.007194245)  
+out      4) bill_length&lt; 43.15 98   2 Adelie (0.979591837 0.020408163 0.000000000) *
+out      5) bill_length&gt;=43.15 41   5 Chinstrap (0.097560976 0.878048780 0.024390244)  
+out       10) body_mass&gt;=4175 7   3 Adelie (0.571428571 0.285714286 0.142857143) *
+out       11) body_mass&lt; 4175 34   0 Chinstrap (0.000000000 1.000000000 0.000000000) *
+out    3) flipper_length&gt;=206 90   4 Gentoo (0.011111111 0.033333333 0.955555556) *</code></pre>
+<ul>
+<li>提取预测：</li>
+</ul>
+<pre class="r"><code>rr$prediction() # all predictions merged into a single Prediction object</code></pre>
+<pre><code>out &lt;PredictionClassif&gt; for 344 observations:
+out     row_ids     truth  response prob.Adelie prob.Chinstrap prob.Gentoo
+out           5    Adelie    Adelie  0.97959184     0.02040816  0.00000000
+out           7    Adelie    Adelie  0.97959184     0.02040816  0.00000000
+out          10    Adelie    Adelie  0.97959184     0.02040816  0.00000000
+out ---                                                                   
+out         338 Chinstrap Chinstrap  0.04651163     0.93023256  0.02325581
+out         342 Chinstrap Chinstrap  0.04651163     0.93023256  0.02325581
+out         344 Chinstrap Chinstrap  0.04651163     0.93023256  0.02325581</code></pre>
+<pre class="r"><code>rr$predictions()[[1]] # prediction of first resampling iteration</code></pre>
+<pre><code>out &lt;PredictionClassif&gt; for 115 observations:
+out     row_ids     truth  response prob.Adelie prob.Chinstrap prob.Gentoo
+out           5    Adelie    Adelie  0.97959184     0.02040816   0.0000000
+out           7    Adelie    Adelie  0.97959184     0.02040816   0.0000000
+out          10    Adelie    Adelie  0.97959184     0.02040816   0.0000000
+out ---                                                                   
+out         336 Chinstrap Chinstrap  0.00000000     1.00000000   0.0000000
+out         337 Chinstrap    Gentoo  0.01111111     0.03333333   0.9555556
+out         339 Chinstrap Chinstrap  0.00000000     1.00000000   0.0000000</code></pre>
+<ul>
+<li>过滤器只保留指定的迭代：</li>
+</ul>
+<pre class="r"><code>rr$filter(c(1, 3))
+print(rr)</code></pre>
+<pre><code>out &lt;ResampleResult&gt; of 2 iterations
+out * Task: penguins
+out * Learner: classif.rpart
+out * Warnings: 0 in 0 iterations
+out * Errors: 0 in 0 iterations</code></pre>
+</div>
+<div id="自定义重采样" class="section level3">
+<h3>自定义重采样</h3>
+<p>有时需要使用自定义分割进行重采样，例如重现研究报告中的结果。可以使用“custom”模板创建手动重采样实例。</p>
+<pre class="r"><code>resampling = rsmp(&quot;custom&quot;)
+resampling$instantiate(task,
+  train = list(c(1:10, 51:60, 101:110)),
+  test = list(c(11:20, 61:70, 111:120))
+)
+resampling$iters</code></pre>
+<pre><code>out [1] 1</code></pre>
+<pre class="r"><code>resampling$train_set(1)</code></pre>
+<pre><code>out  [1]   1   2   3   4   5   6   7   8   9  10  51  52  53  54  55  56  57  58  59
+out [20]  60 101 102 103 104 105 106 107 108 109 110</code></pre>
+<pre class="r"><code>resampling$test_set(1)</code></pre>
+<pre><code>out  [1]  11  12  13  14  15  16  17  18  19  20  61  62  63  64  65  66  67  68  69
+out [20]  70 111 112 113 114 115 116 117 118 119 120</code></pre>
+</div>
+<div id="使用预定义组进行重采样" class="section level3">
+<h3>使用预定义组进行重采样</h3>
+<p>与定义列角色“group”（表示特定的观察结果应该总是在测试集或训练集中一起出现）相反，我们还可以提供一个因子变量来预定义所有分区（还在进行中）。</p>
+<p>这意味着该变量的每个因素级别单独组成测试集。因此，此方法不允许设置“fold”参数，因为折叠的数量是由因子级别的数量决定的。</p>
+<p>这种预定义的方法在mlr2中称为“阻塞”。它不应该与mlr3spatiotempcv中的术语“块”混淆，后者指的是利用平方/矩形分割的一类重采样方法。</p>
+</div>
+<div id="可视化重采样结果" class="section level3">
+<h3>可视化重采样结果</h3>
+<p>mlr3viz提供了一个<code>autoplot()</code>方法。为了展示一些图，我们创建了一个具有两个特征的二元分类任务，使用10倍交叉验证执行重采样并可视化结果：</p>
+<pre class="r"><code>task = tsk(&quot;pima&quot;)
+task$select(c(&quot;glucose&quot;, &quot;mass&quot;))
+learner = lrn(&quot;classif.rpart&quot;, predict_type = &quot;prob&quot;)
+rr = resample(task, learner, rsmp(&quot;cv&quot;), store_models = TRUE)</code></pre>
+<pre><code>out INFO  [20:10:12.462] [mlr3]  Applying learner &#39;classif.rpart&#39; on task &#39;pima&#39; (iter 7/10) 
+out INFO  [20:10:12.473] [mlr3]  Applying learner &#39;classif.rpart&#39; on task &#39;pima&#39; (iter 9/10) 
+out INFO  [20:10:12.485] [mlr3]  Applying learner &#39;classif.rpart&#39; on task &#39;pima&#39; (iter 6/10) 
+out INFO  [20:10:12.496] [mlr3]  Applying learner &#39;classif.rpart&#39; on task &#39;pima&#39; (iter 2/10) 
+out INFO  [20:10:12.507] [mlr3]  Applying learner &#39;classif.rpart&#39; on task &#39;pima&#39; (iter 3/10) 
+out INFO  [20:10:12.518] [mlr3]  Applying learner &#39;classif.rpart&#39; on task &#39;pima&#39; (iter 10/10) 
+out INFO  [20:10:12.537] [mlr3]  Applying learner &#39;classif.rpart&#39; on task &#39;pima&#39; (iter 4/10) 
+out INFO  [20:10:12.549] [mlr3]  Applying learner &#39;classif.rpart&#39; on task &#39;pima&#39; (iter 1/10) 
+out INFO  [20:10:12.560] [mlr3]  Applying learner &#39;classif.rpart&#39; on task &#39;pima&#39; (iter 8/10) 
+out INFO  [20:10:12.571] [mlr3]  Applying learner &#39;classif.rpart&#39; on task &#39;pima&#39; (iter 5/10)</code></pre>
+<pre class="r"><code># boxplot of AUC values across the 10 folds
+autoplot(rr, measure = msr(&quot;classif.auc&quot;))</code></pre>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-63-1.png" width="864" /></p>
+<pre class="r"><code># ROC curve, averaged over 10 folds
+autoplot(rr, type = &quot;roc&quot;)</code></pre>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-63-2.png" width="864" /></p>
+<pre class="r"><code># learner predictions for first fold
+rr$filter(1)
+autoplot(rr, type = &quot;prediction&quot;)</code></pre>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-63-3.png" width="864" /></p>
+<p><a href="https://mlr3viz.mlr-org.com/reference/autoplot.ResampleResult.html">autoplot.ResampleResult()</a>的手册页列出了所有可用的绘图类型。</p>
+</div>
+<div id="可视化重采样分区" class="section level3">
+<h3>可视化重采样分区</h3>
+<p>Mlr3spatiotempcv提供<code>autoplot()</code>方法来可视化时空数据集的重采样分区。更多信息，请参阅<a href="https://mlr3spatiotempcv.mlr-org.com/reference">函数参考</a>和vignette<a href="https://mlr3spatiotempcv.mlr-org.com/articles/spatiotemp-viz.html">“时空可视化”</a>。</p>
+<p><img src="https://mlr3book.mlr-org.com/02-basics-resampling_files/figure-html/02-basics-resampling-018-1.svg" /></p>
+</div>
+</div>
+<div id="基准测试" class="section level2">
+<h2>基准测试</h2>
+<p>比较不同学习器在多个任务和/或不同重采样方案上的表现是一个常见的任务。在机器学习领域，这种操作通常被称为“基准测试”。mlr3包提供了方便的<code>benchmark()</code>函数。</p>
+<div id="设计创建" class="section level3">
+<h3>设计创建</h3>
+<p>在mlr3中，我们要求你提供基准实验的“设计”。这样的设计本质上是你想要执行的设置表。它由任务、学习者和重采样三方面的唯一组合组成。</p>
+<p>我们使用<code>benchmark_grid()</code>函数来创建一个详尽的设计并正确地实例化重采样，这样对于每个任务，所有的学习器都在相同的训练/测试分割上执行。我们设置学习器预测概率，并告诉他们预测训练集的观察值(通过设置predict_sets为c(“train”，“test”))。此外，我们使用<code>tsks()</code>、<code>lrns()</code>和<code>rsmps()</code>来检索Task、Learner和Resampling的列表，其方式与<code>tsk()</code>、<code>lrn()</code>和<code>rsmp()</code>相同。</p>
+<pre class="r"><code>library(&quot;mlr3verse&quot;)
+
+design = benchmark_grid(
+  tasks = tsks(c(&quot;spam&quot;, &quot;german_credit&quot;, &quot;sonar&quot;)),
+  learners = lrns(c(&quot;classif.ranger&quot;, &quot;classif.rpart&quot;, &quot;classif.featureless&quot;),
+    predict_type = &quot;prob&quot;, predict_sets = c(&quot;train&quot;, &quot;test&quot;)),
+  resamplings = rsmps(&quot;cv&quot;, folds = 3)
+)
+print(design)</code></pre>
+<pre><code>out                 task                         learner         resampling
+out 1: &lt;TaskClassif[47]&gt;      &lt;LearnerClassifRanger[36]&gt; &lt;ResamplingCV[19]&gt;
+out 2: &lt;TaskClassif[47]&gt;       &lt;LearnerClassifRpart[36]&gt; &lt;ResamplingCV[19]&gt;
+out 3: &lt;TaskClassif[47]&gt; &lt;LearnerClassifFeatureless[36]&gt; &lt;ResamplingCV[19]&gt;
+out 4: &lt;TaskClassif[47]&gt;      &lt;LearnerClassifRanger[36]&gt; &lt;ResamplingCV[19]&gt;
+out 5: &lt;TaskClassif[47]&gt;       &lt;LearnerClassifRpart[36]&gt; &lt;ResamplingCV[19]&gt;
+out 6: &lt;TaskClassif[47]&gt; &lt;LearnerClassifFeatureless[36]&gt; &lt;ResamplingCV[19]&gt;
+out 7: &lt;TaskClassif[47]&gt;      &lt;LearnerClassifRanger[36]&gt; &lt;ResamplingCV[19]&gt;
+out 8: &lt;TaskClassif[47]&gt;       &lt;LearnerClassifRpart[36]&gt; &lt;ResamplingCV[19]&gt;
+out 9: &lt;TaskClassif[47]&gt; &lt;LearnerClassifFeatureless[36]&gt; &lt;ResamplingCV[19]&gt;</code></pre>
+<p>创建的设计可以传递给<code>benchmark()</code>以开始计算。也可以手动创建自定义设计。然而，如果你使用<code>data.table()</code>创建一个自定义任务，<strong>如果你在创建设计之前没有手动实例化重采样，那么设计的每一行的train/test分割将是不同的</strong>。查看<code>benchmark_grid()</code>的<a href="https://mlr3.mlr-org.com/reference/benchmark_grid.html">帮助页面</a>以获得一个示例。</p>
+</div>
+<div id="结果的执行和汇总" class="section level3">
+<h3>结果的执行和汇总</h3>
+<p>基准设计完成后，可以直接调用<code>benchmark()</code>：</p>
+<pre class="r"><code># execute the benchmark
+bmr = benchmark(design)</code></pre>
+<pre><code>out INFO  [20:10:14.438] [mlr3]  Running benchmark with 27 resampling iterations 
+out INFO  [20:10:14.446] [mlr3]  Applying learner &#39;classif.ranger&#39; on task &#39;german_credit&#39; (iter 2/3) 
+out INFO  [20:10:14.823] [mlr3]  Applying learner &#39;classif.featureless&#39; on task &#39;sonar&#39; (iter 3/3) 
+out INFO  [20:10:14.837] [mlr3]  Applying learner &#39;classif.rpart&#39; on task &#39;spam&#39; (iter 3/3) 
+out INFO  [20:10:15.181] [mlr3]  Applying learner &#39;classif.rpart&#39; on task &#39;sonar&#39; (iter 2/3) 
+out INFO  [20:10:15.206] [mlr3]  Applying learner &#39;classif.ranger&#39; on task &#39;sonar&#39; (iter 1/3) 
+out INFO  [20:10:15.312] [mlr3]  Applying learner &#39;classif.featureless&#39; on task &#39;sonar&#39; (iter 2/3) 
+out INFO  [20:10:15.320] [mlr3]  Applying learner &#39;classif.rpart&#39; on task &#39;spam&#39; (iter 2/3) 
+out INFO  [20:10:15.405] [mlr3]  Applying learner &#39;classif.rpart&#39; on task &#39;german_credit&#39; (iter 2/3) 
+out INFO  [20:10:15.434] [mlr3]  Applying learner &#39;classif.ranger&#39; on task &#39;spam&#39; (iter 3/3) 
+out INFO  [20:10:17.632] [mlr3]  Applying learner &#39;classif.rpart&#39; on task &#39;sonar&#39; (iter 3/3) 
+out INFO  [20:10:17.656] [mlr3]  Applying learner &#39;classif.featureless&#39; on task &#39;german_credit&#39; (iter 1/3) 
+out INFO  [20:10:17.666] [mlr3]  Applying learner &#39;classif.featureless&#39; on task &#39;spam&#39; (iter 2/3) 
+out INFO  [20:10:17.683] [mlr3]  Applying learner &#39;classif.ranger&#39; on task &#39;german_credit&#39; (iter 1/3) 
+out INFO  [20:10:18.049] [mlr3]  Applying learner &#39;classif.rpart&#39; on task &#39;sonar&#39; (iter 1/3) 
+out INFO  [20:10:18.072] [mlr3]  Applying learner &#39;classif.featureless&#39; on task &#39;german_credit&#39; (iter 3/3) 
+out INFO  [20:10:18.082] [mlr3]  Applying learner &#39;classif.featureless&#39; on task &#39;spam&#39; (iter 3/3) 
+out INFO  [20:10:18.099] [mlr3]  Applying learner &#39;classif.rpart&#39; on task &#39;german_credit&#39; (iter 1/3) 
+out INFO  [20:10:18.128] [mlr3]  Applying learner &#39;classif.ranger&#39; on task &#39;spam&#39; (iter 2/3) 
+out INFO  [20:10:20.227] [mlr3]  Applying learner &#39;classif.rpart&#39; on task &#39;german_credit&#39; (iter 3/3) 
+out INFO  [20:10:20.256] [mlr3]  Applying learner &#39;classif.rpart&#39; on task &#39;spam&#39; (iter 1/3) 
+out INFO  [20:10:20.332] [mlr3]  Applying learner &#39;classif.featureless&#39; on task &#39;sonar&#39; (iter 1/3) 
+out INFO  [20:10:20.340] [mlr3]  Applying learner &#39;classif.ranger&#39; on task &#39;spam&#39; (iter 1/3) 
+out INFO  [20:10:22.294] [mlr3]  Applying learner &#39;classif.ranger&#39; on task &#39;german_credit&#39; (iter 3/3) 
+out INFO  [20:10:22.629] [mlr3]  Applying learner &#39;classif.featureless&#39; on task &#39;spam&#39; (iter 1/3) 
+out INFO  [20:10:22.645] [mlr3]  Applying learner &#39;classif.ranger&#39; on task &#39;sonar&#39; (iter 2/3) 
+out INFO  [20:10:22.755] [mlr3]  Applying learner &#39;classif.ranger&#39; on task &#39;sonar&#39; (iter 3/3) 
+out INFO  [20:10:22.859] [mlr3]  Applying learner &#39;classif.featureless&#39; on task &#39;german_credit&#39; (iter 2/3) 
+out INFO  [20:10:22.870] [mlr3]  Finished benchmark</code></pre>
+<p>注意，我们没有手动实例化重采样实例。<code>benchmark_grid()</code>会为我们处理它：在构建穷举网格期间，每个重采样策略都会为每个任务实例化一次。</p>
+<p>基准测试完成后，我们可以使用<code>$aggregate()</code>聚合性能结果。我们创建了两个度量来计算训练集和预测集的AUC：</p>
+<pre class="r"><code>measures = list(
+  msr(&quot;classif.auc&quot;, predict_sets = &quot;train&quot;, id = &quot;auc_train&quot;),
+  msr(&quot;classif.auc&quot;, id = &quot;auc_test&quot;)
+)
+
+tab = bmr$aggregate(measures)
+print(tab)</code></pre>
+<pre><code>out    nr      resample_result       task_id          learner_id resampling_id
+out 1:  1 &lt;ResampleResult[20]&gt;          spam      classif.ranger            cv
+out 2:  2 &lt;ResampleResult[20]&gt;          spam       classif.rpart            cv
+out 3:  3 &lt;ResampleResult[20]&gt;          spam classif.featureless            cv
+out 4:  4 &lt;ResampleResult[20]&gt; german_credit      classif.ranger            cv
+out 5:  5 &lt;ResampleResult[20]&gt; german_credit       classif.rpart            cv
+out 6:  6 &lt;ResampleResult[20]&gt; german_credit classif.featureless            cv
+out 7:  7 &lt;ResampleResult[20]&gt;         sonar      classif.ranger            cv
+out 8:  8 &lt;ResampleResult[20]&gt;         sonar       classif.rpart            cv
+out 9:  9 &lt;ResampleResult[20]&gt;         sonar classif.featureless            cv
+out    iters auc_train  auc_test
+out 1:     3 0.9994965 0.9841249
+out 2:     3 0.9141699 0.9030231
+out 3:     3 0.5000000 0.5000000
+out 4:     3 0.9984703 0.7884144
+out 5:     3 0.8252325 0.6785829
+out 6:     3 0.5000000 0.5000000
+out 7:     3 1.0000000 0.8963470
+out 8:     3 0.9379970 0.7292513
+out 9:     3 0.5000000 0.5000000</code></pre>
+<p>我们可以进一步汇总这些结果。例如，我们可能有兴趣知道哪个学习器在同时完成所有任务时表现最好。简单地将性能与平均值相加通常在统计上并不合理。相反，我们按任务分组计算每个学习器的等级统计量。然后将计算得到的按学习器分组的秩用data.table进行汇总。由于需要最大化AUC，我们将这些值乘以−1，使最好的学习者的排名为1。</p>
+<pre class="r"><code>library(&quot;data.table&quot;)
+# group by levels of task_id, return columns:
+# - learner_id
+# - rank of col &#39;-auc_train&#39; (per level of learner_id)
+# - rank of col &#39;-auc_test&#39; (per level of learner_id)
+ranks = tab[, .(learner_id, rank_train = rank(-auc_train), rank_test = rank(-auc_test)), by = task_id]
+print(ranks)</code></pre>
+<pre><code>out          task_id          learner_id rank_train rank_test
+out 1:          spam      classif.ranger          1         1
+out 2:          spam       classif.rpart          2         2
+out 3:          spam classif.featureless          3         3
+out 4: german_credit      classif.ranger          1         1
+out 5: german_credit       classif.rpart          2         2
+out 6: german_credit classif.featureless          3         3
+out 7:         sonar      classif.ranger          1         1
+out 8:         sonar       classif.rpart          2         2
+out 9:         sonar classif.featureless          3         3</code></pre>
+<pre class="r"><code># group by levels of learner_id, return columns:
+# - mean rank of col &#39;rank_train&#39; (per level of learner_id)
+# - mean rank of col &#39;rank_test&#39; (per level of learner_id)
+ranks = ranks[, .(mrank_train = mean(rank_train), mrank_test = mean(rank_test)), by = learner_id]
+
+# print the final table, ordered by mean rank of AUC test
+ranks[order(mrank_test)]</code></pre>
+<pre><code>out             learner_id mrank_train mrank_test
+out 1:      classif.ranger           1          1
+out 2:       classif.rpart           2          2
+out 3: classif.featureless           3          3</code></pre>
+</div>
+<div id="可视化基准测试结果" class="section level3">
+<h3>可视化基准测试结果</h3>
+<p>与绘制任务、预测或重新取样结果类似，mlr3viz还提供了用于基准测试结果的<code>autoplot()</code>方法。</p>
+<pre class="r"><code>autoplot(bmr) + ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45, hjust = 1))</code></pre>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-69-1.png" width="864" /></p>
+<p>我们也可以绘制ROC曲线。为此，我们首先需要过滤BenchmarkResult，使其只包含一个Task：</p>
+<pre class="r"><code>bmr_small = bmr$clone()$filter(task_id = &quot;german_credit&quot;)
+autoplot(bmr_small, type = &quot;roc&quot;)</code></pre>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-70-1.png" width="864" /></p>
+</div>
+<div id="提取结果" class="section level3">
+<h3>提取结果</h3>
+<p>一个BenchmarkResult对象本质上是多个ResampleResult对象的集合。由于这些数据存储在聚合的<code>data.table()</code>的列中，我们可以很容易地提取它们：</p>
+<pre class="r"><code>tab = bmr$aggregate(measures)
+rr = tab[task_id == &quot;german_credit&quot; &amp; learner_id == &quot;classif.ranger&quot;]$resample_result[[1]]
+print(rr)</code></pre>
+<pre><code>out &lt;ResampleResult&gt; of 3 iterations
+out * Task: german_credit
+out * Learner: classif.ranger
+out * Warnings: 0 in 0 iterations
+out * Errors: 0 in 0 iterations</code></pre>
+<p>我们现在可以使用前一节中所示的方法之一来研究这个重采样，甚至是单个重采样迭代：</p>
+<pre class="r"><code>measure = msr(&quot;classif.auc&quot;)
+rr$aggregate(measure)</code></pre>
+<pre><code>out classif.auc 
+out   0.7884144</code></pre>
+<pre class="r"><code># get the iteration with worst AUC
+perf = rr$score(measure)
+i = which.min(perf$classif.auc)
+
+# get the corresponding learner and train set
+print(rr$learners[[i]])</code></pre>
+<pre><code>out &lt;LearnerClassifRanger:classif.ranger&gt;
+out * Model: -
+out * Parameters: num.threads=1
+out * Packages: ranger
+out * Predict Type: prob
+out * Feature types: logical, integer, numeric, character, factor, ordered
+out * Properties: importance, multiclass, oob_error, twoclass, weights</code></pre>
+<pre class="r"><code>head(rr$resampling$train_set(i))</code></pre>
+<pre><code>out [1]  2  7  9 12 22 24</code></pre>
+</div>
+<div id="转换和合并" class="section level3">
+<h3>转换和合并</h3>
+<p>可以使用转换器<code>as_benchmark_result()</code>将ResampleResult转换为BenchmarkResult。另外，两个BenchmarkResults可以合并到一个更大的结果对象中。</p>
+<pre class="r"><code>task = tsk(&quot;iris&quot;)
+resampling = rsmp(&quot;holdout&quot;)$instantiate(task)
+
+rr1 = resample(task, lrn(&quot;classif.rpart&quot;), resampling)</code></pre>
+<pre><code>out INFO  [20:10:25.048] [mlr3]  Applying learner &#39;classif.rpart&#39; on task &#39;iris&#39; (iter 1/1)</code></pre>
+<pre class="r"><code>rr2 = resample(task, lrn(&quot;classif.featureless&quot;), resampling)</code></pre>
+<pre><code>out INFO  [20:10:25.086] [mlr3]  Applying learner &#39;classif.featureless&#39; on task &#39;iris&#39; (iter 1/1)</code></pre>
+<pre class="r"><code># Cast both ResampleResults to BenchmarkResults
+bmr1 = as_benchmark_result(rr1)
+bmr2 = as_benchmark_result(rr2)
+
+# Merge 2nd BMR into the first BMR
+bmr1$combine(bmr2)
+
+bmr1</code></pre>
+<pre><code>out &lt;BenchmarkResult&gt; of 2 rows with 2 resampling runs
+out  nr task_id          learner_id resampling_id iters warnings errors
+out   1    iris       classif.rpart       holdout     1        0      0
+out   2    iris classif.featureless       holdout     1        0      0</code></pre>
+</div>
+</div>
+<div id="二分类" class="section level2">
+<h2>二分类</h2>
+<p>目标变量只包含两个类的分类问题称为“二分类”。对于这样的二分类目标变量，你可以在任务创建期间在分类任务对象中指定正类。如果在构造过程中没有显式设置，则阳性类默认为目标变量的第一个水平。</p>
+<pre class="r"><code># during construction
+data(&quot;Sonar&quot;, package = &quot;mlbench&quot;)
+task = as_task_classif(Sonar, target = &quot;Class&quot;, positive = &quot;R&quot;)
+
+# switch positive class to level &#39;M&#39;
+task$positive = &quot;M&quot;</code></pre>
+<div id="roc和阈值" class="section level3">
+<h3>ROC和阈值</h3>
+<p>ROC分析是机器学习的一个子领域，研究对二元预测系统的评价。我们前面已经看到，可以通过访问<code>$confusion</code>字段来检索Prediction的混淆矩阵：</p>
+<pre class="r"><code>learner = lrn(&quot;classif.rpart&quot;, predict_type = &quot;prob&quot;)
+pred = learner$train(task)$predict(task)
+C = pred$confusion
+print(C)</code></pre>
+<pre><code>out         truth
+out response  M  R
+out        M 95 10
+out        R 16 87</code></pre>
+<p>混淆矩阵包含正确和不正确的类分配的计数，按类标签分组。列显示真实的(观察到的)标签，行显示预测的标签。正数总是在混淆矩阵的第一行或第一行。因此，C11中的元素是我们的模型预测阳性类并正确的次数。类似地，C22中的元素是我们的模型预测负类的次数，并且是正确的。对角线上的元素被称为真阳性(TP)和真阴性(TN)。元素C12是我们错误预测阳性标签的次数，被称为假阳性(FP)。元素C21被称为假阴性(FN)。</p>
+<p>我们现在可以将混乱矩阵的行和列规范化，从而得出一些有用的指标。</p>
+<p><img src="https://mlr3book.mlr-org.com/images/confusion_matrix.png" /></p>
+<p>很难同时实现高TPR和低FPR，所以我们使用它们来构建ROC曲线。我们通过分类器的TPR和FPR值来描述分类器，并在坐标系中绘制它们。最好的分类器位于左上角。最差的分类器位于对角线。对角线上的分类器产生随机标签(具有不同的比例)。如果每个阳性的x将被随机分为25%的“阳性”，我们得到的TPR为0.25。如果我们将每个负x随机分配给“正”，我们得到的FPR为0.25。在实践中，我们永远不应该得到对角线以下的分类器，因为将预测的标签倒置将导致对角线上的反射。</p>
+<p>评分分类器是产生分数或概率的模型，而不是离散标签。为了从mlr3中的学习者获得概率，你必须为ref(“LearnerClassif”)设置<code>predict_type = "prob"</code>。分类器是否能预测概率在其<code>$predict_types</code>字段中给出。阈值灵活地将测量的概率转换为标签。如果f^(x)&gt;τ else预测0，则预测1(正类)通常情况下，可以使用τ=0.5将概率转换为标签，但对于不平衡或成本敏感的情况，另一个阈值可能更合适。阈值设置之后，可以使用标签上定义的任何度量。</p>
+<pre class="r"><code>library(&quot;mlr3viz&quot;)
+
+# TPR vs FPR / Sensitivity vs (1 - Specificity)
+autoplot(pred, type = &quot;roc&quot;)</code></pre>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-76-1.png" width="864" /></p>
+<pre class="r"><code># Precision vs Recall
+autoplot(pred, type = &quot;prc&quot;)</code></pre>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-76-2.png" width="864" /></p>
+</div>
+<div id="阈值调整" class="section level3">
+<h3>阈值调整</h3>
+<p>能够预测出正向分类概率的学习者器常使用简单的规则来确定预测的分类标签：如果概率超过阈值t=0.5，则选择正向分类标签，否则选择负向分类标签。如果模型没有很好地校准或类标签严重不平衡，选择一个不同的阈值可以帮助提高预测性能。</p>
+<p>在这里，我们将阈值更改为t=0.2，提高了真实阳性率(TPR)。注意，有了新的阈值，更多来自正类别的观察将被正确地归类为正的标签，但与此同时，真实正阴性率(TNR)下降。根据应用的不同，这可能是一种需要的权衡。</p>
+<pre class="r"><code>measures = msrs(c(&quot;classif.tpr&quot;, &quot;classif.tnr&quot;))
+pred$confusion</code></pre>
+<pre><code>out         truth
+out response  M  R
+out        M 95 10
+out        R 16 87</code></pre>
+<pre class="r"><code>pred$score(measures)</code></pre>
+<pre><code>out classif.tpr classif.tnr 
+out   0.8558559   0.8969072</code></pre>
+<pre class="r"><code>pred$set_threshold(0.2)
+pred$confusion</code></pre>
+<pre><code>out         truth
+out response   M   R
+out        M 104  25
+out        R   7  72</code></pre>
+<p>阈值还可以用mlr3pipelines包进行调优，例如使用<a href="https://mlr3pipelines.mlr-org.com/reference/mlr_pipeops_tunethreshold.html">PipeOpTuneThreshold</a>。</p>
+</div>
+</div>
