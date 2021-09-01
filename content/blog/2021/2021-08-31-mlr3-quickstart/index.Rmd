@@ -11,8 +11,6 @@ tags:
   - 机器学习
 description: 翻译与笔记
 keywords: rstats
-editor_options:
-  chunk_output_type: console
 ---
 
 <!-- Links -->
@@ -20,33 +18,10 @@ editor_options:
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(
   echo = TRUE, warning = FALSE, message = FALSE,
-  fig.width = 9, fig.height = 10, comment = "out"
+  fig.width = 9, fig.height = 10
 )
 knitr::opts_chunk$set(engine.opts = list(bash = "-l"))
-knitr::knit_hooks$set(
-  prompt = function(before, options, envir) {
-    options(prompt = if (options$engine %in% c('sh','bash')) '$ ' else 'R> ')
-})
 options(htmltools.dir.version = TRUE)
-
-# If using lightbox for plots, set `fig.show = FALSE`
-# Usage: lightbox_img(knitr::fig_chunk("chunk-name", "png"))
-lightbox_img <- function(url, alt = "", caption = "", preview = TRUE) {
-  if (preview) {
-    glue::glue(
-      '<a href="{url}" data-featherlight="image">
-      <div class="figure">
-      <img src="{url}" alt="{alt}">
-      <p class="caption">{caption}</p>
-      </div>
-      </a>
-      '
-    )
-  } else {
-    if (alt == "") alt <- "static image of the plot"
-    glue::glue('<a href="{url}" data-featherlight="image">{alt}</a>')
-  }
-}
 ```
 
 来源：<https://mlr3book.mlr-org.com/quickstart.html>

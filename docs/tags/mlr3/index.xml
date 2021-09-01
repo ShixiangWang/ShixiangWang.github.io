@@ -48,7 +48,7 @@
       <description>来源：https://mlr3book.mlr-org.com/quickstart.html
 安装包：
 install.packages(&amp;quot;mlr3&amp;quot;) 作为一个30秒的介绍性示例，我们将在虹膜数据集的前120行训练决策树模型，并对最后30行进行预测，测量训练模型的准确性。
-library(&amp;quot;mlr3&amp;quot;) task = tsk(&amp;quot;iris&amp;quot;) learner = lrn(&amp;quot;classif.rpart&amp;quot;) # 为任务的一个子集（前120行）训练这个学习者的模型 learner$train(task, row_ids = 1:120) # 决策树模型 learner$model out n= 120 out out node), split, n, loss, yval, (yprob) out * denotes terminal node out out 1) root 120 70 setosa (0.41666667 0.41666667 0.16666667) out 2) Petal.Length&amp;lt; 2.45 50 0 setosa (1.00000000 0.00000000 0.00000000) * out 3) Petal.Length&amp;gt;=2.45 70 20 versicolor (0.00000000 0.71428571 0.28571429) out 6) Petal.</description>
+library(&amp;quot;mlr3&amp;quot;) task = tsk(&amp;quot;iris&amp;quot;) learner = lrn(&amp;quot;classif.rpart&amp;quot;) # 为任务的一个子集（前120行）训练这个学习者的模型 learner$train(task, row_ids = 1:120) # 决策树模型 learner$model ## n= 120 ## ## node), split, n, loss, yval, (yprob) ## * denotes terminal node ## ## 1) root 120 70 setosa (0.41666667 0.41666667 0.16666667) ## 2) Petal.Length&amp;lt; 2.45 50 0 setosa (1.00000000 0.00000000 0.00000000) * ## 3) Petal.Length&amp;gt;=2.45 70 20 versicolor (0.00000000 0.71428571 0.28571429) ## 6) Petal.</description>
     </item>
     
   </channel>

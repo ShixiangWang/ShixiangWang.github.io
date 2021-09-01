@@ -240,7 +240,7 @@ out   - dbl (2): cyl, disp</code></pre>
 <p>我们可以对任务数据进行可视化：</p>
 <pre class="r"><code>library(&quot;mlr3viz&quot;)
 autoplot(task_mtcars, type = &quot;pairs&quot;)</code></pre>
-<p><img src="../../blog/mlr3-basics/index_files/figure-html/unnamed-chunk-4-1.png" width="864" /></p>
+<p><img src="../../blog/mlr3-basics/index_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
 <p>请注意，与单独加载所有扩展包相比，加载mlr3verse包通常更方便。mlr3verse导入大部分mlr3包并重新导出用于常规机器学习和数据科学任务的函数。</p>
 </div>
 <div id="预定义内置任务" class="section level3">
@@ -494,13 +494,13 @@ task$select(head(task$feature_names, 3))
 
 # default plot: class frequencies
 autoplot(task)</code></pre>
-<p><img src="../../blog/mlr3-basics/index_files/figure-html/unnamed-chunk-20-1.png" width="864" /></p>
+<p><img src="../../blog/mlr3-basics/index_files/figure-html/unnamed-chunk-20-1.png" width="672" /></p>
 <pre class="r"><code># pairs plot (requires package GGally)
 autoplot(task, type = &quot;pairs&quot;)</code></pre>
-<p><img src="../../blog/mlr3-basics/index_files/figure-html/unnamed-chunk-21-1.png" width="864" /></p>
+<p><img src="../../blog/mlr3-basics/index_files/figure-html/unnamed-chunk-21-1.png" width="672" /></p>
 <pre class="r"><code># duo plot (requires package GGally)
 autoplot(task, type = &quot;duo&quot;)</code></pre>
-<p><img src="../../blog/mlr3-basics/index_files/figure-html/unnamed-chunk-22-1.png" width="864" /></p>
+<p><img src="../../blog/mlr3-basics/index_files/figure-html/unnamed-chunk-22-1.png" width="672" /></p>
 <p>当然，你也可以对回归任务(从TaskRegr继承)执行同样的操作。</p>
 <pre class="r"><code>library(&quot;mlr3viz&quot;)
 
@@ -512,10 +512,10 @@ task$select(head(task$feature_names, 3))
 
 # default plot: boxplot of target variable
 autoplot(task)</code></pre>
-<p><img src="../../blog/mlr3-basics/index_files/figure-html/unnamed-chunk-23-1.png" width="864" /></p>
+<p><img src="../../blog/mlr3-basics/index_files/figure-html/unnamed-chunk-23-1.png" width="672" /></p>
 <pre class="r"><code># pairs plot (requires package GGally)
 autoplot(task, type = &quot;pairs&quot;)</code></pre>
-<p><img src="../../blog/mlr3-basics/index_files/figure-html/unnamed-chunk-24-1.png" width="864" /></p>
+<p><img src="../../blog/mlr3-basics/index_files/figure-html/unnamed-chunk-24-1.png" width="672" /></p>
 </div>
 </div>
 </div>
@@ -686,13 +686,11 @@ out
 out node), split, n, loss, yval, (yprob)
 out       * denotes terminal node
 out 
-out 1) root 275 157 Adelie (0.429090909 0.192727273 0.378181818)  
-out   2) flipper_length&lt; 206.5 167  50 Adelie (0.700598802 0.293413174 0.005988024)  
-out     4) bill_length&lt; 43.3 117   3 Adelie (0.974358974 0.025641026 0.000000000) *
-out     5) bill_length&gt;=43.3 50   4 Chinstrap (0.060000000 0.920000000 0.020000000) *
-out   3) flipper_length&gt;=206.5 108   5 Gentoo (0.009259259 0.037037037 0.953703704)  
-out     6) bill_depth&gt;=17.15 7   3 Chinstrap (0.142857143 0.571428571 0.285714286) *
-out     7) bill_depth&lt; 17.15 101   0 Gentoo (0.000000000 0.000000000 1.000000000) *</code></pre>
+out 1) root 275 149 Adelie (0.458181818 0.189090909 0.352727273)  
+out   2) flipper_length&lt; 206.5 175  50 Adelie (0.714285714 0.280000000 0.005714286)  
+out     4) bill_length&lt; 43.35 127   5 Adelie (0.960629921 0.039370079 0.000000000) *
+out     5) bill_length&gt;=43.35 48   4 Chinstrap (0.062500000 0.916666667 0.020833333) *
+out   3) flipper_length&gt;=206.5 100   4 Gentoo (0.010000000 0.030000000 0.960000000) *</code></pre>
 </div>
 <div id="预测" class="section level3">
 <h3>预测</h3>
@@ -701,30 +699,30 @@ out     7) bill_depth&lt; 17.15 101   0 Gentoo (0.000000000 0.000000000 1.000000
 print(prediction)</code></pre>
 <pre><code>out &lt;PredictionClassif&gt; for 69 observations:
 out     row_ids     truth  response
-out           4    Adelie    Adelie
-out           6    Adelie    Adelie
-out          13    Adelie    Adelie
+out           2    Adelie    Adelie
+out           8    Adelie    Adelie
+out          11    Adelie    Adelie
 out ---                            
-out         340 Chinstrap Chinstrap
-out         342 Chinstrap Chinstrap
-out         344 Chinstrap Chinstrap</code></pre>
+out         321 Chinstrap Chinstrap
+out         334 Chinstrap Chinstrap
+out         343 Chinstrap    Gentoo</code></pre>
 <p>Learner的<code>$predict()</code>方法返回一个Prediction对象。更准确地说，LearnerClassif返回PredictionClassif对象。</p>
 <p>预测对象保存测试数据的行id、目标列各自的真实标签和各自的预测。提取此信息的最简单方法是将Prediction对象转换为<code>data.table()</code>：</p>
 <pre class="r"><code>head(as.data.table(prediction))</code></pre>
 <pre><code>out    row_ids  truth response
-out 1:       4 Adelie   Adelie
-out 2:       6 Adelie   Adelie
-out 3:      13 Adelie   Adelie
-out 4:      16 Adelie   Adelie
+out 1:       2 Adelie   Adelie
+out 2:       8 Adelie   Adelie
+out 3:      11 Adelie   Adelie
+out 4:      13 Adelie   Adelie
 out 5:      17 Adelie   Adelie
-out 6:      27 Adelie   Adelie</code></pre>
+out 6:      19 Adelie   Adelie</code></pre>
 <p>对于分类，还可以提取混淆矩阵：</p>
 <pre class="r"><code>prediction$confusion</code></pre>
 <pre><code>out            truth
 out response    Adelie Chinstrap Gentoo
-out   Adelie        32         2      0
-out   Chinstrap      2        13      0
-out   Gentoo         0         0     20</code></pre>
+out   Adelie        24         0      0
+out   Chinstrap      1        14      0
+out   Gentoo         1         2     27</code></pre>
 </div>
 <div id="修改预测类型" class="section level3">
 <h3>修改预测类型</h3>
@@ -740,25 +738,25 @@ prediction = learner$predict(task, row_ids = test_set)</code></pre>
 <pre class="r"><code># data.table conversion
 head(as.data.table(prediction))</code></pre>
 <pre><code>out    row_ids  truth response prob.Adelie prob.Chinstrap prob.Gentoo
-out 1:       4 Adelie   Adelie    0.974359     0.02564103           0
-out 2:       6 Adelie   Adelie    0.974359     0.02564103           0
-out 3:      13 Adelie   Adelie    0.974359     0.02564103           0
-out 4:      16 Adelie   Adelie    0.974359     0.02564103           0
-out 5:      17 Adelie   Adelie    0.974359     0.02564103           0
-out 6:      27 Adelie   Adelie    0.974359     0.02564103           0</code></pre>
+out 1:       2 Adelie   Adelie   0.9606299     0.03937008           0
+out 2:       8 Adelie   Adelie   0.9606299     0.03937008           0
+out 3:      11 Adelie   Adelie   0.9606299     0.03937008           0
+out 4:      13 Adelie   Adelie   0.9606299     0.03937008           0
+out 5:      17 Adelie   Adelie   0.9606299     0.03937008           0
+out 6:      19 Adelie   Adelie   0.9606299     0.03937008           0</code></pre>
 <pre class="r"><code># directly access the predicted labels:
 head(prediction$response)</code></pre>
 <pre><code>out [1] Adelie Adelie Adelie Adelie Adelie Adelie
 out Levels: Adelie Chinstrap Gentoo</code></pre>
 <pre class="r"><code># directly access the matrix of probabilities:
 head(prediction$prob)</code></pre>
-<pre><code>out        Adelie  Chinstrap Gentoo
-out [1,] 0.974359 0.02564103      0
-out [2,] 0.974359 0.02564103      0
-out [3,] 0.974359 0.02564103      0
-out [4,] 0.974359 0.02564103      0
-out [5,] 0.974359 0.02564103      0
-out [6,] 0.974359 0.02564103      0</code></pre>
+<pre><code>out         Adelie  Chinstrap Gentoo
+out [1,] 0.9606299 0.03937008      0
+out [2,] 0.9606299 0.03937008      0
+out [3,] 0.9606299 0.03937008      0
+out [4,] 0.9606299 0.03937008      0
+out [5,] 0.9606299 0.03937008      0
+out [6,] 0.9606299 0.03937008      0</code></pre>
 <p>与预测概率类似，许多回归学习器通过将预测类型设置为“se”来支持提取标准误差估计。</p>
 </div>
 <div id="可视化预测" class="section level3">
@@ -769,7 +767,7 @@ learner = lrn(&quot;classif.rpart&quot;, predict_type = &quot;prob&quot;)
 learner$train(task)
 prediction = learner$predict(task)
 autoplot(prediction)</code></pre>
-<p><img src="../../blog/mlr3-basics/index_files/figure-html/unnamed-chunk-43-1.png" width="864" /></p>
+<p><img src="../../blog/mlr3-basics/index_files/figure-html/unnamed-chunk-43-1.png" width="672" /></p>
 </div>
 <div id="性能评估" class="section level3">
 <h3>性能评估</h3>
@@ -880,9 +878,9 @@ resampling$instantiate(task)
 resampling$iters</code></pre>
 <pre><code>out [1] 3</code></pre>
 <pre class="r"><code>str(resampling$train_set(1))</code></pre>
-<pre><code>out  int [1:229] 1 2 7 8 9 13 14 18 23 27 ...</code></pre>
+<pre><code>out  int [1:229] 3 4 5 8 14 17 20 28 30 35 ...</code></pre>
 <pre class="r"><code>str(resampling$test_set(1))</code></pre>
-<pre><code>out  int [1:115] 3 4 6 10 12 17 20 25 26 28 ...</code></pre>
+<pre><code>out  int [1:115] 1 6 9 10 11 19 21 24 25 31 ...</code></pre>
 <p>请注意，如果你想以公平的方式比较多个学习器，则必须对每个学习器使用相同的实例化重采样。下一节基准测试将讨论一种大大简化多个学习器之间比较的方法。</p>
 </div>
 <div id="执行" class="section level3">
@@ -893,9 +891,9 @@ learner = lrn(&quot;classif.rpart&quot;, maxdepth = 3, predict_type = &quot;prob
 resampling = rsmp(&quot;cv&quot;, folds = 3)
 
 rr = resample(task, learner, resampling, store_models = TRUE)</code></pre>
-<pre><code>out INFO  [20:10:12.090] [mlr3]  Applying learner &#39;classif.rpart&#39; on task &#39;penguins&#39; (iter 2/3) 
-out INFO  [20:10:12.129] [mlr3]  Applying learner &#39;classif.rpart&#39; on task &#39;penguins&#39; (iter 3/3) 
-out INFO  [20:10:12.158] [mlr3]  Applying learner &#39;classif.rpart&#39; on task &#39;penguins&#39; (iter 1/3)</code></pre>
+<pre><code>out INFO  [21:44:36.748] [mlr3]  Applying learner &#39;classif.rpart&#39; on task &#39;penguins&#39; (iter 3/3) 
+out INFO  [21:44:36.795] [mlr3]  Applying learner &#39;classif.rpart&#39; on task &#39;penguins&#39; (iter 1/3) 
+out INFO  [21:44:36.829] [mlr3]  Applying learner &#39;classif.rpart&#39; on task &#39;penguins&#39; (iter 2/3)</code></pre>
 <pre class="r"><code>print(rr)</code></pre>
 <pre><code>out &lt;ResampleResult&gt; of 3 iterations
 out * Task: penguins
@@ -922,8 +920,8 @@ out 1: &lt;ResamplingCV[19]&gt;            cv         1 &lt;PredictionClassif[19
 out 2: &lt;ResamplingCV[19]&gt;            cv         2 &lt;PredictionClassif[19]&gt;
 out 3: &lt;ResamplingCV[19]&gt;            cv         3 &lt;PredictionClassif[19]&gt;
 out    classif.ce
-out 1: 0.09565217
-out 2: 0.06956522
+out 1: 0.05217391
+out 2: 0.11304348
 out 3: 0.04385965</code></pre>
 <ul>
 <li>检查警告或错误：</li>
@@ -940,9 +938,9 @@ out * Parameters: folds=3</code></pre>
 <pre class="r"><code>rr$resampling$iters</code></pre>
 <pre><code>out [1] 3</code></pre>
 <pre class="r"><code>str(rr$resampling$test_set(1))</code></pre>
-<pre><code>out  int [1:115] 5 7 10 11 13 15 17 18 19 24 ...</code></pre>
+<pre><code>out  int [1:115] 1 3 15 19 20 24 29 31 34 37 ...</code></pre>
 <pre class="r"><code>str(rr$resampling$train_set(1))</code></pre>
-<pre><code>out  int [1:229] 1 2 3 4 6 8 12 20 21 28 ...</code></pre>
+<pre><code>out  int [1:229] 5 7 8 9 10 11 13 14 17 27 ...</code></pre>
 <ul>
 <li>检索特定迭代的学习器并检查它：</li>
 </ul>
@@ -953,36 +951,34 @@ out
 out node), split, n, loss, yval, (yprob)
 out       * denotes terminal node
 out 
-out  1) root 229 128 Adelie (0.441048035 0.179039301 0.379912664)  
-out    2) flipper_length&lt; 206 139  39 Adelie (0.719424460 0.273381295 0.007194245)  
-out      4) bill_length&lt; 43.15 98   2 Adelie (0.979591837 0.020408163 0.000000000) *
-out      5) bill_length&gt;=43.15 41   5 Chinstrap (0.097560976 0.878048780 0.024390244)  
-out       10) body_mass&gt;=4175 7   3 Adelie (0.571428571 0.285714286 0.142857143) *
-out       11) body_mass&lt; 4175 34   0 Chinstrap (0.000000000 1.000000000 0.000000000) *
-out    3) flipper_length&gt;=206 90   4 Gentoo (0.011111111 0.033333333 0.955555556) *</code></pre>
+out 1) root 229 124 Adelie (0.458515284 0.196506550 0.344978166)  
+out   2) flipper_length&lt; 207.5 148  44 Adelie (0.702702703 0.290540541 0.006756757)  
+out     4) bill_length&lt; 43.35 105   4 Adelie (0.961904762 0.038095238 0.000000000) *
+out     5) bill_length&gt;=43.35 43   4 Chinstrap (0.069767442 0.906976744 0.023255814) *
+out   3) flipper_length&gt;=207.5 81   3 Gentoo (0.012345679 0.024691358 0.962962963) *</code></pre>
 <ul>
 <li>提取预测：</li>
 </ul>
 <pre class="r"><code>rr$prediction() # all predictions merged into a single Prediction object</code></pre>
 <pre><code>out &lt;PredictionClassif&gt; for 344 observations:
 out     row_ids     truth  response prob.Adelie prob.Chinstrap prob.Gentoo
-out           5    Adelie    Adelie  0.97959184     0.02040816  0.00000000
-out           7    Adelie    Adelie  0.97959184     0.02040816  0.00000000
-out          10    Adelie    Adelie  0.97959184     0.02040816  0.00000000
+out           1    Adelie    Adelie  0.96190476     0.03809524  0.00000000
+out           3    Adelie    Adelie  0.96190476     0.03809524  0.00000000
+out          15    Adelie    Adelie  0.96190476     0.03809524  0.00000000
 out ---                                                                   
-out         338 Chinstrap Chinstrap  0.04651163     0.93023256  0.02325581
-out         342 Chinstrap Chinstrap  0.04651163     0.93023256  0.02325581
-out         344 Chinstrap Chinstrap  0.04651163     0.93023256  0.02325581</code></pre>
+out         337 Chinstrap    Gentoo  0.02127660     0.03191489  0.94680851
+out         338 Chinstrap Chinstrap  0.06666667     0.91111111  0.02222222
+out         340 Chinstrap    Gentoo  0.02127660     0.03191489  0.94680851</code></pre>
 <pre class="r"><code>rr$predictions()[[1]] # prediction of first resampling iteration</code></pre>
 <pre><code>out &lt;PredictionClassif&gt; for 115 observations:
 out     row_ids     truth  response prob.Adelie prob.Chinstrap prob.Gentoo
-out           5    Adelie    Adelie  0.97959184     0.02040816   0.0000000
-out           7    Adelie    Adelie  0.97959184     0.02040816   0.0000000
-out          10    Adelie    Adelie  0.97959184     0.02040816   0.0000000
+out           1    Adelie    Adelie  0.96190476     0.03809524  0.00000000
+out           3    Adelie    Adelie  0.96190476     0.03809524  0.00000000
+out          15    Adelie    Adelie  0.96190476     0.03809524  0.00000000
 out ---                                                                   
-out         336 Chinstrap Chinstrap  0.00000000     1.00000000   0.0000000
-out         337 Chinstrap    Gentoo  0.01111111     0.03333333   0.9555556
-out         339 Chinstrap Chinstrap  0.00000000     1.00000000   0.0000000</code></pre>
+out         339 Chinstrap Chinstrap  0.06976744     0.90697674  0.02325581
+out         343 Chinstrap    Gentoo  0.01234568     0.02469136  0.96296296
+out         344 Chinstrap Chinstrap  0.06976744     0.90697674  0.02325581</code></pre>
 <ul>
 <li>过滤器只保留指定的迭代：</li>
 </ul>
@@ -1024,26 +1020,26 @@ out [20]  70 111 112 113 114 115 116 117 118 119 120</code></pre>
 task$select(c(&quot;glucose&quot;, &quot;mass&quot;))
 learner = lrn(&quot;classif.rpart&quot;, predict_type = &quot;prob&quot;)
 rr = resample(task, learner, rsmp(&quot;cv&quot;), store_models = TRUE)</code></pre>
-<pre><code>out INFO  [20:10:12.462] [mlr3]  Applying learner &#39;classif.rpart&#39; on task &#39;pima&#39; (iter 7/10) 
-out INFO  [20:10:12.473] [mlr3]  Applying learner &#39;classif.rpart&#39; on task &#39;pima&#39; (iter 9/10) 
-out INFO  [20:10:12.485] [mlr3]  Applying learner &#39;classif.rpart&#39; on task &#39;pima&#39; (iter 6/10) 
-out INFO  [20:10:12.496] [mlr3]  Applying learner &#39;classif.rpart&#39; on task &#39;pima&#39; (iter 2/10) 
-out INFO  [20:10:12.507] [mlr3]  Applying learner &#39;classif.rpart&#39; on task &#39;pima&#39; (iter 3/10) 
-out INFO  [20:10:12.518] [mlr3]  Applying learner &#39;classif.rpart&#39; on task &#39;pima&#39; (iter 10/10) 
-out INFO  [20:10:12.537] [mlr3]  Applying learner &#39;classif.rpart&#39; on task &#39;pima&#39; (iter 4/10) 
-out INFO  [20:10:12.549] [mlr3]  Applying learner &#39;classif.rpart&#39; on task &#39;pima&#39; (iter 1/10) 
-out INFO  [20:10:12.560] [mlr3]  Applying learner &#39;classif.rpart&#39; on task &#39;pima&#39; (iter 8/10) 
-out INFO  [20:10:12.571] [mlr3]  Applying learner &#39;classif.rpart&#39; on task &#39;pima&#39; (iter 5/10)</code></pre>
+<pre><code>out INFO  [21:44:37.234] [mlr3]  Applying learner &#39;classif.rpart&#39; on task &#39;pima&#39; (iter 4/10) 
+out INFO  [21:44:37.247] [mlr3]  Applying learner &#39;classif.rpart&#39; on task &#39;pima&#39; (iter 9/10) 
+out INFO  [21:44:37.266] [mlr3]  Applying learner &#39;classif.rpart&#39; on task &#39;pima&#39; (iter 7/10) 
+out INFO  [21:44:37.289] [mlr3]  Applying learner &#39;classif.rpart&#39; on task &#39;pima&#39; (iter 3/10) 
+out INFO  [21:44:37.315] [mlr3]  Applying learner &#39;classif.rpart&#39; on task &#39;pima&#39; (iter 10/10) 
+out INFO  [21:44:37.337] [mlr3]  Applying learner &#39;classif.rpart&#39; on task &#39;pima&#39; (iter 8/10) 
+out INFO  [21:44:37.365] [mlr3]  Applying learner &#39;classif.rpart&#39; on task &#39;pima&#39; (iter 2/10) 
+out INFO  [21:44:37.379] [mlr3]  Applying learner &#39;classif.rpart&#39; on task &#39;pima&#39; (iter 6/10) 
+out INFO  [21:44:37.393] [mlr3]  Applying learner &#39;classif.rpart&#39; on task &#39;pima&#39; (iter 5/10) 
+out INFO  [21:44:37.405] [mlr3]  Applying learner &#39;classif.rpart&#39; on task &#39;pima&#39; (iter 1/10)</code></pre>
 <pre class="r"><code># boxplot of AUC values across the 10 folds
 autoplot(rr, measure = msr(&quot;classif.auc&quot;))</code></pre>
-<p><img src="../../blog/mlr3-basics/index_files/figure-html/unnamed-chunk-63-1.png" width="864" /></p>
+<p><img src="../../blog/mlr3-basics/index_files/figure-html/unnamed-chunk-63-1.png" width="672" /></p>
 <pre class="r"><code># ROC curve, averaged over 10 folds
 autoplot(rr, type = &quot;roc&quot;)</code></pre>
-<p><img src="../../blog/mlr3-basics/index_files/figure-html/unnamed-chunk-63-2.png" width="864" /></p>
+<p><img src="../../blog/mlr3-basics/index_files/figure-html/unnamed-chunk-63-2.png" width="672" /></p>
 <pre class="r"><code># learner predictions for first fold
 rr$filter(1)
 autoplot(rr, type = &quot;prediction&quot;)</code></pre>
-<p><img src="../../blog/mlr3-basics/index_files/figure-html/unnamed-chunk-63-3.png" width="864" /></p>
+<p><img src="../../blog/mlr3-basics/index_files/figure-html/unnamed-chunk-63-3.png" width="672" /></p>
 <p><a href="https://mlr3viz.mlr-org.com/reference/autoplot.ResampleResult.html">autoplot.ResampleResult()</a>的手册页列出了所有可用的绘图类型。</p>
 </div>
 <div id="可视化重采样分区" class="section level3">
@@ -1085,35 +1081,35 @@ out 9: &lt;TaskClassif[47]&gt; &lt;LearnerClassifFeatureless[36]&gt; &lt;Resampl
 <p>基准设计完成后，可以直接调用<code>benchmark()</code>：</p>
 <pre class="r"><code># execute the benchmark
 bmr = benchmark(design)</code></pre>
-<pre><code>out INFO  [20:10:14.438] [mlr3]  Running benchmark with 27 resampling iterations 
-out INFO  [20:10:14.446] [mlr3]  Applying learner &#39;classif.ranger&#39; on task &#39;german_credit&#39; (iter 2/3) 
-out INFO  [20:10:14.823] [mlr3]  Applying learner &#39;classif.featureless&#39; on task &#39;sonar&#39; (iter 3/3) 
-out INFO  [20:10:14.837] [mlr3]  Applying learner &#39;classif.rpart&#39; on task &#39;spam&#39; (iter 3/3) 
-out INFO  [20:10:15.181] [mlr3]  Applying learner &#39;classif.rpart&#39; on task &#39;sonar&#39; (iter 2/3) 
-out INFO  [20:10:15.206] [mlr3]  Applying learner &#39;classif.ranger&#39; on task &#39;sonar&#39; (iter 1/3) 
-out INFO  [20:10:15.312] [mlr3]  Applying learner &#39;classif.featureless&#39; on task &#39;sonar&#39; (iter 2/3) 
-out INFO  [20:10:15.320] [mlr3]  Applying learner &#39;classif.rpart&#39; on task &#39;spam&#39; (iter 2/3) 
-out INFO  [20:10:15.405] [mlr3]  Applying learner &#39;classif.rpart&#39; on task &#39;german_credit&#39; (iter 2/3) 
-out INFO  [20:10:15.434] [mlr3]  Applying learner &#39;classif.ranger&#39; on task &#39;spam&#39; (iter 3/3) 
-out INFO  [20:10:17.632] [mlr3]  Applying learner &#39;classif.rpart&#39; on task &#39;sonar&#39; (iter 3/3) 
-out INFO  [20:10:17.656] [mlr3]  Applying learner &#39;classif.featureless&#39; on task &#39;german_credit&#39; (iter 1/3) 
-out INFO  [20:10:17.666] [mlr3]  Applying learner &#39;classif.featureless&#39; on task &#39;spam&#39; (iter 2/3) 
-out INFO  [20:10:17.683] [mlr3]  Applying learner &#39;classif.ranger&#39; on task &#39;german_credit&#39; (iter 1/3) 
-out INFO  [20:10:18.049] [mlr3]  Applying learner &#39;classif.rpart&#39; on task &#39;sonar&#39; (iter 1/3) 
-out INFO  [20:10:18.072] [mlr3]  Applying learner &#39;classif.featureless&#39; on task &#39;german_credit&#39; (iter 3/3) 
-out INFO  [20:10:18.082] [mlr3]  Applying learner &#39;classif.featureless&#39; on task &#39;spam&#39; (iter 3/3) 
-out INFO  [20:10:18.099] [mlr3]  Applying learner &#39;classif.rpart&#39; on task &#39;german_credit&#39; (iter 1/3) 
-out INFO  [20:10:18.128] [mlr3]  Applying learner &#39;classif.ranger&#39; on task &#39;spam&#39; (iter 2/3) 
-out INFO  [20:10:20.227] [mlr3]  Applying learner &#39;classif.rpart&#39; on task &#39;german_credit&#39; (iter 3/3) 
-out INFO  [20:10:20.256] [mlr3]  Applying learner &#39;classif.rpart&#39; on task &#39;spam&#39; (iter 1/3) 
-out INFO  [20:10:20.332] [mlr3]  Applying learner &#39;classif.featureless&#39; on task &#39;sonar&#39; (iter 1/3) 
-out INFO  [20:10:20.340] [mlr3]  Applying learner &#39;classif.ranger&#39; on task &#39;spam&#39; (iter 1/3) 
-out INFO  [20:10:22.294] [mlr3]  Applying learner &#39;classif.ranger&#39; on task &#39;german_credit&#39; (iter 3/3) 
-out INFO  [20:10:22.629] [mlr3]  Applying learner &#39;classif.featureless&#39; on task &#39;spam&#39; (iter 1/3) 
-out INFO  [20:10:22.645] [mlr3]  Applying learner &#39;classif.ranger&#39; on task &#39;sonar&#39; (iter 2/3) 
-out INFO  [20:10:22.755] [mlr3]  Applying learner &#39;classif.ranger&#39; on task &#39;sonar&#39; (iter 3/3) 
-out INFO  [20:10:22.859] [mlr3]  Applying learner &#39;classif.featureless&#39; on task &#39;german_credit&#39; (iter 2/3) 
-out INFO  [20:10:22.870] [mlr3]  Finished benchmark</code></pre>
+<pre><code>out INFO  [21:44:39.493] [mlr3]  Running benchmark with 27 resampling iterations 
+out INFO  [21:44:39.501] [mlr3]  Applying learner &#39;classif.rpart&#39; on task &#39;sonar&#39; (iter 1/3) 
+out INFO  [21:44:39.528] [mlr3]  Applying learner &#39;classif.featureless&#39; on task &#39;sonar&#39; (iter 1/3) 
+out INFO  [21:44:39.537] [mlr3]  Applying learner &#39;classif.rpart&#39; on task &#39;spam&#39; (iter 1/3) 
+out INFO  [21:44:39.864] [mlr3]  Applying learner &#39;classif.featureless&#39; on task &#39;sonar&#39; (iter 3/3) 
+out INFO  [21:44:39.876] [mlr3]  Applying learner &#39;classif.ranger&#39; on task &#39;sonar&#39; (iter 3/3) 
+out INFO  [21:44:40.066] [mlr3]  Applying learner &#39;classif.rpart&#39; on task &#39;sonar&#39; (iter 3/3) 
+out INFO  [21:44:40.112] [mlr3]  Applying learner &#39;classif.ranger&#39; on task &#39;sonar&#39; (iter 2/3) 
+out INFO  [21:44:40.283] [mlr3]  Applying learner &#39;classif.featureless&#39; on task &#39;sonar&#39; (iter 2/3) 
+out INFO  [21:44:40.299] [mlr3]  Applying learner &#39;classif.rpart&#39; on task &#39;sonar&#39; (iter 2/3) 
+out INFO  [21:44:40.338] [mlr3]  Applying learner &#39;classif.rpart&#39; on task &#39;german_credit&#39; (iter 1/3) 
+out INFO  [21:44:40.410] [mlr3]  Applying learner &#39;classif.featureless&#39; on task &#39;german_credit&#39; (iter 3/3) 
+out INFO  [21:44:40.423] [mlr3]  Applying learner &#39;classif.ranger&#39; on task &#39;german_credit&#39; (iter 2/3) 
+out INFO  [21:44:40.898] [mlr3]  Applying learner &#39;classif.featureless&#39; on task &#39;german_credit&#39; (iter 1/3) 
+out INFO  [21:44:40.908] [mlr3]  Applying learner &#39;classif.ranger&#39; on task &#39;spam&#39; (iter 3/3) 
+out INFO  [21:44:43.498] [mlr3]  Applying learner &#39;classif.ranger&#39; on task &#39;sonar&#39; (iter 1/3) 
+out INFO  [21:44:43.624] [mlr3]  Applying learner &#39;classif.ranger&#39; on task &#39;german_credit&#39; (iter 3/3) 
+out INFO  [21:44:44.128] [mlr3]  Applying learner &#39;classif.ranger&#39; on task &#39;spam&#39; (iter 2/3) 
+out INFO  [21:44:47.058] [mlr3]  Applying learner &#39;classif.ranger&#39; on task &#39;german_credit&#39; (iter 1/3) 
+out INFO  [21:44:47.537] [mlr3]  Applying learner &#39;classif.rpart&#39; on task &#39;german_credit&#39; (iter 2/3) 
+out INFO  [21:44:47.568] [mlr3]  Applying learner &#39;classif.rpart&#39; on task &#39;spam&#39; (iter 3/3) 
+out INFO  [21:44:47.648] [mlr3]  Applying learner &#39;classif.featureless&#39; on task &#39;spam&#39; (iter 1/3) 
+out INFO  [21:44:47.669] [mlr3]  Applying learner &#39;classif.rpart&#39; on task &#39;german_credit&#39; (iter 3/3) 
+out INFO  [21:44:47.717] [mlr3]  Applying learner &#39;classif.featureless&#39; on task &#39;spam&#39; (iter 2/3) 
+out INFO  [21:44:47.741] [mlr3]  Applying learner &#39;classif.featureless&#39; on task &#39;spam&#39; (iter 3/3) 
+out INFO  [21:44:47.762] [mlr3]  Applying learner &#39;classif.ranger&#39; on task &#39;spam&#39; (iter 1/3) 
+out INFO  [21:44:50.098] [mlr3]  Applying learner &#39;classif.rpart&#39; on task &#39;spam&#39; (iter 2/3) 
+out INFO  [21:44:50.177] [mlr3]  Applying learner &#39;classif.featureless&#39; on task &#39;german_credit&#39; (iter 2/3) 
+out INFO  [21:44:50.189] [mlr3]  Finished benchmark</code></pre>
 <p>注意，我们没有手动实例化重采样实例。<code>benchmark_grid()</code>会为我们处理它：在构建穷举网格期间，每个重采样策略都会为每个任务实例化一次。</p>
 <p>基准测试完成后，我们可以使用<code>$aggregate()</code>聚合性能结果。我们创建了两个度量来计算训练集和预测集的AUC：</p>
 <pre class="r"><code>measures = list(
@@ -1134,14 +1130,14 @@ out 7:  7 &lt;ResampleResult[20]&gt;         sonar      classif.ranger          
 out 8:  8 &lt;ResampleResult[20]&gt;         sonar       classif.rpart            cv
 out 9:  9 &lt;ResampleResult[20]&gt;         sonar classif.featureless            cv
 out    iters auc_train  auc_test
-out 1:     3 0.9994965 0.9841249
-out 2:     3 0.9141699 0.9030231
+out 1:     3 0.9994729 0.9843972
+out 2:     3 0.9109017 0.9002759
 out 3:     3 0.5000000 0.5000000
-out 4:     3 0.9984703 0.7884144
-out 5:     3 0.8252325 0.6785829
+out 4:     3 0.9983689 0.8050245
+out 5:     3 0.8049514 0.7278807
 out 6:     3 0.5000000 0.5000000
-out 7:     3 1.0000000 0.8963470
-out 8:     3 0.9379970 0.7292513
+out 7:     3 1.0000000 0.9191759
+out 8:     3 0.9319927 0.7546365
 out 9:     3 0.5000000 0.5000000</code></pre>
 <p>我们可以进一步汇总这些结果。例如，我们可能有兴趣知道哪个学习器在同时完成所有任务时表现最好。简单地将性能与平均值相加通常在统计上并不合理。相反，我们按任务分组计算每个学习器的等级统计量。然后将计算得到的按学习器分组的秩用data.table进行汇总。由于需要最大化AUC，我们将这些值乘以−1，使最好的学习者的排名为1。</p>
 <pre class="r"><code>library(&quot;data.table&quot;)
@@ -1177,11 +1173,11 @@ out 3: classif.featureless           3          3</code></pre>
 <h3>可视化基准测试结果</h3>
 <p>与绘制任务、预测或重新取样结果类似，mlr3viz还提供了用于基准测试结果的<code>autoplot()</code>方法。</p>
 <pre class="r"><code>autoplot(bmr) + ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45, hjust = 1))</code></pre>
-<p><img src="../../blog/mlr3-basics/index_files/figure-html/unnamed-chunk-69-1.png" width="864" /></p>
+<p><img src="../../blog/mlr3-basics/index_files/figure-html/unnamed-chunk-69-1.png" width="672" /></p>
 <p>我们也可以绘制ROC曲线。为此，我们首先需要过滤BenchmarkResult，使其只包含一个Task：</p>
 <pre class="r"><code>bmr_small = bmr$clone()$filter(task_id = &quot;german_credit&quot;)
 autoplot(bmr_small, type = &quot;roc&quot;)</code></pre>
-<p><img src="../../blog/mlr3-basics/index_files/figure-html/unnamed-chunk-70-1.png" width="864" /></p>
+<p><img src="../../blog/mlr3-basics/index_files/figure-html/unnamed-chunk-70-1.png" width="672" /></p>
 </div>
 <div id="提取结果" class="section level3">
 <h3>提取结果</h3>
@@ -1198,7 +1194,7 @@ out * Errors: 0 in 0 iterations</code></pre>
 <pre class="r"><code>measure = msr(&quot;classif.auc&quot;)
 rr$aggregate(measure)</code></pre>
 <pre><code>out classif.auc 
-out   0.7884144</code></pre>
+out   0.8050245</code></pre>
 <pre class="r"><code># get the iteration with worst AUC
 perf = rr$score(measure)
 i = which.min(perf$classif.auc)
@@ -1213,7 +1209,7 @@ out * Predict Type: prob
 out * Feature types: logical, integer, numeric, character, factor, ordered
 out * Properties: importance, multiclass, oob_error, twoclass, weights</code></pre>
 <pre class="r"><code>head(rr$resampling$train_set(i))</code></pre>
-<pre><code>out [1]  2  7  9 12 22 24</code></pre>
+<pre><code>out [1]  4  7 10 11 17 23</code></pre>
 </div>
 <div id="转换和合并" class="section level3">
 <h3>转换和合并</h3>
@@ -1222,9 +1218,9 @@ out * Properties: importance, multiclass, oob_error, twoclass, weights</code></p
 resampling = rsmp(&quot;holdout&quot;)$instantiate(task)
 
 rr1 = resample(task, lrn(&quot;classif.rpart&quot;), resampling)</code></pre>
-<pre><code>out INFO  [20:10:25.048] [mlr3]  Applying learner &#39;classif.rpart&#39; on task &#39;iris&#39; (iter 1/1)</code></pre>
+<pre><code>out INFO  [21:44:52.627] [mlr3]  Applying learner &#39;classif.rpart&#39; on task &#39;iris&#39; (iter 1/1)</code></pre>
 <pre class="r"><code>rr2 = resample(task, lrn(&quot;classif.featureless&quot;), resampling)</code></pre>
-<pre><code>out INFO  [20:10:25.086] [mlr3]  Applying learner &#39;classif.featureless&#39; on task &#39;iris&#39; (iter 1/1)</code></pre>
+<pre><code>out INFO  [21:44:52.751] [mlr3]  Applying learner &#39;classif.featureless&#39; on task &#39;iris&#39; (iter 1/1)</code></pre>
 <pre class="r"><code># Cast both ResampleResults to BenchmarkResults
 bmr1 = as_benchmark_result(rr1)
 bmr2 = as_benchmark_result(rr2)
@@ -1268,10 +1264,10 @@ out        R 16 87</code></pre>
 
 # TPR vs FPR / Sensitivity vs (1 - Specificity)
 autoplot(pred, type = &quot;roc&quot;)</code></pre>
-<p><img src="../../blog/mlr3-basics/index_files/figure-html/unnamed-chunk-76-1.png" width="864" /></p>
+<p><img src="../../blog/mlr3-basics/index_files/figure-html/unnamed-chunk-76-1.png" width="672" /></p>
 <pre class="r"><code># Precision vs Recall
 autoplot(pred, type = &quot;prc&quot;)</code></pre>
-<p><img src="../../blog/mlr3-basics/index_files/figure-html/unnamed-chunk-76-2.png" width="864" /></p>
+<p><img src="../../blog/mlr3-basics/index_files/figure-html/unnamed-chunk-76-2.png" width="672" /></p>
 </div>
 <div id="阈值调整" class="section level3">
 <h3>阈值调整</h3>
