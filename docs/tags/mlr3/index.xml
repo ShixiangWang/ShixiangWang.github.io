@@ -10,6 +10,33 @@
     <language>en-us</language>
     <lastBuildDate>Wed, 01 Sep 2021 00:00:00 +0000</lastBuildDate><atom:link href="/tags/mlr3/index.xml" rel="self" type="application/rss+xml" />
     <item>
+      <title>mlr3（三）模型优化</title>
+      <link>/blog/mlr3-model-optimization/</link>
+      <pubDate>Wed, 01 Sep 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/mlr3-model-optimization/</guid>
+      <description>来源：https://mlr3book.mlr-org.com/optimization.html
+模型优化
+机器学习算法为其超参数设置了默认值。不管怎样，用户需要更改这些超参数，以在给定的数据集上实现最佳性能。不建议手动选择超参数值，因为这种方法很少能获得最佳性能。为了证实所选超参数（=调优）的有效性，建议进行数据驱动的优化。为了优化机器学习算法，必须指定（1）搜索空间，（2）优化算法(又称调优方法)，（3）评估方法，即重采样策略，（4）性能度量。
+总而言之，关于调优的小节介绍：
+ 进行经验超参数选择 选择优化算法 简洁地指定搜索空间 触发调优 自动调优  本小节还需要包mlr3tuning，这是一个支持超参数调优的扩展包。
+特征选择
+本章的第二部分介绍特征选择，也称为变量选择。特征选择是寻找数据相关特征子集的过程。执行选择的一些原因：
+ 增强模型的可解释性 加速模型拟合 通过降低数据中的噪声来提高学习性能  在本文中，我们主要集中在最后一个方面。有不同的方法来识别相关的特征。在特征选择的分章中，我们强调了三种方法：
+ 运用过滤算法根据分数独立地选择特征 根据变量重要性过滤选择特征 包装器方法迭代地选择特性以优化性能度量  注意，过滤器不需要学习器。变量重要性过滤器需要一个学习器，该学习器在训练时可以计算特征的重要性值。获得的重要值可用于数据子集，然后可用于训练学习器。包装器方法可以用于任何学习器，但需要对学习器进行多次训练。
+嵌套重采样
+为了更好地估计泛化性能并避免数据泄漏，外部（性能）和内部（调优/特征选择）重采样过程都是必要的。本章将讨论以下特点：
+ 嵌套重采样中的内重采样和外重采样策略 嵌套重采样的执行 执行重采样迭代的评估  本小节将提供如何实现嵌套重采样的说明，包括mlr3中的内重采样和外重采样。
+超参数调优 超参数是机器学习模型的二阶参数，虽然在模型估计过程中往往没有明确优化，但会对模型的结果和预测性能产生重要影响。通常，超参数在训练模型之前是固定的。但是，由于模型的输出可能对超参数的规范很敏感，因此通常建议对哪些超参数设置可以产生更好的模型性能做出明智的决定。在许多情况下，超参数设置可能是预先选择的，但在将模型拟合到训练数据上之前，尝试不同的设置可能是有利的。这个过程通常被称为模型“调优”。
+超参数调优是通过mlr3tuning扩展包支持的。下面是这个过程的说明：
+mlr3tuning的核心是R6类：
+TuningInstanceSingleCrit，TuningInstanceMultiCrit：这两个类描述调优问题并存储结果。
+Tuner：这个类是调优算法实现的基类。
+TuningInstance* 类 下面的小节审查了皮马印度糖尿病数据集上的简单分类树的优化。
+library(&amp;quot;mlr3verse&amp;quot;) task = tsk(&amp;quot;pima&amp;quot;) print(task) ## &amp;lt;TaskClassif:pima&amp;gt; (768 x 9) ## * Target: diabetes ## * Properties: twoclass ## * Features (8): ## - dbl (8): age, glucose, insulin, mass, pedigree, pregnant, pressure, ## triceps 我们使用rpart中的分类树，并选择我们想要调优的超参数的子集。这通常被称为“调优空间”。</description>
+    </item>
+    
+    <item>
       <title>mlr3（二）基础</title>
       <link>/blog/mlr3-basics/</link>
       <pubDate>Wed, 01 Sep 2021 00:00:00 +0000</pubDate>

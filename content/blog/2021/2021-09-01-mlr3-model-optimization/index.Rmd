@@ -434,4 +434,557 @@ rbindlist(generate_design_grid(search_space, 3)$transpose(), fill = TRUE)
 
 ### 从其他参数集创建调优参数集
 
+为已经拥有参数集信息的学习器定义调优参数集似乎有些不必要的乏味，确实有一种方法可以从学习器的参数集创建调优参数集，利用尽可能多的可用信息。
+
+这是通过将学习器的ParamSet值设置为所谓的TuneTokens来实现的，TuneTokens是通过to_tune调用构造的。这与将其他超参数设置为特定值的方法相同。可以将其理解为标记用于以后调优的超参数。用于调优的结果ParamSet可以使用`$search_space()`方法检索。
+
+```{r}
+learner = lrn("classif.svm")
+learner$param_set$values$kernel = "polynomial"  # for example
+learner$param_set$values$degree = to_tune(lower = 1, upper = 3)
+
+print(learner$param_set$search_space())
+
+rbindlist(generate_design_grid(learner$param_set$search_space(), 3)$transpose())
+```
+
+这里可以省略lower，因为它可以从degree参数本身的下界推断出来。对于其他已经有界的参数，完全可以不给出任何界限，因为它们的范围已经有界。一个例子是逻辑超参数shrinking：
+
+```{r}
+learner$param_set$values$shrinking = to_tune()
+
+print(learner$param_set$search_space())
+```
+
+```{r}
+rbindlist(generate_design_grid(learner$param_set$search_space(), 3)$transpose())
+```
+
+to_tune也可以用Domain对象来构造，比如用`p_***`调用来构造。通过这种方式，可以用离散值调优连续参数，或者给出trafos或依赖项。例如，可以在三个给定的特殊值上调整如上所述的cost，并引入对其进行shrinking的依赖关系。注意，`to_tune(<levels>)`是`to_tune(p_fct(<levels>))`的缩写形式。
+
+```{r}
+learner$param_set$values$type = "C-classification"  # needs to be set because of a bug in paradox
+learner$param_set$values$cost = to_tune(c(val1 = 0.3, val2 = 0.7))
+learner$param_set$values$shrinking = to_tune(p_lgl(depends = cost == "val2"))
+
+print(learner$param_set$search_space())
+```
+
+```{r}
+rbindlist(generate_design_grid(learner$param_set$search_space(), 3)$transpose(), fill = TRUE)
+```
+
+`search_space()`自动从底层ParamSet获取依赖项。因此，如果内核被调优，那么degree就会自动获得对它的依赖，而不需要我们指定。（这里我们重置成本并将其缩减为NULL，以确保生成的输出的清晰性。）
+
+```{r}
+learner$param_set$values$cost = NULL
+learner$param_set$values$shrinking = NULL
+learner$param_set$values$kernel = to_tune(c("polynomial", "radial"))
+
+print(learner$param_set$search_space())
+```
+
+```{r}
+rbindlist(generate_design_grid(learner$param_set$search_space(), 3)$transpose(), fill = TRUE)
+```
+
+甚至可以为单个参数定义整个参数集。对于应该沿着多维搜索的向量超参数，这可能特别有用。但是，这个ParamSet必须有一个`.extra_trafo`，它返回一个包含单个元素的列表，因为它对应于一个正在调优的超参数。假设类的权重超参数应该沿着两个维度进行调整：
+
+```{r}
+learner$param_set$values$class.weights = to_tune(
+  ps(spam = p_dbl(0.1, 0.9), nonspam = p_dbl(0.1, 0.9),
+    .extra_trafo = function(x, param_set) list(c(spam = x$spam, nonspam = x$nonspam))
+  ))
+head(generate_design_grid(learner$param_set$search_space(), 3)$transpose(), 3)
+```
+
+
+## 嵌套重采样
+
+当需要选择超参数或特征时，评估机器学习模型通常需要额外的重采样层。嵌套重采样将这些模型选择步骤从估计模型性能的过程中分离出来。如果将相同的数据用于模型选择步骤和模型本身的评估，则产生的模型性能估计可能存在严重的偏差。一个原因是模型对测试数据的重复评估可能会将其结构的信息泄露到模型中，从而导致过度乐观的性能估计。请记住，**嵌套重采样是一个统计过程，用于估计在完整数据集上训练的模型的预测性能。嵌套重采样不是一个选择最优超参数的过程**。重采样产生许多超参数配置，**这些超参数配置不应用于构建最终模型**。
+
+![](https://mlr3book.mlr-org.com/images/nested_resampling.png)
+
+上面的图形说明了用于超参数调优的嵌套重采样，在外部循环中使用3倍交叉验证，在内部循环中使用4倍交叉验证。
+
+在外部重采样循环中，我们有三对训练/测试集。对每一个外部训练集进行参数调整，从而执行内部重采样循环。这样，我们就得到了每个外部训练集的一组选定的超参数。然后利用所选的超参数将学习器拟合到每个外部训练集上。随后，我们可以评估学习者在外部测试集上的性能。**外部测试集上的聚合性能是模型的无偏性能估计**。
+
+### 执行
+
+上一节研究了mlr_tasks_pima上简单分类树的优化。我们继续这个例子，并估计模型与嵌套重采样的预测性能。
+
+我们在内部重采样循环中使用4倍交叉验证。AutoTuner执行超参数调优，并在5次计算后停止。通过网格搜索提出了超参数配置。
+
+```{r}
+library("mlr3verse")
+
+learner = lrn("classif.rpart")
+resampling = rsmp("holdout")
+measure = msr("classif.ce")
+search_space = ps(cp = p_dbl(lower = 0.001, upper = 0.1))
+terminator = trm("evals", n_evals = 5)
+tuner = tnr("grid_search", resolution = 10)
+
+at = AutoTuner$new(learner, resampling, measure, terminator, tuner, search_space)
+```
+
+外重采样循环采用三倍交叉验证。对每一个外部训练集进行了超参数优化，得到了三种优化的超参数配置。为了执行嵌套重采样，我们将AutoTuner传递给`resample()`函数。我们必须设置`store_models = TRUE`，因为我们需要AutoTuner模型来研究内部调优。
+
+```{r}
+task = tsk("pima")
+outer_resampling = rsmp("cv", folds = 3)
+
+rr = resample(task, at, outer_resampling, store_models = TRUE)
+```
+
+
+你可以自由组合不同的内部和外部重采样策略。嵌套重采样并不局限于超参数调优。你可以将AutoTuner替换为AutoFSelector，并估计适合于优化特征子集的模型的性能。
+
+### 评估
+
+使用创建的ResampleResult，我们现在可以更仔细地检查执行的重采样迭代。有关ResampleResult对象的详细信息，请参阅重采样一节（上一篇文章）。
+
+我们检查了稳定超参数的内部调优结果。这意味着所选的超参数不应该变化太多。在这个例子中，我们可能会观察到不稳定的模型，因为小的数据集和低的重采样迭代次数可能会引入太多的随机性。通常，我们的目标是为所有外部训练集选择稳定的超参数。
+
+```{r}
+extract_inner_tuning_results(rr)
+```
+
+接下来，我们要比较外部重采样和内部重采样估计的预测性能。外重采样的预测性能显著降低，表明优化后的超参数模型对数据进行过拟合。
+
+```{r}
+rr$score()
+```
+
+所有外部重采样迭代的聚合性能本质上是通过网格搜索找到最优超参数的模型的无偏性能。
+
+```{r}
+rr$aggregate()
+```
+
+请注意，嵌套重采样的计算代价很高。由于这个原因，我们在本例中使用了相对较少的超参数配置和较少的重采样迭代。在实践中，你通常需要增加两者。由于这是计算密集型的，后续你可能想要了解如何并行化。
+
+### 最终模型
+
+我们可以使用AutoTuner来调整我们的学习器的超参数，并在完整的数据集上拟合最终模型。
+
+```{r}
+at$train(task)
+```
+
+经过训练的模型现在可以用来对新数据进行预测。一个常见的错误是将执行调优的重采样集(在`$tuning_result$classif.ce`)上的估计性能报告为模型的性能。相反，我们报告用嵌套重采样估计的性能作为模型的性能。
+
+## Hyperband调优
+
+除了更传统的调优方法外，围绕mlr3的生态系统还提供了另一个超参数优化过程，即在mlr3hyperband 包中实现的Hyperband。
+
+这里做一个介绍性的类比，想象两个驯马师得到八匹未经训练的马。两名教练都想赢得即将到来的比赛，但他们只有32单位的食物。考虑到每匹马最多可以吃8单位的食物（每匹马的“最大预算”），没有足够的食物给所有的马。**重要的是尽早发现最有前途的马，并给它们足够的食物来改善**。因此，培训师需要制定一个策略，以最好的方式分配食物。第一个驯马师是非常乐观的，他想要探索马的全部能力，因为他不想对马的表现做出判断，除非它已经被完全训练过。所以，他将自己的预算除以他能给一匹马的最大数量（假设8匹，所以32/8=4），然后随机挑选4匹马——他的预算根本不足以训练更多的马。然后，这四匹马被训练到它们的全部能力，而其余的马则被释放。这样，驯马师就有信心从四匹训练过的马中挑选出最好的，但他可能忽略了潜力最大的那匹，因为他只关注了其中的一半。另一位教练则更有创造力，会想出不同的策略。他认为，如果一匹马一开始表现不好，经过进一步的训练，它也不会进步。基于这个假设，他决定给每匹马一单位的食物，并观察它们的发育情况。在吃完最初的食物后，他检查它们的表现，并把训练最慢的那一半踢出训练计划。然后，他增加剩余的食物，进一步训练它们直到食物再次被吃掉，只是再次踢出最差的那一半。他重复这个动作，直到剩下的那匹马吃完了剩下的食物。这意味着只有一匹马接受了完全的训练，但另一方面，他可以开始训练所有八匹马。
+
+比赛当天，所有的马都被放在起跑线上。但是哪位驯马师会拥有获胜的马呢？就是那个想把马训练到最大限度的人？或者另一个人，对他的马的训练进度做出了假设？训练阶段可能是什么样子如图所示。
+
+![](https://mlr3book.mlr-org.com/images/horse_training1.png)
+
+Hyperband在某些方面非常相似，但在其他方面也有不同。在我们的类比中，它不是体现在一个训练员身上，而是更多地体现在付钱给他们的人身上。Hyperband由几个括号组成，每个括号对应一个训练器，我们关心的不是马，而是机器学习算法的超参数配置。预算不是用食物来衡量的，而是用学习器的超参数来衡量的，这个超参数在某种程度上与计算努力有关。一个例子是我们训练神经网络的纪元数，或者在增强过程中迭代的次数。此外，不仅有两个(或训练员)，而是几个，每一个都位于一个独特的位置，在充分探索后期训练阶段和极端选择性之间，相当于早期训练阶段的更高探索。选择侵略性的级别由用户定义的参数η来处理。因此，1/η是在去掉最差配置后剩余配置的分数，但η也是下一阶段预算增加的因素。因为在不同的场景中，每个配置有不同的最大预算，用户还必须将其设置为R参数。Hyperband不需要进一步的参数——所有括号的全部所需预算是间接给出的
+
+$$
+(\lfloor \log_{\eta}{R} \rfloor + 1)^2 * R
+$$
+
+为了让大家知道对于特定的R和η，布局是怎样的，下表给出了一个快速概览。
+
+| stage | budget |    n |
+| ----: | -----: | ---: |
+|     1 |      1 |    8 |
+|     2 |      2 |    4 |
+|     3 |      4 |    2 |
+|     4 |      8 |    1 |
+
+| stage | budget |    n |
+| ----: | -----: | ---: |
+|     1 |      2 |    6 |
+|     2 |      4 |    3 |
+|     3 |      8 |    1 |
+
+| stage | budget |    n |
+| ----: | -----: | ---: |
+|     1 |      4 |    4 |
+|     2 |      8 |    2 |
+
+| stage | budget |    n |
+| ----: | -----: | ---: |
+|     1 |      8 |    4 |
+
+
+> η=2和R=8的hyperband布局，其中n为active配置的数量。
+
+当然，如果在某些情况下过于激进，基于性能标准的提前终止可能是不利的。如果一个学习器在训练阶段对自己的表现进行了大幅度的评估，那么最好的配置可能会被过早地取消，原因很简单，因为与其他学习器相比，他们的改进不够快。换句话说，我们通常不清楚拥有大量的配置n是否比拥有每个配置的高预算B更好，因为它会被早早地丢弃。由此产生的权衡，被称为“n对B/n问题”：为了在基于早期训练表现的选择和后期训练表现的探索之间建立一个平衡，数组元素的值和值之间的值是相等的。因此，有些括号包含更多配置，初始预算较小。在这些情况下，很多人在训练了很短的时间后就被抛弃了，这与我们在马的比喻中选择的驯马师相对应。另一些则使用更少的配置构造，其中丢弃只发生在消耗了大量预算之后。最后一个括号通常不会丢弃任何东西，但也只从很少的配置开始——这相当于教练员在后面阶段的探索。前者对应高n，后者对应高B/n。即使不同的括号被初始化为不同的配置量和不同的初始预算大小，每个括号被分配(大约)相同的预算(数组logη⁡R一半值+1)\∗R。
+
+每个括号开始处的配置由随机的，通常是均匀的抽样初始化。注意，目前所有配置都是从一开始就完全训练过的，所以不会在各个阶段对模型进行在线更新。
+
+要确定评估Hyperband的预算，用户必须显式指定学习器的哪个超参数影响预算，方法是在ParamSet中扩展单个超参数(tags = "budget")，如以下代码片段所示：
+
+```{r}
+library("mlr3verse")
+
+# Hyperparameter subset of XGBoost
+search_space = ps(
+  nrounds = p_int(lower = 1, upper = 16, tags = "budget"),
+  booster = p_fct(levels = c("gbtree", "gblinear", "dart"))
+)
+```
+
+由于mlr3verse的广泛生态系统，学习器不需要一个自然的预算参数。一个典型的例子是决策树。通过使用子采样作为mlr3pipeline的预处理，我们可以解决缺乏预算参数的问题。
+
+```{r}
+set.seed(123)
+
+# extend "classif.rpart" with "subsampling" as preprocessing step
+ll = po("subsample") %>>% lrn("classif.rpart")
+
+# extend hyperparameters of "classif.rpart" with subsampling fraction as budget
+search_space = ps(
+  classif.rpart.cp = p_dbl(lower = 0.001, upper = 0.1),
+  classif.rpart.minsplit = p_int(lower = 1, upper = 10),
+  subsample.frac = p_dbl(lower = 0.1, upper = 1, tags = "budget")
+)
+```
+
+现在，我们可以像往常一样将具有扩展超参数集的新学习器插入到TuningInstanceSingleCrit中。当然，Hyperband在计算完所有括号后就会终止，因此调优实例中的Terminator充当一个上限，只有在不确定Hyperband在给定设置下需要多长时间完成时，才应该将其设置为一个较低的值。
+
+```{r}
+instance = TuningInstanceSingleCrit$new(
+  task = tsk("iris"),
+  learner = ll,
+  resampling = rsmp("holdout"),
+  measure = msr("classif.ce"),
+  terminator = trm("none"), # hyperband terminates itself
+  search_space = search_space
+)
+```
+
+
+现在，我们初始化mlr3hyperband::mlr_tuners_hyperband类的一个新实例，并开始使用它进行调优。
+
+```{r}
+library("mlr3hyperband")
+tuner = tnr("hyperband", eta = 3)
+
+# reduce logging output
+lgr::get_logger("bbotk")$set_threshold("warn")
+
+tuner$optimize(instance)
+```
+
+要接收每个抽样配置的结果，只需运行以下代码片段。
+
+```{r}
+as.data.table(instance$archive)[, c(
+  "subsample.frac",
+  "classif.rpart.cp",
+  "classif.rpart.minsplit",
+  "classif.ce"
+), with = FALSE]
+```
+
+你可以通过实例对象访问最佳配置。
+
+```{r}
+instance$result
+
+instance$result_learner_param_vals
+```
+
+
+如果你熟悉原始论文，你可能想知道我们是如何使用参数范围从0.1到1.0的Hyperband (Li et al. 2016)。答案是，在预算参数的内部缩放的帮助下。mlr3hyperband自动用它的下界划分预算参数边界，最终预算范围再次从1开始，就像最初的情况一样。如果我们想了解Hyperband创建了什么布局，以及每个设置组中的缩放是如何工作的，我们可以打印一个紧凑的表来查看这些信息。
+
+```{r}
+unique(as.data.table(instance$archive)[, .(bracket, bracket_stage, budget_scaled, budget_real, n_configs)])
+```
+
+在传统的方法中，Hyperband使用均匀采样在每个括号的开始接收配置样本。但是也可以为每个超参数定义一个自定义Sampler。
+
+```{r}
+search_space = ps(
+  nrounds = p_int(lower = 1, upper = 16, tags = "budget"),
+  eta = p_dbl(lower = 0, upper = 1),
+  booster = p_fct(levels = c("gbtree", "gblinear", "dart"))
+)
+
+instance = TuningInstanceSingleCrit$new(
+  task = tsk("iris"),
+  learner = lrn("classif.xgboost"),
+  resampling = rsmp("holdout"),
+  measure = msr("classif.ce"),
+  terminator = trm("none"), # hyperband terminates itself
+  search_space = search_space
+)
+
+# beta distribution with alpha = 2 and beta = 5
+# categorical distribution with custom probabilities
+sampler = SamplerJointIndep$new(list(
+  Sampler1DRfun$new(search_space$params$eta, function(n) rbeta(n, 2, 5)),
+  Sampler1DCateg$new(search_space$params$booster, prob = c(0.2, 0.3, 0.5))
+))
+```
+
+然后，在实例创建期间必须将定义的采样器作为参数提供。然后，可以进行常规的调优。
+
+```{r}
+tuner = tnr("hyperband", eta = 2, sampler = sampler)
+set.seed(123)
+tuner$optimize(instance)
+
+instance$result
+```
+
+此外，我们对原算法进行了扩展，使mlr3hyperband算法也可以用于多目标优化。为此，只需在TuningInstanceMultiCrit中指定更多的度量，并照常运行其余的度量。
+
+```{r}
+instance = TuningInstanceMultiCrit$new(
+  task = tsk("pima"),
+  learner = lrn("classif.xgboost"),
+  resampling = rsmp("holdout"),
+  measures = msrs(c("classif.tpr", "classif.fpr")),
+  terminator = trm("none"), # hyperband terminates itself
+  search_space = search_space
+)
+
+tuner = tnr("hyperband", eta = 4)
+tuner$optimize(instance)
+```
+
+现在的结果不是一个单一的最佳配置，而是一个估计的帕累托前沿。关于fpr和tpr性能度量，所有的红点并不受其他参数配置的控制。
+
+```{r}
+instance$result
+
+plot(classif.tpr~classif.fpr, instance$archive$data)
+points(classif.tpr~classif.fpr, instance$result, col = "red")
+```
+
+## 特征选择和过滤
+
+通常，数据集包含大量的特性。提取相关特征子集的技术称为“特征选择”。
+
+特征选择的目标是将模型的稀疏依赖以最合适的方式拟合到可用数据特征的子集上。特征选择可以提高模型的可解释性，加快学习过程，提高学习器的学习性能。有不同的方法来识别相关的特征。文献中强调了两种不同的方法：一种称为过滤，另一种通常称为特征子集选择或包装器方法。
+
+区别是什么？
+
+- 过滤：外部算法计算特征的等级(例如，基于与响应的相关性)。然后，特征被特定的标准子集，例如一个绝对数量或变量数量的百分比。选择的特性将用于适应模型（通过调优选择可选的超参数）。在计算时间方面，这种计算通常比“特征子集选择”更便宜。所有过滤器通过mlr3filers包连接。
+- 包装器方法：这里没有对功能进行排名。相反，优化算法选择特征的子集，通过计算重新采样的预测性能来评估集合，然后提出一组新的特征(或终止)。一个简单的例子是顺序向前选择。该方法通常需要大量的模型拟合，计算量很大。此外，严格地说，在估计性能之前，所有这些模型都需要进行调优。这将需要在CV设置中增加一个嵌套级别。在完成所有这些步骤之后，最后一组选定的特性将再次得到满足（通过调优选择可选的超参数）。包装器方法在mlr3fselect包中实现。
+- 嵌入方法：许多学习器在内部选择他们认为有助于预测的特征子集。这些子集通常可以被查询，如下例所示：
+
+```{r}
+library("mlr3verse")
+
+task = tsk("iris")
+learner = lrn("classif.rpart")
+
+# ensure that the learner selects features
+stopifnot("selected_features" %in% learner$properties)
+
+# fit a simple classification tree
+learner = learner$train(task)
+
+# extract all features used in the classification tree:
+learner$selected_features()
+```
+
+也有集成过滤器建立在叠加单过滤器方法的思想上。这些还没有实现。
+
+### 过滤器
+
+过滤方法为每个特性分配一个重要值。根据这些值可以对特征进行排名。然后，我们可以选择一个特征子集。[附录](https://mlr3book.mlr-org.com/appendix.html#list-filters)中列出了所有已实现的过滤器方法。
+
+### 计算过滤值
+
+目前，只支持分类和回归任务。
+
+第一步是使用所需的过滤器方法的类创建一个新的R对象。与mlr3中的其他实例类似，这些实例使用关联的快捷函数`flt()`在字典(mlr_filters)中注册。Filter类的每个对象都有一个`.$calculate()`方法，该方法计算过滤值并按降序排列。
+
+```{r}
+filter = flt("jmim")
+
+task = tsk("iris")
+filter$calculate(task)
+
+as.data.table(filter)
+```
+
+一些过滤器支持更改特定的超参数。这类似于使用。`$param_set$values`设置学习者的超参数：
+
+```{r}
+filter_cor = flt("correlation")
+filter_cor$param_set
+
+
+# change parameter 'method'
+filter_cor$param_set$values = list(method = "spearman")
+filter_cor$param_set
+```
+
+### 变量重要性过滤器
+
+所有具有“重要性”属性的学习器都具有综合特征选择方法。
+
+对于一些学习器，需要在学习器创建过程中设置所需的过滤方法。例如，分类学习器classif.ranger自带多种集成方法，c.f. `ranger::ranger()`的帮助页面。要使用方法“impurity”，你需要在构造期间设置过滤方法。
+
+```{r}
+lrn = lrn("classif.ranger", importance = "impurity")
+```
+
+现在你可以对嵌入算法的方法使用FilterImportance过滤器类：
+
+```{r}
+task = tsk("iris")
+filter = flt("importance", learner = lrn)
+filter$calculate(task)
+head(as.data.table(filter), 3)
+```
+
+### 包装器方法
+
+通过mlr3fselect扩展包支持包装器特性选择。在mlr3fselect的核心是R6类：
+
+- FSelectInstanceSingleCrit、FSelectInstanceMultiCrit：这两个类描述了特性选择问题并存储结果。
+- FSelector：这个类是实现特征选择算法的基类。
+
+### FSelectInstance类
+
+下面的小节检查了用于预测患者是否患有糖尿病的Pima数据集上的特征选择。
+
+```{r}
+task = tsk("pima")
+print(task)
+```
+
+我们使用rpart中的分类树。
+
+```{r}
+learner = lrn("classif.rpart")
+```
+
+接下来，我们需要指定如何评估特征子集的性能。为此，我们需要选择重采样策略和性能度量。
+
+```{r}
+hout = rsmp("holdout")
+measure = msr("classif.ce")
+```
+
+最后，必须为特性选择选择可用的预算。
+
+在这个简短的介绍中，我们指定了20次计算的预算，然后把所有的东西放在一个FSelectInstanceSingleCrit中：
+
+```{r}
+evals20 = trm("evals", n_evals = 20)
+
+instance = FSelectInstanceSingleCrit$new(
+  task = task,
+  learner = learner,
+  resampling = hout,
+  measure = measure,
+  terminator = evals20
+)
+instance
+```
+
+为了开始特征选择，我们仍然需要选择一个通过FSelector类定义的算法。
+
+### FSelector类
+
+以下算法目前在mlr3fselect中实现：
+
+- 随机搜索 FSelectorRandomSearch 
+- 穷举搜索 FSelectorExhaustiveSearch
+- 顺序搜索 FSelectorSequential
+- 递归特征消除 FSelectorRFE
+- 设计点 FSelectorDesignPoints
+
+在这个例子中，我们将使用一个简单的随机搜索，并使用`fs()`函数从字典mlr_fselectors中检索它：
+
+```{r}
+fselector = fs("random_search")
+```
+
+### 触发调优
+
+要开始特性选择，我们只需将FSelectInstanceSingleCrit传递给初始化的FSelector的`$optimize()`方法。算法如下所示：
+
+1. FSelector至少提出一个特征子集，也可以提出多个子集来提高并行性，可以通过设置batch_size来控制。
+2. 对于每个特征子集，给定的学习器使用提供的重采样对任务进行拟合。所有的计算都存储在FSelectInstanceSingleCrit的存档中。
+3. 如果预算耗尽，终结者会被询问。如果预算未耗尽，则使用第一步重新启动，直到耗尽为止。
+4. 确定观察性能最好的特征子集。
+5. 将最佳特性子集作为结果存储在实例对象中。可以从实例访问最佳特性子集(`$result_feature_set`)和相应的测量性能(`$result_y`)。
+
+```{r}
+# reduce logging output
+lgr::get_logger("bbotk")$set_threshold("warn")
+
+fselector$optimize(instance)
+
+instance$result_feature_set
+
+instance$result_y
+```
+
+我们可以调查所有已经进行的重采样，因为它们存储在FSelectInstanceSingleCrit的存档中，可以使用`as.data.table()`访问：
+
+```{r}
+as.data.table(instance$archive)
+```
+
+相关的重采样迭代可以在BenchmarkResult中访问：
+
+```{r}
+instance$archive$benchmark_result$data
+```
+
+uhash列将重新采样迭代链接到实例`$archive$data()`中已评估的特性子集。例如，可以对所包含的ResampleResults进行不同的评分。
+
+现在，优化后的特征子集可以用来对任务进行子集化，并对所有观测值进行模型拟合。
+
+```{r}
+task$select(instance$result_feature_set)
+learner$train(task)
+```
+
+经过训练的模型现在可以用来对外部数据进行预测。注意，应该避免根据任务中出现的观察结果进行预测。该模型在特征选择过程中已经看到了这些观察结果，因此结果在统计上是有偏差的。因此，由此产生的性能度量将过于乐观。相反，为了获得当前任务的统计无偏性能估计，需要嵌套重采样。
+
+### 自动特征选择
+
+AutoFSelector包装了一个学习器，并为给定任务添加了自动特征选择功能。因为AutoFSelector本身继承自Learner基类，所以它可以像任何其他学习者一样使用。类似于前面的小节，创建了一个新的分类树学习器。这种分类树学习器使用内部重采样(holdout)在给定任务上自动开始特征选择。我们创建了一个允许10次计算的终止符，并使用一个简单的随机搜索作为特征选择算法：
+
+```{r}
+learner = lrn("classif.rpart")
+terminator = trm("evals", n_evals = 10)
+fselector = fs("random_search")
+
+at = AutoFSelector$new(
+  learner = learner,
+  resampling = rsmp("holdout"),
+  measure = msr("classif.ce"),
+  terminator = terminator,
+  fselector = fselector
+)
+at
+```
+
+我们现在可以像使用其他学习器使用它，调用`$train()`和`$predict()`方法。然而，这一次，我们将它传递给`benchmark()`，以将优化的特性子集与完整的特性集进行比较。这样，AutoFSelector将在外部重采样的各自分割的训练集上进行特征选择的重采样。然后，学习器使用外部重采样的测试集进行预测。这产生了无偏的性能度量，因为测试集中的观察结果在特征选择或拟合各自的学习器时没有被使用。这被称为嵌套重采样。
+
+```{r}
+grid = benchmark_grid(
+  task = tsk("pima"),
+  learner = list(at, lrn("classif.rpart")),
+  resampling = rsmp("cv", folds = 3)
+)
+
+bmr = benchmark(grid, store_models = TRUE)
+bmr$aggregate(msrs(c("classif.ce", "time_train")))
+```
+
+请注意，我们不期望任何显著的差异，因为我们只评估了可能的特性子集的一小部分。
+
+```{r}
+xfun::session_info()
+```
 

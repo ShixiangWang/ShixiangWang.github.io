@@ -1,0 +1,2114 @@
+---
+title: mlr3（三）模型优化
+author: 王诗翔
+date: '2021-09-01'
+slug: mlr3-model-optimization
+categories:
+  - Blog
+tags:
+  - R
+  - mlr3
+  - 机器学习
+rmd_source: ''
+keywords: rstats
+editor_options:
+  chunk_output_type: console
+---
+
+<script src="{{< blogdown/postref >}}index_files/header-attrs-2.10/header-attrs.js"></script>
+
+
+<!-- Links -->
+<p>来源：<a href="https://mlr3book.mlr-org.com/optimization.html" class="uri">https://mlr3book.mlr-org.com/optimization.html</a></p>
+<p><strong>模型优化</strong></p>
+<p>机器学习算法为其超参数设置了默认值。不管怎样，用户需要更改这些超参数，以在给定的数据集上实现最佳性能。不建议手动选择超参数值，因为这种方法很少能获得最佳性能。为了证实所选超参数（=调优）的有效性，建议进行数据驱动的优化。为了优化机器学习算法，必须指定（1）搜索空间，（2）优化算法(又称调优方法)，（3）评估方法，即重采样策略，（4）性能度量。</p>
+<p>总而言之，关于调优的小节介绍：</p>
+<ul>
+<li>进行经验超参数选择</li>
+<li>选择优化算法</li>
+<li>简洁地指定搜索空间</li>
+<li>触发调优</li>
+<li>自动调优</li>
+</ul>
+<p>本小节还需要包mlr3tuning，这是一个支持超参数调优的扩展包。</p>
+<p><strong>特征选择</strong></p>
+<p>本章的第二部分介绍特征选择，也称为变量选择。特征选择是寻找数据相关特征子集的过程。执行选择的一些原因：</p>
+<ul>
+<li>增强模型的可解释性</li>
+<li>加速模型拟合</li>
+<li>通过降低数据中的噪声来提高学习性能</li>
+</ul>
+<p>在本文中，我们主要集中在最后一个方面。有不同的方法来识别相关的特征。在特征选择的分章中，我们强调了三种方法：</p>
+<ul>
+<li>运用过滤算法根据分数独立地选择特征</li>
+<li>根据变量重要性过滤选择特征</li>
+<li>包装器方法迭代地选择特性以优化性能度量</li>
+</ul>
+<p>注意，过滤器不需要学习器。变量重要性过滤器需要一个学习器，该学习器在训练时可以计算特征的重要性值。获得的重要值可用于数据子集，然后可用于训练学习器。包装器方法可以用于任何学习器，但需要对学习器进行多次训练。</p>
+<p><strong>嵌套重采样</strong></p>
+<p>为了更好地估计泛化性能并避免数据泄漏，外部（性能）和内部（调优/特征选择）重采样过程都是必要的。本章将讨论以下特点：</p>
+<ul>
+<li>嵌套重采样中的内重采样和外重采样策略</li>
+<li>嵌套重采样的执行</li>
+<li>执行重采样迭代的评估</li>
+</ul>
+<p>本小节将提供如何实现嵌套重采样的说明，包括mlr3中的内重采样和外重采样。</p>
+<div id="超参数调优" class="section level2">
+<h2>超参数调优</h2>
+<p>超参数是机器学习模型的二阶参数，虽然在模型估计过程中往往没有明确优化，但会对模型的结果和预测性能产生重要影响。通常，超参数在训练模型之前是固定的。但是，由于模型的输出可能对超参数的规范很敏感，因此通常建议对哪些超参数设置可以产生更好的模型性能做出明智的决定。在许多情况下，超参数设置可能是预先选择的，但在将模型拟合到训练数据上之前，尝试不同的设置可能是有利的。这个过程通常被称为模型“调优”。</p>
+<p>超参数调优是通过mlr3tuning扩展包支持的。下面是这个过程的说明：</p>
+<p><img src="https://mlr3book.mlr-org.com/images/tuning_process.svg" /></p>
+<p>mlr3tuning的核心是R6类：</p>
+<p>TuningInstanceSingleCrit，TuningInstanceMultiCrit：这两个类描述调优问题并存储结果。</p>
+<p>Tuner：这个类是调优算法实现的基类。</p>
+<div id="tuninginstance-类" class="section level3">
+<h3>TuningInstance* 类</h3>
+<p>下面的小节审查了皮马印度糖尿病数据集上的简单分类树的优化。</p>
+<pre class="r"><code>library(&quot;mlr3verse&quot;)
+task = tsk(&quot;pima&quot;)
+print(task)</code></pre>
+<pre><code>## &lt;TaskClassif:pima&gt; (768 x 9)
+## * Target: diabetes
+## * Properties: twoclass
+## * Features (8):
+##   - dbl (8): age, glucose, insulin, mass, pedigree, pregnant, pressure,
+##     triceps</code></pre>
+<p>我们使用rpart中的分类树，并选择我们想要调优的超参数的子集。这通常被称为“调优空间”。</p>
+<pre class="r"><code>learner = lrn(&quot;classif.rpart&quot;)
+learner$param_set</code></pre>
+<pre><code>## &lt;ParamSet&gt;
+##                 id    class lower upper nlevels        default value
+##  1:             cp ParamDbl     0     1     Inf           0.01      
+##  2:     keep_model ParamLgl    NA    NA       2          FALSE      
+##  3:     maxcompete ParamInt     0   Inf     Inf              4      
+##  4:       maxdepth ParamInt     1    30      30             30      
+##  5:   maxsurrogate ParamInt     0   Inf     Inf              5      
+##  6:      minbucket ParamInt     1   Inf     Inf &lt;NoDefault[3]&gt;      
+##  7:       minsplit ParamInt     1   Inf     Inf             20      
+##  8: surrogatestyle ParamInt     0     1       2              0      
+##  9:   usesurrogate ParamInt     0     2       3              2      
+## 10:           xval ParamInt     0   Inf     Inf             10     0</code></pre>
+<p>这里，我们选择调优两个参数：</p>
+<ul>
+<li>复杂度 <code>cp</code></li>
+<li>终止准则 <code>minsplit</code></li>
+</ul>
+<p>调优空间需要有边界，因此需要设置上下限：</p>
+<pre class="r"><code>search_space = ps(
+  cp = p_dbl(lower = 0.001, upper = 0.1),
+  minsplit = p_int(lower = 1, upper = 10)
+)
+search_space</code></pre>
+<pre><code>## &lt;ParamSet&gt;
+##          id    class lower upper nlevels        default value
+## 1:       cp ParamDbl 0.001   0.1     Inf &lt;NoDefault[3]&gt;      
+## 2: minsplit ParamInt 1.000  10.0      10 &lt;NoDefault[3]&gt;</code></pre>
+<p>接下来，我们需要明确如何评估性能。为此，我们需要选择重采样策略和性能度量。</p>
+<pre class="r"><code>hout = rsmp(&quot;holdout&quot;)
+measure = msr(&quot;classif.ce&quot;)</code></pre>
+<p>最后，必须选择可用的预算来解决这个调优实例。这是通过选择一个可用的终结者：</p>
+<ul>
+<li>在给定时间后终止 TerminatorClockTime</li>
+<li>在给定的迭代量之后终止 TerminatorEvals</li>
+<li>在达到特定性能后终止 TerminatorPerfReached</li>
+<li>当优化没有改善时终止 TerminatorStagnation</li>
+<li>以ALL或ANY的方式组合上述内容 TerminatorCombo</li>
+</ul>
+<p>在这篇简短的介绍中，我们指定了20次计算的预算，然后把所有东西放在一个TuningInstanceSingleCrit中：</p>
+<pre class="r"><code>library(&quot;mlr3tuning&quot;)
+
+evals20 = trm(&quot;evals&quot;, n_evals = 20)
+
+instance = TuningInstanceSingleCrit$new(
+  task = task,
+  learner = learner,
+  resampling = hout,
+  measure = measure,
+  search_space = search_space,
+  terminator = evals20
+)
+instance</code></pre>
+<pre><code>## &lt;TuningInstanceSingleCrit&gt;
+## * State:  Not optimized
+## * Objective: &lt;ObjectiveTuning:classif.rpart_on_pima&gt;
+## * Search Space:
+## &lt;ParamSet&gt;
+##          id    class lower upper nlevels        default value
+## 1:       cp ParamDbl 0.001   0.1     Inf &lt;NoDefault[3]&gt;      
+## 2: minsplit ParamInt 1.000  10.0      10 &lt;NoDefault[3]&gt;      
+## * Terminator: &lt;TerminatorEvals&gt;
+## * Terminated: FALSE
+## * Archive:
+## &lt;ArchiveTuning&gt;
+## Null data.table (0 rows and 0 cols)</code></pre>
+<p>要开始调优，我们仍然需要选择应该如何进行优化。换句话说，我们需要通过Tuner类选择优化算法。</p>
+</div>
+<div id="tuner-类" class="section level3">
+<h3>Tuner 类</h3>
+<p>以下算法目前在mlr3调优中实现：</p>
+<ul>
+<li>网格搜索 TunerGridSearch</li>
+<li>随机搜索 TunerRandomSearch</li>
+<li>广义模拟退火 TunerGenSA</li>
+<li>非线性最优化 TunerNLoptr</li>
+</ul>
+<p>在本例中，我们将使用一个简单的网格搜索，网格分辨率为5。</p>
+<pre class="r"><code>tuner = tnr(&quot;grid_search&quot;, resolution = 5)</code></pre>
+<p>由于我们只有数值参数，TunerGridSearch将在各自的上界和下界之间创建一个等距网格。由于我们有两个分辨率为5的超参数，二维网格由5^2=25个配置组成。每个配置都作为先前定义的学习器的超参数设置，然后使用提供的重采样将其拟合到任务上。所有配置都将由调优器检查（以随机顺序），直到所有配置都被评估或终结者发出耗尽预算的信号。</p>
+</div>
+<div id="触发调优" class="section level3">
+<h3>触发调优</h3>
+<p>要开始调优，只需将TuningInstanceSingleCrit传递给初始化的Tuner的<code>$optimize()</code>方法。调谐器的工作过程如下：</p>
+<ol style="list-style-type: decimal">
+<li>Tuner建议至少一个超参数配置（Tuner可能建议多个点来改善并行性，这可以通过设置batch_size进行控制）。</li>
+<li>对于每个配置，给定的学习器使用提供的重采样将其分派到任务上。所有计算都存储在TuningInstanceSingleCrit的存档中。</li>
+<li>如果预算耗尽，终结者会被询问。如果预算未耗尽，则使用第一步重新启动，直到耗尽为止。</li>
+<li>确定具有最佳观察性能的配置。</li>
+<li>在实例对象中存储最佳配置结果。可以从实例访问最佳超参数设置(<code>$result_learner_param_vals</code>)和相应的测量性能(<code>$result_y</code>)。</li>
+</ol>
+<pre class="r"><code>tuner$optimize(instance)</code></pre>
+<pre><code>## INFO  [13:30:55.557] [bbotk] Starting to optimize 2 parameter(s) with &#39;&lt;OptimizerGridSearch&gt;&#39; and &#39;&lt;TerminatorEvals&gt; [n_evals=20]&#39; 
+## INFO  [13:30:55.593] [bbotk] Evaluating 1 configuration(s) 
+## INFO  [13:30:55.623] [mlr3]  Running benchmark with 1 resampling iterations 
+## INFO  [13:30:55.683] [mlr3]  Applying learner &#39;classif.rpart&#39; on task &#39;pima&#39; (iter 1/1) 
+## INFO  [13:30:55.720] [mlr3]  Finished benchmark 
+## INFO  [13:30:55.769] [bbotk] Result of batch 1: 
+## INFO  [13:30:55.771] [bbotk]       cp minsplit classif.ce                                uhash 
+## INFO  [13:30:55.771] [bbotk]  0.02575        3   0.234375 3ce34262-9fa3-419c-9b8c-02f7f20b30b3 
+## INFO  [13:30:55.773] [bbotk] Evaluating 1 configuration(s) 
+## INFO  [13:30:55.804] [mlr3]  Running benchmark with 1 resampling iterations 
+## INFO  [13:30:55.810] [mlr3]  Applying learner &#39;classif.rpart&#39; on task &#39;pima&#39; (iter 1/1) 
+## INFO  [13:30:55.822] [mlr3]  Finished benchmark 
+## INFO  [13:30:55.877] [bbotk] Result of batch 2: 
+## INFO  [13:30:55.878] [bbotk]     cp minsplit classif.ce                                uhash 
+## INFO  [13:30:55.878] [bbotk]  0.001       10  0.2460938 fb9d6853-71a0-4d9f-ab01-6a4385a0ae9f 
+## INFO  [13:30:55.880] [bbotk] Evaluating 1 configuration(s) 
+## INFO  [13:30:55.907] [mlr3]  Running benchmark with 1 resampling iterations 
+## INFO  [13:30:55.913] [mlr3]  Applying learner &#39;classif.rpart&#39; on task &#39;pima&#39; (iter 1/1) 
+## INFO  [13:30:55.926] [mlr3]  Finished benchmark 
+## INFO  [13:30:55.961] [bbotk] Result of batch 3: 
+## INFO  [13:30:55.962] [bbotk]     cp minsplit classif.ce                                uhash 
+## INFO  [13:30:55.962] [bbotk]  0.001        3  0.2773438 e7a447e3-e22a-4bf4-b2e1-f6fcbacbf6b2 
+## INFO  [13:30:55.964] [bbotk] Evaluating 1 configuration(s) 
+## INFO  [13:30:55.979] [mlr3]  Running benchmark with 1 resampling iterations 
+## INFO  [13:30:55.985] [mlr3]  Applying learner &#39;classif.rpart&#39; on task &#39;pima&#39; (iter 1/1) 
+## INFO  [13:30:55.997] [mlr3]  Finished benchmark 
+## INFO  [13:30:56.031] [bbotk] Result of batch 4: 
+## INFO  [13:30:56.032] [bbotk]   cp minsplit classif.ce                                uhash 
+## INFO  [13:30:56.032] [bbotk]  0.1        8  0.2734375 31366d2c-4c7b-458d-9f38-8446cf41195e 
+## INFO  [13:30:56.033] [bbotk] Evaluating 1 configuration(s) 
+## INFO  [13:30:56.050] [mlr3]  Running benchmark with 1 resampling iterations 
+## INFO  [13:30:56.056] [mlr3]  Applying learner &#39;classif.rpart&#39; on task &#39;pima&#39; (iter 1/1) 
+## INFO  [13:30:56.067] [mlr3]  Finished benchmark 
+## INFO  [13:30:56.104] [bbotk] Result of batch 5: 
+## INFO  [13:30:56.105] [bbotk]      cp minsplit classif.ce                                uhash 
+## INFO  [13:30:56.105] [bbotk]  0.0505        8  0.2265625 32cbf134-c7fa-49bd-81a7-d53b35969f60 
+## INFO  [13:30:56.106] [bbotk] Evaluating 1 configuration(s) 
+## INFO  [13:30:56.122] [mlr3]  Running benchmark with 1 resampling iterations 
+## INFO  [13:30:56.128] [mlr3]  Applying learner &#39;classif.rpart&#39; on task &#39;pima&#39; (iter 1/1) 
+## INFO  [13:30:56.140] [mlr3]  Finished benchmark 
+## INFO  [13:30:56.176] [bbotk] Result of batch 6: 
+## INFO  [13:30:56.177] [bbotk]      cp minsplit classif.ce                                uhash 
+## INFO  [13:30:56.177] [bbotk]  0.0505       10  0.2265625 35bf09a5-0068-48ff-86bb-4852f008377c 
+## INFO  [13:30:56.178] [bbotk] Evaluating 1 configuration(s) 
+## INFO  [13:30:56.195] [mlr3]  Running benchmark with 1 resampling iterations 
+## INFO  [13:30:56.201] [mlr3]  Applying learner &#39;classif.rpart&#39; on task &#39;pima&#39; (iter 1/1) 
+## INFO  [13:30:56.220] [mlr3]  Finished benchmark 
+## INFO  [13:30:56.253] [bbotk] Result of batch 7: 
+## INFO  [13:30:56.254] [bbotk]   cp minsplit classif.ce                                uhash 
+## INFO  [13:30:56.254] [bbotk]  0.1        3  0.2734375 e9625c8f-9789-402e-98af-2f06ecc1f852 
+## INFO  [13:30:56.255] [bbotk] Evaluating 1 configuration(s) 
+## INFO  [13:30:56.278] [mlr3]  Running benchmark with 1 resampling iterations 
+## INFO  [13:30:56.284] [mlr3]  Applying learner &#39;classif.rpart&#39; on task &#39;pima&#39; (iter 1/1) 
+## INFO  [13:30:56.296] [mlr3]  Finished benchmark 
+## INFO  [13:30:56.329] [bbotk] Result of batch 8: 
+## INFO  [13:30:56.331] [bbotk]   cp minsplit classif.ce                                uhash 
+## INFO  [13:30:56.331] [bbotk]  0.1       10  0.2734375 f5c7db8e-a59a-49bd-a66c-bf5eef7b519b 
+## INFO  [13:30:56.332] [bbotk] Evaluating 1 configuration(s) 
+## INFO  [13:30:56.346] [mlr3]  Running benchmark with 1 resampling iterations 
+## INFO  [13:30:56.352] [mlr3]  Applying learner &#39;classif.rpart&#39; on task &#39;pima&#39; (iter 1/1) 
+## INFO  [13:30:56.363] [mlr3]  Finished benchmark 
+## INFO  [13:30:56.401] [bbotk] Result of batch 9: 
+## INFO  [13:30:56.402] [bbotk]       cp minsplit classif.ce                                uhash 
+## INFO  [13:30:56.402] [bbotk]  0.02575       10   0.234375 18a0048e-7798-4793-8b9d-f88e11e9d4df 
+## INFO  [13:30:56.403] [bbotk] Evaluating 1 configuration(s) 
+## INFO  [13:30:56.419] [mlr3]  Running benchmark with 1 resampling iterations 
+## INFO  [13:30:56.424] [mlr3]  Applying learner &#39;classif.rpart&#39; on task &#39;pima&#39; (iter 1/1) 
+## INFO  [13:30:56.436] [mlr3]  Finished benchmark 
+## INFO  [13:30:56.474] [bbotk] Result of batch 10: 
+## INFO  [13:30:56.475] [bbotk]       cp minsplit classif.ce                                uhash 
+## INFO  [13:30:56.475] [bbotk]  0.07525        1  0.2734375 cd94707c-b83b-4746-8f8c-074c0db225bd 
+## INFO  [13:30:56.476] [bbotk] Evaluating 1 configuration(s) 
+## INFO  [13:30:56.491] [mlr3]  Running benchmark with 1 resampling iterations 
+## INFO  [13:30:56.497] [mlr3]  Applying learner &#39;classif.rpart&#39; on task &#39;pima&#39; (iter 1/1) 
+## INFO  [13:30:56.508] [mlr3]  Finished benchmark 
+## INFO  [13:30:56.542] [bbotk] Result of batch 11: 
+## INFO  [13:30:56.544] [bbotk]       cp minsplit classif.ce                                uhash 
+## INFO  [13:30:56.544] [bbotk]  0.02575        8   0.234375 d21b0867-a95d-43dc-93ea-df08c4c1334b 
+## INFO  [13:30:56.545] [bbotk] Evaluating 1 configuration(s) 
+## INFO  [13:30:56.560] [mlr3]  Running benchmark with 1 resampling iterations 
+## INFO  [13:30:56.566] [mlr3]  Applying learner &#39;classif.rpart&#39; on task &#39;pima&#39; (iter 1/1) 
+## INFO  [13:30:56.578] [mlr3]  Finished benchmark 
+## INFO  [13:30:56.612] [bbotk] Result of batch 12: 
+## INFO  [13:30:56.614] [bbotk]      cp minsplit classif.ce                                uhash 
+## INFO  [13:30:56.614] [bbotk]  0.0505        3  0.2265625 404b9e93-c969-4015-808c-8296f07d171f 
+## INFO  [13:30:56.615] [bbotk] Evaluating 1 configuration(s) 
+## INFO  [13:30:56.630] [mlr3]  Running benchmark with 1 resampling iterations 
+## INFO  [13:30:56.636] [mlr3]  Applying learner &#39;classif.rpart&#39; on task &#39;pima&#39; (iter 1/1) 
+## INFO  [13:30:56.647] [mlr3]  Finished benchmark 
+## INFO  [13:30:56.689] [bbotk] Result of batch 13: 
+## INFO  [13:30:56.690] [bbotk]       cp minsplit classif.ce                                uhash 
+## INFO  [13:30:56.690] [bbotk]  0.07525        8  0.2734375 c3809e4f-a22a-4586-99cc-3070dc558950 
+## INFO  [13:30:56.692] [bbotk] Evaluating 1 configuration(s) 
+## INFO  [13:30:56.706] [mlr3]  Running benchmark with 1 resampling iterations 
+## INFO  [13:30:56.712] [mlr3]  Applying learner &#39;classif.rpart&#39; on task &#39;pima&#39; (iter 1/1) 
+## INFO  [13:30:56.723] [mlr3]  Finished benchmark 
+## INFO  [13:30:56.762] [bbotk] Result of batch 14: 
+## INFO  [13:30:56.763] [bbotk]      cp minsplit classif.ce                                uhash 
+## INFO  [13:30:56.763] [bbotk]  0.0505        5  0.2265625 5e82b462-7f1e-4533-abef-56d0439ee5f1 
+## INFO  [13:30:56.764] [bbotk] Evaluating 1 configuration(s) 
+## INFO  [13:30:56.779] [mlr3]  Running benchmark with 1 resampling iterations 
+## INFO  [13:30:56.784] [mlr3]  Applying learner &#39;classif.rpart&#39; on task &#39;pima&#39; (iter 1/1) 
+## INFO  [13:30:56.795] [mlr3]  Finished benchmark 
+## INFO  [13:30:56.828] [bbotk] Result of batch 15: 
+## INFO  [13:30:56.830] [bbotk]   cp minsplit classif.ce                                uhash 
+## INFO  [13:30:56.830] [bbotk]  0.1        1  0.2734375 c8494a0f-36b7-40aa-8542-2ce9cf40deea 
+## INFO  [13:30:56.831] [bbotk] Evaluating 1 configuration(s) 
+## INFO  [13:30:56.847] [mlr3]  Running benchmark with 1 resampling iterations 
+## INFO  [13:30:56.852] [mlr3]  Applying learner &#39;classif.rpart&#39; on task &#39;pima&#39; (iter 1/1) 
+## INFO  [13:30:56.864] [mlr3]  Finished benchmark 
+## INFO  [13:30:56.898] [bbotk] Result of batch 16: 
+## INFO  [13:30:56.899] [bbotk]      cp minsplit classif.ce                                uhash 
+## INFO  [13:30:56.899] [bbotk]  0.0505        1  0.2265625 cb1b4ac7-2ce0-46f7-b237-66cae9c18077 
+## INFO  [13:30:56.900] [bbotk] Evaluating 1 configuration(s) 
+## INFO  [13:30:56.915] [mlr3]  Running benchmark with 1 resampling iterations 
+## INFO  [13:30:56.921] [mlr3]  Applying learner &#39;classif.rpart&#39; on task &#39;pima&#39; (iter 1/1) 
+## INFO  [13:30:56.932] [mlr3]  Finished benchmark 
+## INFO  [13:30:56.968] [bbotk] Result of batch 17: 
+## INFO  [13:30:56.969] [bbotk]       cp minsplit classif.ce                                uhash 
+## INFO  [13:30:56.969] [bbotk]  0.07525        3  0.2734375 1ea18320-851f-4482-b2c7-be3f35704352 
+## INFO  [13:30:56.970] [bbotk] Evaluating 1 configuration(s) 
+## INFO  [13:30:57.009] [mlr3]  Running benchmark with 1 resampling iterations 
+## INFO  [13:30:57.014] [mlr3]  Applying learner &#39;classif.rpart&#39; on task &#39;pima&#39; (iter 1/1) 
+## INFO  [13:30:57.025] [mlr3]  Finished benchmark 
+## INFO  [13:30:57.058] [bbotk] Result of batch 18: 
+## INFO  [13:30:57.059] [bbotk]   cp minsplit classif.ce                                uhash 
+## INFO  [13:30:57.059] [bbotk]  0.1        5  0.2734375 6330e5b0-ef5a-4f06-9c03-37d069db7361 
+## INFO  [13:30:57.061] [bbotk] Evaluating 1 configuration(s) 
+## INFO  [13:30:57.076] [mlr3]  Running benchmark with 1 resampling iterations 
+## INFO  [13:30:57.082] [mlr3]  Applying learner &#39;classif.rpart&#39; on task &#39;pima&#39; (iter 1/1) 
+## INFO  [13:30:57.094] [mlr3]  Finished benchmark 
+## INFO  [13:30:57.128] [bbotk] Result of batch 19: 
+## INFO  [13:30:57.130] [bbotk]     cp minsplit classif.ce                                uhash 
+## INFO  [13:30:57.130] [bbotk]  0.001        5  0.2382812 c6cbee31-c97c-4764-823a-a41e4031f89c 
+## INFO  [13:30:57.131] [bbotk] Evaluating 1 configuration(s) 
+## INFO  [13:30:57.146] [mlr3]  Running benchmark with 1 resampling iterations 
+## INFO  [13:30:57.152] [mlr3]  Applying learner &#39;classif.rpart&#39; on task &#39;pima&#39; (iter 1/1) 
+## INFO  [13:30:57.164] [mlr3]  Finished benchmark 
+## INFO  [13:30:57.197] [bbotk] Result of batch 20: 
+## INFO  [13:30:57.198] [bbotk]       cp minsplit classif.ce                                uhash 
+## INFO  [13:30:57.198] [bbotk]  0.02575        5   0.234375 81132032-989a-4a7a-b4f0-88fc13f87549 
+## INFO  [13:30:57.203] [bbotk] Finished optimizing after 20 evaluation(s) 
+## INFO  [13:30:57.204] [bbotk] Result: 
+## INFO  [13:30:57.205] [bbotk]      cp minsplit learner_param_vals  x_domain classif.ce 
+## INFO  [13:30:57.205] [bbotk]  0.0505        8          &lt;list[3]&gt; &lt;list[2]&gt;  0.2265625</code></pre>
+<pre><code>##        cp minsplit learner_param_vals  x_domain classif.ce
+## 1: 0.0505        8          &lt;list[3]&gt; &lt;list[2]&gt;  0.2265625</code></pre>
+<pre class="r"><code>instance$result_learner_param_vals</code></pre>
+<pre><code>## $xval
+## [1] 0
+## 
+## $cp
+## [1] 0.0505
+## 
+## $minsplit
+## [1] 8</code></pre>
+<pre class="r"><code>instance$result_y</code></pre>
+<pre><code>## classif.ce 
+##  0.2265625</code></pre>
+<p>我们可以调查所有进行的重采样，因为它们存储在TuningInstanceSingleCrit的存档中，可以使用<code>as.data.table()</code>访问：</p>
+<pre class="r"><code>as.data.table(instance$archive)</code></pre>
+<pre><code>##          cp minsplit classif.ce                                uhash
+##  1: 0.02575        3  0.2343750 3ce34262-9fa3-419c-9b8c-02f7f20b30b3
+##  2: 0.00100       10  0.2460938 fb9d6853-71a0-4d9f-ab01-6a4385a0ae9f
+##  3: 0.00100        3  0.2773438 e7a447e3-e22a-4bf4-b2e1-f6fcbacbf6b2
+##  4: 0.10000        8  0.2734375 31366d2c-4c7b-458d-9f38-8446cf41195e
+##  5: 0.05050        8  0.2265625 32cbf134-c7fa-49bd-81a7-d53b35969f60
+##  6: 0.05050       10  0.2265625 35bf09a5-0068-48ff-86bb-4852f008377c
+##  7: 0.10000        3  0.2734375 e9625c8f-9789-402e-98af-2f06ecc1f852
+##  8: 0.10000       10  0.2734375 f5c7db8e-a59a-49bd-a66c-bf5eef7b519b
+##  9: 0.02575       10  0.2343750 18a0048e-7798-4793-8b9d-f88e11e9d4df
+## 10: 0.07525        1  0.2734375 cd94707c-b83b-4746-8f8c-074c0db225bd
+## 11: 0.02575        8  0.2343750 d21b0867-a95d-43dc-93ea-df08c4c1334b
+## 12: 0.05050        3  0.2265625 404b9e93-c969-4015-808c-8296f07d171f
+## 13: 0.07525        8  0.2734375 c3809e4f-a22a-4586-99cc-3070dc558950
+## 14: 0.05050        5  0.2265625 5e82b462-7f1e-4533-abef-56d0439ee5f1
+## 15: 0.10000        1  0.2734375 c8494a0f-36b7-40aa-8542-2ce9cf40deea
+## 16: 0.05050        1  0.2265625 cb1b4ac7-2ce0-46f7-b237-66cae9c18077
+## 17: 0.07525        3  0.2734375 1ea18320-851f-4482-b2c7-be3f35704352
+## 18: 0.10000        5  0.2734375 6330e5b0-ef5a-4f06-9c03-37d069db7361
+## 19: 0.00100        5  0.2382812 c6cbee31-c97c-4764-823a-a41e4031f89c
+## 20: 0.02575        5  0.2343750 81132032-989a-4a7a-b4f0-88fc13f87549
+##               timestamp batch_nr x_domain_cp x_domain_minsplit
+##  1: 2021-09-02 13:30:55        1     0.02575                 3
+##  2: 2021-09-02 13:30:55        2     0.00100                10
+##  3: 2021-09-02 13:30:55        3     0.00100                 3
+##  4: 2021-09-02 13:30:56        4     0.10000                 8
+##  5: 2021-09-02 13:30:56        5     0.05050                 8
+##  6: 2021-09-02 13:30:56        6     0.05050                10
+##  7: 2021-09-02 13:30:56        7     0.10000                 3
+##  8: 2021-09-02 13:30:56        8     0.10000                10
+##  9: 2021-09-02 13:30:56        9     0.02575                10
+## 10: 2021-09-02 13:30:56       10     0.07525                 1
+## 11: 2021-09-02 13:30:56       11     0.02575                 8
+## 12: 2021-09-02 13:30:56       12     0.05050                 3
+## 13: 2021-09-02 13:30:56       13     0.07525                 8
+## 14: 2021-09-02 13:30:56       14     0.05050                 5
+## 15: 2021-09-02 13:30:56       15     0.10000                 1
+## 16: 2021-09-02 13:30:56       16     0.05050                 1
+## 17: 2021-09-02 13:30:56       17     0.07525                 3
+## 18: 2021-09-02 13:30:57       18     0.10000                 5
+## 19: 2021-09-02 13:30:57       19     0.00100                 5
+## 20: 2021-09-02 13:30:57       20     0.02575                 5</code></pre>
+<p>总之，在终结者停止调优之前，网格搜索以随机顺序评估20/25个不同的网格配置。</p>
+<p>相关的重采样迭代可以在BenchmarkResult中访问:</p>
+<pre class="r"><code>instance$archive$benchmark_result</code></pre>
+<pre><code>## &lt;BenchmarkResult&gt; of 20 rows with 20 resampling runs
+##  nr task_id    learner_id resampling_id iters warnings errors
+##   1    pima classif.rpart       holdout     1        0      0
+##   2    pima classif.rpart       holdout     1        0      0
+##   3    pima classif.rpart       holdout     1        0      0
+##   4    pima classif.rpart       holdout     1        0      0
+##   5    pima classif.rpart       holdout     1        0      0
+##   6    pima classif.rpart       holdout     1        0      0
+##   7    pima classif.rpart       holdout     1        0      0
+##   8    pima classif.rpart       holdout     1        0      0
+##   9    pima classif.rpart       holdout     1        0      0
+##  10    pima classif.rpart       holdout     1        0      0
+##  11    pima classif.rpart       holdout     1        0      0
+##  12    pima classif.rpart       holdout     1        0      0
+##  13    pima classif.rpart       holdout     1        0      0
+##  14    pima classif.rpart       holdout     1        0      0
+##  15    pima classif.rpart       holdout     1        0      0
+##  16    pima classif.rpart       holdout     1        0      0
+##  17    pima classif.rpart       holdout     1        0      0
+##  18    pima classif.rpart       holdout     1        0      0
+##  19    pima classif.rpart       holdout     1        0      0
+##  20    pima classif.rpart       holdout     1        0      0</code></pre>
+<p>uhash列将重新采样迭代链接到<code>instance$archive$data</code>中已评估的配置。例如，可以对所包含的ResampleResults进行不同的评分。</p>
+<pre class="r"><code>instance$archive$benchmark_result$score(msr(&quot;classif.acc&quot;))</code></pre>
+<pre><code>##                                    uhash nr              task task_id
+##  1: 3ce34262-9fa3-419c-9b8c-02f7f20b30b3  1 &lt;TaskClassif[47]&gt;    pima
+##  2: fb9d6853-71a0-4d9f-ab01-6a4385a0ae9f  2 &lt;TaskClassif[47]&gt;    pima
+##  3: e7a447e3-e22a-4bf4-b2e1-f6fcbacbf6b2  3 &lt;TaskClassif[47]&gt;    pima
+##  4: 31366d2c-4c7b-458d-9f38-8446cf41195e  4 &lt;TaskClassif[47]&gt;    pima
+##  5: 32cbf134-c7fa-49bd-81a7-d53b35969f60  5 &lt;TaskClassif[47]&gt;    pima
+##  6: 35bf09a5-0068-48ff-86bb-4852f008377c  6 &lt;TaskClassif[47]&gt;    pima
+##  7: e9625c8f-9789-402e-98af-2f06ecc1f852  7 &lt;TaskClassif[47]&gt;    pima
+##  8: f5c7db8e-a59a-49bd-a66c-bf5eef7b519b  8 &lt;TaskClassif[47]&gt;    pima
+##  9: 18a0048e-7798-4793-8b9d-f88e11e9d4df  9 &lt;TaskClassif[47]&gt;    pima
+## 10: cd94707c-b83b-4746-8f8c-074c0db225bd 10 &lt;TaskClassif[47]&gt;    pima
+## 11: d21b0867-a95d-43dc-93ea-df08c4c1334b 11 &lt;TaskClassif[47]&gt;    pima
+## 12: 404b9e93-c969-4015-808c-8296f07d171f 12 &lt;TaskClassif[47]&gt;    pima
+## 13: c3809e4f-a22a-4586-99cc-3070dc558950 13 &lt;TaskClassif[47]&gt;    pima
+## 14: 5e82b462-7f1e-4533-abef-56d0439ee5f1 14 &lt;TaskClassif[47]&gt;    pima
+## 15: c8494a0f-36b7-40aa-8542-2ce9cf40deea 15 &lt;TaskClassif[47]&gt;    pima
+## 16: cb1b4ac7-2ce0-46f7-b237-66cae9c18077 16 &lt;TaskClassif[47]&gt;    pima
+## 17: 1ea18320-851f-4482-b2c7-be3f35704352 17 &lt;TaskClassif[47]&gt;    pima
+## 18: 6330e5b0-ef5a-4f06-9c03-37d069db7361 18 &lt;TaskClassif[47]&gt;    pima
+## 19: c6cbee31-c97c-4764-823a-a41e4031f89c 19 &lt;TaskClassif[47]&gt;    pima
+## 20: 81132032-989a-4a7a-b4f0-88fc13f87549 20 &lt;TaskClassif[47]&gt;    pima
+##                       learner    learner_id              resampling
+##  1: &lt;LearnerClassifRpart[36]&gt; classif.rpart &lt;ResamplingHoldout[19]&gt;
+##  2: &lt;LearnerClassifRpart[36]&gt; classif.rpart &lt;ResamplingHoldout[19]&gt;
+##  3: &lt;LearnerClassifRpart[36]&gt; classif.rpart &lt;ResamplingHoldout[19]&gt;
+##  4: &lt;LearnerClassifRpart[36]&gt; classif.rpart &lt;ResamplingHoldout[19]&gt;
+##  5: &lt;LearnerClassifRpart[36]&gt; classif.rpart &lt;ResamplingHoldout[19]&gt;
+##  6: &lt;LearnerClassifRpart[36]&gt; classif.rpart &lt;ResamplingHoldout[19]&gt;
+##  7: &lt;LearnerClassifRpart[36]&gt; classif.rpart &lt;ResamplingHoldout[19]&gt;
+##  8: &lt;LearnerClassifRpart[36]&gt; classif.rpart &lt;ResamplingHoldout[19]&gt;
+##  9: &lt;LearnerClassifRpart[36]&gt; classif.rpart &lt;ResamplingHoldout[19]&gt;
+## 10: &lt;LearnerClassifRpart[36]&gt; classif.rpart &lt;ResamplingHoldout[19]&gt;
+## 11: &lt;LearnerClassifRpart[36]&gt; classif.rpart &lt;ResamplingHoldout[19]&gt;
+## 12: &lt;LearnerClassifRpart[36]&gt; classif.rpart &lt;ResamplingHoldout[19]&gt;
+## 13: &lt;LearnerClassifRpart[36]&gt; classif.rpart &lt;ResamplingHoldout[19]&gt;
+## 14: &lt;LearnerClassifRpart[36]&gt; classif.rpart &lt;ResamplingHoldout[19]&gt;
+## 15: &lt;LearnerClassifRpart[36]&gt; classif.rpart &lt;ResamplingHoldout[19]&gt;
+## 16: &lt;LearnerClassifRpart[36]&gt; classif.rpart &lt;ResamplingHoldout[19]&gt;
+## 17: &lt;LearnerClassifRpart[36]&gt; classif.rpart &lt;ResamplingHoldout[19]&gt;
+## 18: &lt;LearnerClassifRpart[36]&gt; classif.rpart &lt;ResamplingHoldout[19]&gt;
+## 19: &lt;LearnerClassifRpart[36]&gt; classif.rpart &lt;ResamplingHoldout[19]&gt;
+## 20: &lt;LearnerClassifRpart[36]&gt; classif.rpart &lt;ResamplingHoldout[19]&gt;
+##     resampling_id iteration              prediction classif.acc
+##  1:       holdout         1 &lt;PredictionClassif[19]&gt;   0.7656250
+##  2:       holdout         1 &lt;PredictionClassif[19]&gt;   0.7539062
+##  3:       holdout         1 &lt;PredictionClassif[19]&gt;   0.7226562
+##  4:       holdout         1 &lt;PredictionClassif[19]&gt;   0.7265625
+##  5:       holdout         1 &lt;PredictionClassif[19]&gt;   0.7734375
+##  6:       holdout         1 &lt;PredictionClassif[19]&gt;   0.7734375
+##  7:       holdout         1 &lt;PredictionClassif[19]&gt;   0.7265625
+##  8:       holdout         1 &lt;PredictionClassif[19]&gt;   0.7265625
+##  9:       holdout         1 &lt;PredictionClassif[19]&gt;   0.7656250
+## 10:       holdout         1 &lt;PredictionClassif[19]&gt;   0.7265625
+## 11:       holdout         1 &lt;PredictionClassif[19]&gt;   0.7656250
+## 12:       holdout         1 &lt;PredictionClassif[19]&gt;   0.7734375
+## 13:       holdout         1 &lt;PredictionClassif[19]&gt;   0.7265625
+## 14:       holdout         1 &lt;PredictionClassif[19]&gt;   0.7734375
+## 15:       holdout         1 &lt;PredictionClassif[19]&gt;   0.7265625
+## 16:       holdout         1 &lt;PredictionClassif[19]&gt;   0.7734375
+## 17:       holdout         1 &lt;PredictionClassif[19]&gt;   0.7265625
+## 18:       holdout         1 &lt;PredictionClassif[19]&gt;   0.7265625
+## 19:       holdout         1 &lt;PredictionClassif[19]&gt;   0.7617188
+## 20:       holdout         1 &lt;PredictionClassif[19]&gt;   0.7656250</code></pre>
+<p>现在，优化的超参数可以使用之前创建的Learner，设置返回的超参数，并在完整的数据集上训练它。</p>
+<pre class="r"><code>learner$param_set$values = instance$result_learner_param_vals
+learner$train(task)</code></pre>
+<p>经过训练的模型现在可以用来对外部数据进行预测。注意，应该避免根据任务中出现的观察结果进行预测。模型在调优期间已经看到了这些观察结果，因此结果在统计上是有偏差的。因此，由此产生的性能度量将过于乐观。相反，为了获得当前任务的统计无偏性能估计，需要嵌套重采样。</p>
+</div>
+<div id="自动化调优" class="section level3">
+<h3>自动化调优</h3>
+<p>AutoTuner包装了一个学习器，并通过对给定超参数集的自动调优增强了它。因为AutoTuner本身继承自Learner基类，所以它可以像任何其他学习器一样使用。类似于前面的小节，创建了一个新的分类树学习器。这个分类树学习器使用内部重采样(holdout)自动调整参数cp和minsplit。我们创建了一个允许10次计算的终止符，并使用一个简单的随机搜索作为调优算法：</p>
+<pre class="r"><code>learner = lrn(&quot;classif.rpart&quot;)
+search_space = ps(
+  cp = p_dbl(lower = 0.001, upper = 0.1),
+  minsplit = p_int(lower = 1, upper = 10)
+)
+terminator = trm(&quot;evals&quot;, n_evals = 10)
+tuner = tnr(&quot;random_search&quot;)
+
+at = AutoTuner$new(
+  learner = learner,
+  resampling = rsmp(&quot;holdout&quot;),
+  measure = msr(&quot;classif.ce&quot;),
+  search_space = search_space,
+  terminator = terminator,
+  tuner = tuner
+)
+at</code></pre>
+<pre><code>## &lt;AutoTuner:classif.rpart.tuned&gt;
+## * Model: -
+## * Parameters: list()
+## * Packages: rpart
+## * Predict Type: response
+## * Feature types: logical, integer, numeric, factor, ordered
+## * Properties: importance, missings, multiclass, selected_features,
+##   twoclass, weights</code></pre>
+<p>我们现在可以像使用其他学习者一样使用学习者，调用<code>$train()</code>和<code>$predict()</code>方法。</p>
+<pre class="r"><code>at$train(task)</code></pre>
+<pre><code>## INFO  [13:30:57.488] [bbotk] Starting to optimize 2 parameter(s) with &#39;&lt;OptimizerRandomSearch&gt;&#39; and &#39;&lt;TerminatorEvals&gt; [n_evals=10]&#39; 
+## INFO  [13:30:57.501] [bbotk] Evaluating 1 configuration(s) 
+## INFO  [13:30:57.517] [mlr3]  Running benchmark with 1 resampling iterations 
+## INFO  [13:30:57.523] [mlr3]  Applying learner &#39;classif.rpart&#39; on task &#39;pima&#39; (iter 1/1) 
+## INFO  [13:30:57.534] [mlr3]  Finished benchmark 
+## INFO  [13:30:57.565] [bbotk] Result of batch 1: 
+## INFO  [13:30:57.567] [bbotk]          cp minsplit classif.ce                                uhash 
+## INFO  [13:30:57.567] [bbotk]  0.07958382       10   0.296875 06ff6bea-7c30-4f2e-b80f-593a209e6eb8 
+## INFO  [13:30:57.570] [bbotk] Evaluating 1 configuration(s) 
+## INFO  [13:30:57.586] [mlr3]  Running benchmark with 1 resampling iterations 
+## INFO  [13:30:57.591] [mlr3]  Applying learner &#39;classif.rpart&#39; on task &#39;pima&#39; (iter 1/1) 
+## INFO  [13:30:57.603] [mlr3]  Finished benchmark 
+## INFO  [13:30:57.646] [bbotk] Result of batch 2: 
+## INFO  [13:30:57.647] [bbotk]          cp minsplit classif.ce                                uhash 
+## INFO  [13:30:57.647] [bbotk]  0.04485224        9  0.2929688 4e863048-efed-47e6-8ce7-434de84959ce 
+## INFO  [13:30:57.650] [bbotk] Evaluating 1 configuration(s) 
+## INFO  [13:30:57.666] [mlr3]  Running benchmark with 1 resampling iterations 
+## INFO  [13:30:57.679] [mlr3]  Applying learner &#39;classif.rpart&#39; on task &#39;pima&#39; (iter 1/1) 
+## INFO  [13:30:57.690] [mlr3]  Finished benchmark 
+## INFO  [13:30:57.723] [bbotk] Result of batch 3: 
+## INFO  [13:30:57.725] [bbotk]          cp minsplit classif.ce                                uhash 
+## INFO  [13:30:57.725] [bbotk]  0.07888845        4   0.296875 25a8325b-1b8a-4aae-b1d9-dc5a31429624 
+## INFO  [13:30:57.728] [bbotk] Evaluating 1 configuration(s) 
+## INFO  [13:30:57.743] [mlr3]  Running benchmark with 1 resampling iterations 
+## INFO  [13:30:57.748] [mlr3]  Applying learner &#39;classif.rpart&#39; on task &#39;pima&#39; (iter 1/1) 
+## INFO  [13:30:57.759] [mlr3]  Finished benchmark 
+## INFO  [13:30:57.793] [bbotk] Result of batch 4: 
+## INFO  [13:30:57.795] [bbotk]          cp minsplit classif.ce                                uhash 
+## INFO  [13:30:57.795] [bbotk]  0.07471412        9   0.296875 2dfb4787-d779-4143-92b5-b2d3417995e4 
+## INFO  [13:30:57.798] [bbotk] Evaluating 1 configuration(s) 
+## INFO  [13:30:57.813] [mlr3]  Running benchmark with 1 resampling iterations 
+## INFO  [13:30:57.818] [mlr3]  Applying learner &#39;classif.rpart&#39; on task &#39;pima&#39; (iter 1/1) 
+## INFO  [13:30:57.830] [mlr3]  Finished benchmark 
+## INFO  [13:30:57.864] [bbotk] Result of batch 5: 
+## INFO  [13:30:57.866] [bbotk]          cp minsplit classif.ce                                uhash 
+## INFO  [13:30:57.866] [bbotk]  0.02354066        9  0.2929688 c80d3197-f534-46a9-9ab3-8024d40bdacd 
+## INFO  [13:30:57.869] [bbotk] Evaluating 1 configuration(s) 
+## INFO  [13:30:57.884] [mlr3]  Running benchmark with 1 resampling iterations 
+## INFO  [13:30:57.890] [mlr3]  Applying learner &#39;classif.rpart&#39; on task &#39;pima&#39; (iter 1/1) 
+## INFO  [13:30:57.902] [mlr3]  Finished benchmark 
+## INFO  [13:30:57.937] [bbotk] Result of batch 6: 
+## INFO  [13:30:57.939] [bbotk]          cp minsplit classif.ce                                uhash 
+## INFO  [13:30:57.939] [bbotk]  0.08502483        8  0.2734375 bf28dd1b-bc36-451d-a1a4-107c138941f9 
+## INFO  [13:30:57.942] [bbotk] Evaluating 1 configuration(s) 
+## INFO  [13:30:57.957] [mlr3]  Running benchmark with 1 resampling iterations 
+## INFO  [13:30:57.963] [mlr3]  Applying learner &#39;classif.rpart&#39; on task &#39;pima&#39; (iter 1/1) 
+## INFO  [13:30:57.982] [mlr3]  Finished benchmark 
+## INFO  [13:30:58.017] [bbotk] Result of batch 7: 
+## INFO  [13:30:58.018] [bbotk]          cp minsplit classif.ce                                uhash 
+## INFO  [13:30:58.018] [bbotk]  0.02185373        6  0.2929688 6e615716-b9e3-4216-9ac3-45e7299fbf24 
+## INFO  [13:30:58.021] [bbotk] Evaluating 1 configuration(s) 
+## INFO  [13:30:58.036] [mlr3]  Running benchmark with 1 resampling iterations 
+## INFO  [13:30:58.042] [mlr3]  Applying learner &#39;classif.rpart&#39; on task &#39;pima&#39; (iter 1/1) 
+## INFO  [13:30:58.053] [mlr3]  Finished benchmark 
+## INFO  [13:30:58.089] [bbotk] Result of batch 8: 
+## INFO  [13:30:58.090] [bbotk]          cp minsplit classif.ce                                uhash 
+## INFO  [13:30:58.090] [bbotk]  0.07774356       10   0.296875 997a49d3-b831-4c51-a0ef-75b6c13a0215 
+## INFO  [13:30:58.093] [bbotk] Evaluating 1 configuration(s) 
+## INFO  [13:30:58.109] [mlr3]  Running benchmark with 1 resampling iterations 
+## INFO  [13:30:58.114] [mlr3]  Applying learner &#39;classif.rpart&#39; on task &#39;pima&#39; (iter 1/1) 
+## INFO  [13:30:58.125] [mlr3]  Finished benchmark 
+## INFO  [13:30:58.160] [bbotk] Result of batch 9: 
+## INFO  [13:30:58.162] [bbotk]          cp minsplit classif.ce                                uhash 
+## INFO  [13:30:58.162] [bbotk]  0.07738881       10   0.296875 b8c7620d-63e2-459d-a50f-8c4bc35f3e27 
+## INFO  [13:30:58.165] [bbotk] Evaluating 1 configuration(s) 
+## INFO  [13:30:58.185] [mlr3]  Running benchmark with 1 resampling iterations 
+## INFO  [13:30:58.191] [mlr3]  Applying learner &#39;classif.rpart&#39; on task &#39;pima&#39; (iter 1/1) 
+## INFO  [13:30:58.202] [mlr3]  Finished benchmark 
+## INFO  [13:30:58.236] [bbotk] Result of batch 10: 
+## INFO  [13:30:58.237] [bbotk]          cp minsplit classif.ce                                uhash 
+## INFO  [13:30:58.237] [bbotk]  0.04121173        3  0.2929688 c885caf9-1719-4261-89bf-02ebc4a7567c 
+## INFO  [13:30:58.244] [bbotk] Finished optimizing after 10 evaluation(s) 
+## INFO  [13:30:58.245] [bbotk] Result: 
+## INFO  [13:30:58.246] [bbotk]          cp minsplit learner_param_vals  x_domain classif.ce 
+## INFO  [13:30:58.246] [bbotk]  0.08502483        8          &lt;list[3]&gt; &lt;list[2]&gt;  0.2734375</code></pre>
+<p>我们也可以将它传递给<code>resample()</code>和<code>benchmark()</code>。这被称为嵌套重采样，下一章将对此进行讨论。</p>
+</div>
+</div>
+<div id="搜索空间调优" class="section level2">
+<h2>搜索空间调优</h2>
+<p>在运行优化时，务必告知优化算法哪些超参数是有效的。这里每个超参数的名称、类型和有效范围都很重要。所有这些信息都与ParamSet类的对象进行通信，ParamSet类在paradox中定义。虽然可以使用它的<code>$new</code>构造函数创建paramset对象，但是使用ps快捷键要短得多，可读性也强得多，这将在这里介绍。</p>
+<p>注意，ParamSet对象存在于两个上下文中。首先，参数集对象用于定义学习器（和其他对象）的有效参数设置空间。其次，它们用于定义用于调优的搜索空间。我们主要对后者感兴趣。例如，我们可以考虑rpart学习器classif的minsplit参数。与学习器相关联的参数集有一个下限，但没有上限。但是，为了优化该值，必须给出一个上下限，因为优化搜索空间需要有界。对于初学者或PipeOp对象，通常使用“无界”参数集。然而，在这里，我们将主要关注于创建可用于调优的“有边界的”参数集。有关使用参数集为用例定义参数范围的更多细节，请参阅深入的paradox章节。</p>
+<div id="创建-paramset" class="section level3">
+<h3>创建 ParamSet</h3>
+<p>一个空的ParamSet——还不是很有用——可以只用ps调用来构造：</p>
+<pre class="r"><code>library(&quot;mlr3verse&quot;)
+
+search_space = ps()
+print(search_space)</code></pre>
+<pre><code>## &lt;ParamSet&gt;
+## Empty.</code></pre>
+<p>ps接受被转换为参数的命名参数。classif.svm学习器可能的搜索空间举例：</p>
+<pre class="r"><code>search_space = ps(
+  cost = p_dbl(lower = 0.1, upper = 10),
+  kernel = p_fct(levels = c(&quot;polynomial&quot;, &quot;radial&quot;))
+)
+print(search_space)</code></pre>
+<pre><code>## &lt;ParamSet&gt;
+##        id    class lower upper nlevels        default value
+## 1:   cost ParamDbl   0.1    10     Inf &lt;NoDefault[3]&gt;      
+## 2: kernel ParamFct    NA    NA       2 &lt;NoDefault[3]&gt;</code></pre>
+<p>可用的参数构造器：</p>
+<table>
+<colgroup>
+<col width="7%" />
+<col width="25%" />
+<col width="24%" />
+<col width="42%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="center">Constructor</th>
+<th align="center">Description</th>
+<th align="center">Is bounded?</th>
+<th align="center">Underlying Class</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center"><code>p_dbl</code></td>
+<td align="center">Real valued parameter (“double”)</td>
+<td align="center">When <code>upper</code> and <code>lower</code> are given</td>
+<td align="center"><a href="https://paradox.mlr-org.com/reference/ParamDbl.html"><code>ParamDbl</code></a></td>
+</tr>
+<tr class="even">
+<td align="center"><code>p_int</code></td>
+<td align="center">Integer parameter</td>
+<td align="center">When <code>upper</code> and <code>lower</code> are given</td>
+<td align="center"><a href="https://paradox.mlr-org.com/reference/ParamInt.html"><code>ParamInt</code></a></td>
+</tr>
+<tr class="odd">
+<td align="center"><code>p_fct</code></td>
+<td align="center">Discrete valued parameter (“factor”)</td>
+<td align="center">Always</td>
+<td align="center"><a href="https://paradox.mlr-org.com/reference/ParamFct.html"><code>ParamFct</code></a></td>
+</tr>
+<tr class="even">
+<td align="center"><code>p_lgl</code></td>
+<td align="center">Logical / Boolean parameter</td>
+<td align="center">Always</td>
+<td align="center"><a href="https://paradox.mlr-org.com/reference/ParamLgl.html"><code>ParamLgl</code></a></td>
+</tr>
+<tr class="odd">
+<td align="center"><code>p_uty</code></td>
+<td align="center">Untyped parameter</td>
+<td align="center">Never</td>
+<td align="center"><a href="https://paradox.mlr-org.com/reference/ParamUty.html"><code>ParamUty</code></a></td>
+</tr>
+</tbody>
+</table>
+<p>这些构造函数接收以下的参数：</p>
+<ul>
+<li>lower, upper：上下边界</li>
+<li>levels：因子水平</li>
+<li>trafo：转换函数</li>
+<li>depends：依赖</li>
+<li>tags：有关参数的进一步信息，例如由 hyperband 使用的参数</li>
+<li>default：值对应于未给出参数时的默认行为。不用于调优搜索空间</li>
+<li>special_vals：除通常接受的参数值外的有效值。不用于调优搜索空间</li>
+<li>custom_check：检查给定给p_uty的值是否有效的函数。不用于调优搜索空间。</li>
+</ul>
+<p>lower、upper或level形参总是在各自构造函数的第一个(或第二个)位置，所以最好在定义ParamSet时省略它们，以提高简洁性：</p>
+<pre class="r"><code>search_space = ps(cost = p_dbl(0.1, 10), kernel = p_fct(c(&quot;polynomial&quot;, &quot;radial&quot;)))</code></pre>
+</div>
+<div id="转换" class="section level3">
+<h3>转换</h3>
+<p>我们可以使用paradox函数generate_design_grid来查看网格搜索将评估的值。(我们在这里使用<code>rbindlist()</code>，因为<code>$transpose()</code>的结果是一个更难读的列表。另一方面，如果我们没有使用<code>$transpose()</code>，我们在这里研究的转换就不会应用。)</p>
+<pre class="r"><code>library(&quot;data.table&quot;)
+rbindlist(generate_design_grid(search_space, 3)$transpose())</code></pre>
+<pre><code>##     cost     kernel
+## 1:  0.10 polynomial
+## 2:  0.10     radial
+## 3:  5.05 polynomial
+## 4:  5.05     radial
+## 5: 10.00 polynomial
+## 6: 10.00     radial</code></pre>
+<p>我们注意到cost参数是线性的。然而，我们假设，0.1和1之间的成本差异应该具有与1和10之间的差异类似的效果。因此，在对数尺度上调整它更有意义。这是通过使用转换(trafo)完成的。这是一个被调谐器采样后应用于参数的函数。我们可以在对数尺度上调整cost，方法是在线性尺度上抽样[- 1,1]，然后从这个值计算10^x。</p>
+<pre class="r"><code>search_space = ps(
+  cost = p_dbl(-1, 1, trafo = function(x) 10^x),
+  kernel = p_fct(c(&quot;polynomial&quot;, &quot;radial&quot;))
+)
+rbindlist(generate_design_grid(search_space, 3)$transpose())</code></pre>
+<pre><code>##    cost     kernel
+## 1:  0.1 polynomial
+## 2:  0.1     radial
+## 3:  1.0 polynomial
+## 4:  1.0     radial
+## 5: 10.0 polynomial
+## 6: 10.0     radial</code></pre>
+<p>甚至可以将另一个转换作为一个整体附加到ParamSet上，在执行单个参数的转换之后执行该转换。它通过.extra_trafo参数给出，应该是一个带有参数x和param_set的函数，接受x中的参数值列表并返回修改后的列表。此转换可以访问评估的所有参数值，并通过交互修改它们。甚至可以添加或删除参数。(下面是一个有点傻的例子。)</p>
+<pre class="r"><code>search_space = ps(
+  cost = p_dbl(-1, 1, trafo = function(x) 10^x),
+  kernel = p_fct(c(&quot;polynomial&quot;, &quot;radial&quot;)),
+  .extra_trafo = function(x, param_set) {
+    if (x$kernel == &quot;polynomial&quot;) {
+      x$cost = x$cost * 2
+    }
+    x
+  }
+)
+rbindlist(generate_design_grid(search_space, 3)$transpose())</code></pre>
+<pre><code>##    cost     kernel
+## 1:  0.2 polynomial
+## 2:  0.1     radial
+## 3:  2.0 polynomial
+## 4:  1.0     radial
+## 5: 20.0 polynomial
+## 6: 10.0     radial</code></pre>
+<p>搜索空间参数的可用类型是有限的：连续、整数、离散和逻辑标量。然而，有许多机器学习算法采用其他类型的参数，例如向量或函数。这些参数不能在搜索空间参数集中定义，通常在学习器的参数集中以 ParamUty的形式给出。在尝试对这些超参数进行调优时，需要执行更改参数类型的Transformation。</p>
+<p>一个例子就是SVM的<code>class.weights</code>参数，它采用一个命名的类权重向量，每个目标类有一个条目。</p>
+<pre class="r"><code>search_space = ps(
+  class.weights = p_dbl(0.1, 0.9, trafo = function(x) c(spam = x, nonspam = 1 - x))
+)
+generate_design_grid(search_space, 3)$transpose()</code></pre>
+<pre><code>## [[1]]
+## [[1]]$class.weights
+##    spam nonspam 
+##     0.1     0.9 
+## 
+## 
+## [[2]]
+## [[2]]$class.weights
+##    spam nonspam 
+##     0.5     0.5 
+## 
+## 
+## [[3]]
+## [[3]]$class.weights
+##    spam nonspam 
+##     0.9     0.1</code></pre>
+</div>
+<div id="自动化因子水平转换" class="section level3">
+<h3>自动化因子水平转换</h3>
+<p>一个常见的用例是必须指定一个应该全部尝试（或从其中取样）的值列表。有一种情况是，超参数接受函数对象作为值，应该尝试某个函数列表。也可能是应该尝试选择一个特殊的数值。为此，p_fct构造函数的级别参数可以是一个不是字符向量的值，而是其他的值。例如，如果cost参数只有0.1、3和10应该尝试，即使是在进行随机搜索时，那么下面的搜索空间可以实现：</p>
+<pre class="r"><code>search_space = ps(
+  cost = p_fct(c(0.1, 3, 10)),
+  kernel = p_fct(c(&quot;polynomial&quot;, &quot;radial&quot;))
+)
+rbindlist(generate_design_grid(search_space, 3)$transpose())</code></pre>
+<pre><code>##    cost     kernel
+## 1:  0.1 polynomial
+## 2:  0.1     radial
+## 3:  3.0 polynomial
+## 4:  3.0     radial
+## 5: 10.0 polynomial
+## 6: 10.0     radial</code></pre>
+<p>这等价于：</p>
+<pre class="r"><code>search_space = ps(
+  cost = p_fct(c(&quot;0.1&quot;, &quot;3&quot;, &quot;10&quot;),
+    trafo = function(x) list(`0.1` = 0.1, `3` = 3, `10` = 10)[[x]]),
+  kernel = p_fct(c(&quot;polynomial&quot;, &quot;radial&quot;))
+)
+rbindlist(generate_design_grid(search_space, 3)$transpose())</code></pre>
+<pre><code>##    cost     kernel
+## 1:  0.1 polynomial
+## 2:  0.1     radial
+## 3:  3.0 polynomial
+## 4:  3.0     radial
+## 5: 10.0 polynomial
+## 6: 10.0     radial</code></pre>
+<p>这可能看起来很愚蠢，但考虑到阶乘优化参数总是字符值，这是有意义的：</p>
+<pre class="r"><code>search_space = ps(
+  cost = p_fct(c(0.1, 3, 10)),
+  kernel = p_fct(c(&quot;polynomial&quot;, &quot;radial&quot;))
+)
+typeof(search_space$params$cost$levels)</code></pre>
+<pre><code>## [1] &quot;character&quot;</code></pre>
+<p>但是，请注意，这会导致一个“无序”超参数。使用参数排序信息的优化算法（如遗传算法或基于模型的优化）在这样做时，性能会更差。对于这些算法，用更合适的流量定义p_dbl或p_int可能更有意义。</p>
+<p>如果只有少量的情况，也可以这样设定：</p>
+<pre class="r"><code>search_space = ps(
+  class.weights = p_fct(
+    list(
+      candidate_a = c(spam = 0.5, nonspam = 0.5),
+      candidate_b = c(spam = 0.3, nonspam = 0.7)
+    )
+  )
+)
+generate_design_grid(search_space)$transpose()</code></pre>
+<pre><code>## [[1]]
+## [[1]]$class.weights
+##    spam nonspam 
+##     0.5     0.5 
+## 
+## 
+## [[2]]
+## [[2]]$class.weights
+##    spam nonspam 
+##     0.3     0.7</code></pre>
+</div>
+<div id="参数依赖" class="section level3">
+<h3>参数依赖</h3>
+<p>有些参数只有在另一个参数具有某个值或多个值中的一个时才相关。例如，支持向量机的度参数只在核为“多项式”时有效。这可以使用depends参数指定。该表达式必须包含其他参数，其形式为<code>&lt;param&gt; == &lt;scalar&gt;</code>，<code>&lt;param&gt; %in% &lt;vector&gt;</code>，或由&amp;&amp;链接的这些参数的倍数。要调优度参数，需要执行以下操作：</p>
+<pre class="r"><code>search_space = ps(
+  cost = p_dbl(-1, 1, trafo = function(x) 10^x),
+  kernel = p_fct(c(&quot;polynomial&quot;, &quot;radial&quot;)),
+  degree = p_int(1, 3, depends = kernel == &quot;polynomial&quot;)
+)
+rbindlist(generate_design_grid(search_space, 3)$transpose(), fill = TRUE)</code></pre>
+<pre><code>##     cost     kernel degree
+##  1:  0.1 polynomial      1
+##  2:  0.1 polynomial      2
+##  3:  0.1 polynomial      3
+##  4:  0.1     radial     NA
+##  5:  1.0 polynomial      1
+##  6:  1.0 polynomial      2
+##  7:  1.0 polynomial      3
+##  8:  1.0     radial     NA
+##  9: 10.0 polynomial      1
+## 10: 10.0 polynomial      2
+## 11: 10.0 polynomial      3
+## 12: 10.0     radial     NA</code></pre>
+</div>
+<div id="从其他参数集创建调优参数集" class="section level3">
+<h3>从其他参数集创建调优参数集</h3>
+<p>为已经拥有参数集信息的学习器定义调优参数集似乎有些不必要的乏味，确实有一种方法可以从学习器的参数集创建调优参数集，利用尽可能多的可用信息。</p>
+<p>这是通过将学习器的ParamSet值设置为所谓的TuneTokens来实现的，TuneTokens是通过to_tune调用构造的。这与将其他超参数设置为特定值的方法相同。可以将其理解为标记用于以后调优的超参数。用于调优的结果ParamSet可以使用<code>$search_space()</code>方法检索。</p>
+<pre class="r"><code>learner = lrn(&quot;classif.svm&quot;)
+learner$param_set$values$kernel = &quot;polynomial&quot;  # for example
+learner$param_set$values$degree = to_tune(lower = 1, upper = 3)
+
+print(learner$param_set$search_space())</code></pre>
+<pre><code>## &lt;ParamSet&gt;
+##        id    class lower upper nlevels        default value
+## 1: degree ParamInt     1     3       3 &lt;NoDefault[3]&gt;</code></pre>
+<pre class="r"><code>rbindlist(generate_design_grid(learner$param_set$search_space(), 3)$transpose())</code></pre>
+<pre><code>##    degree
+## 1:      1
+## 2:      2
+## 3:      3</code></pre>
+<p>这里可以省略lower，因为它可以从degree参数本身的下界推断出来。对于其他已经有界的参数，完全可以不给出任何界限，因为它们的范围已经有界。一个例子是逻辑超参数shrinking：</p>
+<pre class="r"><code>learner$param_set$values$shrinking = to_tune()
+
+print(learner$param_set$search_space())</code></pre>
+<pre><code>## &lt;ParamSet&gt;
+##           id    class lower upper nlevels        default value
+## 1:    degree ParamInt     1     3       3 &lt;NoDefault[3]&gt;      
+## 2: shrinking ParamLgl    NA    NA       2           TRUE</code></pre>
+<pre class="r"><code>rbindlist(generate_design_grid(learner$param_set$search_space(), 3)$transpose())</code></pre>
+<pre><code>##    degree shrinking
+## 1:      1      TRUE
+## 2:      1     FALSE
+## 3:      2      TRUE
+## 4:      2     FALSE
+## 5:      3      TRUE
+## 6:      3     FALSE</code></pre>
+<p>to_tune也可以用Domain对象来构造，比如用<code>p_***</code>调用来构造。通过这种方式，可以用离散值调优连续参数，或者给出trafos或依赖项。例如，可以在三个给定的特殊值上调整如上所述的cost，并引入对其进行shrinking的依赖关系。注意，<code>to_tune(&lt;levels&gt;)</code>是<code>to_tune(p_fct(&lt;levels&gt;))</code>的缩写形式。</p>
+<pre class="r"><code>learner$param_set$values$type = &quot;C-classification&quot;  # needs to be set because of a bug in paradox
+learner$param_set$values$cost = to_tune(c(val1 = 0.3, val2 = 0.7))
+learner$param_set$values$shrinking = to_tune(p_lgl(depends = cost == &quot;val2&quot;))
+
+print(learner$param_set$search_space())</code></pre>
+<pre><code>## &lt;ParamSet&gt;
+##           id    class lower upper nlevels        default parents value
+## 1:      cost ParamFct    NA    NA       2 &lt;NoDefault[3]&gt;              
+## 2:    degree ParamInt     1     3       3 &lt;NoDefault[3]&gt;              
+## 3: shrinking ParamLgl    NA    NA       2 &lt;NoDefault[3]&gt;    cost      
+## Trafo is set.</code></pre>
+<pre class="r"><code>rbindlist(generate_design_grid(learner$param_set$search_space(), 3)$transpose(), fill = TRUE)</code></pre>
+<pre><code>##    degree cost shrinking
+## 1:      1  0.3        NA
+## 2:      1  0.7      TRUE
+## 3:      1  0.7     FALSE
+## 4:      2  0.3        NA
+## 5:      2  0.7      TRUE
+## 6:      2  0.7     FALSE
+## 7:      3  0.3        NA
+## 8:      3  0.7      TRUE
+## 9:      3  0.7     FALSE</code></pre>
+<p><code>search_space()</code>自动从底层ParamSet获取依赖项。因此，如果内核被调优，那么degree就会自动获得对它的依赖，而不需要我们指定。（这里我们重置成本并将其缩减为NULL，以确保生成的输出的清晰性。）</p>
+<pre class="r"><code>learner$param_set$values$cost = NULL
+learner$param_set$values$shrinking = NULL
+learner$param_set$values$kernel = to_tune(c(&quot;polynomial&quot;, &quot;radial&quot;))
+
+print(learner$param_set$search_space())</code></pre>
+<pre><code>## &lt;ParamSet&gt;
+##        id    class lower upper nlevels        default parents value
+## 1: degree ParamInt     1     3       3 &lt;NoDefault[3]&gt;  kernel      
+## 2: kernel ParamFct    NA    NA       2 &lt;NoDefault[3]&gt;</code></pre>
+<pre class="r"><code>rbindlist(generate_design_grid(learner$param_set$search_space(), 3)$transpose(), fill = TRUE)</code></pre>
+<pre><code>##        kernel degree
+## 1: polynomial      1
+## 2: polynomial      2
+## 3: polynomial      3
+## 4:     radial     NA</code></pre>
+<p>甚至可以为单个参数定义整个参数集。对于应该沿着多维搜索的向量超参数，这可能特别有用。但是，这个ParamSet必须有一个<code>.extra_trafo</code>，它返回一个包含单个元素的列表，因为它对应于一个正在调优的超参数。假设类的权重超参数应该沿着两个维度进行调整：</p>
+<pre class="r"><code>learner$param_set$values$class.weights = to_tune(
+  ps(spam = p_dbl(0.1, 0.9), nonspam = p_dbl(0.1, 0.9),
+    .extra_trafo = function(x, param_set) list(c(spam = x$spam, nonspam = x$nonspam))
+  ))
+head(generate_design_grid(learner$param_set$search_space(), 3)$transpose(), 3)</code></pre>
+<pre><code>## [[1]]
+## [[1]]$kernel
+## [1] &quot;polynomial&quot;
+## 
+## [[1]]$degree
+## [1] 1
+## 
+## [[1]]$class.weights
+##    spam nonspam 
+##     0.1     0.1 
+## 
+## 
+## [[2]]
+## [[2]]$kernel
+## [1] &quot;polynomial&quot;
+## 
+## [[2]]$degree
+## [1] 1
+## 
+## [[2]]$class.weights
+##    spam nonspam 
+##     0.1     0.5 
+## 
+## 
+## [[3]]
+## [[3]]$kernel
+## [1] &quot;polynomial&quot;
+## 
+## [[3]]$degree
+## [1] 1
+## 
+## [[3]]$class.weights
+##    spam nonspam 
+##     0.1     0.9</code></pre>
+</div>
+</div>
+<div id="嵌套重采样" class="section level2">
+<h2>嵌套重采样</h2>
+<p>当需要选择超参数或特征时，评估机器学习模型通常需要额外的重采样层。嵌套重采样将这些模型选择步骤从估计模型性能的过程中分离出来。如果将相同的数据用于模型选择步骤和模型本身的评估，则产生的模型性能估计可能存在严重的偏差。一个原因是模型对测试数据的重复评估可能会将其结构的信息泄露到模型中，从而导致过度乐观的性能估计。请记住，<strong>嵌套重采样是一个统计过程，用于估计在完整数据集上训练的模型的预测性能。嵌套重采样不是一个选择最优超参数的过程</strong>。重采样产生许多超参数配置，<strong>这些超参数配置不应用于构建最终模型</strong>。</p>
+<p><img src="https://mlr3book.mlr-org.com/images/nested_resampling.png" /></p>
+<p>上面的图形说明了用于超参数调优的嵌套重采样，在外部循环中使用3倍交叉验证，在内部循环中使用4倍交叉验证。</p>
+<p>在外部重采样循环中，我们有三对训练/测试集。对每一个外部训练集进行参数调整，从而执行内部重采样循环。这样，我们就得到了每个外部训练集的一组选定的超参数。然后利用所选的超参数将学习器拟合到每个外部训练集上。随后，我们可以评估学习者在外部测试集上的性能。<strong>外部测试集上的聚合性能是模型的无偏性能估计</strong>。</p>
+<div id="执行" class="section level3">
+<h3>执行</h3>
+<p>上一节研究了mlr_tasks_pima上简单分类树的优化。我们继续这个例子，并估计模型与嵌套重采样的预测性能。</p>
+<p>我们在内部重采样循环中使用4倍交叉验证。AutoTuner执行超参数调优，并在5次计算后停止。通过网格搜索提出了超参数配置。</p>
+<pre class="r"><code>library(&quot;mlr3verse&quot;)
+
+learner = lrn(&quot;classif.rpart&quot;)
+resampling = rsmp(&quot;holdout&quot;)
+measure = msr(&quot;classif.ce&quot;)
+search_space = ps(cp = p_dbl(lower = 0.001, upper = 0.1))
+terminator = trm(&quot;evals&quot;, n_evals = 5)
+tuner = tnr(&quot;grid_search&quot;, resolution = 10)
+
+at = AutoTuner$new(learner, resampling, measure, terminator, tuner, search_space)</code></pre>
+<p>外重采样循环采用三倍交叉验证。对每一个外部训练集进行了超参数优化，得到了三种优化的超参数配置。为了执行嵌套重采样，我们将AutoTuner传递给<code>resample()</code>函数。我们必须设置<code>store_models = TRUE</code>，因为我们需要AutoTuner模型来研究内部调优。</p>
+<pre class="r"><code>task = tsk(&quot;pima&quot;)
+outer_resampling = rsmp(&quot;cv&quot;, folds = 3)
+
+rr = resample(task, at, outer_resampling, store_models = TRUE)</code></pre>
+<pre><code>## INFO  [13:30:59.517] [mlr3]  Applying learner &#39;classif.rpart.tuned&#39; on task &#39;pima&#39; (iter 3/3) 
+## INFO  [13:30:59.538] [bbotk] Starting to optimize 1 parameter(s) with &#39;&lt;OptimizerGridSearch&gt;&#39; and &#39;&lt;TerminatorEvals&gt; [n_evals=5]&#39; 
+## INFO  [13:30:59.540] [bbotk] Evaluating 1 configuration(s) 
+## INFO  [13:30:59.555] [mlr3]  Running benchmark with 1 resampling iterations 
+## INFO  [13:30:59.561] [mlr3]  Applying learner &#39;classif.rpart&#39; on task &#39;pima&#39; (iter 1/1) 
+## INFO  [13:30:59.572] [mlr3]  Finished benchmark 
+## INFO  [13:30:59.603] [bbotk] Result of batch 1: 
+## INFO  [13:30:59.604] [bbotk]     cp classif.ce                                uhash 
+## INFO  [13:30:59.604] [bbotk]  0.045  0.2222222 01eabee7-ada3-4a1f-aacb-0834858b53df 
+## INFO  [13:30:59.605] [bbotk] Evaluating 1 configuration(s) 
+## INFO  [13:30:59.620] [mlr3]  Running benchmark with 1 resampling iterations 
+## INFO  [13:30:59.627] [mlr3]  Applying learner &#39;classif.rpart&#39; on task &#39;pima&#39; (iter 1/1) 
+## INFO  [13:30:59.638] [mlr3]  Finished benchmark 
+## INFO  [13:30:59.674] [bbotk] Result of batch 2: 
+## INFO  [13:30:59.675] [bbotk]   cp classif.ce                                uhash 
+## INFO  [13:30:59.675] [bbotk]  0.1  0.2222222 50a3c068-5bf3-48cc-8f37-c6803c8e8d42 
+## INFO  [13:30:59.676] [bbotk] Evaluating 1 configuration(s) 
+## INFO  [13:30:59.693] [mlr3]  Running benchmark with 1 resampling iterations 
+## INFO  [13:30:59.699] [mlr3]  Applying learner &#39;classif.rpart&#39; on task &#39;pima&#39; (iter 1/1) 
+## INFO  [13:30:59.710] [mlr3]  Finished benchmark 
+## INFO  [13:30:59.746] [bbotk] Result of batch 3: 
+## INFO  [13:30:59.747] [bbotk]     cp classif.ce                                uhash 
+## INFO  [13:30:59.747] [bbotk]  0.089  0.2222222 e85833ad-f02d-4760-9d1c-cceafd6f4303 
+## INFO  [13:30:59.749] [bbotk] Evaluating 1 configuration(s) 
+## INFO  [13:30:59.766] [mlr3]  Running benchmark with 1 resampling iterations 
+## INFO  [13:30:59.771] [mlr3]  Applying learner &#39;classif.rpart&#39; on task &#39;pima&#39; (iter 1/1) 
+## INFO  [13:30:59.783] [mlr3]  Finished benchmark 
+## INFO  [13:30:59.825] [bbotk] Result of batch 4: 
+## INFO  [13:30:59.827] [bbotk]     cp classif.ce                                uhash 
+## INFO  [13:30:59.827] [bbotk]  0.012  0.1988304 430165bc-6b74-4ef1-8ed2-cf34494b9771 
+## INFO  [13:30:59.828] [bbotk] Evaluating 1 configuration(s) 
+## INFO  [13:30:59.843] [mlr3]  Running benchmark with 1 resampling iterations 
+## INFO  [13:30:59.849] [mlr3]  Applying learner &#39;classif.rpart&#39; on task &#39;pima&#39; (iter 1/1) 
+## INFO  [13:30:59.860] [mlr3]  Finished benchmark 
+## INFO  [13:30:59.894] [bbotk] Result of batch 5: 
+## INFO  [13:30:59.895] [bbotk]     cp classif.ce                                uhash 
+## INFO  [13:30:59.895] [bbotk]  0.067  0.2222222 12edd69a-af64-4ede-bd2a-2903708b2ec6 
+## INFO  [13:30:59.900] [bbotk] Finished optimizing after 5 evaluation(s) 
+## INFO  [13:30:59.901] [bbotk] Result: 
+## INFO  [13:30:59.902] [bbotk]     cp learner_param_vals  x_domain classif.ce 
+## INFO  [13:30:59.902] [bbotk]  0.012          &lt;list[2]&gt; &lt;list[1]&gt;  0.1988304 
+## INFO  [13:30:59.922] [mlr3]  Applying learner &#39;classif.rpart.tuned&#39; on task &#39;pima&#39; (iter 2/3) 
+## INFO  [13:30:59.942] [bbotk] Starting to optimize 1 parameter(s) with &#39;&lt;OptimizerGridSearch&gt;&#39; and &#39;&lt;TerminatorEvals&gt; [n_evals=5]&#39; 
+## INFO  [13:30:59.944] [bbotk] Evaluating 1 configuration(s) 
+## INFO  [13:30:59.960] [mlr3]  Running benchmark with 1 resampling iterations 
+## INFO  [13:30:59.965] [mlr3]  Applying learner &#39;classif.rpart&#39; on task &#39;pima&#39; (iter 1/1) 
+## INFO  [13:30:59.976] [mlr3]  Finished benchmark 
+## INFO  [13:31:00.007] [bbotk] Result of batch 1: 
+## INFO  [13:31:00.008] [bbotk]     cp classif.ce                                uhash 
+## INFO  [13:31:00.008] [bbotk]  0.034   0.245614 4f300771-cb62-4d1e-819f-6a022696b8a7 
+## INFO  [13:31:00.010] [bbotk] Evaluating 1 configuration(s) 
+## INFO  [13:31:00.025] [mlr3]  Running benchmark with 1 resampling iterations 
+## INFO  [13:31:00.031] [mlr3]  Applying learner &#39;classif.rpart&#39; on task &#39;pima&#39; (iter 1/1) 
+## INFO  [13:31:00.041] [mlr3]  Finished benchmark 
+## INFO  [13:31:00.082] [bbotk] Result of batch 2: 
+## INFO  [13:31:00.083] [bbotk]     cp classif.ce                                uhash 
+## INFO  [13:31:00.083] [bbotk]  0.001  0.2690058 5308aaf9-5b7b-42ac-bcce-cb07515ac450 
+## INFO  [13:31:00.084] [bbotk] Evaluating 1 configuration(s) 
+## INFO  [13:31:00.101] [mlr3]  Running benchmark with 1 resampling iterations 
+## INFO  [13:31:00.106] [mlr3]  Applying learner &#39;classif.rpart&#39; on task &#39;pima&#39; (iter 1/1) 
+## INFO  [13:31:00.117] [mlr3]  Finished benchmark 
+## INFO  [13:31:00.151] [bbotk] Result of batch 3: 
+## INFO  [13:31:00.153] [bbotk]     cp classif.ce                                uhash 
+## INFO  [13:31:00.153] [bbotk]  0.056  0.2982456 9d0f9a9c-cd7a-4c19-83db-30801374ec8c 
+## INFO  [13:31:00.154] [bbotk] Evaluating 1 configuration(s) 
+## INFO  [13:31:00.169] [mlr3]  Running benchmark with 1 resampling iterations 
+## INFO  [13:31:00.174] [mlr3]  Applying learner &#39;classif.rpart&#39; on task &#39;pima&#39; (iter 1/1) 
+## INFO  [13:31:00.185] [mlr3]  Finished benchmark 
+## INFO  [13:31:00.219] [bbotk] Result of batch 4: 
+## INFO  [13:31:00.220] [bbotk]     cp classif.ce                                uhash 
+## INFO  [13:31:00.220] [bbotk]  0.012   0.251462 1076dcf2-3989-47f5-aa55-5bf27225754b 
+## INFO  [13:31:00.221] [bbotk] Evaluating 1 configuration(s) 
+## INFO  [13:31:00.236] [mlr3]  Running benchmark with 1 resampling iterations 
+## INFO  [13:31:00.242] [mlr3]  Applying learner &#39;classif.rpart&#39; on task &#39;pima&#39; (iter 1/1) 
+## INFO  [13:31:00.253] [mlr3]  Finished benchmark 
+## INFO  [13:31:00.293] [bbotk] Result of batch 5: 
+## INFO  [13:31:00.294] [bbotk]     cp classif.ce                                uhash 
+## INFO  [13:31:00.294] [bbotk]  0.045   0.245614 f8430d72-0901-4856-a3a3-1d60485a0109 
+## INFO  [13:31:00.299] [bbotk] Finished optimizing after 5 evaluation(s) 
+## INFO  [13:31:00.299] [bbotk] Result: 
+## INFO  [13:31:00.300] [bbotk]     cp learner_param_vals  x_domain classif.ce 
+## INFO  [13:31:00.300] [bbotk]  0.034          &lt;list[2]&gt; &lt;list[1]&gt;   0.245614 
+## INFO  [13:31:00.320] [mlr3]  Applying learner &#39;classif.rpart.tuned&#39; on task &#39;pima&#39; (iter 1/3) 
+## INFO  [13:31:00.339] [bbotk] Starting to optimize 1 parameter(s) with &#39;&lt;OptimizerGridSearch&gt;&#39; and &#39;&lt;TerminatorEvals&gt; [n_evals=5]&#39; 
+## INFO  [13:31:00.342] [bbotk] Evaluating 1 configuration(s) 
+## INFO  [13:31:00.356] [mlr3]  Running benchmark with 1 resampling iterations 
+## INFO  [13:31:00.362] [mlr3]  Applying learner &#39;classif.rpart&#39; on task &#39;pima&#39; (iter 1/1) 
+## INFO  [13:31:00.373] [mlr3]  Finished benchmark 
+## INFO  [13:31:00.405] [bbotk] Result of batch 1: 
+## INFO  [13:31:00.406] [bbotk]     cp classif.ce                                uhash 
+## INFO  [13:31:00.406] [bbotk]  0.023  0.2748538 aa66e49e-309c-45eb-aca4-b11c2df30a3c 
+## INFO  [13:31:00.407] [bbotk] Evaluating 1 configuration(s) 
+## INFO  [13:31:00.422] [mlr3]  Running benchmark with 1 resampling iterations 
+## INFO  [13:31:00.428] [mlr3]  Applying learner &#39;classif.rpart&#39; on task &#39;pima&#39; (iter 1/1) 
+## INFO  [13:31:00.439] [mlr3]  Finished benchmark 
+## INFO  [13:31:00.474] [bbotk] Result of batch 2: 
+## INFO  [13:31:00.475] [bbotk]     cp classif.ce                                uhash 
+## INFO  [13:31:00.475] [bbotk]  0.034  0.2748538 e6053465-a745-4de1-99ec-c6cbb34d130f 
+## INFO  [13:31:00.477] [bbotk] Evaluating 1 configuration(s) 
+## INFO  [13:31:00.492] [mlr3]  Running benchmark with 1 resampling iterations 
+## INFO  [13:31:00.498] [mlr3]  Applying learner &#39;classif.rpart&#39; on task &#39;pima&#39; (iter 1/1) 
+## INFO  [13:31:00.508] [mlr3]  Finished benchmark 
+## INFO  [13:31:00.549] [bbotk] Result of batch 3: 
+## INFO  [13:31:00.550] [bbotk]     cp classif.ce                                uhash 
+## INFO  [13:31:00.550] [bbotk]  0.045  0.2807018 96dfb5aa-c8bc-424b-b5fa-7d0815d759c4 
+## INFO  [13:31:00.551] [bbotk] Evaluating 1 configuration(s) 
+## INFO  [13:31:00.566] [mlr3]  Running benchmark with 1 resampling iterations 
+## INFO  [13:31:00.571] [mlr3]  Applying learner &#39;classif.rpart&#39; on task &#39;pima&#39; (iter 1/1) 
+## INFO  [13:31:00.582] [mlr3]  Finished benchmark 
+## INFO  [13:31:00.616] [bbotk] Result of batch 4: 
+## INFO  [13:31:00.617] [bbotk]     cp classif.ce                                uhash 
+## INFO  [13:31:00.617] [bbotk]  0.056  0.3450292 3f31f9fb-a0b4-4c82-9457-6d407f1faeb3 
+## INFO  [13:31:00.618] [bbotk] Evaluating 1 configuration(s) 
+## INFO  [13:31:00.633] [mlr3]  Running benchmark with 1 resampling iterations 
+## INFO  [13:31:00.638] [mlr3]  Applying learner &#39;classif.rpart&#39; on task &#39;pima&#39; (iter 1/1) 
+## INFO  [13:31:00.649] [mlr3]  Finished benchmark 
+## INFO  [13:31:00.683] [bbotk] Result of batch 5: 
+## INFO  [13:31:00.684] [bbotk]     cp classif.ce                                uhash 
+## INFO  [13:31:00.684] [bbotk]  0.001  0.2397661 1ca9e7e6-5c2b-4326-98e6-9a42672f7df6 
+## INFO  [13:31:00.689] [bbotk] Finished optimizing after 5 evaluation(s) 
+## INFO  [13:31:00.689] [bbotk] Result: 
+## INFO  [13:31:00.690] [bbotk]     cp learner_param_vals  x_domain classif.ce 
+## INFO  [13:31:00.690] [bbotk]  0.001          &lt;list[2]&gt; &lt;list[1]&gt;  0.2397661</code></pre>
+<p>你可以自由组合不同的内部和外部重采样策略。嵌套重采样并不局限于超参数调优。你可以将AutoTuner替换为AutoFSelector，并估计适合于优化特征子集的模型的性能。</p>
+</div>
+<div id="评估" class="section level3">
+<h3>评估</h3>
+<p>使用创建的ResampleResult，我们现在可以更仔细地检查执行的重采样迭代。有关ResampleResult对象的详细信息，请参阅重采样一节（上一篇文章）。</p>
+<p>我们检查了稳定超参数的内部调优结果。这意味着所选的超参数不应该变化太多。在这个例子中，我们可能会观察到不稳定的模型，因为小的数据集和低的重采样迭代次数可能会引入太多的随机性。通常，我们的目标是为所有外部训练集选择稳定的超参数。</p>
+<pre class="r"><code>extract_inner_tuning_results(rr)</code></pre>
+<pre><code>##       cp learner_param_vals  x_domain classif.ce
+## 1: 0.001          &lt;list[2]&gt; &lt;list[1]&gt;  0.2397661
+## 2: 0.034          &lt;list[2]&gt; &lt;list[1]&gt;  0.2456140
+## 3: 0.012          &lt;list[2]&gt; &lt;list[1]&gt;  0.1988304</code></pre>
+<p>接下来，我们要比较外部重采样和内部重采样估计的预测性能。外重采样的预测性能显著降低，表明优化后的超参数模型对数据进行过拟合。</p>
+<pre class="r"><code>rr$score()</code></pre>
+<pre><code>##                 task task_id         learner          learner_id
+## 1: &lt;TaskClassif[47]&gt;    pima &lt;AutoTuner[40]&gt; classif.rpart.tuned
+## 2: &lt;TaskClassif[47]&gt;    pima &lt;AutoTuner[40]&gt; classif.rpart.tuned
+## 3: &lt;TaskClassif[47]&gt;    pima &lt;AutoTuner[40]&gt; classif.rpart.tuned
+##            resampling resampling_id iteration              prediction
+## 1: &lt;ResamplingCV[19]&gt;            cv         1 &lt;PredictionClassif[19]&gt;
+## 2: &lt;ResamplingCV[19]&gt;            cv         2 &lt;PredictionClassif[19]&gt;
+## 3: &lt;ResamplingCV[19]&gt;            cv         3 &lt;PredictionClassif[19]&gt;
+##    classif.ce
+## 1:  0.2226562
+## 2:  0.2773438
+## 3:  0.3007812</code></pre>
+<p>所有外部重采样迭代的聚合性能本质上是通过网格搜索找到最优超参数的模型的无偏性能。</p>
+<pre class="r"><code>rr$aggregate()</code></pre>
+<pre><code>## classif.ce 
+##  0.2669271</code></pre>
+<p>请注意，嵌套重采样的计算代价很高。由于这个原因，我们在本例中使用了相对较少的超参数配置和较少的重采样迭代。在实践中，你通常需要增加两者。由于这是计算密集型的，后续你可能想要了解如何并行化。</p>
+</div>
+<div id="最终模型" class="section level3">
+<h3>最终模型</h3>
+<p>我们可以使用AutoTuner来调整我们的学习器的超参数，并在完整的数据集上拟合最终模型。</p>
+<pre class="r"><code>at$train(task)</code></pre>
+<pre><code>## INFO  [13:31:00.799] [bbotk] Starting to optimize 1 parameter(s) with &#39;&lt;OptimizerGridSearch&gt;&#39; and &#39;&lt;TerminatorEvals&gt; [n_evals=5]&#39; 
+## INFO  [13:31:00.801] [bbotk] Evaluating 1 configuration(s) 
+## INFO  [13:31:00.816] [mlr3]  Running benchmark with 1 resampling iterations 
+## INFO  [13:31:00.821] [mlr3]  Applying learner &#39;classif.rpart&#39; on task &#39;pima&#39; (iter 1/1) 
+## INFO  [13:31:00.832] [mlr3]  Finished benchmark 
+## INFO  [13:31:00.861] [bbotk] Result of batch 1: 
+## INFO  [13:31:00.863] [bbotk]     cp classif.ce                                uhash 
+## INFO  [13:31:00.863] [bbotk]  0.067  0.3085938 23967c13-85ab-4ede-8055-f62192552ca4 
+## INFO  [13:31:00.864] [bbotk] Evaluating 1 configuration(s) 
+## INFO  [13:31:00.878] [mlr3]  Running benchmark with 1 resampling iterations 
+## INFO  [13:31:00.884] [mlr3]  Applying learner &#39;classif.rpart&#39; on task &#39;pima&#39; (iter 1/1) 
+## INFO  [13:31:00.895] [mlr3]  Finished benchmark 
+## INFO  [13:31:00.929] [bbotk] Result of batch 2: 
+## INFO  [13:31:00.930] [bbotk]     cp classif.ce                                uhash 
+## INFO  [13:31:00.930] [bbotk]  0.034  0.2890625 d8334f05-4ca1-4c3a-91fd-c61ceffdc1bc 
+## INFO  [13:31:00.931] [bbotk] Evaluating 1 configuration(s) 
+## INFO  [13:31:00.947] [mlr3]  Running benchmark with 1 resampling iterations 
+## INFO  [13:31:00.952] [mlr3]  Applying learner &#39;classif.rpart&#39; on task &#39;pima&#39; (iter 1/1) 
+## INFO  [13:31:00.969] [mlr3]  Finished benchmark 
+## INFO  [13:31:01.003] [bbotk] Result of batch 3: 
+## INFO  [13:31:01.005] [bbotk]     cp classif.ce                                uhash 
+## INFO  [13:31:01.005] [bbotk]  0.045  0.3085938 b413747a-72ca-442b-8da5-8afc77295a3b 
+## INFO  [13:31:01.006] [bbotk] Evaluating 1 configuration(s) 
+## INFO  [13:31:01.020] [mlr3]  Running benchmark with 1 resampling iterations 
+## INFO  [13:31:01.026] [mlr3]  Applying learner &#39;classif.rpart&#39; on task &#39;pima&#39; (iter 1/1) 
+## INFO  [13:31:01.037] [mlr3]  Finished benchmark 
+## INFO  [13:31:01.071] [bbotk] Result of batch 4: 
+## INFO  [13:31:01.073] [bbotk]     cp classif.ce                                uhash 
+## INFO  [13:31:01.073] [bbotk]  0.012  0.2734375 b93da6db-63fa-4445-a6cf-914174a6a289 
+## INFO  [13:31:01.074] [bbotk] Evaluating 1 configuration(s) 
+## INFO  [13:31:01.088] [mlr3]  Running benchmark with 1 resampling iterations 
+## INFO  [13:31:01.094] [mlr3]  Applying learner &#39;classif.rpart&#39; on task &#39;pima&#39; (iter 1/1) 
+## INFO  [13:31:01.105] [mlr3]  Finished benchmark 
+## INFO  [13:31:01.139] [bbotk] Result of batch 5: 
+## INFO  [13:31:01.140] [bbotk]     cp classif.ce                                uhash 
+## INFO  [13:31:01.140] [bbotk]  0.001  0.2421875 c70da412-bc54-4fc9-abf9-0368c5a04b5f 
+## INFO  [13:31:01.145] [bbotk] Finished optimizing after 5 evaluation(s) 
+## INFO  [13:31:01.145] [bbotk] Result: 
+## INFO  [13:31:01.146] [bbotk]     cp learner_param_vals  x_domain classif.ce 
+## INFO  [13:31:01.146] [bbotk]  0.001          &lt;list[2]&gt; &lt;list[1]&gt;  0.2421875</code></pre>
+<p>经过训练的模型现在可以用来对新数据进行预测。一个常见的错误是将执行调优的重采样集(在<code>$tuning_result$classif.ce</code>)上的估计性能报告为模型的性能。相反，我们报告用嵌套重采样估计的性能作为模型的性能。</p>
+</div>
+</div>
+<div id="hyperband调优" class="section level2">
+<h2>Hyperband调优</h2>
+<p>除了更传统的调优方法外，围绕mlr3的生态系统还提供了另一个超参数优化过程，即在mlr3hyperband 包中实现的Hyperband。</p>
+<p>这里做一个介绍性的类比，想象两个驯马师得到八匹未经训练的马。两名教练都想赢得即将到来的比赛，但他们只有32单位的食物。考虑到每匹马最多可以吃8单位的食物（每匹马的“最大预算”），没有足够的食物给所有的马。<strong>重要的是尽早发现最有前途的马，并给它们足够的食物来改善</strong>。因此，培训师需要制定一个策略，以最好的方式分配食物。第一个驯马师是非常乐观的，他想要探索马的全部能力，因为他不想对马的表现做出判断，除非它已经被完全训练过。所以，他将自己的预算除以他能给一匹马的最大数量（假设8匹，所以32/8=4），然后随机挑选4匹马——他的预算根本不足以训练更多的马。然后，这四匹马被训练到它们的全部能力，而其余的马则被释放。这样，驯马师就有信心从四匹训练过的马中挑选出最好的，但他可能忽略了潜力最大的那匹，因为他只关注了其中的一半。另一位教练则更有创造力，会想出不同的策略。他认为，如果一匹马一开始表现不好，经过进一步的训练，它也不会进步。基于这个假设，他决定给每匹马一单位的食物，并观察它们的发育情况。在吃完最初的食物后，他检查它们的表现，并把训练最慢的那一半踢出训练计划。然后，他增加剩余的食物，进一步训练它们直到食物再次被吃掉，只是再次踢出最差的那一半。他重复这个动作，直到剩下的那匹马吃完了剩下的食物。这意味着只有一匹马接受了完全的训练，但另一方面，他可以开始训练所有八匹马。</p>
+<p>比赛当天，所有的马都被放在起跑线上。但是哪位驯马师会拥有获胜的马呢？就是那个想把马训练到最大限度的人？或者另一个人，对他的马的训练进度做出了假设？训练阶段可能是什么样子如图所示。</p>
+<p><img src="https://mlr3book.mlr-org.com/images/horse_training1.png" /></p>
+<p>Hyperband在某些方面非常相似，但在其他方面也有不同。在我们的类比中，它不是体现在一个训练员身上，而是更多地体现在付钱给他们的人身上。Hyperband由几个括号组成，每个括号对应一个训练器，我们关心的不是马，而是机器学习算法的超参数配置。预算不是用食物来衡量的，而是用学习器的超参数来衡量的，这个超参数在某种程度上与计算努力有关。一个例子是我们训练神经网络的纪元数，或者在增强过程中迭代的次数。此外，不仅有两个(或训练员)，而是几个，每一个都位于一个独特的位置，在充分探索后期训练阶段和极端选择性之间，相当于早期训练阶段的更高探索。选择侵略性的级别由用户定义的参数η来处理。因此，1/η是在去掉最差配置后剩余配置的分数，但η也是下一阶段预算增加的因素。因为在不同的场景中，每个配置有不同的最大预算，用户还必须将其设置为R参数。Hyperband不需要进一步的参数——所有括号的全部所需预算是间接给出的</p>
+<p><span class="math display">\[
+(\lfloor \log_{\eta}{R} \rfloor + 1)^2 * R
+\]</span></p>
+<p>为了让大家知道对于特定的R和η，布局是怎样的，下表给出了一个快速概览。</p>
+<table>
+<thead>
+<tr class="header">
+<th align="right">stage</th>
+<th align="right">budget</th>
+<th align="right">n</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">8</td>
+</tr>
+<tr class="even">
+<td align="right">2</td>
+<td align="right">2</td>
+<td align="right">4</td>
+</tr>
+<tr class="odd">
+<td align="right">3</td>
+<td align="right">4</td>
+<td align="right">2</td>
+</tr>
+<tr class="even">
+<td align="right">4</td>
+<td align="right">8</td>
+<td align="right">1</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr class="header">
+<th align="right">stage</th>
+<th align="right">budget</th>
+<th align="right">n</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">2</td>
+<td align="right">6</td>
+</tr>
+<tr class="even">
+<td align="right">2</td>
+<td align="right">4</td>
+<td align="right">3</td>
+</tr>
+<tr class="odd">
+<td align="right">3</td>
+<td align="right">8</td>
+<td align="right">1</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr class="header">
+<th align="right">stage</th>
+<th align="right">budget</th>
+<th align="right">n</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">4</td>
+<td align="right">4</td>
+</tr>
+<tr class="even">
+<td align="right">2</td>
+<td align="right">8</td>
+<td align="right">2</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr class="header">
+<th align="right">stage</th>
+<th align="right">budget</th>
+<th align="right">n</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">8</td>
+<td align="right">4</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>η=2和R=8的hyperband布局，其中n为active配置的数量。</p>
+</blockquote>
+<p>当然，如果在某些情况下过于激进，基于性能标准的提前终止可能是不利的。如果一个学习器在训练阶段对自己的表现进行了大幅度的评估，那么最好的配置可能会被过早地取消，原因很简单，因为与其他学习器相比，他们的改进不够快。换句话说，我们通常不清楚拥有大量的配置n是否比拥有每个配置的高预算B更好，因为它会被早早地丢弃。由此产生的权衡，被称为“n对B/n问题”：为了在基于早期训练表现的选择和后期训练表现的探索之间建立一个平衡，数组元素的值和值之间的值是相等的。因此，有些括号包含更多配置，初始预算较小。在这些情况下，很多人在训练了很短的时间后就被抛弃了，这与我们在马的比喻中选择的驯马师相对应。另一些则使用更少的配置构造，其中丢弃只发生在消耗了大量预算之后。最后一个括号通常不会丢弃任何东西，但也只从很少的配置开始——这相当于教练员在后面阶段的探索。前者对应高n，后者对应高B/n。即使不同的括号被初始化为不同的配置量和不同的初始预算大小，每个括号被分配(大约)相同的预算(数组logη⁡R一半值+1)∗R。</p>
+<p>每个括号开始处的配置由随机的，通常是均匀的抽样初始化。注意，目前所有配置都是从一开始就完全训练过的，所以不会在各个阶段对模型进行在线更新。</p>
+<p>要确定评估Hyperband的预算，用户必须显式指定学习器的哪个超参数影响预算，方法是在ParamSet中扩展单个超参数(tags = “budget”)，如以下代码片段所示：</p>
+<pre class="r"><code>library(&quot;mlr3verse&quot;)
+
+# Hyperparameter subset of XGBoost
+search_space = ps(
+  nrounds = p_int(lower = 1, upper = 16, tags = &quot;budget&quot;),
+  booster = p_fct(levels = c(&quot;gbtree&quot;, &quot;gblinear&quot;, &quot;dart&quot;))
+)</code></pre>
+<p>由于mlr3verse的广泛生态系统，学习器不需要一个自然的预算参数。一个典型的例子是决策树。通过使用子采样作为mlr3pipeline的预处理，我们可以解决缺乏预算参数的问题。</p>
+<pre class="r"><code>set.seed(123)
+
+# extend &quot;classif.rpart&quot; with &quot;subsampling&quot; as preprocessing step
+ll = po(&quot;subsample&quot;) %&gt;&gt;% lrn(&quot;classif.rpart&quot;)
+
+# extend hyperparameters of &quot;classif.rpart&quot; with subsampling fraction as budget
+search_space = ps(
+  classif.rpart.cp = p_dbl(lower = 0.001, upper = 0.1),
+  classif.rpart.minsplit = p_int(lower = 1, upper = 10),
+  subsample.frac = p_dbl(lower = 0.1, upper = 1, tags = &quot;budget&quot;)
+)</code></pre>
+<p>现在，我们可以像往常一样将具有扩展超参数集的新学习器插入到TuningInstanceSingleCrit中。当然，Hyperband在计算完所有括号后就会终止，因此调优实例中的Terminator充当一个上限，只有在不确定Hyperband在给定设置下需要多长时间完成时，才应该将其设置为一个较低的值。</p>
+<pre class="r"><code>instance = TuningInstanceSingleCrit$new(
+  task = tsk(&quot;iris&quot;),
+  learner = ll,
+  resampling = rsmp(&quot;holdout&quot;),
+  measure = msr(&quot;classif.ce&quot;),
+  terminator = trm(&quot;none&quot;), # hyperband terminates itself
+  search_space = search_space
+)</code></pre>
+<p>现在，我们初始化mlr3hyperband::mlr_tuners_hyperband类的一个新实例，并开始使用它进行调优。</p>
+<pre class="r"><code>library(&quot;mlr3hyperband&quot;)
+tuner = tnr(&quot;hyperband&quot;, eta = 3)
+
+# reduce logging output
+lgr::get_logger(&quot;bbotk&quot;)$set_threshold(&quot;warn&quot;)
+
+tuner$optimize(instance)</code></pre>
+<pre><code>## INFO  [13:31:01.523] [mlr3]  Running benchmark with 9 resampling iterations 
+## INFO  [13:31:01.528] [mlr3]  Applying learner &#39;subsample.classif.rpart&#39; on task &#39;iris&#39; (iter 1/1) 
+## INFO  [13:31:01.581] [mlr3]  Applying learner &#39;subsample.classif.rpart&#39; on task &#39;iris&#39; (iter 1/1) 
+## INFO  [13:31:01.628] [mlr3]  Applying learner &#39;subsample.classif.rpart&#39; on task &#39;iris&#39; (iter 1/1) 
+## INFO  [13:31:01.678] [mlr3]  Applying learner &#39;subsample.classif.rpart&#39; on task &#39;iris&#39; (iter 1/1) 
+## INFO  [13:31:01.733] [mlr3]  Applying learner &#39;subsample.classif.rpart&#39; on task &#39;iris&#39; (iter 1/1) 
+## INFO  [13:31:01.781] [mlr3]  Applying learner &#39;subsample.classif.rpart&#39; on task &#39;iris&#39; (iter 1/1) 
+## INFO  [13:31:01.893] [mlr3]  Applying learner &#39;subsample.classif.rpart&#39; on task &#39;iris&#39; (iter 1/1) 
+## INFO  [13:31:01.942] [mlr3]  Applying learner &#39;subsample.classif.rpart&#39; on task &#39;iris&#39; (iter 1/1) 
+## INFO  [13:31:01.992] [mlr3]  Applying learner &#39;subsample.classif.rpart&#39; on task &#39;iris&#39; (iter 1/1) 
+## INFO  [13:31:02.051] [mlr3]  Finished benchmark 
+## INFO  [13:31:02.349] [mlr3]  Running benchmark with 3 resampling iterations 
+## INFO  [13:31:02.355] [mlr3]  Applying learner &#39;subsample.classif.rpart&#39; on task &#39;iris&#39; (iter 1/1) 
+## INFO  [13:31:02.406] [mlr3]  Applying learner &#39;subsample.classif.rpart&#39; on task &#39;iris&#39; (iter 1/1) 
+## INFO  [13:31:02.465] [mlr3]  Applying learner &#39;subsample.classif.rpart&#39; on task &#39;iris&#39; (iter 1/1) 
+## INFO  [13:31:02.517] [mlr3]  Finished benchmark 
+## INFO  [13:31:02.630] [mlr3]  Running benchmark with 1 resampling iterations 
+## INFO  [13:31:02.636] [mlr3]  Applying learner &#39;subsample.classif.rpart&#39; on task &#39;iris&#39; (iter 1/1) 
+## INFO  [13:31:02.695] [mlr3]  Finished benchmark 
+## INFO  [13:31:02.818] [mlr3]  Running benchmark with 5 resampling iterations 
+## INFO  [13:31:02.824] [mlr3]  Applying learner &#39;subsample.classif.rpart&#39; on task &#39;iris&#39; (iter 1/1) 
+## INFO  [13:31:03.066] [mlr3]  Applying learner &#39;subsample.classif.rpart&#39; on task &#39;iris&#39; (iter 1/1) 
+## INFO  [13:31:03.116] [mlr3]  Applying learner &#39;subsample.classif.rpart&#39; on task &#39;iris&#39; (iter 1/1) 
+## INFO  [13:31:03.163] [mlr3]  Applying learner &#39;subsample.classif.rpart&#39; on task &#39;iris&#39; (iter 1/1) 
+## INFO  [13:31:03.209] [mlr3]  Applying learner &#39;subsample.classif.rpart&#39; on task &#39;iris&#39; (iter 1/1) 
+## INFO  [13:31:03.257] [mlr3]  Finished benchmark 
+## INFO  [13:31:03.429] [mlr3]  Running benchmark with 1 resampling iterations 
+## INFO  [13:31:03.435] [mlr3]  Applying learner &#39;subsample.classif.rpart&#39; on task &#39;iris&#39; (iter 1/1) 
+## INFO  [13:31:03.484] [mlr3]  Finished benchmark 
+## INFO  [13:31:03.573] [mlr3]  Running benchmark with 3 resampling iterations 
+## INFO  [13:31:03.578] [mlr3]  Applying learner &#39;subsample.classif.rpart&#39; on task &#39;iris&#39; (iter 1/1) 
+## INFO  [13:31:03.625] [mlr3]  Applying learner &#39;subsample.classif.rpart&#39; on task &#39;iris&#39; (iter 1/1) 
+## INFO  [13:31:03.678] [mlr3]  Applying learner &#39;subsample.classif.rpart&#39; on task &#39;iris&#39; (iter 1/1) 
+## INFO  [13:31:03.726] [mlr3]  Finished benchmark</code></pre>
+<pre><code>##    classif.rpart.cp classif.rpart.minsplit subsample.frac learner_param_vals
+## 1:       0.07348139                      5      0.1111111          &lt;list[6]&gt;
+##     x_domain classif.ce
+## 1: &lt;list[3]&gt;       0.02</code></pre>
+<p>要接收每个抽样配置的结果，只需运行以下代码片段。</p>
+<pre class="r"><code>as.data.table(instance$archive)[, c(
+  &quot;subsample.frac&quot;,
+  &quot;classif.rpart.cp&quot;,
+  &quot;classif.rpart.minsplit&quot;,
+  &quot;classif.ce&quot;
+), with = FALSE]</code></pre>
+<pre><code>##     subsample.frac classif.rpart.cp classif.rpart.minsplit classif.ce
+##  1:      0.1111111       0.02532664                      3       0.04
+##  2:      0.1111111       0.07348139                      5       0.02
+##  3:      0.1111111       0.08489786                      3       0.02
+##  4:      0.1111111       0.05025520                      6       0.02
+##  5:      0.1111111       0.03940299                      4       0.02
+##  6:      0.1111111       0.02539845                      7       0.42
+##  7:      0.1111111       0.01199855                      4       0.14
+##  8:      0.1111111       0.03960945                      4       0.02
+##  9:      0.1111111       0.05762160                      6       0.02
+## 10:      0.3333333       0.07348139                      5       0.06
+## 11:      0.3333333       0.08489786                      3       0.04
+## 12:      0.3333333       0.05025520                      6       0.06
+## 13:      1.0000000       0.08489786                      3       0.04
+## 14:      0.3333333       0.08650077                      6       0.02
+## 15:      0.3333333       0.07491023                      9       0.06
+## 16:      0.3333333       0.06716018                      6       0.04
+## 17:      0.3333333       0.06218377                      9       0.08
+## 18:      0.3333333       0.03785157                      4       0.06
+## 19:      1.0000000       0.08650077                      6       0.04
+## 20:      1.0000000       0.02723824                     10       0.04
+## 21:      1.0000000       0.05689445                      3       0.04
+## 22:      1.0000000       0.09140563                      4       0.04
+##     subsample.frac classif.rpart.cp classif.rpart.minsplit classif.ce</code></pre>
+<p>你可以通过实例对象访问最佳配置。</p>
+<pre class="r"><code>instance$result</code></pre>
+<pre><code>##    classif.rpart.cp classif.rpart.minsplit subsample.frac learner_param_vals
+## 1:       0.07348139                      5      0.1111111          &lt;list[6]&gt;
+##     x_domain classif.ce
+## 1: &lt;list[3]&gt;       0.02</code></pre>
+<pre class="r"><code>instance$result_learner_param_vals</code></pre>
+<pre><code>## $subsample.frac
+## [1] 0.1111111
+## 
+## $subsample.stratify
+## [1] FALSE
+## 
+## $subsample.replace
+## [1] FALSE
+## 
+## $classif.rpart.xval
+## [1] 0
+## 
+## $classif.rpart.cp
+## [1] 0.07348139
+## 
+## $classif.rpart.minsplit
+## [1] 5</code></pre>
+<p>如果你熟悉原始论文，你可能想知道我们是如何使用参数范围从0.1到1.0的Hyperband (Li et al. 2016)。答案是，在预算参数的内部缩放的帮助下。mlr3hyperband自动用它的下界划分预算参数边界，最终预算范围再次从1开始，就像最初的情况一样。如果我们想了解Hyperband创建了什么布局，以及每个设置组中的缩放是如何工作的，我们可以打印一个紧凑的表来查看这些信息。</p>
+<pre class="r"><code>unique(as.data.table(instance$archive)[, .(bracket, bracket_stage, budget_scaled, budget_real, n_configs)])</code></pre>
+<pre><code>##    bracket bracket_stage budget_scaled budget_real n_configs
+## 1:       2             0      1.111111   0.1111111         9
+## 2:       2             1      3.333333   0.3333333         3
+## 3:       2             2     10.000000   1.0000000         1
+## 4:       1             0      3.333333   0.3333333         5
+## 5:       1             1     10.000000   1.0000000         1
+## 6:       0             0     10.000000   1.0000000         3</code></pre>
+<p>在传统的方法中，Hyperband使用均匀采样在每个括号的开始接收配置样本。但是也可以为每个超参数定义一个自定义Sampler。</p>
+<pre class="r"><code>search_space = ps(
+  nrounds = p_int(lower = 1, upper = 16, tags = &quot;budget&quot;),
+  eta = p_dbl(lower = 0, upper = 1),
+  booster = p_fct(levels = c(&quot;gbtree&quot;, &quot;gblinear&quot;, &quot;dart&quot;))
+)
+
+instance = TuningInstanceSingleCrit$new(
+  task = tsk(&quot;iris&quot;),
+  learner = lrn(&quot;classif.xgboost&quot;),
+  resampling = rsmp(&quot;holdout&quot;),
+  measure = msr(&quot;classif.ce&quot;),
+  terminator = trm(&quot;none&quot;), # hyperband terminates itself
+  search_space = search_space
+)
+
+# beta distribution with alpha = 2 and beta = 5
+# categorical distribution with custom probabilities
+sampler = SamplerJointIndep$new(list(
+  Sampler1DRfun$new(search_space$params$eta, function(n) rbeta(n, 2, 5)),
+  Sampler1DCateg$new(search_space$params$booster, prob = c(0.2, 0.3, 0.5))
+))</code></pre>
+<p>然后，在实例创建期间必须将定义的采样器作为参数提供。然后，可以进行常规的调优。</p>
+<pre class="r"><code>tuner = tnr(&quot;hyperband&quot;, eta = 2, sampler = sampler)
+set.seed(123)
+tuner$optimize(instance)</code></pre>
+<pre><code>## INFO  [13:31:04.539] [mlr3]  Running benchmark with 16 resampling iterations 
+## INFO  [13:31:04.545] [mlr3]  Applying learner &#39;classif.xgboost&#39; on task &#39;iris&#39; (iter 1/1) 
+## [13:31:04] WARNING: amalgamation/../src/learner.cc:1095: Starting in XGBoost 1.3.0, the default evaluation metric used with the objective &#39;multi:softprob&#39; was changed from &#39;merror&#39; to &#39;mlogloss&#39;. Explicitly set eval_metric if you&#39;d like to restore the old behavior.
+## INFO  [13:31:04.592] [mlr3]  Applying learner &#39;classif.xgboost&#39; on task &#39;iris&#39; (iter 1/1) 
+## [13:31:04] WARNING: amalgamation/../src/learner.cc:1095: Starting in XGBoost 1.3.0, the default evaluation metric used with the objective &#39;multi:softprob&#39; was changed from &#39;merror&#39; to &#39;mlogloss&#39;. Explicitly set eval_metric if you&#39;d like to restore the old behavior.
+## INFO  [13:31:04.601] [mlr3]  Applying learner &#39;classif.xgboost&#39; on task &#39;iris&#39; (iter 1/1) 
+## [13:31:04] WARNING: amalgamation/../src/learner.cc:1095: Starting in XGBoost 1.3.0, the default evaluation metric used with the objective &#39;multi:softprob&#39; was changed from &#39;merror&#39; to &#39;mlogloss&#39;. Explicitly set eval_metric if you&#39;d like to restore the old behavior.
+## INFO  [13:31:04.610] [mlr3]  Applying learner &#39;classif.xgboost&#39; on task &#39;iris&#39; (iter 1/1) 
+## [13:31:04] WARNING: amalgamation/../src/learner.cc:1095: Starting in XGBoost 1.3.0, the default evaluation metric used with the objective &#39;multi:softprob&#39; was changed from &#39;merror&#39; to &#39;mlogloss&#39;. Explicitly set eval_metric if you&#39;d like to restore the old behavior.
+## INFO  [13:31:04.619] [mlr3]  Applying learner &#39;classif.xgboost&#39; on task &#39;iris&#39; (iter 1/1) 
+## [13:31:04] WARNING: amalgamation/../src/learner.cc:1095: Starting in XGBoost 1.3.0, the default evaluation metric used with the objective &#39;multi:softprob&#39; was changed from &#39;merror&#39; to &#39;mlogloss&#39;. Explicitly set eval_metric if you&#39;d like to restore the old behavior.
+## INFO  [13:31:04.627] [mlr3]  Applying learner &#39;classif.xgboost&#39; on task &#39;iris&#39; (iter 1/1) 
+## [13:31:04] WARNING: amalgamation/../src/learner.cc:1095: Starting in XGBoost 1.3.0, the default evaluation metric used with the objective &#39;multi:softprob&#39; was changed from &#39;merror&#39; to &#39;mlogloss&#39;. Explicitly set eval_metric if you&#39;d like to restore the old behavior.
+## INFO  [13:31:04.636] [mlr3]  Applying learner &#39;classif.xgboost&#39; on task &#39;iris&#39; (iter 1/1) 
+## [13:31:04] WARNING: amalgamation/../src/learner.cc:1095: Starting in XGBoost 1.3.0, the default evaluation metric used with the objective &#39;multi:softprob&#39; was changed from &#39;merror&#39; to &#39;mlogloss&#39;. Explicitly set eval_metric if you&#39;d like to restore the old behavior.
+## INFO  [13:31:04.645] [mlr3]  Applying learner &#39;classif.xgboost&#39; on task &#39;iris&#39; (iter 1/1) 
+## [13:31:04] WARNING: amalgamation/../src/learner.cc:1095: Starting in XGBoost 1.3.0, the default evaluation metric used with the objective &#39;multi:softprob&#39; was changed from &#39;merror&#39; to &#39;mlogloss&#39;. Explicitly set eval_metric if you&#39;d like to restore the old behavior.
+## INFO  [13:31:04.654] [mlr3]  Applying learner &#39;classif.xgboost&#39; on task &#39;iris&#39; (iter 1/1) 
+## [13:31:04] WARNING: amalgamation/../src/learner.cc:1095: Starting in XGBoost 1.3.0, the default evaluation metric used with the objective &#39;multi:softprob&#39; was changed from &#39;merror&#39; to &#39;mlogloss&#39;. Explicitly set eval_metric if you&#39;d like to restore the old behavior.
+## INFO  [13:31:04.662] [mlr3]  Applying learner &#39;classif.xgboost&#39; on task &#39;iris&#39; (iter 1/1) 
+## [13:31:04] WARNING: amalgamation/../src/learner.cc:1095: Starting in XGBoost 1.3.0, the default evaluation metric used with the objective &#39;multi:softprob&#39; was changed from &#39;merror&#39; to &#39;mlogloss&#39;. Explicitly set eval_metric if you&#39;d like to restore the old behavior.
+## INFO  [13:31:04.671] [mlr3]  Applying learner &#39;classif.xgboost&#39; on task &#39;iris&#39; (iter 1/1) 
+## [13:31:04] WARNING: amalgamation/../src/learner.cc:1095: Starting in XGBoost 1.3.0, the default evaluation metric used with the objective &#39;multi:softprob&#39; was changed from &#39;merror&#39; to &#39;mlogloss&#39;. Explicitly set eval_metric if you&#39;d like to restore the old behavior.
+## INFO  [13:31:04.679] [mlr3]  Applying learner &#39;classif.xgboost&#39; on task &#39;iris&#39; (iter 1/1) 
+## [13:31:04] WARNING: amalgamation/../src/learner.cc:1095: Starting in XGBoost 1.3.0, the default evaluation metric used with the objective &#39;multi:softprob&#39; was changed from &#39;merror&#39; to &#39;mlogloss&#39;. Explicitly set eval_metric if you&#39;d like to restore the old behavior.
+## INFO  [13:31:04.688] [mlr3]  Applying learner &#39;classif.xgboost&#39; on task &#39;iris&#39; (iter 1/1) 
+## [13:31:04] WARNING: amalgamation/../src/learner.cc:1095: Starting in XGBoost 1.3.0, the default evaluation metric used with the objective &#39;multi:softprob&#39; was changed from &#39;merror&#39; to &#39;mlogloss&#39;. Explicitly set eval_metric if you&#39;d like to restore the old behavior.
+## INFO  [13:31:04.697] [mlr3]  Applying learner &#39;classif.xgboost&#39; on task &#39;iris&#39; (iter 1/1) 
+## [13:31:04] WARNING: amalgamation/../src/learner.cc:1095: Starting in XGBoost 1.3.0, the default evaluation metric used with the objective &#39;multi:softprob&#39; was changed from &#39;merror&#39; to &#39;mlogloss&#39;. Explicitly set eval_metric if you&#39;d like to restore the old behavior.
+## INFO  [13:31:04.705] [mlr3]  Applying learner &#39;classif.xgboost&#39; on task &#39;iris&#39; (iter 1/1) 
+## [13:31:04] WARNING: amalgamation/../src/learner.cc:1095: Starting in XGBoost 1.3.0, the default evaluation metric used with the objective &#39;multi:softprob&#39; was changed from &#39;merror&#39; to &#39;mlogloss&#39;. Explicitly set eval_metric if you&#39;d like to restore the old behavior.
+## INFO  [13:31:04.714] [mlr3]  Applying learner &#39;classif.xgboost&#39; on task &#39;iris&#39; (iter 1/1) 
+## [13:31:04] WARNING: amalgamation/../src/learner.cc:1095: Starting in XGBoost 1.3.0, the default evaluation metric used with the objective &#39;multi:softprob&#39; was changed from &#39;merror&#39; to &#39;mlogloss&#39;. Explicitly set eval_metric if you&#39;d like to restore the old behavior.
+## INFO  [13:31:04.724] [mlr3]  Finished benchmark 
+## INFO  [13:31:05.619] [mlr3]  Running benchmark with 8 resampling iterations 
+## INFO  [13:31:05.624] [mlr3]  Applying learner &#39;classif.xgboost&#39; on task &#39;iris&#39; (iter 1/1) 
+## [13:31:05] WARNING: amalgamation/../src/learner.cc:1095: Starting in XGBoost 1.3.0, the default evaluation metric used with the objective &#39;multi:softprob&#39; was changed from &#39;merror&#39; to &#39;mlogloss&#39;. Explicitly set eval_metric if you&#39;d like to restore the old behavior.
+## INFO  [13:31:05.634] [mlr3]  Applying learner &#39;classif.xgboost&#39; on task &#39;iris&#39; (iter 1/1) 
+## [13:31:05] WARNING: amalgamation/../src/learner.cc:1095: Starting in XGBoost 1.3.0, the default evaluation metric used with the objective &#39;multi:softprob&#39; was changed from &#39;merror&#39; to &#39;mlogloss&#39;. Explicitly set eval_metric if you&#39;d like to restore the old behavior.
+## INFO  [13:31:05.644] [mlr3]  Applying learner &#39;classif.xgboost&#39; on task &#39;iris&#39; (iter 1/1) 
+## [13:31:05] WARNING: amalgamation/../src/learner.cc:1095: Starting in XGBoost 1.3.0, the default evaluation metric used with the objective &#39;multi:softprob&#39; was changed from &#39;merror&#39; to &#39;mlogloss&#39;. Explicitly set eval_metric if you&#39;d like to restore the old behavior.
+## INFO  [13:31:05.653] [mlr3]  Applying learner &#39;classif.xgboost&#39; on task &#39;iris&#39; (iter 1/1) 
+## [13:31:05] WARNING: amalgamation/../src/learner.cc:1095: Starting in XGBoost 1.3.0, the default evaluation metric used with the objective &#39;multi:softprob&#39; was changed from &#39;merror&#39; to &#39;mlogloss&#39;. Explicitly set eval_metric if you&#39;d like to restore the old behavior.
+## INFO  [13:31:05.663] [mlr3]  Applying learner &#39;classif.xgboost&#39; on task &#39;iris&#39; (iter 1/1) 
+## [13:31:05] WARNING: amalgamation/../src/learner.cc:1095: Starting in XGBoost 1.3.0, the default evaluation metric used with the objective &#39;multi:softprob&#39; was changed from &#39;merror&#39; to &#39;mlogloss&#39;. Explicitly set eval_metric if you&#39;d like to restore the old behavior.
+## INFO  [13:31:05.672] [mlr3]  Applying learner &#39;classif.xgboost&#39; on task &#39;iris&#39; (iter 1/1) 
+## [13:31:05] WARNING: amalgamation/../src/learner.cc:1095: Starting in XGBoost 1.3.0, the default evaluation metric used with the objective &#39;multi:softprob&#39; was changed from &#39;merror&#39; to &#39;mlogloss&#39;. Explicitly set eval_metric if you&#39;d like to restore the old behavior.
+## INFO  [13:31:05.682] [mlr3]  Applying learner &#39;classif.xgboost&#39; on task &#39;iris&#39; (iter 1/1) 
+## [13:31:05] WARNING: amalgamation/../src/learner.cc:1095: Starting in XGBoost 1.3.0, the default evaluation metric used with the objective &#39;multi:softprob&#39; was changed from &#39;merror&#39; to &#39;mlogloss&#39;. Explicitly set eval_metric if you&#39;d like to restore the old behavior.
+## INFO  [13:31:05.699] [mlr3]  Applying learner &#39;classif.xgboost&#39; on task &#39;iris&#39; (iter 1/1) 
+## [13:31:05] WARNING: amalgamation/../src/learner.cc:1095: Starting in XGBoost 1.3.0, the default evaluation metric used with the objective &#39;multi:softprob&#39; was changed from &#39;merror&#39; to &#39;mlogloss&#39;. Explicitly set eval_metric if you&#39;d like to restore the old behavior.
+## INFO  [13:31:05.709] [mlr3]  Finished benchmark 
+## INFO  [13:31:06.175] [mlr3]  Running benchmark with 4 resampling iterations 
+## INFO  [13:31:06.181] [mlr3]  Applying learner &#39;classif.xgboost&#39; on task &#39;iris&#39; (iter 1/1) 
+## [13:31:06] WARNING: amalgamation/../src/learner.cc:1095: Starting in XGBoost 1.3.0, the default evaluation metric used with the objective &#39;multi:softprob&#39; was changed from &#39;merror&#39; to &#39;mlogloss&#39;. Explicitly set eval_metric if you&#39;d like to restore the old behavior.
+## INFO  [13:31:06.191] [mlr3]  Applying learner &#39;classif.xgboost&#39; on task &#39;iris&#39; (iter 1/1) 
+## [13:31:06] WARNING: amalgamation/../src/learner.cc:1095: Starting in XGBoost 1.3.0, the default evaluation metric used with the objective &#39;multi:softprob&#39; was changed from &#39;merror&#39; to &#39;mlogloss&#39;. Explicitly set eval_metric if you&#39;d like to restore the old behavior.
+## INFO  [13:31:06.202] [mlr3]  Applying learner &#39;classif.xgboost&#39; on task &#39;iris&#39; (iter 1/1) 
+## [13:31:06] WARNING: amalgamation/../src/learner.cc:1095: Starting in XGBoost 1.3.0, the default evaluation metric used with the objective &#39;multi:softprob&#39; was changed from &#39;merror&#39; to &#39;mlogloss&#39;. Explicitly set eval_metric if you&#39;d like to restore the old behavior.
+## INFO  [13:31:06.213] [mlr3]  Applying learner &#39;classif.xgboost&#39; on task &#39;iris&#39; (iter 1/1) 
+## [13:31:06] WARNING: amalgamation/../src/learner.cc:1095: Starting in XGBoost 1.3.0, the default evaluation metric used with the objective &#39;multi:softprob&#39; was changed from &#39;merror&#39; to &#39;mlogloss&#39;. Explicitly set eval_metric if you&#39;d like to restore the old behavior.
+## INFO  [13:31:06.224] [mlr3]  Finished benchmark 
+## INFO  [13:31:06.469] [mlr3]  Running benchmark with 2 resampling iterations 
+## INFO  [13:31:06.474] [mlr3]  Applying learner &#39;classif.xgboost&#39; on task &#39;iris&#39; (iter 1/1) 
+## [13:31:06] WARNING: amalgamation/../src/learner.cc:1095: Starting in XGBoost 1.3.0, the default evaluation metric used with the objective &#39;multi:softprob&#39; was changed from &#39;merror&#39; to &#39;mlogloss&#39;. Explicitly set eval_metric if you&#39;d like to restore the old behavior.
+## INFO  [13:31:06.487] [mlr3]  Applying learner &#39;classif.xgboost&#39; on task &#39;iris&#39; (iter 1/1) 
+## [13:31:06] WARNING: amalgamation/../src/learner.cc:1095: Starting in XGBoost 1.3.0, the default evaluation metric used with the objective &#39;multi:softprob&#39; was changed from &#39;merror&#39; to &#39;mlogloss&#39;. Explicitly set eval_metric if you&#39;d like to restore the old behavior.
+## INFO  [13:31:06.502] [mlr3]  Finished benchmark 
+## INFO  [13:31:06.632] [mlr3]  Running benchmark with 1 resampling iterations 
+## INFO  [13:31:06.637] [mlr3]  Applying learner &#39;classif.xgboost&#39; on task &#39;iris&#39; (iter 1/1) 
+## [13:31:06] WARNING: amalgamation/../src/learner.cc:1095: Starting in XGBoost 1.3.0, the default evaluation metric used with the objective &#39;multi:softprob&#39; was changed from &#39;merror&#39; to &#39;mlogloss&#39;. Explicitly set eval_metric if you&#39;d like to restore the old behavior.
+## INFO  [13:31:06.661] [mlr3]  Finished benchmark 
+## INFO  [13:31:07.031] [mlr3]  Running benchmark with 10 resampling iterations 
+## INFO  [13:31:07.037] [mlr3]  Applying learner &#39;classif.xgboost&#39; on task &#39;iris&#39; (iter 1/1) 
+## [13:31:07] WARNING: amalgamation/../src/learner.cc:1095: Starting in XGBoost 1.3.0, the default evaluation metric used with the objective &#39;multi:softprob&#39; was changed from &#39;merror&#39; to &#39;mlogloss&#39;. Explicitly set eval_metric if you&#39;d like to restore the old behavior.
+## INFO  [13:31:07.046] [mlr3]  Applying learner &#39;classif.xgboost&#39; on task &#39;iris&#39; (iter 1/1) 
+## [13:31:07] WARNING: amalgamation/../src/learner.cc:1095: Starting in XGBoost 1.3.0, the default evaluation metric used with the objective &#39;multi:softprob&#39; was changed from &#39;merror&#39; to &#39;mlogloss&#39;. Explicitly set eval_metric if you&#39;d like to restore the old behavior.
+## INFO  [13:31:07.056] [mlr3]  Applying learner &#39;classif.xgboost&#39; on task &#39;iris&#39; (iter 1/1) 
+## [13:31:07] WARNING: amalgamation/../src/learner.cc:1095: Starting in XGBoost 1.3.0, the default evaluation metric used with the objective &#39;multi:softprob&#39; was changed from &#39;merror&#39; to &#39;mlogloss&#39;. Explicitly set eval_metric if you&#39;d like to restore the old behavior.
+## INFO  [13:31:07.065] [mlr3]  Applying learner &#39;classif.xgboost&#39; on task &#39;iris&#39; (iter 1/1) 
+## [13:31:07] WARNING: amalgamation/../src/learner.cc:1095: Starting in XGBoost 1.3.0, the default evaluation metric used with the objective &#39;multi:softprob&#39; was changed from &#39;merror&#39; to &#39;mlogloss&#39;. Explicitly set eval_metric if you&#39;d like to restore the old behavior.
+## INFO  [13:31:07.074] [mlr3]  Applying learner &#39;classif.xgboost&#39; on task &#39;iris&#39; (iter 1/1) 
+## [13:31:07] WARNING: amalgamation/../src/learner.cc:1095: Starting in XGBoost 1.3.0, the default evaluation metric used with the objective &#39;multi:softprob&#39; was changed from &#39;merror&#39; to &#39;mlogloss&#39;. Explicitly set eval_metric if you&#39;d like to restore the old behavior.
+## INFO  [13:31:07.083] [mlr3]  Applying learner &#39;classif.xgboost&#39; on task &#39;iris&#39; (iter 1/1) 
+## [13:31:07] WARNING: amalgamation/../src/learner.cc:1095: Starting in XGBoost 1.3.0, the default evaluation metric used with the objective &#39;multi:softprob&#39; was changed from &#39;merror&#39; to &#39;mlogloss&#39;. Explicitly set eval_metric if you&#39;d like to restore the old behavior.
+## INFO  [13:31:07.094] [mlr3]  Applying learner &#39;classif.xgboost&#39; on task &#39;iris&#39; (iter 1/1) 
+## [13:31:07] WARNING: amalgamation/../src/learner.cc:1095: Starting in XGBoost 1.3.0, the default evaluation metric used with the objective &#39;multi:softprob&#39; was changed from &#39;merror&#39; to &#39;mlogloss&#39;. Explicitly set eval_metric if you&#39;d like to restore the old behavior.
+## INFO  [13:31:07.104] [mlr3]  Applying learner &#39;classif.xgboost&#39; on task &#39;iris&#39; (iter 1/1) 
+## [13:31:07] WARNING: amalgamation/../src/learner.cc:1095: Starting in XGBoost 1.3.0, the default evaluation metric used with the objective &#39;multi:softprob&#39; was changed from &#39;merror&#39; to &#39;mlogloss&#39;. Explicitly set eval_metric if you&#39;d like to restore the old behavior.
+## INFO  [13:31:07.114] [mlr3]  Applying learner &#39;classif.xgboost&#39; on task &#39;iris&#39; (iter 1/1) 
+## [13:31:07] WARNING: amalgamation/../src/learner.cc:1095: Starting in XGBoost 1.3.0, the default evaluation metric used with the objective &#39;multi:softprob&#39; was changed from &#39;merror&#39; to &#39;mlogloss&#39;. Explicitly set eval_metric if you&#39;d like to restore the old behavior.
+## INFO  [13:31:07.130] [mlr3]  Applying learner &#39;classif.xgboost&#39; on task &#39;iris&#39; (iter 1/1) 
+## [13:31:07] WARNING: amalgamation/../src/learner.cc:1095: Starting in XGBoost 1.3.0, the default evaluation metric used with the objective &#39;multi:softprob&#39; was changed from &#39;merror&#39; to &#39;mlogloss&#39;. Explicitly set eval_metric if you&#39;d like to restore the old behavior.
+## INFO  [13:31:07.140] [mlr3]  Finished benchmark 
+## INFO  [13:31:07.719] [mlr3]  Running benchmark with 5 resampling iterations 
+## INFO  [13:31:07.725] [mlr3]  Applying learner &#39;classif.xgboost&#39; on task &#39;iris&#39; (iter 1/1) 
+## [13:31:07] WARNING: amalgamation/../src/learner.cc:1095: Starting in XGBoost 1.3.0, the default evaluation metric used with the objective &#39;multi:softprob&#39; was changed from &#39;merror&#39; to &#39;mlogloss&#39;. Explicitly set eval_metric if you&#39;d like to restore the old behavior.
+## INFO  [13:31:07.736] [mlr3]  Applying learner &#39;classif.xgboost&#39; on task &#39;iris&#39; (iter 1/1) 
+## [13:31:07] WARNING: amalgamation/../src/learner.cc:1095: Starting in XGBoost 1.3.0, the default evaluation metric used with the objective &#39;multi:softprob&#39; was changed from &#39;merror&#39; to &#39;mlogloss&#39;. Explicitly set eval_metric if you&#39;d like to restore the old behavior.
+## INFO  [13:31:07.748] [mlr3]  Applying learner &#39;classif.xgboost&#39; on task &#39;iris&#39; (iter 1/1) 
+## [13:31:07] WARNING: amalgamation/../src/learner.cc:1095: Starting in XGBoost 1.3.0, the default evaluation metric used with the objective &#39;multi:softprob&#39; was changed from &#39;merror&#39; to &#39;mlogloss&#39;. Explicitly set eval_metric if you&#39;d like to restore the old behavior.
+## INFO  [13:31:07.758] [mlr3]  Applying learner &#39;classif.xgboost&#39; on task &#39;iris&#39; (iter 1/1) 
+## [13:31:07] WARNING: amalgamation/../src/learner.cc:1095: Starting in XGBoost 1.3.0, the default evaluation metric used with the objective &#39;multi:softprob&#39; was changed from &#39;merror&#39; to &#39;mlogloss&#39;. Explicitly set eval_metric if you&#39;d like to restore the old behavior.
+## INFO  [13:31:07.769] [mlr3]  Applying learner &#39;classif.xgboost&#39; on task &#39;iris&#39; (iter 1/1) 
+## [13:31:07] WARNING: amalgamation/../src/learner.cc:1095: Starting in XGBoost 1.3.0, the default evaluation metric used with the objective &#39;multi:softprob&#39; was changed from &#39;merror&#39; to &#39;mlogloss&#39;. Explicitly set eval_metric if you&#39;d like to restore the old behavior.
+## INFO  [13:31:07.780] [mlr3]  Finished benchmark 
+## INFO  [13:31:08.072] [mlr3]  Running benchmark with 2 resampling iterations 
+## INFO  [13:31:08.077] [mlr3]  Applying learner &#39;classif.xgboost&#39; on task &#39;iris&#39; (iter 1/1) 
+## [13:31:08] WARNING: amalgamation/../src/learner.cc:1095: Starting in XGBoost 1.3.0, the default evaluation metric used with the objective &#39;multi:softprob&#39; was changed from &#39;merror&#39; to &#39;mlogloss&#39;. Explicitly set eval_metric if you&#39;d like to restore the old behavior.
+## INFO  [13:31:08.088] [mlr3]  Applying learner &#39;classif.xgboost&#39; on task &#39;iris&#39; (iter 1/1) 
+## [13:31:08] WARNING: amalgamation/../src/learner.cc:1095: Starting in XGBoost 1.3.0, the default evaluation metric used with the objective &#39;multi:softprob&#39; was changed from &#39;merror&#39; to &#39;mlogloss&#39;. Explicitly set eval_metric if you&#39;d like to restore the old behavior.
+## INFO  [13:31:08.103] [mlr3]  Finished benchmark 
+## INFO  [13:31:08.236] [mlr3]  Running benchmark with 1 resampling iterations 
+## INFO  [13:31:08.242] [mlr3]  Applying learner &#39;classif.xgboost&#39; on task &#39;iris&#39; (iter 1/1) 
+## [13:31:08] WARNING: amalgamation/../src/learner.cc:1095: Starting in XGBoost 1.3.0, the default evaluation metric used with the objective &#39;multi:softprob&#39; was changed from &#39;merror&#39; to &#39;mlogloss&#39;. Explicitly set eval_metric if you&#39;d like to restore the old behavior.
+## INFO  [13:31:08.257] [mlr3]  Finished benchmark 
+## INFO  [13:31:08.655] [mlr3]  Running benchmark with 7 resampling iterations 
+## INFO  [13:31:08.661] [mlr3]  Applying learner &#39;classif.xgboost&#39; on task &#39;iris&#39; (iter 1/1) 
+## [13:31:08] WARNING: amalgamation/../src/learner.cc:1095: Starting in XGBoost 1.3.0, the default evaluation metric used with the objective &#39;multi:softprob&#39; was changed from &#39;merror&#39; to &#39;mlogloss&#39;. Explicitly set eval_metric if you&#39;d like to restore the old behavior.
+## INFO  [13:31:08.672] [mlr3]  Applying learner &#39;classif.xgboost&#39; on task &#39;iris&#39; (iter 1/1) 
+## [13:31:08] WARNING: amalgamation/../src/learner.cc:1095: Starting in XGBoost 1.3.0, the default evaluation metric used with the objective &#39;multi:softprob&#39; was changed from &#39;merror&#39; to &#39;mlogloss&#39;. Explicitly set eval_metric if you&#39;d like to restore the old behavior.
+## INFO  [13:31:08.682] [mlr3]  Applying learner &#39;classif.xgboost&#39; on task &#39;iris&#39; (iter 1/1) 
+## [13:31:08] WARNING: amalgamation/../src/learner.cc:1095: Starting in XGBoost 1.3.0, the default evaluation metric used with the objective &#39;multi:softprob&#39; was changed from &#39;merror&#39; to &#39;mlogloss&#39;. Explicitly set eval_metric if you&#39;d like to restore the old behavior.
+## INFO  [13:31:08.693] [mlr3]  Applying learner &#39;classif.xgboost&#39; on task &#39;iris&#39; (iter 1/1) 
+## [13:31:08] WARNING: amalgamation/../src/learner.cc:1095: Starting in XGBoost 1.3.0, the default evaluation metric used with the objective &#39;multi:softprob&#39; was changed from &#39;merror&#39; to &#39;mlogloss&#39;. Explicitly set eval_metric if you&#39;d like to restore the old behavior.
+## INFO  [13:31:08.704] [mlr3]  Applying learner &#39;classif.xgboost&#39; on task &#39;iris&#39; (iter 1/1) 
+## [13:31:08] WARNING: amalgamation/../src/learner.cc:1095: Starting in XGBoost 1.3.0, the default evaluation metric used with the objective &#39;multi:softprob&#39; was changed from &#39;merror&#39; to &#39;mlogloss&#39;. Explicitly set eval_metric if you&#39;d like to restore the old behavior.
+## INFO  [13:31:08.713] [mlr3]  Applying learner &#39;classif.xgboost&#39; on task &#39;iris&#39; (iter 1/1) 
+## [13:31:08] WARNING: amalgamation/../src/learner.cc:1095: Starting in XGBoost 1.3.0, the default evaluation metric used with the objective &#39;multi:softprob&#39; was changed from &#39;merror&#39; to &#39;mlogloss&#39;. Explicitly set eval_metric if you&#39;d like to restore the old behavior.
+## INFO  [13:31:08.723] [mlr3]  Applying learner &#39;classif.xgboost&#39; on task &#39;iris&#39; (iter 1/1) 
+## [13:31:08] WARNING: amalgamation/../src/learner.cc:1095: Starting in XGBoost 1.3.0, the default evaluation metric used with the objective &#39;multi:softprob&#39; was changed from &#39;merror&#39; to &#39;mlogloss&#39;. Explicitly set eval_metric if you&#39;d like to restore the old behavior.
+## INFO  [13:31:08.733] [mlr3]  Finished benchmark 
+## INFO  [13:31:09.146] [mlr3]  Running benchmark with 3 resampling iterations 
+## INFO  [13:31:09.152] [mlr3]  Applying learner &#39;classif.xgboost&#39; on task &#39;iris&#39; (iter 1/1) 
+## [13:31:09] WARNING: amalgamation/../src/learner.cc:1095: Starting in XGBoost 1.3.0, the default evaluation metric used with the objective &#39;multi:softprob&#39; was changed from &#39;merror&#39; to &#39;mlogloss&#39;. Explicitly set eval_metric if you&#39;d like to restore the old behavior.
+## INFO  [13:31:09.164] [mlr3]  Applying learner &#39;classif.xgboost&#39; on task &#39;iris&#39; (iter 1/1) 
+## [13:31:09] WARNING: amalgamation/../src/learner.cc:1095: Starting in XGBoost 1.3.0, the default evaluation metric used with the objective &#39;multi:softprob&#39; was changed from &#39;merror&#39; to &#39;mlogloss&#39;. Explicitly set eval_metric if you&#39;d like to restore the old behavior.
+## INFO  [13:31:09.177] [mlr3]  Applying learner &#39;classif.xgboost&#39; on task &#39;iris&#39; (iter 1/1) 
+## [13:31:09] WARNING: amalgamation/../src/learner.cc:1095: Starting in XGBoost 1.3.0, the default evaluation metric used with the objective &#39;multi:softprob&#39; was changed from &#39;merror&#39; to &#39;mlogloss&#39;. Explicitly set eval_metric if you&#39;d like to restore the old behavior.
+## INFO  [13:31:09.200] [mlr3]  Finished benchmark 
+## INFO  [13:31:09.385] [mlr3]  Running benchmark with 1 resampling iterations 
+## INFO  [13:31:09.390] [mlr3]  Applying learner &#39;classif.xgboost&#39; on task &#39;iris&#39; (iter 1/1) 
+## [13:31:09] WARNING: amalgamation/../src/learner.cc:1095: Starting in XGBoost 1.3.0, the default evaluation metric used with the objective &#39;multi:softprob&#39; was changed from &#39;merror&#39; to &#39;mlogloss&#39;. Explicitly set eval_metric if you&#39;d like to restore the old behavior.
+## INFO  [13:31:09.415] [mlr3]  Finished benchmark 
+## INFO  [13:31:09.651] [mlr3]  Running benchmark with 5 resampling iterations 
+## INFO  [13:31:09.657] [mlr3]  Applying learner &#39;classif.xgboost&#39; on task &#39;iris&#39; (iter 1/1) 
+## [13:31:09] WARNING: amalgamation/../src/learner.cc:1095: Starting in XGBoost 1.3.0, the default evaluation metric used with the objective &#39;multi:softprob&#39; was changed from &#39;merror&#39; to &#39;mlogloss&#39;. Explicitly set eval_metric if you&#39;d like to restore the old behavior.
+## INFO  [13:31:09.669] [mlr3]  Applying learner &#39;classif.xgboost&#39; on task &#39;iris&#39; (iter 1/1) 
+## [13:31:09] WARNING: amalgamation/../src/learner.cc:1095: Starting in XGBoost 1.3.0, the default evaluation metric used with the objective &#39;multi:softprob&#39; was changed from &#39;merror&#39; to &#39;mlogloss&#39;. Explicitly set eval_metric if you&#39;d like to restore the old behavior.
+## INFO  [13:31:09.682] [mlr3]  Applying learner &#39;classif.xgboost&#39; on task &#39;iris&#39; (iter 1/1) 
+## [13:31:09] WARNING: amalgamation/../src/learner.cc:1095: Starting in XGBoost 1.3.0, the default evaluation metric used with the objective &#39;multi:softprob&#39; was changed from &#39;merror&#39; to &#39;mlogloss&#39;. Explicitly set eval_metric if you&#39;d like to restore the old behavior.
+## INFO  [13:31:09.694] [mlr3]  Applying learner &#39;classif.xgboost&#39; on task &#39;iris&#39; (iter 1/1) 
+## [13:31:09] WARNING: amalgamation/../src/learner.cc:1095: Starting in XGBoost 1.3.0, the default evaluation metric used with the objective &#39;multi:softprob&#39; was changed from &#39;merror&#39; to &#39;mlogloss&#39;. Explicitly set eval_metric if you&#39;d like to restore the old behavior.
+## INFO  [13:31:09.708] [mlr3]  Applying learner &#39;classif.xgboost&#39; on task &#39;iris&#39; (iter 1/1) 
+## [13:31:09] WARNING: amalgamation/../src/learner.cc:1095: Starting in XGBoost 1.3.0, the default evaluation metric used with the objective &#39;multi:softprob&#39; was changed from &#39;merror&#39; to &#39;mlogloss&#39;. Explicitly set eval_metric if you&#39;d like to restore the old behavior.
+## INFO  [13:31:09.723] [mlr3]  Finished benchmark 
+## INFO  [13:31:10.035] [mlr3]  Running benchmark with 2 resampling iterations 
+## INFO  [13:31:10.041] [mlr3]  Applying learner &#39;classif.xgboost&#39; on task &#39;iris&#39; (iter 1/1) 
+## [13:31:10] WARNING: amalgamation/../src/learner.cc:1095: Starting in XGBoost 1.3.0, the default evaluation metric used with the objective &#39;multi:softprob&#39; was changed from &#39;merror&#39; to &#39;mlogloss&#39;. Explicitly set eval_metric if you&#39;d like to restore the old behavior.
+## INFO  [13:31:10.072] [mlr3]  Applying learner &#39;classif.xgboost&#39; on task &#39;iris&#39; (iter 1/1) 
+## [13:31:10] WARNING: amalgamation/../src/learner.cc:1095: Starting in XGBoost 1.3.0, the default evaluation metric used with the objective &#39;multi:softprob&#39; was changed from &#39;merror&#39; to &#39;mlogloss&#39;. Explicitly set eval_metric if you&#39;d like to restore the old behavior.
+## INFO  [13:31:10.100] [mlr3]  Finished benchmark 
+## INFO  [13:31:10.393] [mlr3]  Running benchmark with 5 resampling iterations 
+## INFO  [13:31:10.399] [mlr3]  Applying learner &#39;classif.xgboost&#39; on task &#39;iris&#39; (iter 1/1) 
+## [13:31:10] WARNING: amalgamation/../src/learner.cc:1095: Starting in XGBoost 1.3.0, the default evaluation metric used with the objective &#39;multi:softprob&#39; was changed from &#39;merror&#39; to &#39;mlogloss&#39;. Explicitly set eval_metric if you&#39;d like to restore the old behavior.
+## INFO  [13:31:10.421] [mlr3]  Applying learner &#39;classif.xgboost&#39; on task &#39;iris&#39; (iter 1/1) 
+## [13:31:10] WARNING: amalgamation/../src/learner.cc:1095: Starting in XGBoost 1.3.0, the default evaluation metric used with the objective &#39;multi:softprob&#39; was changed from &#39;merror&#39; to &#39;mlogloss&#39;. Explicitly set eval_metric if you&#39;d like to restore the old behavior.
+## INFO  [13:31:10.436] [mlr3]  Applying learner &#39;classif.xgboost&#39; on task &#39;iris&#39; (iter 1/1) 
+## [13:31:10] WARNING: amalgamation/../src/learner.cc:1095: Starting in XGBoost 1.3.0, the default evaluation metric used with the objective &#39;multi:softprob&#39; was changed from &#39;merror&#39; to &#39;mlogloss&#39;. Explicitly set eval_metric if you&#39;d like to restore the old behavior.
+## INFO  [13:31:10.458] [mlr3]  Applying learner &#39;classif.xgboost&#39; on task &#39;iris&#39; (iter 1/1) 
+## [13:31:10] WARNING: amalgamation/../src/learner.cc:1095: Starting in XGBoost 1.3.0, the default evaluation metric used with the objective &#39;multi:softprob&#39; was changed from &#39;merror&#39; to &#39;mlogloss&#39;. Explicitly set eval_metric if you&#39;d like to restore the old behavior.
+## INFO  [13:31:10.480] [mlr3]  Applying learner &#39;classif.xgboost&#39; on task &#39;iris&#39; (iter 1/1) 
+## [13:31:10] WARNING: amalgamation/../src/learner.cc:1095: Starting in XGBoost 1.3.0, the default evaluation metric used with the objective &#39;multi:softprob&#39; was changed from &#39;merror&#39; to &#39;mlogloss&#39;. Explicitly set eval_metric if you&#39;d like to restore the old behavior.
+## INFO  [13:31:10.492] [mlr3]  Finished benchmark</code></pre>
+<pre><code>##    nrounds       eta booster learner_param_vals  x_domain classif.ce
+## 1:       1 0.2414701    dart          &lt;list[5]&gt; &lt;list[3]&gt;       0.04</code></pre>
+<pre class="r"><code>instance$result</code></pre>
+<pre><code>##    nrounds       eta booster learner_param_vals  x_domain classif.ce
+## 1:       1 0.2414701    dart          &lt;list[5]&gt; &lt;list[3]&gt;       0.04</code></pre>
+<p>此外，我们对原算法进行了扩展，使mlr3hyperband算法也可以用于多目标优化。为此，只需在TuningInstanceMultiCrit中指定更多的度量，并照常运行其余的度量。</p>
+<pre class="r"><code>instance = TuningInstanceMultiCrit$new(
+  task = tsk(&quot;pima&quot;),
+  learner = lrn(&quot;classif.xgboost&quot;),
+  resampling = rsmp(&quot;holdout&quot;),
+  measures = msrs(c(&quot;classif.tpr&quot;, &quot;classif.fpr&quot;)),
+  terminator = trm(&quot;none&quot;), # hyperband terminates itself
+  search_space = search_space
+)
+
+tuner = tnr(&quot;hyperband&quot;, eta = 4)
+tuner$optimize(instance)</code></pre>
+<pre><code>## INFO  [13:31:11.504] [mlr3]  Running benchmark with 16 resampling iterations 
+## INFO  [13:31:11.510] [mlr3]  Applying learner &#39;classif.xgboost&#39; on task &#39;pima&#39; (iter 1/1) 
+## [13:31:11] WARNING: amalgamation/../src/learner.cc:1095: Starting in XGBoost 1.3.0, the default evaluation metric used with the objective &#39;binary:logistic&#39; was changed from &#39;error&#39; to &#39;logloss&#39;. Explicitly set eval_metric if you&#39;d like to restore the old behavior.
+## INFO  [13:31:11.519] [mlr3]  Applying learner &#39;classif.xgboost&#39; on task &#39;pima&#39; (iter 1/1) 
+## [13:31:11] WARNING: amalgamation/../src/learner.cc:1095: Starting in XGBoost 1.3.0, the default evaluation metric used with the objective &#39;binary:logistic&#39; was changed from &#39;error&#39; to &#39;logloss&#39;. Explicitly set eval_metric if you&#39;d like to restore the old behavior.
+## INFO  [13:31:11.527] [mlr3]  Applying learner &#39;classif.xgboost&#39; on task &#39;pima&#39; (iter 1/1) 
+## [13:31:11] WARNING: amalgamation/../src/learner.cc:1095: Starting in XGBoost 1.3.0, the default evaluation metric used with the objective &#39;binary:logistic&#39; was changed from &#39;error&#39; to &#39;logloss&#39;. Explicitly set eval_metric if you&#39;d like to restore the old behavior.
+## INFO  [13:31:11.537] [mlr3]  Applying learner &#39;classif.xgboost&#39; on task &#39;pima&#39; (iter 1/1) 
+## [13:31:11] WARNING: amalgamation/../src/learner.cc:1095: Starting in XGBoost 1.3.0, the default evaluation metric used with the objective &#39;binary:logistic&#39; was changed from &#39;error&#39; to &#39;logloss&#39;. Explicitly set eval_metric if you&#39;d like to restore the old behavior.
+## INFO  [13:31:11.546] [mlr3]  Applying learner &#39;classif.xgboost&#39; on task &#39;pima&#39; (iter 1/1) 
+## [13:31:11] WARNING: amalgamation/../src/learner.cc:1095: Starting in XGBoost 1.3.0, the default evaluation metric used with the objective &#39;binary:logistic&#39; was changed from &#39;error&#39; to &#39;logloss&#39;. Explicitly set eval_metric if you&#39;d like to restore the old behavior.
+## INFO  [13:31:11.554] [mlr3]  Applying learner &#39;classif.xgboost&#39; on task &#39;pima&#39; (iter 1/1) 
+## [13:31:11] WARNING: amalgamation/../src/learner.cc:1095: Starting in XGBoost 1.3.0, the default evaluation metric used with the objective &#39;binary:logistic&#39; was changed from &#39;error&#39; to &#39;logloss&#39;. Explicitly set eval_metric if you&#39;d like to restore the old behavior.
+## INFO  [13:31:11.565] [mlr3]  Applying learner &#39;classif.xgboost&#39; on task &#39;pima&#39; (iter 1/1) 
+## [13:31:11] WARNING: amalgamation/../src/learner.cc:1095: Starting in XGBoost 1.3.0, the default evaluation metric used with the objective &#39;binary:logistic&#39; was changed from &#39;error&#39; to &#39;logloss&#39;. Explicitly set eval_metric if you&#39;d like to restore the old behavior.
+## INFO  [13:31:11.573] [mlr3]  Applying learner &#39;classif.xgboost&#39; on task &#39;pima&#39; (iter 1/1) 
+## [13:31:11] WARNING: amalgamation/../src/learner.cc:1095: Starting in XGBoost 1.3.0, the default evaluation metric used with the objective &#39;binary:logistic&#39; was changed from &#39;error&#39; to &#39;logloss&#39;. Explicitly set eval_metric if you&#39;d like to restore the old behavior.
+## INFO  [13:31:11.583] [mlr3]  Applying learner &#39;classif.xgboost&#39; on task &#39;pima&#39; (iter 1/1) 
+## [13:31:11] WARNING: amalgamation/../src/learner.cc:1095: Starting in XGBoost 1.3.0, the default evaluation metric used with the objective &#39;binary:logistic&#39; was changed from &#39;error&#39; to &#39;logloss&#39;. Explicitly set eval_metric if you&#39;d like to restore the old behavior.
+## INFO  [13:31:11.593] [mlr3]  Applying learner &#39;classif.xgboost&#39; on task &#39;pima&#39; (iter 1/1) 
+## [13:31:11] WARNING: amalgamation/../src/learner.cc:1095: Starting in XGBoost 1.3.0, the default evaluation metric used with the objective &#39;binary:logistic&#39; was changed from &#39;error&#39; to &#39;logloss&#39;. Explicitly set eval_metric if you&#39;d like to restore the old behavior.
+## INFO  [13:31:11.602] [mlr3]  Applying learner &#39;classif.xgboost&#39; on task &#39;pima&#39; (iter 1/1) 
+## [13:31:11] WARNING: amalgamation/../src/learner.cc:1095: Starting in XGBoost 1.3.0, the default evaluation metric used with the objective &#39;binary:logistic&#39; was changed from &#39;error&#39; to &#39;logloss&#39;. Explicitly set eval_metric if you&#39;d like to restore the old behavior.
+## INFO  [13:31:11.612] [mlr3]  Applying learner &#39;classif.xgboost&#39; on task &#39;pima&#39; (iter 1/1) 
+## [13:31:11] WARNING: amalgamation/../src/learner.cc:1095: Starting in XGBoost 1.3.0, the default evaluation metric used with the objective &#39;binary:logistic&#39; was changed from &#39;error&#39; to &#39;logloss&#39;. Explicitly set eval_metric if you&#39;d like to restore the old behavior.
+## INFO  [13:31:11.620] [mlr3]  Applying learner &#39;classif.xgboost&#39; on task &#39;pima&#39; (iter 1/1) 
+## [13:31:11] WARNING: amalgamation/../src/learner.cc:1095: Starting in XGBoost 1.3.0, the default evaluation metric used with the objective &#39;binary:logistic&#39; was changed from &#39;error&#39; to &#39;logloss&#39;. Explicitly set eval_metric if you&#39;d like to restore the old behavior.
+## INFO  [13:31:11.630] [mlr3]  Applying learner &#39;classif.xgboost&#39; on task &#39;pima&#39; (iter 1/1) 
+## [13:31:11] WARNING: amalgamation/../src/learner.cc:1095: Starting in XGBoost 1.3.0, the default evaluation metric used with the objective &#39;binary:logistic&#39; was changed from &#39;error&#39; to &#39;logloss&#39;. Explicitly set eval_metric if you&#39;d like to restore the old behavior.
+## INFO  [13:31:11.638] [mlr3]  Applying learner &#39;classif.xgboost&#39; on task &#39;pima&#39; (iter 1/1) 
+## [13:31:11] WARNING: amalgamation/../src/learner.cc:1095: Starting in XGBoost 1.3.0, the default evaluation metric used with the objective &#39;binary:logistic&#39; was changed from &#39;error&#39; to &#39;logloss&#39;. Explicitly set eval_metric if you&#39;d like to restore the old behavior.
+## INFO  [13:31:11.647] [mlr3]  Applying learner &#39;classif.xgboost&#39; on task &#39;pima&#39; (iter 1/1) 
+## [13:31:11] WARNING: amalgamation/../src/learner.cc:1095: Starting in XGBoost 1.3.0, the default evaluation metric used with the objective &#39;binary:logistic&#39; was changed from &#39;error&#39; to &#39;logloss&#39;. Explicitly set eval_metric if you&#39;d like to restore the old behavior.
+## INFO  [13:31:11.656] [mlr3]  Finished benchmark 
+## INFO  [13:31:12.657] [mlr3]  Running benchmark with 4 resampling iterations 
+## INFO  [13:31:12.663] [mlr3]  Applying learner &#39;classif.xgboost&#39; on task &#39;pima&#39; (iter 1/1) 
+## [13:31:12] WARNING: amalgamation/../src/learner.cc:1095: Starting in XGBoost 1.3.0, the default evaluation metric used with the objective &#39;binary:logistic&#39; was changed from &#39;error&#39; to &#39;logloss&#39;. Explicitly set eval_metric if you&#39;d like to restore the old behavior.
+## INFO  [13:31:12.676] [mlr3]  Applying learner &#39;classif.xgboost&#39; on task &#39;pima&#39; (iter 1/1) 
+## [13:31:12] WARNING: amalgamation/../src/learner.cc:1095: Starting in XGBoost 1.3.0, the default evaluation metric used with the objective &#39;binary:logistic&#39; was changed from &#39;error&#39; to &#39;logloss&#39;. Explicitly set eval_metric if you&#39;d like to restore the old behavior.
+## INFO  [13:31:12.686] [mlr3]  Applying learner &#39;classif.xgboost&#39; on task &#39;pima&#39; (iter 1/1) 
+## [13:31:12] WARNING: amalgamation/../src/learner.cc:1095: Starting in XGBoost 1.3.0, the default evaluation metric used with the objective &#39;binary:logistic&#39; was changed from &#39;error&#39; to &#39;logloss&#39;. Explicitly set eval_metric if you&#39;d like to restore the old behavior.
+## INFO  [13:31:12.695] [mlr3]  Applying learner &#39;classif.xgboost&#39; on task &#39;pima&#39; (iter 1/1) 
+## [13:31:12] WARNING: amalgamation/../src/learner.cc:1095: Starting in XGBoost 1.3.0, the default evaluation metric used with the objective &#39;binary:logistic&#39; was changed from &#39;error&#39; to &#39;logloss&#39;. Explicitly set eval_metric if you&#39;d like to restore the old behavior.
+## INFO  [13:31:12.704] [mlr3]  Finished benchmark 
+## INFO  [13:31:12.981] [mlr3]  Running benchmark with 1 resampling iterations 
+## INFO  [13:31:12.989] [mlr3]  Applying learner &#39;classif.xgboost&#39; on task &#39;pima&#39; (iter 1/1) 
+## [13:31:12] WARNING: amalgamation/../src/learner.cc:1095: Starting in XGBoost 1.3.0, the default evaluation metric used with the objective &#39;binary:logistic&#39; was changed from &#39;error&#39; to &#39;logloss&#39;. Explicitly set eval_metric if you&#39;d like to restore the old behavior.
+## INFO  [13:31:13.020] [mlr3]  Finished benchmark 
+## INFO  [13:31:13.300] [mlr3]  Running benchmark with 6 resampling iterations 
+## INFO  [13:31:13.305] [mlr3]  Applying learner &#39;classif.xgboost&#39; on task &#39;pima&#39; (iter 1/1) 
+## [13:31:13] WARNING: amalgamation/../src/learner.cc:1095: Starting in XGBoost 1.3.0, the default evaluation metric used with the objective &#39;binary:logistic&#39; was changed from &#39;error&#39; to &#39;logloss&#39;. Explicitly set eval_metric if you&#39;d like to restore the old behavior.
+## INFO  [13:31:13.320] [mlr3]  Applying learner &#39;classif.xgboost&#39; on task &#39;pima&#39; (iter 1/1) 
+## [13:31:13] WARNING: amalgamation/../src/learner.cc:1095: Starting in XGBoost 1.3.0, the default evaluation metric used with the objective &#39;binary:logistic&#39; was changed from &#39;error&#39; to &#39;logloss&#39;. Explicitly set eval_metric if you&#39;d like to restore the old behavior.
+## INFO  [13:31:13.333] [mlr3]  Applying learner &#39;classif.xgboost&#39; on task &#39;pima&#39; (iter 1/1) 
+## [13:31:13] WARNING: amalgamation/../src/learner.cc:1095: Starting in XGBoost 1.3.0, the default evaluation metric used with the objective &#39;binary:logistic&#39; was changed from &#39;error&#39; to &#39;logloss&#39;. Explicitly set eval_metric if you&#39;d like to restore the old behavior.
+## INFO  [13:31:13.343] [mlr3]  Applying learner &#39;classif.xgboost&#39; on task &#39;pima&#39; (iter 1/1) 
+## [13:31:13] WARNING: amalgamation/../src/learner.cc:1095: Starting in XGBoost 1.3.0, the default evaluation metric used with the objective &#39;binary:logistic&#39; was changed from &#39;error&#39; to &#39;logloss&#39;. Explicitly set eval_metric if you&#39;d like to restore the old behavior.
+## INFO  [13:31:13.356] [mlr3]  Applying learner &#39;classif.xgboost&#39; on task &#39;pima&#39; (iter 1/1) 
+## [13:31:13] WARNING: amalgamation/../src/learner.cc:1095: Starting in XGBoost 1.3.0, the default evaluation metric used with the objective &#39;binary:logistic&#39; was changed from &#39;error&#39; to &#39;logloss&#39;. Explicitly set eval_metric if you&#39;d like to restore the old behavior.
+## INFO  [13:31:13.370] [mlr3]  Applying learner &#39;classif.xgboost&#39; on task &#39;pima&#39; (iter 1/1) 
+## [13:31:13] WARNING: amalgamation/../src/learner.cc:1095: Starting in XGBoost 1.3.0, the default evaluation metric used with the objective &#39;binary:logistic&#39; was changed from &#39;error&#39; to &#39;logloss&#39;. Explicitly set eval_metric if you&#39;d like to restore the old behavior.
+## INFO  [13:31:13.385] [mlr3]  Finished benchmark 
+## INFO  [13:31:13.765] [mlr3]  Running benchmark with 1 resampling iterations 
+## INFO  [13:31:13.773] [mlr3]  Applying learner &#39;classif.xgboost&#39; on task &#39;pima&#39; (iter 1/1) 
+## [13:31:13] WARNING: amalgamation/../src/learner.cc:1095: Starting in XGBoost 1.3.0, the default evaluation metric used with the objective &#39;binary:logistic&#39; was changed from &#39;error&#39; to &#39;logloss&#39;. Explicitly set eval_metric if you&#39;d like to restore the old behavior.
+## INFO  [13:31:13.814] [mlr3]  Finished benchmark 
+## INFO  [13:31:13.979] [mlr3]  Running benchmark with 3 resampling iterations 
+## INFO  [13:31:13.985] [mlr3]  Applying learner &#39;classif.xgboost&#39; on task &#39;pima&#39; (iter 1/1) 
+## [13:31:13] WARNING: amalgamation/../src/learner.cc:1095: Starting in XGBoost 1.3.0, the default evaluation metric used with the objective &#39;binary:logistic&#39; was changed from &#39;error&#39; to &#39;logloss&#39;. Explicitly set eval_metric if you&#39;d like to restore the old behavior.
+## INFO  [13:31:14.011] [mlr3]  Applying learner &#39;classif.xgboost&#39; on task &#39;pima&#39; (iter 1/1) 
+## [13:31:14] WARNING: amalgamation/../src/learner.cc:1095: Starting in XGBoost 1.3.0, the default evaluation metric used with the objective &#39;binary:logistic&#39; was changed from &#39;error&#39; to &#39;logloss&#39;. Explicitly set eval_metric if you&#39;d like to restore the old behavior.
+## INFO  [13:31:14.022] [mlr3]  Applying learner &#39;classif.xgboost&#39; on task &#39;pima&#39; (iter 1/1) 
+## [13:31:14] WARNING: amalgamation/../src/learner.cc:1095: Starting in XGBoost 1.3.0, the default evaluation metric used with the objective &#39;binary:logistic&#39; was changed from &#39;error&#39; to &#39;logloss&#39;. Explicitly set eval_metric if you&#39;d like to restore the old behavior.
+## INFO  [13:31:14.101] [mlr3]  Finished benchmark</code></pre>
+<pre><code>##    nrounds       eta  booster learner_param_vals  x_domain classif.tpr
+## 1:       4 0.7927383 gblinear          &lt;list[5]&gt; &lt;list[3]&gt;  0.10989011
+## 2:       4 0.5855656 gblinear          &lt;list[5]&gt; &lt;list[3]&gt;  0.05494505
+## 3:       4 0.3699073 gblinear          &lt;list[5]&gt; &lt;list[3]&gt;  0.01098901
+## 4:      16 0.3063113     dart          &lt;list[5]&gt; &lt;list[3]&gt;  0.64835165
+## 5:      16 0.3554347   gbtree          &lt;list[5]&gt; &lt;list[3]&gt;  0.62637363
+##    classif.fpr
+## 1:  0.03030303
+## 2:  0.02424242
+## 3:  0.00000000
+## 4:  0.20000000
+## 5:  0.17575758</code></pre>
+<p>现在的结果不是一个单一的最佳配置，而是一个估计的帕累托前沿。关于fpr和tpr性能度量，所有的红点并不受其他参数配置的控制。</p>
+<pre class="r"><code>instance$result</code></pre>
+<pre><code>##    nrounds       eta  booster learner_param_vals  x_domain classif.tpr
+## 1:       4 0.7927383 gblinear          &lt;list[5]&gt; &lt;list[3]&gt;  0.10989011
+## 2:       4 0.5855656 gblinear          &lt;list[5]&gt; &lt;list[3]&gt;  0.05494505
+## 3:       4 0.3699073 gblinear          &lt;list[5]&gt; &lt;list[3]&gt;  0.01098901
+## 4:      16 0.3063113     dart          &lt;list[5]&gt; &lt;list[3]&gt;  0.64835165
+## 5:      16 0.3554347   gbtree          &lt;list[5]&gt; &lt;list[3]&gt;  0.62637363
+##    classif.fpr
+## 1:  0.03030303
+## 2:  0.02424242
+## 3:  0.00000000
+## 4:  0.20000000
+## 5:  0.17575758</code></pre>
+<pre class="r"><code>plot(classif.tpr~classif.fpr, instance$archive$data)
+points(classif.tpr~classif.fpr, instance$result, col = &quot;red&quot;)</code></pre>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-51-1.png" width="672" /></p>
+</div>
+<div id="特征选择和过滤" class="section level2">
+<h2>特征选择和过滤</h2>
+<p>通常，数据集包含大量的特性。提取相关特征子集的技术称为“特征选择”。</p>
+<p>特征选择的目标是将模型的稀疏依赖以最合适的方式拟合到可用数据特征的子集上。特征选择可以提高模型的可解释性，加快学习过程，提高学习器的学习性能。有不同的方法来识别相关的特征。文献中强调了两种不同的方法：一种称为过滤，另一种通常称为特征子集选择或包装器方法。</p>
+<p>区别是什么？</p>
+<ul>
+<li>过滤：外部算法计算特征的等级(例如，基于与响应的相关性)。然后，特征被特定的标准子集，例如一个绝对数量或变量数量的百分比。选择的特性将用于适应模型（通过调优选择可选的超参数）。在计算时间方面，这种计算通常比“特征子集选择”更便宜。所有过滤器通过mlr3filers包连接。</li>
+<li>包装器方法：这里没有对功能进行排名。相反，优化算法选择特征的子集，通过计算重新采样的预测性能来评估集合，然后提出一组新的特征(或终止)。一个简单的例子是顺序向前选择。该方法通常需要大量的模型拟合，计算量很大。此外，严格地说，在估计性能之前，所有这些模型都需要进行调优。这将需要在CV设置中增加一个嵌套级别。在完成所有这些步骤之后，最后一组选定的特性将再次得到满足（通过调优选择可选的超参数）。包装器方法在mlr3fselect包中实现。</li>
+<li>嵌入方法：许多学习器在内部选择他们认为有助于预测的特征子集。这些子集通常可以被查询，如下例所示：</li>
+</ul>
+<pre class="r"><code>library(&quot;mlr3verse&quot;)
+
+task = tsk(&quot;iris&quot;)
+learner = lrn(&quot;classif.rpart&quot;)
+
+# ensure that the learner selects features
+stopifnot(&quot;selected_features&quot; %in% learner$properties)
+
+# fit a simple classification tree
+learner = learner$train(task)
+
+# extract all features used in the classification tree:
+learner$selected_features()</code></pre>
+<pre><code>## [1] &quot;Petal.Length&quot; &quot;Petal.Width&quot;</code></pre>
+<p>也有集成过滤器建立在叠加单过滤器方法的思想上。这些还没有实现。</p>
+<div id="过滤器" class="section level3">
+<h3>过滤器</h3>
+<p>过滤方法为每个特性分配一个重要值。根据这些值可以对特征进行排名。然后，我们可以选择一个特征子集。<a href="https://mlr3book.mlr-org.com/appendix.html#list-filters">附录</a>中列出了所有已实现的过滤器方法。</p>
+</div>
+<div id="计算过滤值" class="section level3">
+<h3>计算过滤值</h3>
+<p>目前，只支持分类和回归任务。</p>
+<p>第一步是使用所需的过滤器方法的类创建一个新的R对象。与mlr3中的其他实例类似，这些实例使用关联的快捷函数<code>flt()</code>在字典(mlr_filters)中注册。Filter类的每个对象都有一个<code>.$calculate()</code>方法，该方法计算过滤值并按降序排列。</p>
+<pre class="r"><code>filter = flt(&quot;jmim&quot;)
+
+task = tsk(&quot;iris&quot;)
+filter$calculate(task)
+
+as.data.table(filter)</code></pre>
+<pre><code>##         feature     score
+## 1:  Petal.Width 1.0000000
+## 2: Sepal.Length 0.6666667
+## 3: Petal.Length 0.3333333
+## 4:  Sepal.Width 0.0000000</code></pre>
+<p>一些过滤器支持更改特定的超参数。这类似于使用。<code>$param_set$values</code>设置学习者的超参数：</p>
+<pre class="r"><code>filter_cor = flt(&quot;correlation&quot;)
+filter_cor$param_set</code></pre>
+<pre><code>## &lt;ParamSet&gt;
+##        id    class lower upper nlevels    default value
+## 1:    use ParamFct    NA    NA       5 everything      
+## 2: method ParamFct    NA    NA       3    pearson</code></pre>
+<pre class="r"><code># change parameter &#39;method&#39;
+filter_cor$param_set$values = list(method = &quot;spearman&quot;)
+filter_cor$param_set</code></pre>
+<pre><code>## &lt;ParamSet&gt;
+##        id    class lower upper nlevels    default    value
+## 1:    use ParamFct    NA    NA       5 everything         
+## 2: method ParamFct    NA    NA       3    pearson spearman</code></pre>
+</div>
+<div id="变量重要性过滤器" class="section level3">
+<h3>变量重要性过滤器</h3>
+<p>所有具有“重要性”属性的学习器都具有综合特征选择方法。</p>
+<p>对于一些学习器，需要在学习器创建过程中设置所需的过滤方法。例如，分类学习器classif.ranger自带多种集成方法，c.f. <code>ranger::ranger()</code>的帮助页面。要使用方法“impurity”，你需要在构造期间设置过滤方法。</p>
+<pre class="r"><code>lrn = lrn(&quot;classif.ranger&quot;, importance = &quot;impurity&quot;)</code></pre>
+<p>现在你可以对嵌入算法的方法使用FilterImportance过滤器类：</p>
+<pre class="r"><code>task = tsk(&quot;iris&quot;)
+filter = flt(&quot;importance&quot;, learner = lrn)
+filter$calculate(task)
+head(as.data.table(filter), 3)</code></pre>
+<pre><code>##         feature     score
+## 1:  Petal.Width 43.500627
+## 2: Petal.Length 43.274221
+## 3: Sepal.Length  9.993514</code></pre>
+</div>
+<div id="包装器方法" class="section level3">
+<h3>包装器方法</h3>
+<p>通过mlr3fselect扩展包支持包装器特性选择。在mlr3fselect的核心是R6类：</p>
+<ul>
+<li>FSelectInstanceSingleCrit、FSelectInstanceMultiCrit：这两个类描述了特性选择问题并存储结果。</li>
+<li>FSelector：这个类是实现特征选择算法的基类。</li>
+</ul>
+</div>
+<div id="fselectinstance类" class="section level3">
+<h3>FSelectInstance类</h3>
+<p>下面的小节检查了用于预测患者是否患有糖尿病的Pima数据集上的特征选择。</p>
+<pre class="r"><code>task = tsk(&quot;pima&quot;)
+print(task)</code></pre>
+<pre><code>## &lt;TaskClassif:pima&gt; (768 x 9)
+## * Target: diabetes
+## * Properties: twoclass
+## * Features (8):
+##   - dbl (8): age, glucose, insulin, mass, pedigree, pregnant, pressure,
+##     triceps</code></pre>
+<p>我们使用rpart中的分类树。</p>
+<pre class="r"><code>learner = lrn(&quot;classif.rpart&quot;)</code></pre>
+<p>接下来，我们需要指定如何评估特征子集的性能。为此，我们需要选择重采样策略和性能度量。</p>
+<pre class="r"><code>hout = rsmp(&quot;holdout&quot;)
+measure = msr(&quot;classif.ce&quot;)</code></pre>
+<p>最后，必须为特性选择选择可用的预算。</p>
+<p>在这个简短的介绍中，我们指定了20次计算的预算，然后把所有的东西放在一个FSelectInstanceSingleCrit中：</p>
+<pre class="r"><code>evals20 = trm(&quot;evals&quot;, n_evals = 20)
+
+instance = FSelectInstanceSingleCrit$new(
+  task = task,
+  learner = learner,
+  resampling = hout,
+  measure = measure,
+  terminator = evals20
+)
+instance</code></pre>
+<pre><code>## &lt;FSelectInstanceSingleCrit&gt;
+## * State:  Not optimized
+## * Objective: &lt;ObjectiveFSelect:classif.rpart_on_pima&gt;
+## * Search Space:
+## &lt;ParamSet&gt;
+##          id    class lower upper nlevels        default value
+## 1:      age ParamLgl    NA    NA       2 &lt;NoDefault[3]&gt;      
+## 2:  glucose ParamLgl    NA    NA       2 &lt;NoDefault[3]&gt;      
+## 3:  insulin ParamLgl    NA    NA       2 &lt;NoDefault[3]&gt;      
+## 4:     mass ParamLgl    NA    NA       2 &lt;NoDefault[3]&gt;      
+## 5: pedigree ParamLgl    NA    NA       2 &lt;NoDefault[3]&gt;      
+## 6: pregnant ParamLgl    NA    NA       2 &lt;NoDefault[3]&gt;      
+## 7: pressure ParamLgl    NA    NA       2 &lt;NoDefault[3]&gt;      
+## 8:  triceps ParamLgl    NA    NA       2 &lt;NoDefault[3]&gt;      
+## * Terminator: &lt;TerminatorEvals&gt;
+## * Terminated: FALSE
+## * Archive:
+## &lt;ArchiveFSelect&gt;
+## Null data.table (0 rows and 0 cols)</code></pre>
+<p>为了开始特征选择，我们仍然需要选择一个通过FSelector类定义的算法。</p>
+</div>
+<div id="fselector类" class="section level3">
+<h3>FSelector类</h3>
+<p>以下算法目前在mlr3fselect中实现：</p>
+<ul>
+<li>随机搜索 FSelectorRandomSearch</li>
+<li>穷举搜索 FSelectorExhaustiveSearch</li>
+<li>顺序搜索 FSelectorSequential</li>
+<li>递归特征消除 FSelectorRFE</li>
+<li>设计点 FSelectorDesignPoints</li>
+</ul>
+<p>在这个例子中，我们将使用一个简单的随机搜索，并使用<code>fs()</code>函数从字典mlr_fselectors中检索它：</p>
+<pre class="r"><code>fselector = fs(&quot;random_search&quot;)</code></pre>
+</div>
+<div id="触发调优-1" class="section level3">
+<h3>触发调优</h3>
+<p>要开始特性选择，我们只需将FSelectInstanceSingleCrit传递给初始化的FSelector的<code>$optimize()</code>方法。算法如下所示：</p>
+<ol style="list-style-type: decimal">
+<li>FSelector至少提出一个特征子集，也可以提出多个子集来提高并行性，可以通过设置batch_size来控制。</li>
+<li>对于每个特征子集，给定的学习器使用提供的重采样对任务进行拟合。所有的计算都存储在FSelectInstanceSingleCrit的存档中。</li>
+<li>如果预算耗尽，终结者会被询问。如果预算未耗尽，则使用第一步重新启动，直到耗尽为止。</li>
+<li>确定观察性能最好的特征子集。</li>
+<li>将最佳特性子集作为结果存储在实例对象中。可以从实例访问最佳特性子集(<code>$result_feature_set</code>)和相应的测量性能(<code>$result_y</code>)。</li>
+</ol>
+<pre class="r"><code># reduce logging output
+lgr::get_logger(&quot;bbotk&quot;)$set_threshold(&quot;warn&quot;)
+
+fselector$optimize(instance)</code></pre>
+<pre><code>## INFO  [13:31:15.787] [mlr3]  Running benchmark with 10 resampling iterations 
+## INFO  [13:31:15.792] [mlr3]  Applying learner &#39;select.classif.rpart&#39; on task &#39;pima&#39; (iter 1/1) 
+## INFO  [13:31:15.841] [mlr3]  Applying learner &#39;select.classif.rpart&#39; on task &#39;pima&#39; (iter 1/1) 
+## INFO  [13:31:15.891] [mlr3]  Applying learner &#39;select.classif.rpart&#39; on task &#39;pima&#39; (iter 1/1) 
+## INFO  [13:31:15.940] [mlr3]  Applying learner &#39;select.classif.rpart&#39; on task &#39;pima&#39; (iter 1/1) 
+## INFO  [13:31:16.010] [mlr3]  Applying learner &#39;select.classif.rpart&#39; on task &#39;pima&#39; (iter 1/1) 
+## INFO  [13:31:16.077] [mlr3]  Applying learner &#39;select.classif.rpart&#39; on task &#39;pima&#39; (iter 1/1) 
+## INFO  [13:31:16.133] [mlr3]  Applying learner &#39;select.classif.rpart&#39; on task &#39;pima&#39; (iter 1/1) 
+## INFO  [13:31:16.182] [mlr3]  Applying learner &#39;select.classif.rpart&#39; on task &#39;pima&#39; (iter 1/1) 
+## INFO  [13:31:16.243] [mlr3]  Applying learner &#39;select.classif.rpart&#39; on task &#39;pima&#39; (iter 1/1) 
+## INFO  [13:31:16.310] [mlr3]  Applying learner &#39;select.classif.rpart&#39; on task &#39;pima&#39; (iter 1/1) 
+## INFO  [13:31:16.368] [mlr3]  Finished benchmark 
+## INFO  [13:31:17.204] [mlr3]  Running benchmark with 10 resampling iterations 
+## INFO  [13:31:17.210] [mlr3]  Applying learner &#39;select.classif.rpart&#39; on task &#39;pima&#39; (iter 1/1) 
+## INFO  [13:31:17.257] [mlr3]  Applying learner &#39;select.classif.rpart&#39; on task &#39;pima&#39; (iter 1/1) 
+## INFO  [13:31:17.306] [mlr3]  Applying learner &#39;select.classif.rpart&#39; on task &#39;pima&#39; (iter 1/1) 
+## INFO  [13:31:17.355] [mlr3]  Applying learner &#39;select.classif.rpart&#39; on task &#39;pima&#39; (iter 1/1) 
+## INFO  [13:31:17.418] [mlr3]  Applying learner &#39;select.classif.rpart&#39; on task &#39;pima&#39; (iter 1/1) 
+## INFO  [13:31:17.484] [mlr3]  Applying learner &#39;select.classif.rpart&#39; on task &#39;pima&#39; (iter 1/1) 
+## INFO  [13:31:17.541] [mlr3]  Applying learner &#39;select.classif.rpart&#39; on task &#39;pima&#39; (iter 1/1) 
+## INFO  [13:31:17.597] [mlr3]  Applying learner &#39;select.classif.rpart&#39; on task &#39;pima&#39; (iter 1/1) 
+## INFO  [13:31:17.663] [mlr3]  Applying learner &#39;select.classif.rpart&#39; on task &#39;pima&#39; (iter 1/1) 
+## INFO  [13:31:17.726] [mlr3]  Applying learner &#39;select.classif.rpart&#39; on task &#39;pima&#39; (iter 1/1) 
+## INFO  [13:31:17.777] [mlr3]  Finished benchmark</code></pre>
+<pre><code>##     age glucose insulin mass pedigree pregnant pressure triceps
+## 1: TRUE    TRUE    TRUE TRUE     TRUE     TRUE    FALSE   FALSE
+##                                      features classif.ce
+## 1: age,glucose,insulin,mass,pedigree,pregnant  0.2382812</code></pre>
+<pre class="r"><code>instance$result_feature_set</code></pre>
+<pre><code>## [1] &quot;age&quot;      &quot;glucose&quot;  &quot;insulin&quot;  &quot;mass&quot;     &quot;pedigree&quot; &quot;pregnant&quot;</code></pre>
+<pre class="r"><code>instance$result_y</code></pre>
+<pre><code>## classif.ce 
+##  0.2382812</code></pre>
+<p>我们可以调查所有已经进行的重采样，因为它们存储在FSelectInstanceSingleCrit的存档中，可以使用<code>as.data.table()</code>访问：</p>
+<pre class="r"><code>as.data.table(instance$archive)</code></pre>
+<pre><code>##       age glucose insulin  mass pedigree pregnant pressure triceps classif.ce
+##  1:  TRUE    TRUE    TRUE  TRUE     TRUE     TRUE    FALSE   FALSE  0.2382812
+##  2:  TRUE    TRUE    TRUE FALSE    FALSE     TRUE    FALSE    TRUE  0.2539062
+##  3: FALSE   FALSE   FALSE  TRUE    FALSE     TRUE    FALSE   FALSE  0.3828125
+##  4: FALSE    TRUE   FALSE  TRUE    FALSE    FALSE    FALSE    TRUE  0.2421875
+##  5:  TRUE    TRUE   FALSE  TRUE    FALSE     TRUE    FALSE   FALSE  0.2421875
+##  6:  TRUE   FALSE    TRUE  TRUE     TRUE    FALSE    FALSE    TRUE  0.3046875
+##  7: FALSE   FALSE    TRUE FALSE    FALSE    FALSE    FALSE   FALSE  0.3554688
+##  8:  TRUE   FALSE    TRUE FALSE     TRUE     TRUE     TRUE   FALSE  0.3203125
+##  9:  TRUE   FALSE    TRUE FALSE    FALSE    FALSE    FALSE    TRUE  0.3125000
+## 10:  TRUE    TRUE   FALSE FALSE    FALSE     TRUE    FALSE   FALSE  0.2656250
+## 11:  TRUE    TRUE    TRUE FALSE     TRUE     TRUE     TRUE    TRUE  0.2695312
+## 12:  TRUE    TRUE   FALSE  TRUE    FALSE     TRUE     TRUE    TRUE  0.2617188
+## 13:  TRUE    TRUE    TRUE FALSE    FALSE    FALSE     TRUE    TRUE  0.2578125
+## 14:  TRUE    TRUE    TRUE  TRUE     TRUE     TRUE     TRUE    TRUE  0.2382812
+## 15:  TRUE    TRUE   FALSE  TRUE    FALSE     TRUE     TRUE    TRUE  0.2617188
+## 16: FALSE   FALSE    TRUE FALSE    FALSE    FALSE     TRUE   FALSE  0.3476562
+## 17:  TRUE   FALSE    TRUE FALSE     TRUE     TRUE     TRUE    TRUE  0.3750000
+## 18:  TRUE    TRUE    TRUE  TRUE     TRUE     TRUE     TRUE    TRUE  0.2382812
+## 19:  TRUE    TRUE    TRUE  TRUE     TRUE     TRUE    FALSE    TRUE  0.2382812
+## 20: FALSE    TRUE   FALSE FALSE     TRUE    FALSE    FALSE   FALSE  0.2812500
+##                                    uhash           timestamp batch_nr
+##  1: 39a6f9df-c819-46f5-a9d4-a45a6c08e3cb 2021-09-02 13:31:16        1
+##  2: 25f90820-66ab-4b94-aac8-e455c107c225 2021-09-02 13:31:16        1
+##  3: e8d02508-b027-4c35-91ea-406d63b67d0c 2021-09-02 13:31:16        1
+##  4: 01855511-59b0-44cb-83bc-6b2c93254f1e 2021-09-02 13:31:16        1
+##  5: b9ec572a-efaa-48e7-9dda-3a35a917ce8c 2021-09-02 13:31:16        1
+##  6: a9e305d7-5775-40b1-8148-ec154649a743 2021-09-02 13:31:16        1
+##  7: 8d00ded7-2f31-410d-b49e-ddb52b196850 2021-09-02 13:31:16        1
+##  8: 66ada257-b331-44da-9520-7a09ebcf65f0 2021-09-02 13:31:16        1
+##  9: ebeee1f7-cf97-4269-9a67-07852e4f6acf 2021-09-02 13:31:16        1
+## 10: f8da3b6d-ed5c-4cb3-91fa-bd410b6b7d3a 2021-09-02 13:31:16        1
+## 11: 504138da-f6c5-47ca-8dd2-aab8636e6b9c 2021-09-02 13:31:18        2
+## 12: 1b121a02-3552-4fe9-91b7-f8476d974c8f 2021-09-02 13:31:18        2
+## 13: 9d5f6baf-0b3b-451b-8a60-0f41d5c16381 2021-09-02 13:31:18        2
+## 14: 2d45b07e-15d8-49ee-969a-5dd7f483bed3 2021-09-02 13:31:18        2
+## 15: 650e9327-2b08-46b4-bad4-b8812964c398 2021-09-02 13:31:18        2
+## 16: d2e8885e-88bf-43a1-ad49-d993f666ae00 2021-09-02 13:31:18        2
+## 17: 8d3aeabf-cd0f-4ed4-bd0c-b570641efbf9 2021-09-02 13:31:18        2
+## 18: d6d02fee-89a9-4284-a9b2-038562e30eb1 2021-09-02 13:31:18        2
+## 19: 4f2097c3-fdd6-4fb3-9c94-b5f97189da9c 2021-09-02 13:31:18        2
+## 20: c27360a8-502d-4f35-a180-60d55eb0f963 2021-09-02 13:31:18        2</code></pre>
+<p>相关的重采样迭代可以在BenchmarkResult中访问：</p>
+<pre class="r"><code>instance$archive$benchmark_result$data</code></pre>
+<pre><code>## &lt;ResultData&gt;
+##   Public:
+##     as_data_table: function (view = NULL, reassemble_learners = TRUE, convert_predictions = TRUE, 
+##     clone: function (deep = FALSE) 
+##     combine: function (rdata) 
+##     data: list
+##     initialize: function (data = NULL, store_backends = TRUE) 
+##     iterations: function (view = NULL) 
+##     learners: function (view = NULL, states = TRUE, reassemble = TRUE) 
+##     logs: function (view = NULL, condition) 
+##     prediction: function (view = NULL, predict_sets = &quot;test&quot;) 
+##     predictions: function (view = NULL, predict_sets = &quot;test&quot;) 
+##     resamplings: function (view = NULL) 
+##     sweep: function () 
+##     task_type: active binding
+##     tasks: function (view = NULL) 
+##     uhashes: function (view = NULL) 
+##   Private:
+##     deep_clone: function (name, value) 
+##     get_view_index: function (view)</code></pre>
+<p>uhash列将重新采样迭代链接到实例<code>$archive$data()</code>中已评估的特性子集。例如，可以对所包含的ResampleResults进行不同的评分。</p>
+<p>现在，优化后的特征子集可以用来对任务进行子集化，并对所有观测值进行模型拟合。</p>
+<pre class="r"><code>task$select(instance$result_feature_set)
+learner$train(task)</code></pre>
+<p>经过训练的模型现在可以用来对外部数据进行预测。注意，应该避免根据任务中出现的观察结果进行预测。该模型在特征选择过程中已经看到了这些观察结果，因此结果在统计上是有偏差的。因此，由此产生的性能度量将过于乐观。相反，为了获得当前任务的统计无偏性能估计，需要嵌套重采样。</p>
+</div>
+<div id="自动特征选择" class="section level3">
+<h3>自动特征选择</h3>
+<p>AutoFSelector包装了一个学习器，并为给定任务添加了自动特征选择功能。因为AutoFSelector本身继承自Learner基类，所以它可以像任何其他学习者一样使用。类似于前面的小节，创建了一个新的分类树学习器。这种分类树学习器使用内部重采样(holdout)在给定任务上自动开始特征选择。我们创建了一个允许10次计算的终止符，并使用一个简单的随机搜索作为特征选择算法：</p>
+<pre class="r"><code>learner = lrn(&quot;classif.rpart&quot;)
+terminator = trm(&quot;evals&quot;, n_evals = 10)
+fselector = fs(&quot;random_search&quot;)
+
+at = AutoFSelector$new(
+  learner = learner,
+  resampling = rsmp(&quot;holdout&quot;),
+  measure = msr(&quot;classif.ce&quot;),
+  terminator = terminator,
+  fselector = fselector
+)
+at</code></pre>
+<pre><code>## &lt;AutoFSelector:classif.rpart.fselector&gt;
+## * Model: -
+## * Parameters: xval=0
+## * Packages: rpart
+## * Predict Type: response
+## * Feature types: logical, integer, numeric, factor, ordered
+## * Properties: importance, missings, multiclass, selected_features,
+##   twoclass, weights</code></pre>
+<p>我们现在可以像使用其他学习器使用它，调用<code>$train()</code>和<code>$predict()</code>方法。然而，这一次，我们将它传递给<code>benchmark()</code>，以将优化的特性子集与完整的特性集进行比较。这样，AutoFSelector将在外部重采样的各自分割的训练集上进行特征选择的重采样。然后，学习器使用外部重采样的测试集进行预测。这产生了无偏的性能度量，因为测试集中的观察结果在特征选择或拟合各自的学习器时没有被使用。这被称为嵌套重采样。</p>
+<pre class="r"><code>grid = benchmark_grid(
+  task = tsk(&quot;pima&quot;),
+  learner = list(at, lrn(&quot;classif.rpart&quot;)),
+  resampling = rsmp(&quot;cv&quot;, folds = 3)
+)
+
+bmr = benchmark(grid, store_models = TRUE)</code></pre>
+<pre><code>## INFO  [13:31:18.264] [mlr3]  Running benchmark with 6 resampling iterations 
+## INFO  [13:31:18.270] [mlr3]  Applying learner &#39;classif.rpart.fselector&#39; on task &#39;pima&#39; (iter 3/3) 
+## INFO  [13:31:18.818] [mlr3]  Running benchmark with 10 resampling iterations 
+## INFO  [13:31:18.824] [mlr3]  Applying learner &#39;select.classif.rpart&#39; on task &#39;pima&#39; (iter 1/1) 
+## INFO  [13:31:18.872] [mlr3]  Applying learner &#39;select.classif.rpart&#39; on task &#39;pima&#39; (iter 1/1) 
+## INFO  [13:31:18.923] [mlr3]  Applying learner &#39;select.classif.rpart&#39; on task &#39;pima&#39; (iter 1/1) 
+## INFO  [13:31:18.972] [mlr3]  Applying learner &#39;select.classif.rpart&#39; on task &#39;pima&#39; (iter 1/1) 
+## INFO  [13:31:19.037] [mlr3]  Applying learner &#39;select.classif.rpart&#39; on task &#39;pima&#39; (iter 1/1) 
+## INFO  [13:31:19.102] [mlr3]  Applying learner &#39;select.classif.rpart&#39; on task &#39;pima&#39; (iter 1/1) 
+## INFO  [13:31:19.156] [mlr3]  Applying learner &#39;select.classif.rpart&#39; on task &#39;pima&#39; (iter 1/1) 
+## INFO  [13:31:19.275] [mlr3]  Applying learner &#39;select.classif.rpart&#39; on task &#39;pima&#39; (iter 1/1) 
+## INFO  [13:31:19.347] [mlr3]  Applying learner &#39;select.classif.rpart&#39; on task &#39;pima&#39; (iter 1/1) 
+## INFO  [13:31:19.405] [mlr3]  Applying learner &#39;select.classif.rpart&#39; on task &#39;pima&#39; (iter 1/1) 
+## INFO  [13:31:19.455] [mlr3]  Finished benchmark 
+## INFO  [13:31:19.783] [mlr3]  Applying learner &#39;classif.rpart&#39; on task &#39;pima&#39; (iter 2/3) 
+## INFO  [13:31:19.794] [mlr3]  Applying learner &#39;classif.rpart&#39; on task &#39;pima&#39; (iter 1/3) 
+## INFO  [13:31:19.814] [mlr3]  Applying learner &#39;classif.rpart.fselector&#39; on task &#39;pima&#39; (iter 2/3) 
+## INFO  [13:31:20.378] [mlr3]  Running benchmark with 10 resampling iterations 
+## INFO  [13:31:20.384] [mlr3]  Applying learner &#39;select.classif.rpart&#39; on task &#39;pima&#39; (iter 1/1) 
+## INFO  [13:31:20.457] [mlr3]  Applying learner &#39;select.classif.rpart&#39; on task &#39;pima&#39; (iter 1/1) 
+## INFO  [13:31:20.522] [mlr3]  Applying learner &#39;select.classif.rpart&#39; on task &#39;pima&#39; (iter 1/1) 
+## INFO  [13:31:20.574] [mlr3]  Applying learner &#39;select.classif.rpart&#39; on task &#39;pima&#39; (iter 1/1) 
+## INFO  [13:31:20.624] [mlr3]  Applying learner &#39;select.classif.rpart&#39; on task &#39;pima&#39; (iter 1/1) 
+## INFO  [13:31:20.672] [mlr3]  Applying learner &#39;select.classif.rpart&#39; on task &#39;pima&#39; (iter 1/1) 
+## INFO  [13:31:20.736] [mlr3]  Applying learner &#39;select.classif.rpart&#39; on task &#39;pima&#39; (iter 1/1) 
+## INFO  [13:31:20.804] [mlr3]  Applying learner &#39;select.classif.rpart&#39; on task &#39;pima&#39; (iter 1/1) 
+## INFO  [13:31:20.865] [mlr3]  Applying learner &#39;select.classif.rpart&#39; on task &#39;pima&#39; (iter 1/1) 
+## INFO  [13:31:20.949] [mlr3]  Applying learner &#39;select.classif.rpart&#39; on task &#39;pima&#39; (iter 1/1) 
+## INFO  [13:31:21.019] [mlr3]  Finished benchmark 
+## INFO  [13:31:21.368] [mlr3]  Applying learner &#39;classif.rpart.fselector&#39; on task &#39;pima&#39; (iter 1/3) 
+## INFO  [13:31:21.946] [mlr3]  Running benchmark with 10 resampling iterations 
+## INFO  [13:31:21.952] [mlr3]  Applying learner &#39;select.classif.rpart&#39; on task &#39;pima&#39; (iter 1/1) 
+## INFO  [13:31:22.000] [mlr3]  Applying learner &#39;select.classif.rpart&#39; on task &#39;pima&#39; (iter 1/1) 
+## INFO  [13:31:22.048] [mlr3]  Applying learner &#39;select.classif.rpart&#39; on task &#39;pima&#39; (iter 1/1) 
+## INFO  [13:31:22.096] [mlr3]  Applying learner &#39;select.classif.rpart&#39; on task &#39;pima&#39; (iter 1/1) 
+## INFO  [13:31:22.145] [mlr3]  Applying learner &#39;select.classif.rpart&#39; on task &#39;pima&#39; (iter 1/1) 
+## INFO  [13:31:22.220] [mlr3]  Applying learner &#39;select.classif.rpart&#39; on task &#39;pima&#39; (iter 1/1) 
+## INFO  [13:31:22.285] [mlr3]  Applying learner &#39;select.classif.rpart&#39; on task &#39;pima&#39; (iter 1/1) 
+## INFO  [13:31:22.568] [mlr3]  Applying learner &#39;select.classif.rpart&#39; on task &#39;pima&#39; (iter 1/1) 
+## INFO  [13:31:22.617] [mlr3]  Applying learner &#39;select.classif.rpart&#39; on task &#39;pima&#39; (iter 1/1) 
+## INFO  [13:31:22.663] [mlr3]  Applying learner &#39;select.classif.rpart&#39; on task &#39;pima&#39; (iter 1/1) 
+## INFO  [13:31:22.710] [mlr3]  Finished benchmark 
+## INFO  [13:31:22.983] [mlr3]  Applying learner &#39;classif.rpart&#39; on task &#39;pima&#39; (iter 3/3) 
+## INFO  [13:31:22.995] [mlr3]  Finished benchmark</code></pre>
+<pre class="r"><code>bmr$aggregate(msrs(c(&quot;classif.ce&quot;, &quot;time_train&quot;)))</code></pre>
+<pre><code>##    nr      resample_result task_id              learner_id resampling_id iters
+## 1:  1 &lt;ResampleResult[20]&gt;    pima classif.rpart.fselector            cv     3
+## 2:  2 &lt;ResampleResult[20]&gt;    pima           classif.rpart            cv     3
+##    classif.ce time_train
+## 1:  0.2617188          0
+## 2:  0.2460938          0</code></pre>
+<p>请注意，我们不期望任何显著的差异，因为我们只评估了可能的特性子集的一小部分。</p>
+<pre class="r"><code>xfun::session_info()</code></pre>
+<pre><code>## R version 4.1.0 (2021-05-18)
+## Platform: x86_64-apple-darwin17.0 (64-bit)
+## Running under: macOS Big Sur 10.16
+## 
+## Locale: en_US.UTF-8 / en_US.UTF-8 / en_US.UTF-8 / C / en_US.UTF-8 / en_US.UTF-8
+## 
+## Package version:
+##   assertthat_0.2.1      backports_1.2.1       base64enc_0.1.3      
+##   bbotk_0.3.2           blogdown_1.4          bookdown_0.23        
+##   bslib_0.2.5.1         checkmate_2.0.0       cli_3.0.1            
+##   clue_0.3-59           cluster_2.1.2         clusterCrit_1.2.8    
+##   codetools_0.2-18      colorspace_2.0-2      compiler_4.1.0       
+##   crayon_1.4.1          data.table_1.14.0     DBI_1.1.1            
+##   digest_0.6.27         distr6_1.5.6          dplyr_1.0.7          
+##   ellipsis_0.3.2        emoa_0.5-0.1          evaluate_0.14        
+##   fansi_0.5.0           farver_2.1.0          fs_1.5.0             
+##   future_1.21.0         future.apply_1.8.1    generics_0.1.0       
+##   ggplot2_3.3.5         globals_0.14.0        glue_1.4.2           
+##   graphics_4.1.0        grDevices_4.1.0       grid_4.1.0           
+##   gtable_0.3.0          highr_0.9             htmltools_0.5.1.1    
+##   httpuv_1.6.2          isoband_0.2.5         jquerylib_0.1.4      
+##   jsonlite_1.7.2        knitr_1.33            labeling_0.4.2       
+##   later_1.3.0           lattice_0.20-44       lgr_0.4.2            
+##   lifecycle_1.0.0       listenv_0.8.0         magrittr_2.0.1       
+##   markdown_1.1          MASS_7.3.54           Matrix_1.3-4         
+##   methods_4.1.0         mgcv_1.8.36           mime_0.11            
+##   mlbench_2.1.3         mlr3_0.12.0           mlr3cluster_0.1.1    
+##   mlr3data_0.5.0        mlr3filters_0.4.2     mlr3fselect_0.5.1    
+##   mlr3hyperband_0.1.2   mlr3learners_0.5.0    mlr3measures_0.3.1   
+##   mlr3misc_0.9.3        mlr3pipelines_0.3.5-1 mlr3proba_0.4.0      
+##   mlr3tuning_0.8.0      mlr3verse_0.2.2       mlr3viz_0.5.5        
+##   munsell_0.5.0         nlme_3.1.152          palmerpenguins_0.1.0 
+##   paradox_0.7.1         parallel_4.1.0        parallelly_1.27.0    
+##   pillar_1.6.2          pkgconfig_2.0.3       praznik_8.0.0        
+##   promises_1.2.0.1      PRROC_1.3.1           purrr_0.3.4          
+##   R6_2.5.1              R62S3_1.4.1           ranger_0.13.1        
+##   rappdirs_0.3.3        RColorBrewer_1.1.2    Rcpp_1.0.7           
+##   RcppEigen_0.3.3.9.1   rlang_0.4.11          rmarkdown_2.10       
+##   rpart_4.1-15          sass_0.4.0            scales_1.1.1         
+##   servr_0.23            set6_0.2.3            splines_4.1.0        
+##   stats_4.1.0           stringi_1.7.3         stringr_1.4.0        
+##   survival_3.2-12       tibble_3.1.3          tidyselect_1.1.1     
+##   tinytex_0.33          tools_4.1.0           utf8_1.2.2           
+##   utils_4.1.0           uuid_0.1-4            vctrs_0.3.8          
+##   viridisLite_0.4.0     withr_2.4.2           xfun_0.25            
+##   xgboost_1.4.1.1       yaml_2.2.1</code></pre>
+</div>
+</div>
