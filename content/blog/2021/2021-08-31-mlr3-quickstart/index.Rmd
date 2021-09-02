@@ -39,10 +39,11 @@ library("mlr3")
 task = tsk("iris")
 learner = lrn("classif.rpart")
 
-# 为任务的一个子集（前120行）训练这个学习者的模型
+# 为任务的一个子集（前120行）训练这个学习器的模型
 learner$train(task, row_ids = 1:120)
 # 决策树模型
 learner$model
+
 ```
 
 进行预测：
