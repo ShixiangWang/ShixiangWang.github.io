@@ -123,3 +123,16 @@ SLURM_ARRAY_TASK_ID 1
 | $SLURM_ARRAY_TASK_MIN     |                   | Minimum array index                        |
 
 更多的控制需要看[*Job Array Support*](https://slurm.schedmd.com/job_array.html)这篇文档。
+
+## 查看任务资源占用情况
+
+```bash
+$ export SACCT_FORMAT="JobID%20,JobName,User,Partition,NodeList,Elapsed,CPUTime,State,AllocTRES%32"
+$ sacct
+               JobID    JobName      User  Partition        NodeList    Elapsed    CPUTime      State                        AllocTRES 
+-------------------- ---------- --------- ---------- --------------- ---------- ---------- ---------- -------------------------------- 
+            249527_4   xgb_tune    zhaoqi         cn            cn12   00:26:50 1-11:46:40    RUNNING billing=80,cpu=80,mem=100G,node+ 
+            249527_1   xgb_tune    zhaoqi         cn            cn09   00:26:50 1-11:46:40    RUNNING billing=80,cpu=80,mem=100G,node+ 
+            249527_2   xgb_tune    zhaoqi         cn            cn10   00:26:50 1-11:46:40    RUNNING billing=80,cpu=80,mem=100G,node+ 
+            249527_3   xgb_tune    zhaoqi         cn            cn11   00:26:50 1-11:46:40    RUNNING billing=80,cpu=80,mem=100G,node+ 
+```

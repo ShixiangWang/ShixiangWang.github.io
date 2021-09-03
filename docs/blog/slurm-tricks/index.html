@@ -199,7 +199,16 @@
 </tbody>
 </table>
 <p>更多的控制需要看<a href="https://slurm.schedmd.com/job_array.html"><em>Job Array Support</em></a>这篇文档。</p>
-
+<h2 id="查看任务资源占用情况">查看任务资源占用情况</h2>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>$ <span style="color:#008000">export</span> <span style="color:#19177c">SACCT_FORMAT</span><span style="color:#666">=</span><span style="color:#ba2121">&#34;JobID%20,JobName,User,Partition,NodeList,Elapsed,CPUTime,State,AllocTRES%32&#34;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>$ sacct
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>               JobID    JobName      User  Partition        NodeList    Elapsed    CPUTime      State                        AllocTRES 
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>-------------------- ---------- --------- ---------- --------------- ---------- ---------- ---------- -------------------------------- 
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>            249527_4   xgb_tune    zhaoqi         cn            cn12   00:26:50 1-11:46:40    RUNNING <span style="color:#19177c">billing</span><span style="color:#666">=</span>80,cpu<span style="color:#666">=</span>80,mem<span style="color:#666">=</span>100G,node+ 
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span>            249527_1   xgb_tune    zhaoqi         cn            cn09   00:26:50 1-11:46:40    RUNNING <span style="color:#19177c">billing</span><span style="color:#666">=</span>80,cpu<span style="color:#666">=</span>80,mem<span style="color:#666">=</span>100G,node+ 
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7</span>            249527_2   xgb_tune    zhaoqi         cn            cn10   00:26:50 1-11:46:40    RUNNING <span style="color:#19177c">billing</span><span style="color:#666">=</span>80,cpu<span style="color:#666">=</span>80,mem<span style="color:#666">=</span>100G,node+ 
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">8</span>            249527_3   xgb_tune    zhaoqi         cn            cn11   00:26:50 1-11:46:40    RUNNING <span style="color:#19177c">billing</span><span style="color:#666">=</span>80,cpu<span style="color:#666">=</span>80,mem<span style="color:#666">=</span>100G,node+ 
+</code></pre></div>
 				</div>
 				<footer class="footer">
 				  <hr>
