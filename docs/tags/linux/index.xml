@@ -21,7 +21,13 @@
 在Root用户下操作：
 1yum install centos-release-scl 2yum install devtoolset-9 然后在你使用R的用户下操作：
 1# If you use your non-root account to install packages,  2# change /root to /home/your_id in the following command 3mkdir -p /root/.R 4vi /root/.R/Makevars 将下面的内容写入打开的文件，然后保存：
-1CXX11=/opt/rh/devtoolset-9/root/usr/bin/g++ -std=c++11 -fPIC 2CXX14=/opt/rh/devtoolset-9/root/usr/bin/g++ -std=c++14 -fPIC </description>
+1CXX11=/opt/rh/devtoolset-9/root/usr/bin/g++ -std=c++11 -fPIC 2CXX14=/opt/rh/devtoolset-9/root/usr/bin/g++ -std=c++14 -fPIC 如果没有root权限，可以通过conda来安装新版本的gcc,c++等：
+1conda install gcc_linux-64 2conda install gxx_linux-64  加上conda-forge通道也可以。
+ 另外可以一键安装常用的编译器：
+1conda install -c conda-forge compilers 安装完成后记得添加环境变量：
+1export CC=/path/to/anaconda/bin/x86_64-conda_cos6-linux-gnu-gcc 2export CXX=/path/to/anaconda/bin/x86_64-conda_cos6-linux-gnu-g++ 如果是R包编译，修改前面提到的Makevars文件即可。
+如果使用的是miniconda，这个文件的内容可能就是这样的了：
+1CXX11=~/miniconda3/bin/x86_64-conda-linux-gnu-g++ -std=c++11 -fPIC 2CXX14=~/miniconda3/bin/x86_64-conda-linux-gnu-g++ -std=c++14 -fPIC 这样就可以愉快地安装包了：</description>
     </item>
     
     <item>
