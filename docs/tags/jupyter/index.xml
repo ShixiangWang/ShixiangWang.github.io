@@ -16,8 +16,8 @@
       
       <guid>/blog/jupyter-notebook-plugin-configs/</guid>
       <description>安装命令：
-1pip3 install -U jupyter_contrib_nbextensions 2jupyter contrib nbextension install --user 3pip3 install -U jupyter_nbextensions_configurator 4jupyter nbextensions_configurator enable --user 5 6pip3 install -U qgrid # 动态操作 DataFrame 7jupyter nbextension enable --py --sys-prefix qgrid 8jupyter nbextension enable --py --sys-prefix widgetsnbextension 如果要修改主题：
-1pip3 install -U jupyterthemes 网址：https://github.com/dunovank/jupyter-themes
+pip3 install -U jupyter_contrib_nbextensions jupyter contrib nbextension install --user pip3 install -U jupyter_nbextensions_configurator jupyter nbextensions_configurator enable --user pip3 install -U qgrid # 动态操作 DataFrame jupyter nbextension enable --py --sys-prefix qgrid jupyter nbextension enable --py --sys-prefix widgetsnbextension 如果要修改主题：
+pip3 install -U jupyterthemes 网址：https://github.com/dunovank/jupyter-themes
 激活的插件：</description>
     </item>
     

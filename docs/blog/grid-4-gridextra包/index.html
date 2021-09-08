@@ -93,45 +93,45 @@
 				<div class="post-content e-content">
 					<p>gridExtra包提供了grid系统的有用拓展，包括对grobs对象的操作方法和其他一些grobs对象。</p>
 <p><code>grid.arrange()</code>可以绘制多个对象：</p>
-<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-R" data-lang="R"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#00f">library</span>(gridExtra)
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span style="color:#00f">grid.arrange</span>(lollipop, <span style="color:#00f">circleGrob</span>(),
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>             <span style="color:#00f">rectGrob</span>(), lollipop, 
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>             ncol <span style="color:#666">=</span> <span style="color:#666">2</span>) 
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-R" data-lang="R"><span style="color:#00f">library</span>(gridExtra)
+<span style="color:#00f">grid.arrange</span>(lollipop, <span style="color:#00f">circleGrob</span>(),
+             <span style="color:#00f">rectGrob</span>(), lollipop, 
+             ncol <span style="color:#666">=</span> <span style="color:#666">2</span>) 
 </code></pre></div><p><img src="https://gitee.com/ShixiangWang/ImageCollection/raw/master/png/20210809123914.png" alt=""></p>
 <p>由于ggplot2也是基于grid系统的，所以我们可以使用该函数对ggplot对象组合排序：</p>
-<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-R" data-lang="R"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>time_vs_shots <span style="color:#666">&lt;-</span> <span style="color:#00f">ggplot</span>(worldcup, <span style="color:#00f">aes</span>(x <span style="color:#666">=</span> Time, y <span style="color:#666">=</span> Shots)) <span style="color:#666">+</span> 
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>  <span style="color:#00f">geom_point</span>()
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>player_positions <span style="color:#666">&lt;-</span> <span style="color:#00f">ggplot</span>(worldcup, <span style="color:#00f">aes</span>(x <span style="color:#666">=</span> Position)) <span style="color:#666">+</span> 
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>  <span style="color:#00f">geom_bar</span>()
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span><span style="color:#00f">grid.arrange</span>(time_vs_shots, player_positions, ncol <span style="color:#666">=</span> <span style="color:#666">2</span>)
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-R" data-lang="R">time_vs_shots <span style="color:#666">&lt;-</span> <span style="color:#00f">ggplot</span>(worldcup, <span style="color:#00f">aes</span>(x <span style="color:#666">=</span> Time, y <span style="color:#666">=</span> Shots)) <span style="color:#666">+</span> 
+  <span style="color:#00f">geom_point</span>()
+player_positions <span style="color:#666">&lt;-</span> <span style="color:#00f">ggplot</span>(worldcup, <span style="color:#00f">aes</span>(x <span style="color:#666">=</span> Position)) <span style="color:#666">+</span> 
+  <span style="color:#00f">geom_bar</span>()
+
+<span style="color:#00f">grid.arrange</span>(time_vs_shots, player_positions, ncol <span style="color:#666">=</span> <span style="color:#666">2</span>)
 </code></pre></div><p><img src="https://gitee.com/ShixiangWang/ImageCollection/raw/master/png/20210809123921.png" alt=""></p>
 <p>使用<code>layout_matrix</code>选项可以进行更自定义控制：</p>
-<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-R" data-lang="R"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#00f">grid.arrange</span>(time_vs_shots, player_positions,
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>             layout_matrix <span style="color:#666">=</span> <span style="color:#00f">matrix</span>(<span style="color:#00f">c</span>(<span style="color:#666">1</span>, <span style="color:#666">2</span>, <span style="color:#666">2</span>), ncol <span style="color:#666">=</span> <span style="color:#666">3</span>))
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-R" data-lang="R"><span style="color:#00f">grid.arrange</span>(time_vs_shots, player_positions,
+             layout_matrix <span style="color:#666">=</span> <span style="color:#00f">matrix</span>(<span style="color:#00f">c</span>(<span style="color:#666">1</span>, <span style="color:#666">2</span>, <span style="color:#666">2</span>), ncol <span style="color:#666">=</span> <span style="color:#666">3</span>))
 </code></pre></div><p><img src="https://gitee.com/ShixiangWang/ImageCollection/raw/master/png/20210809123931.png" alt=""></p>
 <p>包括图形填充：</p>
-<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-R" data-lang="R"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#00f">grid.arrange</span>(time_vs_shots, player_positions,
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>             layout_matrix <span style="color:#666">=</span> <span style="color:#00f">matrix</span>(<span style="color:#00f">c</span>(<span style="color:#666">1</span>, <span style="color:#008000;font-weight:bold">NA</span>, <span style="color:#008000;font-weight:bold">NA</span>, <span style="color:#008000;font-weight:bold">NA</span>, <span style="color:#666">2</span>, <span style="color:#666">2</span>), 
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>                                    byrow <span style="color:#666">=</span> <span style="color:#008000;font-weight:bold">TRUE</span>, ncol <span style="color:#666">=</span> <span style="color:#666">3</span>))
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-R" data-lang="R"><span style="color:#00f">grid.arrange</span>(time_vs_shots, player_positions,
+             layout_matrix <span style="color:#666">=</span> <span style="color:#00f">matrix</span>(<span style="color:#00f">c</span>(<span style="color:#666">1</span>, <span style="color:#008000;font-weight:bold">NA</span>, <span style="color:#008000;font-weight:bold">NA</span>, <span style="color:#008000;font-weight:bold">NA</span>, <span style="color:#666">2</span>, <span style="color:#666">2</span>), 
+                                    byrow <span style="color:#666">=</span> <span style="color:#008000;font-weight:bold">TRUE</span>, ncol <span style="color:#666">=</span> <span style="color:#666">3</span>))
 </code></pre></div><p><img src="https://gitee.com/ShixiangWang/ImageCollection/raw/master/png/20210809123938.png" alt=""></p>
 <p>使用<code>tableGrob()</code>函数，我们可以在图中嵌入表格。下面是一个略微复杂的例子：</p>
-<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-R" data-lang="R"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span>worldcup_table <span style="color:#666">&lt;-</span> worldcup <span style="color:#666">%&gt;%</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>  <span style="color:#00f">filter</span>(Team <span style="color:#666">%in%</span> <span style="color:#00f">c</span>(<span style="color:#ba2121">&#34;Germany&#34;</span>, <span style="color:#ba2121">&#34;Spain&#34;</span>, <span style="color:#ba2121">&#34;Netherlands&#34;</span>, <span style="color:#ba2121">&#34;Uruguay&#34;</span>)) <span style="color:#666">%&gt;%</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>  <span style="color:#00f">group_by</span>(Team) <span style="color:#666">%&gt;%</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>  dplyr<span style="color:#666">::</span><span style="color:#00f">summarize</span>(`Average time` <span style="color:#666">=</span> <span style="color:#00f">round</span>(<span style="color:#00f">mean</span>(Time), <span style="color:#666">1</span>),
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>                   `Average shots` <span style="color:#666">=</span> <span style="color:#00f">round</span>(<span style="color:#00f">mean</span>(Shots), <span style="color:#666">1</span>)) <span style="color:#666">%&gt;%</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>  <span style="color:#00f">tableGrob</span>()
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span><span style="color:#00f">`summarise</span>()` ungrouping output (override with `.groups` argument)
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span style="color:#00f">grid.draw</span>(<span style="color:#00f">ggplotGrob</span>(time_vs_shots)) <span style="color:#408080;font-style:italic"># 先绘制了一个ggplot</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>wc_table_vp <span style="color:#666">&lt;-</span> <span style="color:#00f">viewport</span>(x <span style="color:#666">=</span> <span style="color:#666">0.22</span>, y <span style="color:#666">=</span> <span style="color:#666">0.85</span>, 
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>                        just <span style="color:#666">=</span> <span style="color:#00f">c</span>(<span style="color:#ba2121">&#34;left&#34;</span>, <span style="color:#ba2121">&#34;top&#34;</span>),
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>                        height <span style="color:#666">=</span> <span style="color:#666">0.1</span>, width <span style="color:#666">=</span> <span style="color:#666">0.2</span>) <span style="color:#408080;font-style:italic"># 添加一个新的视图绘制表格</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span><span style="color:#00f">pushViewport</span>(wc_table_vp)
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span><span style="color:#408080;font-style:italic"># 绘制表格</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span><span style="color:#00f">grid.draw</span>(worldcup_table)
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span><span style="color:#00f">popViewport</span>()
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-R" data-lang="R">worldcup_table <span style="color:#666">&lt;-</span> worldcup <span style="color:#666">%&gt;%</span>
+  <span style="color:#00f">filter</span>(Team <span style="color:#666">%in%</span> <span style="color:#00f">c</span>(<span style="color:#ba2121">&#34;Germany&#34;</span>, <span style="color:#ba2121">&#34;Spain&#34;</span>, <span style="color:#ba2121">&#34;Netherlands&#34;</span>, <span style="color:#ba2121">&#34;Uruguay&#34;</span>)) <span style="color:#666">%&gt;%</span>
+  <span style="color:#00f">group_by</span>(Team) <span style="color:#666">%&gt;%</span>
+  dplyr<span style="color:#666">::</span><span style="color:#00f">summarize</span>(`Average time` <span style="color:#666">=</span> <span style="color:#00f">round</span>(<span style="color:#00f">mean</span>(Time), <span style="color:#666">1</span>),
+                   `Average shots` <span style="color:#666">=</span> <span style="color:#00f">round</span>(<span style="color:#00f">mean</span>(Shots), <span style="color:#666">1</span>)) <span style="color:#666">%&gt;%</span>
+  <span style="color:#00f">tableGrob</span>()
+<span style="color:#00f">`summarise</span>()` ungrouping output (override with `.groups` argument)
+
+<span style="color:#00f">grid.draw</span>(<span style="color:#00f">ggplotGrob</span>(time_vs_shots)) <span style="color:#408080;font-style:italic"># 先绘制了一个ggplot</span>
+wc_table_vp <span style="color:#666">&lt;-</span> <span style="color:#00f">viewport</span>(x <span style="color:#666">=</span> <span style="color:#666">0.22</span>, y <span style="color:#666">=</span> <span style="color:#666">0.85</span>, 
+                        just <span style="color:#666">=</span> <span style="color:#00f">c</span>(<span style="color:#ba2121">&#34;left&#34;</span>, <span style="color:#ba2121">&#34;top&#34;</span>),
+                        height <span style="color:#666">=</span> <span style="color:#666">0.1</span>, width <span style="color:#666">=</span> <span style="color:#666">0.2</span>) <span style="color:#408080;font-style:italic"># 添加一个新的视图绘制表格</span>
+<span style="color:#00f">pushViewport</span>(wc_table_vp)
+<span style="color:#408080;font-style:italic"># 绘制表格</span>
+<span style="color:#00f">grid.draw</span>(worldcup_table)
+<span style="color:#00f">popViewport</span>()
 </code></pre></div><p><img src="https://gitee.com/ShixiangWang/ImageCollection/raw/master/png/20210809123945.png" alt=""></p>
 <p><strong>更多关于grid的知识：</strong></p>
 <ul>

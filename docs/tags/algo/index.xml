@@ -36,9 +36,9 @@ library(dplyr) df |&amp;gt; group_by(c1) |&amp;gt; summarize(c2 = max(c2, na.rm 
 问题 给定一个整数数组nums和一个整数目标值target，请你在该数组中找出 和为目标值target 的那两个整数，并返回它们的数组下标。
 你可以假设每种输入只会对应一个答案。但是，数组中同一个元素在答案里不能重复出现。
 示例：
-1输入：nums = [2,7,11,15], target = 9 2输出：[0,1] 3解释：因为 nums[0] + nums[1] == 9 ，返回 [0, 1] 。 题解 顺序扫描数组，对每一个元素，在map中找能组合给定值的另一半数字，如果找到了，直接返回2个数字的下标即可。如果找不到，就把这个数字存入map中，等待扫到“另一半”数字的时候，再取出来返回结果。
+输入：nums = [2,7,11,15], target = 9 输出：[0,1] 解释：因为 nums[0] + nums[1] == 9 ，返回 [0, 1] 。 题解 顺序扫描数组，对每一个元素，在map中找能组合给定值的另一半数字，如果找到了，直接返回2个数字的下标即可。如果找不到，就把这个数字存入map中，等待扫到“另一半”数字的时候，再取出来返回结果。
 这种解法将数据扫描一遍必然得到结果，所以时间复杂度是O(n)。
-Go 1package main 2 3import &amp;#34;fmt&amp;#34; 4 5func twoSum(nums []int, target int) []int { 6 m := make(map[int]int) 7 for i := 0; i &amp;lt; len(nums); i++ { 8 another := target - nums[i] 9 if _, ok := m[another]; ok { 10 return []int{m[another], i} 11 } 12 m[nums[i]] = i 13 } 14 return nil 15} 16 17func main() { 18 fmt.</description>
+Go package main import &amp;#34;fmt&amp;#34; func twoSum(nums []int, target int) []int { m := make(map[int]int) for i := 0; i &amp;lt; len(nums); i++ { another := target - nums[i] if _, ok := m[another]; ok { return []int{m[another], i} } m[nums[i]] = i } return nil } func main() { fmt.</description>
     </item>
     
   </channel>

@@ -94,66 +94,66 @@
 这里简单介绍如何生成和使用数组。</p>
 <h2 id="生成数组">生成数组</h2>
 <p>我们只要将一组空格分隔的序列用括号括起来，就生成了一个数组。</p>
-<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#19177c">array</span><span style="color:#666">=(</span>a b c d e f g<span style="color:#666">)</span>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="color:#19177c">array</span><span style="color:#666">=(</span>a b c d e f g<span style="color:#666">)</span>
 </code></pre></div><h2 id="使用数组">使用数组</h2>
 <h3 id="输出数组">输出数组</h3>
 <p>使用<code>${array[*]}</code>或<code>${array[@]}</code>输出全部元素：</p>
-<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>bash-3.2$ <span style="color:#008000">echo</span> <span style="color:#b68;font-weight:bold">${</span><span style="color:#19177c">array</span>[*]<span style="color:#b68;font-weight:bold">}</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>a b c d e f g
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>bash-3.2$ <span style="color:#008000">echo</span> <span style="color:#b68;font-weight:bold">${</span><span style="color:#19177c">array</span>[@]<span style="color:#b68;font-weight:bold">}</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>a b c d e f g
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">bash-3.2$ <span style="color:#008000">echo</span> <span style="color:#b68;font-weight:bold">${</span><span style="color:#19177c">array</span>[*]<span style="color:#b68;font-weight:bold">}</span>
+a b c d e f g
+bash-3.2$ <span style="color:#008000">echo</span> <span style="color:#b68;font-weight:bold">${</span><span style="color:#19177c">array</span>[@]<span style="color:#b68;font-weight:bold">}</span>
+a b c d e f g
 </code></pre></div><p>在<code>array</code>前加<code>#</code>输出元素个数：</p>
-<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>bash-3.2$ <span style="color:#008000">echo</span> <span style="color:#b68;font-weight:bold">${#</span><span style="color:#19177c">array</span>[*]<span style="color:#b68;font-weight:bold">}</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span style="color:#666">7</span>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">bash-3.2$ <span style="color:#008000">echo</span> <span style="color:#b68;font-weight:bold">${#</span><span style="color:#19177c">array</span>[*]<span style="color:#b68;font-weight:bold">}</span>
+<span style="color:#666">7</span>
 </code></pre></div><p>获取元素将<code>*</code>改成索引，记得是从0开始：</p>
-<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>bash-3.2$ <span style="color:#008000">echo</span> <span style="color:#b68;font-weight:bold">${</span><span style="color:#19177c">array</span>[1]<span style="color:#b68;font-weight:bold">}</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>b
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>bash-3.2$ <span style="color:#008000">echo</span> <span style="color:#b68;font-weight:bold">${</span><span style="color:#19177c">array</span>[2]<span style="color:#b68;font-weight:bold">}</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>c
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">bash-3.2$ <span style="color:#008000">echo</span> <span style="color:#b68;font-weight:bold">${</span><span style="color:#19177c">array</span>[1]<span style="color:#b68;font-weight:bold">}</span>
+b
+bash-3.2$ <span style="color:#008000">echo</span> <span style="color:#b68;font-weight:bold">${</span><span style="color:#19177c">array</span>[2]<span style="color:#b68;font-weight:bold">}</span>
+c
 </code></pre></div><p>注意在非引用的情况下不需要美元符号和花括号，例如修改元素：</p>
-<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>bash-3.2$ array<span style="color:#666">[</span>2<span style="color:#666">]=</span>ff
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>bash-3.2$ <span style="color:#008000">echo</span> <span style="color:#b68;font-weight:bold">${</span><span style="color:#19177c">array</span>[2]<span style="color:#b68;font-weight:bold">}</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>ff
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">bash-3.2$ array<span style="color:#666">[</span>2<span style="color:#666">]=</span>ff
+bash-3.2$ <span style="color:#008000">echo</span> <span style="color:#b68;font-weight:bold">${</span><span style="color:#19177c">array</span>[2]<span style="color:#b68;font-weight:bold">}</span>
+ff
 </code></pre></div><p>迭代数组：</p>
-<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#408080;font-style:italic">#for i in &#34;${!array[@]}&#34;; do </span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span style="color:#408080;font-style:italic">#  printf &#34;%s\t%s\n&#34; &#34;$i&#34; &#34;${array[$i]}&#34;</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span style="color:#408080;font-style:italic">#done</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>bash-3.2$ <span style="color:#008000;font-weight:bold">for</span> i in <span style="color:#ba2121">&#34;</span><span style="color:#b68;font-weight:bold">${</span>!array[@]<span style="color:#b68;font-weight:bold">}</span><span style="color:#ba2121">&#34;</span>; <span style="color:#008000;font-weight:bold">do</span> 
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>&gt;   <span style="color:#008000">printf</span> <span style="color:#ba2121">&#34;%s\t%s\n&#34;</span> <span style="color:#ba2121">&#34;</span><span style="color:#19177c">$i</span><span style="color:#ba2121">&#34;</span> <span style="color:#ba2121">&#34;</span><span style="color:#b68;font-weight:bold">${</span><span style="color:#19177c">array</span>[<span style="color:#19177c">$i</span>]<span style="color:#b68;font-weight:bold">}</span><span style="color:#ba2121">&#34;</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>&gt; <span style="color:#008000;font-weight:bold">done</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>0	 a
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>1	 b
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>2	 ff
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>3	 d
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>4	 e
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>5	 f
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>6	 g
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="color:#408080;font-style:italic">#for i in &#34;${!array[@]}&#34;; do </span>
+<span style="color:#408080;font-style:italic">#  printf &#34;%s\t%s\n&#34; &#34;$i&#34; &#34;${array[$i]}&#34;</span>
+<span style="color:#408080;font-style:italic">#done</span>
+
+bash-3.2$ <span style="color:#008000;font-weight:bold">for</span> i in <span style="color:#ba2121">&#34;</span><span style="color:#b68;font-weight:bold">${</span>!array[@]<span style="color:#b68;font-weight:bold">}</span><span style="color:#ba2121">&#34;</span>; <span style="color:#008000;font-weight:bold">do</span> 
+&gt;   <span style="color:#008000">printf</span> <span style="color:#ba2121">&#34;%s\t%s\n&#34;</span> <span style="color:#ba2121">&#34;</span><span style="color:#19177c">$i</span><span style="color:#ba2121">&#34;</span> <span style="color:#ba2121">&#34;</span><span style="color:#b68;font-weight:bold">${</span><span style="color:#19177c">array</span>[<span style="color:#19177c">$i</span>]<span style="color:#b68;font-weight:bold">}</span><span style="color:#ba2121">&#34;</span>
+&gt; <span style="color:#008000;font-weight:bold">done</span>
+0	 a
+1	 b
+2	 ff
+3	 d
+4	 e
+5	 f
+6	 g
 </code></pre></div><p>注意我们常用的序列生成命令<code>seq</code>并不会生成一个数组，哪怕你可以迭代它：</p>
-<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span>bash-3.2$ <span style="color:#008000">echo</span> <span style="color:#ba2121">`</span>seq <span style="color:#666">1</span> 10<span style="color:#ba2121">`</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span style="color:#666">1</span> <span style="color:#666">2</span> <span style="color:#666">3</span> <span style="color:#666">4</span> <span style="color:#666">5</span> <span style="color:#666">6</span> <span style="color:#666">7</span> <span style="color:#666">8</span> <span style="color:#666">9</span> <span style="color:#666">10</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>bash-3.2$ <span style="color:#19177c">a2</span><span style="color:#666">=</span><span style="color:#ba2121">`</span>seq <span style="color:#666">1</span> 10<span style="color:#ba2121">`</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>bash-3.2$ <span style="color:#008000">echo</span> <span style="color:#b68;font-weight:bold">${</span><span style="color:#19177c">a2</span><span style="color:#b68;font-weight:bold">}</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span><span style="color:#666">1</span> <span style="color:#666">2</span> <span style="color:#666">3</span> <span style="color:#666">4</span> <span style="color:#666">5</span> <span style="color:#666">6</span> <span style="color:#666">7</span> <span style="color:#666">8</span> <span style="color:#666">9</span> <span style="color:#666">10</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>bash-3.2$ <span style="color:#008000">echo</span> <span style="color:#19177c">$a2</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span><span style="color:#666">1</span> <span style="color:#666">2</span> <span style="color:#666">3</span> <span style="color:#666">4</span> <span style="color:#666">5</span> <span style="color:#666">6</span> <span style="color:#666">7</span> <span style="color:#666">8</span> <span style="color:#666">9</span> <span style="color:#666">10</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>bash-3.2$ <span style="color:#008000">echo</span> <span style="color:#b68;font-weight:bold">${</span><span style="color:#19177c">a2</span>[1]<span style="color:#b68;font-weight:bold">}</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>bash-3.2$ <span style="color:#008000">echo</span> <span style="color:#b68;font-weight:bold">${</span><span style="color:#19177c">a2</span>[2]<span style="color:#b68;font-weight:bold">}</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>bash-3.2$ <span style="color:#008000">echo</span> <span style="color:#b68;font-weight:bold">${</span><span style="color:#19177c">a2</span>[0]<span style="color:#b68;font-weight:bold">}</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span><span style="color:#666">1</span> <span style="color:#666">2</span> <span style="color:#666">3</span> <span style="color:#666">4</span> <span style="color:#666">5</span> <span style="color:#666">6</span> <span style="color:#666">7</span> <span style="color:#666">8</span> <span style="color:#666">9</span> <span style="color:#666">10</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>bash-3.2$ <span style="color:#008000;font-weight:bold">for</span> i in <span style="color:#19177c">$a2</span>; <span style="color:#008000;font-weight:bold">do</span> <span style="color:#008000">echo</span> <span style="color:#19177c">$i</span>; <span style="color:#008000;font-weight:bold">done</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span><span style="color:#666">1</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span><span style="color:#666">2</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span><span style="color:#666">3</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span><span style="color:#666">4</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span><span style="color:#666">5</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span><span style="color:#666">6</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span><span style="color:#666">7</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span><span style="color:#666">8</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23</span><span style="color:#666">9</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24</span><span style="color:#666">10</span>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">bash-3.2$ <span style="color:#008000">echo</span> <span style="color:#ba2121">`</span>seq <span style="color:#666">1</span> 10<span style="color:#ba2121">`</span>
+<span style="color:#666">1</span> <span style="color:#666">2</span> <span style="color:#666">3</span> <span style="color:#666">4</span> <span style="color:#666">5</span> <span style="color:#666">6</span> <span style="color:#666">7</span> <span style="color:#666">8</span> <span style="color:#666">9</span> <span style="color:#666">10</span>
+bash-3.2$ <span style="color:#19177c">a2</span><span style="color:#666">=</span><span style="color:#ba2121">`</span>seq <span style="color:#666">1</span> 10<span style="color:#ba2121">`</span>
+bash-3.2$ <span style="color:#008000">echo</span> <span style="color:#b68;font-weight:bold">${</span><span style="color:#19177c">a2</span><span style="color:#b68;font-weight:bold">}</span>
+<span style="color:#666">1</span> <span style="color:#666">2</span> <span style="color:#666">3</span> <span style="color:#666">4</span> <span style="color:#666">5</span> <span style="color:#666">6</span> <span style="color:#666">7</span> <span style="color:#666">8</span> <span style="color:#666">9</span> <span style="color:#666">10</span>
+bash-3.2$ <span style="color:#008000">echo</span> <span style="color:#19177c">$a2</span>
+<span style="color:#666">1</span> <span style="color:#666">2</span> <span style="color:#666">3</span> <span style="color:#666">4</span> <span style="color:#666">5</span> <span style="color:#666">6</span> <span style="color:#666">7</span> <span style="color:#666">8</span> <span style="color:#666">9</span> <span style="color:#666">10</span>
+bash-3.2$ <span style="color:#008000">echo</span> <span style="color:#b68;font-weight:bold">${</span><span style="color:#19177c">a2</span>[1]<span style="color:#b68;font-weight:bold">}</span>
+
+bash-3.2$ <span style="color:#008000">echo</span> <span style="color:#b68;font-weight:bold">${</span><span style="color:#19177c">a2</span>[2]<span style="color:#b68;font-weight:bold">}</span>
+
+bash-3.2$ <span style="color:#008000">echo</span> <span style="color:#b68;font-weight:bold">${</span><span style="color:#19177c">a2</span>[0]<span style="color:#b68;font-weight:bold">}</span>
+<span style="color:#666">1</span> <span style="color:#666">2</span> <span style="color:#666">3</span> <span style="color:#666">4</span> <span style="color:#666">5</span> <span style="color:#666">6</span> <span style="color:#666">7</span> <span style="color:#666">8</span> <span style="color:#666">9</span> <span style="color:#666">10</span>
+bash-3.2$ <span style="color:#008000;font-weight:bold">for</span> i in <span style="color:#19177c">$a2</span>; <span style="color:#008000;font-weight:bold">do</span> <span style="color:#008000">echo</span> <span style="color:#19177c">$i</span>; <span style="color:#008000;font-weight:bold">done</span>
+<span style="color:#666">1</span>
+<span style="color:#666">2</span>
+<span style="color:#666">3</span>
+<span style="color:#666">4</span>
+<span style="color:#666">5</span>
+<span style="color:#666">6</span>
+<span style="color:#666">7</span>
+<span style="color:#666">8</span>
+<span style="color:#666">9</span>
+<span style="color:#666">10</span>
 </code></pre></div><p>下一节我们再看如何转换。</p>
 <h2 id="数据处理中利用数组">数据处理中利用数组</h2>
 <p>如果你有一定的数据分析经验，会比较容易发现上面的知识并不能带来什么用处。
@@ -161,32 +161,32 @@
 <h3 id="以可编程的方式引用数组元素">以可编程的方式引用数组元素</h3>
 <p>在实际处理时，我们一般不可能会手动地指定元素在所在数组中的索引。所以，我们需要一种办法做到。</p>
 <p>其实也很简单，将索引直接用Shell变量替换即可：</p>
-<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>bash-3.2$ <span style="color:#19177c">idx</span><span style="color:#666">=</span><span style="color:#666">2</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>bash-3.2$ <span style="color:#008000">echo</span> <span style="color:#b68;font-weight:bold">${</span><span style="color:#19177c">array</span>[<span style="color:#19177c">$idx</span>]<span style="color:#b68;font-weight:bold">}</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>ff
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">bash-3.2$ <span style="color:#19177c">idx</span><span style="color:#666">=</span><span style="color:#666">2</span>
+bash-3.2$ <span style="color:#008000">echo</span> <span style="color:#b68;font-weight:bold">${</span><span style="color:#19177c">array</span>[<span style="color:#19177c">$idx</span>]<span style="color:#b68;font-weight:bold">}</span>
+ff
 </code></pre></div><p>使用时一定要注意不同符号的位置关系。</p>
 <h3 id="序列转换为数组">序列转换为数组</h3>
 <p>我们先看看怎么将<code>a2</code>转换为数组。</p>
 <p>将序列转换为数组，还是使用<code>()</code>。</p>
-<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span>bash-3.2$ <span style="color:#008000">echo</span> <span style="color:#19177c">$a2</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span style="color:#666">1</span> <span style="color:#666">2</span> <span style="color:#666">3</span> <span style="color:#666">4</span> <span style="color:#666">5</span> <span style="color:#666">6</span> <span style="color:#666">7</span> <span style="color:#666">8</span> <span style="color:#666">9</span> <span style="color:#666">10</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>bash-3.2$ <span style="color:#19177c">a3</span><span style="color:#666">=(</span><span style="color:#19177c">$a2</span><span style="color:#666">)</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>bash-3.2$ <span style="color:#008000">echo</span> <span style="color:#19177c">$a3</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span><span style="color:#666">1</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>bash-3.2$ <span style="color:#008000">echo</span> <span style="color:#b68;font-weight:bold">${#</span><span style="color:#19177c">a2</span>[*]<span style="color:#b68;font-weight:bold">}</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span><span style="color:#666">1</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>bash-3.2$ <span style="color:#008000">echo</span> <span style="color:#b68;font-weight:bold">${#</span><span style="color:#19177c">a3</span>[*]<span style="color:#b68;font-weight:bold">}</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span style="color:#666">10</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>bash-3.2$ <span style="color:#008000">echo</span> <span style="color:#b68;font-weight:bold">${</span><span style="color:#19177c">a3</span>[*]<span style="color:#b68;font-weight:bold">}</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span><span style="color:#666">1</span> <span style="color:#666">2</span> <span style="color:#666">3</span> <span style="color:#666">4</span> <span style="color:#666">5</span> <span style="color:#666">6</span> <span style="color:#666">7</span> <span style="color:#666">8</span> <span style="color:#666">9</span> <span style="color:#666">10</span>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">bash-3.2$ <span style="color:#008000">echo</span> <span style="color:#19177c">$a2</span>
+<span style="color:#666">1</span> <span style="color:#666">2</span> <span style="color:#666">3</span> <span style="color:#666">4</span> <span style="color:#666">5</span> <span style="color:#666">6</span> <span style="color:#666">7</span> <span style="color:#666">8</span> <span style="color:#666">9</span> <span style="color:#666">10</span>
+bash-3.2$ <span style="color:#19177c">a3</span><span style="color:#666">=(</span><span style="color:#19177c">$a2</span><span style="color:#666">)</span>
+bash-3.2$ <span style="color:#008000">echo</span> <span style="color:#19177c">$a3</span>
+<span style="color:#666">1</span>
+bash-3.2$ <span style="color:#008000">echo</span> <span style="color:#b68;font-weight:bold">${#</span><span style="color:#19177c">a2</span>[*]<span style="color:#b68;font-weight:bold">}</span>
+<span style="color:#666">1</span>
+bash-3.2$ <span style="color:#008000">echo</span> <span style="color:#b68;font-weight:bold">${#</span><span style="color:#19177c">a3</span>[*]<span style="color:#b68;font-weight:bold">}</span>
+<span style="color:#666">10</span>
+bash-3.2$ <span style="color:#008000">echo</span> <span style="color:#b68;font-weight:bold">${</span><span style="color:#19177c">a3</span>[*]<span style="color:#b68;font-weight:bold">}</span>
+<span style="color:#666">1</span> <span style="color:#666">2</span> <span style="color:#666">3</span> <span style="color:#666">4</span> <span style="color:#666">5</span> <span style="color:#666">6</span> <span style="color:#666">7</span> <span style="color:#666">8</span> <span style="color:#666">9</span> <span style="color:#666">10</span>
 </code></pre></div><blockquote>
 <p>注意美元符两侧不要加引号。</p>
 </blockquote>
 <p>这样我们就能够愉快地将命令生成的序列数组化，然后单个获取和操作其中的元素了：</p>
-<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>bash-3.2$ touch file<span style="color:#666">{</span>1..10<span style="color:#666">}</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>bash-3.2$ <span style="color:#19177c">files</span><span style="color:#666">=(</span><span style="color:#ba2121">`</span>ls file*<span style="color:#ba2121">`</span><span style="color:#666">)</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>bash-3.2$ <span style="color:#008000">echo</span> <span style="color:#b68;font-weight:bold">${</span><span style="color:#19177c">files</span>[3]<span style="color:#b68;font-weight:bold">}</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>file3
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">bash-3.2$ touch file<span style="color:#666">{</span>1..10<span style="color:#666">}</span>
+bash-3.2$ <span style="color:#19177c">files</span><span style="color:#666">=(</span><span style="color:#ba2121">`</span>ls file*<span style="color:#ba2121">`</span><span style="color:#666">)</span>
+bash-3.2$ <span style="color:#008000">echo</span> <span style="color:#b68;font-weight:bold">${</span><span style="color:#19177c">files</span>[3]<span style="color:#b68;font-weight:bold">}</span>
+file3
 </code></pre></div>
 				</div>
 				<footer class="footer">

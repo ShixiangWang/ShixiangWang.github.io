@@ -94,93 +94,93 @@
 <p><code>grobs</code> 是 grid 绘图系统中图形对象的表示，即 <code>graphics + objects = grobs</code></p>
 <p><code>grobs</code> 的创建通常使用以 <code>Grob</code> 作为后缀的函数们，包括<code>circleGrob</code>, <code>linesGrob</code>, <code>polygonGrob</code>, <code>rasterGrob</code>, <code>rectGrob</code>, <code>segmentsGrob</code>, <code>legendGrob</code>, <code>xaxisGrob</code>, and <code>yaxisGrob</code> 等等。 <code>gridExtra</code> 包定义了更多的图形对象。</p>
 <p>下面是一个绘圆的示例：</p>
-<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-R" data-lang="R"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#00f">library</span>(grid)
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>my_circle <span style="color:#666">&lt;-</span> <span style="color:#00f">circleGrob</span>(x <span style="color:#666">=</span> <span style="color:#666">0.5</span>, y <span style="color:#666">=</span> <span style="color:#666">0.5</span>, r <span style="color:#666">=</span> <span style="color:#666">0.5</span>,
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>                        gp <span style="color:#666">=</span> <span style="color:#00f">gpar</span>(col <span style="color:#666">=</span> <span style="color:#ba2121">&#34;gray&#34;</span>, lty <span style="color:#666">=</span> <span style="color:#666">3</span>))
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-R" data-lang="R"><span style="color:#00f">library</span>(grid)
+my_circle <span style="color:#666">&lt;-</span> <span style="color:#00f">circleGrob</span>(x <span style="color:#666">=</span> <span style="color:#666">0.5</span>, y <span style="color:#666">=</span> <span style="color:#666">0.5</span>, r <span style="color:#666">=</span> <span style="color:#666">0.5</span>,
+                        gp <span style="color:#666">=</span> <span style="color:#00f">gpar</span>(col <span style="color:#666">=</span> <span style="color:#ba2121">&#34;gray&#34;</span>, lty <span style="color:#666">=</span> <span style="color:#666">3</span>))
 </code></pre></div><p>每个图形对象有自带的参数，比如圆有它的中心，半径。而不同的对象有相同的一些参数设定，包括颜色、线型、大小等等，这通过 <code>gpar</code> 函数进行设定。</p>
 <p>再创建图形对象后，使用 <code>grid.draw()</code> 将图形绘制出来。</p>
-<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-R" data-lang="R"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#00f">grid.draw</span>(my_circle)
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-R" data-lang="R"><span style="color:#00f">grid.draw</span>(my_circle)
 </code></pre></div><p><img src="https://cdn.nlark.com/yuque/0/2021/png/471931/1621587529167-de0bc3e6-5ed6-40fd-a3ab-09b45deb3baf.png" alt=""></p>
 <p>多个图形对象可以叠加，而且叠加后可以修改原来的图形对象。</p>
-<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-R" data-lang="R"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>my_circle <span style="color:#666">&lt;-</span> <span style="color:#00f">circleGrob</span>(name <span style="color:#666">=</span> <span style="color:#ba2121">&#34;my_circle&#34;</span>,
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>                        x <span style="color:#666">=</span> <span style="color:#666">0.5</span>, y <span style="color:#666">=</span> <span style="color:#666">0.5</span>, r <span style="color:#666">=</span> <span style="color:#666">0.5</span>,
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>                        gp <span style="color:#666">=</span> <span style="color:#00f">gpar</span>(col <span style="color:#666">=</span> <span style="color:#ba2121">&#34;gray&#34;</span>, lty <span style="color:#666">=</span> <span style="color:#666">3</span>))
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span style="color:#00f">grid.draw</span>(my_circle)
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span>my_rect <span style="color:#666">&lt;-</span> <span style="color:#00f">rectGrob</span>(x <span style="color:#666">=</span> <span style="color:#666">0.5</span>, y <span style="color:#666">=</span> <span style="color:#666">0.5</span>, width <span style="color:#666">=</span> <span style="color:#666">0.8</span>, height <span style="color:#666">=</span> <span style="color:#666">0.3</span>)
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7</span><span style="color:#00f">grid.draw</span>(my_rect)
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-R" data-lang="R">my_circle <span style="color:#666">&lt;-</span> <span style="color:#00f">circleGrob</span>(name <span style="color:#666">=</span> <span style="color:#ba2121">&#34;my_circle&#34;</span>,
+                        x <span style="color:#666">=</span> <span style="color:#666">0.5</span>, y <span style="color:#666">=</span> <span style="color:#666">0.5</span>, r <span style="color:#666">=</span> <span style="color:#666">0.5</span>,
+                        gp <span style="color:#666">=</span> <span style="color:#00f">gpar</span>(col <span style="color:#666">=</span> <span style="color:#ba2121">&#34;gray&#34;</span>, lty <span style="color:#666">=</span> <span style="color:#666">3</span>))
+<span style="color:#00f">grid.draw</span>(my_circle)
+
+my_rect <span style="color:#666">&lt;-</span> <span style="color:#00f">rectGrob</span>(x <span style="color:#666">=</span> <span style="color:#666">0.5</span>, y <span style="color:#666">=</span> <span style="color:#666">0.5</span>, width <span style="color:#666">=</span> <span style="color:#666">0.8</span>, height <span style="color:#666">=</span> <span style="color:#666">0.3</span>)
+<span style="color:#00f">grid.draw</span>(my_rect)
 </code></pre></div><p><img src="https://cdn.nlark.com/yuque/0/2021/png/471931/1621587745380-6f6f27da-20c8-4cf3-9a2c-d129b36c1a97.png" alt=""></p>
 <p>修改：</p>
-<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-R" data-lang="R"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#00f">grid.edit</span>(<span style="color:#ba2121">&#34;my_circle&#34;</span>, gp <span style="color:#666">=</span> <span style="color:#00f">gpar</span>(col <span style="color:#666">=</span> <span style="color:#ba2121">&#34;red&#34;</span>, lty <span style="color:#666">=</span> <span style="color:#666">1</span>))
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-R" data-lang="R"><span style="color:#00f">grid.edit</span>(<span style="color:#ba2121">&#34;my_circle&#34;</span>, gp <span style="color:#666">=</span> <span style="color:#00f">gpar</span>(col <span style="color:#666">=</span> <span style="color:#ba2121">&#34;red&#34;</span>, lty <span style="color:#666">=</span> <span style="color:#666">1</span>))
 </code></pre></div><p><img src="https://cdn.nlark.com/yuque/0/2021/png/471931/1621590475555-31a04caa-af58-4424-b44a-eeeac28be70a.png" alt=""></p>
 <p>ggplot2 是基于 grid 系统构建的，所以它们可以比较好的进行整合。</p>
-<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-R" data-lang="R"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>wc_plot <span style="color:#666">&lt;-</span> <span style="color:#00f">ggplot</span>(worldcup, <span style="color:#00f">aes</span>(x <span style="color:#666">=</span> Time, y <span style="color:#666">=</span> Passes)) <span style="color:#666">+</span> 
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>  <span style="color:#00f">geom_point</span>()
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span style="color:#00f">grid.draw</span>(wc_plot)
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span><span style="color:#00f">grid.draw</span>(my_circle)
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-R" data-lang="R">wc_plot <span style="color:#666">&lt;-</span> <span style="color:#00f">ggplot</span>(worldcup, <span style="color:#00f">aes</span>(x <span style="color:#666">=</span> Time, y <span style="color:#666">=</span> Passes)) <span style="color:#666">+</span> 
+  <span style="color:#00f">geom_point</span>()
+
+<span style="color:#00f">grid.draw</span>(wc_plot)
+<span style="color:#00f">grid.draw</span>(my_circle)
 </code></pre></div><p><img src="https://cdn.nlark.com/yuque/0/2021/png/471931/1621590706907-05bd4920-4635-4b5c-b5b5-8c845c3de10c.png" alt=""></p>
 <p>我们可以使用 grid 提供的函数来修改 ggplot2 图形，首先我们需要先找到 ggplot 图像中的对象，然后使用 <code>grid.edit()</code> 进行修改。</p>
 <p>下面是一个例子：</p>
-<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-R" data-lang="R"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>wc_plot
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span style="color:#00f">grid.force</span>() <span style="color:#408080;font-style:italic"># 将 ggplot2 转变为 grid 对象列表</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span style="color:#00f">grid.ls</span>()
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-R" data-lang="R">wc_plot
+<span style="color:#00f">grid.force</span>() <span style="color:#408080;font-style:italic"># 将 ggplot2 转变为 grid 对象列表</span>
+<span style="color:#00f">grid.ls</span>()
 </code></pre></div><p>输出：</p>
-<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-R" data-lang="R"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span>layout
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>  background.1<span style="color:#666">-7-10-1</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>  panel.6<span style="color:#666">-4-6-4</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>    grill.gTree.1413
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>      panel.background..rect.1404
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>      panel.grid.minor.y..polyline.1406
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>      panel.grid.minor.x..polyline.1408
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>      panel.grid.major.y..polyline.1410
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>      panel.grid.major.x..polyline.1412
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>    <span style="color:#008000;font-weight:bold">NULL</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>    geom_point.points.1400
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>    <span style="color:#008000;font-weight:bold">NULL</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>    panel.border..zeroGrob.1401
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>  spacer.7<span style="color:#666">-5-7-5</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>  spacer.7<span style="color:#666">-3-7-3</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span>  spacer.5<span style="color:#666">-5-5-5</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span>  spacer.5<span style="color:#666">-3-5-3</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span>  axis<span style="color:#666">-</span>t.5<span style="color:#666">-4-5-4</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span>  axis<span style="color:#666">-</span>l.6<span style="color:#666">-3-6-3</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span>    axis.line.y..zeroGrob.1432
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span>    axis
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span>      axis.1<span style="color:#666">-1-1-1</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23</span>        GRID.text.1429
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24</span>      axis.1<span style="color:#666">-2-1-2</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25</span>  axis<span style="color:#666">-</span>r.6<span style="color:#666">-5-6-5</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26</span>  axis<span style="color:#666">-</span>b.7<span style="color:#666">-4-7-4</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27</span>    axis.line.x..zeroGrob.1425
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28</span>    axis
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29</span>      axis.1<span style="color:#666">-1-1-1</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30</span>      axis.2<span style="color:#666">-1-2-1</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">31</span>        GRID.text.1422
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">32</span>  xlab<span style="color:#666">-</span>t.4<span style="color:#666">-4-4-4</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">33</span>  xlab<span style="color:#666">-</span>b.8<span style="color:#666">-4-8-4</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">34</span>    GRID.text.1416
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">35</span>  ylab<span style="color:#666">-</span>l.6<span style="color:#666">-2-6-2</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">36</span>    GRID.text.1419
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">37</span>  ylab<span style="color:#666">-</span>r.6<span style="color:#666">-6-6-6</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">38</span>  subtitle.3<span style="color:#666">-4-3-4</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">39</span>  title.2<span style="color:#666">-4-2-4</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">40</span>  caption.9<span style="color:#666">-4-9-4</span>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-R" data-lang="R">layout
+  background.1<span style="color:#666">-7-10-1</span>
+  panel.6<span style="color:#666">-4-6-4</span>
+    grill.gTree.1413
+      panel.background..rect.1404
+      panel.grid.minor.y..polyline.1406
+      panel.grid.minor.x..polyline.1408
+      panel.grid.major.y..polyline.1410
+      panel.grid.major.x..polyline.1412
+    <span style="color:#008000;font-weight:bold">NULL</span>
+    geom_point.points.1400
+    <span style="color:#008000;font-weight:bold">NULL</span>
+    panel.border..zeroGrob.1401
+  spacer.7<span style="color:#666">-5-7-5</span>
+  spacer.7<span style="color:#666">-3-7-3</span>
+  spacer.5<span style="color:#666">-5-5-5</span>
+  spacer.5<span style="color:#666">-3-5-3</span>
+  axis<span style="color:#666">-</span>t.5<span style="color:#666">-4-5-4</span>
+  axis<span style="color:#666">-</span>l.6<span style="color:#666">-3-6-3</span>
+    axis.line.y..zeroGrob.1432
+    axis
+      axis.1<span style="color:#666">-1-1-1</span>
+        GRID.text.1429
+      axis.1<span style="color:#666">-2-1-2</span>
+  axis<span style="color:#666">-</span>r.6<span style="color:#666">-5-6-5</span>
+  axis<span style="color:#666">-</span>b.7<span style="color:#666">-4-7-4</span>
+    axis.line.x..zeroGrob.1425
+    axis
+      axis.1<span style="color:#666">-1-1-1</span>
+      axis.2<span style="color:#666">-1-2-1</span>
+        GRID.text.1422
+  xlab<span style="color:#666">-</span>t.4<span style="color:#666">-4-4-4</span>
+  xlab<span style="color:#666">-</span>b.8<span style="color:#666">-4-8-4</span>
+    GRID.text.1416
+  ylab<span style="color:#666">-</span>l.6<span style="color:#666">-2-6-2</span>
+    GRID.text.1419
+  ylab<span style="color:#666">-</span>r.6<span style="color:#666">-6-6-6</span>
+  subtitle.3<span style="color:#666">-4-3-4</span>
+  title.2<span style="color:#666">-4-2-4</span>
+  caption.9<span style="color:#666">-4-9-4</span>
 </code></pre></div><p>然后我们可以针对性修改：</p>
-<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-R" data-lang="R"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#00f">grid.edit</span>(<span style="color:#ba2121">&#34;geom_point.points.1400&#34;</span>, gp <span style="color:#666">=</span> <span style="color:#00f">gpar</span>(col <span style="color:#666">=</span> <span style="color:#ba2121">&#34;red&#34;</span>))
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span style="color:#00f">grid.edit</span>(<span style="color:#ba2121">&#34;GRID.text.1419&#34;</span>, gp <span style="color:#666">=</span> <span style="color:#00f">gpar</span>(fontface <span style="color:#666">=</span> <span style="color:#ba2121">&#34;bold&#34;</span>))
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-R" data-lang="R"><span style="color:#00f">grid.edit</span>(<span style="color:#ba2121">&#34;geom_point.points.1400&#34;</span>, gp <span style="color:#666">=</span> <span style="color:#00f">gpar</span>(col <span style="color:#666">=</span> <span style="color:#ba2121">&#34;red&#34;</span>))
+<span style="color:#00f">grid.edit</span>(<span style="color:#ba2121">&#34;GRID.text.1419&#34;</span>, gp <span style="color:#666">=</span> <span style="color:#00f">gpar</span>(fontface <span style="color:#666">=</span> <span style="color:#ba2121">&#34;bold&#34;</span>))
 </code></pre></div><p>ggplot2 包中的  <code>ggplotGrob()</code> 函数可以将 ggplot 对象转化为 grob。</p>
 <p>gTree grob 可以包含多个子 grob（即组装多个子对象），可以用于像箱线图这种复杂的图形中。下面是例子：</p>
-<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-R" data-lang="R"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>candy <span style="color:#666">&lt;-</span> <span style="color:#00f">circleGrob</span>(r <span style="color:#666">=</span> <span style="color:#666">0.1</span>, x <span style="color:#666">=</span> <span style="color:#666">0.5</span>, y <span style="color:#666">=</span> <span style="color:#666">0.6</span>)
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>stick <span style="color:#666">&lt;-</span> <span style="color:#00f">segmentsGrob</span>(x0 <span style="color:#666">=</span> <span style="color:#666">0.5</span>, x1 <span style="color:#666">=</span> <span style="color:#666">0.5</span>, y0 <span style="color:#666">=</span> <span style="color:#666">0</span>, y1 <span style="color:#666">=</span> <span style="color:#666">0.5</span>)
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>lollipop <span style="color:#666">&lt;-</span> <span style="color:#00f">gTree</span>(children <span style="color:#666">=</span> <span style="color:#00f">gList</span>(candy, stick))
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span style="color:#00f">grid.draw</span>(lollipop)
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-R" data-lang="R">candy <span style="color:#666">&lt;-</span> <span style="color:#00f">circleGrob</span>(r <span style="color:#666">=</span> <span style="color:#666">0.1</span>, x <span style="color:#666">=</span> <span style="color:#666">0.5</span>, y <span style="color:#666">=</span> <span style="color:#666">0.6</span>)
+stick <span style="color:#666">&lt;-</span> <span style="color:#00f">segmentsGrob</span>(x0 <span style="color:#666">=</span> <span style="color:#666">0.5</span>, x1 <span style="color:#666">=</span> <span style="color:#666">0.5</span>, y0 <span style="color:#666">=</span> <span style="color:#666">0</span>, y1 <span style="color:#666">=</span> <span style="color:#666">0.5</span>)
+lollipop <span style="color:#666">&lt;-</span> <span style="color:#00f">gTree</span>(children <span style="color:#666">=</span> <span style="color:#00f">gList</span>(candy, stick))
+<span style="color:#00f">grid.draw</span>(lollipop)
 </code></pre></div><p><img src="https://cdn.nlark.com/yuque/0/2021/png/471931/1621591087235-ca33ddb9-18c7-41ca-bb8b-94f242755135.png" alt=""></p>
 <p>列出子对象：</p>
-<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-R" data-lang="R"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#00f">grid.ls</span>(lollipop)
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>GRID.gTree.7233
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>  GRID.circle.7231
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>  GRID.segments.7232
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-R" data-lang="R"><span style="color:#00f">grid.ls</span>(lollipop)
+GRID.gTree.7233
+  GRID.circle.7231
+  GRID.segments.7232
 </code></pre></div>
 				</div>
 				<footer class="footer">

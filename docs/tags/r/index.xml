@@ -86,7 +86,8 @@ library(dplyr) df |&amp;gt; group_by(c1) |&amp;gt; summarize(c2 = max(c2, na.rm 
       
       <guid>/blog/forestmode-set-overall-pva-for-variable-with-multiple-levels/</guid>
       <description>前段时间收到来信：
-1Hi Shixiang 2 3I am writing to you about the forestmodel package in R. 4 5Thank you so much for the wonderful package that you created. 6 7I was wondering if there is a way to display the wald test p-value which is important for variables that have more than two levels. I tried to work around the code but did not find a way out. 8 9Best 10Aniket 我不是作者，搞错了人，问我干啥呢～自个提问嘛</description>
+Hi Shixiang I am writing to you about the forestmodel package in R. Thank you so much for the wonderful package that you created. I was wondering if there is a way to display the wald test p-value which is important for variables that have more than two levels. I tried to work around the code but did not find a way out. Best Aniket 我不是作者，搞错了人，问我干啥呢～自个提问嘛
+Hi Aniket, I am not the author of forestmodel, you can see from https://github.</description>
     </item>
     
     <item>
@@ -128,7 +129,7 @@ pr &amp;lt;- PRROC::pr.curve(ROCR.simple$predictions, weights.class0 = ROCR.simp
 分为2类：
 采样是一种常见的预处理技术。
  随机采样。每个样本单位被抽中的概率相等，样本的每个单位完全独立，彼此间无一定的关联性和排斥性。 分层采样。将抽样单位按某种特征或某种规则划分为不同的层，然后从不同的层中独立、随机地抽取样本。从而保证样本的结构与总体的结构比较相近，从而提高估计的精度。可以利用sampling::strata()。 欠采样和过采样。我们经常会碰到不同分类的样本比例相差较大的问题，这种问题会对我们构建模型造成很大的影响，因此从数据角度出发，我们可以利用欠采样或过采样处理这种现象。可以利用ROSE::ovun.sample()。  特征变换和编码 无量纲化 通过归一化，我们可以消除不同量纲下的数据对最终结果的影响。
-1normalize &amp;lt;- function(x) { 2 # 计算极值 3 x_min &amp;lt;- min(x) 4 x_max &amp;lt;- max(x) 5 # 归一化 6 x_n &amp;lt;- (x - x_min) / 7 (x_max - x_min) 8 # 将极值作为结果的属性 9 attr(x_n, 10 &amp;#39;min&amp;#39;) &amp;lt;- x_min 11 attr(x_n, 12 &amp;#39;max&amp;#39;) &amp;lt;- x_max 13 # 返回归一化后结果 14 x_n 15} 标准化。</description>
+normalize &amp;lt;- function(x) { # 计算极值 x_min &amp;lt;- min(x) x_max &amp;lt;- max(x) # 归一化 x_n &amp;lt;- (x - x_min) / (x_max - x_min) # 将极值作为结果的属性 attr(x_n, &amp;#39;min&amp;#39;) &amp;lt;- x_min attr(x_n, &amp;#39;max&amp;#39;) &amp;lt;- x_max # 返回归一化后结果 x_n } 标准化。</description>
     </item>
     
     <item>
@@ -139,7 +140,7 @@ pr &amp;lt;- PRROC::pr.curve(ROCR.simple$predictions, weights.class0 = ROCR.simp
       <guid>/blog/install-stringi-when-bad-acess-to-gh/</guid>
       <description>这是一个我每次重装R，或者在新的系统上使用R进行包安装，都会遇到的问题。
 stringi是tidyverse的一个核心包，基本上必装。但由于gayhub经常访问有问题，这个包安装时所需要的依赖文件会下载不了。 解决的办法是手动下载，然后进行安装：
-1wget https://github.com/gagolews/stringi/archive/master.zip -O stringi.zip 2# 如果上面github的链接无法下载，尝试： 3# wget https://download.fastgit.org/gagolews/stringi/archive/master.zip -O stringi.zip 4unzip stringi.zip 5sed -i &amp;#39;/\/icu..\/data/d&amp;#39; stringi-master/.Rbuildignore 6R CMD build stringi-master 7R CMD INSTALL stringi*.tar.gz 参考：https://stackoverflow.com/questions/31942322/how-to-install-stringi-from-local-file-absolutely-no-internet-access#</description>
+wget https://github.com/gagolews/stringi/archive/master.zip -O stringi.zip # 如果上面github的链接无法下载，尝试： # wget https://download.fastgit.org/gagolews/stringi/archive/master.zip -O stringi.zip unzip stringi.zip sed -i &amp;#39;/\/icu..\/data/d&amp;#39; stringi-master/.Rbuildignore R CMD build stringi-master R CMD INSTALL stringi*.tar.gz 参考：https://stackoverflow.com/questions/31942322/how-to-install-stringi-from-local-file-absolutely-no-internet-access#</description>
     </item>
     
     <item>
@@ -150,11 +151,11 @@ stringi是tidyverse的一个核心包，基本上必装。但由于gayhub经常�
       <guid>/blog/use-modules-to-organize-r-functions/</guid>
       <description>接触过Python的朋友肯定对模块很熟悉，R的代码组织方式以包为主。但基于文件的模块形式也是可以实现的，modules 包提供了这种支持。
 安装和使用 直接从CRAN下载即可：
-1install.packages(&amp;#34;modules&amp;#34;) 使用了解2个函数的使用就可以了。
+install.packages(&amp;#34;modules&amp;#34;) 使用了解2个函数的使用就可以了。
 一是import()，用于替换library()加载包。
-1&amp;gt; library(modules) 2&amp;gt; gp = import(&amp;#39;ggplot2&amp;#39;) 3Masking (modules:ggplot2): 4 `Position` from: base 5&amp;gt; args(gp$ggplot) 6function (data = NULL, mapping = aes(), ..., environment = parent.frame()) 7NULL 8&amp;gt; args(ggplot) 9function (data = NULL, mapping = aes(), ..., environment = parent.frame()) 10NULL 这样我们可以直接使用这个函数，也可以通过gp这个对象去访问可用的函数。
+&amp;gt; library(modules) &amp;gt; gp = import(&amp;#39;ggplot2&amp;#39;) Masking (modules:ggplot2): `Position` from: base &amp;gt; args(gp$ggplot) function (data = NULL, mapping = aes(), ..., environment = parent.frame()) NULL &amp;gt; args(ggplot) function (data = NULL, mapping = aes(), ..., environment = parent.frame()) NULL 这样我们可以直接使用这个函数，也可以通过gp这个对象去访问可用的函数。
 如果不想要在全局直接访问包内的函数，在导入时设定attach=FALSE。
-1&amp;gt; dp &amp;lt;- import(dplyr, attach = FALSE) 2Masking (modules:dplyr): 3 `intersect` from: base 4 `setdiff` from: base 5 `setequal` from: base 6 `union` from: base 7&amp;gt; select 8错误: 找不到对象&amp;#39;select&amp;#39; 9&amp;gt; dp$select 10function (.</description>
+&amp;gt; dp &amp;lt;- import(dplyr, attach = FALSE) Masking (modules:dplyr): `intersect` from: base `setdiff` from: base `setequal` from: base `union` from: base &amp;gt; select 错误: 找不到对象&amp;#39;select&amp;#39; &amp;gt; dp$select function (.</description>
     </item>
     
     <item>

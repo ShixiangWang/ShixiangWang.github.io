@@ -19,15 +19,15 @@
 一些有C++代码的R包可能会用到一些新的C++特性，需要C++11或者C++14。这个问题通常在CentOS/红帽系统上出现，因为系统稳定的要求，这个系列的系统它的C++版本很低。 但请读者前往注意了别自己编译新版本的gcc，然后替换掉系统的。这种操作我试过几次，系统基本上就崩掉了。
 正确的解决方式是安装独立的gcc，通过环境变量引用和使用它。
 在Root用户下操作：
-1yum install centos-release-scl 2yum install devtoolset-9 然后在你使用R的用户下操作：
-1# If you use your non-root account to install packages,  2# change /root to /home/your_id in the following command 3mkdir -p /root/.R 4vi /root/.R/Makevars 将下面的内容写入打开的文件，然后保存：
-1CXX11=/opt/rh/devtoolset-9/root/usr/bin/g++ -std=c++11 -fPIC 2CXX14=/opt/rh/devtoolset-9/root/usr/bin/g++ -std=c++14 -fPIC 如果没有root权限，可以通过conda来安装新版本的gcc,c++等：
-1conda install gcc_linux-64 2conda install gxx_linux-64  加上conda-forge通道也可以。
+yum install centos-release-scl yum install devtoolset-9 然后在你使用R的用户下操作：
+# If you use your non-root account to install packages,  # change /root to /home/your_id in the following command mkdir -p /root/.R vi /root/.R/Makevars 将下面的内容写入打开的文件，然后保存：
+CXX11=/opt/rh/devtoolset-9/root/usr/bin/g++ -std=c++11 -fPIC CXX14=/opt/rh/devtoolset-9/root/usr/bin/g++ -std=c++14 -fPIC 如果没有root权限，可以通过conda来安装新版本的gcc,c++等：
+conda install gcc_linux-64 conda install gxx_linux-64  加上conda-forge通道也可以。
  另外可以一键安装常用的编译器：
-1conda install -c conda-forge compilers 安装完成后记得添加环境变量：
-1export CC=/path/to/anaconda/bin/x86_64-conda_cos6-linux-gnu-gcc 2export CXX=/path/to/anaconda/bin/x86_64-conda_cos6-linux-gnu-g++ 如果是R包编译，修改前面提到的Makevars文件即可。
+conda install -c conda-forge compilers 安装完成后记得添加环境变量：
+export CC=/path/to/anaconda/bin/x86_64-conda_cos6-linux-gnu-gcc export CXX=/path/to/anaconda/bin/x86_64-conda_cos6-linux-gnu-g++ 如果是R包编译，修改前面提到的Makevars文件即可。
 如果使用的是miniconda，这个文件的内容可能就是这样的了：
-1CXX11=~/miniconda3/bin/x86_64-conda-linux-gnu-g++ -std=c++11 -fPIC 2CXX14=~/miniconda3/bin/x86_64-conda-linux-gnu-g++ -std=c++14 -fPIC 这样就可以愉快地安装包了：</description>
+CXX11=~/miniconda3/bin/x86_64-conda-linux-gnu-g++ -std=c++11 -fPIC CXX14=~/miniconda3/bin/x86_64-conda-linux-gnu-g++ -std=c++14 -fPIC 这样就可以愉快地安装包了：</description>
     </item>
     
     <item>
@@ -38,11 +38,11 @@
       <guid>/blog/unix-bash-programming/</guid>
       <description>原文：https://seankross.com/the-unix-workbench/bash-programming.html
  数学 创建math.sh：
-1#!/usr/bin/env bash 2# File: math.sh 3 4expr 5 + 2 5expr 5 - 2 6expr 5 \* 2 # 转义 7expr 5 / 2 保存然后运行：
-1$ bash math.sh 27 33 410 52 ⚠️注意，bash使用整除法。求余使用%符号。
+#!/usr/bin/env bash # File: math.sh expr 5 + 2 expr 5 - 2 expr 5 \* 2 # 转义 expr 5 / 2 保存然后运行：
+$ bash math.sh 7 3 10 2 ⚠️注意，bash使用整除法。求余使用%符号。
 如果我们想要进行更为复杂的数学计算，使用bc命令。
 创建文件bigmath.sh：
-1#!/usr/bin/env bash 2# File: bigmath.sh 3 4echo &amp;#34;22 / 7&amp;#34; | bc -l 5echo &amp;#34;4.2 * 9.15&amp;#34; | bc -l 6echo &amp;#34;(6.5 / 0.5) + (6 * 2.2)&amp;#34; | bc -l 结果：</description>
+#!/usr/bin/env bash # File: bigmath.sh echo &amp;#34;22 / 7&amp;#34; | bc -l echo &amp;#34;4.2 * 9.15&amp;#34; | bc -l echo &amp;#34;(6.5 / 0.5) + (6 * 2.2)&amp;#34; | bc -l 结果：</description>
     </item>
     
   </channel>

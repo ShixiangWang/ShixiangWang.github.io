@@ -32,7 +32,8 @@ IntegerVector类 模板函数as&amp;lt;&amp;gt;()用于从R转换到C++，而wra
  示例：返回完美数 什么是完美数：
 https://baike.baidu.com/item/完全数/370913?fromtitle=完美数&amp;amp;fromid=871560&amp;amp;fr=aladdin
 代码：
-1library(Rcpp) 2library(inline) 3 4src &amp;lt;- &amp;#39; 5Rcpp::IntegerVector epn(4); 6epn[0] = 6; 7epn[1] = 14; 8epn[2] = 496; 9epn[3] = 8182; 10return epn; 11&amp;#39; 12 13func &amp;lt;- cxxfunction(signature(), src, plugin = &amp;#34;Rcpp&amp;#34;) 调用：</description>
+library(Rcpp) library(inline) src &amp;lt;- &amp;#39; Rcpp::IntegerVector epn(4); epn[0] = 6; epn[1] = 14; epn[2] = 496; epn[3] = 8182; return epn; &amp;#39; func &amp;lt;- cxxfunction(signature(), src, plugin = &amp;#34;Rcpp&amp;#34;) 调用：
+&amp;gt; func() [1] 6 14 496 8182 示例：使用输入 求乘积。</description>
     </item>
     
   </channel>

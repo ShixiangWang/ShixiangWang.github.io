@@ -143,6 +143,4 @@ print(forest_model(coxph(Surv(time, status) ~ ECOG, pretty_lung), show_global_p 
 
 由于我之前开发的ezcox包可以直接接收传到forestmodel的其他参数，所以只要无需改动ezcox就完成了对该包该特性的支持。有使用ezcox包的读者可以试试。
 
-
-
-这位朋友算是无心插柳吗？
+由于做了不少维护和开发工作，就这两天forestmodel作者将我加入了[作者列表](https://github.com/NikNakk/forestmodel/blob/d001c80f5b001ff8c4c82201b1f223be64415b8b/DESCRIPTION#L9)。这算是无心插柳吗？

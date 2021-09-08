@@ -16,7 +16,8 @@
       
       <guid>/blog/forestmode-set-overall-pva-for-variable-with-multiple-levels/</guid>
       <description>前段时间收到来信：
-1Hi Shixiang 2 3I am writing to you about the forestmodel package in R. 4 5Thank you so much for the wonderful package that you created. 6 7I was wondering if there is a way to display the wald test p-value which is important for variables that have more than two levels. I tried to work around the code but did not find a way out. 8 9Best 10Aniket 我不是作者，搞错了人，问我干啥呢～自个提问嘛</description>
+Hi Shixiang I am writing to you about the forestmodel package in R. Thank you so much for the wonderful package that you created. I was wondering if there is a way to display the wald test p-value which is important for variables that have more than two levels. I tried to work around the code but did not find a way out. Best Aniket 我不是作者，搞错了人，问我干啥呢～自个提问嘛
+Hi Aniket, I am not the author of forestmodel, you can see from https://github.</description>
     </item>
     
   </channel>

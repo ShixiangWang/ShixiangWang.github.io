@@ -93,126 +93,126 @@
 </blockquote>
 <h2 id="数学">数学</h2>
 <p>创建<code>math.sh</code>：</p>
-<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#bc7a00">#!/usr/bin/env bash
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span style="color:#bc7a00"></span><span style="color:#408080;font-style:italic"># File: math.sh</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>expr <span style="color:#666">5</span> + <span style="color:#666">2</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>expr <span style="color:#666">5</span> - <span style="color:#666">2</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span>expr <span style="color:#666">5</span> <span style="color:#b62;font-weight:bold">\*</span> <span style="color:#666">2</span> <span style="color:#408080;font-style:italic"># 转义</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7</span>expr <span style="color:#666">5</span> / <span style="color:#666">2</span>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="color:#bc7a00">#!/usr/bin/env bash
+</span><span style="color:#bc7a00"></span><span style="color:#408080;font-style:italic"># File: math.sh</span>
+
+expr <span style="color:#666">5</span> + <span style="color:#666">2</span>
+expr <span style="color:#666">5</span> - <span style="color:#666">2</span>
+expr <span style="color:#666">5</span> <span style="color:#b62;font-weight:bold">\*</span> <span style="color:#666">2</span> <span style="color:#408080;font-style:italic"># 转义</span>
+expr <span style="color:#666">5</span> / <span style="color:#666">2</span>
 </code></pre></div><p>保存然后运行：</p>
-<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-Bash" data-lang="Bash"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>$ bash math.sh
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span style="color:#666">7</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span style="color:#666">3</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span style="color:#666">10</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span><span style="color:#666">2</span> 
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-Bash" data-lang="Bash">$ bash math.sh
+<span style="color:#666">7</span>
+<span style="color:#666">3</span>
+<span style="color:#666">10</span>
+<span style="color:#666">2</span> 
 </code></pre></div><p>⚠️注意，bash使用整除法。求余使用<code>%</code>符号。</p>
 <p>如果我们想要进行更为复杂的数学计算，使用<code>bc</code>命令。</p>
 <p>创建文件<code>bigmath.sh</code>：</p>
-<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#bc7a00">#!/usr/bin/env bash
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span style="color:#bc7a00"></span><span style="color:#408080;font-style:italic"># File: bigmath.sh</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span style="color:#008000">echo</span> <span style="color:#ba2121">&#34;22 / 7&#34;</span> | bc -l
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span><span style="color:#008000">echo</span> <span style="color:#ba2121">&#34;4.2 * 9.15&#34;</span> | bc -l
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span><span style="color:#008000">echo</span> <span style="color:#ba2121">&#34;(6.5 / 0.5) + (6 * 2.2)&#34;</span> | bc -l
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="color:#bc7a00">#!/usr/bin/env bash
+</span><span style="color:#bc7a00"></span><span style="color:#408080;font-style:italic"># File: bigmath.sh</span>
+
+<span style="color:#008000">echo</span> <span style="color:#ba2121">&#34;22 / 7&#34;</span> | bc -l
+<span style="color:#008000">echo</span> <span style="color:#ba2121">&#34;4.2 * 9.15&#34;</span> | bc -l
+<span style="color:#008000">echo</span> <span style="color:#ba2121">&#34;(6.5 / 0.5) + (6 * 2.2)&#34;</span> | bc -l
 </code></pre></div><p>结果：</p>
-<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>$ bash bigmath.sh
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>3.14285714285714285714
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>38.430
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>26.2
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">$ bash bigmath.sh
+3.14285714285714285714
+38.430
+26.2
+
 </code></pre></div><p>注意，如果不指定<code>-l</code> 选项，返回的就是整数结果：</p>
-<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-Bash" data-lang="Bash"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>$ <span style="color:#008000">echo</span> <span style="color:#ba2121">&#34;22 / 7&#34;</span> | bc
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span style="color:#666">3</span> 
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-Bash" data-lang="Bash">$ <span style="color:#008000">echo</span> <span style="color:#ba2121">&#34;22 / 7&#34;</span> | bc
+<span style="color:#666">3</span> 
 </code></pre></div><h2 id="变量">变量</h2>
 <p>变量用于存储数据，赋值使用等号：</p>
-<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#19177c">chapter_number</span><span style="color:#666">=</span><span style="color:#666">5</span>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="color:#19177c">chapter_number</span><span style="color:#666">=</span><span style="color:#666">5</span>
 </code></pre></div><p>注意等号两侧不能有空格，这与一般的编程语言不同。也就是说，下面的非法的：</p>
-<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#19177c">chapter_number</span> <span style="color:#666">=</span> <span style="color:#666">5</span>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="color:#19177c">chapter_number</span> <span style="color:#666">=</span> <span style="color:#666">5</span>
 </code></pre></div><p>使用<code>let</code>命令修改变量：</p>
-<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#008000">let</span> <span style="color:#19177c">chapter_number</span><span style="color:#666">=</span><span style="color:#19177c">$chapter_number</span>+1
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span style="color:#008000">echo</span> <span style="color:#19177c">$chapter_number</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span style="color:#408080;font-style:italic"># 6 </span>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="color:#008000">let</span> <span style="color:#19177c">chapter_number</span><span style="color:#666">=</span><span style="color:#19177c">$chapter_number</span>+1
+<span style="color:#008000">echo</span> <span style="color:#19177c">$chapter_number</span>
+<span style="color:#408080;font-style:italic"># 6 </span>
 </code></pre></div><p>存储字符串也是可以的：</p>
-<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#19177c">the_empire_state</span><span style="color:#666">=</span><span style="color:#ba2121">&#34;New York&#34;</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span style="color:#008000">echo</span> <span style="color:#19177c">$the_empire_state</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span style="color:#408080;font-style:italic"># New York </span>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="color:#19177c">the_empire_state</span><span style="color:#666">=</span><span style="color:#ba2121">&#34;New York&#34;</span>
+<span style="color:#008000">echo</span> <span style="color:#19177c">$the_empire_state</span>
+<span style="color:#408080;font-style:italic"># New York </span>
 </code></pre></div><p>有时，你可能希望像在命令行上那样运行命令，并将该命令的结果存储在一个变量中。我们可以通过将命令用美元符号和圆括号（<code>$()</code>）括起来来实现这一点。这种语法叫作<strong>命令替换</strong> 。例如：</p>
-<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#19177c">math_lines</span><span style="color:#666">=</span><span style="color:#008000;font-weight:bold">$(</span>cat math.sh | wc -l<span style="color:#008000;font-weight:bold">)</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span style="color:#008000">echo</span> <span style="color:#19177c">$math_lines</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span style="color:#408080;font-style:italic"># 7 </span>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="color:#19177c">math_lines</span><span style="color:#666">=</span><span style="color:#008000;font-weight:bold">$(</span>cat math.sh | wc -l<span style="color:#008000;font-weight:bold">)</span>
+<span style="color:#008000">echo</span> <span style="color:#19177c">$math_lines</span>
+<span style="color:#408080;font-style:italic"># 7 </span>
 </code></pre></div><p>带有美元符号的变量名也可以在其他字符串中使用，以便将变量的值插入到字符串中：</p>
-<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#008000">echo</span> <span style="color:#ba2121">&#34;I went to school in </span><span style="color:#19177c">$the_empire_state</span><span style="color:#ba2121">.&#34;</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span style="color:#408080;font-style:italic"># I went to school in New York. </span>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="color:#008000">echo</span> <span style="color:#ba2121">&#34;I went to school in </span><span style="color:#19177c">$the_empire_state</span><span style="color:#ba2121">.&#34;</span>
+<span style="color:#408080;font-style:italic"># I went to school in New York. </span>
 </code></pre></div><p>在编写Bash脚本时，脚本会免费提供一些变量。让我们用以下代码创建一个名为<code>vars.sh</code>的新文件：</p>
-<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#bc7a00">#!/usr/bin/env bash
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span style="color:#bc7a00"></span><span style="color:#408080;font-style:italic"># File: vars.sh</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span style="color:#008000">echo</span> <span style="color:#ba2121">&#34;Script arguments: </span><span style="color:#19177c">$@</span><span style="color:#ba2121">&#34;</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span><span style="color:#008000">echo</span> <span style="color:#ba2121">&#34;First arg: </span><span style="color:#19177c">$1</span><span style="color:#ba2121">. Second arg: </span><span style="color:#19177c">$2</span><span style="color:#ba2121">.&#34;</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span><span style="color:#008000">echo</span> <span style="color:#ba2121">&#34;Number of arguments: </span><span style="color:#19177c">$#</span><span style="color:#ba2121">&#34;</span>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="color:#bc7a00">#!/usr/bin/env bash
+</span><span style="color:#bc7a00"></span><span style="color:#408080;font-style:italic"># File: vars.sh</span>
+
+<span style="color:#008000">echo</span> <span style="color:#ba2121">&#34;Script arguments: </span><span style="color:#19177c">$@</span><span style="color:#ba2121">&#34;</span>
+<span style="color:#008000">echo</span> <span style="color:#ba2121">&#34;First arg: </span><span style="color:#19177c">$1</span><span style="color:#ba2121">. Second arg: </span><span style="color:#19177c">$2</span><span style="color:#ba2121">.&#34;</span>
+<span style="color:#008000">echo</span> <span style="color:#ba2121">&#34;Number of arguments: </span><span style="color:#19177c">$#</span><span style="color:#ba2121">&#34;</span>
 </code></pre></div><p>上面几个变量可以获取全部参数、指定参数（<code>$2</code>获取第2个参数，以此类推）以及参数的数目。</p>
-<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>$ bash vars.sh red
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>Script arguments: red
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>First arg: red. Second arg: .
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>Number of arguments: <span style="color:#666">1</span> 
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">$ bash vars.sh red
+Script arguments: red
+First arg: red. Second arg: .
+Number of arguments: <span style="color:#666">1</span> 
 </code></pre></div><h2 id="用户输入">用户输入</h2>
 <p>如果你正在为自己或其他人编写Bash程序，那么获取用户输入的一种方式就是指定用户提供给程序的参数，正如我们在前一节中讨论的那样。你还可以通过使用<code>read</code>命令暂时停止程序的执行，要求用户在命令行上输入一个字符串。让我们写一个小脚本，你可以看到<code>read</code>命令是如何工作的：</p>
-<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#bc7a00">#!/usr/bin/env bash
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span style="color:#bc7a00"></span><span style="color:#408080;font-style:italic"># File: letsread.sh</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span style="color:#008000">echo</span> <span style="color:#ba2121">&#34;Type in a string and then press Enter:&#34;</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span><span style="color:#008000">read</span> response
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span><span style="color:#008000">echo</span> <span style="color:#ba2121">&#34;You entered: </span><span style="color:#19177c">$response</span><span style="color:#ba2121">&#34;</span>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="color:#bc7a00">#!/usr/bin/env bash
+</span><span style="color:#bc7a00"></span><span style="color:#408080;font-style:italic"># File: letsread.sh</span>
+
+<span style="color:#008000">echo</span> <span style="color:#ba2121">&#34;Type in a string and then press Enter:&#34;</span>
+<span style="color:#008000">read</span> response
+<span style="color:#008000">echo</span> <span style="color:#ba2121">&#34;You entered: </span><span style="color:#19177c">$response</span><span style="color:#ba2121">&#34;</span>
 </code></pre></div><p>让我们运行脚本，然后输入一个字符串：</p>
-<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>$ bash letsread.sh
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>Type in a string and <span style="color:#008000;font-weight:bold">then</span> press Enter:
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>Hello!
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>You entered: Hello! 
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">$ bash letsread.sh
+Type in a string and <span style="color:#008000;font-weight:bold">then</span> press Enter:
+Hello!
+You entered: Hello! 
 </code></pre></div><h2 id="逻辑控制">逻辑控制</h2>
 <h3 id="条件执行">条件执行</h3>
 <p>如何编程语言都有逻辑值，表示是<code>true</code>与否<code>false</code>。</p>
 <p>在具体看怎么使用判断语句前，我们先看下退出状态码。</p>
 <p>运行命令：</p>
-<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>$ this_command_does_not_exist
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>Error in running <span style="color:#008000">command</span> bash 
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">$ this_command_does_not_exist
+Error in running <span style="color:#008000">command</span> bash 
 </code></pre></div><p>当每一条bash命令运行后，会隐式地将命令运行的状态结果存储在一个变量<code>$?</code>中：</p>
-<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>$ <span style="color:#008000">echo</span> <span style="color:#19177c">$?</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span style="color:#666">127</span> 
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">$ <span style="color:#008000">echo</span> <span style="color:#19177c">$?</span>
+<span style="color:#666">127</span> 
 </code></pre></div><p>这个整数就是状态码。</p>
 <p>这个特殊的退出状态向shell发出指示，它应该向控制台打印错误消息。成功运行的程序的退出状态是什么？让我们一起来看看：</p>
-<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-Bash" data-lang="Bash"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>$ <span style="color:#008000">echo</span> I will succeed.
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>I will succeed.
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>$ <span style="color:#008000">echo</span> <span style="color:#19177c">$?</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span style="color:#666">0</span> 
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-Bash" data-lang="Bash">$ <span style="color:#008000">echo</span> I will succeed.
+I will succeed.
+$ <span style="color:#008000">echo</span> <span style="color:#19177c">$?</span>
+<span style="color:#666">0</span> 
 </code></pre></div><p>成功的状态码是<code>0</code>。我们再看看逻辑值：</p>
-<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>$ <span style="color:#008000">true</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>$ <span style="color:#008000">echo</span> <span style="color:#19177c">$?</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span style="color:#666">0</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>$ <span style="color:#008000">false</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>$ <span style="color:#008000">echo</span> <span style="color:#19177c">$?</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span><span style="color:#666">1</span> 
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">$ <span style="color:#008000">true</span>
+$ <span style="color:#008000">echo</span> <span style="color:#19177c">$?</span>
+<span style="color:#666">0</span>
+$ <span style="color:#008000">false</span>
+$ <span style="color:#008000">echo</span> <span style="color:#19177c">$?</span>
+<span style="color:#666">1</span> 
 </code></pre></div><p>如您所见，<code>true</code>的退出状态为0，而<code>false</code>的退出状态为1。由于这些程序不做其他事情，你可以将<code>true</code>定义为始终具有退出状态0的程序，将<code>false</code>定义为始终具有退出状态1的程序。</p>
 <p>在讨论逻辑操作符AND操作符（<code>&amp;&amp;</code>）和OR操作符（<code>||</code>）时，了解这些程序的退出状态很重要。AND和OR运算符可用于命令行程序的条件执行。当一个程序的执行依赖于另一个程序的退出状态时，就会发生条件执行。例如，在AND操作符的情况下，只有当<code>&amp;&amp;</code>左边的程序的退出状态为0时，<code>&amp;&amp;</code>右边的程序才会被执行。让我们来看看一些小的例子：</p>
-<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-Bash" data-lang="Bash"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>$ <span style="color:#008000">true</span> <span style="color:#666">&amp;&amp;</span> <span style="color:#008000">echo</span> <span style="color:#ba2121">&#34;Program 1 was executed.&#34;</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>Program <span style="color:#666">1</span> was executed.
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>$ <span style="color:#008000">false</span> <span style="color:#666">&amp;&amp;</span> <span style="color:#008000">echo</span> <span style="color:#ba2121">&#34;Program 2 was executed.&#34;</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span> 
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-Bash" data-lang="Bash">$ <span style="color:#008000">true</span> <span style="color:#666">&amp;&amp;</span> <span style="color:#008000">echo</span> <span style="color:#ba2121">&#34;Program 1 was executed.&#34;</span>
+Program <span style="color:#666">1</span> was executed.
+$ <span style="color:#008000">false</span> <span style="color:#666">&amp;&amp;</span> <span style="color:#008000">echo</span> <span style="color:#ba2121">&#34;Program 2 was executed.&#34;</span>
+ 
 </code></pre></div><p>在由AND操作符连接在一起的一系列程序中，如果左侧程序退出状态是非零，右侧则不执行。</p>
 <p>OR运算符（<code>||</code>）遵循一组类似的原理。只有当左边的命令失败，退出状态不是0时，<code>||</code>右边的命令才会被执行。让我们来看看它是如何工作的：</p>
-<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>$ <span style="color:#008000">true</span> <span style="color:#666">||</span> <span style="color:#008000">echo</span> <span style="color:#ba2121">&#34;Program 1 was executed.&#34;</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span style="color:#19177c">$false</span> <span style="color:#666">||</span> <span style="color:#008000">echo</span> <span style="color:#ba2121">&#34;Program 2 was executed.&#34;</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>Program <span style="color:#666">2</span> was executed. 
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">$ <span style="color:#008000">true</span> <span style="color:#666">||</span> <span style="color:#008000">echo</span> <span style="color:#ba2121">&#34;Program 1 was executed.&#34;</span>
+
+<span style="color:#19177c">$false</span> <span style="color:#666">||</span> <span style="color:#008000">echo</span> <span style="color:#ba2121">&#34;Program 2 was executed.&#34;</span>
+Program <span style="color:#666">2</span> was executed. 
 </code></pre></div><p>你可以组合多个OR操作符，这样只有第一个退出状态为0的程序才会被执行。</p>
 <h3 id="条件表达式">条件表达式</h3>
 <p>让Bash脚本能够做出决策是非常有用的。条件执行允许你根据某些程序的成功或失败来控制执行这些程序的情况，但你也可以构造条件表达式，即等价于<code>true</code>或<code>false</code>的逻辑语句。条件表达式可以比较两个值，也可以对一个值提出问题。条件表达式总是在双括号（<code>[[]]</code>）之间，它们要么使用逻辑标志，要么使用逻辑操作符。例如，可以使用一些逻辑标志来比较两个整数。如果我们想知道一个整数是否大于另一个，我们可以使用<code>-gt</code>大于标志。在命令行中输入这个简单的条件表达式：</p>
-<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>$ <span style="color:#666">[[</span> <span style="color:#666">4</span> -gt <span style="color:#666">3</span> <span style="color:#666">]]</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>$ <span style="color:#008000">echo</span> <span style="color:#19177c">$?</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span style="color:#666">0</span> 
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">$ <span style="color:#666">[[</span> <span style="color:#666">4</span> -gt <span style="color:#666">3</span> <span style="color:#666">]]</span>
+$ <span style="color:#008000">echo</span> <span style="color:#19177c">$?</span>
+<span style="color:#666">0</span> 
 </code></pre></div><p>这些二进制逻辑表达式比较两个值，但也有只查看一个值的一元逻辑表达式。例如，你可以使用<code>-e</code>逻辑标志来测试文件是否存在。让我们来看看这个选项的作用：</p>
-<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>$ <span style="color:#666">[[</span> -e math.sh <span style="color:#666">]]</span> <span style="color:#666">&amp;&amp;</span> <span style="color:#008000">echo</span> t <span style="color:#666">||</span> <span style="color:#008000">echo</span> f
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>t 
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">$ <span style="color:#666">[[</span> -e math.sh <span style="color:#666">]]</span> <span style="color:#666">&amp;&amp;</span> <span style="color:#008000">echo</span> t <span style="color:#666">||</span> <span style="color:#008000">echo</span> f
+t 
 </code></pre></div><p>全部的逻辑标志如下：</p>
 <table>
 <thead>
@@ -276,20 +276,20 @@
 </tbody>
 </table>
 <p>除了逻辑标志之外，还有逻辑操作符。最有用的逻辑操作符之一是正则表达式匹配操作符<code>=~</code>。正则表达式匹配操作符将字符串与正则表达式进行比较，如果字符串与正则表达式匹配，则表达式等价于true，否则等价于false。让我们用几种不同的方法来测试这个操作符：</p>
-<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>$ <span style="color:#666">[[</span> <span style="color:#19177c">rhythms</span> <span style="color:#666">=</span>~ <span style="color:#666">[</span>aeiou<span style="color:#666">]</span> <span style="color:#666">]]</span> <span style="color:#666">&amp;&amp;</span> <span style="color:#008000">echo</span> t <span style="color:#666">||</span> <span style="color:#008000">echo</span> f
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>f
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>$ <span style="color:#19177c">my_name</span><span style="color:#666">=</span>sean
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>$ <span style="color:#666">[[</span> <span style="color:#19177c">$my_name</span> <span style="color:#666">=</span>~ ^s.+n$ <span style="color:#666">]]</span> <span style="color:#666">&amp;&amp;</span> <span style="color:#008000">echo</span> t <span style="color:#666">||</span> <span style="color:#008000">echo</span> f
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>t 
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">$ <span style="color:#666">[[</span> <span style="color:#19177c">rhythms</span> <span style="color:#666">=</span>~ <span style="color:#666">[</span>aeiou<span style="color:#666">]</span> <span style="color:#666">]]</span> <span style="color:#666">&amp;&amp;</span> <span style="color:#008000">echo</span> t <span style="color:#666">||</span> <span style="color:#008000">echo</span> f
+f
+$ <span style="color:#19177c">my_name</span><span style="color:#666">=</span>sean
+$ <span style="color:#666">[[</span> <span style="color:#19177c">$my_name</span> <span style="color:#666">=</span>~ ^s.+n$ <span style="color:#666">]]</span> <span style="color:#666">&amp;&amp;</span> <span style="color:#008000">echo</span> t <span style="color:#666">||</span> <span style="color:#008000">echo</span> f
+t 
 </code></pre></div><p>还有一个非运算符<code>!</code>，它反转任何条件表达式的值。NOT操作符将真表达式转换为假表达式，反之亦然。让我们看几个使用NOT操作符的例子：</p>
-<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>$ <span style="color:#666">[[</span> <span style="color:#666">7</span> -gt <span style="color:#666">2</span> <span style="color:#666">]]</span> <span style="color:#666">&amp;&amp;</span> <span style="color:#008000">echo</span> t <span style="color:#666">||</span> <span style="color:#008000">echo</span> f
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>t
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>$ <span style="color:#666">[[</span> ! <span style="color:#666">7</span> -gt <span style="color:#666">2</span> <span style="color:#666">]]</span> <span style="color:#666">&amp;&amp;</span> <span style="color:#008000">echo</span> t <span style="color:#666">||</span> <span style="color:#008000">echo</span> f
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>f
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>$ <span style="color:#666">[[</span> <span style="color:#666">6</span> -ne <span style="color:#666">3</span> <span style="color:#666">]]</span> <span style="color:#666">&amp;&amp;</span> <span style="color:#008000">echo</span> t <span style="color:#666">||</span> <span style="color:#008000">echo</span> f
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span>t
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7</span>$ <span style="color:#666">[[</span> ! <span style="color:#666">6</span> -ne <span style="color:#666">3</span> <span style="color:#666">]]</span> <span style="color:#666">&amp;&amp;</span> <span style="color:#008000">echo</span> t <span style="color:#666">||</span> <span style="color:#008000">echo</span> f
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">8</span>f 
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">$ <span style="color:#666">[[</span> <span style="color:#666">7</span> -gt <span style="color:#666">2</span> <span style="color:#666">]]</span> <span style="color:#666">&amp;&amp;</span> <span style="color:#008000">echo</span> t <span style="color:#666">||</span> <span style="color:#008000">echo</span> f
+t
+$ <span style="color:#666">[[</span> ! <span style="color:#666">7</span> -gt <span style="color:#666">2</span> <span style="color:#666">]]</span> <span style="color:#666">&amp;&amp;</span> <span style="color:#008000">echo</span> t <span style="color:#666">||</span> <span style="color:#008000">echo</span> f
+f
+$ <span style="color:#666">[[</span> <span style="color:#666">6</span> -ne <span style="color:#666">3</span> <span style="color:#666">]]</span> <span style="color:#666">&amp;&amp;</span> <span style="color:#008000">echo</span> t <span style="color:#666">||</span> <span style="color:#008000">echo</span> f
+t
+$ <span style="color:#666">[[</span> ! <span style="color:#666">6</span> -ne <span style="color:#666">3</span> <span style="color:#666">]]</span> <span style="color:#666">&amp;&amp;</span> <span style="color:#008000">echo</span> t <span style="color:#666">||</span> <span style="color:#008000">echo</span> f
+f 
 </code></pre></div><p>全部逻辑操作符：</p>
 <table>
 <thead>
@@ -324,312 +324,312 @@
 </table>
 <h3 id="if和else">If和Else</h3>
 <p>条件表达式的功能非常强大，因为我们可以使用它们来控制正在编写的Bash程序的执行方式。Bash编程中的基本构造之一是IF语句。在IF语句中编写的代码只在某个条件为真时执行，否则代码将被跳过。让我们写一个带有IF语句的小程序：</p>
-<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#bc7a00">#!/usr/bin/env bash
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span style="color:#bc7a00"></span><span style="color:#408080;font-style:italic"># File: simpleif.sh</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span><span style="color:#008000">echo</span> <span style="color:#ba2121">&#34;Start program&#34;</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span><span style="color:#008000;font-weight:bold">if</span> <span style="color:#666">[[</span> <span style="color:#19177c">$1</span> -eq <span style="color:#666">4</span> <span style="color:#666">]]</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span><span style="color:#008000;font-weight:bold">then</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>  <span style="color:#008000">echo</span> <span style="color:#ba2121">&#34;You entered </span><span style="color:#19177c">$1</span><span style="color:#ba2121">&#34;</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span style="color:#008000;font-weight:bold">fi</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span><span style="color:#008000">echo</span> <span style="color:#ba2121">&#34;End program&#34;</span>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="color:#bc7a00">#!/usr/bin/env bash
+</span><span style="color:#bc7a00"></span><span style="color:#408080;font-style:italic"># File: simpleif.sh</span>
+
+<span style="color:#008000">echo</span> <span style="color:#ba2121">&#34;Start program&#34;</span>
+
+<span style="color:#008000;font-weight:bold">if</span> <span style="color:#666">[[</span> <span style="color:#19177c">$1</span> -eq <span style="color:#666">4</span> <span style="color:#666">]]</span>
+<span style="color:#008000;font-weight:bold">then</span>
+  <span style="color:#008000">echo</span> <span style="color:#ba2121">&#34;You entered </span><span style="color:#19177c">$1</span><span style="color:#ba2121">&#34;</span>
+<span style="color:#008000;font-weight:bold">fi</span>
+
+<span style="color:#008000">echo</span> <span style="color:#ba2121">&#34;End program&#34;</span>
 </code></pre></div><p>我们来看看运行结果，首先不带参数：</p>
-<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>$ bash simpleif.sh
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>Start program
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>End program
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">$ bash simpleif.sh
+Start program
+End program
+
 </code></pre></div><p>带一个比4大的参数：</p>
-<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>$ bash simpleif.sh <span style="color:#666">77</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>Start program
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>End program
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">$ bash simpleif.sh <span style="color:#666">77</span>
+Start program
+End program
 </code></pre></div><p>带4：</p>
-<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>$ bash simpleif.sh <span style="color:#666">4</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>Start program
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>You entered <span style="color:#666">4</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>End program
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">$ bash simpleif.sh <span style="color:#666">4</span>
+Start program
+You entered <span style="color:#666">4</span>
+End program
 </code></pre></div><p>如果要处理额外的情况，我们需要加一个ELSE语句块：</p>
-<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#bc7a00">#!/usr/bin/env bash
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span style="color:#bc7a00"></span><span style="color:#408080;font-style:italic"># File: simpleifelse.sh</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span><span style="color:#008000">echo</span> <span style="color:#ba2121">&#34;Start program&#34;</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span><span style="color:#008000;font-weight:bold">if</span> <span style="color:#666">[[</span> <span style="color:#19177c">$1</span> -eq <span style="color:#666">4</span> <span style="color:#666">]]</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span><span style="color:#008000;font-weight:bold">then</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>  <span style="color:#008000">echo</span> <span style="color:#ba2121">&#34;Thanks for entering </span><span style="color:#19177c">$1</span><span style="color:#ba2121">&#34;</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span style="color:#008000;font-weight:bold">else</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>  <span style="color:#008000">echo</span> <span style="color:#ba2121">&#34;You entered: </span><span style="color:#19177c">$1</span><span style="color:#ba2121">, not what I was looking for.&#34;</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span><span style="color:#008000;font-weight:bold">fi</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span><span style="color:#008000">echo</span> <span style="color:#ba2121">&#34;End program&#34;</span>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="color:#bc7a00">#!/usr/bin/env bash
+</span><span style="color:#bc7a00"></span><span style="color:#408080;font-style:italic"># File: simpleifelse.sh</span>
+
+<span style="color:#008000">echo</span> <span style="color:#ba2121">&#34;Start program&#34;</span>
+
+<span style="color:#008000;font-weight:bold">if</span> <span style="color:#666">[[</span> <span style="color:#19177c">$1</span> -eq <span style="color:#666">4</span> <span style="color:#666">]]</span>
+<span style="color:#008000;font-weight:bold">then</span>
+  <span style="color:#008000">echo</span> <span style="color:#ba2121">&#34;Thanks for entering </span><span style="color:#19177c">$1</span><span style="color:#ba2121">&#34;</span>
+<span style="color:#008000;font-weight:bold">else</span>
+  <span style="color:#008000">echo</span> <span style="color:#ba2121">&#34;You entered: </span><span style="color:#19177c">$1</span><span style="color:#ba2121">, not what I was looking for.&#34;</span>
+<span style="color:#008000;font-weight:bold">fi</span>
+
+<span style="color:#008000">echo</span> <span style="color:#ba2121">&#34;End program&#34;</span>
 </code></pre></div><p>如果是有多个if-else结构，使用ELIF语句块：</p>
-<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#bc7a00">#!/usr/bin/env bash
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span style="color:#bc7a00"></span><span style="color:#408080;font-style:italic"># File: simpleelif.sh</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span><span style="color:#008000;font-weight:bold">if</span> <span style="color:#666">[[</span> <span style="color:#19177c">$1</span> -eq <span style="color:#666">4</span> <span style="color:#666">]]</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span><span style="color:#008000;font-weight:bold">then</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>  <span style="color:#008000">echo</span> <span style="color:#ba2121">&#34;</span><span style="color:#19177c">$1</span><span style="color:#ba2121"> is my favorite number&#34;</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span><span style="color:#008000;font-weight:bold">elif</span> <span style="color:#666">[[</span> <span style="color:#19177c">$1</span> -gt <span style="color:#666">3</span> <span style="color:#666">]]</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span><span style="color:#008000;font-weight:bold">then</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>  <span style="color:#008000">echo</span> <span style="color:#ba2121">&#34;</span><span style="color:#19177c">$1</span><span style="color:#ba2121"> is a great number&#34;</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span style="color:#008000;font-weight:bold">else</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>  <span style="color:#008000">echo</span> <span style="color:#ba2121">&#34;You entered: </span><span style="color:#19177c">$1</span><span style="color:#ba2121">, not what I was looking for.&#34;</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span><span style="color:#008000;font-weight:bold">fi</span>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="color:#bc7a00">#!/usr/bin/env bash
+</span><span style="color:#bc7a00"></span><span style="color:#408080;font-style:italic"># File: simpleelif.sh</span>
+
+<span style="color:#008000;font-weight:bold">if</span> <span style="color:#666">[[</span> <span style="color:#19177c">$1</span> -eq <span style="color:#666">4</span> <span style="color:#666">]]</span>
+<span style="color:#008000;font-weight:bold">then</span>
+  <span style="color:#008000">echo</span> <span style="color:#ba2121">&#34;</span><span style="color:#19177c">$1</span><span style="color:#ba2121"> is my favorite number&#34;</span>
+<span style="color:#008000;font-weight:bold">elif</span> <span style="color:#666">[[</span> <span style="color:#19177c">$1</span> -gt <span style="color:#666">3</span> <span style="color:#666">]]</span>
+<span style="color:#008000;font-weight:bold">then</span>
+  <span style="color:#008000">echo</span> <span style="color:#ba2121">&#34;</span><span style="color:#19177c">$1</span><span style="color:#ba2121"> is a great number&#34;</span>
+<span style="color:#008000;font-weight:bold">else</span>
+  <span style="color:#008000">echo</span> <span style="color:#ba2121">&#34;You entered: </span><span style="color:#19177c">$1</span><span style="color:#ba2121">, not what I was looking for.&#34;</span>
+<span style="color:#008000;font-weight:bold">fi</span>
 </code></pre></div><p><strong>注意，IF/ELIF语句后都存在</strong> <strong>then</strong> <strong>才对。</strong> Bash语句的写法可能与其他的语言有所不同，但使用并无差别。</p>
 <h2 id="数组">数组</h2>
 <p>Bash中的数组是值的<strong>有序列表</strong> 。可以通过将列表赋值给变量名从头创建列表。列表是用圆括号<code>()</code>创建的，用<strong>空格</strong> 分隔列表中的每个元素。让我们列出埃及的灾殃：</p>
-<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#19177c">plagues</span><span style="color:#666">=(</span>blood frogs lice flies sickness boils hail locusts darkness death<span style="color:#666">)</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="color:#19177c">plagues</span><span style="color:#666">=(</span>blood frogs lice flies sickness boils hail locusts darkness death<span style="color:#666">)</span>
+
 </code></pre></div><p>要检索数组，需要使用<strong>参数展开</strong> ，其中包括美元符号和花括号<code>${}</code>。数组中元素的位置从<strong>0</strong> 开始编号。要获取该数组的第一个元素，请使用<code>${plagues[0]}</code>：</p>
-<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>$ <span style="color:#008000">echo</span> <span style="color:#b68;font-weight:bold">${</span><span style="color:#19177c">plagues</span>[0]<span style="color:#b68;font-weight:bold">}</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>blood 
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">$ <span style="color:#008000">echo</span> <span style="color:#b68;font-weight:bold">${</span><span style="color:#19177c">plagues</span>[0]<span style="color:#b68;font-weight:bold">}</span>
+blood 
 </code></pre></div><p>要得到瘟疫的所有元素，在方括号中使用星号（<code>*</code>）：</p>
-<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>$ <span style="color:#008000">echo</span> <span style="color:#b68;font-weight:bold">${</span><span style="color:#19177c">plagues</span>[*]<span style="color:#b68;font-weight:bold">}</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>blood frogs lice flies sickness boils hail locusts darkness death 
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">$ <span style="color:#008000">echo</span> <span style="color:#b68;font-weight:bold">${</span><span style="color:#19177c">plagues</span>[*]<span style="color:#b68;font-weight:bold">}</span>
+blood frogs lice flies sickness boils hail locusts darkness death 
 </code></pre></div><p>你也可以通过在方括号中指定索引来改变数组中的单个元素：</p>
-<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>$ <span style="color:#008000">echo</span> <span style="color:#b68;font-weight:bold">${</span><span style="color:#19177c">plagues</span>[*]<span style="color:#b68;font-weight:bold">}</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>blood frogs lice flies sickness boils hail locusts darkness death
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>$ plagues<span style="color:#666">[</span>4<span style="color:#666">]=</span>disease
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>$ <span style="color:#008000">echo</span> <span style="color:#b68;font-weight:bold">${</span><span style="color:#19177c">plagues</span>[*]<span style="color:#b68;font-weight:bold">}</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>blood frogs lice flies disease boils hail locusts darkness death 
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">$ <span style="color:#008000">echo</span> <span style="color:#b68;font-weight:bold">${</span><span style="color:#19177c">plagues</span>[*]<span style="color:#b68;font-weight:bold">}</span>
+blood frogs lice flies sickness boils hail locusts darkness death
+$ plagues<span style="color:#666">[</span>4<span style="color:#666">]=</span>disease
+$ <span style="color:#008000">echo</span> <span style="color:#b68;font-weight:bold">${</span><span style="color:#19177c">plagues</span>[*]<span style="color:#b68;font-weight:bold">}</span>
+blood frogs lice flies disease boils hail locusts darkness death 
 </code></pre></div><p>如果只获取数组的一部分，你必须指定你想从数组开始的索引，然后是你想从数组中检索的元素数，用冒号分隔：</p>
-<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>$ <span style="color:#008000">echo</span> <span style="color:#b68;font-weight:bold">${</span><span style="color:#19177c">plagues</span>[*]:<span style="color:#19177c">5</span>:<span style="color:#19177c">3</span><span style="color:#b68;font-weight:bold">}</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>boils hail locusts 
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">$ <span style="color:#008000">echo</span> <span style="color:#b68;font-weight:bold">${</span><span style="color:#19177c">plagues</span>[*]:<span style="color:#19177c">5</span>:<span style="color:#19177c">3</span><span style="color:#b68;font-weight:bold">}</span>
+boils hail locusts 
 </code></pre></div><p>你可以使用井号（<code>#</code>）找到数组的长度：</p>
-<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>$ <span style="color:#008000">echo</span> <span style="color:#b68;font-weight:bold">${#</span><span style="color:#19177c">plagues</span>[*]<span style="color:#b68;font-weight:bold">}</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span style="color:#666">10</span> 
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">$ <span style="color:#008000">echo</span> <span style="color:#b68;font-weight:bold">${#</span><span style="color:#19177c">plagues</span>[*]<span style="color:#b68;font-weight:bold">}</span>
+<span style="color:#666">10</span> 
 </code></pre></div><p>你可以使用加等于操作符（<code>+=</code>）将数组添加到数组的末尾：</p>
-<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>$ <span style="color:#19177c">dwarfs</span><span style="color:#666">=(</span>grumpy sleepy sneezy doc<span style="color:#666">)</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>$ <span style="color:#008000">echo</span> <span style="color:#b68;font-weight:bold">${</span><span style="color:#19177c">dwarfs</span>[*]<span style="color:#b68;font-weight:bold">}</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>grumpy sleepy sneezy doc
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>$ <span style="color:#19177c">dwarfs</span><span style="color:#666">+=(</span>bashful dopey happy<span style="color:#666">)</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>$ <span style="color:#008000">echo</span> <span style="color:#b68;font-weight:bold">${</span><span style="color:#19177c">dwarfs</span>[*]<span style="color:#b68;font-weight:bold">}</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span>grumpy sleepy sneezy doc bashful dopey happy
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7</span>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">$ <span style="color:#19177c">dwarfs</span><span style="color:#666">=(</span>grumpy sleepy sneezy doc<span style="color:#666">)</span>
+$ <span style="color:#008000">echo</span> <span style="color:#b68;font-weight:bold">${</span><span style="color:#19177c">dwarfs</span>[*]<span style="color:#b68;font-weight:bold">}</span>
+grumpy sleepy sneezy doc
+$ <span style="color:#19177c">dwarfs</span><span style="color:#666">+=(</span>bashful dopey happy<span style="color:#666">)</span>
+$ <span style="color:#008000">echo</span> <span style="color:#b68;font-weight:bold">${</span><span style="color:#19177c">dwarfs</span>[*]<span style="color:#b68;font-weight:bold">}</span>
+grumpy sleepy sneezy doc bashful dopey happy
+
 </code></pre></div><h2 id="大括号">大括号</h2>
 <p>Bash有一个非常方便的工具，可以从称为<strong>大括号展开</strong> 的序列中创建字符串。大括号展开使用大括号和两个点（<code>{..}</code>）创建一个字母或数字的序列。例如，要创建一个包含0到9之间所有数字的字符串，你可以这样做：</p>
-<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>$ <span style="color:#008000">echo</span> <span style="color:#666">{</span>0..9<span style="color:#666">}</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span style="color:#666">0</span> <span style="color:#666">1</span> <span style="color:#666">2</span> <span style="color:#666">3</span> <span style="color:#666">4</span> <span style="color:#666">5</span> <span style="color:#666">6</span> <span style="color:#666">7</span> <span style="color:#666">8</span> <span style="color:#666">9</span> 
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">$ <span style="color:#008000">echo</span> <span style="color:#666">{</span>0..9<span style="color:#666">}</span>
+<span style="color:#666">0</span> <span style="color:#666">1</span> <span style="color:#666">2</span> <span style="color:#666">3</span> <span style="color:#666">4</span> <span style="color:#666">5</span> <span style="color:#666">6</span> <span style="color:#666">7</span> <span style="color:#666">8</span> <span style="color:#666">9</span> 
 </code></pre></div><p>字母也可以：</p>
-<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>$ <span style="color:#008000">echo</span> <span style="color:#666">{</span>a..e<span style="color:#666">}</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>a b c d e
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>$ <span style="color:#008000">echo</span> <span style="color:#666">{</span>W..Z<span style="color:#666">}</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>W X Y Z 
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">$ <span style="color:#008000">echo</span> <span style="color:#666">{</span>a..e<span style="color:#666">}</span>
+a b c d e
+$ <span style="color:#008000">echo</span> <span style="color:#666">{</span>W..Z<span style="color:#666">}</span>
+W X Y Z 
 </code></pre></div><p>这种序列生成可以组合以及连用：</p>
-<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>$ <span style="color:#008000">echo</span> a<span style="color:#666">{</span>0..4<span style="color:#666">}</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>a0 a1 a2 a3 a4
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>$ <span style="color:#008000">echo</span> b<span style="color:#666">{</span>0..4<span style="color:#666">}</span>c
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>b0c b1c b2c b3c b4c
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>$ <span style="color:#008000">echo</span> <span style="color:#666">{</span>1..3<span style="color:#666">}{</span>A..C<span style="color:#666">}</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span>1A 1B 1C 2A 2B 2C 3A 3B 3C 
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">$ <span style="color:#008000">echo</span> a<span style="color:#666">{</span>0..4<span style="color:#666">}</span>
+a0 a1 a2 a3 a4
+$ <span style="color:#008000">echo</span> b<span style="color:#666">{</span>0..4<span style="color:#666">}</span>c
+b0c b1c b2c b3c b4c
+$ <span style="color:#008000">echo</span> <span style="color:#666">{</span>1..3<span style="color:#666">}{</span>A..C<span style="color:#666">}</span>
+1A 1B 1C 2A 2B 2C 3A 3B 3C 
 </code></pre></div><p>如果你想使用变量来定义序列，你需要使用<code>eval</code>命令来创建序列：</p>
-<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>$ <span style="color:#19177c">start</span><span style="color:#666">=</span><span style="color:#666">4</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>$ <span style="color:#19177c">end</span><span style="color:#666">=</span><span style="color:#666">9</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>$ <span style="color:#008000">echo</span> <span style="color:#666">{</span><span style="color:#19177c">$start</span>..<span style="color:#19177c">$end</span><span style="color:#666">}</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span style="color:#666">{</span>4..9<span style="color:#666">}</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>$ <span style="color:#008000">eval</span> <span style="color:#008000">echo</span> <span style="color:#666">{</span><span style="color:#19177c">$start</span>..<span style="color:#19177c">$end</span><span style="color:#666">}</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span><span style="color:#666">4</span> <span style="color:#666">5</span> <span style="color:#666">6</span> <span style="color:#666">7</span> <span style="color:#666">8</span> <span style="color:#666">9</span> 
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">$ <span style="color:#19177c">start</span><span style="color:#666">=</span><span style="color:#666">4</span>
+$ <span style="color:#19177c">end</span><span style="color:#666">=</span><span style="color:#666">9</span>
+$ <span style="color:#008000">echo</span> <span style="color:#666">{</span><span style="color:#19177c">$start</span>..<span style="color:#19177c">$end</span><span style="color:#666">}</span>
+<span style="color:#666">{</span>4..9<span style="color:#666">}</span>
+$ <span style="color:#008000">eval</span> <span style="color:#008000">echo</span> <span style="color:#666">{</span><span style="color:#19177c">$start</span>..<span style="color:#19177c">$end</span><span style="color:#666">}</span>
+<span style="color:#666">4</span> <span style="color:#666">5</span> <span style="color:#666">6</span> <span style="color:#666">7</span> <span style="color:#666">8</span> <span style="color:#666">9</span> 
 </code></pre></div><p>而且可以使用<code>,</code>实现序列的增补：</p>
-<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>$ <span style="color:#008000">echo</span> <span style="color:#666">{{</span>1..3<span style="color:#666">}</span>,<span style="color:#666">{</span>a..c<span style="color:#666">}}</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span style="color:#666">1</span> <span style="color:#666">2</span> <span style="color:#666">3</span> a b c 
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">$ <span style="color:#008000">echo</span> <span style="color:#666">{{</span>1..3<span style="color:#666">}</span>,<span style="color:#666">{</span>a..c<span style="color:#666">}}</span>
+<span style="color:#666">1</span> <span style="color:#666">2</span> <span style="color:#666">3</span> a b c 
 </code></pre></div><h2 id="循环">循环♻️</h2>
 <p>循环是Bash语言中最重要的编程结构之一。到目前为止，我们编写的所有程序都是从脚本的第一行执行到最后一行，但是循环允许基于逻辑条件或遵循序列重复代码行。</p>
 <h3 id="for">For</h3>
 <p>我们要讨论的第一种循环是FOR循环。FOR循环遍历你指定的序列的每个元素。让我们看一个小的FOR循环示例：</p>
-<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#bc7a00">#!/usr/bin/env bash
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span style="color:#bc7a00"></span><span style="color:#408080;font-style:italic"># File: forloop.sh</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span><span style="color:#008000">echo</span> <span style="color:#ba2121">&#34;Before Loop&#34;</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span><span style="color:#008000;font-weight:bold">for</span> i in <span style="color:#666">{</span>1..3<span style="color:#666">}</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span><span style="color:#008000;font-weight:bold">do</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>    <span style="color:#008000">echo</span> <span style="color:#ba2121">&#34;i is equal to </span><span style="color:#19177c">$i</span><span style="color:#ba2121">&#34;</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span style="color:#008000;font-weight:bold">done</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span><span style="color:#008000">echo</span> <span style="color:#ba2121">&#34;After Loop&#34;</span>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="color:#bc7a00">#!/usr/bin/env bash
+</span><span style="color:#bc7a00"></span><span style="color:#408080;font-style:italic"># File: forloop.sh</span>
+
+<span style="color:#008000">echo</span> <span style="color:#ba2121">&#34;Before Loop&#34;</span>
+
+<span style="color:#008000;font-weight:bold">for</span> i in <span style="color:#666">{</span>1..3<span style="color:#666">}</span>
+<span style="color:#008000;font-weight:bold">do</span>
+    <span style="color:#008000">echo</span> <span style="color:#ba2121">&#34;i is equal to </span><span style="color:#19177c">$i</span><span style="color:#ba2121">&#34;</span>
+<span style="color:#008000;font-weight:bold">done</span>
+
+<span style="color:#008000">echo</span> <span style="color:#ba2121">&#34;After Loop&#34;</span>
 </code></pre></div><p>运行该脚本：</p>
-<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>$ bash forloop.sh
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>Before Loop
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>i is equal to <span style="color:#666">1</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>i is equal to <span style="color:#666">2</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>i is equal to <span style="color:#666">3</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span>After Loop 
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">$ bash forloop.sh
+Before Loop
+i is equal to <span style="color:#666">1</span>
+i is equal to <span style="color:#666">2</span>
+i is equal to <span style="color:#666">3</span>
+After Loop 
 </code></pre></div><p>一旦我们了解了上述原则，我们可以尝试阅读一些其他类型的序列生成策略，看看这个例子：</p>
-<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#bc7a00">#!/usr/bin/env bash
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span style="color:#bc7a00"></span><span style="color:#408080;font-style:italic"># File: manyloops.sh</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span><span style="color:#008000">echo</span> <span style="color:#ba2121">&#34;Explicit list:&#34;</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span><span style="color:#008000;font-weight:bold">for</span> picture in img001.jpg img002.jpg img451.jpg
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span><span style="color:#008000;font-weight:bold">do</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>    <span style="color:#008000">echo</span> <span style="color:#ba2121">&#34;picture is equal to </span><span style="color:#19177c">$picture</span><span style="color:#ba2121">&#34;</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span style="color:#008000;font-weight:bold">done</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span><span style="color:#008000">echo</span> <span style="color:#ba2121">&#34;&#34;</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span><span style="color:#008000">echo</span> <span style="color:#ba2121">&#34;Array:&#34;</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span><span style="color:#19177c">stooges</span><span style="color:#666">=(</span>curly larry moe<span style="color:#666">)</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span><span style="color:#008000;font-weight:bold">for</span> stooge in <span style="color:#b68;font-weight:bold">${</span><span style="color:#19177c">stooges</span>[*]<span style="color:#b68;font-weight:bold">}</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span><span style="color:#008000;font-weight:bold">do</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span>    <span style="color:#008000">echo</span> <span style="color:#ba2121">&#34;Current stooge: </span><span style="color:#19177c">$stooge</span><span style="color:#ba2121">&#34;</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span><span style="color:#008000;font-weight:bold">done</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span><span style="color:#008000">echo</span> <span style="color:#ba2121">&#34;&#34;</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span><span style="color:#008000">echo</span> <span style="color:#ba2121">&#34;Command substitution:&#34;</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24</span><span style="color:#008000;font-weight:bold">for</span> code in <span style="color:#008000;font-weight:bold">$(</span>ls<span style="color:#008000;font-weight:bold">)</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25</span><span style="color:#008000;font-weight:bold">do</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26</span>    <span style="color:#008000">echo</span> <span style="color:#ba2121">&#34;</span><span style="color:#19177c">$code</span><span style="color:#ba2121"> is a bash script&#34;</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27</span><span style="color:#008000;font-weight:bold">done</span>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="color:#bc7a00">#!/usr/bin/env bash
+</span><span style="color:#bc7a00"></span><span style="color:#408080;font-style:italic"># File: manyloops.sh</span>
+
+<span style="color:#008000">echo</span> <span style="color:#ba2121">&#34;Explicit list:&#34;</span>
+
+<span style="color:#008000;font-weight:bold">for</span> picture in img001.jpg img002.jpg img451.jpg
+<span style="color:#008000;font-weight:bold">do</span>
+    <span style="color:#008000">echo</span> <span style="color:#ba2121">&#34;picture is equal to </span><span style="color:#19177c">$picture</span><span style="color:#ba2121">&#34;</span>
+<span style="color:#008000;font-weight:bold">done</span>
+
+<span style="color:#008000">echo</span> <span style="color:#ba2121">&#34;&#34;</span>
+<span style="color:#008000">echo</span> <span style="color:#ba2121">&#34;Array:&#34;</span>
+
+<span style="color:#19177c">stooges</span><span style="color:#666">=(</span>curly larry moe<span style="color:#666">)</span>
+
+<span style="color:#008000;font-weight:bold">for</span> stooge in <span style="color:#b68;font-weight:bold">${</span><span style="color:#19177c">stooges</span>[*]<span style="color:#b68;font-weight:bold">}</span>
+<span style="color:#008000;font-weight:bold">do</span>
+    <span style="color:#008000">echo</span> <span style="color:#ba2121">&#34;Current stooge: </span><span style="color:#19177c">$stooge</span><span style="color:#ba2121">&#34;</span>
+<span style="color:#008000;font-weight:bold">done</span>
+
+<span style="color:#008000">echo</span> <span style="color:#ba2121">&#34;&#34;</span>
+<span style="color:#008000">echo</span> <span style="color:#ba2121">&#34;Command substitution:&#34;</span>
+
+<span style="color:#008000;font-weight:bold">for</span> code in <span style="color:#008000;font-weight:bold">$(</span>ls<span style="color:#008000;font-weight:bold">)</span>
+<span style="color:#008000;font-weight:bold">do</span>
+    <span style="color:#008000">echo</span> <span style="color:#ba2121">&#34;</span><span style="color:#19177c">$code</span><span style="color:#ba2121"> is a bash script&#34;</span>
+<span style="color:#008000;font-weight:bold">done</span>
 </code></pre></div><p>运行：</p>
-<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span>$ bash manyloops.sh
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>Explicit list:
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>picture is equal to img001.jpg
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>picture is equal to img002.jpg
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>picture is equal to img451.jpg
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>Array:
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>Current stooge: curly
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>Current stooge: larry
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>Current stooge: moe
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>Command substitution:
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>bigmath.sh is a bash script
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>condexif.sh is a bash script
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>forloop.sh is a bash script
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span>letsread.sh is a bash script
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span>manyloops.sh is a bash script
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span>math.sh is a bash script
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span>nested.sh is a bash script
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span>simpleelif.sh is a bash script
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span>simpleif.sh is a bash script
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span>simpleifelse.sh is a bash script
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23</span>vars.sh is a bash script 
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">$ bash manyloops.sh
+Explicit list:
+picture is equal to img001.jpg
+picture is equal to img002.jpg
+picture is equal to img451.jpg
+
+Array:
+Current stooge: curly
+Current stooge: larry
+Current stooge: moe
+
+Command substitution:
+bigmath.sh is a bash script
+condexif.sh is a bash script
+forloop.sh is a bash script
+letsread.sh is a bash script
+manyloops.sh is a bash script
+math.sh is a bash script
+nested.sh is a bash script
+simpleelif.sh is a bash script
+simpleif.sh is a bash script
+simpleifelse.sh is a bash script
+vars.sh is a bash script 
 </code></pre></div><h3 id="while">While</h3>
 <p>现在我们已经有了几个FOR循环，让我们继续看WHILE循环。WHILE循环确实是编程结构中的“里斯花生酱杯”，它结合了部分FOR循环和IF语句。让我们看一个WHILE循环的例子，这样你就可以明白我的意思了：</p>
-<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#bc7a00">#!/usr/bin/env bash
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span style="color:#bc7a00"></span><span style="color:#408080;font-style:italic"># File: whileloop.sh</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span><span style="color:#19177c">count</span><span style="color:#666">=</span><span style="color:#666">3</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span><span style="color:#008000;font-weight:bold">while</span> <span style="color:#666">[[</span> <span style="color:#19177c">$count</span> -gt <span style="color:#666">0</span> <span style="color:#666">]]</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span><span style="color:#008000;font-weight:bold">do</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>  <span style="color:#008000">echo</span> <span style="color:#ba2121">&#34;count is equal to </span><span style="color:#19177c">$count</span><span style="color:#ba2121">&#34;</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>  <span style="color:#008000">let</span> <span style="color:#19177c">count</span><span style="color:#666">=</span><span style="color:#19177c">$count</span>-1
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span style="color:#008000;font-weight:bold">done</span>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="color:#bc7a00">#!/usr/bin/env bash
+</span><span style="color:#bc7a00"></span><span style="color:#408080;font-style:italic"># File: whileloop.sh</span>
+
+<span style="color:#19177c">count</span><span style="color:#666">=</span><span style="color:#666">3</span>
+
+<span style="color:#008000;font-weight:bold">while</span> <span style="color:#666">[[</span> <span style="color:#19177c">$count</span> -gt <span style="color:#666">0</span> <span style="color:#666">]]</span>
+<span style="color:#008000;font-weight:bold">do</span>
+  <span style="color:#008000">echo</span> <span style="color:#ba2121">&#34;count is equal to </span><span style="color:#19177c">$count</span><span style="color:#ba2121">&#34;</span>
+  <span style="color:#008000">let</span> <span style="color:#19177c">count</span><span style="color:#666">=</span><span style="color:#19177c">$count</span>-1
+<span style="color:#008000;font-weight:bold">done</span>
 </code></pre></div><p>上面注意<code>do</code>和<code>done</code>是一对，读者自己编写时莫要忘记了。</p>
 <p>看看运行结果：</p>
-<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>$ bash whileloop.sh
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>count is equal to <span style="color:#666">3</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>count is equal to <span style="color:#666">2</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>count is equal to <span style="color:#666">1</span>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">$ bash whileloop.sh
+count is equal to <span style="color:#666">3</span>
+count is equal to <span style="color:#666">2</span>
+count is equal to <span style="color:#666">1</span>
 </code></pre></div><h3 id="嵌套">嵌套</h3>
 <p>像IF语句一样，FOR和WHILE语句可以嵌套：</p>
-<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#bc7a00">#!/usr/bin/env bash
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span style="color:#bc7a00"></span><span style="color:#408080;font-style:italic"># File: nestedloops.sh</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span><span style="color:#008000;font-weight:bold">for</span> number in <span style="color:#666">{</span>1..3<span style="color:#666">}</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span><span style="color:#008000;font-weight:bold">do</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>  <span style="color:#008000;font-weight:bold">for</span> letter in a b
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>  <span style="color:#008000;font-weight:bold">do</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>    <span style="color:#008000">echo</span> <span style="color:#ba2121">&#34;number is </span><span style="color:#19177c">$number</span><span style="color:#ba2121">, letter is </span><span style="color:#19177c">$letter</span><span style="color:#ba2121">&#34;</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>  <span style="color:#008000;font-weight:bold">done</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span style="color:#008000;font-weight:bold">done</span>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="color:#bc7a00">#!/usr/bin/env bash
+</span><span style="color:#bc7a00"></span><span style="color:#408080;font-style:italic"># File: nestedloops.sh</span>
+
+<span style="color:#008000;font-weight:bold">for</span> number in <span style="color:#666">{</span>1..3<span style="color:#666">}</span>
+<span style="color:#008000;font-weight:bold">do</span>
+  <span style="color:#008000;font-weight:bold">for</span> letter in a b
+  <span style="color:#008000;font-weight:bold">do</span>
+    <span style="color:#008000">echo</span> <span style="color:#ba2121">&#34;number is </span><span style="color:#19177c">$number</span><span style="color:#ba2121">, letter is </span><span style="color:#19177c">$letter</span><span style="color:#ba2121">&#34;</span>
+  <span style="color:#008000;font-weight:bold">done</span>
+<span style="color:#008000;font-weight:bold">done</span>
 </code></pre></div><p>运行：</p>
-<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>$ bash nestedloops.sh
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>number is 1, letter is a
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>number is 1, letter is b
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>number is 2, letter is a
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>number is 2, letter is b
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span>number is 3, letter is a
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7</span>number is 3, letter is b 
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">$ bash nestedloops.sh
+number is 1, letter is a
+number is 1, letter is b
+number is 2, letter is a
+number is 2, letter is b
+number is 3, letter is a
+number is 3, letter is b 
 </code></pre></div><h2 id="函数">函数</h2>
 <h3 id="写函数">写函数</h3>
 <p>函数是有名称的一小段代码。编写函数允许我们在程序中多次重用相同的代码。函数的语法如下：</p>
-<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#008000;font-weight:bold">function</span> <span style="color:#666">[</span>name of <span style="color:#008000;font-weight:bold">function</span><span style="color:#666">]</span> <span style="color:#666">{</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>  <span style="color:#408080;font-style:italic"># code here</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span style="color:#666">}</span>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="color:#008000;font-weight:bold">function</span> <span style="color:#666">[</span>name of <span style="color:#008000;font-weight:bold">function</span><span style="color:#666">]</span> <span style="color:#666">{</span>
+  <span style="color:#408080;font-style:italic"># code here</span>
+<span style="color:#666">}</span>
 </code></pre></div><p>是不是很简单？让我们来写一个<code>hello.sh</code>：</p>
-<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#bc7a00">#!/usr/bin/env bash
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span style="color:#bc7a00"></span><span style="color:#408080;font-style:italic"># File: hello.sh</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span><span style="color:#008000;font-weight:bold">function</span> hello <span style="color:#666">{</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>  <span style="color:#008000">echo</span> <span style="color:#ba2121">&#34;Hello&#34;</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span><span style="color:#666">}</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>hello <span style="color:#408080;font-style:italic"># 这里是调用函数执行</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>hello
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>hello
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="color:#bc7a00">#!/usr/bin/env bash
+</span><span style="color:#bc7a00"></span><span style="color:#408080;font-style:italic"># File: hello.sh</span>
+
+<span style="color:#008000;font-weight:bold">function</span> hello <span style="color:#666">{</span>
+  <span style="color:#008000">echo</span> <span style="color:#ba2121">&#34;Hello&#34;</span>
+<span style="color:#666">}</span>
+
+hello <span style="color:#408080;font-style:italic"># 这里是调用函数执行</span>
+hello
+hello
 </code></pre></div><p>函数的整个结构，包括<code>function</code>关键字、函数名和写在方括号内的函数代码，作为函数定义。函数定义将函数内的代码分配给函数名（在本例中是<code>hello</code>）。函数定义后，就可以像其他任何命令一样使用它。使用三次<code>hello</code>命令应该相当于使用三次<code>echo &quot;Hello&quot;</code>。让我们运行这个脚本来找出答案：</p>
-<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>$ bash hello.sh
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>Hello
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>Hello
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>Hello 
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">$ bash hello.sh
+Hello
+Hello
+Hello 
 </code></pre></div><p>函数与整个bash脚本共享许多行为，包括它们如何处理参数。通常的bash脚本参数如<code>$1</code>、<code>$2</code>和<code>$@</code>都在函数中工作，这允许你指定函数参数。让我们创建一个稍微修改过的hello.sh版本，我们将其命名为<code>ntmy.sh</code>：</p>
-<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#bc7a00">#!/usr/bin/env bash
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span style="color:#bc7a00"></span><span style="color:#408080;font-style:italic"># File: ntmy.sh</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span style="color:#008000;font-weight:bold">function</span> ntmy <span style="color:#666">{</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>  <span style="color:#008000">echo</span> <span style="color:#ba2121">&#34;Nice to meet you </span><span style="color:#19177c">$1</span><span style="color:#ba2121">&#34;</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span><span style="color:#666">}</span>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="color:#bc7a00">#!/usr/bin/env bash
+</span><span style="color:#bc7a00"></span><span style="color:#408080;font-style:italic"># File: ntmy.sh</span>
+
+<span style="color:#008000;font-weight:bold">function</span> ntmy <span style="color:#666">{</span>
+  <span style="color:#008000">echo</span> <span style="color:#ba2121">&#34;Nice to meet you </span><span style="color:#19177c">$1</span><span style="color:#ba2121">&#34;</span>
+<span style="color:#666">}</span>
 </code></pre></div><p>在上面的文件中，请注意，在定义了ntmy函数之后，我们没有使用它。这是因为我们将开始使用我们定义为命令行程序的函数。到目前为止，本章我们一直在使用<code>bash[脚本名]</code>的语法来执行脚本的内容。现在我们将开始使用<code>source</code>命令，<strong>它允许我们将bash脚本中的函数定义作为命令行命令使用</strong> 。让我们对这个文件使用<code>source</code>，这样我们就可以使用<code>ntmy</code>命令：</p>
-<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>$ <span style="color:#008000">source</span> ntmy.sh
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>$ ntmy Jeff
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>Nice to meet you Jeff
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>$ ntmy Philip
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>Nice to meet you Philip
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span>$ ntmy Jenny
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7</span>Nice to meet you Jenny 
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">$ <span style="color:#008000">source</span> ntmy.sh
+$ ntmy Jeff
+Nice to meet you Jeff
+$ ntmy Philip
+Nice to meet you Philip
+$ ntmy Jenny
+Nice to meet you Jenny 
 </code></pre></div><p>就像这样，你已经创建了自己的命令！但一旦关闭当前shell，你将失去对ntmy命令的访问权，但在下一节中，我们将讨论如何设置你自己的命令，以便始终能够访问它们。</p>
 <p>我们写一个更复杂的函数。假设我们想要从命令行中对一个数字序列进行相加，但是我们无法知道序列中有多少数字。我们需要什么东西来写这个函数？<strong>首先，我们需要一种方法来捕获可变长度的参数列表，其次，我们需要一种方法来遍历该列表以便将每个元素相加，我们还需要一种方法来存储序列的累积和</strong> 。这三个要求可以通过使用<code>$@</code>变量、一个FOR循环和可以存储和的变量来满足。在编写程序之前，将一个更大的目标分解成一系列独立的模块是很重要的，这样我们可以更容易地确定需要哪些特性和工具。让我们在一个名为<code>addseq.sh</code>的文件中编写这个程序。</p>
-<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#bc7a00">#!/usr/bin/env bash
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span style="color:#bc7a00"></span><span style="color:#408080;font-style:italic"># File: addseq.sh</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span><span style="color:#008000;font-weight:bold">function</span> addseq <span style="color:#666">{</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>  <span style="color:#19177c">sum</span><span style="color:#666">=</span><span style="color:#666">0</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>  <span style="color:#008000;font-weight:bold">for</span> element in <span style="color:#19177c">$@</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>  <span style="color:#008000;font-weight:bold">do</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>    <span style="color:#008000">let</span> <span style="color:#19177c">sum</span><span style="color:#666">=</span>sum+<span style="color:#19177c">$element</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>  <span style="color:#008000;font-weight:bold">done</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>  <span style="color:#008000">echo</span> <span style="color:#19177c">$sum</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span><span style="color:#666">}</span>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="color:#bc7a00">#!/usr/bin/env bash
+</span><span style="color:#bc7a00"></span><span style="color:#408080;font-style:italic"># File: addseq.sh</span>
+
+<span style="color:#008000;font-weight:bold">function</span> addseq <span style="color:#666">{</span>
+  <span style="color:#19177c">sum</span><span style="color:#666">=</span><span style="color:#666">0</span>
+
+  <span style="color:#008000;font-weight:bold">for</span> element in <span style="color:#19177c">$@</span>
+  <span style="color:#008000;font-weight:bold">do</span>
+    <span style="color:#008000">let</span> <span style="color:#19177c">sum</span><span style="color:#666">=</span>sum+<span style="color:#19177c">$element</span>
+  <span style="color:#008000;font-weight:bold">done</span>
+
+  <span style="color:#008000">echo</span> <span style="color:#19177c">$sum</span>
+<span style="color:#666">}</span>
 </code></pre></div><p>运行：</p>
-<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>$ <span style="color:#008000">source</span> addseq.sh
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>$ addseq <span style="color:#666">12</span> <span style="color:#666">90</span> <span style="color:#666">3</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span style="color:#666">105</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>$ addseq <span style="color:#666">0</span> <span style="color:#666">1</span> <span style="color:#666">1</span> <span style="color:#666">2</span> <span style="color:#666">3</span> <span style="color:#666">5</span> <span style="color:#666">8</span> <span style="color:#666">13</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span><span style="color:#666">33</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span>$ addseq
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7</span><span style="color:#666">0</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">8</span>$ addseq <span style="color:#666">4</span> <span style="color:#666">6</span> <span style="color:#666">6</span> <span style="color:#666">6</span> <span style="color:#666">4</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">9</span><span style="color:#666">26</span> 
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">$ <span style="color:#008000">source</span> addseq.sh
+$ addseq <span style="color:#666">12</span> <span style="color:#666">90</span> <span style="color:#666">3</span>
+<span style="color:#666">105</span>
+$ addseq <span style="color:#666">0</span> <span style="color:#666">1</span> <span style="color:#666">1</span> <span style="color:#666">2</span> <span style="color:#666">3</span> <span style="color:#666">5</span> <span style="color:#666">8</span> <span style="color:#666">13</span>
+<span style="color:#666">33</span>
+$ addseq
+<span style="color:#666">0</span>
+$ addseq <span style="color:#666">4</span> <span style="color:#666">6</span> <span style="color:#666">6</span> <span style="color:#666">6</span> <span style="color:#666">4</span>
+<span style="color:#666">26</span> 
 </code></pre></div><h3 id="从函数中获取值">从函数中获取值</h3>
 <p>函数主要用于两个目的：<strong>计算值和副作用</strong> 。在前一节的<code>addseq</code>命令中，我们为该命令提供了一个数字序列，然后该命令为我们提供了该序列的和，这是我们感兴趣的值。在本例中，我们可以看到<code>addseq</code>基于一些输入值计算了一个值。许多其他命令，例如<code>pwd</code>，返回一个值而不影响我们计算机上的文件状态。然而，像<code>mv</code>或<code>cp</code>这样的功能可以移动和复制我们计算机上的文件。<strong>每当一个函数在我们的计算机上创建或更改文件时，就会产生一个副作用</strong> 。如果成功，这些命令不会打印任何值。</p>
 <p>我们经常会编写函数来计算某个值，理解如何将函数的结果存储在变量中以便以后使用是很重要的。让我们源代码<code>addseq.sh</code>并再次运行它：</p>
-<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>$ <span style="color:#008000">source</span> addseq.sh
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>$ addseq <span style="color:#666">3</span> <span style="color:#666">0</span> <span style="color:#666">0</span> <span style="color:#666">7</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span style="color:#666">10</span>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">$ <span style="color:#008000">source</span> addseq.sh
+$ addseq <span style="color:#666">3</span> <span style="color:#666">0</span> <span style="color:#666">0</span> <span style="color:#666">7</span>
+<span style="color:#666">10</span>
 </code></pre></div><p>如果我们回头看<code>addseq.sh</code>的代码，可以看到我们在函数<code>sum</code>中创建了一个变量。当您在函数中创建变量时，这些变量成为全局可访问的，<strong>这意味着即使在程序结束后，该变量仍然在您的shell中保留其值</strong> 。我们可以通过返回<code>sum</code>的值来很容易地验证这一点：</p>
-<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>$ <span style="color:#008000">echo</span> <span style="color:#19177c">$sum</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span style="color:#666">10</span> 
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">$ <span style="color:#008000">echo</span> <span style="color:#19177c">$sum</span>
+<span style="color:#666">10</span> 
 </code></pre></div><p>这是我们可以用来检索函数计算的值的一个策略示例。不幸的是，这种方法存在问题，因为它改变了我们可能在shell中使用的变量的值。例如，如果我们在一个名为<code>sum</code>的变量中存储一些其他重要的值，我们会通过运行<code>addseq</code>意外地销毁该值。为了避免这个问题，<strong>在函数中赋值变量时使用local关键字是很重要的</strong> 。<code>local</code>关键字确保函数外部的变量不会被函数覆盖。让我们创建一个名为<code>addseq2</code>的<code>addseq</code>新版本，它在赋值变量时使用<code>local</code>。</p>
-<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#bc7a00">#!/usr/bin/env bash
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span style="color:#bc7a00"></span><span style="color:#408080;font-style:italic"># File: addseq2.sh</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span><span style="color:#008000;font-weight:bold">function</span> addseq2 <span style="color:#666">{</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>  <span style="color:#008000">local</span> <span style="color:#19177c">sum</span><span style="color:#666">=</span><span style="color:#666">0</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>  <span style="color:#008000;font-weight:bold">for</span> element in <span style="color:#19177c">$@</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>  <span style="color:#008000;font-weight:bold">do</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>    <span style="color:#008000">let</span> <span style="color:#19177c">sum</span><span style="color:#666">=</span>sum+<span style="color:#19177c">$element</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>  <span style="color:#008000;font-weight:bold">done</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>  <span style="color:#008000">echo</span> <span style="color:#19177c">$sum</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span><span style="color:#666">}</span>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="color:#bc7a00">#!/usr/bin/env bash
+</span><span style="color:#bc7a00"></span><span style="color:#408080;font-style:italic"># File: addseq2.sh</span>
+
+<span style="color:#008000;font-weight:bold">function</span> addseq2 <span style="color:#666">{</span>
+  <span style="color:#008000">local</span> <span style="color:#19177c">sum</span><span style="color:#666">=</span><span style="color:#666">0</span>
+
+  <span style="color:#008000;font-weight:bold">for</span> element in <span style="color:#19177c">$@</span>
+  <span style="color:#008000;font-weight:bold">do</span>
+    <span style="color:#008000">let</span> <span style="color:#19177c">sum</span><span style="color:#666">=</span>sum+<span style="color:#19177c">$element</span>
+  <span style="color:#008000;font-weight:bold">done</span>
+
+  <span style="color:#008000">echo</span> <span style="color:#19177c">$sum</span>
+<span style="color:#666">}</span>
 </code></pre></div><h2 id="编写程序">编写程序</h2>
 <h3 id="unix哲学">Unix哲学</h3>
 <p>也许在我们开始讨论Unix工具时，你已经注意到了一些设计模式，现在我们将明确地讨论它们。Unix工具是按照一组指导方针设计的，Ken Thompson的思想最好地总结了这些指导方针，<strong>即每个Unix程序应该做好一件事</strong> 。当编写函数和程序时，遵循这个规则可以实现以下几个目标：</p>
@@ -650,10 +650,10 @@
 <p>Unix中可组合性的概念最好通过使用用于创建程序管道的管道操作符（<code>|</code>）来说明。当你考虑你的程序将有什么输入以及你的程序将输出到控制台时，你应该考虑你的程序是否可能在管道中使用，你应该相应地组织你的程序。</p>
 <h3 id="让程序可执行">让程序可执行</h3>
 <p>首先让我们看下我们的工作目录：</p>
-<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>$ ls -l | head -n <span style="color:#666">3</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>-rw-rw-r-- <span style="color:#666">1</span> sean sean <span style="color:#666">138</span> Jun <span style="color:#666">26</span> 12:51 addseq.sh
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>-rw-rw-r-- <span style="color:#666">1</span> sean sean <span style="color:#666">146</span> Jun <span style="color:#666">26</span> 14:45 addseq2.sh
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>-rw-rw-r-- <span style="color:#666">1</span> sean sean <span style="color:#666">140</span> Jan <span style="color:#666">29</span> 10:06 bigmath.sh 
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">$ ls -l | head -n <span style="color:#666">3</span>
+-rw-rw-r-- <span style="color:#666">1</span> sean sean <span style="color:#666">138</span> Jun <span style="color:#666">26</span> 12:51 addseq.sh
+-rw-rw-r-- <span style="color:#666">1</span> sean sean <span style="color:#666">146</span> Jun <span style="color:#666">26</span> 14:45 addseq2.sh
+-rw-rw-r-- <span style="color:#666">1</span> sean sean <span style="color:#666">140</span> Jan <span style="color:#666">29</span> 10:06 bigmath.sh 
 </code></pre></div><p>该表的左列包含一系列单独的字符和破折号。第一个连字符（<code>-</code>）表示这个列表中的每个条目都是文件。如果其中任何一个是目录，那么就会用<code>d</code>代替连字符。除去第一个连字符，我们有以下字符串：<code>rw-rw-r-—</code>。该字符串反映了为该文件设置的权限。我们可以授予三种权限：读取文件<code>r</code>、写入或编辑文件<code>w</code>或作为程序执行文件<code>x</code>的能力。这三种权限可以被授予三种不同的访问级别，它们对应于权限字符串中的三组<code>rwx</code>中的每一组：文件的所有者、文件所属的组以及除所有者和组成员之外的所有人。由于你创建了该文件，因此你是该文件的所有者，你可以使用chmod命令为你所拥有的文件设置权限。</p>
 <p><code>chmod</code>命令有两个参数。第一个参数是一个字符串，它指定了我们将如何改变一个文件的权限，第二个参数是文件的路径。第一个论证必须以一种非常具体的方式组成。首先，我们可以指定要为哪组用户更改权限：</p>
 <table>
@@ -729,55 +729,55 @@
 </tbody>
 </table>
 <p>让我们举个小例子：</p>
-<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>$ <span style="color:#008000">echo</span> <span style="color:#ba2121">&#39;echo &#34;a small program&#34;&#39;</span> &gt; short <span style="color:#408080;font-style:italic"># 创建一个脚本文件</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>$ ls -l short 
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>-rw-r--r--  <span style="color:#666">1</span> sean  staff  <span style="color:#666">23</span> Jun <span style="color:#666">28</span> 09:47 short
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>$ <span style="color:#408080;font-style:italic"># 添加可执行权限</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>$ chmod u+x short
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span>$ ls -l short
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7</span>-rwxr--r--  <span style="color:#666">1</span> sean  staff  <span style="color:#666">23</span> Jun <span style="color:#666">28</span> 09:47 short 
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">$ <span style="color:#008000">echo</span> <span style="color:#ba2121">&#39;echo &#34;a small program&#34;&#39;</span> &gt; short <span style="color:#408080;font-style:italic"># 创建一个脚本文件</span>
+$ ls -l short 
+-rw-r--r--  <span style="color:#666">1</span> sean  staff  <span style="color:#666">23</span> Jun <span style="color:#666">28</span> 09:47 short
+$ <span style="color:#408080;font-style:italic"># 添加可执行权限</span>
+$ chmod u+x short
+$ ls -l short
+-rwxr--r--  <span style="color:#666">1</span> sean  staff  <span style="color:#666">23</span> Jun <span style="color:#666">28</span> 09:47 short 
 </code></pre></div><p>现在我们就可以直接使用下面的方式执行它了：</p>
-<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>$ ./short
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>a small program 
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">$ ./short
+a small program 
 </code></pre></div><p>看起来很有效！不过，我们应该在这个程序中添加一个小细节。即使我们已经让文件可执行了，如果我们把程序给别人，他们可能使用的是不知道如何执行程序的shell。我们需要通过在程序的开头添加称为<code>shebang</code>的特殊文本行来指示程序应该如何运行。<code>shebang</code>总是以<code>#!</code>后面是将执行文件中的代码的程序的路径。表示我们想使用Bash的shebang是<code>#!/usr/bin/env bash</code>，我们已经把它添加到脚本的开头有一段时间了！让我们重写这个程序以包含Bash shebang，然后运行这个程序。</p>
-<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>$ <span style="color:#008000">echo</span> <span style="color:#ba2121">&#39;#!/usr/bin/env bash&#39;</span> &gt; short
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>$ <span style="color:#008000">echo</span> <span style="color:#ba2121">&#39;echo &#34;a small program&#34;&#39;</span> &gt;&gt; short
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">$ <span style="color:#008000">echo</span> <span style="color:#ba2121">&#39;#!/usr/bin/env bash&#39;</span> &gt; short
+$ <span style="color:#008000">echo</span> <span style="color:#ba2121">&#39;echo &#34;a small program&#34;&#39;</span> &gt;&gt; short
 </code></pre></div><p>现在我们的Bash脚本已经准备好了！</p>
 <h3 id="环境变量">环境变量</h3>
 <p>我们距离能够将脚本和函数作为shell命令使用只有一步之遥，但是首先我们需要了解环境变量。环境变量是Bash创建的变量，用于存储关于当前计算环境的数据。环境变量名全部使用大写字母。让我们看看这些变量的值。<code>HOME</code>变量包含到主目录的路径，<code>PWD</code>变量包含到当前目录的路径。</p>
-<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>$ <span style="color:#008000">echo</span> <span style="color:#19177c">$HOME</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>/Users/sean
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>$ <span style="color:#008000">echo</span> <span style="color:#19177c">$PWD</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>/Users/sean/Code 
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">$ <span style="color:#008000">echo</span> <span style="color:#19177c">$HOME</span>
+/Users/sean
+$ <span style="color:#008000">echo</span> <span style="color:#19177c">$PWD</span>
+/Users/sean/Code 
 </code></pre></div><p>如果我们希望某个函数始终作为命令可用，那么我们需要更改<code>PATH</code>变量。让我们先看一下这个变量。</p>
-<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>$ <span style="color:#008000">echo</span> <span style="color:#19177c">$PATH</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>/usr/local/bin:/usr/bin:/bin:/usr/local/git/bin 
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">$ <span style="color:#008000">echo</span> <span style="color:#19177c">$PATH</span>
+/usr/local/bin:/usr/bin:/bin:/usr/local/git/bin 
 </code></pre></div><p><code>PATH</code>变量包含计算机上以冒号分隔的一系列路径。当shell启动时，它会在这些路径中搜索可执行文件，然后让这些可执行命令在我们的shell中可用。使我们的脚本可用的一种方法是向<code>PATH</code>添加一个目录。可执行目录中的Bash脚本可以作为命令使用。每次启动shell时，我们都需要修改<code>PATH</code>，因此可以修改<code>~/.bash_profile</code>（Linux一般是<code>~/.bashrc</code>）使可执行脚本的目录始终位于<code>PATH</code>中。要修改环境变量，我们需要使用<code>export</code>关键字。</p>
 <p>首先，让我们在Code目录中创建一个名为Commands的新目录，在那里我们可以保存可执行脚本。然后我们将在<code>~/.bash_profile</code>中添加一行，以便将Commands添加到<code>PATH</code>。</p>
-<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>$ mkdir Commands
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>$ nano ~/.bash_profile
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">$ mkdir Commands
+$ nano ~/.bash_profile
 </code></pre></div><p>内容为：</p>
-<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#008000">alias</span> <span style="color:#19177c">docs</span><span style="color:#666">=</span><span style="color:#ba2121">&#39;cd ~/Documents&#39;</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span style="color:#008000">alias</span> <span style="color:#19177c">edbp</span><span style="color:#666">=</span><span style="color:#ba2121">&#39;nano ~/.bash_profile&#39;</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span style="color:#008000">export</span> <span style="color:#19177c">PATH</span><span style="color:#666">=</span>~/Code/Commands:<span style="color:#19177c">$PATH</span>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="color:#008000">alias</span> <span style="color:#19177c">docs</span><span style="color:#666">=</span><span style="color:#ba2121">&#39;cd ~/Documents&#39;</span>
+<span style="color:#008000">alias</span> <span style="color:#19177c">edbp</span><span style="color:#666">=</span><span style="color:#ba2121">&#39;nano ~/.bash_profile&#39;</span>
+
+<span style="color:#008000">export</span> <span style="color:#19177c">PATH</span><span style="color:#666">=</span>~/Code/Commands:<span style="color:#19177c">$PATH</span>
 </code></pre></div><blockquote>
 <p>不建议读者进行上述操作，如果要进行，请首先备份<code>~/.bash_profile</code>文件。</p>
 </blockquote>
 <p>这样我们就可以在任意目录执行<code>short</code>命令了：</p>
-<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>$ <span style="color:#008000">source</span> ~/.bash_profile
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>$ short
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>a small program 
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">$ <span style="color:#008000">source</span> ~/.bash_profile
+$ short
+a small program 
 </code></pre></div><p>除了使个别脚本可执行之外，我们还可以在<code>~/.bash_profile</code>添加一个<code>source</code>命令。这样我们就可以在命令行上使用Bash函数。让我们重新编辑该文件：</p>
-<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#008000">alias</span> <span style="color:#19177c">docs</span><span style="color:#666">=</span><span style="color:#ba2121">&#39;cd ~/Documents&#39;</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span style="color:#008000">alias</span> <span style="color:#19177c">edbp</span><span style="color:#666">=</span><span style="color:#ba2121">&#39;nano ~/.bash_profile&#39;</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span style="color:#008000">export</span> <span style="color:#19177c">PATH</span><span style="color:#666">=</span>~/Code/Commands:<span style="color:#19177c">$PATH</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span><span style="color:#008000">source</span> ~/Code/addseq2.sh
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="color:#008000">alias</span> <span style="color:#19177c">docs</span><span style="color:#666">=</span><span style="color:#ba2121">&#39;cd ~/Documents&#39;</span>
+<span style="color:#008000">alias</span> <span style="color:#19177c">edbp</span><span style="color:#666">=</span><span style="color:#ba2121">&#39;nano ~/.bash_profile&#39;</span>
+
+<span style="color:#008000">export</span> <span style="color:#19177c">PATH</span><span style="color:#666">=</span>~/Code/Commands:<span style="color:#19177c">$PATH</span>
+<span style="color:#008000">source</span> ~/Code/addseq2.sh
 </code></pre></div><p>保存文件，通过<code>source</code>更新配置文件，然后就可以将脚本中的函数当作命令使用了：</p>
-<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>$ <span style="color:#008000">source</span> ~/.bash_profile
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>$ addseq2 <span style="color:#666">9</span> <span style="color:#666">8</span> <span style="color:#666">7</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span style="color:#666">24</span> 
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">$ <span style="color:#008000">source</span> ~/.bash_profile
+$ addseq2 <span style="color:#666">9</span> <span style="color:#666">8</span> <span style="color:#666">7</span>
+<span style="color:#666">24</span> 
 </code></pre></div>
 				</div>
 				<footer class="footer">

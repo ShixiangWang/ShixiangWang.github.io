@@ -16,7 +16,7 @@
       
       <guid>/blog/unix-working-tricks/</guid>
       <description>远程传输和备份文件（夹） 使用scp无法续传，使用rsync更好。
-1rsync -avLr --progress huaxi:/remote_dir/ ./local_dir 从bed文件指定的区域提取bam结果 1samtools view -@ 4 -bhL ../regions_to_check_in_bam.bed /public/home/zhaoxxx.bam &amp;gt; xxx.bam </description>
+rsync -avLr --progress huaxi:/remote_dir/ ./local_dir 从bed文件指定的区域提取bam结果 samtools view -@ 4 -bhL ../regions_to_check_in_bam.bed /public/home/zhaoxxx.bam &amp;gt; xxx.bam </description>
     </item>
     
     <item>
@@ -27,12 +27,12 @@
       <guid>/blog/shell-array/</guid>
       <description>之前使用Shell编程很少使用到数组，最近尝试使用后发现它在某些情况下非常有用。 这里简单介绍如何生成和使用数组。
 生成数组 我们只要将一组空格分隔的序列用括号括起来，就生成了一个数组。
-1array=(a b c d e f g) 使用数组 输出数组 使用${array[*]}或${array[@]}输出全部元素：
-1bash-3.2$ echo ${array[*]} 2a b c d e f g 3bash-3.2$ echo ${array[@]} 4a b c d e f g 在array前加#输出元素个数：
-1bash-3.2$ echo ${#array[*]} 27 获取元素将*改成索引，记得是从0开始：
-1bash-3.2$ echo ${array[1]} 2b 3bash-3.2$ echo ${array[2]} 4c 注意在非引用的情况下不需要美元符号和花括号，例如修改元素：
-1bash-3.2$ array[2]=ff 2bash-3.2$ echo ${array[2]} 3ff 迭代数组：
-1#for i in &amp;#34;${!array[@]}&amp;#34;; do  2# printf &amp;#34;%s\t%s\n&amp;#34; &amp;#34;$i&amp;#34; &amp;#34;${array[$i]}&amp;#34; 3#done 4 5bash-3.2$ for i in &amp;#34;${!</description>
+array=(a b c d e f g) 使用数组 输出数组 使用${array[*]}或${array[@]}输出全部元素：
+bash-3.2$ echo ${array[*]} a b c d e f g bash-3.2$ echo ${array[@]} a b c d e f g 在array前加#输出元素个数：
+bash-3.2$ echo ${#array[*]} 7 获取元素将*改成索引，记得是从0开始：
+bash-3.2$ echo ${array[1]} b bash-3.2$ echo ${array[2]} c 注意在非引用的情况下不需要美元符号和花括号，例如修改元素：
+bash-3.2$ array[2]=ff bash-3.2$ echo ${array[2]} ff 迭代数组：
+#for i in &amp;#34;${!array[@]}&amp;#34;; do  # printf &amp;#34;%s\t%s\n&amp;#34; &amp;#34;$i&amp;#34; &amp;#34;${array[$i]}&amp;#34; #done bash-3.2$ for i in &amp;#34;${!</description>
     </item>
     
     <item>
@@ -43,11 +43,11 @@
       <guid>/blog/unix-bash-programming/</guid>
       <description>原文：https://seankross.com/the-unix-workbench/bash-programming.html
  数学 创建math.sh：
-1#!/usr/bin/env bash 2# File: math.sh 3 4expr 5 + 2 5expr 5 - 2 6expr 5 \* 2 # 转义 7expr 5 / 2 保存然后运行：
-1$ bash math.sh 27 33 410 52 ⚠️注意，bash使用整除法。求余使用%符号。
+#!/usr/bin/env bash # File: math.sh expr 5 + 2 expr 5 - 2 expr 5 \* 2 # 转义 expr 5 / 2 保存然后运行：
+$ bash math.sh 7 3 10 2 ⚠️注意，bash使用整除法。求余使用%符号。
 如果我们想要进行更为复杂的数学计算，使用bc命令。
 创建文件bigmath.sh：
-1#!/usr/bin/env bash 2# File: bigmath.sh 3 4echo &amp;#34;22 / 7&amp;#34; | bc -l 5echo &amp;#34;4.2 * 9.15&amp;#34; | bc -l 6echo &amp;#34;(6.5 / 0.5) + (6 * 2.2)&amp;#34; | bc -l 结果：</description>
+#!/usr/bin/env bash # File: bigmath.sh echo &amp;#34;22 / 7&amp;#34; | bc -l echo &amp;#34;4.2 * 9.15&amp;#34; | bc -l echo &amp;#34;(6.5 / 0.5) + (6 * 2.2)&amp;#34; | bc -l 结果：</description>
     </item>
     
   </channel>

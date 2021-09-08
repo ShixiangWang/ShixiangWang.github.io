@@ -130,21 +130,21 @@
 <h4 id="无量纲化">无量纲化</h4>
 <p>通过归一化，我们可以消除不同量纲下的数据对最终结果的影响。</p>
 <p><img src="https://gitee.com/ShixiangWang/ImageCollection/raw/master/png/202108301502946.png" alt="image-20210830150239893"></p>
-<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-R" data-lang="R"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span>normalize <span style="color:#666">&lt;-</span> <span style="color:#00f">function</span>(x) {
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>  <span style="color:#408080;font-style:italic"># 计算极值</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>  x_min <span style="color:#666">&lt;-</span> <span style="color:#00f">min</span>(x)
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>  x_max <span style="color:#666">&lt;-</span> <span style="color:#00f">max</span>(x)
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>  <span style="color:#408080;font-style:italic"># 归一化</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>  x_n <span style="color:#666">&lt;-</span> (x <span style="color:#666">-</span> x_min) <span style="color:#666">/</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>  (x_max <span style="color:#666">-</span> x_min)
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>  <span style="color:#408080;font-style:italic"># 将极值作为结果的属性</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>  <span style="color:#00f">attr</span>(x_n,
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>  <span style="color:#ba2121">&#39;min&#39;</span>) <span style="color:#666">&lt;-</span> x_min
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>  <span style="color:#00f">attr</span>(x_n,
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>  <span style="color:#ba2121">&#39;max&#39;</span>) <span style="color:#666">&lt;-</span> x_max
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>  <span style="color:#408080;font-style:italic"># 返回归一化后结果</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>  x_n
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>}
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-R" data-lang="R">normalize <span style="color:#666">&lt;-</span> <span style="color:#00f">function</span>(x) {
+  <span style="color:#408080;font-style:italic"># 计算极值</span>
+  x_min <span style="color:#666">&lt;-</span> <span style="color:#00f">min</span>(x)
+  x_max <span style="color:#666">&lt;-</span> <span style="color:#00f">max</span>(x)
+  <span style="color:#408080;font-style:italic"># 归一化</span>
+  x_n <span style="color:#666">&lt;-</span> (x <span style="color:#666">-</span> x_min) <span style="color:#666">/</span>
+  (x_max <span style="color:#666">-</span> x_min)
+  <span style="color:#408080;font-style:italic"># 将极值作为结果的属性</span>
+  <span style="color:#00f">attr</span>(x_n,
+  <span style="color:#ba2121">&#39;min&#39;</span>) <span style="color:#666">&lt;-</span> x_min
+  <span style="color:#00f">attr</span>(x_n,
+  <span style="color:#ba2121">&#39;max&#39;</span>) <span style="color:#666">&lt;-</span> x_max
+  <span style="color:#408080;font-style:italic"># 返回归一化后结果</span>
+  x_n
+}
 </code></pre></div><p><strong>标准化。</strong></p>
 <p><img src="https://gitee.com/ShixiangWang/ImageCollection/raw/master/png/202108301504156.png" alt="image-20210830150431122"></p>
 <p>注意标准化在机器学习中的作用。</p>

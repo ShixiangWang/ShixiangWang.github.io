@@ -97,164 +97,164 @@
 <h2 id="视图是什么">视图是什么</h2>
 <p>视图是绘图窗口，我们可以将其移进或移出，以方便使用grid包定制绘图。我们可以导航到其中一个视图，进行一些更改，然后弹出并导航到另一个视图。简而言之，视图提供了一种在绘图（可以想象为一个画板）的不同子空间（不同的层，如果了解ggplot2，采用图层概念理解它）中导航和工作的方法。</p>
 <p>下面是一个例子，我们在整个图形的右上角绘制一个棒棒图：</p>
-<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-R" data-lang="R"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#408080;font-style:italic"># 默认，grid会初始化第一个视图</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span style="color:#00f">grid.draw</span>(<span style="color:#00f">rectGrob</span>())
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span style="color:#408080;font-style:italic"># 创建一个小的视图</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span><span style="color:#408080;font-style:italic"># 指定新视图的位置，X为0.5，Y为0.5，视图高宽都为0.5</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>sample_vp <span style="color:#666">&lt;-</span> <span style="color:#00f">viewport</span>(x <span style="color:#666">=</span> <span style="color:#666">0.5</span>, y <span style="color:#666">=</span> <span style="color:#666">0.5</span>, 
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>                      width <span style="color:#666">=</span> <span style="color:#666">0.5</span>, height <span style="color:#666">=</span> <span style="color:#666">0.5</span>,
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>                      just <span style="color:#666">=</span> <span style="color:#00f">c</span>(<span style="color:#ba2121">&#34;left&#34;</span>, <span style="color:#ba2121">&#34;bottom&#34;</span>)) <span style="color:#408080;font-style:italic"># 位置校正参数</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span><span style="color:#408080;font-style:italic"># 导航视图：上面只是定义了一个视图对象</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span style="color:#408080;font-style:italic"># 我们可以想象为一个大画板是一张白纸</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span style="color:#408080;font-style:italic"># 我们上面准备了一张小的白纸</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span><span style="color:#408080;font-style:italic"># 而 push 的目的就是把小的白纸放到大白纸的对应位置</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span><span style="color:#408080;font-style:italic"># 接下来的绘图动作就是在小的白纸上进行的</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span><span style="color:#00f">pushViewport</span>(sample_vp)
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span><span style="color:#00f">grid.draw</span>(<span style="color:#00f">roundrectGrob</span>())
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span><span style="color:#00f">grid.draw</span>(lollipop)
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span><span style="color:#408080;font-style:italic"># 弹出最上层的视图</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span><span style="color:#00f">popViewport</span>()
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-R" data-lang="R"><span style="color:#408080;font-style:italic"># 默认，grid会初始化第一个视图</span>
+<span style="color:#00f">grid.draw</span>(<span style="color:#00f">rectGrob</span>())
+<span style="color:#408080;font-style:italic"># 创建一个小的视图</span>
+<span style="color:#408080;font-style:italic"># 指定新视图的位置，X为0.5，Y为0.5，视图高宽都为0.5</span>
+sample_vp <span style="color:#666">&lt;-</span> <span style="color:#00f">viewport</span>(x <span style="color:#666">=</span> <span style="color:#666">0.5</span>, y <span style="color:#666">=</span> <span style="color:#666">0.5</span>, 
+                      width <span style="color:#666">=</span> <span style="color:#666">0.5</span>, height <span style="color:#666">=</span> <span style="color:#666">0.5</span>,
+                      just <span style="color:#666">=</span> <span style="color:#00f">c</span>(<span style="color:#ba2121">&#34;left&#34;</span>, <span style="color:#ba2121">&#34;bottom&#34;</span>)) <span style="color:#408080;font-style:italic"># 位置校正参数</span>
+<span style="color:#408080;font-style:italic"># 导航视图：上面只是定义了一个视图对象</span>
+<span style="color:#408080;font-style:italic"># 我们可以想象为一个大画板是一张白纸</span>
+<span style="color:#408080;font-style:italic"># 我们上面准备了一张小的白纸</span>
+<span style="color:#408080;font-style:italic"># 而 push 的目的就是把小的白纸放到大白纸的对应位置</span>
+<span style="color:#408080;font-style:italic"># 接下来的绘图动作就是在小的白纸上进行的</span>
+<span style="color:#00f">pushViewport</span>(sample_vp)
+<span style="color:#00f">grid.draw</span>(<span style="color:#00f">roundrectGrob</span>())
+<span style="color:#00f">grid.draw</span>(lollipop)
+<span style="color:#408080;font-style:italic"># 弹出最上层的视图</span>
+<span style="color:#00f">popViewport</span>()
 </code></pre></div><p><img src="https://gitee.com/ShixiangWang/ImageCollection/raw/master/png/20210809123352.png" alt=""></p>
 <blockquote>
 <p>棒棒图的绘制见<a href="https://www.wolai.com/5sw6RUS9fcMYmUUmZfFbd6">「R」grid 图形对象 grobs</a>一文末尾。</p>
 </blockquote>
 <h2 id="视图的just参数">视图的<code>just</code>参数</h2>
 <p>值得注意的是这里的<code>just</code>参数：它定义了新的视图是如何在旧（大） 的视图上摆放的。这里的<code>c(&quot;left&quot;, &quot;bottom&quot;)</code>指定了小的视图的左侧和下侧与其坐标单位<code>0.5, 0.5</code>对齐。我们看看修改下该参数的效果：</p>
-<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-R" data-lang="R"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#00f">grid.draw</span>(<span style="color:#00f">rectGrob</span>())
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>sample_vp <span style="color:#666">&lt;-</span> <span style="color:#00f">viewport</span>(x <span style="color:#666">=</span> <span style="color:#666">0.5</span>, y <span style="color:#666">=</span> <span style="color:#666">0.5</span>, 
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>                      width <span style="color:#666">=</span> <span style="color:#666">0.5</span>, height <span style="color:#666">=</span> <span style="color:#666">0.5</span>,
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>                      just <span style="color:#666">=</span> <span style="color:#00f">c</span>(<span style="color:#ba2121">&#34;center&#34;</span>, <span style="color:#ba2121">&#34;center&#34;</span>))
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span><span style="color:#00f">pushViewport</span>(sample_vp)
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span><span style="color:#00f">grid.draw</span>(<span style="color:#00f">roundrectGrob</span>())
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7</span><span style="color:#00f">grid.draw</span>(lollipop)
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">8</span><span style="color:#00f">popViewport</span>() 
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-R" data-lang="R"><span style="color:#00f">grid.draw</span>(<span style="color:#00f">rectGrob</span>())
+sample_vp <span style="color:#666">&lt;-</span> <span style="color:#00f">viewport</span>(x <span style="color:#666">=</span> <span style="color:#666">0.5</span>, y <span style="color:#666">=</span> <span style="color:#666">0.5</span>, 
+                      width <span style="color:#666">=</span> <span style="color:#666">0.5</span>, height <span style="color:#666">=</span> <span style="color:#666">0.5</span>,
+                      just <span style="color:#666">=</span> <span style="color:#00f">c</span>(<span style="color:#ba2121">&#34;center&#34;</span>, <span style="color:#ba2121">&#34;center&#34;</span>))
+<span style="color:#00f">pushViewport</span>(sample_vp)
+<span style="color:#00f">grid.draw</span>(<span style="color:#00f">roundrectGrob</span>())
+<span style="color:#00f">grid.draw</span>(lollipop)
+<span style="color:#00f">popViewport</span>() 
 </code></pre></div><p><img src="https://gitee.com/ShixiangWang/ImageCollection/raw/master/png/20210809123359.png" alt=""></p>
 <h2 id="操作视图">操作视图</h2>
 <p><strong>我们一次只能操作一个视图，当确定视图后，我们就可以在上面绘制图形对象。如果我们需要在不同的视图中绘制，在绘制之前我们需要导航视图到我们需要进行绘制的视图上去。</strong></p>
-<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-R" data-lang="R"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#00f">grid.draw</span>(<span style="color:#00f">rectGrob</span>())
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>sample_vp_1 <span style="color:#666">&lt;-</span> <span style="color:#00f">viewport</span>(x <span style="color:#666">=</span> <span style="color:#666">0.75</span>, y <span style="color:#666">=</span> <span style="color:#666">0.75</span>, 
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>                      width <span style="color:#666">=</span> <span style="color:#666">0.25</span>, height <span style="color:#666">=</span> <span style="color:#666">0.25</span>,
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>                      just <span style="color:#666">=</span> <span style="color:#00f">c</span>(<span style="color:#ba2121">&#34;left&#34;</span>, <span style="color:#ba2121">&#34;bottom&#34;</span>))
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span><span style="color:#00f">pushViewport</span>(sample_vp_1)
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span><span style="color:#00f">grid.draw</span>(<span style="color:#00f">roundrectGrob</span>())
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span><span style="color:#00f">grid.draw</span>(lollipop)
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span style="color:#00f">popViewport</span>() <span style="color:#408080;font-style:italic"># 这里必须弹出，试一试不弹出的结果是什么？</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>sample_vp_2 <span style="color:#666">&lt;-</span> <span style="color:#00f">viewport</span>(x <span style="color:#666">=</span> <span style="color:#666">0</span>, y <span style="color:#666">=</span> <span style="color:#666">0</span>, 
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>                      width <span style="color:#666">=</span> <span style="color:#666">0.5</span>, height <span style="color:#666">=</span> <span style="color:#666">0.5</span>,
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>                      just <span style="color:#666">=</span> <span style="color:#00f">c</span>(<span style="color:#ba2121">&#34;left&#34;</span>, <span style="color:#ba2121">&#34;bottom&#34;</span>))
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span><span style="color:#00f">pushViewport</span>(sample_vp_2)
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span><span style="color:#00f">grid.draw</span>(<span style="color:#00f">roundrectGrob</span>())
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span><span style="color:#00f">grid.draw</span>(lollipop)
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span><span style="color:#00f">popViewport</span>()
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-R" data-lang="R"><span style="color:#00f">grid.draw</span>(<span style="color:#00f">rectGrob</span>())
+
+sample_vp_1 <span style="color:#666">&lt;-</span> <span style="color:#00f">viewport</span>(x <span style="color:#666">=</span> <span style="color:#666">0.75</span>, y <span style="color:#666">=</span> <span style="color:#666">0.75</span>, 
+                      width <span style="color:#666">=</span> <span style="color:#666">0.25</span>, height <span style="color:#666">=</span> <span style="color:#666">0.25</span>,
+                      just <span style="color:#666">=</span> <span style="color:#00f">c</span>(<span style="color:#ba2121">&#34;left&#34;</span>, <span style="color:#ba2121">&#34;bottom&#34;</span>))
+<span style="color:#00f">pushViewport</span>(sample_vp_1)
+<span style="color:#00f">grid.draw</span>(<span style="color:#00f">roundrectGrob</span>())
+<span style="color:#00f">grid.draw</span>(lollipop)
+<span style="color:#00f">popViewport</span>() <span style="color:#408080;font-style:italic"># 这里必须弹出，试一试不弹出的结果是什么？</span>
+
+sample_vp_2 <span style="color:#666">&lt;-</span> <span style="color:#00f">viewport</span>(x <span style="color:#666">=</span> <span style="color:#666">0</span>, y <span style="color:#666">=</span> <span style="color:#666">0</span>, 
+                      width <span style="color:#666">=</span> <span style="color:#666">0.5</span>, height <span style="color:#666">=</span> <span style="color:#666">0.5</span>,
+                      just <span style="color:#666">=</span> <span style="color:#00f">c</span>(<span style="color:#ba2121">&#34;left&#34;</span>, <span style="color:#ba2121">&#34;bottom&#34;</span>))
+<span style="color:#00f">pushViewport</span>(sample_vp_2)
+<span style="color:#00f">grid.draw</span>(<span style="color:#00f">roundrectGrob</span>())
+<span style="color:#00f">grid.draw</span>(lollipop)
+<span style="color:#00f">popViewport</span>()
 </code></pre></div><p><img src="https://gitee.com/ShixiangWang/ImageCollection/raw/master/png/20210809123407.png" alt=""></p>
 <h2 id="视图嵌套">视图嵌套</h2>
 <p>视图可以层层嵌套堆叠到一起，在实际绘图中，绘制子图、放大部分图形通常可以通过该方式实现。</p>
-<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-R" data-lang="R"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#00f">grid.draw</span>(<span style="color:#00f">rectGrob</span>())
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>sample_vp_1 <span style="color:#666">&lt;-</span> <span style="color:#00f">viewport</span>(x <span style="color:#666">=</span> <span style="color:#666">0.5</span>, y <span style="color:#666">=</span> <span style="color:#666">0.5</span>, 
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>                      width <span style="color:#666">=</span> <span style="color:#666">0.5</span>, height <span style="color:#666">=</span> <span style="color:#666">0.5</span>,
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>                      just <span style="color:#666">=</span> <span style="color:#00f">c</span>(<span style="color:#ba2121">&#34;left&#34;</span>, <span style="color:#ba2121">&#34;bottom&#34;</span>))
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>sample_vp_2 <span style="color:#666">&lt;-</span> <span style="color:#00f">viewport</span>(x <span style="color:#666">=</span> <span style="color:#666">0.1</span>, y <span style="color:#666">=</span> <span style="color:#666">0.1</span>, 
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>                      width <span style="color:#666">=</span> <span style="color:#666">0.4</span>, height <span style="color:#666">=</span> <span style="color:#666">0.4</span>,
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>                      just <span style="color:#666">=</span> <span style="color:#00f">c</span>(<span style="color:#ba2121">&#34;left&#34;</span>, <span style="color:#ba2121">&#34;bottom&#34;</span>))
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span style="color:#408080;font-style:italic"># 先导航到第一个视图</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span style="color:#00f">pushViewport</span>(sample_vp_1)
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span><span style="color:#408080;font-style:italic"># 绘制</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span><span style="color:#00f">grid.draw</span>(<span style="color:#00f">roundrectGrob</span>(gp <span style="color:#666">=</span> <span style="color:#00f">gpar</span>(col <span style="color:#666">=</span> <span style="color:#ba2121">&#34;red&#34;</span>)))
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span><span style="color:#408080;font-style:italic"># 再导航到第二个视图</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span><span style="color:#00f">pushViewport</span>(sample_vp_2)
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span><span style="color:#408080;font-style:italic"># 绘制</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span><span style="color:#00f">grid.draw</span>(<span style="color:#00f">roundrectGrob</span>())
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span><span style="color:#00f">grid.draw</span>(lollipop)
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span><span style="color:#408080;font-style:italic"># 弹出添加的2个视图</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span><span style="color:#00f">popViewport</span>(<span style="color:#666">2</span>)
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-R" data-lang="R"><span style="color:#00f">grid.draw</span>(<span style="color:#00f">rectGrob</span>())
+
+sample_vp_1 <span style="color:#666">&lt;-</span> <span style="color:#00f">viewport</span>(x <span style="color:#666">=</span> <span style="color:#666">0.5</span>, y <span style="color:#666">=</span> <span style="color:#666">0.5</span>, 
+                      width <span style="color:#666">=</span> <span style="color:#666">0.5</span>, height <span style="color:#666">=</span> <span style="color:#666">0.5</span>,
+                      just <span style="color:#666">=</span> <span style="color:#00f">c</span>(<span style="color:#ba2121">&#34;left&#34;</span>, <span style="color:#ba2121">&#34;bottom&#34;</span>))
+sample_vp_2 <span style="color:#666">&lt;-</span> <span style="color:#00f">viewport</span>(x <span style="color:#666">=</span> <span style="color:#666">0.1</span>, y <span style="color:#666">=</span> <span style="color:#666">0.1</span>, 
+                      width <span style="color:#666">=</span> <span style="color:#666">0.4</span>, height <span style="color:#666">=</span> <span style="color:#666">0.4</span>,
+                      just <span style="color:#666">=</span> <span style="color:#00f">c</span>(<span style="color:#ba2121">&#34;left&#34;</span>, <span style="color:#ba2121">&#34;bottom&#34;</span>))
+<span style="color:#408080;font-style:italic"># 先导航到第一个视图</span>
+<span style="color:#00f">pushViewport</span>(sample_vp_1)
+<span style="color:#408080;font-style:italic"># 绘制</span>
+<span style="color:#00f">grid.draw</span>(<span style="color:#00f">roundrectGrob</span>(gp <span style="color:#666">=</span> <span style="color:#00f">gpar</span>(col <span style="color:#666">=</span> <span style="color:#ba2121">&#34;red&#34;</span>)))
+<span style="color:#408080;font-style:italic"># 再导航到第二个视图</span>
+<span style="color:#00f">pushViewport</span>(sample_vp_2)
+<span style="color:#408080;font-style:italic"># 绘制</span>
+<span style="color:#00f">grid.draw</span>(<span style="color:#00f">roundrectGrob</span>())
+<span style="color:#00f">grid.draw</span>(lollipop)
+<span style="color:#408080;font-style:italic"># 弹出添加的2个视图</span>
+<span style="color:#00f">popViewport</span>(<span style="color:#666">2</span>)
 </code></pre></div><p><img src="https://gitee.com/ShixiangWang/ImageCollection/raw/master/png/20210809123412.png" alt=""></p>
 <p>注意，上面我们使用了<code>popViewport(2)</code>重新导航到主（初始的）绘图视图。</p>
 <p><code>grid.ls()</code>可以罗列出所有的绘图对象：</p>
-<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-R" data-lang="R"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#666">&gt;</span> <span style="color:#00f">grid.ls</span>()
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>GRID.rect.7246
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>GRID.roundrect.7247
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>GRID.gTree.7233
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>  GRID.circle.7231
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span>  GRID.segments.7232
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-R" data-lang="R"><span style="color:#666">&gt;</span> <span style="color:#00f">grid.ls</span>()
+GRID.rect.7246
+GRID.roundrect.7247
+GRID.gTree.7233
+  GRID.circle.7231
+  GRID.segments.7232
 </code></pre></div><h2 id="捕获ggplot的grobs对象">捕获ggplot的grobs对象</h2>
 <p>对于ggplot对象，我们也可以捕获全部的grobs对象。操作示例如下：</p>
-<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-R" data-lang="R"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>worldcup <span style="color:#666">%&gt;%</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>  <span style="color:#00f">ggplot</span>(<span style="color:#00f">aes</span>(x <span style="color:#666">=</span> Time, y <span style="color:#666">=</span> Passes)) <span style="color:#666">+</span> 
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>  <span style="color:#00f">geom_point</span>()
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span style="color:#00f">grid.force</span>() <span style="color:#408080;font-style:italic"># 必需的</span>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-R" data-lang="R">worldcup <span style="color:#666">%&gt;%</span>
+  <span style="color:#00f">ggplot</span>(<span style="color:#00f">aes</span>(x <span style="color:#666">=</span> Time, y <span style="color:#666">=</span> Passes)) <span style="color:#666">+</span> 
+  <span style="color:#00f">geom_point</span>()
+<span style="color:#00f">grid.force</span>() <span style="color:#408080;font-style:italic"># 必需的</span>
 </code></pre></div><p><img src="https://gitee.com/ShixiangWang/ImageCollection/raw/master/png/20210809123420.png" alt=""></p>
-<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-R" data-lang="R"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#666">&gt;</span> <span style="color:#00f">grid.ls</span>()
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>layout
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>  background.1<span style="color:#666">-9-12-1</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>  panel.7<span style="color:#666">-5-7-5</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>    grill.gTree.7261
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>      panel.background..zeroGrob.7252
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>      panel.grid.minor.y..polyline.7254
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>      panel.grid.minor.x..polyline.7256
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>      panel.grid.major.y..polyline.7258
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>      panel.grid.major.x..polyline.7260
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>    <span style="color:#008000;font-weight:bold">NULL</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>    geom_point.points.7249
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>    <span style="color:#008000;font-weight:bold">NULL</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>    panel.border..zeroGrob.7250
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>  spacer.8<span style="color:#666">-6-8-6</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span>  spacer.8<span style="color:#666">-4-8-4</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span>  spacer.6<span style="color:#666">-6-6-6</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span>  spacer.6<span style="color:#666">-4-6-4</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span>  axis<span style="color:#666">-</span>t.6<span style="color:#666">-5-6-5</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span>  axis<span style="color:#666">-</span>l.7<span style="color:#666">-4-7-4</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span>    <span style="color:#008000;font-weight:bold">NULL</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span>    axis
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23</span>      axis.1<span style="color:#666">-1-1-1</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24</span>        GRID.text.7267
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25</span>      axis.1<span style="color:#666">-2-1-2</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26</span>  axis<span style="color:#666">-</span>r.7<span style="color:#666">-6-7-6</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27</span>  axis<span style="color:#666">-</span>b.8<span style="color:#666">-5-8-5</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28</span>    <span style="color:#008000;font-weight:bold">NULL</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29</span>    axis
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30</span>      axis.1<span style="color:#666">-1-1-1</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">31</span>      axis.2<span style="color:#666">-1-2-1</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">32</span>        GRID.text.7264
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">33</span>  xlab<span style="color:#666">-</span>t.5<span style="color:#666">-5-5-5</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">34</span>  xlab<span style="color:#666">-</span>b.9<span style="color:#666">-5-9-5</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">35</span>    GRID.text.7270
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">36</span>  ylab<span style="color:#666">-</span>l.7<span style="color:#666">-3-7-3</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">37</span>    GRID.text.7273
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">38</span>  ylab<span style="color:#666">-</span>r.7<span style="color:#666">-7-7-7</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">39</span>  subtitle.4<span style="color:#666">-5-4-5</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">40</span>  title.3<span style="color:#666">-5-3-5</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">41</span>  caption.10<span style="color:#666">-5-10-5</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">42</span>  tag.2<span style="color:#666">-2-2-2</span>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-R" data-lang="R"><span style="color:#666">&gt;</span> <span style="color:#00f">grid.ls</span>()
+layout
+  background.1<span style="color:#666">-9-12-1</span>
+  panel.7<span style="color:#666">-5-7-5</span>
+    grill.gTree.7261
+      panel.background..zeroGrob.7252
+      panel.grid.minor.y..polyline.7254
+      panel.grid.minor.x..polyline.7256
+      panel.grid.major.y..polyline.7258
+      panel.grid.major.x..polyline.7260
+    <span style="color:#008000;font-weight:bold">NULL</span>
+    geom_point.points.7249
+    <span style="color:#008000;font-weight:bold">NULL</span>
+    panel.border..zeroGrob.7250
+  spacer.8<span style="color:#666">-6-8-6</span>
+  spacer.8<span style="color:#666">-4-8-4</span>
+  spacer.6<span style="color:#666">-6-6-6</span>
+  spacer.6<span style="color:#666">-4-6-4</span>
+  axis<span style="color:#666">-</span>t.6<span style="color:#666">-5-6-5</span>
+  axis<span style="color:#666">-</span>l.7<span style="color:#666">-4-7-4</span>
+    <span style="color:#008000;font-weight:bold">NULL</span>
+    axis
+      axis.1<span style="color:#666">-1-1-1</span>
+        GRID.text.7267
+      axis.1<span style="color:#666">-2-1-2</span>
+  axis<span style="color:#666">-</span>r.7<span style="color:#666">-6-7-6</span>
+  axis<span style="color:#666">-</span>b.8<span style="color:#666">-5-8-5</span>
+    <span style="color:#008000;font-weight:bold">NULL</span>
+    axis
+      axis.1<span style="color:#666">-1-1-1</span>
+      axis.2<span style="color:#666">-1-2-1</span>
+        GRID.text.7264
+  xlab<span style="color:#666">-</span>t.5<span style="color:#666">-5-5-5</span>
+  xlab<span style="color:#666">-</span>b.9<span style="color:#666">-5-9-5</span>
+    GRID.text.7270
+  ylab<span style="color:#666">-</span>l.7<span style="color:#666">-3-7-3</span>
+    GRID.text.7273
+  ylab<span style="color:#666">-</span>r.7<span style="color:#666">-7-7-7</span>
+  subtitle.4<span style="color:#666">-5-4-5</span>
+  title.3<span style="color:#666">-5-3-5</span>
+  caption.10<span style="color:#666">-5-10-5</span>
+  tag.2<span style="color:#666">-2-2-2</span>
 </code></pre></div><p>我们可以将ggplot绘制到grid视图中去，下面是一个例子：</p>
 <blockquote>
 <p>代码不重要，理解其思想和大致操作逻辑。</p>
 </blockquote>
-<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-R" data-lang="R"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span>balt_counties <span style="color:#666">&lt;-</span> <span style="color:#00f">map_data</span>(<span style="color:#ba2121">&#34;county&#34;</span>, region <span style="color:#666">=</span> <span style="color:#ba2121">&#34;maryland&#34;</span>) <span style="color:#666">%&gt;%</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>  <span style="color:#00f">mutate</span>(our_counties <span style="color:#666">=</span> subregion <span style="color:#666">%in%</span> <span style="color:#00f">c</span>(<span style="color:#ba2121">&#34;baltimore&#34;</span>, <span style="color:#ba2121">&#34;baltimore city&#34;</span>))
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>balt_map <span style="color:#666">&lt;-</span> <span style="color:#00f">get_map</span>(<span style="color:#ba2121">&#34;Baltimore County&#34;</span>, zoom <span style="color:#666">=</span> <span style="color:#666">10</span>) <span style="color:#666">%&gt;%</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>  <span style="color:#00f">ggmap</span>(extent <span style="color:#666">=</span> <span style="color:#ba2121">&#34;device&#34;</span>) <span style="color:#666">+</span> 
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>  <span style="color:#00f">geom_polygon</span>(data <span style="color:#666">=</span> <span style="color:#00f">filter</span>(balt_counties, our_counties <span style="color:#666">==</span> <span style="color:#008000;font-weight:bold">TRUE</span>),
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>               <span style="color:#00f">aes</span>(x <span style="color:#666">=</span> long, y <span style="color:#666">=</span> lat, group <span style="color:#666">=</span> group),
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>               fill <span style="color:#666">=</span> <span style="color:#ba2121">&#34;red&#34;</span>, color <span style="color:#666">=</span> <span style="color:#ba2121">&#34;darkred&#34;</span>, alpha <span style="color:#666">=</span> <span style="color:#666">0.2</span>)
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>maryland_map <span style="color:#666">&lt;-</span> balt_counties <span style="color:#666">%&gt;%</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>  <span style="color:#00f">ggplot</span>(<span style="color:#00f">aes</span>(x <span style="color:#666">=</span> long, y <span style="color:#666">=</span> lat, group <span style="color:#666">=</span> group, fill <span style="color:#666">=</span> our_counties)) <span style="color:#666">+</span> 
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>  <span style="color:#00f">geom_polygon</span>(color <span style="color:#666">=</span> <span style="color:#ba2121">&#34;black&#34;</span>) <span style="color:#666">+</span> 
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>  <span style="color:#00f">scale_fill_manual</span>(values <span style="color:#666">=</span> <span style="color:#00f">c</span>(<span style="color:#ba2121">&#34;white&#34;</span>, <span style="color:#ba2121">&#34;darkred&#34;</span>), guide <span style="color:#666">=</span> <span style="color:#008000;font-weight:bold">FALSE</span>) <span style="color:#666">+</span> 
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>  <span style="color:#00f">theme_void</span>() <span style="color:#666">+</span> 
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>  <span style="color:#00f">coord_map</span>()
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span><span style="color:#00f">grid.draw</span>(<span style="color:#00f">ggplotGrob</span>(balt_map))
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span>md_inset <span style="color:#666">&lt;-</span> <span style="color:#00f">viewport</span>(x <span style="color:#666">=</span> <span style="color:#666">0</span>, y <span style="color:#666">=</span> <span style="color:#666">0</span>, 
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span>                     just <span style="color:#666">=</span> <span style="color:#00f">c</span>(<span style="color:#ba2121">&#34;left&#34;</span>, <span style="color:#ba2121">&#34;bottom&#34;</span>),
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span>                     width <span style="color:#666">=</span> <span style="color:#666">0.35</span>, height <span style="color:#666">=</span> <span style="color:#666">0.35</span>)
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span><span style="color:#00f">pushViewport</span>(md_inset)
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span><span style="color:#00f">grid.draw</span>(<span style="color:#00f">rectGrob</span>(gp <span style="color:#666">=</span> <span style="color:#00f">gpar</span>(alpha <span style="color:#666">=</span> <span style="color:#666">0.5</span>, col <span style="color:#666">=</span> <span style="color:#ba2121">&#34;white&#34;</span>)))
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span><span style="color:#00f">grid.draw</span>(<span style="color:#00f">rectGrob</span>(gp <span style="color:#666">=</span> <span style="color:#00f">gpar</span>(fill <span style="color:#666">=</span> <span style="color:#008000;font-weight:bold">NA</span>, col <span style="color:#666">=</span> <span style="color:#ba2121">&#34;black&#34;</span>)))
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span><span style="color:#00f">grid.draw</span>(<span style="color:#00f">ggplotGrob</span>(maryland_map))
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23</span><span style="color:#00f">popViewport</span>()
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-R" data-lang="R">balt_counties <span style="color:#666">&lt;-</span> <span style="color:#00f">map_data</span>(<span style="color:#ba2121">&#34;county&#34;</span>, region <span style="color:#666">=</span> <span style="color:#ba2121">&#34;maryland&#34;</span>) <span style="color:#666">%&gt;%</span>
+  <span style="color:#00f">mutate</span>(our_counties <span style="color:#666">=</span> subregion <span style="color:#666">%in%</span> <span style="color:#00f">c</span>(<span style="color:#ba2121">&#34;baltimore&#34;</span>, <span style="color:#ba2121">&#34;baltimore city&#34;</span>))
+balt_map <span style="color:#666">&lt;-</span> <span style="color:#00f">get_map</span>(<span style="color:#ba2121">&#34;Baltimore County&#34;</span>, zoom <span style="color:#666">=</span> <span style="color:#666">10</span>) <span style="color:#666">%&gt;%</span>
+  <span style="color:#00f">ggmap</span>(extent <span style="color:#666">=</span> <span style="color:#ba2121">&#34;device&#34;</span>) <span style="color:#666">+</span> 
+  <span style="color:#00f">geom_polygon</span>(data <span style="color:#666">=</span> <span style="color:#00f">filter</span>(balt_counties, our_counties <span style="color:#666">==</span> <span style="color:#008000;font-weight:bold">TRUE</span>),
+               <span style="color:#00f">aes</span>(x <span style="color:#666">=</span> long, y <span style="color:#666">=</span> lat, group <span style="color:#666">=</span> group),
+               fill <span style="color:#666">=</span> <span style="color:#ba2121">&#34;red&#34;</span>, color <span style="color:#666">=</span> <span style="color:#ba2121">&#34;darkred&#34;</span>, alpha <span style="color:#666">=</span> <span style="color:#666">0.2</span>)
+maryland_map <span style="color:#666">&lt;-</span> balt_counties <span style="color:#666">%&gt;%</span>
+  <span style="color:#00f">ggplot</span>(<span style="color:#00f">aes</span>(x <span style="color:#666">=</span> long, y <span style="color:#666">=</span> lat, group <span style="color:#666">=</span> group, fill <span style="color:#666">=</span> our_counties)) <span style="color:#666">+</span> 
+  <span style="color:#00f">geom_polygon</span>(color <span style="color:#666">=</span> <span style="color:#ba2121">&#34;black&#34;</span>) <span style="color:#666">+</span> 
+  <span style="color:#00f">scale_fill_manual</span>(values <span style="color:#666">=</span> <span style="color:#00f">c</span>(<span style="color:#ba2121">&#34;white&#34;</span>, <span style="color:#ba2121">&#34;darkred&#34;</span>), guide <span style="color:#666">=</span> <span style="color:#008000;font-weight:bold">FALSE</span>) <span style="color:#666">+</span> 
+  <span style="color:#00f">theme_void</span>() <span style="color:#666">+</span> 
+  <span style="color:#00f">coord_map</span>()
+
+<span style="color:#00f">grid.draw</span>(<span style="color:#00f">ggplotGrob</span>(balt_map))
+md_inset <span style="color:#666">&lt;-</span> <span style="color:#00f">viewport</span>(x <span style="color:#666">=</span> <span style="color:#666">0</span>, y <span style="color:#666">=</span> <span style="color:#666">0</span>, 
+                     just <span style="color:#666">=</span> <span style="color:#00f">c</span>(<span style="color:#ba2121">&#34;left&#34;</span>, <span style="color:#ba2121">&#34;bottom&#34;</span>),
+                     width <span style="color:#666">=</span> <span style="color:#666">0.35</span>, height <span style="color:#666">=</span> <span style="color:#666">0.35</span>)
+<span style="color:#00f">pushViewport</span>(md_inset)
+<span style="color:#00f">grid.draw</span>(<span style="color:#00f">rectGrob</span>(gp <span style="color:#666">=</span> <span style="color:#00f">gpar</span>(alpha <span style="color:#666">=</span> <span style="color:#666">0.5</span>, col <span style="color:#666">=</span> <span style="color:#ba2121">&#34;white&#34;</span>)))
+<span style="color:#00f">grid.draw</span>(<span style="color:#00f">rectGrob</span>(gp <span style="color:#666">=</span> <span style="color:#00f">gpar</span>(fill <span style="color:#666">=</span> <span style="color:#008000;font-weight:bold">NA</span>, col <span style="color:#666">=</span> <span style="color:#ba2121">&#34;black&#34;</span>)))
+<span style="color:#00f">grid.draw</span>(<span style="color:#00f">ggplotGrob</span>(maryland_map))
+<span style="color:#00f">popViewport</span>()
 </code></pre></div><p><img src="https://gitee.com/ShixiangWang/ImageCollection/raw/master/png/20210809123428.png" alt=""></p>
 
 				</div>

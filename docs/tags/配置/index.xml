@@ -17,7 +17,7 @@
       <guid>/blog/install-stringi-when-bad-acess-to-gh/</guid>
       <description>这是一个我每次重装R，或者在新的系统上使用R进行包安装，都会遇到的问题。
 stringi是tidyverse的一个核心包，基本上必装。但由于gayhub经常访问有问题，这个包安装时所需要的依赖文件会下载不了。 解决的办法是手动下载，然后进行安装：
-1wget https://github.com/gagolews/stringi/archive/master.zip -O stringi.zip 2# 如果上面github的链接无法下载，尝试： 3# wget https://download.fastgit.org/gagolews/stringi/archive/master.zip -O stringi.zip 4unzip stringi.zip 5sed -i &amp;#39;/\/icu..\/data/d&amp;#39; stringi-master/.Rbuildignore 6R CMD build stringi-master 7R CMD INSTALL stringi*.tar.gz 参考：https://stackoverflow.com/questions/31942322/how-to-install-stringi-from-local-file-absolutely-no-internet-access#</description>
+wget https://github.com/gagolews/stringi/archive/master.zip -O stringi.zip # 如果上面github的链接无法下载，尝试： # wget https://download.fastgit.org/gagolews/stringi/archive/master.zip -O stringi.zip unzip stringi.zip sed -i &amp;#39;/\/icu..\/data/d&amp;#39; stringi-master/.Rbuildignore R CMD build stringi-master R CMD INSTALL stringi*.tar.gz 参考：https://stackoverflow.com/questions/31942322/how-to-install-stringi-from-local-file-absolutely-no-internet-access#</description>
     </item>
     
     <item>
@@ -30,15 +30,15 @@ stringi是tidyverse的一个核心包，基本上必装。但由于gayhub经常�
 一些有C++代码的R包可能会用到一些新的C++特性，需要C++11或者C++14。这个问题通常在CentOS/红帽系统上出现，因为系统稳定的要求，这个系列的系统它的C++版本很低。 但请读者前往注意了别自己编译新版本的gcc，然后替换掉系统的。这种操作我试过几次，系统基本上就崩掉了。
 正确的解决方式是安装独立的gcc，通过环境变量引用和使用它。
 在Root用户下操作：
-1yum install centos-release-scl 2yum install devtoolset-9 然后在你使用R的用户下操作：
-1# If you use your non-root account to install packages,  2# change /root to /home/your_id in the following command 3mkdir -p /root/.R 4vi /root/.R/Makevars 将下面的内容写入打开的文件，然后保存：
-1CXX11=/opt/rh/devtoolset-9/root/usr/bin/g++ -std=c++11 -fPIC 2CXX14=/opt/rh/devtoolset-9/root/usr/bin/g++ -std=c++14 -fPIC 如果没有root权限，可以通过conda来安装新版本的gcc,c++等：
-1conda install gcc_linux-64 2conda install gxx_linux-64  加上conda-forge通道也可以。
+yum install centos-release-scl yum install devtoolset-9 然后在你使用R的用户下操作：
+# If you use your non-root account to install packages,  # change /root to /home/your_id in the following command mkdir -p /root/.R vi /root/.R/Makevars 将下面的内容写入打开的文件，然后保存：
+CXX11=/opt/rh/devtoolset-9/root/usr/bin/g++ -std=c++11 -fPIC CXX14=/opt/rh/devtoolset-9/root/usr/bin/g++ -std=c++14 -fPIC 如果没有root权限，可以通过conda来安装新版本的gcc,c++等：
+conda install gcc_linux-64 conda install gxx_linux-64  加上conda-forge通道也可以。
  另外可以一键安装常用的编译器：
-1conda install -c conda-forge compilers 安装完成后记得添加环境变量：
-1export CC=/path/to/anaconda/bin/x86_64-conda_cos6-linux-gnu-gcc 2export CXX=/path/to/anaconda/bin/x86_64-conda_cos6-linux-gnu-g++ 如果是R包编译，修改前面提到的Makevars文件即可。
+conda install -c conda-forge compilers 安装完成后记得添加环境变量：
+export CC=/path/to/anaconda/bin/x86_64-conda_cos6-linux-gnu-gcc export CXX=/path/to/anaconda/bin/x86_64-conda_cos6-linux-gnu-g++ 如果是R包编译，修改前面提到的Makevars文件即可。
 如果使用的是miniconda，这个文件的内容可能就是这样的了：
-1CXX11=~/miniconda3/bin/x86_64-conda-linux-gnu-g++ -std=c++11 -fPIC 2CXX14=~/miniconda3/bin/x86_64-conda-linux-gnu-g++ -std=c++14 -fPIC 这样就可以愉快地安装包了：</description>
+CXX11=~/miniconda3/bin/x86_64-conda-linux-gnu-g++ -std=c++11 -fPIC CXX14=~/miniconda3/bin/x86_64-conda-linux-gnu-g++ -std=c++14 -fPIC 这样就可以愉快地安装包了：</description>
     </item>
     
     <item>
@@ -48,8 +48,8 @@ stringi是tidyverse的一个核心包，基本上必装。但由于gayhub经常�
       
       <guid>/blog/jupyter-notebook-plugin-configs/</guid>
       <description>安装命令：
-1pip3 install -U jupyter_contrib_nbextensions 2jupyter contrib nbextension install --user 3pip3 install -U jupyter_nbextensions_configurator 4jupyter nbextensions_configurator enable --user 5 6pip3 install -U qgrid # 动态操作 DataFrame 7jupyter nbextension enable --py --sys-prefix qgrid 8jupyter nbextension enable --py --sys-prefix widgetsnbextension 如果要修改主题：
-1pip3 install -U jupyterthemes 网址：https://github.com/dunovank/jupyter-themes
+pip3 install -U jupyter_contrib_nbextensions jupyter contrib nbextension install --user pip3 install -U jupyter_nbextensions_configurator jupyter nbextensions_configurator enable --user pip3 install -U qgrid # 动态操作 DataFrame jupyter nbextension enable --py --sys-prefix qgrid jupyter nbextension enable --py --sys-prefix widgetsnbextension 如果要修改主题：
+pip3 install -U jupyterthemes 网址：https://github.com/dunovank/jupyter-themes
 激活的插件：</description>
     </item>
     

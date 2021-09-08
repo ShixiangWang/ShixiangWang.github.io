@@ -26,7 +26,7 @@
   ggproto()函数用于构造一个与新的geom对应的新类。这个新类指定了许多属性和函数，这些属性和函数描述了如何在图上绘制数据。
   geom_*函数被构造为标准函数。这个函数返回一个层，该层可以添加到使用ggplot()函数创建的plot中。
   新的geom类的基本设置如下所示：
-1GeomNEW &amp;lt;- ggproto(&amp;#34;GeomNEW&amp;#34;, Geom, 2 required_aes = &amp;lt;a character vector of required aesthetics&amp;gt;, 3 default_aes = aes(&amp;lt;default values for certain aesthetics&amp;gt;), 4 draw_key = &amp;lt;a function used to draw the key in the legend&amp;gt;, 5 draw_panel = function(data, panel_scales, coord) { 6 ## 返回一个grid grob对象的函数 7 ## 是绘图真正工作的地方 8 } 9) 所需的美学映射应该很简单——例如，如果你的新geom生成了一种特殊的散点图，那么你可能需要x和y映射。美学映射的默认值可以包括绘图符号如形状、颜色等内容。</description>
+GeomNEW &amp;lt;- ggproto(&amp;#34;GeomNEW&amp;#34;, Geom, required_aes = &amp;lt;a character vector of required aesthetics&amp;gt;, default_aes = aes(&amp;lt;default values for certain aesthetics&amp;gt;), draw_key = &amp;lt;a function used to draw the key in the legend&amp;gt;, draw_panel = function(data, panel_scales, coord) { ## 返回一个grid grob对象的函数 ## 是绘图真正工作的地方 } ) 所需的美学映射应该很简单——例如，如果你的新geom生成了一种特殊的散点图，那么你可能需要x和y映射。美学映射的默认值可以包括绘图符号如形状、颜色等内容。</description>
     </item>
     
   </channel>

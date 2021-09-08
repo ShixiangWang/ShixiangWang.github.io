@@ -87,7 +87,8 @@ library(dplyr) df |&amp;amp;gt; group_by(c1) |&amp;amp;gt; summarize(c2 = max(c2
       
       <guid>/blog/forestmode-set-overall-pva-for-variable-with-multiple-levels/</guid>
       <description>前段时间收到来信：
-1Hi Shixiang 2 3I am writing to you about the forestmodel package in R. 4 5Thank you so much for the wonderful package that you created. 6 7I was wondering if there is a way to display the wald test p-value which is important for variables that have more than two levels. I tried to work around the code but did not find a way out. 8 9Best 10Aniket 我不是作者，搞错了人，问我干啥呢～自个提问嘛</description>
+Hi Shixiang I am writing to you about the forestmodel package in R. Thank you so much for the wonderful package that you created. I was wondering if there is a way to display the wald test p-value which is important for variables that have more than two levels. I tried to work around the code but did not find a way out. Best Aniket 我不是作者，搞错了人，问我干啥呢～自个提问嘛
+Hi Aniket, I am not the author of forestmodel, you can see from https://github.</description>
     </item>
     
     <item>
@@ -129,7 +130,7 @@ pr &amp;amp;lt;- PRROC::pr.curve(ROCR.simple$predictions, weights.class0 = ROCR.
 分为2类：
 采样是一种常见的预处理技术。
  随机采样。每个样本单位被抽中的概率相等，样本的每个单位完全独立，彼此间无一定的关联性和排斥性。 分层采样。将抽样单位按某种特征或某种规则划分为不同的层，然后从不同的层中独立、随机地抽取样本。从而保证样本的结构与总体的结构比较相近，从而提高估计的精度。可以利用sampling::strata()。 欠采样和过采样。我们经常会碰到不同分类的样本比例相差较大的问题，这种问题会对我们构建模型造成很大的影响，因此从数据角度出发，我们可以利用欠采样或过采样处理这种现象。可以利用ROSE::ovun.sample()。  特征变换和编码 无量纲化 通过归一化，我们可以消除不同量纲下的数据对最终结果的影响。
-1normalize &amp;amp;lt;- function(x) { 2 # 计算极值 3 x_min &amp;amp;lt;- min(x) 4 x_max &amp;amp;lt;- max(x) 5 # 归一化 6 x_n &amp;amp;lt;- (x - x_min) / 7 (x_max - x_min) 8 # 将极值作为结果的属性 9 attr(x_n, 10 &amp;amp;#39;min&amp;amp;#39;) &amp;amp;lt;- x_min 11 attr(x_n, 12 &amp;amp;#39;max&amp;amp;#39;) &amp;amp;lt;- x_max 13 # 返回归一化后结果 14 x_n 15} 标准化。</description>
+normalize &amp;amp;lt;- function(x) { # 计算极值 x_min &amp;amp;lt;- min(x) x_max &amp;amp;lt;- max(x) # 归一化 x_n &amp;amp;lt;- (x - x_min) / (x_max - x_min) # 将极值作为结果的属性 attr(x_n, &amp;amp;#39;min&amp;amp;#39;) &amp;amp;lt;- x_min attr(x_n, &amp;amp;#39;max&amp;amp;#39;) &amp;amp;lt;- x_max # 返回归一化后结果 x_n } 标准化。</description>
     </item>
     
     <item>
@@ -140,7 +141,7 @@ pr &amp;amp;lt;- PRROC::pr.curve(ROCR.simple$predictions, weights.class0 = ROCR.
       <guid>/blog/install-stringi-when-bad-acess-to-gh/</guid>
       <description>这是一个我每次重装R，或者在新的系统上使用R进行包安装，都会遇到的问题。
 stringi是tidyverse的一个核心包，基本上必装。但由于gayhub经常访问有问题，这个包安装时所需要的依赖文件会下载不了。 解决的办法是手动下载，然后进行安装：
-1wget https://github.com/gagolews/stringi/archive/master.zip -O stringi.zip 2# 如果上面github的链接无法下载，尝试： 3# wget https://download.fastgit.org/gagolews/stringi/archive/master.zip -O stringi.zip 4unzip stringi.zip 5sed -i &amp;amp;#39;/\/icu..\/data/d&amp;amp;#39; stringi-master/.Rbuildignore 6R CMD build stringi-master 7R CMD INSTALL stringi*.tar.gz 参考：https://stackoverflow.com/questions/31942322/how-to-install-stringi-from-local-file-absolutely-no-internet-access#</description>
+wget https://github.com/gagolews/stringi/archive/master.zip -O stringi.zip # 如果上面github的链接无法下载，尝试： # wget https://download.fastgit.org/gagolews/stringi/archive/master.zip -O stringi.zip unzip stringi.zip sed -i &amp;amp;#39;/\/icu..\/data/d&amp;amp;#39; stringi-master/.Rbuildignore R CMD build stringi-master R CMD INSTALL stringi*.tar.gz 参考：https://stackoverflow.com/questions/31942322/how-to-install-stringi-from-local-file-absolutely-no-internet-access#</description>
     </item>
     
     <item>
@@ -153,15 +154,15 @@ stringi是tidyverse的一个核心包，基本上必装。但由于gayhub经常�
 一些有C&#43;&#43;代码的R包可能会用到一些新的C&#43;&#43;特性，需要C&#43;&#43;11或者C&#43;&#43;14。这个问题通常在CentOS/红帽系统上出现，因为系统稳定的要求，这个系列的系统它的C&#43;&#43;版本很低。 但请读者前往注意了别自己编译新版本的gcc，然后替换掉系统的。这种操作我试过几次，系统基本上就崩掉了。
 正确的解决方式是安装独立的gcc，通过环境变量引用和使用它。
 在Root用户下操作：
-1yum install centos-release-scl 2yum install devtoolset-9 然后在你使用R的用户下操作：
-1# If you use your non-root account to install packages,  2# change /root to /home/your_id in the following command 3mkdir -p /root/.R 4vi /root/.R/Makevars 将下面的内容写入打开的文件，然后保存：
-1CXX11=/opt/rh/devtoolset-9/root/usr/bin/g&#43;&#43; -std=c&#43;&#43;11 -fPIC 2CXX14=/opt/rh/devtoolset-9/root/usr/bin/g&#43;&#43; -std=c&#43;&#43;14 -fPIC 如果没有root权限，可以通过conda来安装新版本的gcc,c&#43;&#43;等：
-1conda install gcc_linux-64 2conda install gxx_linux-64  加上conda-forge通道也可以。
+yum install centos-release-scl yum install devtoolset-9 然后在你使用R的用户下操作：
+# If you use your non-root account to install packages,  # change /root to /home/your_id in the following command mkdir -p /root/.R vi /root/.R/Makevars 将下面的内容写入打开的文件，然后保存：
+CXX11=/opt/rh/devtoolset-9/root/usr/bin/g&#43;&#43; -std=c&#43;&#43;11 -fPIC CXX14=/opt/rh/devtoolset-9/root/usr/bin/g&#43;&#43; -std=c&#43;&#43;14 -fPIC 如果没有root权限，可以通过conda来安装新版本的gcc,c&#43;&#43;等：
+conda install gcc_linux-64 conda install gxx_linux-64  加上conda-forge通道也可以。
  另外可以一键安装常用的编译器：
-1conda install -c conda-forge compilers 安装完成后记得添加环境变量：
-1export CC=/path/to/anaconda/bin/x86_64-conda_cos6-linux-gnu-gcc 2export CXX=/path/to/anaconda/bin/x86_64-conda_cos6-linux-gnu-g&#43;&#43; 如果是R包编译，修改前面提到的Makevars文件即可。
+conda install -c conda-forge compilers 安装完成后记得添加环境变量：
+export CC=/path/to/anaconda/bin/x86_64-conda_cos6-linux-gnu-gcc export CXX=/path/to/anaconda/bin/x86_64-conda_cos6-linux-gnu-g&#43;&#43; 如果是R包编译，修改前面提到的Makevars文件即可。
 如果使用的是miniconda，这个文件的内容可能就是这样的了：
-1CXX11=~/miniconda3/bin/x86_64-conda-linux-gnu-g&#43;&#43; -std=c&#43;&#43;11 -fPIC 2CXX14=~/miniconda3/bin/x86_64-conda-linux-gnu-g&#43;&#43; -std=c&#43;&#43;14 -fPIC 这样就可以愉快地安装包了：</description>
+CXX11=~/miniconda3/bin/x86_64-conda-linux-gnu-g&#43;&#43; -std=c&#43;&#43;11 -fPIC CXX14=~/miniconda3/bin/x86_64-conda-linux-gnu-g&#43;&#43; -std=c&#43;&#43;14 -fPIC 这样就可以愉快地安装包了：</description>
     </item>
     
     <item>
@@ -172,11 +173,11 @@ stringi是tidyverse的一个核心包，基本上必装。但由于gayhub经常�
       <guid>/blog/use-modules-to-organize-r-functions/</guid>
       <description>接触过Python的朋友肯定对模块很熟悉，R的代码组织方式以包为主。但基于文件的模块形式也是可以实现的，modules 包提供了这种支持。
 安装和使用 直接从CRAN下载即可：
-1install.packages(&amp;amp;#34;modules&amp;amp;#34;) 使用了解2个函数的使用就可以了。
+install.packages(&amp;amp;#34;modules&amp;amp;#34;) 使用了解2个函数的使用就可以了。
 一是import()，用于替换library()加载包。
-1&amp;amp;gt; library(modules) 2&amp;amp;gt; gp = import(&amp;amp;#39;ggplot2&amp;amp;#39;) 3Masking (modules:ggplot2): 4 `Position` from: base 5&amp;amp;gt; args(gp$ggplot) 6function (data = NULL, mapping = aes(), ..., environment = parent.frame()) 7NULL 8&amp;amp;gt; args(ggplot) 9function (data = NULL, mapping = aes(), ..., environment = parent.frame()) 10NULL 这样我们可以直接使用这个函数，也可以通过gp这个对象去访问可用的函数。
+&amp;amp;gt; library(modules) &amp;amp;gt; gp = import(&amp;amp;#39;ggplot2&amp;amp;#39;) Masking (modules:ggplot2): `Position` from: base &amp;amp;gt; args(gp$ggplot) function (data = NULL, mapping = aes(), ..., environment = parent.frame()) NULL &amp;amp;gt; args(ggplot) function (data = NULL, mapping = aes(), ..., environment = parent.frame()) NULL 这样我们可以直接使用这个函数，也可以通过gp这个对象去访问可用的函数。
 如果不想要在全局直接访问包内的函数，在导入时设定attach=FALSE。
-1&amp;amp;gt; dp &amp;amp;lt;- import(dplyr, attach = FALSE) 2Masking (modules:dplyr): 3 `intersect` from: base 4 `setdiff` from: base 5 `setequal` from: base 6 `union` from: base 7&amp;amp;gt; select 8错误: 找不到对象&amp;amp;#39;select&amp;amp;#39; 9&amp;amp;gt; dp$select 10function (.</description>
+&amp;amp;gt; dp &amp;amp;lt;- import(dplyr, attach = FALSE) Masking (modules:dplyr): `intersect` from: base `setdiff` from: base `setequal` from: base `union` from: base &amp;amp;gt; select 错误: 找不到对象&amp;amp;#39;select&amp;amp;#39; &amp;amp;gt; dp$select function (.</description>
     </item>
     
     <item>
@@ -186,7 +187,7 @@ stringi是tidyverse的一个核心包，基本上必装。但由于gayhub经常�
       
       <guid>/blog/unix-working-tricks/</guid>
       <description>远程传输和备份文件（夹） 使用scp无法续传，使用rsync更好。
-1rsync -avLr --progress huaxi:/remote_dir/ ./local_dir 从bed文件指定的区域提取bam结果 1samtools view -@ 4 -bhL ../regions_to_check_in_bam.bed /public/home/zhaoxxx.bam &amp;amp;gt; xxx.bam </description>
+rsync -avLr --progress huaxi:/remote_dir/ ./local_dir 从bed文件指定的区域提取bam结果 samtools view -@ 4 -bhL ../regions_to_check_in_bam.bed /public/home/zhaoxxx.bam &amp;amp;gt; xxx.bam </description>
     </item>
     
     <item>
@@ -209,12 +210,12 @@ rRNA 这里有几个点：
       <guid>/blog/shell-array/</guid>
       <description>之前使用Shell编程很少使用到数组，最近尝试使用后发现它在某些情况下非常有用。 这里简单介绍如何生成和使用数组。
 生成数组 我们只要将一组空格分隔的序列用括号括起来，就生成了一个数组。
-1array=(a b c d e f g) 使用数组 输出数组 使用${array[*]}或${array[@]}输出全部元素：
-1bash-3.2$ echo ${array[*]} 2a b c d e f g 3bash-3.2$ echo ${array[@]} 4a b c d e f g 在array前加#输出元素个数：
-1bash-3.2$ echo ${#array[*]} 27 获取元素将*改成索引，记得是从0开始：
-1bash-3.2$ echo ${array[1]} 2b 3bash-3.2$ echo ${array[2]} 4c 注意在非引用的情况下不需要美元符号和花括号，例如修改元素：
-1bash-3.2$ array[2]=ff 2bash-3.2$ echo ${array[2]} 3ff 迭代数组：
-1#for i in &amp;amp;#34;${!array[@]}&amp;amp;#34;; do  2# printf &amp;amp;#34;%s\t%s\n&amp;amp;#34; &amp;amp;#34;$i&amp;amp;#34; &amp;amp;#34;${array[$i]}&amp;amp;#34; 3#done 4 5bash-3.2$ for i in &amp;amp;#34;${!</description>
+array=(a b c d e f g) 使用数组 输出数组 使用${array[*]}或${array[@]}输出全部元素：
+bash-3.2$ echo ${array[*]} a b c d e f g bash-3.2$ echo ${array[@]} a b c d e f g 在array前加#输出元素个数：
+bash-3.2$ echo ${#array[*]} 7 获取元素将*改成索引，记得是从0开始：
+bash-3.2$ echo ${array[1]} b bash-3.2$ echo ${array[2]} c 注意在非引用的情况下不需要美元符号和花括号，例如修改元素：
+bash-3.2$ array[2]=ff bash-3.2$ echo ${array[2]} ff 迭代数组：
+#for i in &amp;amp;#34;${!array[@]}&amp;amp;#34;; do  # printf &amp;amp;#34;%s\t%s\n&amp;amp;#34; &amp;amp;#34;$i&amp;amp;#34; &amp;amp;#34;${array[$i]}&amp;amp;#34; #done bash-3.2$ for i in &amp;amp;#34;${!</description>
     </item>
     
     <item>
@@ -279,7 +280,7 @@ x_{m1} &amp;amp;amp; x_{m2} &amp;amp;amp; \dots &amp;amp;amp; x_{mn} \end{bmatri
   ggproto()函数用于构造一个与新的geom对应的新类。这个新类指定了许多属性和函数，这些属性和函数描述了如何在图上绘制数据。
   geom_*函数被构造为标准函数。这个函数返回一个层，该层可以添加到使用ggplot()函数创建的plot中。
   新的geom类的基本设置如下所示：
-1GeomNEW &amp;amp;lt;- ggproto(&amp;amp;#34;GeomNEW&amp;amp;#34;, Geom, 2 required_aes = &amp;amp;lt;a character vector of required aesthetics&amp;amp;gt;, 3 default_aes = aes(&amp;amp;lt;default values for certain aesthetics&amp;amp;gt;), 4 draw_key = &amp;amp;lt;a function used to draw the key in the legend&amp;amp;gt;, 5 draw_panel = function(data, panel_scales, coord) { 6 ## 返回一个grid grob对象的函数 7 ## 是绘图真正工作的地方 8 } 9) 所需的美学映射应该很简单——例如，如果你的新geom生成了一种特殊的散点图，那么你可能需要x和y映射。美学映射的默认值可以包括绘图符号如形状、颜色等内容。</description>
+GeomNEW &amp;amp;lt;- ggproto(&amp;amp;#34;GeomNEW&amp;amp;#34;, Geom, required_aes = &amp;amp;lt;a character vector of required aesthetics&amp;amp;gt;, default_aes = aes(&amp;amp;lt;default values for certain aesthetics&amp;amp;gt;), draw_key = &amp;amp;lt;a function used to draw the key in the legend&amp;amp;gt;, draw_panel = function(data, panel_scales, coord) { ## 返回一个grid grob对象的函数 ## 是绘图真正工作的地方 } ) 所需的美学映射应该很简单——例如，如果你的新geom生成了一种特殊的散点图，那么你可能需要x和y映射。美学映射的默认值可以包括绘图符号如形状、颜色等内容。</description>
     </item>
     
     <item>
@@ -292,10 +293,10 @@ x_{m1} &amp;amp;amp; x_{m2} &amp;amp;amp; \dots &amp;amp;amp; x_{mn} \end{bmatri
 grobs 是 grid 绘图系统中图形对象的表示，即 graphics &#43; objects = grobs
 grobs 的创建通常使用以 Grob 作为后缀的函数们，包括circleGrob, linesGrob, polygonGrob, rasterGrob, rectGrob, segmentsGrob, legendGrob, xaxisGrob, and yaxisGrob 等等。 gridExtra 包定义了更多的图形对象。
 下面是一个绘圆的示例：
-1library(grid) 2my_circle &amp;amp;lt;- circleGrob(x = 0.5, y = 0.5, r = 0.5, 3 gp = gpar(col = &amp;amp;#34;gray&amp;amp;#34;, lty = 3)) 每个图形对象有自带的参数，比如圆有它的中心，半径。而不同的对象有相同的一些参数设定，包括颜色、线型、大小等等，这通过 gpar 函数进行设定。
+library(grid) my_circle &amp;amp;lt;- circleGrob(x = 0.5, y = 0.5, r = 0.5, gp = gpar(col = &amp;amp;#34;gray&amp;amp;#34;, lty = 3)) 每个图形对象有自带的参数，比如圆有它的中心，半径。而不同的对象有相同的一些参数设定，包括颜色、线型、大小等等，这通过 gpar 函数进行设定。
 再创建图形对象后，使用 grid.draw() 将图形绘制出来。
-1grid.draw(my_circle) 多个图形对象可以叠加，而且叠加后可以修改原来的图形对象。
-1my_circle &amp;amp;lt;- circleGrob(name = &amp;amp;#34;my_circle&amp;amp;#34;, 2 x = 0.5, y = 0.5, r = 0.</description>
+grid.draw(my_circle) 多个图形对象可以叠加，而且叠加后可以修改原来的图形对象。
+my_circle &amp;amp;lt;- circleGrob(name = &amp;amp;#34;my_circle&amp;amp;#34;, x = 0.5, y = 0.5, r = 0.5, gp = gpar(col = &amp;amp;#34;gray&amp;amp;#34;, lty = 3)) grid.</description>
     </item>
     
     <item>
@@ -307,9 +308,9 @@ grobs 的创建通常使用以 Grob 作为后缀的函数们，包括circleGrob,
       <description>原文：https://bookdown.org/rdpeng/RProgDA/the-grid-package.html#viewports
  视图是什么 视图是绘图窗口，我们可以将其移进或移出，以方便使用grid包定制绘图。我们可以导航到其中一个视图，进行一些更改，然后弹出并导航到另一个视图。简而言之，视图提供了一种在绘图（可以想象为一个画板）的不同子空间（不同的层，如果了解ggplot2，采用图层概念理解它）中导航和工作的方法。
 下面是一个例子，我们在整个图形的右上角绘制一个棒棒图：
-1# 默认，grid会初始化第一个视图 2grid.draw(rectGrob()) 3# 创建一个小的视图 4# 指定新视图的位置，X为0.5，Y为0.5，视图高宽都为0.5 5sample_vp &amp;amp;lt;- viewport(x = 0.5, y = 0.5, 6 width = 0.5, height = 0.5, 7 just = c(&amp;amp;#34;left&amp;amp;#34;, &amp;amp;#34;bottom&amp;amp;#34;)) # 位置校正参数 8# 导航视图：上面只是定义了一个视图对象 9# 我们可以想象为一个大画板是一张白纸 10# 我们上面准备了一张小的白纸 11# 而 push 的目的就是把小的白纸放到大白纸的对应位置 12# 接下来的绘图动作就是在小的白纸上进行的 13pushViewport(sample_vp) 14grid.draw(roundrectGrob()) 15grid.draw(lollipop) 16# 弹出最上层的视图 17popViewport()  棒棒图的绘制见「R」grid 图形对象 grobs一文末尾。
+# 默认，grid会初始化第一个视图 grid.draw(rectGrob()) # 创建一个小的视图 # 指定新视图的位置，X为0.5，Y为0.5，视图高宽都为0.5 sample_vp &amp;amp;lt;- viewport(x = 0.5, y = 0.5, width = 0.5, height = 0.5, just = c(&amp;amp;#34;left&amp;amp;#34;, &amp;amp;#34;bottom&amp;amp;#34;)) # 位置校正参数 # 导航视图：上面只是定义了一个视图对象 # 我们可以想象为一个大画板是一张白纸 # 我们上面准备了一张小的白纸 # 而 push 的目的就是把小的白纸放到大白纸的对应位置 # 接下来的绘图动作就是在小的白纸上进行的 pushViewport(sample_vp) grid.draw(roundrectGrob()) grid.draw(lollipop) # 弹出最上层的视图 popViewport()  棒棒图的绘制见「R」grid 图形对象 grobs一文末尾。
  视图的just参数 值得注意的是这里的just参数：它定义了新的视图是如何在旧（大） 的视图上摆放的。这里的c(&amp;amp;quot;left&amp;amp;quot;, &amp;amp;quot;bottom&amp;amp;quot;)指定了小的视图的左侧和下侧与其坐标单位0.5, 0.5对齐。我们看看修改下该参数的效果：
-1grid.draw(rectGrob()) 2sample_vp &amp;amp;lt;- viewport(x = 0.5, y = 0.</description>
+grid.draw(rectGrob()) sample_vp &amp;amp;lt;- viewport(x = 0.5, y = 0.5, width = 0.</description>
     </item>
     
     <item>
@@ -324,7 +325,7 @@ grobs 的创建通常使用以 Grob 作为后缀的函数们，包括circleGrob,
   n pc单位：将整个（笛卡尔）坐标系缩放为0到1范围。
   实际尺寸单位：包括英寸、厘米、毫米。
   例如，下面的绘图同时用到了前两者：
-1ex_vp &amp;amp;lt;- viewport(x = 0.5, y = 0.5, # npc 单位 2 just = c(&amp;amp;#34;center&amp;amp;#34;, &amp;amp;#34;center&amp;amp;#34;), 3 height = 0.8, width = 0.8, 4 xscale = c(0, 100), yscale = c(0, 10)) # 设定native单位 5pushViewport(ex_vp) 6grid.draw(rectGrob()) 7grid.draw(circleGrob(x = unit(20, &amp;amp;#34;native&amp;amp;#34;), y = unit(5, &amp;amp;#34;native&amp;amp;#34;), # 根据native单位绘图 8 r = 0.1, gp = gpar(fill = &amp;amp;#34;lightblue&amp;amp;#34;))) 9grid.</description>
+ex_vp &amp;amp;lt;- viewport(x = 0.5, y = 0.5, # npc 单位 just = c(&amp;amp;#34;center&amp;amp;#34;, &amp;amp;#34;center&amp;amp;#34;), height = 0.8, width = 0.8, xscale = c(0, 100), yscale = c(0, 10)) # 设定native单位 pushViewport(ex_vp) grid.draw(rectGrob()) grid.draw(circleGrob(x = unit(20, &amp;amp;#34;native&amp;amp;#34;), y = unit(5, &amp;amp;#34;native&amp;amp;#34;), # 根据native单位绘图 r = 0.1, gp = gpar(fill = &amp;amp;#34;lightblue&amp;amp;#34;))) grid.draw(circleGrob(x = unit(85, &amp;amp;#34;native&amp;amp;#34;), y = unit(8, &amp;amp;#34;native&amp;amp;#34;), r = 0.</description>
     </item>
     
     <item>
@@ -335,10 +336,11 @@ grobs 的创建通常使用以 Grob 作为后缀的函数们，包括circleGrob,
       <guid>/blog/grid-4-gridextra%E5%8C%85/</guid>
       <description>gridExtra包提供了grid系统的有用拓展，包括对grobs对象的操作方法和其他一些grobs对象。
 grid.arrange()可以绘制多个对象：
-1library(gridExtra) 2grid.arrange(lollipop, circleGrob(), 3 rectGrob(), lollipop, 4 ncol = 2) 由于ggplot2也是基于grid系统的，所以我们可以使用该函数对ggplot对象组合排序：
-1time_vs_shots &amp;amp;lt;- ggplot(worldcup, aes(x = Time, y = Shots)) &#43; 2 geom_point() 3player_positions &amp;amp;lt;- ggplot(worldcup, aes(x = Position)) &#43; 4 geom_bar() 5 6grid.arrange(time_vs_shots, player_positions, ncol = 2) 使用layout_matrix选项可以进行更自定义控制：
-1grid.arrange(time_vs_shots, player_positions, 2 layout_matrix = matrix(c(1, 2, 2), ncol = 3)) 包括图形填充：
-1grid.arrange(time_vs_shots, player_positions, 2 layout_matrix = matrix(c(1, NA, NA, NA, 2, 2), 3 byrow = TRUE, ncol = 3)) 使用tableGrob()函数，我们可以在图中嵌入表格。下面是一个略微复杂的例子：</description>
+library(gridExtra) grid.arrange(lollipop, circleGrob(), rectGrob(), lollipop, ncol = 2) 由于ggplot2也是基于grid系统的，所以我们可以使用该函数对ggplot对象组合排序：
+time_vs_shots &amp;amp;lt;- ggplot(worldcup, aes(x = Time, y = Shots)) &#43; geom_point() player_positions &amp;amp;lt;- ggplot(worldcup, aes(x = Position)) &#43; geom_bar() grid.arrange(time_vs_shots, player_positions, ncol = 2) 使用layout_matrix选项可以进行更自定义控制：
+grid.arrange(time_vs_shots, player_positions, layout_matrix = matrix(c(1, 2, 2), ncol = 3)) 包括图形填充：
+grid.arrange(time_vs_shots, player_positions, layout_matrix = matrix(c(1, NA, NA, NA, 2, 2), byrow = TRUE, ncol = 3)) 使用tableGrob()函数，我们可以在图中嵌入表格。下面是一个略微复杂的例子：
+worldcup_table &amp;amp;lt;- worldcup %&amp;amp;gt;% filter(Team %in% c(&amp;amp;#34;Germany&amp;amp;#34;, &amp;amp;#34;Spain&amp;amp;#34;, &amp;amp;#34;Netherlands&amp;amp;#34;, &amp;amp;#34;Uruguay&amp;amp;#34;)) %&amp;amp;gt;% group_by(Team) %&amp;amp;gt;% dplyr::summarize(`Average time` = round(mean(Time), 1), `Average shots` = round(mean(Shots), 1)) %&amp;amp;gt;% tableGrob() `summarise()` ungrouping output (override with `.</description>
     </item>
     
     <item>
@@ -364,7 +366,8 @@ IntegerVector类 模板函数as&amp;amp;lt;&amp;amp;gt;()用于从R转换到C&#4
  示例：返回完美数 什么是完美数：
 https://baike.baidu.com/item/完全数/370913?fromtitle=完美数&amp;amp;amp;fromid=871560&amp;amp;amp;fr=aladdin
 代码：
-1library(Rcpp) 2library(inline) 3 4src &amp;amp;lt;- &amp;amp;#39; 5Rcpp::IntegerVector epn(4); 6epn[0] = 6; 7epn[1] = 14; 8epn[2] = 496; 9epn[3] = 8182; 10return epn; 11&amp;amp;#39; 12 13func &amp;amp;lt;- cxxfunction(signature(), src, plugin = &amp;amp;#34;Rcpp&amp;amp;#34;) 调用：</description>
+library(Rcpp) library(inline) src &amp;amp;lt;- &amp;amp;#39; Rcpp::IntegerVector epn(4); epn[0] = 6; epn[1] = 14; epn[2] = 496; epn[3] = 8182; return epn; &amp;amp;#39; func &amp;amp;lt;- cxxfunction(signature(), src, plugin = &amp;amp;#34;Rcpp&amp;amp;#34;) 调用：
+&amp;amp;gt; func() [1] 6 14 496 8182 示例：使用输入 求乘积。</description>
     </item>
     
     <item>
@@ -375,11 +378,11 @@ https://baike.baidu.com/item/完全数/370913?fromtitle=完美数&amp;amp;amp;fr
       <guid>/blog/unix-bash-programming/</guid>
       <description>原文：https://seankross.com/the-unix-workbench/bash-programming.html
  数学 创建math.sh：
-1#!/usr/bin/env bash 2# File: math.sh 3 4expr 5 &#43; 2 5expr 5 - 2 6expr 5 \* 2 # 转义 7expr 5 / 2 保存然后运行：
-1$ bash math.sh 27 33 410 52 ⚠️注意，bash使用整除法。求余使用%符号。
+#!/usr/bin/env bash # File: math.sh expr 5 &#43; 2 expr 5 - 2 expr 5 \* 2 # 转义 expr 5 / 2 保存然后运行：
+$ bash math.sh 7 3 10 2 ⚠️注意，bash使用整除法。求余使用%符号。
 如果我们想要进行更为复杂的数学计算，使用bc命令。
 创建文件bigmath.sh：
-1#!/usr/bin/env bash 2# File: bigmath.sh 3 4echo &amp;amp;#34;22 / 7&amp;amp;#34; | bc -l 5echo &amp;amp;#34;4.2 * 9.15&amp;amp;#34; | bc -l 6echo &amp;amp;#34;(6.5 / 0.5) &#43; (6 * 2.2)&amp;amp;#34; | bc -l 结果：</description>
+#!/usr/bin/env bash # File: bigmath.sh echo &amp;amp;#34;22 / 7&amp;amp;#34; | bc -l echo &amp;amp;#34;4.2 * 9.15&amp;amp;#34; | bc -l echo &amp;amp;#34;(6.5 / 0.5) &#43; (6 * 2.2)&amp;amp;#34; | bc -l 结果：</description>
     </item>
     
     <item>
@@ -396,15 +399,16 @@ https://baike.baidu.com/item/完全数/370913?fromtitle=完美数&amp;amp;amp;fr
   运行make。
   这是通过指定一个名为makefile的文件来实现的，该文件描述了不同文件和程序之间的关系 。除了安装程序之外，make对于自动创建文档也很有用。让我们构建一个makefile，它创建一个readme.txt文件，该文件自动填充有关当前目录的一些信息。
 首先进入目录并创建一个文件：
-1▶ cd ~/Documents/test 2▶ nano makefile 填入如下内容：
-1draft_journal_entry.txt: 2 touch draft_journal_entry.txt 上面简单的makefile说明了一个规则，它的一般格式如下：
-1[target]: [dependencies...] 2 [commands...] 在这个简单的示例中，我们创建了以draft_journal_entry.txt为目标的文件，该文件是作为命令的结果创建的。需要注意的是，目标下的任何命令都必须用Tab缩进。如果我们不使用Tab 来缩进命令，那么make将失败。让我们保存并关闭makefile，然后我们可以在控制台中运行以下命令：
-1▶ ls 2makefile 然后使用下面的操作查看make使用方式：
-1▶ make draft_journal_entry.txt 2touch draft_journal_entry.txt 3▶ ls 4draft_journal_entry.txt makefile 在我们为draft_journal_entry.txt目标定义的规则下缩进的命令已经执行，所以现在draft_journal_entry.txt存在！让我们再次运行相同的make命令：
-1▶ make draft_journal_entry.txt 2make: `draft_journal_entry.txt&amp;amp;#39; is up to date. 因为目标文件已经存在，所以没有采取任何操作，相反，我们被告知，draft_journal_entry.txt的规则是“最新的”(没有什么需要做的)。
+▶ cd ~/Documents/test ▶ nano makefile 填入如下内容：
+draft_journal_entry.txt: touch draft_journal_entry.txt 上面简单的makefile说明了一个规则，它的一般格式如下：
+[target]: [dependencies...] [commands...] 在这个简单的示例中，我们创建了以draft_journal_entry.txt为目标的文件，该文件是作为命令的结果创建的。需要注意的是，目标下的任何命令都必须用Tab缩进。如果我们不使用Tab 来缩进命令，那么make将失败。让我们保存并关闭makefile，然后我们可以在控制台中运行以下命令：
+▶ ls makefile 然后使用下面的操作查看make使用方式：
+▶ make draft_journal_entry.txt touch draft_journal_entry.txt ▶ ls draft_journal_entry.txt makefile 在我们为draft_journal_entry.txt目标定义的规则下缩进的命令已经执行，所以现在draft_journal_entry.txt存在！让我们再次运行相同的make命令：
+▶ make draft_journal_entry.txt make: `draft_journal_entry.txt&amp;amp;#39; is up to date. 因为目标文件已经存在，所以没有采取任何操作，相反，我们被告知，draft_journal_entry.txt的规则是“最新的”(没有什么需要做的)。
 如果我们看一下我们之前草拟的一般规则格式，我们可以看到我们没有为该规则指定任何依赖项。依赖项是目标在构建时所依赖的文件。如果自上次为目标运行make以来，依赖项已经更新，则目标不是“最新的”。这意味着下次为该目标运行make时将运行该目标的命令。通过这种方式，对依赖项的更改被合并到目标中。为了避免不必要地运行命令，这些命令只在依赖项改变时运行，或者当目标根本不存在时运行。
 让我们更新makefile，以包含自动生成的readme.txt。首先，让我们添加文件：
-1▶ echo &amp;amp;#34;1. 2017-06-15-In-Boston&amp;amp;#34; &amp;amp;gt; toc.txt makefile修改为：</description>
+▶ echo &amp;amp;#34;1. 2017-06-15-In-Boston&amp;amp;#34; &amp;amp;gt; toc.txt makefile修改为：
+draft_journal_entry.txt: touch draft_journal_entry.</description>
     </item>
     
     <item>
@@ -420,8 +424,8 @@ https://baike.baidu.com/item/完全数/370913?fromtitle=完美数&amp;amp;amp;fr
   BWA
   samtools
   Circle-Map
-  1conda install -c bioconda bwa samtools 2pip3 install Circle-Map 3pip3 install biopython==1.77 # 不安装这个版本目前使用会报错 4 第一步：准备和下载数据 下载原始数据 直接克隆仓库：
-1git clone https://github.com/iprada/Circle-Map 下载和准备参考基因组 1wget http://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/hg38.fa.gz 2gunzip -d hg38.fa.gz 3 4bwa index hg38.fa 5samtools faidx hg38.fa 6 第二步：比对到参考基因组 1cd Circle-Map/tutorial/ 2bwa mem -q ~/data/refs/hg38.fa unknown_circle_reads_1.fastq unknown_circle_reads_2.fastq &amp;amp;gt; unknown_circle.sam 3 这就产生了一个SAM文件，其中包含了关于reads在哪里以及如何与基因组对齐的信息。
+  conda install -c bioconda bwa samtools pip3 install Circle-Map pip3 install biopython==1.77 # 不安装这个版本目前使用会报错 第一步：准备和下载数据 下载原始数据 直接克隆仓库：
+git clone https://github.com/iprada/Circle-Map 下载和准备参考基因组 wget http://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/hg38.fa.gz gunzip -d hg38.fa.gz bwa index hg38.fa samtools faidx hg38.fa 第二步：比对到参考基因组 cd Circle-Map/tutorial/ bwa mem -q ~/data/refs/hg38.fa unknown_circle_reads_1.fastq unknown_circle_reads_2.fastq &amp;amp;gt; unknown_circle.sam 这就产生了一个SAM文件，其中包含了关于reads在哪里以及如何与基因组对齐的信息。
   我们使用 -q 选项（query name sorted）为BWA中的拆分读对比对分配独立的映射质量分数 。这可以改进Circle-Map概率模型中断点图权值的估计。</description>
     </item>
     
@@ -432,8 +436,8 @@ https://baike.baidu.com/item/完全数/370913?fromtitle=完美数&amp;amp;amp;fr
       
       <guid>/blog/jupyter-notebook-plugin-configs/</guid>
       <description>安装命令：
-1pip3 install -U jupyter_contrib_nbextensions 2jupyter contrib nbextension install --user 3pip3 install -U jupyter_nbextensions_configurator 4jupyter nbextensions_configurator enable --user 5 6pip3 install -U qgrid # 动态操作 DataFrame 7jupyter nbextension enable --py --sys-prefix qgrid 8jupyter nbextension enable --py --sys-prefix widgetsnbextension 如果要修改主题：
-1pip3 install -U jupyterthemes 网址：https://github.com/dunovank/jupyter-themes
+pip3 install -U jupyter_contrib_nbextensions jupyter contrib nbextension install --user pip3 install -U jupyter_nbextensions_configurator jupyter nbextensions_configurator enable --user pip3 install -U qgrid # 动态操作 DataFrame jupyter nbextension enable --py --sys-prefix qgrid jupyter nbextension enable --py --sys-prefix widgetsnbextension 如果要修改主题：
+pip3 install -U jupyterthemes 网址：https://github.com/dunovank/jupyter-themes
 激活的插件：</description>
     </item>
     
@@ -446,8 +450,8 @@ https://baike.baidu.com/item/完全数/370913?fromtitle=完美数&amp;amp;amp;fr
       <description>Slurm的官方文档在：https://slurm.schedmd.com/。
 这篇文章记录下我在工作中使用经常用到，但是一般的初级文档不会涉及的内容、操作。
 系统节点资源概览 一般我们输入sinfo，只能看到非常精简的节点信息：
-1$ sinfo 2PARTITION AVAIL TIMELIMIT NODES STATE NODELIST 3cn up infinite 1 mix cn03 4cn up infinite 2 alloc cn[01-02] 5cn up infinite 15 idle cn[04-18] 6fat up infinite 1 idle fat01 7gpu* up infinite 1 idle gpu01 我们可以添加几个选项来获得一个更为完备的信息：
-1$ sinfo -Nel 2Fri Aug 6 15:54:17 2021 3NODELIST NODES PARTITION STATE CPUS S:C:T MEMORY TMP_DISK WEIGHT AVAIL_FE REASON 4cn01 1 cn allocated 80 80:1:1 771000 0 1 (null) none 5cn02 1 cn allocated 80 80:1:1 771000 0 1 (null) none 6cn03 1 cn mixed 80 80:1:1 771000 0 1 (null) none 7cn04 1 cn idle 80 80:1:1 771000 0 1 (null) none 8cn05 1 cn idle 80 80:1:1 771000 0 1 (null) none 9cn06 1 cn idle 80 80:1:1 771000 0 1 (null) none 10cn07 1 cn idle 80 80:1:1 771000 0 1 (null) none 11cn08 1 cn idle 80 80:1:1 771000 0 1 (null) none 12cn09 1 cn idle 80 80:1:1 771000 0 1 (null) none 13cn10 1 cn idle 80 80:1:1 771000 0 1 (null) none 14cn11 1 cn idle 80 80:1:1 771000 0 1 (null) none 15cn12 1 cn idle 80 80:1:1 771000 0 1 (null) none 16cn13 1 cn idle 80 80:1:1 771000 0 1 (null) none 17cn14 1 cn idle 80 80:1:1 771000 0 1 (null) none 18cn15 1 cn idle 80 80:1:1 771000 0 1 (null) none 19cn16 1 cn idle 80 80:1:1 771000 0 1 (null) none 20cn17 1 cn idle 80 80:1:1 771000 0 1 (null) none 21cn18 1 cn idle 80 80:1:1 771000 0 1 (null) none 22fat01 1 fat idle 80 80:1:1 296649 0 1 (null) none 23gpu01 1 gpu* idle 40 40:1:1 772000 0 1 (null) none 全部的选项介绍在文档sinfo中。</description>
+$ sinfo PARTITION AVAIL TIMELIMIT NODES STATE NODELIST cn up infinite 1 mix cn03 cn up infinite 2 alloc cn[01-02] cn up infinite 15 idle cn[04-18] fat up infinite 1 idle fat01 gpu* up infinite 1 idle gpu01 我们可以添加几个选项来获得一个更为完备的信息：
+$ sinfo -Nel Fri Aug 6 15:54:17 2021 NODELIST NODES PARTITION STATE CPUS S:C:T MEMORY TMP_DISK WEIGHT AVAIL_FE REASON cn01 1 cn allocated 80 80:1:1 771000 0 1 (null) none cn02 1 cn allocated 80 80:1:1 771000 0 1 (null) none cn03 1 cn mixed 80 80:1:1 771000 0 1 (null) none cn04 1 cn idle 80 80:1:1 771000 0 1 (null) none cn05 1 cn idle 80 80:1:1 771000 0 1 (null) none cn06 1 cn idle 80 80:1:1 771000 0 1 (null) none cn07 1 cn idle 80 80:1:1 771000 0 1 (null) none cn08 1 cn idle 80 80:1:1 771000 0 1 (null) none cn09 1 cn idle 80 80:1:1 771000 0 1 (null) none cn10 1 cn idle 80 80:1:1 771000 0 1 (null) none cn11 1 cn idle 80 80:1:1 771000 0 1 (null) none cn12 1 cn idle 80 80:1:1 771000 0 1 (null) none cn13 1 cn idle 80 80:1:1 771000 0 1 (null) none cn14 1 cn idle 80 80:1:1 771000 0 1 (null) none cn15 1 cn idle 80 80:1:1 771000 0 1 (null) none cn16 1 cn idle 80 80:1:1 771000 0 1 (null) none cn17 1 cn idle 80 80:1:1 771000 0 1 (null) none cn18 1 cn idle 80 80:1:1 771000 0 1 (null) none fat01 1 fat idle 80 80:1:1 296649 0 1 (null) none gpu01 1 gpu* idle 40 40:1:1 772000 0 1 (null) none 全部的选项介绍在文档sinfo中。</description>
     </item>
     
     <item>
@@ -464,9 +468,9 @@ https://baike.baidu.com/item/完全数/370913?fromtitle=完美数&amp;amp;amp;fr
 问题 给定一个整数数组nums和一个整数目标值target，请你在该数组中找出 和为目标值target 的那两个整数，并返回它们的数组下标。
 你可以假设每种输入只会对应一个答案。但是，数组中同一个元素在答案里不能重复出现。
 示例：
-1输入：nums = [2,7,11,15], target = 9 2输出：[0,1] 3解释：因为 nums[0] &#43; nums[1] == 9 ，返回 [0, 1] 。 题解 顺序扫描数组，对每一个元素，在map中找能组合给定值的另一半数字，如果找到了，直接返回2个数字的下标即可。如果找不到，就把这个数字存入map中，等待扫到“另一半”数字的时候，再取出来返回结果。
+输入：nums = [2,7,11,15], target = 9 输出：[0,1] 解释：因为 nums[0] &#43; nums[1] == 9 ，返回 [0, 1] 。 题解 顺序扫描数组，对每一个元素，在map中找能组合给定值的另一半数字，如果找到了，直接返回2个数字的下标即可。如果找不到，就把这个数字存入map中，等待扫到“另一半”数字的时候，再取出来返回结果。
 这种解法将数据扫描一遍必然得到结果，所以时间复杂度是O(n)。
-Go 1package main 2 3import &amp;amp;#34;fmt&amp;amp;#34; 4 5func twoSum(nums []int, target int) []int { 6 m := make(map[int]int) 7 for i := 0; i &amp;amp;lt; len(nums); i&#43;&#43; { 8 another := target - nums[i] 9 if _, ok := m[another]; ok { 10 return []int{m[another], i} 11 } 12 m[nums[i]] = i 13 } 14 return nil 15} 16 17func main() { 18 fmt.</description>
+Go package main import &amp;amp;#34;fmt&amp;amp;#34; func twoSum(nums []int, target int) []int { m := make(map[int]int) for i := 0; i &amp;amp;lt; len(nums); i&#43;&#43; { another := target - nums[i] if _, ok := m[another]; ok { return []int{m[another], i} } m[nums[i]] = i } return nil } func main() { fmt.</description>
     </item>
     
     <item>

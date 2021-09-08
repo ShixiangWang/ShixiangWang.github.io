@@ -105,7 +105,7 @@ pr &amp;lt;- PRROC::pr.curve(ROCR.simple$predictions, weights.class0 = ROCR.simp
 分为2类：
 采样是一种常见的预处理技术。
  随机采样。每个样本单位被抽中的概率相等，样本的每个单位完全独立，彼此间无一定的关联性和排斥性。 分层采样。将抽样单位按某种特征或某种规则划分为不同的层，然后从不同的层中独立、随机地抽取样本。从而保证样本的结构与总体的结构比较相近，从而提高估计的精度。可以利用sampling::strata()。 欠采样和过采样。我们经常会碰到不同分类的样本比例相差较大的问题，这种问题会对我们构建模型造成很大的影响，因此从数据角度出发，我们可以利用欠采样或过采样处理这种现象。可以利用ROSE::ovun.sample()。  特征变换和编码 无量纲化 通过归一化，我们可以消除不同量纲下的数据对最终结果的影响。
-1normalize &amp;lt;- function(x) { 2 # 计算极值 3 x_min &amp;lt;- min(x) 4 x_max &amp;lt;- max(x) 5 # 归一化 6 x_n &amp;lt;- (x - x_min) / 7 (x_max - x_min) 8 # 将极值作为结果的属性 9 attr(x_n, 10 &amp;#39;min&amp;#39;) &amp;lt;- x_min 11 attr(x_n, 12 &amp;#39;max&amp;#39;) &amp;lt;- x_max 13 # 返回归一化后结果 14 x_n 15} 标准化。</description>
+normalize &amp;lt;- function(x) { # 计算极值 x_min &amp;lt;- min(x) x_max &amp;lt;- max(x) # 归一化 x_n &amp;lt;- (x - x_min) / (x_max - x_min) # 将极值作为结果的属性 attr(x_n, &amp;#39;min&amp;#39;) &amp;lt;- x_min attr(x_n, &amp;#39;max&amp;#39;) &amp;lt;- x_max # 返回归一化后结果 x_n } 标准化。</description>
     </item>
     
   </channel>
