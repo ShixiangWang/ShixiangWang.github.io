@@ -8,7 +8,19 @@
 王诗翔</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 01 Sep 2021 00:00:00 +0000</lastBuildDate><atom:link href="/categories/blog/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 08 Sep 2021 00:00:00 +0000</lastBuildDate><atom:link href="/categories/blog/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>云服务器清理病毒kdevtmpfsi</title>
+      <link>/blog/clean-virus-in-cloud-server/</link>
+      <pubDate>Wed, 08 Sep 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/clean-virus-in-cloud-server/</guid>
+      <description>云服务器一段时间没使用就经常能发现存在挖矿病毒，也不知道怎么进来的。 也不知道各种云服务商干啥去了，一般能本地使用电脑还是不建议使用云服务器。
+本文记录下清理病毒的大体流程，防止脑子总是忘记，又不是需要它。
+查看占CPU任务名 这种一般top就可以了。
+$ top -H top - 19:47:30 up 72 days, 4:01, 1 user, load average: 3.46, 3.17, 3.12 Threads: 357 total, 5 running, 352 sleeping, 0 stopped, 0 zombie %Cpu(s): 98.7 us, 1.3 sy, 0.0 ni, 0.0 id, 0.0 wa, 0.0 hi, 0.0 si, 0.0 st KiB Mem : 1882016 total, 69388 free, 579844 used, 1232784 buff/cache KiB Swap: 2097148 total, 2002172 free, 94976 used. 1106516 avail Mem PID USER PR NI VIRT RES SHR S %CPU %MEM TIME+ COMMAND 24665 zd 20 0 710928 265496 672 R 98.</description>
+    </item>
+    
     <item>
       <title>mlr3（三）模型优化</title>
       <link>/blog/mlr3-model-optimization/</link>
@@ -162,21 +174,6 @@ conda install -c conda-forge compilers 安装完成后记得添加环境变量�
 export CC=/path/to/anaconda/bin/x86_64-conda_cos6-linux-gnu-gcc export CXX=/path/to/anaconda/bin/x86_64-conda_cos6-linux-gnu-g++ 如果是R包编译，修改前面提到的Makevars文件即可。
 如果使用的是miniconda，这个文件的内容可能就是这样的了：
 CXX11=~/miniconda3/bin/x86_64-conda-linux-gnu-g++ -std=c++11 -fPIC CXX14=~/miniconda3/bin/x86_64-conda-linux-gnu-g++ -std=c++14 -fPIC 这样就可以愉快地安装包了：</description>
-    </item>
-    
-    <item>
-      <title>使用modules包来组织R的函数集合</title>
-      <link>/blog/use-modules-to-organize-r-functions/</link>
-      <pubDate>Tue, 24 Aug 2021 00:00:00 +0000</pubDate>
-      
-      <guid>/blog/use-modules-to-organize-r-functions/</guid>
-      <description>接触过Python的朋友肯定对模块很熟悉，R的代码组织方式以包为主。但基于文件的模块形式也是可以实现的，modules 包提供了这种支持。
-安装和使用 直接从CRAN下载即可：
-install.packages(&amp;#34;modules&amp;#34;) 使用了解2个函数的使用就可以了。
-一是import()，用于替换library()加载包。
-&amp;gt; library(modules) &amp;gt; gp = import(&amp;#39;ggplot2&amp;#39;) Masking (modules:ggplot2): `Position` from: base &amp;gt; args(gp$ggplot) function (data = NULL, mapping = aes(), ..., environment = parent.frame()) NULL &amp;gt; args(ggplot) function (data = NULL, mapping = aes(), ..., environment = parent.frame()) NULL 这样我们可以直接使用这个函数，也可以通过gp这个对象去访问可用的函数。
-如果不想要在全局直接访问包内的函数，在导入时设定attach=FALSE。
-&amp;gt; dp &amp;lt;- import(dplyr, attach = FALSE) Masking (modules:dplyr): `intersect` from: base `setdiff` from: base `setequal` from: base `union` from: base &amp;gt; select 错误: 找不到对象&amp;#39;select&amp;#39; &amp;gt; dp$select function (.</description>
     </item>
     
   </channel>
