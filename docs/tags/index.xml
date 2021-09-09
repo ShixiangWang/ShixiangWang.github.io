@@ -8,7 +8,25 @@
 王诗翔</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 08 Sep 2021 00:00:00 +0000</lastBuildDate><atom:link href="/tags/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 09 Sep 2021 00:00:00 +0000</lastBuildDate><atom:link href="/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Python</title>
+      <link>/tags/python/</link>
+      <pubDate>Thu, 09 Sep 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/python/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>VSCode</title>
+      <link>/tags/vscode/</link>
+      <pubDate>Thu, 09 Sep 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/vscode/</guid>
+      <description></description>
+    </item>
+    
     <item>
       <title>Linux</title>
       <link>/tags/linux/</link>
@@ -78,24 +96,6 @@
       <pubDate>Wed, 25 Aug 2021 00:00:00 +0000</pubDate>
       
       <guid>/tags/unix/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>开发</title>
-      <link>/tags/%E5%BC%80%E5%8F%91/</link>
-      <pubDate>Tue, 24 Aug 2021 00:00:00 +0000</pubDate>
-      
-      <guid>/tags/%E5%BC%80%E5%8F%91/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Bash</title>
-      <link>/tags/bash/</link>
-      <pubDate>Wed, 18 Aug 2021 00:00:00 +0000</pubDate>
-      
-      <guid>/tags/bash/</guid>
       <description></description>
     </item>
     

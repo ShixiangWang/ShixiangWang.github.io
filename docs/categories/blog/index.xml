@@ -8,7 +8,21 @@
 王诗翔</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 08 Sep 2021 00:00:00 +0000</lastBuildDate><atom:link href="/categories/blog/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 09 Sep 2021 00:00:00 +0000</lastBuildDate><atom:link href="/categories/blog/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>在VSCode中使用ipython执行代码</title>
+      <link>/blog/use-ipython-exe-code-in-vscode/</link>
+      <pubDate>Thu, 09 Sep 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/use-ipython-exe-code-in-vscode/</guid>
+      <description>参考Stack Overflow这篇回答进行配置，将下面的内容加入settings.json.
+&amp;#34;python.terminal.launchArgs&amp;#34;: [ &amp;#34;-m&amp;#34;, &amp;#34;IPython&amp;#34;, &amp;#34;--no-autoindent&amp;#34;, ], Python的数据科学社区都将编辑的重心放到了Jupyter notebook上，忽视了对.py文本本身的支持。 这个事情不知道是好是坏，但对于我这个R使用比较严重的人来说使用起来是不舒服的。 Jupyter的记录格式太笨重了，如果只是单独完成分析任务，代码加注释完全够用了。 R里面有RMarkdown格式，相比更加轻松。更重要的是，我在GitHub上2年前提的需求说 VSCode中Python文件不支持按块执行，现在也没有实现。只能找到上面的办法缓解这种不适。
+我之前的帖子在：https://github.com/microsoft/vscode-python/issues/8851
+我在issue中也看到了一些类似的提问和讨论，但皆不了了之。
+其实还有一个痛点我没说，在执行完一句代码后，VSCode插件不会自动向下移动光标。
+整个源代码编辑交互式分析的体验Python还没有编辑器能比过RStudio。</description>
+    </item>
+    
     <item>
       <title>云服务器清理病毒kdevtmpfsi</title>
       <link>/blog/clean-virus-in-cloud-server/</link>
@@ -153,27 +167,6 @@ normalize &amp;lt;- function(x) { # 计算极值 x_min &amp;lt;- min(x) x_max &a
       <description>这是一个我每次重装R，或者在新的系统上使用R进行包安装，都会遇到的问题。
 stringi是tidyverse的一个核心包，基本上必装。但由于gayhub经常访问有问题，这个包安装时所需要的依赖文件会下载不了。 解决的办法是手动下载，然后进行安装：
 wget https://github.com/gagolews/stringi/archive/master.zip -O stringi.zip # 如果上面github的链接无法下载，尝试： # wget https://download.fastgit.org/gagolews/stringi/archive/master.zip -O stringi.zip unzip stringi.zip sed -i &amp;#39;/\/icu..\/data/d&amp;#39; stringi-master/.Rbuildignore R CMD build stringi-master R CMD INSTALL stringi*.tar.gz 参考：https://stackoverflow.com/questions/31942322/how-to-install-stringi-from-local-file-absolutely-no-internet-access#</description>
-    </item>
-    
-    <item>
-      <title>CentOS/Redhat R包使用最新的gcc编译</title>
-      <link>/blog/use-new-gcc-on-centos-for-r/</link>
-      <pubDate>Wed, 25 Aug 2021 00:00:00 +0000</pubDate>
-      
-      <guid>/blog/use-new-gcc-on-centos-for-r/</guid>
-      <description>R包在Linux下编译不通过，原因是gcc版本太低怎么办？
-一些有C++代码的R包可能会用到一些新的C++特性，需要C++11或者C++14。这个问题通常在CentOS/红帽系统上出现，因为系统稳定的要求，这个系列的系统它的C++版本很低。 但请读者前往注意了别自己编译新版本的gcc，然后替换掉系统的。这种操作我试过几次，系统基本上就崩掉了。
-正确的解决方式是安装独立的gcc，通过环境变量引用和使用它。
-在Root用户下操作：
-yum install centos-release-scl yum install devtoolset-9 然后在你使用R的用户下操作：
-# If you use your non-root account to install packages,  # change /root to /home/your_id in the following command mkdir -p /root/.R vi /root/.R/Makevars 将下面的内容写入打开的文件，然后保存：
-CXX11=/opt/rh/devtoolset-9/root/usr/bin/g++ -std=c++11 -fPIC CXX14=/opt/rh/devtoolset-9/root/usr/bin/g++ -std=c++14 -fPIC 如果没有root权限，可以通过conda来安装新版本的gcc,c++等：
-conda install gcc_linux-64 conda install gxx_linux-64  加上conda-forge通道也可以。
- 另外可以一键安装常用的编译器：
-conda install -c conda-forge compilers 安装完成后记得添加环境变量：
-export CC=/path/to/anaconda/bin/x86_64-conda_cos6-linux-gnu-gcc export CXX=/path/to/anaconda/bin/x86_64-conda_cos6-linux-gnu-g++ 如果是R包编译，修改前面提到的Makevars文件即可。
-如果使用的是miniconda，这个文件的内容可能就是这样的了：
-CXX11=~/miniconda3/bin/x86_64-conda-linux-gnu-g++ -std=c++11 -fPIC CXX14=~/miniconda3/bin/x86_64-conda-linux-gnu-g++ -std=c++14 -fPIC 这样就可以愉快地安装包了：</description>
     </item>
     
   </channel>
