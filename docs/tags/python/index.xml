@@ -8,7 +8,18 @@
 王诗翔</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 09 Sep 2021 00:00:00 +0000</lastBuildDate><atom:link href="/tags/python/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 14 Sep 2021 00:00:00 +0000</lastBuildDate><atom:link href="/tags/python/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>解决conda报错：Module _sysconfigdata_x86_64_conda_linux_gnu not found</title>
+      <link>/blog/conda-error-sysconfigdata-not-found/</link>
+      <pubDate>Tue, 14 Sep 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/conda-error-sysconfigdata-not-found/</guid>
+      <description>最新可能是受conda update conda的影响，发现使用conda涉及Python的操作时一直出现问题， 报错：
+ModuleNotFoundError: No module named &amp;#39;_sysconfigdata_x86_64_conda_linux_gnu&amp;#39; 例如：
+$ pip list Traceback (most recent call last): File &amp;#34;~/miniconda3/bin/pip&amp;#34;, line 7, in &amp;lt;module&amp;gt; from pip._internal.cli.main import main File &amp;#34;~/miniconda3/lib/python3.9/site-packages/pip/_internal/cli/main.py&amp;#34;, line 9, in &amp;lt;module&amp;gt; from pip._internal.cli.autocompletion import autocomplete File &amp;#34;~/miniconda3/lib/python3.9/site-packages/pip/_internal/cli/autocompletion.py&amp;#34;, line 10, in &amp;lt;module&amp;gt; from pip._internal.cli.main_parser import create_main_parser File &amp;#34;~/miniconda3/lib/python3.9/site-packages/pip/_internal/cli/main_parser.py&amp;#34;, line 8, in &amp;lt;module&amp;gt; from pip._internal.cli import cmdoptions File &amp;#34;~/miniconda3/lib/python3.9/site-packages/pip/_internal/cli/cmdoptions.py&amp;#34;, line 23, in &amp;lt;module&amp;gt; from pip._internal.cli.parser import ConfigOptionParser File &amp;#34;~/miniconda3/lib/python3.9/site-packages/pip/_internal/cli/parser.py&amp;#34;, line 12, in &amp;lt;module&amp;gt; from pip.</description>
+    </item>
+    
     <item>
       <title>在VSCode中使用ipython执行代码</title>
       <link>/blog/use-ipython-exe-code-in-vscode/</link>
