@@ -8,7 +8,22 @@
 王诗翔</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 14 Sep 2021 00:00:00 +0000</lastBuildDate><atom:link href="/categories/blog/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 26 Sep 2021 00:00:00 +0000</lastBuildDate><atom:link href="/categories/blog/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>处理glm.fit: fitted probabilities numerically 0 or 1 occurred</title>
+      <link>/blog/process-glm-logistic-warning/</link>
+      <pubDate>Sun, 26 Sep 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/process-glm-logistic-warning/</guid>
+      <description>原文：https://www.statology.org/glm-fit-fitted-probabilities-numerically-0-or-1-occurred/
+ 在建立逻辑回归模型时遇到这个警告：
+Warning message: glm.fit: fitted probabilities numerically 0 or 1 occurred 当拟合逻辑回归模型，且数据框中一个或多个观测值的预测概率与0或1难以区分时，会出现此警告。
+值得注意的是，这是一个警告消息，而不是一个错误。即使你收到这个错误，你的逻辑回归模型仍然是合适的，但是可能值得分析原始数据框，看看是否有任何异常值导致此警告消息出现。
+本教程将分享如何在实践中处理此警告消息。
+重复警告 假设我们将logistic回归模型拟合到R中的以下数据框：
+#create data frame df &amp;lt;- data.frame(y = c(0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1), x1 = c(3, 3, 4, 4, 3, 2, 5, 8, 9, 9, 9, 8, 9, 9, 9), x2 = c(8, 7, 7, 6, 5, 6, 5, 2, 2, 3, 4, 3, 7, 4, 4)) #fit logistic regression model model &amp;lt;- glm(y ~ x1 + x2, data=df, family=binomial) #view model summary summary(model) Warning message: glm.</description>
+    </item>
+    
     <item>
       <title>解决conda报错：Module _sysconfigdata_x86_64_conda_linux_gnu not found</title>
       <link>/blog/conda-error-sysconfigdata-not-found/</link>
@@ -153,18 +168,6 @@ library(dplyr) df |&amp;gt; group_by(c1) |&amp;gt; summarize(c2 = max(c2, na.rm 
       <description>前段时间收到来信：
 Hi Shixiang I am writing to you about the forestmodel package in R. Thank you so much for the wonderful package that you created. I was wondering if there is a way to display the wald test p-value which is important for variables that have more than two levels. I tried to work around the code but did not find a way out. Best Aniket 我不是作者，搞错了人，问我干啥呢～自个提问嘛
 Hi Aniket, I am not the author of forestmodel, you can see from https://github.</description>
-    </item>
-    
-    <item>
-      <title>mlr3（一）快速入门</title>
-      <link>/blog/mlr3-quickstart/</link>
-      <pubDate>Tue, 31 Aug 2021 00:00:00 +0000</pubDate>
-      
-      <guid>/blog/mlr3-quickstart/</guid>
-      <description>来源：https://mlr3book.mlr-org.com/quickstart.html
-安装包：
-install.packages(&amp;quot;mlr3&amp;quot;) 作为一个30秒的介绍性示例，我们将在虹膜数据集的前120行训练决策树模型，并对最后30行进行预测，测量训练模型的准确性。
-library(&amp;quot;mlr3&amp;quot;) task = tsk(&amp;quot;iris&amp;quot;) learner = lrn(&amp;quot;classif.rpart&amp;quot;) # 为任务的一个子集（前120行）训练这个学习器的模型 learner$train(task, row_ids = 1:120) # 决策树模型 learner$model ## n= 120 ## ## node), split, n, loss, yval, (yprob) ## * denotes terminal node ## ## 1) root 120 70 setosa (0.41666667 0.41666667 0.16666667) ## 2) Petal.Length&amp;lt; 2.45 50 0 setosa (1.00000000 0.00000000 0.00000000) * ## 3) Petal.Length&amp;gt;=2.45 70 20 versicolor (0.00000000 0.71428571 0.28571429) ## 6) Petal.</description>
     </item>
     
   </channel>

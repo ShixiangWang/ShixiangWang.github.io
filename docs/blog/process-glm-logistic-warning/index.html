@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en-US">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1">
+
+		
+		<title>处理glm.fit: fitted probabilities numerically 0 or 1 occurred &middot; ShixiangWang
+王诗翔</title>
+		
+		<meta property="og:title" content="处理glm.fit: fitted probabilities numerically 0 or 1 occurred - ShixiangWang
+王诗翔">
+		
+		<meta property="og:type" content="article">
+		
+
+		
+			
+			<meta property="description" content="遇到警告，刚好看到一篇英文介绍，翻译下">
+			<meta property="og:description" content="遇到警告，刚好看到一篇英文介绍，翻译下">
+			
+			
+    	<meta property="twitter:card" content="summary">
+  		<meta property="twitter:image" content="/apple-touch-icon-152x152.png">
+			
+		
+
+		
+		
+		<meta name="twitter:creator" content="@WangShxiang">
+		<meta name="twitter:site" content="https://shixiangwang.github.io">
+		
+		
+
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+		<link rel="stylesheet" href="../../css/poole.css">
+		<link rel="stylesheet" href="../../css/syntax.css">
+		<link rel="stylesheet" href="../../css/hyde.css">
+		
+		
+		<link rel="stylesheet" href="../../css/hamburgers.css">
+		
+		<link rel="stylesheet" href="../../css/custom.css">
+		
+		
+
+<link rel="apple-touch-icon-precomposed" sizes="57x57" href="../../apple-touch-icon-57x57.png" />
+<link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../apple-touch-icon-114x114.png" />
+<link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../apple-touch-icon-72x72.png" />
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../apple-touch-icon-144x144.png" />
+<link rel="apple-touch-icon-precomposed" sizes="120x120" href="../../apple-touch-icon-120x120.png" />
+<link rel="apple-touch-icon-precomposed" sizes="152x152" href="../../apple-touch-icon-152x152.png" />
+<link rel="icon" type="image/png" href="../../favicon-32x32.png" sizes="32x32" />
+<link rel="icon" type="image/png" href="../../favicon-16x16.png" sizes="16x16" />
+<meta name="application-name" content="Garrick Aden-Buie"/>
+<meta name="msapplication-TileColor" content="#002B36" />
+<meta name="msapplication-TileImage" content="/mstile-144x144.png" />
+<meta name="theme-color" content="#ffffff">
+
+<meta name="mobile-web-app-capable" content="yes">
+
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-title" content="Garrick Aden-Buie">
+
+<link href="../../css/featherlight.min.css" type="text/css" rel="stylesheet" />
+
+<script async defer src="https://buttons.github.io/buttons.js"></script>
+
+<script defer src="../../js/van11y-accessible-hide-show-aria.min.js"></script>
+
+<script defer src="../../js/toc.js"></script>
+
+
+
+		<link href="../../blog/process-glm-logistic-warning" rel="canonical">
+	</head>
+
+	<body class="restyled-garrick  h-entry">
+		<main class="content container" role="main">
+			<article class="post">
+				<header>
+					<a class="u-url" href="../../blog/process-glm-logistic-warning">
+						<h1 class="post-title p-name">处理glm.fit: fitted probabilities numerically 0 or 1 occurred</h1>
+					</a>
+					<h3 class="post-author">王诗翔</h3>
+					<time class="post-date dt-published" datetime="2021-09-26T00:00:00Z">Sunday, 26 September 2021</time>
+					
+				</header>
+				<div class="post-content e-content">
+					<blockquote>
+<p>原文：<a href="https://www.statology.org/glm-fit-fitted-probabilities-numerically-0-or-1-occurred/">https://www.statology.org/glm-fit-fitted-probabilities-numerically-0-or-1-occurred/</a></p>
+</blockquote>
+<p>在建立逻辑回归模型时遇到这个警告：</p>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-fallback" data-lang="fallback">Warning message:
+glm.fit: fitted probabilities numerically 0 or 1 occurred 
+</code></pre></div><p>当拟合逻辑回归模型，且数据框中一个或多个观测值的预测概率与0或1难以区分时，会出现此警告。</p>
+<p>值得注意的是，这是一个警告消息，而不是一个错误。即使你收到这个错误，你的逻辑回归模型仍然是合适的，但是可能值得分析原始数据框，看看是否有任何异常值导致此警告消息出现。</p>
+<p>本教程将分享如何在实践中处理此警告消息。</p>
+<h3 id="重复警告">重复警告</h3>
+<p>假设我们将logistic回归模型拟合到R中的以下数据框：</p>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-R" data-lang="R"><span style="color:#408080;font-style:italic">#create data frame</span>
+df <span style="color:#666">&lt;-</span> <span style="color:#00f">data.frame</span>(y <span style="color:#666">=</span> <span style="color:#00f">c</span>(<span style="color:#666">0</span>, <span style="color:#666">0</span>, <span style="color:#666">0</span>, <span style="color:#666">0</span>, <span style="color:#666">0</span>, <span style="color:#666">0</span>, <span style="color:#666">0</span>, <span style="color:#666">1</span>, <span style="color:#666">1</span>, <span style="color:#666">1</span>, <span style="color:#666">1</span>, <span style="color:#666">1</span>, <span style="color:#666">1</span>, <span style="color:#666">1</span>, <span style="color:#666">1</span>),
+                 x1 <span style="color:#666">=</span> <span style="color:#00f">c</span>(<span style="color:#666">3</span>, <span style="color:#666">3</span>, <span style="color:#666">4</span>, <span style="color:#666">4</span>, <span style="color:#666">3</span>, <span style="color:#666">2</span>, <span style="color:#666">5</span>, <span style="color:#666">8</span>, <span style="color:#666">9</span>, <span style="color:#666">9</span>, <span style="color:#666">9</span>, <span style="color:#666">8</span>, <span style="color:#666">9</span>, <span style="color:#666">9</span>, <span style="color:#666">9</span>),
+                 x2 <span style="color:#666">=</span> <span style="color:#00f">c</span>(<span style="color:#666">8</span>, <span style="color:#666">7</span>, <span style="color:#666">7</span>, <span style="color:#666">6</span>, <span style="color:#666">5</span>, <span style="color:#666">6</span>, <span style="color:#666">5</span>, <span style="color:#666">2</span>, <span style="color:#666">2</span>, <span style="color:#666">3</span>, <span style="color:#666">4</span>, <span style="color:#666">3</span>, <span style="color:#666">7</span>, <span style="color:#666">4</span>, <span style="color:#666">4</span>))
+
+<span style="color:#408080;font-style:italic">#fit logistic regression model</span>
+model <span style="color:#666">&lt;-</span> <span style="color:#00f">glm</span>(y <span style="color:#666">~</span> x1 <span style="color:#666">+</span> x2, data<span style="color:#666">=</span>df, family<span style="color:#666">=</span>binomial)
+
+<span style="color:#408080;font-style:italic">#view model summary</span>
+<span style="color:#00f">summary</span>(model)
+
+Warning message<span style="color:#666">:</span>
+glm.fit<span style="color:#666">:</span> fitted probabilities numerically <span style="color:#666">0</span> or <span style="color:#666">1</span> occurred 
+
+Call<span style="color:#666">:</span>
+<span style="color:#00f">glm</span>(formula <span style="color:#666">=</span> y <span style="color:#666">~</span> x1 <span style="color:#666">+</span> x2, family <span style="color:#666">=</span> binomial, data <span style="color:#666">=</span> df)
+
+Deviance Residuals<span style="color:#666">:</span> 
+       Min          <span style="color:#666">1</span>Q      Median          <span style="color:#666">3</span>Q         Max  
+<span style="color:#666">-1.729e-05</span>  <span style="color:#666">-2.110e-08</span>   <span style="color:#666">2.110e-08</span>   <span style="color:#666">2.110e-08</span>   <span style="color:#666">1.515e-05</span>  
+
+Coefficients<span style="color:#666">:</span>
+              Estimate Std. Error z value <span style="color:#00f">Pr</span>(<span style="color:#666">&gt;|</span>z<span style="color:#666">|</span>)
+(Intercept)    <span style="color:#666">-75.205</span> <span style="color:#666">307338.933</span>       <span style="color:#666">0</span>        <span style="color:#666">1</span>
+x1              <span style="color:#666">13.309</span>  <span style="color:#666">28512.818</span>       <span style="color:#666">0</span>        <span style="color:#666">1</span>
+x2              <span style="color:#666">-2.793</span>  <span style="color:#666">37342.280</span>       <span style="color:#666">0</span>        <span style="color:#666">1</span>
+
+(Dispersion parameter for binomial family taken to be <span style="color:#666">1</span>)
+
+    Null deviance<span style="color:#666">:</span> <span style="color:#666">2.0728e+01</span>  on <span style="color:#666">14</span>  degrees of freedom
+Residual deviance<span style="color:#666">:</span> <span style="color:#666">5.6951e-10</span>  on <span style="color:#666">12</span>  degrees of freedom
+AIC<span style="color:#666">:</span> <span style="color:#666">6</span>
+
+Number of Fisher Scoring iterations<span style="color:#666">:</span> <span style="color:#666">24</span>
+</code></pre></div><p>如果我们使用拟合的logistic回归模型对原始数据框中观测值的响应值进行预测，我们可以看到几乎所有的预测概率都与0和1没有区别：</p>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-R" data-lang="R"><span style="color:#408080;font-style:italic">#use fitted model to predict response values</span>
+df<span style="color:#666">$</span>y_pred <span style="color:#666">=</span> <span style="color:#00f">predict</span>(model, df, type<span style="color:#666">=</span><span style="color:#ba2121">&#34;response&#34;</span>)
+
+<span style="color:#408080;font-style:italic">#view updated data frame</span>
+df
+
+   y x1 x2       y_pred
+<span style="color:#666">1</span>  <span style="color:#666">0</span>  <span style="color:#666">3</span>  <span style="color:#666">8</span> <span style="color:#666">2.220446e-16</span>
+<span style="color:#666">2</span>  <span style="color:#666">0</span>  <span style="color:#666">3</span>  <span style="color:#666">7</span> <span style="color:#666">2.220446e-16</span>
+<span style="color:#666">3</span>  <span style="color:#666">0</span>  <span style="color:#666">4</span>  <span style="color:#666">7</span> <span style="color:#666">2.220446e-16</span>
+<span style="color:#666">4</span>  <span style="color:#666">0</span>  <span style="color:#666">4</span>  <span style="color:#666">6</span> <span style="color:#666">2.220446e-16</span>
+<span style="color:#666">5</span>  <span style="color:#666">0</span>  <span style="color:#666">3</span>  <span style="color:#666">5</span> <span style="color:#666">2.220446e-16</span>
+<span style="color:#666">6</span>  <span style="color:#666">0</span>  <span style="color:#666">2</span>  <span style="color:#666">6</span> <span style="color:#666">2.220446e-16</span>
+<span style="color:#666">7</span>  <span style="color:#666">0</span>  <span style="color:#666">5</span>  <span style="color:#666">5</span> <span style="color:#666">1.494599e-10</span>
+<span style="color:#666">8</span>  <span style="color:#666">1</span>  <span style="color:#666">8</span>  <span style="color:#666">2</span> <span style="color:#666">1.000000e+00</span>
+<span style="color:#666">9</span>  <span style="color:#666">1</span>  <span style="color:#666">9</span>  <span style="color:#666">2</span> <span style="color:#666">1.000000e+00</span>
+<span style="color:#666">10</span> <span style="color:#666">1</span>  <span style="color:#666">9</span>  <span style="color:#666">3</span> <span style="color:#666">1.000000e+00</span>
+<span style="color:#666">11</span> <span style="color:#666">1</span>  <span style="color:#666">9</span>  <span style="color:#666">4</span> <span style="color:#666">1.000000e+00</span>
+<span style="color:#666">12</span> <span style="color:#666">1</span>  <span style="color:#666">8</span>  <span style="color:#666">3</span> <span style="color:#666">1.000000e+00</span>
+<span style="color:#666">13</span> <span style="color:#666">1</span>  <span style="color:#666">9</span>  <span style="color:#666">7</span> <span style="color:#666">1.000000e+00</span>
+<span style="color:#666">14</span> <span style="color:#666">1</span>  <span style="color:#666">9</span>  <span style="color:#666">4</span> <span style="color:#666">1.000000e+00</span>
+<span style="color:#666">15</span> <span style="color:#666">1</span>  <span style="color:#666">9</span>  <span style="color:#666">4</span> <span style="color:#666">1.000000e+00</span>
+</code></pre></div><h3 id="如何处理警告">如何处理警告</h3>
+<p>有三种方法来处理这个警告信息：</p>
+<p><strong>(1) 忽略它</strong></p>
+<p>在某些情况下，你可以简单地忽略此警告消息，因为它不一定表明逻辑回归模型有问题。它仅仅意味着数据框中的一个或多个观察结果具有与0或1不可区分的预测值。</p>
+<p><strong>(2) 增加样本量</strong></p>
+<p>在其他情况下，当您使用小数据框时，如果没有足够的数据来提供可靠的模型匹配，则会出现此警告消息。要解决这个错误，只需增加你输入模型的观察的样本量。</p>
+<p><strong>(3) 移除离群值</strong></p>
+<p>在其他情况下，当原始数据框架中存在异常值，且只有少量观测值拟合的概率接近0或1时，就会出现这种错误。通过去除这些异常值，警告信息通常就消失了。</p>
+<h3 id="其他资源"><strong>其他资源</strong></h3>
+<p>下面的教程解释了如何处理R中的其他警告和错误：</p>
+<ul>
+<li><a href="https://www.statology.org/r-invalid-model-formula-in-extractvars/">How to Fix in R: invalid model formula in ExtractVars</a></li>
+<li><a href="https://www.statology.org/r-argument-is-not-numeric-or-logical/">How to Fix in R: argument is not numeric or logical: returning na</a></li>
+<li><a href="https://www.statology.org/randomforest-na-nan-inf-in-foreign-function-call/">How to Fix: randomForest.default(m, y, …) : Na/NaN/Inf in foreign function call</a></li>
+</ul>
+
+				</div>
+				<footer class="footer">
+				  <hr>
+<div class="post-tags">
+
+<p>
+  <svg xmlns="http://www.w3.org/2000/svg" class="octicon" width="20" height="24" viewBox="0 0 14 16"><path fill-rule="evenodd" d="M8 2H6V0h2v2zm4 5H2c-.55 0-1-.45-1-1V4c0-.55.45-1 1-1h10l2 2-2 2zM8 4H6v2h2V4zM6 16h2V8H6v8z"/></svg>
+	
+	<a class="p-category" href="../../categories/blog/">Blog</a>
+</p>
+
+
+<p>
+  <svg xmlns="http://www.w3.org/2000/svg" class="octicon" width="20" height="24" viewBox="0 0 15 16"><path fill-rule="evenodd" d="M7.73 1.73C7.26 1.26 6.62 1 5.96 1H3.5C2.13 1 1 2.13 1 3.5v2.47c0 .66.27 1.3.73 1.77l6.06 6.06c.39.39 1.02.39 1.41 0l4.59-4.59a.996.996 0 0 0 0-1.41L7.73 1.73zM2.38 7.09c-.31-.3-.47-.7-.47-1.13V3.5c0-.88.72-1.59 1.59-1.59h2.47c.42 0 .83.16 1.13.47l6.14 6.13-4.73 4.73-6.13-6.15zM3.01 3h2v2H3V3h.01z"/></svg>
+	
+	<a class="p-tag" href="../../tags/r/">R</a><a class="p-tag" href="../../tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/">机器学习</a>
+
+</p>
+</div>
+
+				</footer>
+			</article>
+		</main>
+			  <button class="hamburger hamburger--arrow is-active" type="button" onclick="document.getElementsByClassName('sidebar')[0].classList.toggle('collapsed');document.getElementsByClassName('content')[0].classList.toggle('expanded');document.getElementsByClassName('hamburger')[0].classList.toggle('is-active');document.getElementsByClassName('hamburger-inner')[0].classList.toggle('is-active')">
+      <span class="hamburger-box">
+        <span class="hamburger-inner"></span>
+      </span>
+    </button>
+		<aside class="sidebar">
+			<div class="container sidebar-sticky">
+				<header class="sidebar-about h-card vcard p-author">
+					
+					<a class="u-url u-uid" rel="me" href="../../">
+						<img class="u-photo" src="https://avatars.githubusercontent.com/u/25057508?v=4" width=128 height=128 />
+					</a>
+					
+
+					
+					<span class="site-title u-name fn">
+					  <a class="u-url u-uid" rel="me" href="../../">ShixiangWang
+王诗翔</a>
+				  </span>
+					
+
+					<p class="lead p-note">
+						 Bioinformatics Scholar. Cancer Researcher. Data Scientist. #rstats #golang. Always learning something new. 
+					</p>
+
+					<nav>
+						<ul class="sidebar-nav">
+							
+							<li><a href="../../about/"> About </a></li>
+							
+							<li><a href="../../blog/"> Blog </a></li>
+							
+							<li><a href="../../project/"> Projects </a></li>
+							
+							<li><a href="http://42.192.87.178:3838/"> Shiny Apps </a></li>
+							
+							<li><a href="../../talk/"> Talks </a></li>
+							
+							<li><a href="https://github.com/ShixiangWang/self-study/discussions"> Discuss with me? </a></li>
+							
+							<li><a href="https://shixiangwang.netlify.app/"> Mirror #1 </a></li>
+							
+							<li><a href="https://shixiangwang.github.io/"> Mirror #2 </a></li>
+							
+						</ul>
+					</nav>
+
+					
+						<div class="contact">
+						  
+							<ul class="contact-list">
+								
+								<li>
+									
+									  
+		  							  <a href="https://twitter.com/WangShxiang" class="u-url url" rel="me" title="Twitter" aria-label="Twitter">
+		  						    <i class='fab fa-twitter fa-fw'></i>
+		  							  </a>
+		  						  
+								
+								</li>
+								
+								<li>
+									
+									  
+		  							  <a href="https://github.com/ShixiangWang" class="u-url url" rel="me" title="GitHub" aria-label="GitHub">
+		  						    <i class='fab fa-github fa-fw'></i>
+		  							  </a>
+		  						  
+								
+								</li>
+								
+								<li>
+									
+		  							<a href="mailto:shixiang1994wang@gmail.com" class="u-email email" rel="me" title="Email" aria-label="Email">
+		  							<i class='fa fa-envelope fa-fw'></i>
+		  							  
+		  							</a>
+									
+								</li>
+								
+								<li>
+									
+									  
+		  							  <a href="https://shixiangwang.github.io/home/logo/qrcode.jpg" class="u-url url" rel="me" title="Bandcamp" aria-label="Bandcamp">
+		  						    <i class='fab fa-bandcamp fa-fw'></i>
+		  							  </a>
+		  						  
+								
+								</li>
+								
+							</ul>
+						</div>
+					
+				</header>
+
+				<footer>&copy; 2021. All rights reserved. </footer>
+				 <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+            <span id="busuanzi_container_site_pv">本站总访问量&nbsp;<span id="busuanzi_value_site_pv"></span>&nbsp;次</span>
+			</div>
+		</aside>
+
+		  <footer>
+  <script src="../../js/jquery-latest.js"></script>
+<script src="../../js/featherlight.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+
+<script>
+MathJax = {
+  tex: {
+    inlineMath: [['$', '$'], ['\\(', '\\)']]
+  }
+};
+</script>
+<script type="text/javascript" id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+  
+  </footer>
+  </body>
+</html>
+
+	</body>
+</html>

@@ -5,10 +5,25 @@
     <description>Recent posts from Garrick Aden-Buie</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 14 Sep 2021 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sun, 26 Sep 2021 00:00:00 +0000</lastBuildDate>
     
         <atom:link href="/blog/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>处理glm.fit: fitted probabilities numerically 0 or 1 occurred</title>
+      <link>/blog/process-glm-logistic-warning/</link>
+      <pubDate>Sun, 26 Sep 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/process-glm-logistic-warning/</guid>
+      <description>原文：https://www.statology.org/glm-fit-fitted-probabilities-numerically-0-or-1-occurred/
+ 在建立逻辑回归模型时遇到这个警告：
+Warning message: glm.fit: fitted probabilities numerically 0 or 1 occurred 当拟合逻辑回归模型，且数据框中一个或多个观测值的预测概率与0或1难以区分时，会出现此警告。
+值得注意的是，这是一个警告消息，而不是一个错误。即使你收到这个错误，你的逻辑回归模型仍然是合适的，但是可能值得分析原始数据框，看看是否有任何异常值导致此警告消息出现。
+本教程将分享如何在实践中处理此警告消息。
+重复警告 假设我们将logistic回归模型拟合到R中的以下数据框：
+#create data frame df &amp;amp;lt;- data.frame(y = c(0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1), x1 = c(3, 3, 4, 4, 3, 2, 5, 8, 9, 9, 9, 8, 9, 9, 9), x2 = c(8, 7, 7, 6, 5, 6, 5, 2, 2, 3, 4, 3, 7, 4, 4)) #fit logistic regression model model &amp;amp;lt;- glm(y ~ x1 &#43; x2, data=df, family=binomial) #view model summary summary(model) Warning message: glm.</description>
+    </item>
     
     <item>
       <title>解决conda报错：Module _sysconfigdata_x86_64_conda_linux_gnu not found</title>
