@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en-US">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1">
+
+		
+		<title>解决igraph使用optimap_函数报错：GLPK is not available, Unimplemented function call &middot; ShixiangWang
+王诗翔</title>
+		
+		<meta property="og:title" content="解决igraph使用optimap_函数报错：GLPK is not available, Unimplemented function call - ShixiangWang
+王诗翔">
+		
+		<meta property="og:type" content="article">
+		
+
+		
+			
+			<meta property="description" content="有错就要解决">
+			<meta property="og:description" content="有错就要解决">
+			
+			
+    	<meta property="twitter:card" content="summary">
+  		<meta property="twitter:image" content="/apple-touch-icon-152x152.png">
+			
+		
+
+		
+		
+		<meta name="twitter:creator" content="@WangShxiang">
+		<meta name="twitter:site" content="https://shixiangwang.github.io">
+		
+		
+
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+		<link rel="stylesheet" href="../../css/poole.css">
+		<link rel="stylesheet" href="../../css/syntax.css">
+		<link rel="stylesheet" href="../../css/hyde.css">
+		
+		
+		<link rel="stylesheet" href="../../css/hamburgers.css">
+		
+		<link rel="stylesheet" href="../../css/custom.css">
+		
+		
+
+<link rel="apple-touch-icon-precomposed" sizes="57x57" href="../../apple-touch-icon-57x57.png" />
+<link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../apple-touch-icon-114x114.png" />
+<link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../apple-touch-icon-72x72.png" />
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../apple-touch-icon-144x144.png" />
+<link rel="apple-touch-icon-precomposed" sizes="120x120" href="../../apple-touch-icon-120x120.png" />
+<link rel="apple-touch-icon-precomposed" sizes="152x152" href="../../apple-touch-icon-152x152.png" />
+<link rel="icon" type="image/png" href="../../favicon-32x32.png" sizes="32x32" />
+<link rel="icon" type="image/png" href="../../favicon-16x16.png" sizes="16x16" />
+<meta name="application-name" content="Garrick Aden-Buie"/>
+<meta name="msapplication-TileColor" content="#002B36" />
+<meta name="msapplication-TileImage" content="/mstile-144x144.png" />
+<meta name="theme-color" content="#ffffff">
+
+<meta name="mobile-web-app-capable" content="yes">
+
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-title" content="Garrick Aden-Buie">
+
+<link href="../../css/featherlight.min.css" type="text/css" rel="stylesheet" />
+
+<script async defer src="https://buttons.github.io/buttons.js"></script>
+
+<script defer src="../../js/van11y-accessible-hide-show-aria.min.js"></script>
+
+<script defer src="../../js/toc.js"></script>
+
+
+
+		<link href="../../blog/fix-igprah-glpk-error" rel="canonical">
+	</head>
+
+	<body class="restyled-garrick  h-entry">
+		<main class="content container" role="main">
+			<article class="post">
+				<header>
+					<a class="u-url" href="../../blog/fix-igprah-glpk-error">
+						<h1 class="post-title p-name">解决igraph使用optimap_函数报错：GLPK is not available, Unimplemented function call</h1>
+					</a>
+					<h3 class="post-author">R package build</h3>
+					<time class="post-date dt-published" datetime="2021-10-02T00:00:00Z">Saturday, 2 October 2021</time>
+					
+				</header>
+				<div class="post-content e-content">
+					<p>在使用igraph的测试用例时，发生GLPK相关的报错：</p>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-R" data-lang="R"><span style="color:#666">&gt;</span> g <span style="color:#666">&lt;-</span> <span style="color:#00f">make_graph</span>(<span style="color:#ba2121">&#34;Zachary&#34;</span>)
+<span style="color:#666">&gt;</span> oc <span style="color:#666">&lt;-</span> <span style="color:#00f">cluster_optimal</span>(g)
+Error in <span style="color:#00f">cluster_optimal</span>(g) <span style="color:#666">:</span> 
+  At optimal_modularity.c<span style="color:#666">:</span><span style="color:#666">85</span> <span style="color:#666">:</span> GLPK is not available, Unimplemented function call
+</code></pre></div><p>GitHub的帖子<a href="https://github.com/igraph/rigraph/issues/273">#273</a>对该问题进行了一些
+积极的讨论，不过主要集中在MacOS系统上。而我要解决的是CentOS上的问题。</p>
+<p>不过原理相通，加上<code>cluster_optimal</code>函数文档的描述，大体知道了CRAN不允许igraph团队
+内置该库，所以从1.2.1版本后就移除了，因此需要安装包之前在相关系统上安装好该库，
+这样该包安装的时候就能够编译相应的函数。否则，相应的函数使用就会报错。</p>
+<p>一种解决的思路就是安装之前的版本，我尝试了下，发现一些编译报错。可能是旧代码存在一些
+bug吧，所以只能用最新版本。</p>
+<p>这样需要先用root权限安装库：</p>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh">yum install glpk glpk-devel
+</code></pre></div><p>然后再安装：</p>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-R" data-lang="R"><span style="color:#00f">install.packages</span>(<span style="color:#ba2121">&#34;igraph&#34;</span>)
+</code></pre></div><p>安装时间会比较长。</p>
+<p>如果仔细观察的话，会发现g++的命令中会指定加入<code>-lglpk</code>选项用于加入相关的库进行编译。</p>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-R" data-lang="R">g<span style="color:#666">++</span> <span style="color:#666">-</span>m64 <span style="color:#666">-</span>std<span style="color:#666">=</span>gnu<span style="color:#666">+</span><span style="color:#666">+11</span> <span style="color:#666">-</span>shared <span style="color:#666">-</span>L<span style="color:#666">/</span>usr<span style="color:#666">/</span>lib64<span style="color:#666">/</span>R<span style="color:#666">/</span>lib <span style="color:#666">-</span>Wl,<span style="color:#666">-</span>z,relro <span style="color:#666">-</span>o igraph.so AMD<span style="color:#666">/</span>Source<span style="color:#666">/</span>amd.o AMD<span style="color:#666">/</span>Source<span style="color:#666">/</span>amd_1.o AMD<span style="color:#666">/</span>Source<span style="color:#666">/</span>amd_2.o AMD<span style="color:#666">/</span>Source<span style="color:#666">/</span>amd_aat.o AMD<span style="color:#666">/</span>Source<span style="color:#666">/</span>amd_control.o AMD<span style="color:#666">/</span>Source<span style="color:#666">/</span>amd_defaults.o AMD<span style="color:#666">/</span>Source<span style="color:#666">/</span>amd_dump.o AMD<span style="color:#666">/</span>Source<span style="color:#666">/</span>amd_global.o AMD<span style="color:#666">/</span>Source<span style="color:#666">/</span>amd_info.o AMD<span style="color:#666">/</span>Source<span style="color:#666">/</span>amd_order.o AMD<span style="color:#666">/</span>Source<span style="color:#666">/</span>amd_post_tree.o AMD<span style="color:#666">/</span>Source<span style="color:#666">/</span>amd_postorder.o AMD<span style="color:#666">/</span>Source<span style="color:#666">/</span>amd_preprocess.o AMD<span style="color:#666">/</span>Source<span style="color:#666">/</span>amd_valid.o AMD<span style="color:#666">/</span>Source<span style="color:#666">/</span>amdbar.o CHOLMOD<span style="color:#666">/</span>Check<span style="color:#666">/</span>cholmod_check.o CHOLMOD<span style="color:#666">/</span>Check<span style="color:#666">/</span>cholmod_read.o CHOLMOD<span style="color:#666">/</span>Check<span style="color:#666">/</span>cholmod_write.o CHOLMOD<span style="color:#666">/</span>Cholesky<span style="color:#666">/</span>cholmod_amd.o CHOLMOD<span style="color:#666">/</span>Cholesky<span style="color:#666">/</span>cholmod_analyze.o CHOLMOD<span style="color:#666">/</span>Cholesky<span style="color:#666">/</span>cholmod_colamd.o CHOLMOD<span style="color:#666">/</span>Cholesky<span style="color:#666">/</span>cholmod_etree.o CHOLMOD<span style="color:#666">/</span>Cholesky<span style="color:#666">/</span>cholmod_factorize.o CHOLMOD<span style="color:#666">/</span>Cholesky<span style="color:#666">/</span>cholmod_postorder.o CHOLMOD<span style="color:#666">/</span>Cholesky<span style="color:#666">/</span>cholmod_rcond.o CHOLMOD<span style="color:#666">/</span>Cholesky<span style="color:#666">/</span>cholmod_resymbol.o CHOLMOD<span style="color:#666">/</span>Cholesky<span style="color:#666">/</span>cholmod_rowcolcounts.o CHOLMOD<span style="color:#666">/</span>Cholesky<span style="color:#666">/</span>cholmod_rowfac.o CHOLMOD<span style="color:#666">/</span>Cholesky<span style="color:#666">/</span>cholmod_solve.o CHOLMOD<span style="color:#666">/</span>Cholesky<span style="color:#666">/</span>cholmod_spsolve.o CHOLMOD<span style="color:#666">/</span>Core<span style="color:#666">/</span>cholmod_aat.o CHOLMOD<span style="color:#666">/</span>Core<span style="color:#666">/</span>cholmod_add.o CHOLMOD<span style="color:#666">/</span>Core<span style="color:#666">/</span>cholmod_band.o CHOLMOD<span style="color:#666">/</span>Core<span style="color:#666">/</span>cholmod_change_factor.o CHOLMOD<span style="color:#666">/</span>Core<span style="color:#666">/</span>cholmod_common.o CHOLMOD<span style="color:#666">/</span>Core<span style="color:#666">/</span>cholmod_complex.o CHOLMOD<span style="color:#666">/</span>Core<span style="color:#666">/</span>cholmod_copy.o CHOLMOD<span style="color:#666">/</span>Core<span style="color:#666">/</span>cholmod_dense.o CHOLMOD<span style="color:#666">/</span>Core<span style="color:#666">/</span>cholmod_error.o CHOLMOD<span style="color:#666">/</span>Core<span style="color:#666">/</span>cholmod_factor.o CHOLMOD<span style="color:#666">/</span>Core<span style="color:#666">/</span>cholmod_memory.o CHOLMOD<span style="color:#666">/</span>Core<span style="color:#666">/</span>cholmod_sparse.o CHOLMOD<span style="color:#666">/</span>Core<span style="color:#666">/</span>cholmod_transpose.o CHOLMOD<span style="color:#666">/</span>Core<span style="color:#666">/</span>cholmod_triplet.o CHOLMOD<span style="color:#666">/</span>Core<span style="color:#666">/</span>cholmod_version.o CHOLMOD<span style="color:#666">/</span>MatrixOps<span style="color:#666">/</span>cholmod_drop.o CHOLMOD<span style="color:#666">/</span>MatrixOps<span style="color:#666">/</span>cholmod_horzcat.o CHOLMOD<span style="color:#666">/</span>MatrixOps<span style="color:#666">/</span>cholmod_norm.o CHOLMOD<span style="color:#666">/</span>MatrixOps<span style="color:#666">/</span>cholmod_scale.o CHOLMOD<span style="color:#666">/</span>MatrixOps<span style="color:#666">/</span>cholmod_sdmult.o CHOLMOD<span style="color:#666">/</span>MatrixOps<span style="color:#666">/</span>cholmod_ssmult.o CHOLMOD<span style="color:#666">/</span>MatrixOps<span style="color:#666">/</span>cholmod_submatrix.o CHOLMOD<span style="color:#666">/</span>MatrixOps<span style="color:#666">/</span>cholmod_symmetry.o CHOLMOD<span style="color:#666">/</span>MatrixOps<span style="color:#666">/</span>cholmod_vertcat.o CHOLMOD<span style="color:#666">/</span>Modify<span style="color:#666">/</span>cholmod_rowadd.o CHOLMOD<span style="color:#666">/</span>Modify<span style="color:#666">/</span>cholmod_rowdel.o CHOLMOD<span style="color:#666">/</span>Modify<span style="color:#666">/</span>cholmod_updown.o CHOLMOD<span style="color:#666">/</span>Partition<span style="color:#666">/</span>cholmod_camd.o CHOLMOD<span style="color:#666">/</span>Partition<span style="color:#666">/</span>cholmod_ccolamd.o CHOLMOD<span style="color:#666">/</span>Partition<span style="color:#666">/</span>cholmod_csymamd.o CHOLMOD<span style="color:#666">/</span>Partition<span style="color:#666">/</span>cholmod_metis.o CHOLMOD<span style="color:#666">/</span>Partition<span style="color:#666">/</span>cholmod_nesdis.o CHOLMOD<span style="color:#666">/</span>Supernodal<span style="color:#666">/</span>cholmod_super_numeric.o CHOLMOD<span style="color:#666">/</span>Supernodal<span style="color:#666">/</span>cholmod_super_solve.o CHOLMOD<span style="color:#666">/</span>Supernodal<span style="color:#666">/</span>cholmod_super_symbolic.o COLAMD<span style="color:#666">/</span>Source<span style="color:#666">/</span>colamd.o COLAMD<span style="color:#666">/</span>Source<span style="color:#666">/</span>colamd_global.o DensityGrid.o DensityGrid_3d.o NetDataTypes.o NetRoutines.o SuiteSparse_config<span style="color:#666">/</span>SuiteSparse_config.o adjlist.o arpack.o array.o atlas.o attributes.o basic_query.o bfgs.o bigint.o bignum.o bipartite.o blas.o bliss.o bliss<span style="color:#666">/</span>bliss_heap.o bliss<span style="color:#666">/</span>defs.o bliss<span style="color:#666">/</span>graph.o bliss<span style="color:#666">/</span>orbit.o bliss<span style="color:#666">/</span>partition.o bliss<span style="color:#666">/</span>uintseqhash.o bliss<span style="color:#666">/</span>utils.o cattributes.o centrality.o cliquer<span style="color:#666">/</span>cliquer.o cliquer<span style="color:#666">/</span>cliquer_graph.o cliquer<span style="color:#666">/</span>reorder.o cliques.o clustertool.o cocitation.o cohesive_blocks.o coloring.o community.o complex.o components.o conversion.o cores.o cs<span style="color:#666">/</span>cs_add.o cs<span style="color:#666">/</span>cs_amd.o cs<span style="color:#666">/</span>cs_chol.o cs<span style="color:#666">/</span>cs_cholsol.o cs<span style="color:#666">/</span>cs_compress.o cs<span style="color:#666">/</span>cs_counts.o cs<span style="color:#666">/</span>cs_cumsum.o cs<span style="color:#666">/</span>cs_dfs.o cs<span style="color:#666">/</span>cs_dmperm.o cs<span style="color:#666">/</span>cs_droptol.o cs<span style="color:#666">/</span>cs_dropzeros.o cs<span style="color:#666">/</span>cs_dupl.o cs<span style="color:#666">/</span>cs_entry.o cs<span style="color:#666">/</span>cs_ereach.o cs<span style="color:#666">/</span>cs_etree.o cs<span style="color:#666">/</span>cs_fkeep.o cs<span style="color:#666">/</span>cs_gaxpy.o cs<span style="color:#666">/</span>cs_happly.o cs<span style="color:#666">/</span>cs_house.o cs<span style="color:#666">/</span>cs_ipvec.o cs<span style="color:#666">/</span>cs_leaf.o cs<span style="color:#666">/</span>cs_load.o cs<span style="color:#666">/</span>cs_lsolve.o cs<span style="color:#666">/</span>cs_ltsolve.o cs<span style="color:#666">/</span>cs_lu.o cs<span style="color:#666">/</span>cs_lusol.o cs<span style="color:#666">/</span>cs_malloc.o cs<span style="color:#666">/</span>cs_maxtrans.o cs<span style="color:#666">/</span>cs_multiply.o cs<span style="color:#666">/</span>cs_norm.o cs<span style="color:#666">/</span>cs_permute.o cs<span style="color:#666">/</span>cs_pinv.o cs<span style="color:#666">/</span>cs_post.o cs<span style="color:#666">/</span>cs_print.o cs<span style="color:#666">/</span>cs_pvec.o cs<span style="color:#666">/</span>cs_qr.o cs<span style="color:#666">/</span>cs_qrsol.o cs<span style="color:#666">/</span>cs_randperm.o cs<span style="color:#666">/</span>cs_reach.o cs<span style="color:#666">/</span>cs_scatter.o cs<span style="color:#666">/</span>cs_scc.o cs<span style="color:#666">/</span>cs_schol.o cs<span style="color:#666">/</span>cs_spsolve.o cs<span style="color:#666">/</span>cs_sqr.o cs<span style="color:#666">/</span>cs_symperm.o cs<span style="color:#666">/</span>cs_tdfs.o cs<span style="color:#666">/</span>cs_transpose.o cs<span style="color:#666">/</span>cs_updown.o cs<span style="color:#666">/</span>cs_usolve.o cs<span style="color:#666">/</span>cs_util.o cs<span style="color:#666">/</span>cs_utsolve.o decomposition.o distances.o dotproduct.o dqueue.o drl_graph.o drl_graph_3d.o drl_layout.o drl_layout_3d.o drl_parse.o eigen.o embedding.o fast_community.o feedback_arc_set.o flow.o foreign<span style="color:#666">-</span>dl<span style="color:#666">-</span>lexer.o foreign<span style="color:#666">-</span>dl<span style="color:#666">-</span>parser.o foreign<span style="color:#666">-</span>gml<span style="color:#666">-</span>lexer.o foreign<span style="color:#666">-</span>gml<span style="color:#666">-</span>parser.o foreign<span style="color:#666">-</span>graphml.o foreign<span style="color:#666">-</span>lgl<span style="color:#666">-</span>lexer.o foreign<span style="color:#666">-</span>lgl<span style="color:#666">-</span>parser.o foreign<span style="color:#666">-</span>ncol<span style="color:#666">-</span>lexer.o foreign<span style="color:#666">-</span>ncol<span style="color:#666">-</span>parser.o foreign<span style="color:#666">-</span>pajek<span style="color:#666">-</span>lexer.o foreign<span style="color:#666">-</span>pajek<span style="color:#666">-</span>parser.o foreign.o forestfire.o fortran_intrinsics.o games.o gengraph_box_list.o gengraph_degree_sequence.o gengraph_graph_molloy_hash.o gengraph_graph_molloy_optimized.o gengraph_mr<span style="color:#666">-</span>connected.o gengraph_powerlaw.o gengraph_random.o glet.o glpk_support.o gml_tree.o hacks.o heap.o igraph_buckets.o igraph_cliquer.o igraph_error.o igraph_estack.o igraph_fixed_vectorlist.o igraph_grid.o igraph_hashtable.o igraph_heap.o igraph_hrg.o igraph_hrg_types.o igraph_marked_queue.o igraph_psumtree.o igraph_set.o igraph_stack.o igraph_strvector.o igraph_trie.o infomap.o infomap_FlowGraph.o infomap_Greedy.o infomap_Node.o interrupt.o iterators.o lad.o lapack.o layout.o layout_dh.o layout_fr.o layout_gem.o layout_kk.o lsap.o matching.o math.o matrix.o maximal_cliques.o memory.o microscopic_update.o mixing.o motifs.o operators.o optimal_modularity.o other.o paths.o plfit<span style="color:#666">/</span>error.o plfit<span style="color:#666">/</span>gss.o plfit<span style="color:#666">/</span>kolmogorov.o plfit<span style="color:#666">/</span>lbfgs.o plfit<span style="color:#666">/</span>options.o plfit<span style="color:#666">/</span>plfit.o plfit<span style="color:#666">/</span>zeta.o pottsmodel_2.o progress.o prpack.o prpack<span style="color:#666">/</span>prpack_base_graph.o prpack<span style="color:#666">/</span>prpack_igraph_graph.o prpack<span style="color:#666">/</span>prpack_preprocessed_ge_graph.o prpack<span style="color:#666">/</span>prpack_preprocessed_gs_graph.o prpack<span style="color:#666">/</span>prpack_preprocessed_scc_graph.o prpack<span style="color:#666">/</span>prpack_preprocessed_schur_graph.o prpack<span style="color:#666">/</span>prpack_result.o prpack<span style="color:#666">/</span>prpack_solver.o prpack<span style="color:#666">/</span>prpack_utils.o qsort.o qsort_r.o random.o random_walk.o sbm.o scan.o scg.o scg_approximate_methods.o scg_exact_scg.o scg_kmeans.o scg_optimal_method.o scg_utils.o separators.o sir.o spanning_trees.o sparsemat.o spectral_properties.o spmatrix.o st<span style="color:#666">-</span>cuts.o statusbar.o structural_properties.o structure_generators.o sugiyama.o topology.o triangles.o type_indexededgelist.o types.o vector.o vector_ptr.o version.o visitors.o walktrap.o walktrap_communities.o walktrap_graph.o walktrap_heap.o zeroin.o dgetv0.o dlaqrb.o dmout.o dnaitr.o dnapps.o dnaup2.o dnaupd.o dnconv.o dneigh.o dneupd.o dngets.o dsaitr.o dsapps.o dsaup2.o dsaupd.o dsconv.o dseigt.o dsesrt.o dseupd.o dsgets.o dsortc.o dsortr.o dstatn.o dstats.o dstqrb.o dvout.o ivout.o second.o wrap.o simpleraytracer<span style="color:#666">/</span>Color.o simpleraytracer<span style="color:#666">/</span>Light.o simpleraytracer<span style="color:#666">/</span>Point.o simpleraytracer<span style="color:#666">/</span>RIgraphRay.o simpleraytracer<span style="color:#666">/</span>Ray.o simpleraytracer<span style="color:#666">/</span>RayTracer.o simpleraytracer<span style="color:#666">/</span>RayVector.o simpleraytracer<span style="color:#666">/</span>Shape.o simpleraytracer<span style="color:#666">/</span>Sphere.o simpleraytracer<span style="color:#666">/</span>Triangle.o simpleraytracer<span style="color:#666">/</span>unit_limiter.o uuid<span style="color:#666">/</span>R.o uuid<span style="color:#666">/</span>clear.o uuid<span style="color:#666">/</span>compare.o uuid<span style="color:#666">/</span>copy.o uuid<span style="color:#666">/</span>gen_uuid.o uuid<span style="color:#666">/</span>isnull.o uuid<span style="color:#666">/</span>pack.o uuid<span style="color:#666">/</span>parse.o uuid<span style="color:#666">/</span>unpack.o uuid<span style="color:#666">/</span>unparse.o rinterface.o rinterface_extra.o lazyeval.o <span style="color:#666">-</span>lxml2 <span style="color:#666">-</span>lz <span style="color:#666">-</span>lm <span style="color:#666">-</span>ldl <span style="color:#666">-</span>lgmp <span style="color:#666">-</span>lglpk <span style="color:#666">-</span>L<span style="color:#666">/</span>usr<span style="color:#666">/</span>lib64<span style="color:#666">/</span>R<span style="color:#666">/</span>lib <span style="color:#666">-</span>lRlapack <span style="color:#666">-</span>L<span style="color:#666">/</span>usr<span style="color:#666">/</span>lib64<span style="color:#666">/</span>R<span style="color:#666">/</span>lib <span style="color:#666">-</span>lRblas <span style="color:#666">-</span>lgfortran <span style="color:#666">-</span>lm <span style="color:#666">-</span>lquadmath <span style="color:#666">-</span>lgfortran <span style="color:#666">-</span>lm <span style="color:#666">-</span>lquadmath <span style="color:#666">-</span>L<span style="color:#666">/</span>usr<span style="color:#666">/</span>lib64<span style="color:#666">/</span>R<span style="color:#666">/</span>lib <span style="color:#666">-</span>lR
+</code></pre></div><p>如果还是报错的话，可能就是这里的g++可能编译时没有用到相应的库，应该可以手动指定。
+这个可以参考<a href="https://shixiangwang.github.io/blog/use-new-gcc-on-centos-for-r/">CentOS/Redhat R包使用最新的gcc编译</a>这篇文章的环境变量设置部分。</p>
+<p>成功测试的结果如下：</p>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-R" data-lang="R"><span style="color:#666">&gt;</span> <span style="color:#00f">library</span>(igraph)
+<span style="color:#666">&gt;</span> 
+<span style="color:#666">&gt;</span> g <span style="color:#666">&lt;-</span> <span style="color:#00f">make_graph</span>(<span style="color:#ba2121">&#34;Zachary&#34;</span>)
+<span style="color:#666">&gt;</span> 
+<span style="color:#666">&gt;</span> <span style="color:#408080;font-style:italic">## We put everything into a big &#39;try&#39; block, in case </span>
+<span style="color:#666">&gt;</span> <span style="color:#408080;font-style:italic">## igraph was compiled without GLPK support</span>
+<span style="color:#666">&gt;</span> 
+<span style="color:#666">&gt;</span> <span style="color:#408080;font-style:italic">## The calculation only takes a couple of seconds</span>
+<span style="color:#666">&gt;</span> oc <span style="color:#666">&lt;-</span> <span style="color:#00f">cluster_optimal</span>(g)
+<span style="color:#666">&gt;</span> 
+<span style="color:#666">&gt;</span> 
+<span style="color:#666">&gt;</span> 
+<span style="color:#666">&gt;</span> 
+<span style="color:#666">&gt;</span> 
+<span style="color:#666">&gt;</span> oc
+IGRAPH clustering optimal, groups<span style="color:#666">:</span> <span style="color:#666">4</span>, mod<span style="color:#666">:</span> <span style="color:#666">0.42</span>
+<span style="color:#666">+</span> groups<span style="color:#666">:</span>
+  <span style="color:#666">$</span>`1`
+   [1]  <span style="color:#666">1</span>  <span style="color:#666">2</span>  <span style="color:#666">3</span>  <span style="color:#666">4</span>  <span style="color:#666">8</span> <span style="color:#666">12</span> <span style="color:#666">13</span> <span style="color:#666">14</span> <span style="color:#666">18</span> <span style="color:#666">20</span> <span style="color:#666">22</span>
+  
+  <span style="color:#666">$</span>`2`
+  [1]  <span style="color:#666">5</span>  <span style="color:#666">6</span>  <span style="color:#666">7</span> <span style="color:#666">11</span> <span style="color:#666">17</span>
+  
+  <span style="color:#666">$</span>`3`
+   [1]  <span style="color:#666">9</span> <span style="color:#666">10</span> <span style="color:#666">15</span> <span style="color:#666">16</span> <span style="color:#666">19</span> <span style="color:#666">21</span> <span style="color:#666">23</span> <span style="color:#666">27</span> <span style="color:#666">30</span> <span style="color:#666">31</span> <span style="color:#666">33</span> <span style="color:#666">34</span>
+  
+  <span style="color:#666">$</span>`4`
+  <span style="color:#666">+</span> <span style="color:#008000;font-weight:bold">...</span> omitted several groups<span style="color:#666">/</span>vertices
+</code></pre></div>
+				</div>
+				<footer class="footer">
+				  <hr>
+<div class="post-tags">
+
+<p>
+  <svg xmlns="http://www.w3.org/2000/svg" class="octicon" width="20" height="24" viewBox="0 0 14 16"><path fill-rule="evenodd" d="M8 2H6V0h2v2zm4 5H2c-.55 0-1-.45-1-1V4c0-.55.45-1 1-1h10l2 2-2 2zM8 4H6v2h2V4zM6 16h2V8H6v8z"/></svg>
+	
+	<a class="p-category" href="../../categories/blog/">Blog</a>
+</p>
+
+
+<p>
+  <svg xmlns="http://www.w3.org/2000/svg" class="octicon" width="20" height="24" viewBox="0 0 15 16"><path fill-rule="evenodd" d="M7.73 1.73C7.26 1.26 6.62 1 5.96 1H3.5C2.13 1 1 2.13 1 3.5v2.47c0 .66.27 1.3.73 1.77l6.06 6.06c.39.39 1.02.39 1.41 0l4.59-4.59a.996.996 0 0 0 0-1.41L7.73 1.73zM2.38 7.09c-.31-.3-.47-.7-.47-1.13V3.5c0-.88.72-1.59 1.59-1.59h2.47c.42 0 .83.16 1.13.47l6.14 6.13-4.73 4.73-6.13-6.15zM3.01 3h2v2H3V3h.01z"/></svg>
+	
+	<a class="p-tag" href="../../tags/r/">R</a><a class="p-tag" href="../../tags/igraph/">igraph</a>
+
+</p>
+</div>
+
+				</footer>
+			</article>
+		</main>
+			  <button class="hamburger hamburger--arrow is-active" type="button" onclick="document.getElementsByClassName('sidebar')[0].classList.toggle('collapsed');document.getElementsByClassName('content')[0].classList.toggle('expanded');document.getElementsByClassName('hamburger')[0].classList.toggle('is-active');document.getElementsByClassName('hamburger-inner')[0].classList.toggle('is-active')">
+      <span class="hamburger-box">
+        <span class="hamburger-inner"></span>
+      </span>
+    </button>
+		<aside class="sidebar">
+			<div class="container sidebar-sticky">
+				<header class="sidebar-about h-card vcard p-author">
+					
+					<a class="u-url u-uid" rel="me" href="../../">
+						<img class="u-photo" src="https://avatars.githubusercontent.com/u/25057508?v=4" width=128 height=128 />
+					</a>
+					
+
+					
+					<span class="site-title u-name fn">
+					  <a class="u-url u-uid" rel="me" href="../../">ShixiangWang
+王诗翔</a>
+				  </span>
+					
+
+					<p class="lead p-note">
+						 Bioinformatics Scholar. Cancer Researcher. Data Scientist. #rstats #golang. Always learning something new. 
+					</p>
+
+					<nav>
+						<ul class="sidebar-nav">
+							
+							<li><a href="../../about/"> About </a></li>
+							
+							<li><a href="../../blog/"> Blog </a></li>
+							
+							<li><a href="../../project/"> Projects </a></li>
+							
+							<li><a href="http://42.192.87.178:3838/"> Shiny Apps </a></li>
+							
+							<li><a href="../../talk/"> Talks </a></li>
+							
+							<li><a href="https://github.com/ShixiangWang/self-study/discussions"> Discuss with me? </a></li>
+							
+							<li><a href="https://shixiangwang.netlify.app/"> Mirror #1 </a></li>
+							
+							<li><a href="https://shixiangwang.github.io/"> Mirror #2 </a></li>
+							
+						</ul>
+					</nav>
+
+					
+						<div class="contact">
+						  
+							<ul class="contact-list">
+								
+								<li>
+									
+									  
+		  							  <a href="https://twitter.com/WangShxiang" class="u-url url" rel="me" title="Twitter" aria-label="Twitter">
+		  						    <i class='fab fa-twitter fa-fw'></i>
+		  							  </a>
+		  						  
+								
+								</li>
+								
+								<li>
+									
+									  
+		  							  <a href="https://github.com/ShixiangWang" class="u-url url" rel="me" title="GitHub" aria-label="GitHub">
+		  						    <i class='fab fa-github fa-fw'></i>
+		  							  </a>
+		  						  
+								
+								</li>
+								
+								<li>
+									
+		  							<a href="mailto:shixiang1994wang@gmail.com" class="u-email email" rel="me" title="Email" aria-label="Email">
+		  							<i class='fa fa-envelope fa-fw'></i>
+		  							  
+		  							</a>
+									
+								</li>
+								
+								<li>
+									
+									  
+		  							  <a href="https://shixiangwang.github.io/home/logo/qrcode.jpg" class="u-url url" rel="me" title="Bandcamp" aria-label="Bandcamp">
+		  						    <i class='fab fa-bandcamp fa-fw'></i>
+		  							  </a>
+		  						  
+								
+								</li>
+								
+							</ul>
+						</div>
+					
+				</header>
+
+				<footer>&copy; 2021. All rights reserved. </footer>
+				 <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+            <span id="busuanzi_container_site_pv">本站总访问量&nbsp;<span id="busuanzi_value_site_pv"></span>&nbsp;次</span>
+			</div>
+		</aside>
+
+		  <footer>
+  <script src="../../js/jquery-latest.js"></script>
+<script src="../../js/featherlight.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+
+<script>
+MathJax = {
+  tex: {
+    inlineMath: [['$', '$'], ['\\(', '\\)']]
+  }
+};
+</script>
+<script type="text/javascript" id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+  
+  </footer>
+  </body>
+</html>
+
+	</body>
+</html>

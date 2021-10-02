@@ -4,17 +4,42 @@
   
   <url>
     <loc>/categories/blog/</loc>
-    <lastmod>2021-09-29T00:00:00+00:00</lastmod>
+    <lastmod>2021-10-02T00:00:00+00:00</lastmod>
   </url>
   
   <url>
     <loc>/blog/</loc>
-    <lastmod>2021-09-29T00:00:00+00:00</lastmod>
+    <lastmod>2021-10-02T00:00:00+00:00</lastmod>
   </url>
   
   <url>
     <loc>/categories/</loc>
-    <lastmod>2021-09-29T00:00:00+00:00</lastmod>
+    <lastmod>2021-10-02T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/igraph/</loc>
+    <lastmod>2021-10-02T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/r/</loc>
+    <lastmod>2021-10-02T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/</loc>
+    <lastmod>2021-10-02T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/</loc>
+    <lastmod>2021-10-02T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/blog/fix-igprah-glpk-error/</loc>
+    <lastmod>2021-10-02T00:00:00+00:00</lastmod>
   </url>
   
   <url>
@@ -23,23 +48,8 @@
   </url>
   
   <url>
-    <loc>/</loc>
-    <lastmod>2021-09-29T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/tags/</loc>
-    <lastmod>2021-09-29T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
     <loc>/blog/reproducibility-issue/</loc>
     <lastmod>2021-09-29T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/tags/r/</loc>
-    <lastmod>2021-09-26T00:00:00+00:00</lastmod>
   </url>
   
   <url>
