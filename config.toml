@@ -83,7 +83,7 @@ publishDir = "docs"
     image = "https://avatars.githubusercontent.com/u/25057508?v=4"
 
 [params]
-    description = "Bioinformatics Scholar. Cancer Researcher. Data Scientist. #rstats #golang. Always learning something new."
+    description = "Bioinformatics Scholar. Cancer Researcher. Data Scientist. #rstats #python #rust. Always learning something new."
     author = "Shixiang Wang"
     EnableEmoji = true
     #contactHeader = "Links"
