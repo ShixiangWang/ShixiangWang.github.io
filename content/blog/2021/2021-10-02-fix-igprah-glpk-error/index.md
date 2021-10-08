@@ -51,7 +51,7 @@ g++ -m64 -std=gnu++11 -shared -L/usr/lib64/R/lib -Wl,-z,relro -o igraph.so AMD/S
 ```
 
 如果还是报错的话，可能就是这里的g++可能编译时没有用到相应的库，应该可以手动指定。
-这个可以参考[CentOS/Redhat R包使用最新的gcc编译](https://shixiangwang.github.io/blog/use-new-gcc-on-centos-for-r/)这篇文章的环境变量设置部分。
+这个可以参考[CentOS/Redhat R包使用最新的gcc编译](https://shixiangwang.github.io/blog/use-new-gcc-on-centos-for-r/)这篇文章的环境变量设置部分或者文章[*How to specify (non-R) library path for dynamic library loading in R?*](https://newbedev.com/how-to-specify-non-r-library-path-for-dynamic-library-loading-in-r)。
 
 成功测试的结果如下：
 
@@ -85,5 +85,17 @@ IGRAPH clustering optimal, groups: 4, mod: 0.42
   $`4`
   + ... omitted several groups/vertices
 ```
+
+**更新**
+
+需要注意，如果你使用的是conda环境的R，那么conda在调用自带的编译器编译时会找不到系统
+yum安装的库，这个问题可以通过conda安装[`glpk`库](https://anaconda.org/conda-forge/glpk)来解决：
+
+```bash
+conda install -c conda-forge glpk
+```
+
+
+
 
 
