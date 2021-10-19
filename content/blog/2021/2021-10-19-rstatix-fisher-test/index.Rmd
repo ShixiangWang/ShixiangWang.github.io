@@ -1,0 +1,150 @@
+---
+title: rstatix使用fisher检验处理比例关系
+author: 王诗翔
+date: '2021-10-19'
+slug: rstatix-fisher-test
+categories:
+  - Blog
+tags:
+  - R
+  - stats
+description: 通过例子学习工具
+keywords: rstats
+editor_options:
+  chunk_output_type: console
+---
+
+<!-- Links -->
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo = TRUE, warning = FALSE, message = FALSE,
+  fig.width = 7, fig.height = 6
+)
+```
+
+Fisher检验R默认就可以做，但是只支持一次检验，为了更好地处理数据，这篇文章通过rstatix包的相关功能来
+学习一些新知识。
+
+```{r}
+library(rstatix)
+```
+
+> 本文的相关代码文档可以运行`?rstatix::fisher_test()`查看。
+
+## 比较2个比例值
+
+生成数据：
+
+```{r}
+xtab <- as.table(rbind(c(490, 10), c(400, 100)))
+dimnames(xtab) <- list(
+  group = c("grp1", "grp2"),
+  smoker = c("yes", "no")
+)
+xtab
+```
+
+进行比较：
+
+```{r}
+fisher_test(xtab)
+
+# 给出更多的比较信息
+fisher_test(xtab, detailed = TRUE)
+```
+
+## 组间比例的同质性
+
+H0: the proportion of smokers is similar in the four groups
+
+Ha: this proportion is different in at least one of the populations.
+
+生成数据：
+
+```{r}
+grp.size <- c( 106, 113, 156, 102 )
+smokers  <- c( 50, 100, 139, 80 )
+no.smokers <- grp.size - smokers
+xtab <- as.table(rbind(
+  smokers,
+  no.smokers
+))
+dimnames(xtab) <- list(
+  Smokers = c("Yes", "No"),
+  Groups = c("grp1", "grp2", "grp3", "grp4")
+)
+xtab
+```
+
+比较不同组别smokers的比例：
+
+```{r}
+fisher_test(xtab, detailed = TRUE)
+```
+
+不同组别的成对比较：
+
+```{r}
+pairwise_fisher_test(xtab)
+```
+
+## 成对比例检验
+
+生成数据：
+
+```{r}
+# Data: Titanic
+xtab <- as.table(rbind(
+  c(122, 167, 528, 673),
+  c(203, 118, 178, 212)
+))
+dimnames(xtab) <- list(
+  Survived = c("No", "Yes"),
+  Class = c("1st", "2nd", "3rd", "Crew")
+)
+xtab
+```
+
+比较不同组别的生存率：
+
+```{r}
+pairwise_fisher_test(xtab)
+```
+
+## 逐行比例检验
+
+```{r}
+# Data: Titanic
+xtab <- as.table(rbind(
+  c(180, 145), c(179, 106),
+  c(510, 196), c(862, 23)
+))
+dimnames(xtab) <- list(
+  Class = c("1st", "2nd", "3rd", "Crew"),
+  Gender = c("Male", "Female")
+)
+xtab
+```
+
+比较不同Class下男女的比例：
+
+```{r}
+row_wise_fisher_test(xtab)
+```
+
+
+## 多行多列表格计算
+
+这个时候默认方法会超级慢，可能算不出来，我们可以更改下参数使用模拟操作。
+
+```{r}
+# A r x c table  Agresti (2002, p. 57) Job Satisfaction
+Job <- matrix(c(1,2,1,0, 3,3,6,1, 10,10,14,9, 6,7,12,11), 4, 4,
+              dimnames = list(income = c("< 15k", "15-25k", "25-40k", "> 40k"),
+                             satisfaction = c("VeryD", "LittleD", "ModerateS", "VeryS")))
+fisher_test(Job)
+fisher_test(Job, simulate.p.value = TRUE, B = 1e5)
+```
+
+

@@ -1,0 +1,24 @@
+---
+title: R6编程
+author: 王诗翔
+date: '2021-10-15'
+slug: r6-programming
+categories:
+  - Blog
+tags:
+  - R
+  - R6
+  - 面向对象编程
+description: R中最modern的面向对象编程系统
+---
+
+<!-- Links -->
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo = TRUE, warning = FALSE, message = FALSE,
+  fig.width = 7, fig.height = 6
+)
+```
+
+

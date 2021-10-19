@@ -208,6 +208,36 @@ $ sacct
             249527_1   xgb_tune    zhaoqi         cn            cn09   00:26:50 1-11:46:40    RUNNING <span style="color:#19177c">billing</span><span style="color:#666">=</span>80,cpu<span style="color:#666">=</span>80,mem<span style="color:#666">=</span>100G,node+ 
             249527_2   xgb_tune    zhaoqi         cn            cn10   00:26:50 1-11:46:40    RUNNING <span style="color:#19177c">billing</span><span style="color:#666">=</span>80,cpu<span style="color:#666">=</span>80,mem<span style="color:#666">=</span>100G,node+ 
             249527_3   xgb_tune    zhaoqi         cn            cn11   00:26:50 1-11:46:40    RUNNING <span style="color:#19177c">billing</span><span style="color:#666">=</span>80,cpu<span style="color:#666">=</span>80,mem<span style="color:#666">=</span>100G,node+ 
+</code></pre></div><h2 id="查找资源限制">查找资源限制</h2>
+<p>Bash函数：</p>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="color:#408080;font-style:italic"># show every associations of every user.</span>
+<span style="color:#408080;font-style:italic"># if user=username is passed, show only associations for the specific user username</span>
+<span style="color:#408080;font-style:italic"># see &#34;man sacctmgr&#34; for more</span>
+<span style="color:#008000;font-weight:bold">function</span> cri_show_assoc <span style="color:#666">()</span>
+<span style="color:#666">{</span>
+    sacctmgr -p list associations <span style="color:#19177c">$@</span> <span style="color:#19177c">format</span><span style="color:#666">=</span>Account,User,Partition,Qos,DefaultQOS tree | column -ts<span style="color:#ba2121">&#39;|&#39;</span>
+<span style="color:#666">}</span>
+
+<span style="color:#408080;font-style:italic"># show every QoS definition</span>
+<span style="color:#408080;font-style:italic"># if name=qosname is passed, show only the specific QoS qosname definition</span>
+<span style="color:#408080;font-style:italic"># see &#34;man sacctmgr&#34; for more</span>
+<span style="color:#008000;font-weight:bold">function</span> cri_show_qos <span style="color:#666">()</span>
+<span style="color:#666">{</span>
+    sacctmgr -p list qos <span style="color:#19177c">$@</span> <span style="color:#19177c">format</span><span style="color:#666">=</span>Name,Priority,GraceTime,GrpTRES,GrpJobs,GrpSubmit,GrpSubmit,MaxTRES,MaxTRESPerUser,MaxJobsPU | column -ts<span style="color:#ba2121">&#39;|&#39;</span>
+<span style="color:#666">}</span>
+
+</code></pre></div><blockquote>
+<p>来源：https://groups.google.com/g/slurm-users/c/m0EvzqScz_g?pli=1</p>
+</blockquote>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="color:#666">[</span>zhaoqi@login01 gdc<span style="color:#666">]</span>$ cri_show_qos 
+Name    Priority  GraceTime  GrpTRES  GrpJobs  GrpSubmit  MaxTRES  MaxTRESPU  MaxJobsPU  
+normal  <span style="color:#666">0</span>         00:00:00                                                               
+cpu     <span style="color:#666">0</span>         00:00:00                                         <span style="color:#19177c">cpu</span><span style="color:#666">=</span><span style="color:#666">640</span>               
+cpu1    <span style="color:#666">0</span>         00:00:00                                         <span style="color:#19177c">cpu</span><span style="color:#666">=</span><span style="color:#666">960</span>               
+cpu2    <span style="color:#666">0</span>         00:00:00                                         <span style="color:#19177c">cpu</span><span style="color:#666">=</span><span style="color:#666">320</span>               
+<span style="color:#666">[</span>zhaoqi@login01 gdc<span style="color:#666">]</span>$ cri_show_assoc <span style="color:#19177c">user</span><span style="color:#666">=</span>zhaoqi
+Account   User    Partition  QOS   Def QOS  
+paratera  zhaoqi             cpu2   
 </code></pre></div>
 				</div>
 				<footer class="footer">
