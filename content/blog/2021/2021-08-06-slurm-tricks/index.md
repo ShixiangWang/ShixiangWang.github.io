@@ -136,3 +136,40 @@ $ sacct
             249527_2   xgb_tune    zhaoqi         cn            cn10   00:26:50 1-11:46:40    RUNNING billing=80,cpu=80,mem=100G,node+ 
             249527_3   xgb_tune    zhaoqi         cn            cn11   00:26:50 1-11:46:40    RUNNING billing=80,cpu=80,mem=100G,node+ 
 ```
+
+
+## 查找资源限制
+
+Bash函数：
+
+```bash
+# show every associations of every user.
+# if user=username is passed, show only associations for the specific user username
+# see "man sacctmgr" for more
+function cri_show_assoc ()
+{
+    sacctmgr -p list associations $@ format=Account,User,Partition,Qos,DefaultQOS tree | column -ts'|'
+}
+
+# show every QoS definition
+# if name=qosname is passed, show only the specific QoS qosname definition
+# see "man sacctmgr" for more
+function cri_show_qos ()
+{
+    sacctmgr -p list qos $@ format=Name,Priority,GraceTime,GrpTRES,GrpJobs,GrpSubmit,GrpSubmit,MaxTRES,MaxTRESPerUser,MaxJobsPU | column -ts'|'
+}
+
+```
+> 来源：https://groups.google.com/g/slurm-users/c/m0EvzqScz_g?pli=1
+
+```bash
+[zhaoqi@login01 gdc]$ cri_show_qos 
+Name    Priority  GraceTime  GrpTRES  GrpJobs  GrpSubmit  MaxTRES  MaxTRESPU  MaxJobsPU  
+normal  0         00:00:00                                                               
+cpu     0         00:00:00                                         cpu=640               
+cpu1    0         00:00:00                                         cpu=960               
+cpu2    0         00:00:00                                         cpu=320               
+[zhaoqi@login01 gdc]$ cri_show_assoc user=zhaoqi
+Account   User    Partition  QOS   Def QOS  
+paratera  zhaoqi             cpu2   
+```
