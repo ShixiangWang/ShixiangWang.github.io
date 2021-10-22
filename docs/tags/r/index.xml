@@ -8,7 +8,16 @@
 王诗翔</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 19 Oct 2021 00:00:00 +0000</lastBuildDate><atom:link href="/tags/r/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 20 Oct 2021 00:00:00 +0000</lastBuildDate><atom:link href="/tags/r/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>跳过R包check系统使用无法显式载入DESCRIPTION的外部包</title>
+      <link>/blog/skip-r-check-system/</link>
+      <pubDate>Wed, 20 Oct 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/skip-r-check-system/</guid>
+      <description>.attach_this &amp;lt;- function() { if (!&amp;#34;ggpubr&amp;#34; %in% (.packages())) { tryCatch(eval(parse(text = &amp;#34;library(ggpubr)&amp;#34;)), error = function(e) { eval(parse(text = &amp;#39;remotes::install_github(&amp;#34;ggpubr&amp;#34;)&amp;#39;)) eval(parse(text = &amp;#34;library(ggpubr)&amp;#34;)) }) } } `%:::%` &amp;lt;- function(pkg, fun, inherits = TRUE) { get(fun, envir = asNamespace(pkg), inherits = inherits ) } .attach_this() ggboxp &amp;lt;- &amp;#34;ggpubr&amp;#34;%:::%&amp;#34;ggboxplot&amp;#34; args(ggboxp) </description>
+    </item>
+    
     <item>
       <title>rstatix使用fisher检验处理比例关系</title>
       <link>/blog/rstatix-fisher-test/</link>
@@ -159,17 +168,6 @@ df &amp;lt;- data.frame( c1 = c(&amp;quot;a&amp;quot;, &amp;quot;a&amp;quot;, &a
 思考一分钟。
 如果使用惯了tidyverse套装，我们脑子里容易冒出来的是这样的解法：使用分组应用。
 library(dplyr) df |&amp;gt; group_by(c1) |&amp;gt; summarize(c2 = max(c2, na.rm = TRUE)) out # A tibble: 3 × 2 out c1 c2 out &amp;lt;chr&amp;gt; &amp;lt;dbl&amp;gt; out 1 a 3 out 2 b 4 out 3 c 2 在数据不是特别大的时候，使用这种策略没有任何问题。但如果分组有成千上万，分组的时间代价就很高了。有没有其他的方式可以解决该问题呢？</description>
-    </item>
-    
-    <item>
-      <title>forestmodel给多水平变量添加整体p值</title>
-      <link>/blog/forestmode-set-overall-pva-for-variable-with-multiple-levels/</link>
-      <pubDate>Tue, 31 Aug 2021 00:00:00 +0000</pubDate>
-      
-      <guid>/blog/forestmode-set-overall-pva-for-variable-with-multiple-levels/</guid>
-      <description>前段时间收到来信：
-Hi Shixiang I am writing to you about the forestmodel package in R. Thank you so much for the wonderful package that you created. I was wondering if there is a way to display the wald test p-value which is important for variables that have more than two levels. I tried to work around the code but did not find a way out. Best Aniket 我不是作者，搞错了人，问我干啥呢～自个提问嘛
-Hi Aniket, I am not the author of forestmodel, you can see from https://github.</description>
     </item>
     
   </channel>

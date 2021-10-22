@@ -1,7 +1,7 @@
 ---
 title: R6编程
 author: 王诗翔
-date: '2021-10-15'
+date: '2021-10-22'
 slug: r6-programming
 categories:
   - Blog
@@ -17,8 +17,620 @@ description: R中最modern的面向对象编程系统
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(
   echo = TRUE, warning = FALSE, message = FALSE,
-  fig.width = 7, fig.height = 6
+  fig.width = 7, fig.height = 6,
+  tidy = "styler"
 )
 ```
 
+> 原文来源：<https://r6.r-lib.org/articles/Introduction.html>
 
+R6包为R提供了封装的面向对象编程的实现（有时也被称为经典的面向对象编程）。它类似于R的引用类，但它更高效，不依赖于S4类和方法包。
+
+与R中的许多对象不同，R6类的实例(对象)具有引用语义。R6类还支持：
+
+- 公共和私有方法
+- active bindings
+- 跨包工作的继承(超类)
+
+## 基础
+
+下面是如何创建一个简单的R6类。public参数是一个项目列表，可以是函数和字段(非函数)。函数将被用作方法。
+
+```{r}
+library(R6)
+
+Person <- R6Class(
+  "Person",
+  public = list(
+    name = NULL,
+    hair = NULL,
+    initialize = function(name = NA, hair = nA) {
+      self$name <- name
+      self$hair <- hair
+      self$greet()
+    },
+    set_hair = function(val) {
+      self$hair <- val
+    },
+    greet = function() {
+      cat(paste0("Hello, my name is ", self$name, ".\n"))
+    }
+  )
+)
+```
+
+使用`$new()`进行初始化：
+
+```{r}
+ann <- Person$new("Ann", "black")
+ann
+```
+
+如果存在`initialize()`方法，在初始化时会自动调用。代码中的`self`为自引用。
+
+对象初始化后，我们可以访问值和方法了：
+
+```{r}
+ann$hair
+ann$greet()
+ann$set_hair("red")
+ann$hair
+```
+
+
+> 注意：R6对象的外部表面基本上是一个包含公共成员的环境。这也被称为公共环境。R6对象的方法有一个独立的封闭环境，粗略地说，就是它们“运行”的环境。这是发现self的地方，它只是对公共环境的一个引用。
+
+## 私有成员
+
+上面例子的成员都是公共的，我们其实可以添加私有成员。下面一个例子：
+
+```{r}
+Queue <- R6Class("Queue",
+                 public = list(
+                   initialize = function(...) {
+                     for (item in list(...)) {
+                       self$add(item)
+                     }
+                   },
+                   add = function(x) {
+                     private$queue = c(private$queue, list(x))
+                     invisible(self)
+                   },
+                   remove = function() {
+                     if (private$length() == 0) return(NULL)
+                     head = private$queue[[1]]
+                     private$queue = private$queue[-1]
+                     head
+                   }
+                 ),
+                 private = list(
+                   queue = list(),
+                   length = function() base::length(private$queue)
+                 ))
+
+q = Queue$new(5, 6, "foo")
+```
+
+与公共成员使用`self$`访问类似，私有成员使用`private$`进行访问。
+
+```{r}
+q$add("something")
+q$add("another thing")
+q$add(10)
+q$remove()
+q$remove()
+```
+
+而私有成员无法外部访问：
+
+```{r error=TRUE}
+q$queue
+q$length()
+```
+
+一个有用的设计模式是方法在可能的情况下返回`self`(不可见的)，因为这使它们具有可链接性。例如，`add()`方法返回`self`，所以你可以将它们链接在一起:
+
+```{r}
+q$add(10)$add(20)
+```
+
+## Active bindings
+
+Active bindings（主动/活跃绑定？）看起来像字段，但是每一次访问它时，它会调用函数。它们总是公开访问。
+
+```{r}
+Numbers = R6Class("Numbers",
+                  public = list(
+                    x = 100
+                  ),
+                  active = list(
+                    x2 = function(value) {
+                      if (missing(value)) return(self$x *2)
+                      else self$x = value / 2
+                    },
+                    rand = function() rnorm(1)
+                  ))
+
+
+n = Numbers$new()
+n$x
+```
+
+我们再看看active binding的效果：
+
+```{r}
+n$x2
+```
+
+当它被赋值时，被赋值的会被当作参数传入：
+
+```{r}
+n$x2 <- 1000
+n$x
+```
+
+
+而如果函数没有参数，那就无法被赋值啦！
+
+```{r error=TRUE}
+n$rand
+n$rand
+n$rand = 3
+```
+
+> 注意：active binding与公共环境绑定在一起
+
+## 继承
+
+继承，所有可以生成超类和之类。
+
+之类可以有额外的方法，它们可以重写超类方法。
+下面是一个保存历史的队列，我们添加`show()`方法重写`remove()`方法。
+
+```{r}
+# 注意，这不是很高效，仅用于解释
+HistoryQueue = R6Class("HistoryQueue",
+                       inherit = Queue,
+                       public = list(
+                         show = function() {
+                           cat("Next item is at index", private$head_idx + 1, "\n")
+                           for (i in seq_along(private$queue)) {
+                             cat(i, ": ", private$queue[[i]], "\n", sep = "")
+                           }
+                         },
+                         remove = function() {
+                           if (private$length() - private$head_idx == 0) return (NULL)
+                           private$head_idx = private$head_idx +1
+                           private$queue[[private$head_idx]]
+                         }
+                       ),
+                       private = list(
+                         head_idx = 0
+                       ))
+
+hq = HistoryQueue$new(5, 6, "foo")
+hq$show()
+hq$remove()
+hq$show()
+hq$remove()
+```
+
+父（超）类方法可以通过`super$xx()`调用。下面是一个例子：
+
+```{r}
+CountingQueue <- R6Class("CountingQueue",
+  inherit = Queue,
+  public = list(
+    add = function(x) {
+      private$total <- private$total + 1
+      super$add(x)
+    },
+    get_total = function() private$total
+  ),
+  private = list(
+    total = 0
+  )
+)
+
+cq <- CountingQueue$new("x", "y")
+cq$get_total()
+cq$add("z")
+cq$remove()
+cq$get_total()
+```
+
+## 字段中包含其他引用对象
+
+如果你的R6类包含任何同样具有引用语义的字段(例如，其他R6对象和环境)，这些字段应该在`initialize`方法中填充。如果字段在类定义中直接设置为引用对象，那么该对象将在R6对象的所有实例中共享。这里有一个例子:
+
+```{r}
+SimpleClass <- R6Class("SimpleClass",
+  public = list(x = NULL)
+)
+
+SharedField <- R6Class("SharedField",
+  public = list(
+    e = SimpleClass$new()
+  )
+)
+
+s1 <- SharedField$new()
+s1$e$x <- 1
+
+s2 <- SharedField$new()
+s2$e$x <- 2
+
+# 改变 s2$e$x 也会改变 s1$e$x
+s1$e$x
+```
+
+为了避免这种情况，在`initialize`方法中填充字段：
+
+```{r}
+NonSharedField <- R6Class("NonSharedField",
+  public = list(
+    e = NULL,
+    initialize = function() self$e <- SimpleClass$new()
+  )
+)
+
+n1 <- NonSharedField$new()
+n1$e$x <- 1
+
+n2 <- NonSharedField$new()
+n2$e$x <- 2
+
+# 修改n2不改变n1
+n1$e$x
+```
+
+## 其他主题
+
+### 添加成员到已有的类
+
+使用`$set()`方法：
+
+```{r}
+Simple <- R6Class("Simple",
+  public = list(
+    x = 1,
+    getx = function() self$x
+  )
+)
+
+Simple$set("public", "getx2", function() self$x*2)
+
+# 要覆盖已有成员 overwrite=TRUE
+Simple$set("public", "x", 10, overwrite = TRUE)
+
+s <- Simple$new()
+s$x
+s$getx2()
+```
+
+为了防止上述的修改，我们可以锁定类：
+
+```{r}
+Simple <- R6Class("Simple",
+  public = list(
+    x = 1,
+    getx = function() self$x
+  ),
+  lock_class = TRUE
+)
+
+# 解锁
+Simple$unlock()
+
+# 锁定
+Simple$lock()
+```
+
+### 克隆对象
+
+默认情况下,R6对象有`clone()`方法用于创建对象的副本。
+
+```{r}
+Simple <- R6Class("Simple",
+  public = list(
+    x = 1,
+    getx = function() self$x
+  )
+)
+
+s <- Simple$new()
+
+# 创建克隆
+s1 <- s$clone()
+# 修改
+s1$x <- 2
+s1$getx()
+
+# 原始对象不会受到影响
+s$getx()
+```
+
+如果不想添加克隆方法，可以在创建类时使用`cloneable=FALSE`。如果任何加载的R6对象具有克隆方法，该函数将使用82.8kB，但对于每个额外的对象，克隆方法将花费少量的空间(112字节)。
+
+## 深度拷贝（克隆）
+
+如果有任何字段是具有引用语义的对象(环境、R6对象、引用类对象)，拷贝将获得对同一对象的引用。这有时是可取的，但往往不是。
+
+例如，我们将创建一个对象c1，它包含另一个R6对象s，然后克隆它。因为原始的s和克隆的s字段都指向同一个对象，因此从一个字段修改它会导致反映在另一个字段中的更改。
+
+```{r}
+Simple <- R6Class("Simple", public = list(x = 1))
+
+Cloneable <- R6Class("Cloneable",
+  public = list(
+    s = NULL,
+    initialize = function() self$s <- Simple$new()
+  )
+)
+
+c1 <- Cloneable$new()
+c2 <- c1$clone()
+
+c1$s$x <- 2
+c2$s$x
+```
+
+为了让字段也得到一个新的副本，我们使用`deep = TRUE`选项。
+
+```{r}
+c3 <- c1$clone(deep = TRUE)
+
+c1$s$x <- 3
+
+# 现在不会同时改变了
+c3$s$x
+```
+
+注意，`clone(deep=TRUE)`的默认行为是复制R6对象的字段，而不是复制环境、引用类对象或其他包含其他引用类型对象(例如，带有R6对象的列表)的数据结构的字段。
+
+如果您的R6对象包含这些类型的对象，并且你希望对它们进行深度克隆，那么你必须在名为`deep_clone`的私有方法中提供自己的深度克隆函数。下面是一个R6对象的例子，它有两个字段，a和b，都是环境，都包含一个值x。它还有一个字段v，这是一个常规(非引用)值，还有一个私有`deep_clone`方法。
+
+```{r}
+CloneEnv <- R6Class("CloneEnv",
+  public = list(
+    a = NULL,
+    b = NULL,
+    v = 1,
+    initialize = function() {
+      self$a <- new.env(parent = emptyenv())
+      self$b <- new.env(parent = emptyenv())
+      self$a$x <- 1
+      self$b$x <- 1
+    }
+  ),
+  private = list(
+    deep_clone = function(name, value) {
+      # With x$clone(deep=TRUE) is called, the deep_clone gets invoked once for
+      # each field, with the name and value.
+      if (name == "a") {
+        # `a` is an environment, so use this quick way of copying
+        list2env(as.list.environment(value, all.names = TRUE),
+                 parent = emptyenv())
+      } else {
+        # For all other fields, just return the value
+        value
+      }
+    }
+  )
+)
+
+c1 <- CloneEnv$new()
+c2 <- c1$clone(deep = TRUE)
+```
+
+当调用`c1$clone(deep=TRUE)`时，会为c1中的每个字段调用`deep_clone`方法，并传递字段和值的名称。在我们的版本中，a环境被复制，但b没有，v也没有(但这没关系，因为v不是引用对象)。我们可以测试克隆：
+
+```{r}
+# Modifying c1$a doesn't affect c2$a, because they're separate objects
+c1$a$x <- 2
+c2$a$x
+#> [1] 1
+
+# Modifying c1$b does affect c2$b, because they're the same object
+c1$b$x <- 3
+c2$b$x
+#> [1] 3
+
+# Modifying c1$v doesn't affect c2$v, because they're not reference objects
+c1$v <- 4
+c2$v
+#> [1] 1
+```
+
+### 将R6对象输出到屏幕
+
+R6对象有一个默认的`print`方法，它列出了对象的所有成员。如果类定义了`print`方法，那么它将覆盖默认方法。
+
+```{r}
+PrettyCountingQueue <- R6Class("PrettyCountingQueue",
+  inherit = CountingQueue,
+  public = list(
+    print = function(...) {
+      cat("<PrettyCountingQueue> of ", self$get_total(), " elements\n", sep = "")
+    }
+  )
+)
+```
+
+```{r}
+pq <- PrettyCountingQueue$new(1, 2, "foobar")
+pq
+```
+
+### 终结器
+
+有时在对象被垃圾回收时运行函数是很有用的。例如，你可能希望确保关闭一个文件或数据库连接。为此，你可以定义一个私有的`finalize()`方法，当对象被垃圾收集时，将不带参数地调用该方法。
+
+```{r}
+A <- R6Class("A", private = list(
+  finalize = function() {
+    print("Finalizer has been called!")
+  }
+))
+
+# 初始化对象
+obj <- A$new()
+
+rm(obj); gc()
+```
+
+### 类方法和成员函数
+
+当R6类定义在public或private部分包含函数时，这些函数就是类方法：
+它们可以访问`self`（以及`private`和`super`）。当一个R6对象被克隆时，结果对象的方法将有一个引用新对象的self。
+
+与类方法相反，你还可以添加常规函数作为R6对象的成员。这可以通过将函数赋值给`initialize`方法中的字段来实现，也可以在对象被实例化之后实现。这些函数不是类方法，它们不能访问`self`、`private`或`super`。
+
+```{r}
+FunctionWrapper <- R6Class("FunctionWrapper",
+  public = list(
+    get_self = function() {
+      self
+    },
+    fn = NULL
+  )
+)
+
+a <- FunctionWrapper$new()
+
+self <- 100
+a$fn <- function() {
+  self
+}
+
+a$get_self()
+
+a$fn()
+```
+
+## 调试
+
+调试R6类中的方法与调试正常的R函数有些不同。
+
+RStudio断点在R6类方法中不起作用。调试代码最简单的方法是在你想要打开调试控制台的地方插入一个`browser()`行，重新加载类，然后逐步遍历代码。但这涉及到修改代码、重新加载代码，并重新实例化要测试的任何对象。
+
+### 为类的所有未来实例启用调试
+
+R6生成器对象有一个名为`debug()`的方法，它将为方法启用调试。这将影响在调用`debug()`之后创建的类的所有实例。
+
+```{r, eval=FALSE}
+Simple <- R6Class("Simple",
+  public = list(
+    x = 10,
+    getx = function() self$x
+  )
+)
+
+# 准备调试Simple类实例的 getx() 方法
+Simple$debug("getx")
+
+s <- Simple$new()
+s$getx()
+# [Debugging prompt]
+```
+
+要禁用对未来实例的调试，请使用生成器的`undebug()`方法:
+
+```{r eval=FALSE}
+# 准备停止调试
+Simple$undebug("getx")
+
+s <- Simple$new()
+s$getx()
+#> [1] 10
+```
+
+```{r include=FALSE}
+Simple <- R6Class("Simple",
+  public = list(
+    x = 10,
+    getx = function() self$x
+  )
+)
+```
+
+### 在单个对象中调试方法
+
+要在对象的单个实例中启用方法的调试，请使用`debug()`函数(而不是生成器对象中的`debug()`方法)。
+
+```{r eval=FALSE}
+s <- Simple$new()
+debug(s$getx)
+s$getx()
+# [Debugging prompt]
+```
+
+使用`undebug()`函数关闭调试：
+
+```{r}
+undebug(s$getx)
+s$getx()
+#> [1] 10
+```
+
+还可以使用`trace()`函数指定要将方法放入调试控制台的位置。
+
+
+## R6文档
+
+本节介绍roxygen2包对R6的文档化支持。
+
+下面是一个具体的例子：
+
+```{r eval=FALSE}
+#' R6 Class Representing a Person
+#'
+#' @description
+#' A person has a name and a hair color.
+#'
+#' @details
+#' A person can also greet you.
+
+Person <- R6::R6Class("Person",
+public = list(
+
+    #' @field name First or full name of the person.
+    name = NULL,
+
+    #' @field hair Hair color of the person.
+    hair = NULL,
+
+    #' @description
+    #' Create a new person object.
+    #' @param name Name.
+    #' @param hair Hair color.
+    #' @return A new `Person` object.
+    initialize = function(name = NA, hair = NA) { # 对应$new()方法
+      self$name <- name
+      self$hair <- hair
+      self$greet()
+    },
+
+    #' @description
+    #' Change hair color.
+    #' @param val New hair color.
+    #' @examples
+    #' P <- Person("Ann", "black")
+    #' P$hair
+    #' P$set_hair("red")
+    #' P$hair
+    set_hair = function(val) {
+      self$hair <- val
+    },
+
+    #' @description
+    #' Say hi.
+    greet = function() {
+      cat(paste0("Hello, my name is ", self$name, ".\n"))
+    }
+  )
+)
+```
+
+注意：如果需要，出现在类定义之前的`@param`标记将被所有方法自动继承。
+这可以简化参数说明。
