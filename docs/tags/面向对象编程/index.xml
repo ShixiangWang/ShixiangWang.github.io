@@ -8,14 +8,19 @@
 王诗翔</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 15 Oct 2021 00:00:00 +0000</lastBuildDate><atom:link href="/tags/%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E7%BC%96%E7%A8%8B/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 22 Oct 2021 00:00:00 +0000</lastBuildDate><atom:link href="/tags/%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E7%BC%96%E7%A8%8B/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>R6编程</title>
       <link>/blog/r6-programming/</link>
-      <pubDate>Fri, 15 Oct 2021 00:00:00 +0000</pubDate>
+      <pubDate>Fri, 22 Oct 2021 00:00:00 +0000</pubDate>
       
       <guid>/blog/r6-programming/</guid>
-      <description>  </description>
+      <description>原文来源：https://r6.r-lib.org/articles/Introduction.html
+ R6包为R提供了封装的面向对象编程的实现（有时也被称为经典的面向对象编程）。它类似于R的引用类，但它更高效，不依赖于S4类和方法包。
+与R中的许多对象不同，R6类的实例(对象)具有引用语义。R6类还支持：
+ 公共和私有方法 active bindings 跨包工作的继承(超类)  基础 下面是如何创建一个简单的R6类。public参数是一个项目列表，可以是函数和字段(非函数)。函数将被用作方法。
+library(R6) Person &amp;lt;- R6Class( &amp;quot;Person&amp;quot;, public = list( name = NULL, hair = NULL, initialize = function(name = NA, hair = nA) { self$name &amp;lt;- name self$hair &amp;lt;- hair self$greet() }, set_hair = function(val) { self$hair &amp;lt;- val }, greet = function() { cat(paste0(&amp;quot;Hello, my name is &amp;quot;, self$name, &amp;quot;.\n&amp;quot;)) } ) ) 使用$new()进行初始化：
+ann &amp;lt;- Person$new(&amp;quot;Ann&amp;quot;, &amp;quot;black&amp;quot;) ## Hello, my name is Ann.</description>
     </item>
     
   </channel>

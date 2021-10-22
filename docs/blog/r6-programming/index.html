@@ -84,7 +84,7 @@
 						<h1 class="post-title p-name">R6编程</h1>
 					</a>
 					<h3 class="post-author">王诗翔</h3>
-					<time class="post-date dt-published" datetime="2021-10-15T00:00:00Z">Friday, 15 October 2021</time>
+					<time class="post-date dt-published" datetime="2021-10-22T00:00:00Z">Friday, 22 October 2021</time>
 					
 				</header>
 				<div class="post-content e-content">
@@ -93,6 +93,559 @@
 
 
 <!-- Links -->
+<blockquote>
+<p>原文来源：<a href="https://r6.r-lib.org/articles/Introduction.html" class="uri">https://r6.r-lib.org/articles/Introduction.html</a></p>
+</blockquote>
+<p>R6包为R提供了封装的面向对象编程的实现（有时也被称为经典的面向对象编程）。它类似于R的引用类，但它更高效，不依赖于S4类和方法包。</p>
+<p>与R中的许多对象不同，R6类的实例(对象)具有引用语义。R6类还支持：</p>
+<ul>
+<li>公共和私有方法</li>
+<li>active bindings</li>
+<li>跨包工作的继承(超类)</li>
+</ul>
+<div id="基础" class="section level2">
+<h2>基础</h2>
+<p>下面是如何创建一个简单的R6类。public参数是一个项目列表，可以是函数和字段(非函数)。函数将被用作方法。</p>
+<pre class="r"><code>library(R6)
+
+Person &lt;- R6Class(
+  &quot;Person&quot;,
+  public = list(
+    name = NULL,
+    hair = NULL,
+    initialize = function(name = NA, hair = nA) {
+      self$name &lt;- name
+      self$hair &lt;- hair
+      self$greet()
+    },
+    set_hair = function(val) {
+      self$hair &lt;- val
+    },
+    greet = function() {
+      cat(paste0(&quot;Hello, my name is &quot;, self$name, &quot;.\n&quot;))
+    }
+  )
+)</code></pre>
+<p>使用<code>$new()</code>进行初始化：</p>
+<pre class="r"><code>ann &lt;- Person$new(&quot;Ann&quot;, &quot;black&quot;)</code></pre>
+<pre><code>## Hello, my name is Ann.</code></pre>
+<pre class="r"><code>ann</code></pre>
+<pre><code>## &lt;Person&gt;
+##   Public:
+##     clone: function (deep = FALSE) 
+##     greet: function () 
+##     hair: black
+##     initialize: function (name = NA, hair = nA) 
+##     name: Ann
+##     set_hair: function (val)</code></pre>
+<p>如果存在<code>initialize()</code>方法，在初始化时会自动调用。代码中的<code>self</code>为自引用。</p>
+<p>对象初始化后，我们可以访问值和方法了：</p>
+<pre class="r"><code>ann$hair</code></pre>
+<pre><code>## [1] &quot;black&quot;</code></pre>
+<pre class="r"><code>ann$greet()</code></pre>
+<pre><code>## Hello, my name is Ann.</code></pre>
+<pre class="r"><code>ann$set_hair(&quot;red&quot;)
+ann$hair</code></pre>
+<pre><code>## [1] &quot;red&quot;</code></pre>
+<blockquote>
+<p>注意：R6对象的外部表面基本上是一个包含公共成员的环境。这也被称为公共环境。R6对象的方法有一个独立的封闭环境，粗略地说，就是它们“运行”的环境。这是发现self的地方，它只是对公共环境的一个引用。</p>
+</blockquote>
+</div>
+<div id="私有成员" class="section level2">
+<h2>私有成员</h2>
+<p>上面例子的成员都是公共的，我们其实可以添加私有成员。下面一个例子：</p>
+<pre class="r"><code>Queue &lt;- R6Class(&quot;Queue&quot;,
+  public = list(
+    initialize = function(...) {
+      for (item in list(...)) {
+        self$add(item)
+      }
+    },
+    add = function(x) {
+      private$queue &lt;- c(private$queue, list(x))
+      invisible(self)
+    },
+    remove = function() {
+      if (private$length() == 0) {
+        return(NULL)
+      }
+      head &lt;- private$queue[[1]]
+      private$queue &lt;- private$queue[-1]
+      head
+    }
+  ),
+  private = list(
+    queue = list(),
+    length = function() base::length(private$queue)
+  )
+)
+
+q &lt;- Queue$new(5, 6, &quot;foo&quot;)</code></pre>
+<p>与公共成员使用<code>self$</code>访问类似，私有成员使用<code>private$</code>进行访问。</p>
+<pre class="r"><code>q$add(&quot;something&quot;)
+q$add(&quot;another thing&quot;)
+q$add(10)
+q$remove()</code></pre>
+<pre><code>## [1] 5</code></pre>
+<pre class="r"><code>q$remove()</code></pre>
+<pre><code>## [1] 6</code></pre>
+<p>而私有成员无法外部访问：</p>
+<pre class="r"><code>q$queue</code></pre>
+<pre><code>## NULL</code></pre>
+<pre class="r"><code>q$length()</code></pre>
+<pre><code>## Error in eval(expr, envir, enclos): attempt to apply non-function</code></pre>
+<p>一个有用的设计模式是方法在可能的情况下返回<code>self</code>(不可见的)，因为这使它们具有可链接性。例如，<code>add()</code>方法返回<code>self</code>，所以你可以将它们链接在一起:</p>
+<pre class="r"><code>q$add(10)$add(20)</code></pre>
+</div>
+<div id="active-bindings" class="section level2">
+<h2>Active bindings</h2>
+<p>Active bindings（主动/活跃绑定？）看起来像字段，但是每一次访问它时，它会调用函数。它们总是公开访问。</p>
+<pre class="r"><code>Numbers &lt;- R6Class(&quot;Numbers&quot;,
+  public = list(
+    x = 100
+  ),
+  active = list(
+    x2 = function(value) {
+      if (missing(value)) {
+        return(self$x * 2)
+      } else {
+        self$x &lt;- value / 2
+      }
+    },
+    rand = function() rnorm(1)
+  )
+)
+
+
+n &lt;- Numbers$new()
+n$x</code></pre>
+<pre><code>## [1] 100</code></pre>
+<p>我们再看看active binding的效果：</p>
+<pre class="r"><code>n$x2</code></pre>
+<pre><code>## [1] 200</code></pre>
+<p>当它被赋值时，被赋值的会被当作参数传入：</p>
+<pre class="r"><code>n$x2 &lt;- 1000
+n$x</code></pre>
+<pre><code>## [1] 500</code></pre>
+<p>而如果函数没有参数，那就无法被赋值啦！</p>
+<pre class="r"><code>n$rand</code></pre>
+<pre><code>## [1] 0.6510595</code></pre>
+<pre class="r"><code>n$rand</code></pre>
+<pre><code>## [1] -0.1274247</code></pre>
+<pre class="r"><code>n$rand &lt;- 3</code></pre>
+<pre><code>## Error in (function () : unused argument (base::quote(3))</code></pre>
+<blockquote>
+<p>注意：active binding与公共环境绑定在一起</p>
+</blockquote>
+</div>
+<div id="继承" class="section level2">
+<h2>继承</h2>
+<p>继承，所有可以生成超类和之类。</p>
+<p>之类可以有额外的方法，它们可以重写超类方法。
+下面是一个保存历史的队列，我们添加<code>show()</code>方法重写<code>remove()</code>方法。</p>
+<pre class="r"><code># 注意，这不是很高效，仅用于解释
+HistoryQueue &lt;- R6Class(&quot;HistoryQueue&quot;,
+  inherit = Queue,
+  public = list(
+    show = function() {
+      cat(&quot;Next item is at index&quot;, private$head_idx + 1, &quot;\n&quot;)
+      for (i in seq_along(private$queue)) {
+        cat(i, &quot;: &quot;, private$queue[[i]], &quot;\n&quot;, sep = &quot;&quot;)
+      }
+    },
+    remove = function() {
+      if (private$length() - private$head_idx == 0) {
+        return(NULL)
+      }
+      private$head_idx &lt;- private$head_idx + 1
+      private$queue[[private$head_idx]]
+    }
+  ),
+  private = list(
+    head_idx = 0
+  )
+)
+
+hq &lt;- HistoryQueue$new(5, 6, &quot;foo&quot;)
+hq$show()</code></pre>
+<pre><code>## Next item is at index 1 
+## 1: 5
+## 2: 6
+## 3: foo</code></pre>
+<pre class="r"><code>hq$remove()</code></pre>
+<pre><code>## [1] 5</code></pre>
+<pre class="r"><code>hq$show()</code></pre>
+<pre><code>## Next item is at index 2 
+## 1: 5
+## 2: 6
+## 3: foo</code></pre>
+<pre class="r"><code>hq$remove()</code></pre>
+<pre><code>## [1] 6</code></pre>
+<p>父（超）类方法可以通过<code>super$xx()</code>调用。下面是一个例子：</p>
+<pre class="r"><code>CountingQueue &lt;- R6Class(&quot;CountingQueue&quot;,
+  inherit = Queue,
+  public = list(
+    add = function(x) {
+      private$total &lt;- private$total + 1
+      super$add(x)
+    },
+    get_total = function() private$total
+  ),
+  private = list(
+    total = 0
+  )
+)
+
+cq &lt;- CountingQueue$new(&quot;x&quot;, &quot;y&quot;)
+cq$get_total()</code></pre>
+<pre><code>## [1] 2</code></pre>
+<pre class="r"><code>cq$add(&quot;z&quot;)
+cq$remove()</code></pre>
+<pre><code>## [1] &quot;x&quot;</code></pre>
+<pre class="r"><code>cq$get_total()</code></pre>
+<pre><code>## [1] 3</code></pre>
+</div>
+<div id="字段中包含其他引用对象" class="section level2">
+<h2>字段中包含其他引用对象</h2>
+<p>如果你的R6类包含任何同样具有引用语义的字段(例如，其他R6对象和环境)，这些字段应该在<code>initialize</code>方法中填充。如果字段在类定义中直接设置为引用对象，那么该对象将在R6对象的所有实例中共享。这里有一个例子:</p>
+<pre class="r"><code>SimpleClass &lt;- R6Class(&quot;SimpleClass&quot;,
+  public = list(x = NULL)
+)
+
+SharedField &lt;- R6Class(&quot;SharedField&quot;,
+  public = list(
+    e = SimpleClass$new()
+  )
+)
+
+s1 &lt;- SharedField$new()
+s1$e$x &lt;- 1
+
+s2 &lt;- SharedField$new()
+s2$e$x &lt;- 2
+
+# 改变 s2$e$x 也会改变 s1$e$x
+s1$e$x</code></pre>
+<pre><code>## [1] 2</code></pre>
+<p>为了避免这种情况，在<code>initialize</code>方法中填充字段：</p>
+<pre class="r"><code>NonSharedField &lt;- R6Class(&quot;NonSharedField&quot;,
+  public = list(
+    e = NULL,
+    initialize = function() self$e &lt;- SimpleClass$new()
+  )
+)
+
+n1 &lt;- NonSharedField$new()
+n1$e$x &lt;- 1
+
+n2 &lt;- NonSharedField$new()
+n2$e$x &lt;- 2
+
+# 修改n2不改变n1
+n1$e$x</code></pre>
+<pre><code>## [1] 1</code></pre>
+</div>
+<div id="其他主题" class="section level2">
+<h2>其他主题</h2>
+<div id="添加成员到已有的类" class="section level3">
+<h3>添加成员到已有的类</h3>
+<p>使用<code>$set()</code>方法：</p>
+<pre class="r"><code>Simple &lt;- R6Class(&quot;Simple&quot;,
+  public = list(
+    x = 1,
+    getx = function() self$x
+  )
+)
+
+Simple$set(&quot;public&quot;, &quot;getx2&quot;, function() self$x * 2)
+
+# 要覆盖已有成员 overwrite=TRUE
+Simple$set(&quot;public&quot;, &quot;x&quot;, 10, overwrite = TRUE)
+
+s &lt;- Simple$new()
+s$x</code></pre>
+<pre><code>## [1] 10</code></pre>
+<pre class="r"><code>s$getx2()</code></pre>
+<pre><code>## [1] 20</code></pre>
+<p>为了防止上述的修改，我们可以锁定类：</p>
+<pre class="r"><code>Simple &lt;- R6Class(&quot;Simple&quot;,
+  public = list(
+    x = 1,
+    getx = function() self$x
+  ),
+  lock_class = TRUE
+)
+
+# 解锁
+Simple$unlock()
+
+# 锁定
+Simple$lock()</code></pre>
+</div>
+<div id="克隆对象" class="section level3">
+<h3>克隆对象</h3>
+<p>默认情况下,R6对象有<code>clone()</code>方法用于创建对象的副本。</p>
+<pre class="r"><code>Simple &lt;- R6Class(&quot;Simple&quot;,
+  public = list(
+    x = 1,
+    getx = function() self$x
+  )
+)
+
+s &lt;- Simple$new()
+
+# 创建克隆
+s1 &lt;- s$clone()
+# 修改
+s1$x &lt;- 2
+s1$getx()</code></pre>
+<pre><code>## [1] 2</code></pre>
+<pre class="r"><code># 原始对象不会受到影响
+s$getx()</code></pre>
+<pre><code>## [1] 1</code></pre>
+<p>如果不想添加克隆方法，可以在创建类时使用<code>cloneable=FALSE</code>。如果任何加载的R6对象具有克隆方法，该函数将使用82.8kB，但对于每个额外的对象，克隆方法将花费少量的空间(112字节)。</p>
+</div>
+</div>
+<div id="深度拷贝克隆" class="section level2">
+<h2>深度拷贝（克隆）</h2>
+<p>如果有任何字段是具有引用语义的对象(环境、R6对象、引用类对象)，拷贝将获得对同一对象的引用。这有时是可取的，但往往不是。</p>
+<p>例如，我们将创建一个对象c1，它包含另一个R6对象s，然后克隆它。因为原始的s和克隆的s字段都指向同一个对象，因此从一个字段修改它会导致反映在另一个字段中的更改。</p>
+<pre class="r"><code>Simple &lt;- R6Class(&quot;Simple&quot;, public = list(x = 1))
+
+Cloneable &lt;- R6Class(&quot;Cloneable&quot;,
+  public = list(
+    s = NULL,
+    initialize = function() self$s &lt;- Simple$new()
+  )
+)
+
+c1 &lt;- Cloneable$new()
+c2 &lt;- c1$clone()
+
+c1$s$x &lt;- 2
+c2$s$x</code></pre>
+<pre><code>## [1] 2</code></pre>
+<p>为了让字段也得到一个新的副本，我们使用<code>deep = TRUE</code>选项。</p>
+<pre class="r"><code>c3 &lt;- c1$clone(deep = TRUE)
+
+c1$s$x &lt;- 3
+
+# 现在不会同时改变了
+c3$s$x</code></pre>
+<pre><code>## [1] 2</code></pre>
+<p>注意，<code>clone(deep=TRUE)</code>的默认行为是复制R6对象的字段，而不是复制环境、引用类对象或其他包含其他引用类型对象(例如，带有R6对象的列表)的数据结构的字段。</p>
+<p>如果您的R6对象包含这些类型的对象，并且你希望对它们进行深度克隆，那么你必须在名为<code>deep_clone</code>的私有方法中提供自己的深度克隆函数。下面是一个R6对象的例子，它有两个字段，a和b，都是环境，都包含一个值x。它还有一个字段v，这是一个常规(非引用)值，还有一个私有<code>deep_clone</code>方法。</p>
+<pre class="r"><code>CloneEnv &lt;- R6Class(&quot;CloneEnv&quot;,
+  public = list(
+    a = NULL,
+    b = NULL,
+    v = 1,
+    initialize = function() {
+      self$a &lt;- new.env(parent = emptyenv())
+      self$b &lt;- new.env(parent = emptyenv())
+      self$a$x &lt;- 1
+      self$b$x &lt;- 1
+    }
+  ),
+  private = list(
+    deep_clone = function(name, value) {
+      # With x$clone(deep=TRUE) is called, the deep_clone gets invoked once for
+      # each field, with the name and value.
+      if (name == &quot;a&quot;) {
+        # `a` is an environment, so use this quick way of copying
+        list2env(as.list.environment(value, all.names = TRUE),
+          parent = emptyenv()
+        )
+      } else {
+        # For all other fields, just return the value
+        value
+      }
+    }
+  )
+)
+
+c1 &lt;- CloneEnv$new()
+c2 &lt;- c1$clone(deep = TRUE)</code></pre>
+<p>当调用<code>c1$clone(deep=TRUE)</code>时，会为c1中的每个字段调用<code>deep_clone</code>方法，并传递字段和值的名称。在我们的版本中，a环境被复制，但b没有，v也没有(但这没关系，因为v不是引用对象)。我们可以测试克隆：</p>
+<pre class="r"><code># Modifying c1$a doesn&#39;t affect c2$a, because they&#39;re separate objects
+c1$a$x &lt;- 2
+c2$a$x</code></pre>
+<pre><code>## [1] 1</code></pre>
+<pre class="r"><code>#&gt; [1] 1
+
+# Modifying c1$b does affect c2$b, because they&#39;re the same object
+c1$b$x &lt;- 3
+c2$b$x</code></pre>
+<pre><code>## [1] 3</code></pre>
+<pre class="r"><code>#&gt; [1] 3
+
+# Modifying c1$v doesn&#39;t affect c2$v, because they&#39;re not reference objects
+c1$v &lt;- 4
+c2$v</code></pre>
+<pre><code>## [1] 1</code></pre>
+<pre class="r"><code>#&gt; [1] 1</code></pre>
+<div id="将r6对象输出到屏幕" class="section level3">
+<h3>将R6对象输出到屏幕</h3>
+<p>R6对象有一个默认的<code>print</code>方法，它列出了对象的所有成员。如果类定义了<code>print</code>方法，那么它将覆盖默认方法。</p>
+<pre class="r"><code>PrettyCountingQueue &lt;- R6Class(&quot;PrettyCountingQueue&quot;,
+  inherit = CountingQueue,
+  public = list(
+    print = function(...) {
+      cat(&quot;&lt;PrettyCountingQueue&gt; of &quot;, self$get_total(), &quot; elements\n&quot;, sep = &quot;&quot;)
+    }
+  )
+)</code></pre>
+<pre class="r"><code>pq &lt;- PrettyCountingQueue$new(1, 2, &quot;foobar&quot;)
+pq</code></pre>
+<pre><code>## &lt;PrettyCountingQueue&gt; of 3 elements</code></pre>
+</div>
+<div id="终结器" class="section level3">
+<h3>终结器</h3>
+<p>有时在对象被垃圾回收时运行函数是很有用的。例如，你可能希望确保关闭一个文件或数据库连接。为此，你可以定义一个私有的<code>finalize()</code>方法，当对象被垃圾收集时，将不带参数地调用该方法。</p>
+<pre class="r"><code>A &lt;- R6Class(&quot;A&quot;, private = list(
+  finalize = function() {
+    print(&quot;Finalizer has been called!&quot;)
+  }
+))
+
+# 初始化对象
+obj &lt;- A$new()
+
+rm(obj)
+gc()</code></pre>
+<pre><code>## [1] &quot;Finalizer has been called!&quot;</code></pre>
+<pre><code>##           used (Mb) gc trigger (Mb) limit (Mb) max used (Mb)
+## Ncells  703227 37.6    1321700 70.6         NA  1321700 70.6
+## Vcells 1297774 10.0    8388608 64.0      16384  1930331 14.8</code></pre>
+</div>
+<div id="类方法和成员函数" class="section level3">
+<h3>类方法和成员函数</h3>
+<p>当R6类定义在public或private部分包含函数时，这些函数就是类方法：
+它们可以访问<code>self</code>（以及<code>private</code>和<code>super</code>）。当一个R6对象被克隆时，结果对象的方法将有一个引用新对象的self。</p>
+<p>与类方法相反，你还可以添加常规函数作为R6对象的成员。这可以通过将函数赋值给<code>initialize</code>方法中的字段来实现，也可以在对象被实例化之后实现。这些函数不是类方法，它们不能访问<code>self</code>、<code>private</code>或<code>super</code>。</p>
+<pre class="r"><code>FunctionWrapper &lt;- R6Class(&quot;FunctionWrapper&quot;,
+  public = list(
+    get_self = function() {
+      self
+    },
+    fn = NULL
+  )
+)
+
+a &lt;- FunctionWrapper$new()
+
+self &lt;- 100
+a$fn &lt;- function() {
+  self
+}
+
+a$get_self()</code></pre>
+<pre><code>## &lt;FunctionWrapper&gt;
+##   Public:
+##     clone: function (deep = FALSE) 
+##     fn: function () 
+##     get_self: function ()</code></pre>
+<pre class="r"><code>a$fn()</code></pre>
+<pre><code>## [1] 100</code></pre>
+</div>
+</div>
+<div id="调试" class="section level2">
+<h2>调试</h2>
+<p>调试R6类中的方法与调试正常的R函数有些不同。</p>
+<p>RStudio断点在R6类方法中不起作用。调试代码最简单的方法是在你想要打开调试控制台的地方插入一个<code>browser()</code>行，重新加载类，然后逐步遍历代码。但这涉及到修改代码、重新加载代码，并重新实例化要测试的任何对象。</p>
+<div id="为类的所有未来实例启用调试" class="section level3">
+<h3>为类的所有未来实例启用调试</h3>
+<p>R6生成器对象有一个名为<code>debug()</code>的方法，它将为方法启用调试。这将影响在调用<code>debug()</code>之后创建的类的所有实例。</p>
+<pre class="r"><code>Simple &lt;- R6Class(&quot;Simple&quot;,
+  public = list(
+    x = 10,
+    getx = function() self$x
+  )
+)
+
+# 准备调试Simple类实例的 getx() 方法
+Simple$debug(&quot;getx&quot;)
+
+s &lt;- Simple$new()
+s$getx()
+# [Debugging prompt]</code></pre>
+<p>要禁用对未来实例的调试，请使用生成器的<code>undebug()</code>方法:</p>
+<pre class="r"><code># 准备停止调试
+Simple$undebug(&quot;getx&quot;)
+
+s &lt;- Simple$new()
+s$getx()
+#&gt; [1] 10</code></pre>
+</div>
+<div id="在单个对象中调试方法" class="section level3">
+<h3>在单个对象中调试方法</h3>
+<p>要在对象的单个实例中启用方法的调试，请使用<code>debug()</code>函数(而不是生成器对象中的<code>debug()</code>方法)。</p>
+<pre class="r"><code>s &lt;- Simple$new()
+debug(s$getx)
+s$getx()
+# [Debugging prompt]</code></pre>
+<p>使用<code>undebug()</code>函数关闭调试：</p>
+<pre class="r"><code>undebug(s$getx)
+s$getx()</code></pre>
+<pre><code>## [1] 1</code></pre>
+<pre class="r"><code>#&gt; [1] 10</code></pre>
+<p>还可以使用<code>trace()</code>函数指定要将方法放入调试控制台的位置。</p>
+</div>
+</div>
+<div id="r6文档" class="section level2">
+<h2>R6文档</h2>
+<p>本节介绍roxygen2包对R6的文档化支持。</p>
+<p>下面是一个具体的例子：</p>
+<pre class="r"><code>#&#39; R6 Class Representing a Person
+#&#39;
+#&#39; @description
+#&#39; A person has a name and a hair color.
+#&#39;
+#&#39; @details
+#&#39; A person can also greet you.
+
+Person &lt;- R6::R6Class(&quot;Person&quot;,
+  public = list(
+
+    #&#39; @field name First or full name of the person.
+    name = NULL,
+
+    #&#39; @field hair Hair color of the person.
+    hair = NULL,
+
+    #&#39; @description
+    #&#39; Create a new person object.
+    #&#39; @param name Name.
+    #&#39; @param hair Hair color.
+    #&#39; @return A new `Person` object.
+    initialize = function(name = NA, hair = NA) { # 对应$new()方法
+      self$name &lt;- name
+      self$hair &lt;- hair
+      self$greet()
+    },
+
+    #&#39; @description
+    #&#39; Change hair color.
+    #&#39; @param val New hair color.
+    #&#39; @examples
+    #&#39; P &lt;- Person(&quot;Ann&quot;, &quot;black&quot;)
+    #&#39; P$hair
+    #&#39; P$set_hair(&quot;red&quot;)
+    #&#39; P$hair
+    set_hair = function(val) {
+      self$hair &lt;- val
+    },
+
+    #&#39; @description
+    #&#39; Say hi.
+    greet = function() {
+      cat(paste0(&quot;Hello, my name is &quot;, self$name, &quot;.\n&quot;))
+    }
+  )
+)</code></pre>
+<p>注意：如果需要，出现在类定义之前的<code>@param</code>标记将被所有方法自动继承。
+这可以简化参数说明。</p>
+</div>
 
 				</div>
 				<footer class="footer">
