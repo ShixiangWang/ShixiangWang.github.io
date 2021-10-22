@@ -1,0 +1,88 @@
+---
+title: ezcox v1.0.2 更新
+author: 王诗翔
+date: '2021-10-22'
+slug: ezcox-v1-2-update
+categories:
+  - Blog
+tags:
+  - R
+  - ezcox
+description: 支持了交互项和修正了一个画图问题
+---
+
+<script src="{{< blogdown/postref >}}index_files/header-attrs/header-attrs.js"></script>
+
+
+<!-- Links -->
+<p>针对<code>@lijing-lin</code>在GitHub的ezcox仓库提出的<a href="https://github.com/ShixiangWang/ezcox/issues/23">Fast way to add interaction terms?</a>问题，
+这两天闲暇时废了些脑细胞进行解决。同时也fix之前记录的一个遗留问题。</p>
+<pre class="r"><code>remotes::install_github(&quot;ShixiangWang/ezcox&quot;)</code></pre>
+<div id="交互项支持" class="section level2">
+<h2>交互项支持</h2>
+<p>之前为了解决用户数据列名不符合的R命名规则，在源代码例自动对不合法名字进行了反撇号标记。
+这会导致R的公式没法进行解析，例如<code>sex:age</code>会被判断为一个列名，R的公式没法解析它，因为
+找不到数据中对应的<code>sex:age</code>列，所以会报错。</p>
+<pre class="r"><code>library(survival)
+library(ezcox)
+
+lung$ph.ecog &lt;- factor(lung$ph.ecog)
+ezcox(lung, covariates = c(&quot;age&quot;), controls = &quot;sex:ph.ecog&quot;)</code></pre>
+<pre><code>## # A tibble: 5 × 12
+##   Variable is_control contrast_level ref_level n_contrast n_ref     beta    HR
+##   &lt;chr&gt;    &lt;lgl&gt;      &lt;chr&gt;          &lt;lgl&gt;     &lt;lgl&gt;      &lt;lgl&gt;    &lt;dbl&gt; &lt;dbl&gt;
+## 1 age      FALSE      age            NA        NA         NA     0.00844 1.01 
+## 2 age      TRUE       sex:ph.ecog0   NA        NA         NA    -0.890   0.411
+## 3 age      TRUE       sex:ph.ecog1   NA        NA         NA    -0.580   0.560
+## 4 age      TRUE       sex:ph.ecog2   NA        NA         NA    -0.236   0.790
+## 5 age      TRUE       sex:ph.ecog3   NA        NA         NA     0.967   2.63 
+## # … with 4 more variables: lower_95 &lt;dbl&gt;, upper_95 &lt;dbl&gt;, p.value &lt;dbl&gt;,
+## #   global.pval &lt;dbl&gt;</code></pre>
+<p>另外，一些数据的计算会由于交互项的引入带来麻烦，我选择将一些结果列直接赋值为<code>NA</code>来消除。
+所以新的特性的实现是有一些代价的。</p>
+<p>另外值得注意的时，由于<code>forestmodel</code>包不支持提取交互项的数据，在绘图时会被自动忽略。</p>
+<pre class="r"><code>show_forest(lung, covariates = c(&quot;age&quot;, &quot;wt.loss&quot;), controls = &quot;sex:ph.ecog&quot;)</code></pre>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+</div>
+<div id="ezcox_group乱序问题" class="section level2">
+<h2><code>ezcox_group()</code>乱序问题</h2>
+<p>在之前的版本中下面的代码运行后所有数据生成的<code>ALL</code>组会跑到中间去，本次版本进行了修复，
+确保它位于最后一个。</p>
+<pre class="r"><code>lung$sex &lt;- ifelse(lung$sex == 1, &quot;Male&quot;, &quot;Female&quot;)
+
+ezcox_group(lung, grp_var = &quot;sex&quot;,
+            covariate = &quot;ph.ecog&quot;, controls = &quot;age&quot;, add_all = TRUE)</code></pre>
+<pre><code>## $data
+## $stats
+## # A tibble: 12 × 13
+##    Group  Variable is_control contrast_level ref_level n_contrast n_ref    beta
+##    &lt;chr&gt;  &lt;chr&gt;    &lt;lgl&gt;      &lt;chr&gt;          &lt;chr&gt;          &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt;
+##  1 ALL    ph.ecog  FALSE      1              0                113    63  0.359 
+##  2 ALL    ph.ecog  FALSE      2              0                 50    63  0.857 
+##  3 ALL    ph.ecog  FALSE      3              0                  1    63  2.11  
+##  4 ALL    ph.ecog  TRUE       age            age              228   228  0.0108
+##  5 Female ph.ecog  FALSE      1              0                 42    27  0.439 
+##  6 Female ph.ecog  FALSE      2              0                 21    27  1.41  
+##  7 Female ph.ecog  FALSE      3              0                  0    27 NA     
+##  8 Female ph.ecog  TRUE       age            age               90    90 -0.0153
+##  9 Male   ph.ecog  FALSE      1              0                 71    36  0.353 
+## 10 Male   ph.ecog  FALSE      2              0                 29    36  0.809 
+## 11 Male   ph.ecog  FALSE      3              0                  1    36  1.77  
+## 12 Male   ph.ecog  TRUE       age            age              138   138  0.0182
+## # … with 5 more variables: HR &lt;dbl&gt;, lower_95 &lt;dbl&gt;, upper_95 &lt;dbl&gt;,
+## #   p.value &lt;dbl&gt;, global.pval &lt;dbl&gt;
+## 
+## $models
+## # A tibble: 3 × 6
+##   Group  Variable control model_file                               model  status
+##   &lt;chr&gt;  &lt;chr&gt;    &lt;chr&gt;   &lt;chr&gt;                                    &lt;list&gt; &lt;lgl&gt; 
+## 1 ALL    ph.ecog  age     /Volumes/Extra/R/Rtmp//Rtmp9B6ubK/ezcox… &lt;coxp… TRUE  
+## 2 Female ph.ecog  age     /Volumes/Extra/R/Rtmp//Rtmp9B6ubK/ezcox… &lt;coxp… TRUE  
+## 3 Male   ph.ecog  age     /Volumes/Extra/R/Rtmp//Rtmp9B6ubK/ezcox… &lt;coxp… TRUE  
+## 
+## attr(,&quot;class&quot;)
+## [1] &quot;ezcox&quot;
+## 
+## $plot</code></pre>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+</div>

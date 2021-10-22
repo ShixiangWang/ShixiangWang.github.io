@@ -10,6 +10,17 @@
     <language>en-us</language>
     <lastBuildDate>Fri, 22 Oct 2021 00:00:00 +0000</lastBuildDate><atom:link href="/categories/blog/index.xml" rel="self" type="application/rss+xml" />
     <item>
+      <title>ezcox v1.0.2 更新</title>
+      <link>/blog/ezcox-v1-2-update/</link>
+      <pubDate>Fri, 22 Oct 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/ezcox-v1-2-update/</guid>
+      <description>针对@lijing-lin在GitHub的ezcox仓库提出的Fast way to add interaction terms?问题， 这两天闲暇时废了些脑细胞进行解决。同时也fix之前记录的一个遗留问题。
+remotes::install_github(&amp;quot;ShixiangWang/ezcox&amp;quot;) 交互项支持 之前为了解决用户数据列名不符合的R命名规则，在源代码例自动对不合法名字进行了反撇号标记。 这会导致R的公式没法进行解析，例如sex:age会被判断为一个列名，R的公式没法解析它，因为 找不到数据中对应的sex:age列，所以会报错。
+library(survival) library(ezcox) lung$ph.ecog &amp;lt;- factor(lung$ph.ecog) ezcox(lung, covariates = c(&amp;quot;age&amp;quot;), controls = &amp;quot;sex:ph.ecog&amp;quot;) ## # A tibble: 5 × 12 ## Variable is_control contrast_level ref_level n_contrast n_ref beta HR ## &amp;lt;chr&amp;gt; &amp;lt;lgl&amp;gt; &amp;lt;chr&amp;gt; &amp;lt;lgl&amp;gt; &amp;lt;lgl&amp;gt; &amp;lt;lgl&amp;gt; &amp;lt;dbl&amp;gt; &amp;lt;dbl&amp;gt; ## 1 age FALSE age NA NA NA 0.00844 1.01 ## 2 age TRUE sex:ph.ecog0 NA NA NA -0.890 0.</description>
+    </item>
+    
+    <item>
       <title>R6编程</title>
       <link>/blog/r6-programming/</link>
       <pubDate>Fri, 22 Oct 2021 00:00:00 +0000</pubDate>
@@ -131,20 +142,6 @@ CC=/opt/local/bin/gcc-mp-4.7 CXX=/opt/local/bin/g++-mp-4.7 CPLUS_INCLUDE_PATH=/o
 //sum.cpp #include &amp;lt;Rcpp.h&amp;gt;using namespace Rcpp; // [[Rcpp::export]] double rcpp_sum(NumericVector v){ double sum = 0; for(int i=0; i&amp;lt;v.length(); ++i){ sum += v[i]; } return(sum); } Rcpp函数定义格式 下面是定义一个Rcpp函数的基本格式：
 #include&amp;lt;Rcpp.h&amp;gt;using namespace Rcpp; // [[Rcpp::export]] RETURN_TYPE FUNCTION_NAME(ARGUMENT_TYPE ARGUMENT){ //do something  return RETURN_VALUE; }  #include&amp;lt;Rcpp.h&amp;gt;：这个句子允许你使用Rcpp包定义的类和函数。 // [[Rcpp::export]]：这个句子下面定义的函数可以从R中访问。 你需要把这个句子附加到你想从R中使用的每个函数中。 using namespace Rcpp;：这个句子是可选的。但是如果你没有写这个句子， 你必须添加前缀Rcpp::来指定由Rcpp定义的类和函数。(例如：Rcpp::NumericVector) RETURN_TYPE FUNCTION_NAME(ARGUMENT_TYPE ARGUMENT){}：你需要指定函数和参数的数据类型。 return RETURN_VALUE;：如果函数将返回一个值，return语句是强制性的。 然而，如果你的函数没有返回值（即RETURN_TYPE是无效的），返回语句可以省略。  编译代码 函数Rcpp::sourceCpp()将编译你的源代码，并将定义的函数加载到R。
 library(Rcpp) sourceCpp(&amp;#39;sum.cpp&amp;#39;) 使用函数 像正常R函数一样调用它就可以了。</description>
-    </item>
-    
-    <item>
-      <title>在VSCode中使用ipython执行代码</title>
-      <link>/blog/use-ipython-exe-code-in-vscode/</link>
-      <pubDate>Thu, 09 Sep 2021 00:00:00 +0000</pubDate>
-      
-      <guid>/blog/use-ipython-exe-code-in-vscode/</guid>
-      <description>参考Stack Overflow这篇回答进行配置，将下面的内容加入settings.json.
-&amp;#34;python.terminal.launchArgs&amp;#34;: [ &amp;#34;-m&amp;#34;, &amp;#34;IPython&amp;#34;, &amp;#34;--no-autoindent&amp;#34;, ], Python的数据科学社区都将编辑的重心放到了Jupyter notebook上，忽视了对.py文本本身的支持。 这个事情不知道是好是坏，但对于我这个R使用比较严重的人来说使用起来是不舒服的。 Jupyter的记录格式太笨重了，如果只是单独完成分析任务，代码加注释完全够用了。 R里面有RMarkdown格式，相比更加轻松。更重要的是，我在GitHub上2年前提的需求说 VSCode中Python文件不支持按块执行，现在也没有实现。只能找到上面的办法缓解这种不适。
-我之前的帖子在：https://github.com/microsoft/vscode-python/issues/8851
-我在issue中也看到了一些类似的提问和讨论，但皆不了了之。
-其实还有一个痛点我没说，在执行完一句代码后，VSCode插件不会自动向下移动光标。
-整个源代码编辑交互式分析的体验Python还没有编辑器能比过RStudio。</description>
     </item>
     
   </channel>

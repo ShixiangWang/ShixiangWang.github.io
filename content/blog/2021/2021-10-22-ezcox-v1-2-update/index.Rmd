@@ -1,0 +1,66 @@
+---
+title: ezcox v1.0.2 更新
+author: 王诗翔
+date: '2021-10-22'
+slug: ezcox-v1-2-update
+categories:
+  - Blog
+tags:
+  - R
+  - ezcox
+description: 支持了交互项和修正了一个画图问题
+---
+
+<!-- Links -->
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo = TRUE, warning = FALSE, message = FALSE,
+  fig.width = 7, fig.height = 6
+)
+```
+
+针对`@lijing-lin`在GitHub的ezcox仓库提出的[Fast way to add interaction terms?](https://github.com/ShixiangWang/ezcox/issues/23)问题，
+这两天闲暇时废了些脑细胞进行解决。同时也fix之前记录的一个遗留问题。
+
+```{r eval=FALSE}
+remotes::install_github("ShixiangWang/ezcox")
+```
+
+
+## 交互项支持
+
+之前为了解决用户数据列名不符合的R命名规则，在源代码例自动对不合法名字进行了反撇号标记。
+这会导致R的公式没法进行解析，例如`sex:age`会被判断为一个列名，R的公式没法解析它，因为
+找不到数据中对应的`sex:age`列，所以会报错。
+
+```{r}
+library(survival)
+library(ezcox)
+
+lung$ph.ecog <- factor(lung$ph.ecog)
+ezcox(lung, covariates = c("age"), controls = "sex:ph.ecog")
+```
+
+另外，一些数据的计算会由于交互项的引入带来麻烦，我选择将一些结果列直接赋值为`NA`来消除。
+所以新的特性的实现是有一些代价的。
+
+另外值得注意的时，由于`forestmodel`包不支持提取交互项的数据，在绘图时会被自动忽略。
+
+```{r}
+show_forest(lung, covariates = c("age", "wt.loss"), controls = "sex:ph.ecog")
+```
+
+## `ezcox_group()`乱序问题
+
+在之前的版本中下面的代码运行后所有数据生成的`ALL`组会跑到中间去，本次版本进行了修复，
+确保它位于最后一个。
+
+```{r}
+lung$sex <- ifelse(lung$sex == 1, "Male", "Female")
+
+ezcox_group(lung, grp_var = "sex",
+            covariate = "ph.ecog", controls = "age", add_all = TRUE)
+```
+
+
