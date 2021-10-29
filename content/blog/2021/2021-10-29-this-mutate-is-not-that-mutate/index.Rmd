@@ -1,0 +1,140 @@
+---
+title: 此mutate非彼mutate
+author: 王诗翔
+date: '2021-10-29'
+slug: this-mutate-is-not-that-mutate
+categories:
+  - Blog
+tags:
+  - R
+  - dplyr
+description: 程序出乎意料，怎么办？
+---
+
+<!-- Links -->
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo = TRUE, warning = FALSE, message = FALSE,
+  fig.width = 7, fig.height = 6
+)
+```
+
+程序出乎意料，怎么办？
+
+今天在星球圈里收到提问：
+
+![](https://gitee.com/ShixiangWang/ImageCollection/raw/master/2021-10-29/1635503469657-image.png)
+
+我对`ddply()`这个函数是不熟悉的，只知道hadley一个过时的包`plyr`里有一系列这样的函数。
+所以我首先想到的是这位朋友用错了。不过我马上就排除了，这种问题是非常容易发现和处理的。
+
+因此还是得动手实际检验一下这个问题在我的电脑上是否可以重复。
+
+我们首先把数据导入进来：
+
+```{r}
+library(scales)
+library(tidyverse)
+library(plyr)
+
+ts <- openxlsx::read.xlsx("~/Downloads/示例数据.xlsx")
+head(ts)
+```
+
+按照两种不同的方法生成结果：
+
+```{r}
+out1 = ts %>%
+ ddply(., .(variable), transform, rescale = rescale(value)) %>%
+ arrange(variable, Name)
+
+head(out1)
+
+out2 = ts %>%
+ group_by(variable) %>%
+ mutate(rescale = rescale(value)) %>%
+ ungroup() %>%
+ arrange(variable, Name) %>%
+ as.data.frame()
+
+head(out2)
+```
+从结果的格式可以看的出来，它们从输入到输出经历的操作应该是相同的。
+
+那么我们实际对比下结果：
+
+```{r}
+setdiff(out1, out2)
+```
+**结果显示两个数据框确实不一样**。那这是怎么回事？
+
+```{r}
+out1$rescale[which(out1$rescale != out2$rescale)]
+out2$rescale[which(out1$rescale != out2$rescale)]
+```
+
+认真查看数据我发现这里的variable指代的是TCGA的样本，上面的操作是一个对不同样本进行相同处理的操作。最实际
+的探索笨办法就是一个一个样本检查：
+
+```{r}
+setdiff(out1[1:11, ], out2[1:11, ])
+```
+
+
+第1个样本没有问题，继续：
+
+```{r}
+setdiff(out1[12:22, ], out2[12:22, ])
+```
+问题出来了，那个是对的呢？手动算一下
+
+```{r}
+out1[12:22, ]
+out2[12:22, ] # there are some problem with the dplyr approach
+rescale(out1[12:22, ]$value)
+```
+
+手动算的结果跟第1个是一致的，那么第2种方法肯定哪里出问题了。
+
+难道是调用`rescale()`这个函数出了问题？？由于这个函数要做的事情很简单，我们可以自己
+写一个看看：
+
+```{r}
+rescale2 <- function(x) {
+ (x - min(x)) / (max(x) - min(x))
+}
+
+out3 = ts %>%
+ group_by(variable) %>%
+ mutate(rescale = rescale2(value)) %>%
+ ungroup() %>%
+ arrange(variable, Name) %>%
+ as.data.frame()
+
+setdiff(out1, out3)
+```
+问题依旧，数据肯定在rescale的时候出了问题。我`debug()`进去一看，发现全部的数据，而不是单独一个样本的数据作为输入！
+
+在确定`group_by()`函数没有问题后，终于在`mutate()`上发现了端倪。
+
+```{r}
+mutate
+```
+环境显示它来自`plyr`。而我们实际想要使用的是`dplyr`包中的同名函数！
+
+明确指定命名空间后发现问题也确实解决了。
+
+```{r}
+out3 = ts %>%
+ group_by(variable) %>%
+ dplyr::mutate(rescale = rescale2(value)) %>%
+ ungroup() %>%
+ arrange(variable, Name) %>%
+ as.data.frame()
+
+setdiff(out1, out3)
+```
+
+此`mutate()`非彼`mutate()`，建议大家在发现类似问题时（一个常用函数做了一件意外的事情），
+请检查使用的函数来自哪个包。

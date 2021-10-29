@@ -8,7 +8,22 @@
 王诗翔</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 22 Oct 2021 00:00:00 +0000</lastBuildDate><atom:link href="/categories/blog/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 29 Oct 2021 00:00:00 +0000</lastBuildDate><atom:link href="/categories/blog/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>此mutate非彼mutate</title>
+      <link>/blog/this-mutate-is-not-that-mutate/</link>
+      <pubDate>Fri, 29 Oct 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/this-mutate-is-not-that-mutate/</guid>
+      <description>程序出乎意料，怎么办？
+今天在星球圈里收到提问：
+我对ddply()这个函数是不熟悉的，只知道hadley一个过时的包plyr里有一系列这样的函数。 所以我首先想到的是这位朋友用错了。不过我马上就排除了，这种问题是非常容易发现和处理的。
+因此还是得动手实际检验一下这个问题在我的电脑上是否可以重复。
+我们首先把数据导入进来：
+library(scales) library(tidyverse) library(plyr) ts &amp;lt;- openxlsx::read.xlsx(&amp;quot;~/Downloads/示例数据.xlsx&amp;quot;) head(ts) ## Name variable value ## 1 SLCO1B1 TCGA-44-2666 3.52916020 ## 2 GCGR TCGA-44-2666 0.08499940 ## 3 HTR3A TCGA-44-2666 0.05029628 ## 4 CA9 TCGA-44-2666 0.19814361 ## 5 TNFSF11 TCGA-44-2666 0.28202803 ## 6 FGB TCGA-44-2666 4.56223499 按照两种不同的方法生成结果：
+out1 = ts %&amp;gt;% ddply(., .(variable), transform, rescale = rescale(value)) %&amp;gt;% arrange(variable, Name) head(out1) ## Name variable value rescale ## 1 ADRB2 TCGA-05-4390 2.</description>
+    </item>
+    
     <item>
       <title>ezcox v1.0.2 更新</title>
       <link>/blog/ezcox-v1-2-update/</link>
@@ -128,20 +143,6 @@ $ pip list Traceback (most recent call last): File &amp;#34;~/miniconda3/bin/pip
 下面是一个示例：
 CC=/opt/local/bin/gcc-mp-4.7 CXX=/opt/local/bin/g++-mp-4.7 CPLUS_INCLUDE_PATH=/opt/local/include:$CPLUS_INCLUDE_PATH LD_LIBRARY_PATH=/opt/local/lib:$LD_LIBRARY_PATH CXXFLAGS= -g0 -O2 -Wall MAKE=make -j4  包括编译器位置、头文件位置、动态库位置、编译参数等。
  安装Rcpp install.packages(&amp;#34;Rcpp&amp;#34;) </description>
-    </item>
-    
-    <item>
-      <title>Rcpp：基本用法</title>
-      <link>/blog/rcpp-basic-usage/</link>
-      <pubDate>Mon, 13 Sep 2021 00:00:00 +0000</pubDate>
-      
-      <guid>/blog/rcpp-basic-usage/</guid>
-      <description>来源：https://teuder.github.io/rcpp4everyone_en/030_basic_usage.html
-使用Rcpp函数只需要3步：
- 编写Rcpp源代码。 编译代码。 执行函数。  编写Rcpp代码 下面是一个对向量求和的Rcpp函数：
-//sum.cpp #include &amp;lt;Rcpp.h&amp;gt;using namespace Rcpp; // [[Rcpp::export]] double rcpp_sum(NumericVector v){ double sum = 0; for(int i=0; i&amp;lt;v.length(); ++i){ sum += v[i]; } return(sum); } Rcpp函数定义格式 下面是定义一个Rcpp函数的基本格式：
-#include&amp;lt;Rcpp.h&amp;gt;using namespace Rcpp; // [[Rcpp::export]] RETURN_TYPE FUNCTION_NAME(ARGUMENT_TYPE ARGUMENT){ //do something  return RETURN_VALUE; }  #include&amp;lt;Rcpp.h&amp;gt;：这个句子允许你使用Rcpp包定义的类和函数。 // [[Rcpp::export]]：这个句子下面定义的函数可以从R中访问。 你需要把这个句子附加到你想从R中使用的每个函数中。 using namespace Rcpp;：这个句子是可选的。但是如果你没有写这个句子， 你必须添加前缀Rcpp::来指定由Rcpp定义的类和函数。(例如：Rcpp::NumericVector) RETURN_TYPE FUNCTION_NAME(ARGUMENT_TYPE ARGUMENT){}：你需要指定函数和参数的数据类型。 return RETURN_VALUE;：如果函数将返回一个值，return语句是强制性的。 然而，如果你的函数没有返回值（即RETURN_TYPE是无效的），返回语句可以省略。  编译代码 函数Rcpp::sourceCpp()将编译你的源代码，并将定义的函数加载到R。
-library(Rcpp) sourceCpp(&amp;#39;sum.cpp&amp;#39;) 使用函数 像正常R函数一样调用它就可以了。</description>
     </item>
     
   </channel>

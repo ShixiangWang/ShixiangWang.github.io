@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en-US">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1">
+
+		
+		<title>此mutate非彼mutate &middot; ShixiangWang
+王诗翔</title>
+		
+		<meta property="og:title" content="此mutate非彼mutate - ShixiangWang
+王诗翔">
+		
+		<meta property="og:type" content="article">
+		
+
+		
+			
+			<meta property="description" content="程序出乎意料，怎么办？">
+			<meta property="og:description" content="程序出乎意料，怎么办？">
+			
+			
+    	<meta property="twitter:card" content="summary">
+  		<meta property="twitter:image" content="/apple-touch-icon-152x152.png">
+			
+		
+
+		
+		
+		<meta name="twitter:creator" content="@WangShxiang">
+		<meta name="twitter:site" content="https://shixiangwang.github.io">
+		
+		
+
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+		<link rel="stylesheet" href="../../css/poole.css">
+		<link rel="stylesheet" href="../../css/syntax.css">
+		<link rel="stylesheet" href="../../css/hyde.css">
+		
+		
+		<link rel="stylesheet" href="../../css/hamburgers.css">
+		
+		<link rel="stylesheet" href="../../css/custom.css">
+		
+		
+
+<link rel="apple-touch-icon-precomposed" sizes="57x57" href="../../apple-touch-icon-57x57.png" />
+<link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../apple-touch-icon-114x114.png" />
+<link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../apple-touch-icon-72x72.png" />
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../apple-touch-icon-144x144.png" />
+<link rel="apple-touch-icon-precomposed" sizes="120x120" href="../../apple-touch-icon-120x120.png" />
+<link rel="apple-touch-icon-precomposed" sizes="152x152" href="../../apple-touch-icon-152x152.png" />
+<link rel="icon" type="image/png" href="../../favicon-32x32.png" sizes="32x32" />
+<link rel="icon" type="image/png" href="../../favicon-16x16.png" sizes="16x16" />
+<meta name="application-name" content="Garrick Aden-Buie"/>
+<meta name="msapplication-TileColor" content="#002B36" />
+<meta name="msapplication-TileImage" content="/mstile-144x144.png" />
+<meta name="theme-color" content="#ffffff">
+
+<meta name="mobile-web-app-capable" content="yes">
+
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-title" content="Garrick Aden-Buie">
+
+<link href="../../css/featherlight.min.css" type="text/css" rel="stylesheet" />
+
+<script async defer src="https://buttons.github.io/buttons.js"></script>
+
+<script defer src="../../js/van11y-accessible-hide-show-aria.min.js"></script>
+
+<script defer src="../../js/toc.js"></script>
+
+
+
+		<link href="../../blog/this-mutate-is-not-that-mutate" rel="canonical">
+	</head>
+
+	<body class="restyled-garrick  h-entry">
+		<main class="content container" role="main">
+			<article class="post">
+				<header>
+					<a class="u-url" href="../../blog/this-mutate-is-not-that-mutate">
+						<h1 class="post-title p-name">此mutate非彼mutate</h1>
+					</a>
+					<h3 class="post-author">王诗翔</h3>
+					<time class="post-date dt-published" datetime="2021-10-29T00:00:00Z">Friday, 29 October 2021</time>
+					
+				</header>
+				<div class="post-content e-content">
+					
+<script src="../../blog/this-mutate-is-not-that-mutate/index_files/header-attrs/header-attrs.js"></script>
+
+
+<!-- Links -->
+<p>程序出乎意料，怎么办？</p>
+<p>今天在星球圈里收到提问：</p>
+<p><img src="https://gitee.com/ShixiangWang/ImageCollection/raw/master/2021-10-29/1635503469657-image.png" /></p>
+<p>我对<code>ddply()</code>这个函数是不熟悉的，只知道hadley一个过时的包<code>plyr</code>里有一系列这样的函数。
+所以我首先想到的是这位朋友用错了。不过我马上就排除了，这种问题是非常容易发现和处理的。</p>
+<p>因此还是得动手实际检验一下这个问题在我的电脑上是否可以重复。</p>
+<p>我们首先把数据导入进来：</p>
+<pre class="r"><code>library(scales)
+library(tidyverse)
+library(plyr)
+
+ts &lt;- openxlsx::read.xlsx(&quot;~/Downloads/示例数据.xlsx&quot;)
+head(ts)</code></pre>
+<pre><code>##      Name     variable      value
+## 1 SLCO1B1 TCGA-44-2666 3.52916020
+## 2    GCGR TCGA-44-2666 0.08499940
+## 3   HTR3A TCGA-44-2666 0.05029628
+## 4     CA9 TCGA-44-2666 0.19814361
+## 5 TNFSF11 TCGA-44-2666 0.28202803
+## 6     FGB TCGA-44-2666 4.56223499</code></pre>
+<p>按照两种不同的方法生成结果：</p>
+<pre class="r"><code>out1 = ts %&gt;%
+ ddply(., .(variable), transform, rescale = rescale(value)) %&gt;%
+ arrange(variable, Name)
+
+head(out1)</code></pre>
+<pre><code>##    Name     variable       value     rescale
+## 1 ADRB2 TCGA-05-4390  2.07637862 0.179759689
+## 2 BIRC5 TCGA-05-4390  4.76410093 0.412445637
+## 3   CA9 TCGA-05-4390  4.47563050 0.387471697
+## 4   FGB TCGA-05-4390 11.55085787 1.000000000
+## 5  GCGR TCGA-05-4390  0.06531648 0.005654687
+## 6 HTR3A TCGA-05-4390  0.13418263 0.011616680</code></pre>
+<pre class="r"><code>out2 = ts %&gt;%
+ group_by(variable) %&gt;%
+ mutate(rescale = rescale(value)) %&gt;%
+ ungroup() %&gt;%
+ arrange(variable, Name) %&gt;%
+ as.data.frame()
+
+head(out2)</code></pre>
+<pre><code>##    Name     variable       value     rescale
+## 1 ADRB2 TCGA-05-4390  2.07637862 0.179759689
+## 2 BIRC5 TCGA-05-4390  4.76410093 0.412445637
+## 3   CA9 TCGA-05-4390  4.47563050 0.387471697
+## 4   FGB TCGA-05-4390 11.55085787 1.000000000
+## 5  GCGR TCGA-05-4390  0.06531648 0.005654687
+## 6 HTR3A TCGA-05-4390  0.13418263 0.011616680</code></pre>
+<p>从结果的格式可以看的出来，它们从输入到输出经历的操作应该是相同的。</p>
+<p>那么我们实际对比下结果：</p>
+<pre class="r"><code>setdiff(out1, out2)</code></pre>
+<pre><code>##       Name     variable      value     rescale
+## 1    ADRB2 TCGA-21-5782 1.64848811 0.192834783
+## 2    BIRC5 TCGA-21-5782 4.75155422 0.675892757
+## 3      CA9 TCGA-21-5782 6.83355317 1.000000000
+## 4      FGB TCGA-21-5782 0.84742072 0.068131673
+## 5     GCGR TCGA-21-5782 0.51442280 0.016293492
+## 6    HTR3A TCGA-21-5782 0.86791639 0.071322259
+## 7      IL2 TCGA-21-5782 0.40975672 0.000000000
+## 8    KCNA5 TCGA-21-5782 0.83802752 0.066669422
+## 9    PADI4 TCGA-21-5782 0.65747836 0.038563121
+## 10 SLCO1B1 TCGA-21-5782 0.91029877 0.077919974
+## 11 TNFSF11 TCGA-21-5782 0.68943867 0.043538419
+## 12   ADRB2 TCGA-38-4632 1.49522485 0.173357774
+## 13   BIRC5 TCGA-38-4632 5.68731111 0.659392191
+## 14     CA9 TCGA-38-4632 0.47006487 0.054499762
+## 15     FGB TCGA-38-4632 8.62508107 1.000000000
+## 16    GCGR TCGA-38-4632 0.10181144 0.011804114
+## 17   HTR3A TCGA-38-4632 0.37084853 0.042996526
+## 18     IL2 TCGA-38-4632 0.04300049 0.004985518
+## 19   KCNA5 TCGA-38-4632 0.18014798 0.020886526
+## 20   PADI4 TCGA-38-4632 0.11071744 0.012836683
+## 21 TNFSF11 TCGA-38-4632 0.21541180 0.024975047
+## 22   ADRB2 TCGA-44-2666 3.11114961 0.678389828
+## 23   BIRC5 TCGA-44-2666 1.34130377 0.286131434
+## 24     CA9 TCGA-44-2666 0.19814361 0.032768028
+## 25     FGB TCGA-44-2666 4.56223499 1.000000000
+## 26    GCGR TCGA-44-2666 0.08499940 0.007691400
+## 27   HTR3A TCGA-44-2666 0.05029628 0.000000000
+## 28     IL2 TCGA-44-2666 0.06204253 0.002603372
+## 29   KCNA5 TCGA-44-2666 0.89569660 0.187369639
+## 30   PADI4 TCGA-44-2666 0.26135921 0.046778767
+## 31 SLCO1B1 TCGA-44-2666 3.52916020 0.771035279
+## 32 TNFSF11 TCGA-44-2666 0.28202803 0.051359685
+## 33   ADRB2 TCGA-49-AAQV 1.61516402 0.183927550
+## 34   BIRC5 TCGA-49-AAQV 3.19367091 0.365190414
+## 35     CA9 TCGA-49-AAQV 4.63585169 0.530798699
+## 36     FGB TCGA-49-AAQV 8.72183748 1.000000000
+## 37    GCGR TCGA-49-AAQV 0.01345201 0.000000000
+## 38   HTR3A TCGA-49-AAQV 3.07484686 0.351545629
+## 39     IL2 TCGA-49-AAQV 0.21759594 0.023442225
+## 40   KCNA5 TCGA-49-AAQV 0.23745833 0.025723059
+## 41   PADI4 TCGA-49-AAQV 0.07889044 0.007514416
+## 42 SLCO1B1 TCGA-49-AAQV 1.10041358 0.124817806
+## 43 TNFSF11 TCGA-49-AAQV 0.72236264 0.081405517</code></pre>
+<p><strong>结果显示两个数据框确实不一样</strong>。那这是怎么回事？</p>
+<pre class="r"><code>out1$rescale[which(out1$rescale != out2$rescale)]</code></pre>
+<pre><code>##  [1] 0.192834783 0.675892757 1.000000000 0.068131673 0.016293492 0.071322259
+##  [7] 0.000000000 0.066669422 0.038563121 0.077919974 0.043538419 0.173357774
+## [13] 0.659392191 0.054499762 1.000000000 0.011804114 0.042996526 0.004985518
+## [19] 0.020886526 0.012836683 0.024975047 0.678389828 0.286131434 0.032768028
+## [25] 1.000000000 0.007691400 0.000000000 0.002603372 0.187369639 0.046778767
+## [31] 0.771035279 0.051359685 0.183927550 0.365190414 0.530798699 1.000000000
+## [37] 0.000000000 0.351545629 0.023442225 0.025723059 0.007514416 0.124817806
+## [43] 0.081405517</code></pre>
+<pre class="r"><code>out2$rescale[which(out1$rescale != out2$rescale)]</code></pre>
+<pre><code>##  [1] 0.142715643 0.411359422 0.591605684 0.073364310 0.044535462 0.075138695
+##  [7] 0.035474138 0.072551106 0.056920306 0.078807893 0.059687226 0.129447083
+## [13] 0.492371317 0.040695234 0.746704805 0.008814189 0.032105713 0.003722710
+## [19] 0.015596069 0.009585213 0.018648988 0.269343597 0.116121572 0.017154017
+## [25] 0.394969365 0.007358709 0.004354333 0.005371249 0.077543730 0.022626822
+## [31] 0.305532303 0.024416198 0.139830655 0.276487768 0.401342631 0.755081361
+## [37] 0.001164590 0.266200735 0.018838077 0.020557636 0.006829834 0.095266827
+## [43] 0.062537575</code></pre>
+<p>认真查看数据我发现这里的variable指代的是TCGA的样本，上面的操作是一个对不同样本进行相同处理的操作。最实际
+的探索笨办法就是一个一个样本检查：</p>
+<pre class="r"><code>setdiff(out1[1:11, ], out2[1:11, ])</code></pre>
+<pre><code>## [1] Name     variable value    rescale 
+## &lt;0 行&gt; (或0-长度的row.names)</code></pre>
+<p>第1个样本没有问题，继续：</p>
+<pre class="r"><code>setdiff(out1[12:22, ], out2[12:22, ])</code></pre>
+<pre><code>##       Name     variable     value    rescale
+## 1    ADRB2 TCGA-21-5782 1.6484881 0.19283478
+## 2    BIRC5 TCGA-21-5782 4.7515542 0.67589276
+## 3      CA9 TCGA-21-5782 6.8335532 1.00000000
+## 4      FGB TCGA-21-5782 0.8474207 0.06813167
+## 5     GCGR TCGA-21-5782 0.5144228 0.01629349
+## 6    HTR3A TCGA-21-5782 0.8679164 0.07132226
+## 7      IL2 TCGA-21-5782 0.4097567 0.00000000
+## 8    KCNA5 TCGA-21-5782 0.8380275 0.06666942
+## 9    PADI4 TCGA-21-5782 0.6574784 0.03856312
+## 10 SLCO1B1 TCGA-21-5782 0.9102988 0.07791997
+## 11 TNFSF11 TCGA-21-5782 0.6894387 0.04353842</code></pre>
+<p>问题出来了，那个是对的呢？手动算一下</p>
+<pre class="r"><code>out1[12:22, ]</code></pre>
+<pre><code>##       Name     variable     value    rescale
+## 12   ADRB2 TCGA-21-5782 1.6484881 0.19283478
+## 13   BIRC5 TCGA-21-5782 4.7515542 0.67589276
+## 14     CA9 TCGA-21-5782 6.8335532 1.00000000
+## 15     FGB TCGA-21-5782 0.8474207 0.06813167
+## 16    GCGR TCGA-21-5782 0.5144228 0.01629349
+## 17   HTR3A TCGA-21-5782 0.8679164 0.07132226
+## 18     IL2 TCGA-21-5782 0.4097567 0.00000000
+## 19   KCNA5 TCGA-21-5782 0.8380275 0.06666942
+## 20   PADI4 TCGA-21-5782 0.6574784 0.03856312
+## 21 SLCO1B1 TCGA-21-5782 0.9102988 0.07791997
+## 22 TNFSF11 TCGA-21-5782 0.6894387 0.04353842</code></pre>
+<pre class="r"><code>out2[12:22, ] # there are some problem with the dplyr approach</code></pre>
+<pre><code>##       Name     variable     value    rescale
+## 12   ADRB2 TCGA-21-5782 1.6484881 0.14271564
+## 13   BIRC5 TCGA-21-5782 4.7515542 0.41135942
+## 14     CA9 TCGA-21-5782 6.8335532 0.59160568
+## 15     FGB TCGA-21-5782 0.8474207 0.07336431
+## 16    GCGR TCGA-21-5782 0.5144228 0.04453546
+## 17   HTR3A TCGA-21-5782 0.8679164 0.07513870
+## 18     IL2 TCGA-21-5782 0.4097567 0.03547414
+## 19   KCNA5 TCGA-21-5782 0.8380275 0.07255111
+## 20   PADI4 TCGA-21-5782 0.6574784 0.05692031
+## 21 SLCO1B1 TCGA-21-5782 0.9102988 0.07880789
+## 22 TNFSF11 TCGA-21-5782 0.6894387 0.05968723</code></pre>
+<pre class="r"><code>rescale(out1[12:22, ]$value)</code></pre>
+<pre><code>##  [1] 0.19283478 0.67589276 1.00000000 0.06813167 0.01629349 0.07132226
+##  [7] 0.00000000 0.06666942 0.03856312 0.07791997 0.04353842</code></pre>
+<p>手动算的结果跟第1个是一致的，那么第2种方法肯定哪里出问题了。</p>
+<p>难道是调用<code>rescale()</code>这个函数出了问题？？由于这个函数要做的事情很简单，我们可以自己
+写一个看看：</p>
+<pre class="r"><code>rescale2 &lt;- function(x) {
+ (x - min(x)) / (max(x) - min(x))
+}
+
+out3 = ts %&gt;%
+ group_by(variable) %&gt;%
+ mutate(rescale = rescale2(value)) %&gt;%
+ ungroup() %&gt;%
+ arrange(variable, Name) %&gt;%
+ as.data.frame()
+
+setdiff(out1, out3)</code></pre>
+<pre><code>##       Name     variable      value     rescale
+## 1    ADRB2 TCGA-21-5782 1.64848811 0.192834783
+## 2    BIRC5 TCGA-21-5782 4.75155422 0.675892757
+## 3      CA9 TCGA-21-5782 6.83355317 1.000000000
+## 4      FGB TCGA-21-5782 0.84742072 0.068131673
+## 5     GCGR TCGA-21-5782 0.51442280 0.016293492
+## 6    HTR3A TCGA-21-5782 0.86791639 0.071322259
+## 7      IL2 TCGA-21-5782 0.40975672 0.000000000
+## 8    KCNA5 TCGA-21-5782 0.83802752 0.066669422
+## 9    PADI4 TCGA-21-5782 0.65747836 0.038563121
+## 10 SLCO1B1 TCGA-21-5782 0.91029877 0.077919974
+## 11 TNFSF11 TCGA-21-5782 0.68943867 0.043538419
+## 12   ADRB2 TCGA-38-4632 1.49522485 0.173357774
+## 13   BIRC5 TCGA-38-4632 5.68731111 0.659392191
+## 14     CA9 TCGA-38-4632 0.47006487 0.054499762
+## 15     FGB TCGA-38-4632 8.62508107 1.000000000
+## 16    GCGR TCGA-38-4632 0.10181144 0.011804114
+## 17   HTR3A TCGA-38-4632 0.37084853 0.042996526
+## 18     IL2 TCGA-38-4632 0.04300049 0.004985518
+## 19   KCNA5 TCGA-38-4632 0.18014798 0.020886526
+## 20   PADI4 TCGA-38-4632 0.11071744 0.012836683
+## 21 TNFSF11 TCGA-38-4632 0.21541180 0.024975047
+## 22   ADRB2 TCGA-44-2666 3.11114961 0.678389828
+## 23   BIRC5 TCGA-44-2666 1.34130377 0.286131434
+## 24     CA9 TCGA-44-2666 0.19814361 0.032768028
+## 25     FGB TCGA-44-2666 4.56223499 1.000000000
+## 26    GCGR TCGA-44-2666 0.08499940 0.007691400
+## 27   HTR3A TCGA-44-2666 0.05029628 0.000000000
+## 28     IL2 TCGA-44-2666 0.06204253 0.002603372
+## 29   KCNA5 TCGA-44-2666 0.89569660 0.187369639
+## 30   PADI4 TCGA-44-2666 0.26135921 0.046778767
+## 31 SLCO1B1 TCGA-44-2666 3.52916020 0.771035279
+## 32 TNFSF11 TCGA-44-2666 0.28202803 0.051359685
+## 33   ADRB2 TCGA-49-AAQV 1.61516402 0.183927550
+## 34   BIRC5 TCGA-49-AAQV 3.19367091 0.365190414
+## 35     CA9 TCGA-49-AAQV 4.63585169 0.530798699
+## 36     FGB TCGA-49-AAQV 8.72183748 1.000000000
+## 37    GCGR TCGA-49-AAQV 0.01345201 0.000000000
+## 38   HTR3A TCGA-49-AAQV 3.07484686 0.351545629
+## 39     IL2 TCGA-49-AAQV 0.21759594 0.023442225
+## 40   KCNA5 TCGA-49-AAQV 0.23745833 0.025723059
+## 41   PADI4 TCGA-49-AAQV 0.07889044 0.007514416
+## 42 SLCO1B1 TCGA-49-AAQV 1.10041358 0.124817806
+## 43 TNFSF11 TCGA-49-AAQV 0.72236264 0.081405517</code></pre>
+<p>问题依旧，数据肯定在rescale的时候出了问题。我<code>debug()</code>进去一看，发现全部的数据，而不是单独一个样本的数据作为输入！</p>
+<p>在确定<code>group_by()</code>函数没有问题后，终于在<code>mutate()</code>上发现了端倪。</p>
+<pre class="r"><code>mutate</code></pre>
+<pre><code>## function (.data, ...) 
+## {
+##     stopifnot(is.data.frame(.data) || is.list(.data) || is.environment(.data))
+##     cols &lt;- as.list(substitute(list(...))[-1])
+##     cols &lt;- cols[names(cols) != &quot;&quot;]
+##     for (col in names(cols)) {
+##         .data[[col]] &lt;- eval(cols[[col]], .data, parent.frame())
+##     }
+##     .data
+## }
+## &lt;bytecode: 0x7fbbcd1fa470&gt;
+## &lt;environment: namespace:plyr&gt;</code></pre>
+<p>环境显示它来自<code>plyr</code>。而我们实际想要使用的是<code>dplyr</code>包中的同名函数！</p>
+<p>明确指定命名空间后发现问题也确实解决了。</p>
+<pre class="r"><code>out3 = ts %&gt;%
+ group_by(variable) %&gt;%
+ dplyr::mutate(rescale = rescale2(value)) %&gt;%
+ ungroup() %&gt;%
+ arrange(variable, Name) %&gt;%
+ as.data.frame()
+
+setdiff(out1, out3)</code></pre>
+<pre><code>## [1] Name     variable value    rescale 
+## &lt;0 行&gt; (或0-长度的row.names)</code></pre>
+<p>此<code>mutate()</code>非彼<code>mutate()</code>，建议大家在发现类似问题时（一个常用函数做了一件意外的事情），
+请检查使用的函数来自哪个包。</p>
+
+				</div>
+				<footer class="footer">
+				  <hr>
+<div class="post-tags">
+
+<p>
+  <svg xmlns="http://www.w3.org/2000/svg" class="octicon" width="20" height="24" viewBox="0 0 14 16"><path fill-rule="evenodd" d="M8 2H6V0h2v2zm4 5H2c-.55 0-1-.45-1-1V4c0-.55.45-1 1-1h10l2 2-2 2zM8 4H6v2h2V4zM6 16h2V8H6v8z"/></svg>
+	
+	<a class="p-category" href="../../categories/blog/">Blog</a>
+</p>
+
+
+<p>
+  <svg xmlns="http://www.w3.org/2000/svg" class="octicon" width="20" height="24" viewBox="0 0 15 16"><path fill-rule="evenodd" d="M7.73 1.73C7.26 1.26 6.62 1 5.96 1H3.5C2.13 1 1 2.13 1 3.5v2.47c0 .66.27 1.3.73 1.77l6.06 6.06c.39.39 1.02.39 1.41 0l4.59-4.59a.996.996 0 0 0 0-1.41L7.73 1.73zM2.38 7.09c-.31-.3-.47-.7-.47-1.13V3.5c0-.88.72-1.59 1.59-1.59h2.47c.42 0 .83.16 1.13.47l6.14 6.13-4.73 4.73-6.13-6.15zM3.01 3h2v2H3V3h.01z"/></svg>
+	
+	<a class="p-tag" href="../../tags/r/">R</a><a class="p-tag" href="../../tags/dplyr/">dplyr</a>
+
+</p>
+</div>
+
+				</footer>
+			</article>
+		</main>
+			  <button class="hamburger hamburger--arrow is-active" type="button" onclick="document.getElementsByClassName('sidebar')[0].classList.toggle('collapsed');document.getElementsByClassName('content')[0].classList.toggle('expanded');document.getElementsByClassName('hamburger')[0].classList.toggle('is-active');document.getElementsByClassName('hamburger-inner')[0].classList.toggle('is-active')">
+      <span class="hamburger-box">
+        <span class="hamburger-inner"></span>
+      </span>
+    </button>
+		<aside class="sidebar">
+			<div class="container sidebar-sticky">
+				<header class="sidebar-about h-card vcard p-author">
+					
+					<a class="u-url u-uid" rel="me" href="../../">
+						<img class="u-photo" src="https://avatars.githubusercontent.com/u/25057508?v=4" width=128 height=128 />
+					</a>
+					
+
+					
+					<span class="site-title u-name fn">
+					  <a class="u-url u-uid" rel="me" href="../../">ShixiangWang
+王诗翔</a>
+				  </span>
+					
+
+					<p class="lead p-note">
+						 Bioinformatics Scholar. Cancer Researcher. Data Scientist. #rstats #python #rust. Always learning something new. 
+					</p>
+
+					<nav>
+						<ul class="sidebar-nav">
+							
+							<li><a href="../../about/"> About </a></li>
+							
+							<li><a href="../../blog/"> Blog </a></li>
+							
+							<li><a href="../../project/"> Projects </a></li>
+							
+							<li><a href="http://42.192.87.178:3838/"> Shiny Apps </a></li>
+							
+							<li><a href="../../talk/"> Talks </a></li>
+							
+							<li><a href="https://github.com/ShixiangWang/self-study/discussions"> Discuss with me? </a></li>
+							
+							<li><a href="https://shixiangwang.netlify.app/"> Mirror #1 </a></li>
+							
+							<li><a href="https://shixiangwang.github.io/"> Mirror #2 </a></li>
+							
+						</ul>
+					</nav>
+
+					
+						<div class="contact">
+						  
+							<ul class="contact-list">
+								
+								<li>
+									
+									  
+		  							  <a href="https://twitter.com/WangShxiang" class="u-url url" rel="me" title="Twitter" aria-label="Twitter">
+		  						    <i class='fab fa-twitter fa-fw'></i>
+		  							  </a>
+		  						  
+								
+								</li>
+								
+								<li>
+									
+									  
+		  							  <a href="https://github.com/ShixiangWang" class="u-url url" rel="me" title="GitHub" aria-label="GitHub">
+		  						    <i class='fab fa-github fa-fw'></i>
+		  							  </a>
+		  						  
+								
+								</li>
+								
+								<li>
+									
+		  							<a href="mailto:shixiang1994wang@gmail.com" class="u-email email" rel="me" title="Email" aria-label="Email">
+		  							<i class='fa fa-envelope fa-fw'></i>
+		  							  
+		  							</a>
+									
+								</li>
+								
+								<li>
+									
+									  
+		  							  <a href="https://shixiangwang.github.io/home/logo/qrcode.jpg" class="u-url url" rel="me" title="Bandcamp" aria-label="Bandcamp">
+		  						    <i class='fab fa-bandcamp fa-fw'></i>
+		  							  </a>
+		  						  
+								
+								</li>
+								
+							</ul>
+						</div>
+					
+				</header>
+
+				<footer>&copy; 2021. All rights reserved. </footer>
+				 <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+            <span id="busuanzi_container_site_pv">本站总访问量&nbsp;<span id="busuanzi_value_site_pv"></span>&nbsp;次</span>
+			</div>
+		</aside>
+
+		  <footer>
+  <script src="../../js/jquery-latest.js"></script>
+<script src="../../js/featherlight.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+
+<script>
+MathJax = {
+  tex: {
+    inlineMath: [['$', '$'], ['\\(', '\\)']]
+  }
+};
+</script>
+<script type="text/javascript" id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+  
+  </footer>
+  </body>
+</html>
+
+	</body>
+</html>
