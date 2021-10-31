@@ -8,7 +8,29 @@
 王诗翔</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 26 Sep 2021 00:00:00 +0000</lastBuildDate><atom:link href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 31 Oct 2021 00:00:00 +0000</lastBuildDate><atom:link href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>机器学习分类性能常用一些指标</title>
+      <link>/blog/measures-for-classification-in-ml/</link>
+      <pubDate>Sun, 31 Oct 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/measures-for-classification-in-ml/</guid>
+      <description>这篇文章的目的主要是记录一些分类器相关的度量指标。 从混淆矩阵中衍生出来的指标特别多，而我们中文与英文可能又存在多种对应 关系，这造成了记忆和理解上的困难。
+ 来源：https://zhuanlan.zhihu.com/p/111274912
+ 灵敏度与特异性 灵敏度 灵敏度（sensitivity），又称真阳性率，即实际有病，并且按照该诊断试验的标准被正确地判为有病的百分比。它反映了诊断试验发现病人的能力。
+该研究中，根据手术病理结果有100例乳腺癌患者，但胸部扪诊只检测出其中80例患者。这说明该诊断试验只能发现80%的病人。
+特异性 特异度（specificity），又称真阴性率，即实际没病，同时被诊断试验正确地判为无病的百分比。它反映了诊断试验确定非病人的能力。
+例如有900例不是乳腺癌患者，但胸部扪诊只识别了其中的800例。特异性为89%。
+比较 如果一项诊断试验的灵敏度比较低，那么会出现很多假阴性的患者。这会延误患者的就诊，影响病程发展和愈后，甚至导致患者过早死亡。
+如果一项诊断试验的特异度比较低，那么会出现很多假阳性的患者。这样会浪费医疗资源、造成患者无端的恐慌和焦虑。
+这两个指标主要可以通过ROC曲线同时查看。
+ 本节参考：https://www.mediecogroup.com/zhuanlan/lessons/229/  精度与召回率 首先需要说明的是这两者类似于ROC曲线，可以通过PR曲线同时进行观测。
+精度 精度，precision。预测所关注的事件的结果中，预测正确的概率（共预测了 20 次，8 次正确，12 次错误）。
+与Accuracy的区别：Accuracy不管正负类，算全部预测正确占总数的比率。而精度关注 预测正确的正类数目占全部正类数目的比率。
+召回率/查全率 recall。对所有所关注的类型（一般就是正类），将其预测出的概率（共 10 个癌症患者，预测出 8 个）。
+ 本节参考：https://www.jianshu.com/p/dcf4deddff9f  </description>
+    </item>
+    
     <item>
       <title>处理glm.fit: fitted probabilities numerically 0 or 1 occurred</title>
       <link>/blog/process-glm-logistic-warning/</link>

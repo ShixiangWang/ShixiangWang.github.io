@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en-US">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1">
+
+		
+		<title>机器学习分类性能常用一些指标 &middot; ShixiangWang
+王诗翔</title>
+		
+		<meta property="og:title" content="机器学习分类性能常用一些指标 - ShixiangWang
+王诗翔">
+		
+		<meta property="og:type" content="article">
+		
+
+		
+			
+			<meta property="description" content="一些记录">
+			<meta property="og:description" content="一些记录">
+			
+			
+    	<meta property="twitter:card" content="summary">
+  		<meta property="twitter:image" content="/apple-touch-icon-152x152.png">
+			
+		
+
+		
+		
+		<meta name="twitter:creator" content="@WangShxiang">
+		<meta name="twitter:site" content="https://shixiangwang.github.io">
+		
+		
+
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+		<link rel="stylesheet" href="../../css/poole.css">
+		<link rel="stylesheet" href="../../css/syntax.css">
+		<link rel="stylesheet" href="../../css/hyde.css">
+		
+		
+		<link rel="stylesheet" href="../../css/hamburgers.css">
+		
+		<link rel="stylesheet" href="../../css/custom.css">
+		
+		
+
+<link rel="apple-touch-icon-precomposed" sizes="57x57" href="../../apple-touch-icon-57x57.png" />
+<link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../apple-touch-icon-114x114.png" />
+<link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../apple-touch-icon-72x72.png" />
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../apple-touch-icon-144x144.png" />
+<link rel="apple-touch-icon-precomposed" sizes="120x120" href="../../apple-touch-icon-120x120.png" />
+<link rel="apple-touch-icon-precomposed" sizes="152x152" href="../../apple-touch-icon-152x152.png" />
+<link rel="icon" type="image/png" href="../../favicon-32x32.png" sizes="32x32" />
+<link rel="icon" type="image/png" href="../../favicon-16x16.png" sizes="16x16" />
+<meta name="application-name" content="Garrick Aden-Buie"/>
+<meta name="msapplication-TileColor" content="#002B36" />
+<meta name="msapplication-TileImage" content="/mstile-144x144.png" />
+<meta name="theme-color" content="#ffffff">
+
+<meta name="mobile-web-app-capable" content="yes">
+
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-title" content="Garrick Aden-Buie">
+
+<link href="../../css/featherlight.min.css" type="text/css" rel="stylesheet" />
+
+<script async defer src="https://buttons.github.io/buttons.js"></script>
+
+<script defer src="../../js/van11y-accessible-hide-show-aria.min.js"></script>
+
+<script defer src="../../js/toc.js"></script>
+
+
+
+		<link href="../../blog/measures-for-classification-in-ml" rel="canonical">
+	</head>
+
+	<body class="restyled-garrick  h-entry">
+		<main class="content container" role="main">
+			<article class="post">
+				<header>
+					<a class="u-url" href="../../blog/measures-for-classification-in-ml">
+						<h1 class="post-title p-name">机器学习分类性能常用一些指标</h1>
+					</a>
+					<h3 class="post-author">王诗翔</h3>
+					<time class="post-date dt-published" datetime="2021-10-31T00:00:00Z">Sunday, 31 October 2021</time>
+					
+				</header>
+				<div class="post-content e-content">
+					<p>这篇文章的目的主要是记录一些分类器相关的度量指标。
+从混淆矩阵中衍生出来的指标特别多，而我们中文与英文可能又存在多种对应
+关系，这造成了记忆和理解上的困难。</p>
+<p><img src="https://pic3.zhimg.com/80/v2-17468616d8a618027fc846b3248c0ab2_1440w.jpg" alt=""></p>
+<p><img src="https://pic1.zhimg.com/80/v2-488916569c0275e0a7ec79392a15e91c_1440w.jpg" alt=""></p>
+<blockquote>
+<p>来源：<a href="https://zhuanlan.zhihu.com/p/111274912">https://zhuanlan.zhihu.com/p/111274912</a></p>
+</blockquote>
+<h2 id="灵敏度与特异性">灵敏度与特异性</h2>
+<h3 id="灵敏度">灵敏度</h3>
+<p>灵敏度（sensitivity），又称<strong>真阳性率</strong>，即实际有病，并且按照该诊断试验的标准被正确地判为有病的百分比。它反映了诊断试验发现病人的能力。</p>
+<p>该研究中，根据手术病理结果有100例乳腺癌患者，但胸部扪诊只检测出其中80例患者。这说明该诊断试验只能发现80%的病人。</p>
+<h3 id="特异性">特异性</h3>
+<p>特异度（specificity），又称<strong>真阴性率</strong>，即实际没病，同时被诊断试验正确地判为无病的百分比。它反映了诊断试验确定非病人的能力。</p>
+<p>例如有900例不是乳腺癌患者，但胸部扪诊只识别了其中的800例。特异性为89%。</p>
+<h3 id="比较">比较</h3>
+<p><strong>如果一项诊断试验的灵敏度比较低，那么会出现很多假阴性的患者</strong>。这会延误患者的就诊，影响病程发展和愈后，甚至导致患者过早死亡。</p>
+<p><strong>如果一项诊断试验的特异度比较低，那么会出现很多假阳性的患者</strong>。这样会浪费医疗资源、造成患者无端的恐慌和焦虑。</p>
+<p>这两个指标主要可以通过ROC曲线同时查看。</p>
+<ul>
+<li>本节参考：<a href="https://www.mediecogroup.com/zhuanlan/lessons/229/">https://www.mediecogroup.com/zhuanlan/lessons/229/</a></li>
+</ul>
+<h2 id="精度与召回率">精度与召回率</h2>
+<p>首先需要说明的是这两者类似于ROC曲线，可以通过PR曲线同时进行观测。</p>
+<h3 id="精度">精度</h3>
+<p>精度，precision。预测所关注的事件的结果中，预测正确的概率（共预测了 20 次，8 次正确，12 次错误）。</p>
+<p>与Accuracy的区别：Accuracy不管正负类，算全部预测正确占总数的比率。而精度关注
+预测正确的正类数目占全部正类数目的比率。</p>
+<h3 id="召回率查全率">召回率/查全率</h3>
+<p>recall。对所有<strong>所关注的类型</strong>（一般就是正类），将其预测出的概率（共 10 个癌症患者，预测出 8 个）。</p>
+<ul>
+<li>本节参考：<a href="https://www.jianshu.com/p/dcf4deddff9f">https://www.jianshu.com/p/dcf4deddff9f</a></li>
+</ul>
+
+				</div>
+				<footer class="footer">
+				  <hr>
+<div class="post-tags">
+
+<p>
+  <svg xmlns="http://www.w3.org/2000/svg" class="octicon" width="20" height="24" viewBox="0 0 14 16"><path fill-rule="evenodd" d="M8 2H6V0h2v2zm4 5H2c-.55 0-1-.45-1-1V4c0-.55.45-1 1-1h10l2 2-2 2zM8 4H6v2h2V4zM6 16h2V8H6v8z"/></svg>
+	
+	<a class="p-category" href="../../categories/blog/">Blog</a>
+</p>
+
+
+<p>
+  <svg xmlns="http://www.w3.org/2000/svg" class="octicon" width="20" height="24" viewBox="0 0 15 16"><path fill-rule="evenodd" d="M7.73 1.73C7.26 1.26 6.62 1 5.96 1H3.5C2.13 1 1 2.13 1 3.5v2.47c0 .66.27 1.3.73 1.77l6.06 6.06c.39.39 1.02.39 1.41 0l4.59-4.59a.996.996 0 0 0 0-1.41L7.73 1.73zM2.38 7.09c-.31-.3-.47-.7-.47-1.13V3.5c0-.88.72-1.59 1.59-1.59h2.47c.42 0 .83.16 1.13.47l6.14 6.13-4.73 4.73-6.13-6.15zM3.01 3h2v2H3V3h.01z"/></svg>
+	
+	<a class="p-tag" href="../../tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/">机器学习</a>
+
+</p>
+</div>
+
+				</footer>
+			</article>
+		</main>
+			  <button class="hamburger hamburger--arrow is-active" type="button" onclick="document.getElementsByClassName('sidebar')[0].classList.toggle('collapsed');document.getElementsByClassName('content')[0].classList.toggle('expanded');document.getElementsByClassName('hamburger')[0].classList.toggle('is-active');document.getElementsByClassName('hamburger-inner')[0].classList.toggle('is-active')">
+      <span class="hamburger-box">
+        <span class="hamburger-inner"></span>
+      </span>
+    </button>
+		<aside class="sidebar">
+			<div class="container sidebar-sticky">
+				<header class="sidebar-about h-card vcard p-author">
+					
+					<a class="u-url u-uid" rel="me" href="../../">
+						<img class="u-photo" src="https://avatars.githubusercontent.com/u/25057508?v=4" width=128 height=128 />
+					</a>
+					
+
+					
+					<span class="site-title u-name fn">
+					  <a class="u-url u-uid" rel="me" href="../../">ShixiangWang
+王诗翔</a>
+				  </span>
+					
+
+					<p class="lead p-note">
+						 Bioinformatics Scholar. Cancer Researcher. Data Scientist. #rstats #python #rust. Always learning something new. 
+					</p>
+
+					<nav>
+						<ul class="sidebar-nav">
+							
+							<li><a href="../../about/"> About </a></li>
+							
+							<li><a href="../../blog/"> Blog </a></li>
+							
+							<li><a href="../../project/"> Projects </a></li>
+							
+							<li><a href="http://42.192.87.178:3838/"> Shiny Apps </a></li>
+							
+							<li><a href="../../talk/"> Talks </a></li>
+							
+							<li><a href="https://github.com/ShixiangWang/self-study/discussions"> Discuss with me? </a></li>
+							
+							<li><a href="https://shixiangwang.netlify.app/"> Mirror #1 </a></li>
+							
+							<li><a href="https://shixiangwang.github.io/"> Mirror #2 </a></li>
+							
+						</ul>
+					</nav>
+
+					
+						<div class="contact">
+						  
+							<ul class="contact-list">
+								
+								<li>
+									
+									  
+		  							  <a href="https://twitter.com/WangShxiang" class="u-url url" rel="me" title="Twitter" aria-label="Twitter">
+		  						    <i class='fab fa-twitter fa-fw'></i>
+		  							  </a>
+		  						  
+								
+								</li>
+								
+								<li>
+									
+									  
+		  							  <a href="https://github.com/ShixiangWang" class="u-url url" rel="me" title="GitHub" aria-label="GitHub">
+		  						    <i class='fab fa-github fa-fw'></i>
+		  							  </a>
+		  						  
+								
+								</li>
+								
+								<li>
+									
+		  							<a href="mailto:shixiang1994wang@gmail.com" class="u-email email" rel="me" title="Email" aria-label="Email">
+		  							<i class='fa fa-envelope fa-fw'></i>
+		  							  
+		  							</a>
+									
+								</li>
+								
+								<li>
+									
+									  
+		  							  <a href="https://shixiangwang.github.io/home/logo/qrcode.jpg" class="u-url url" rel="me" title="Bandcamp" aria-label="Bandcamp">
+		  						    <i class='fab fa-bandcamp fa-fw'></i>
+		  							  </a>
+		  						  
+								
+								</li>
+								
+							</ul>
+						</div>
+					
+				</header>
+
+				<footer>&copy; 2021. All rights reserved. </footer>
+				 <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+            <span id="busuanzi_container_site_pv">本站总访问量&nbsp;<span id="busuanzi_value_site_pv"></span>&nbsp;次</span>
+			</div>
+		</aside>
+
+		  <footer>
+  <script src="../../js/jquery-latest.js"></script>
+<script src="../../js/featherlight.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+
+<script>
+MathJax = {
+  tex: {
+    inlineMath: [['$', '$'], ['\\(', '\\)']]
+  }
+};
+</script>
+<script type="text/javascript" id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+  
+  </footer>
+  </body>
+</html>
+
+	</body>
+</html>

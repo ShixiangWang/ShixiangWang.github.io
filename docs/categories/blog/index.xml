@@ -8,7 +8,29 @@
 王诗翔</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 29 Oct 2021 00:00:00 +0000</lastBuildDate><atom:link href="/categories/blog/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 31 Oct 2021 00:00:00 +0000</lastBuildDate><atom:link href="/categories/blog/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>机器学习分类性能常用一些指标</title>
+      <link>/blog/measures-for-classification-in-ml/</link>
+      <pubDate>Sun, 31 Oct 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/measures-for-classification-in-ml/</guid>
+      <description>这篇文章的目的主要是记录一些分类器相关的度量指标。 从混淆矩阵中衍生出来的指标特别多，而我们中文与英文可能又存在多种对应 关系，这造成了记忆和理解上的困难。
+ 来源：https://zhuanlan.zhihu.com/p/111274912
+ 灵敏度与特异性 灵敏度 灵敏度（sensitivity），又称真阳性率，即实际有病，并且按照该诊断试验的标准被正确地判为有病的百分比。它反映了诊断试验发现病人的能力。
+该研究中，根据手术病理结果有100例乳腺癌患者，但胸部扪诊只检测出其中80例患者。这说明该诊断试验只能发现80%的病人。
+特异性 特异度（specificity），又称真阴性率，即实际没病，同时被诊断试验正确地判为无病的百分比。它反映了诊断试验确定非病人的能力。
+例如有900例不是乳腺癌患者，但胸部扪诊只识别了其中的800例。特异性为89%。
+比较 如果一项诊断试验的灵敏度比较低，那么会出现很多假阴性的患者。这会延误患者的就诊，影响病程发展和愈后，甚至导致患者过早死亡。
+如果一项诊断试验的特异度比较低，那么会出现很多假阳性的患者。这样会浪费医疗资源、造成患者无端的恐慌和焦虑。
+这两个指标主要可以通过ROC曲线同时查看。
+ 本节参考：https://www.mediecogroup.com/zhuanlan/lessons/229/  精度与召回率 首先需要说明的是这两者类似于ROC曲线，可以通过PR曲线同时进行观测。
+精度 精度，precision。预测所关注的事件的结果中，预测正确的概率（共预测了 20 次，8 次正确，12 次错误）。
+与Accuracy的区别：Accuracy不管正负类，算全部预测正确占总数的比率。而精度关注 预测正确的正类数目占全部正类数目的比率。
+召回率/查全率 recall。对所有所关注的类型（一般就是正类），将其预测出的概率（共 10 个癌症患者，预测出 8 个）。
+ 本节参考：https://www.jianshu.com/p/dcf4deddff9f  </description>
+    </item>
+    
     <item>
       <title>此mutate非彼mutate</title>
       <link>/blog/this-mutate-is-not-that-mutate/</link>
@@ -129,20 +151,6 @@ Warning message: glm.fit: fitted probabilities numerically 0 or 1 occurred 当�
       <description>最新可能是受conda update conda的影响，发现使用conda涉及Python的操作时一直出现问题， 报错：
 ModuleNotFoundError: No module named &amp;#39;_sysconfigdata_x86_64_conda_linux_gnu&amp;#39; 例如：
 $ pip list Traceback (most recent call last): File &amp;#34;~/miniconda3/bin/pip&amp;#34;, line 7, in &amp;lt;module&amp;gt; from pip._internal.cli.main import main File &amp;#34;~/miniconda3/lib/python3.9/site-packages/pip/_internal/cli/main.py&amp;#34;, line 9, in &amp;lt;module&amp;gt; from pip._internal.cli.autocompletion import autocomplete File &amp;#34;~/miniconda3/lib/python3.9/site-packages/pip/_internal/cli/autocompletion.py&amp;#34;, line 10, in &amp;lt;module&amp;gt; from pip._internal.cli.main_parser import create_main_parser File &amp;#34;~/miniconda3/lib/python3.9/site-packages/pip/_internal/cli/main_parser.py&amp;#34;, line 8, in &amp;lt;module&amp;gt; from pip._internal.cli import cmdoptions File &amp;#34;~/miniconda3/lib/python3.9/site-packages/pip/_internal/cli/cmdoptions.py&amp;#34;, line 23, in &amp;lt;module&amp;gt; from pip._internal.cli.parser import ConfigOptionParser File &amp;#34;~/miniconda3/lib/python3.9/site-packages/pip/_internal/cli/parser.py&amp;#34;, line 12, in &amp;lt;module&amp;gt; from pip.</description>
-    </item>
-    
-    <item>
-      <title>Rcpp：什么时候使用Rcpp</title>
-      <link>/blog/when-use-rcpp/</link>
-      <pubDate>Mon, 13 Sep 2021 00:00:00 +0000</pubDate>
-      
-      <guid>/blog/when-use-rcpp/</guid>
-      <description>来源：https://teuder.github.io/rcpp4everyone_en/010_Rcpp_merit.html
-什么时候使用  后面的迭代依赖于前面的迭代的循环操作。 需要访问向量/矩阵的每个元素。 在循环中循环调用函数。 动态更改向量的大小。 需要高级数据结构和算法的操作。  怎么配置 除了Windows需要安装Rtools，其他系统中一般已经装好了。
-如果我们要自定义C++的配置，如更改编译器，需要使用到配置文件.R/Makevars。
-下面是一个示例：
-CC=/opt/local/bin/gcc-mp-4.7 CXX=/opt/local/bin/g++-mp-4.7 CPLUS_INCLUDE_PATH=/opt/local/include:$CPLUS_INCLUDE_PATH LD_LIBRARY_PATH=/opt/local/lib:$LD_LIBRARY_PATH CXXFLAGS= -g0 -O2 -Wall MAKE=make -j4  包括编译器位置、头文件位置、动态库位置、编译参数等。
- 安装Rcpp install.packages(&amp;#34;Rcpp&amp;#34;) </description>
     </item>
     
   </channel>
