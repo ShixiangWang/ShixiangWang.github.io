@@ -1,0 +1,594 @@
+---
+title: 使用GenomicRanges操作区间数据
+author: 王诗翔
+date: '2021-11-01'
+slug: operate-range-data-with-genomicranges
+categories:
+  - Blog
+tags:
+  - Bioinformatics
+  - Bioconductor
+description: Bioc学起来
+---
+
+<!-- Links -->
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo = TRUE, warning = FALSE, message = FALSE,
+  fig.width = 7, fig.height = 6
+)
+```
+
+>资料来源：*Bioinformatics Data Skills*
+
+## 准备
+
+涉及的包：
+
+- GenomicRanges - 表示和处理基因组区间
+- GenomicFeatures - 表示和处理基因组元件（基因、外显子等）
+- Biostrings/BSgenome - 操作基因组序列
+- rtracklayer - 读入常见生物学数据文件（BED、GTF/GFF和WIG等）
+
+## 从IRanges开始
+
+### 基本用法
+
+IRange是区间的基本数据构造：
+
+```{r}
+library(IRanges)
+
+rng = IRanges(start = 1, end = 15)
+rng
+```
+
+构造出来的对象区间起始和终止都是闭合的，另外与R索引一致，都是从1开始。
+
+### 构造向量
+
+向量是最常见的了：
+
+```{r}
+x = IRanges(start=c(4, 7, 2, 20), end=c(13, 7, 5, 23))
+x
+```
+
+给区间命名：
+
+```{r}
+names(x) = letters[1:4]
+x
+```
+
+### 操作区间
+
+首先是提取区间的各种数据：
+
+```{r}
+start(x)
+end(x)
+width(x)
+```
+
+重赋值非常方便：
+
+```{r}
+end(x) = end(x) + 4
+x
+```
+
+返回全部区间覆盖的范围：
+
+```{r}
+range(x)
+```
+
+像操作向量一样进行索引和比较：
+
+```{r}
+x[2:3]
+start(x) < 5
+x[start(x) < 7]
+x[width(x) > 8]
+x['a']
+```
+
+有时候我们想在设定区间的时候又限定它在某个范围内：
+
+```{r}
+y = IRanges(start=c(4, 6, 10, 12), width=13)
+y
+restrict(y, 5, 10)
+```
+
+一个常见且重要的区间转换是获取侧翼（flank）区间。
+
+```{r}
+x
+
+# 默认是上游区间
+flank(x, width = 7)
+# 改为下游
+flank(x, width = 7, start = FALSE)
+# 两侧
+flank(x, width = 7, both = TRUE)
+```
+
+另一个操作是reduce，合并存在交集的区间：
+
+```{r}
+set.seed(0)
+alns = IRanges(start = sample(seq_len(50), 20), width = 5)
+head(alns, 4)
+reduce(alns)
+```
+
+一个相似的操作是gap，它返回区间之间的gap。
+
+```{r}
+gaps(alns)
+```
+
+默认的情况它不会返回开始之前和停止位点之后的gap。
+
+```{r}
+gaps(alns, start = 1, end = 60)
+```
+
+### 集合操作
+
+区间可以看作集合，所以base包的集合操作都有对应的实现。
+
+```{r}
+a = IRanges(4, 13)
+b = IRanges(12, 17)
+intersect(a, b)
+setdiff(a, b)
+setdiff(b, a)
+union(a, b)
+```
+
+存在`psetdiff()`，`pintersect()`等系列函数用于成对操作。
+
+### 寻找overlap区间
+
+寻找overlap区间是需要基因组分析的核心。
+
+#### findOverlaps
+
+这里从最基本的2个IRanges对象的overlap查找开始。
+
+```{r}
+qry = IRanges(start=c(1, 26, 19, 11, 21, 7), end=c(16, 30, 19, 15, 24, 8), names=letters[1:6])
+sbj = IRanges(start=c(1, 19, 10), end=c(5, 29, 16), names=letters[24:26])
+qry
+sbj
+```
+
+![](https://gitee.com/ShixiangWang/ImageCollection/raw/master/png/202111012234896.png)
+
+默认调用的结果是返回Hits类对象，它存储了overlaps：
+
+```{r}
+hts = findOverlaps(qry, sbj)
+hts
+```
+
+这个结果返回的是输入的2个对象之间的映射关系。
+
+![](https://gitee.com/ShixiangWang/ImageCollection/raw/master/png/202111012331747.png)
+
+最简单的我们可以看出来qry的第6条记录在sbj中找不到overlap。
+
+我们可以通过下面的操作分别找出2个输入对象的索引：
+
+```{r}
+names(qry)[queryHits(hts)]
+names(sbj)[subjectHits(hts)]
+```
+
+Overlap查找的逻辑有多种，默认是any。我们可以找在目标区域中的记录。
+
+```{r}
+hts_within = findOverlaps(qry, sbj, type = "within")
+hts_within
+```
+
+除了type，还有个select参数可能还有用，默认是返回目标区域中匹配的所有记录，但这个可以更改为第一个或者是最后一个。
+
+```{r}
+findOverlaps(qry, sbj, select = "all")
+findOverlaps(qry, sbj, select = "first")
+findOverlaps(qry, sbj, select = "last")
+findOverlaps(qry, sbj, select = "arbitrary")
+```
+
+其他一些有用的操作：
+
+```{r}
+countQueryHits(hts)
+countSubjectHits(hts)
+countOverlaps(qry, sbj)
+subsetByOverlaps(qry, sbj)
+```
+
+### 寻找最近的区间并计算距离
+
+```{r}
+qry = IRanges(6, 13, name = "query")
+sbj = IRanges(c(2, 4, 18, 19), c(4, 5, 21, 24), names = 1:4)
+qry
+sbj
+```
+
+查找临近索引的几个操作：
+
+```{r}
+nearest(qry, sbj)
+precede(qry, sbj)
+follow(qry, sbj)
+```
+
+precede操作查找qry领先的区间索引，follow查找到
+区间随后的索引。
+例如这里qry在sbj的第2-3索引的区间之间，所以
+precede是3，而follow是2。
+
+nearest操作则总是返回最近的区间索引。
+
+寻找最近的区间操作函数家族还包含了distanceToNearest
+和distance。
+
+```{r}
+qry = IRanges(sample(seq_len(1000), 5), width=10)
+sbj = IRanges(sample(seq_len(1000), 5), width=10)
+qry
+sbj
+```
+
+下面操作和findOverlaps有点像：对于每一个qry的区间，
+它找到对应sbj中最近的区间，然后返回一个Hits对象，但
+包含一个额外的列以显示距离：
+
+```{r}
+distanceToNearest(qry, sbj)
+```
+
+distance操作则返回成对（一一对应）的区间距离：
+
+```{r}
+distance(qry, sbj)
+```
+
+## Run长度编码（RLE）和视图
+
+许多基因组数据其实是不同区间位点的连续数值序列，例如：
+
+- 覆盖度
+- 保守性评分（碱基级别的不同物种演化保守性评分）
+- 单个碱基位点核苷酸多态性
+
+这些数据往往几百上千万条，但复用一个有限的数值集合，怎么有效地表示这些数据呢？Run-length encoding出场了。
+
+拿覆盖度来说，RLE可以对序列进行有效压缩。例如3个4，2个3，1个2，5个1，7个0，3个1，7个4的序列，表示为：
+
+```{r}
+x = as.integer(
+  c(4, 4, 4, 3, 3, 2,
+    1, 1, 1, 1, 1,
+    0, 0, 0, 0, 0, 0, 0,
+    1, 1, 1,
+    4, 4, 4, 4, 4, 4, 4)
+)
+xrle = Rle(x)
+xrle
+```
+
+`Rle()`以向量为输入，返回以RLE版本的压缩结果。
+以该种方式存储的数据，我们可以逆转为向量形式：
+
+```{r}
+as.vector(xrle)
+```
+
+Rle对象支持绝大部分基本的R向量操作，包括取子集、算术、比较、汇总、数值计算。
+
+```{r}
+xrle + 4L
+xrle / 2
+xrle > 3
+xrle[xrle > 3]
+sum(xrle)
+summary(xrle)
+round(cos(xrle), 2)
+```
+
+我们可以利用下面的操作把Rle对象表示的长度和数值抓出来：
+
+```{r}
+runLength(xrle) # 对应Lengths那一行，称为run
+runValue(xrle)  # run对应的value
+```
+
+当使用coverage操作工作时，我们就会得到一个RLE结果。
+
+```{r}
+set.seed(0)
+rngs = IRanges(sample(seq_len(60), 10), width = 7)
+names(rngs)[9] = "A"
+rngs_cov = coverage(rngs)
+rngs_cov
+```
+
+利用覆盖度信息，我们可以做一些区间过滤：
+
+```{r}
+rngs_cov > 1
+rngs_cov[as.vector(rngs_cov) > 1]
+rngs_cov[rngs_cov > 1]
+```
+
+包括定点选择和计算：
+
+```{r}
+rngs_cov[rngs['A']]
+mean(rngs_cov[rngs['A']])
+```
+
+### 从RLE到slice()
+
+前面我们使用比较操作可以获取coverage大于某个计数的逻辑值，
+现实世界中我们可能更需要的是切片操作：获取coverage大于某个计数
+的区间。
+
+为了从RLE中生成区间，我们需要使用到slice操作：
+
+```{r}
+min_cov2 = slice(rngs_cov, lower = 2)
+min_cov2
+```
+
+该对象返回的是一个视图view，视图结合了RLE和区间range。
+区间是序列的一部分。上面的例子中，我们看到的就是序列中
+只有2x以上coverage的序列。如果我们只关注区间：
+
+```{r}
+ranges(min_cov2)
+```
+
+slice操作在我们需要定义coverage peak的时候非常方便，peak通常是
+我们根据数据认为定义的。
+
+### 视图操作
+
+视图提供了对序列子集进行操作的基础。
+IRanges提供了一系列函数对视图的每一行数据进行处理。
+
+
+```{r}
+viewMeans(min_cov2)
+viewMaxs(min_cov2)
+viewApply(min_cov2, median)
+```
+
+其他类似方法可以通过`?viewMeans`查看。
+
+通过视图，我们可以按照window/bin对序列进行汇总。
+
+```{r}
+length(rngs_cov)
+bwidth = 5L
+end = bwidth * floor(length(rngs_cov) / bwidth)
+windows = IRanges(start = seq(1, end, bwidth), width = bwidth)
+
+head(windows)
+cov_by_wnd = Views(rngs_cov, windows)
+head(cov_by_wnd)
+```
+
+```{r}
+viewMeans(cov_by_wnd)
+```
+
+## GenomicRanges存储基因组区间
+
+我们知道基因组有不同的染色体，这无法直接用连续的数值区间表示。
+基于IRanges，Bioc提供了GenomicRanges包和GRanges对象来存储和操作基因组区间。它包含2个额外的信息：sequence name/chromosome和strand。
+另外，GRanges对象可以包含metadata列，可以将一些注释数据链接到基因组区间。
+
+```{r}
+library(GenomicRanges)
+gr = GRanges(
+  seqnames = c("chr1", "chr1", "chr2", "chr3"),
+  ranges = IRanges(start = 5:8, width = 10),
+  strand = c("+", "-", "-", "+")
+)
+gr
+```
+
+在上面的构造器中我们可以输入任意多列的额外元信息：
+
+```{r}
+gr = GRanges(
+  seqnames = c("chr1", "chr1", "chr2", "chr3"),
+  ranges = IRanges(start = 5:8, width = 10),
+  strand = c("+", "-", "-", "+"),
+  gc = round(runif(4), 3)
+)
+gr
+```
+
+所有的metadata都存储的一个`data.frame`中，它跟R基础的数据框没什么两样，当支持更广泛的列类型。
+实际中我们可以存储非常多的数据：identifier、元件名、实验数据、注释数据。
+
+前面已经提到基因组区间坐标都是相对于基因组版本和基因组大小而言的，这一点我们也可以在构造器中指定：
+
+```{r}
+seqlens = c(chr1 = 152, chr2 = 432, chr3 = 903)
+gr = GRanges(
+  seqnames = c("chr1", "chr1", "chr2", "chr3"),
+  ranges = IRanges(start = 5:8, width = 10),
+  strand = c("+", "-", "-", "+"),
+  gc = round(runif(4), 3),
+  seqlengths = seqlens
+)
+# 另一种指定seqlengths的方式
+# seqlengths(gr) = seqlens
+gr
+```
+
+GR对象的基础操作很多与IRanges一致。
+
+```{r}
+start(gr)
+end(gr)
+width(gr)
+```
+
+一些特定的访问函数：
+
+```{r}
+seqnames(gr)
+strand(gr)
+ranges(gr) # 从GR对象中提取IRanges
+```
+
+提取长度或设定名称：
+
+```{r}
+length(gr)
+names(gr) = letters[1:length(gr)]
+gr
+```
+
+一些常见处理操作：
+
+```{r}
+start(gr) > 7
+gr[start(gr) > 7]
+table(seqnames(gr))
+gr[seqnames(gr) == "chr1"]
+# 访问元数据
+mcols(gr)
+# 使用 $ 访问
+gr$gc
+```
+
+## 利用GRangesList对数据分组
+
+数据分组对于组织数据和按块处理非常有用。
+GRanges对象有自身版本的列表集合GRangesList。
+
+```{r}
+gr1 = GRanges(c("chr1", "chr2"), IRanges(start=c(32, 95), width=c(24, 123)))
+gr2 = GRanges(c("chr8", "chr2"), IRanges(start=c(27, 12), width=c(42, 34)))
+grl = GRangesList(gr1, gr2)
+grl
+```
+
+该列表对象的行为与R中自带的list几乎一致。
+
+```{r}
+unlist(grl)
+doubled_grl = c(grl, grl)
+length(doubled_grl)
+doubled_grl[2]
+doubled_grl[[2]]
+```
+
+针对GRanges对象的函数基本都可以复用。不过返回的是列表。
+
+split操作有针对GRanges对象的实现，所以我们可以用来拆分。
+
+```{r}
+chrs = c("chr3", "chr1", "chr2", "chr2", "chr3", "chr1")
+gr = GRanges(chrs, IRanges(sample(1:100, 6, replace=TRUE), width=sample(3:30, 6, replace=TRUE)))
+head(gr)
+
+gr_split = split(gr, seqnames(gr))
+gr_split[[1]]
+names(gr_split)
+```
+
+我们还可以直接应用lapply操作：
+
+```{r}
+lapply(gr_split, function(x) order(width(x)))
+sapply(gr_split, function(x) min(start(x)))
+sapply(gr_split, length)
+```
+
+这些操作提供了很大的灵活度。然而，对于许多overlap操作（如reduce, flank, coverage等），我们并不需要显式地调用lapply函数，GRangesList对象默认就是以该方式工作的：
+
+```{r}
+reduce(gr_split)
+```
+
+## 处理注释数据：GenomicFeatures和rtracklayer
+
+本节介绍2个包用于导入和处理外部的数据。
+GenomicFeatures被设计用来处理基于转录本的基因组注释。
+rtracklayer用于导入和导出不同格式的数据。
+
+GenomicFeatures提供了创建和使用转录数据库对象的方法。这些转录数据库对象包装注释数据的方式允许以一致的方式提取基因组特征，如基因、转录本、外显子和编码序列（CDS），而不管注释数据的生物体和来源。
+
+我们先下载用于展示的小鼠注释数据，不同的物种采用相似的命名方式进行存储的：
+
+```{r eval = FALSE}
+BiocManager::install("TxDb.Mmusculus.UCSC.mm10.ensGene")
+```
+
+```{r}
+library(TxDb.Mmusculus.UCSC.mm10.ensGene)
+txdb = TxDb.Mmusculus.UCSC.mm10.ensGene
+txdb
+class(txdb)
+```
+
+该对象实质是以SQLite数据库文件存储在本地。
+我们可以把它看作一个数据对象，然后进行各种操作，
+打开连接、筛选数据、关闭连接等操作会自动为我们进行。
+
+```{r}
+mm_genes = genes(txdb)
+head(mm_genes)
+```
+
+GenomicFeatures返回的是一个GRanges对象，所有之前学到的操作都能在这里用上。
+
+除了提取基因，还可以提取
+
+```{r}
+head(transcripts(txdb))
+head(exons(txdb))
+head(cds(txdb))
+head(promoters(txdb))
+```
+
+在数据处理时，我们常常会对不同的元件分别进行操作，所以我们可以先提取出一个GRangesList。
+
+```{r}
+mm_exons_by_tx = exonsBy(txdb, by = "tx")
+mm_exons_by_gn = exonsBy(txdb, by = "gene")
+length(mm_exons_by_tx)
+length(mm_exons_by_gn)
+```
+
+这是一系列函数，包括不仅限于transcriptsBy，exonsBy，cdsBy，intronsBy，fiveUTRsByTranscript，threeUTRsByTranscript。
+
+GenomicFeatures还提供了函数用于提取元件子集或者计算与一些区间的覆盖情况。
+
+```{r}
+qtl_region = GRanges("chr1", IRanges(123260562, 123557264)) + 10e3
+transcriptsByOverlaps(txdb, qtl_region)
+```
+
+后面的没数据，不往下跟习了。
+
+BioC是一个比较大的体系，有很多人的付出，后续要持续关注和学习下，而不仅仅停留CRAN的一些通用数据处理逻辑和手段。
+
+
+
+

@@ -8,7 +8,21 @@
 王诗翔</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 31 Oct 2021 00:00:00 +0000</lastBuildDate><atom:link href="/categories/blog/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 01 Nov 2021 00:00:00 +0000</lastBuildDate><atom:link href="/categories/blog/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>使用GenomicRanges操作区间数据</title>
+      <link>/blog/operate-range-data-with-genomicranges/</link>
+      <pubDate>Mon, 01 Nov 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/operate-range-data-with-genomicranges/</guid>
+      <description>资料来源：Bioinformatics Data Skills
+ 准备 涉及的包：
+ GenomicRanges - 表示和处理基因组区间 GenomicFeatures - 表示和处理基因组元件（基因、外显子等） Biostrings/BSgenome - 操作基因组序列 rtracklayer - 读入常见生物学数据文件（BED、GTF/GFF和WIG等）   从IRanges开始 基本用法 IRange是区间的基本数据构造：
+library(IRanges) rng = IRanges(start = 1, end = 15) rng ## IRanges object with 1 range and 0 metadata columns: ## start end width ## &amp;lt;integer&amp;gt; &amp;lt;integer&amp;gt; &amp;lt;integer&amp;gt; ## [1] 1 15 15 构造出来的对象区间起始和终止都是闭合的，另外与R索引一致，都是从1开始。
+ 构造向量 向量是最常见的了：
+x = IRanges(start=c(4, 7, 2, 20), end=c(13, 7, 5, 23)) x ## IRanges object with 4 ranges and 0 metadata columns: ## start end width ## &amp;lt;integer&amp;gt; &amp;lt;integer&amp;gt; &amp;lt;integer&amp;gt; ## [1] 4 13 10 ## [2] 7 7 1 ## [3] 2 5 4 ## [4] 20 23 4 给区间命名：</description>
+    </item>
+    
     <item>
       <title>机器学习分类性能常用一些指标</title>
       <link>/blog/measures-for-classification-in-ml/</link>
@@ -140,17 +154,6 @@ Warning message: glm.fit: fitted probabilities numerically 0 or 1 occurred 当�
 本教程将分享如何在实践中处理此警告消息。
 重复警告 假设我们将logistic回归模型拟合到R中的以下数据框：
 #create data frame df &amp;lt;- data.frame(y = c(0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1), x1 = c(3, 3, 4, 4, 3, 2, 5, 8, 9, 9, 9, 8, 9, 9, 9), x2 = c(8, 7, 7, 6, 5, 6, 5, 2, 2, 3, 4, 3, 7, 4, 4)) #fit logistic regression model model &amp;lt;- glm(y ~ x1 + x2, data=df, family=binomial) #view model summary summary(model) Warning message: glm.</description>
-    </item>
-    
-    <item>
-      <title>解决conda报错：Module _sysconfigdata_x86_64_conda_linux_gnu not found</title>
-      <link>/blog/conda-error-sysconfigdata-not-found/</link>
-      <pubDate>Tue, 14 Sep 2021 00:00:00 +0000</pubDate>
-      
-      <guid>/blog/conda-error-sysconfigdata-not-found/</guid>
-      <description>最新可能是受conda update conda的影响，发现使用conda涉及Python的操作时一直出现问题， 报错：
-ModuleNotFoundError: No module named &amp;#39;_sysconfigdata_x86_64_conda_linux_gnu&amp;#39; 例如：
-$ pip list Traceback (most recent call last): File &amp;#34;~/miniconda3/bin/pip&amp;#34;, line 7, in &amp;lt;module&amp;gt; from pip._internal.cli.main import main File &amp;#34;~/miniconda3/lib/python3.9/site-packages/pip/_internal/cli/main.py&amp;#34;, line 9, in &amp;lt;module&amp;gt; from pip._internal.cli.autocompletion import autocomplete File &amp;#34;~/miniconda3/lib/python3.9/site-packages/pip/_internal/cli/autocompletion.py&amp;#34;, line 10, in &amp;lt;module&amp;gt; from pip._internal.cli.main_parser import create_main_parser File &amp;#34;~/miniconda3/lib/python3.9/site-packages/pip/_internal/cli/main_parser.py&amp;#34;, line 8, in &amp;lt;module&amp;gt; from pip._internal.cli import cmdoptions File &amp;#34;~/miniconda3/lib/python3.9/site-packages/pip/_internal/cli/cmdoptions.py&amp;#34;, line 23, in &amp;lt;module&amp;gt; from pip._internal.cli.parser import ConfigOptionParser File &amp;#34;~/miniconda3/lib/python3.9/site-packages/pip/_internal/cli/parser.py&amp;#34;, line 12, in &amp;lt;module&amp;gt; from pip.</description>
     </item>
     
   </channel>

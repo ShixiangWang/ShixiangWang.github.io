@@ -1,0 +1,957 @@
+---
+title: 使用GenomicRanges操作区间数据
+author: 王诗翔
+date: '2021-11-01'
+slug: operate-range-data-with-genomicranges
+categories:
+  - Blog
+tags:
+  - Bioinformatics
+  - Bioconductor
+description: Bioc学起来
+---
+
+<script src="{{< blogdown/postref >}}index_files/header-attrs/header-attrs.js"></script>
+
+
+<!-- Links -->
+<blockquote>
+<p>资料来源：<em>Bioinformatics Data Skills</em></p>
+</blockquote>
+<div id="准备" class="section level2">
+<h2>准备</h2>
+<p>涉及的包：</p>
+<ul>
+<li>GenomicRanges - 表示和处理基因组区间</li>
+<li>GenomicFeatures - 表示和处理基因组元件（基因、外显子等）</li>
+<li>Biostrings/BSgenome - 操作基因组序列</li>
+<li>rtracklayer - 读入常见生物学数据文件（BED、GTF/GFF和WIG等）</li>
+</ul>
+</div>
+<div id="从iranges开始" class="section level2">
+<h2>从IRanges开始</h2>
+<div id="基本用法" class="section level3">
+<h3>基本用法</h3>
+<p>IRange是区间的基本数据构造：</p>
+<pre class="r"><code>library(IRanges)
+
+rng = IRanges(start = 1, end = 15)
+rng</code></pre>
+<pre><code>## IRanges object with 1 range and 0 metadata columns:
+##           start       end     width
+##       &lt;integer&gt; &lt;integer&gt; &lt;integer&gt;
+##   [1]         1        15        15</code></pre>
+<p>构造出来的对象区间起始和终止都是闭合的，另外与R索引一致，都是从1开始。</p>
+</div>
+<div id="构造向量" class="section level3">
+<h3>构造向量</h3>
+<p>向量是最常见的了：</p>
+<pre class="r"><code>x = IRanges(start=c(4, 7, 2, 20), end=c(13, 7, 5, 23))
+x</code></pre>
+<pre><code>## IRanges object with 4 ranges and 0 metadata columns:
+##           start       end     width
+##       &lt;integer&gt; &lt;integer&gt; &lt;integer&gt;
+##   [1]         4        13        10
+##   [2]         7         7         1
+##   [3]         2         5         4
+##   [4]        20        23         4</code></pre>
+<p>给区间命名：</p>
+<pre class="r"><code>names(x) = letters[1:4]
+x</code></pre>
+<pre><code>## IRanges object with 4 ranges and 0 metadata columns:
+##         start       end     width
+##     &lt;integer&gt; &lt;integer&gt; &lt;integer&gt;
+##   a         4        13        10
+##   b         7         7         1
+##   c         2         5         4
+##   d        20        23         4</code></pre>
+</div>
+<div id="操作区间" class="section level3">
+<h3>操作区间</h3>
+<p>首先是提取区间的各种数据：</p>
+<pre class="r"><code>start(x)</code></pre>
+<pre><code>## [1]  4  7  2 20</code></pre>
+<pre class="r"><code>end(x)</code></pre>
+<pre><code>## [1] 13  7  5 23</code></pre>
+<pre class="r"><code>width(x)</code></pre>
+<pre><code>## [1] 10  1  4  4</code></pre>
+<p>重赋值非常方便：</p>
+<pre class="r"><code>end(x) = end(x) + 4
+x</code></pre>
+<pre><code>## IRanges object with 4 ranges and 0 metadata columns:
+##         start       end     width
+##     &lt;integer&gt; &lt;integer&gt; &lt;integer&gt;
+##   a         4        17        14
+##   b         7        11         5
+##   c         2         9         8
+##   d        20        27         8</code></pre>
+<p>返回全部区间覆盖的范围：</p>
+<pre class="r"><code>range(x)</code></pre>
+<pre><code>## IRanges object with 1 range and 0 metadata columns:
+##           start       end     width
+##       &lt;integer&gt; &lt;integer&gt; &lt;integer&gt;
+##   [1]         2        27        26</code></pre>
+<p>像操作向量一样进行索引和比较：</p>
+<pre class="r"><code>x[2:3]</code></pre>
+<pre><code>## IRanges object with 2 ranges and 0 metadata columns:
+##         start       end     width
+##     &lt;integer&gt; &lt;integer&gt; &lt;integer&gt;
+##   b         7        11         5
+##   c         2         9         8</code></pre>
+<pre class="r"><code>start(x) &lt; 5</code></pre>
+<pre><code>## [1]  TRUE FALSE  TRUE FALSE</code></pre>
+<pre class="r"><code>x[start(x) &lt; 7]</code></pre>
+<pre><code>## IRanges object with 2 ranges and 0 metadata columns:
+##         start       end     width
+##     &lt;integer&gt; &lt;integer&gt; &lt;integer&gt;
+##   a         4        17        14
+##   c         2         9         8</code></pre>
+<pre class="r"><code>x[width(x) &gt; 8]</code></pre>
+<pre><code>## IRanges object with 1 range and 0 metadata columns:
+##         start       end     width
+##     &lt;integer&gt; &lt;integer&gt; &lt;integer&gt;
+##   a         4        17        14</code></pre>
+<pre class="r"><code>x[&#39;a&#39;]</code></pre>
+<pre><code>## IRanges object with 1 range and 0 metadata columns:
+##         start       end     width
+##     &lt;integer&gt; &lt;integer&gt; &lt;integer&gt;
+##   a         4        17        14</code></pre>
+<p>有时候我们想在设定区间的时候又限定它在某个范围内：</p>
+<pre class="r"><code>y = IRanges(start=c(4, 6, 10, 12), width=13)
+y</code></pre>
+<pre><code>## IRanges object with 4 ranges and 0 metadata columns:
+##           start       end     width
+##       &lt;integer&gt; &lt;integer&gt; &lt;integer&gt;
+##   [1]         4        16        13
+##   [2]         6        18        13
+##   [3]        10        22        13
+##   [4]        12        24        13</code></pre>
+<pre class="r"><code>restrict(y, 5, 10)</code></pre>
+<pre><code>## IRanges object with 3 ranges and 0 metadata columns:
+##           start       end     width
+##       &lt;integer&gt; &lt;integer&gt; &lt;integer&gt;
+##   [1]         5        10         6
+##   [2]         6        10         5
+##   [3]        10        10         1</code></pre>
+<p>一个常见且重要的区间转换是获取侧翼（flank）区间。</p>
+<pre class="r"><code>x</code></pre>
+<pre><code>## IRanges object with 4 ranges and 0 metadata columns:
+##         start       end     width
+##     &lt;integer&gt; &lt;integer&gt; &lt;integer&gt;
+##   a         4        17        14
+##   b         7        11         5
+##   c         2         9         8
+##   d        20        27         8</code></pre>
+<pre class="r"><code># 默认是上游区间
+flank(x, width = 7)</code></pre>
+<pre><code>## IRanges object with 4 ranges and 0 metadata columns:
+##         start       end     width
+##     &lt;integer&gt; &lt;integer&gt; &lt;integer&gt;
+##   a        -3         3         7
+##   b         0         6         7
+##   c        -5         1         7
+##   d        13        19         7</code></pre>
+<pre class="r"><code># 改为下游
+flank(x, width = 7, start = FALSE)</code></pre>
+<pre><code>## IRanges object with 4 ranges and 0 metadata columns:
+##         start       end     width
+##     &lt;integer&gt; &lt;integer&gt; &lt;integer&gt;
+##   a        18        24         7
+##   b        12        18         7
+##   c        10        16         7
+##   d        28        34         7</code></pre>
+<pre class="r"><code># 两侧
+flank(x, width = 7, both = TRUE)</code></pre>
+<pre><code>## IRanges object with 4 ranges and 0 metadata columns:
+##         start       end     width
+##     &lt;integer&gt; &lt;integer&gt; &lt;integer&gt;
+##   a        -3        10        14
+##   b         0        13        14
+##   c        -5         8        14
+##   d        13        26        14</code></pre>
+<p>另一个操作是reduce，合并存在交集的区间：</p>
+<pre class="r"><code>set.seed(0)
+alns = IRanges(start = sample(seq_len(50), 20), width = 5)
+head(alns, 4)</code></pre>
+<pre><code>## IRanges object with 4 ranges and 0 metadata columns:
+##           start       end     width
+##       &lt;integer&gt; &lt;integer&gt; &lt;integer&gt;
+##   [1]        14        18         5
+##   [2]         4         8         5
+##   [3]        39        43         5
+##   [4]         1         5         5</code></pre>
+<pre class="r"><code>reduce(alns)</code></pre>
+<pre><code>## IRanges object with 2 ranges and 0 metadata columns:
+##           start       end     width
+##       &lt;integer&gt; &lt;integer&gt; &lt;integer&gt;
+##   [1]         1        29        29
+##   [2]        33        54        22</code></pre>
+<p>一个相似的操作是gap，它返回区间之间的gap。</p>
+<pre class="r"><code>gaps(alns)</code></pre>
+<pre><code>## IRanges object with 1 range and 0 metadata columns:
+##           start       end     width
+##       &lt;integer&gt; &lt;integer&gt; &lt;integer&gt;
+##   [1]        30        32         3</code></pre>
+<p>默认的情况它不会返回开始之前和停止位点之后的gap。</p>
+<pre class="r"><code>gaps(alns, start = 1, end = 60)</code></pre>
+<pre><code>## IRanges object with 2 ranges and 0 metadata columns:
+##           start       end     width
+##       &lt;integer&gt; &lt;integer&gt; &lt;integer&gt;
+##   [1]        30        32         3
+##   [2]        55        60         6</code></pre>
+</div>
+<div id="集合操作" class="section level3">
+<h3>集合操作</h3>
+<p>区间可以看作集合，所以base包的集合操作都有对应的实现。</p>
+<pre class="r"><code>a = IRanges(4, 13)
+b = IRanges(12, 17)
+intersect(a, b)</code></pre>
+<pre><code>## IRanges object with 1 range and 0 metadata columns:
+##           start       end     width
+##       &lt;integer&gt; &lt;integer&gt; &lt;integer&gt;
+##   [1]        12        13         2</code></pre>
+<pre class="r"><code>setdiff(a, b)</code></pre>
+<pre><code>## IRanges object with 1 range and 0 metadata columns:
+##           start       end     width
+##       &lt;integer&gt; &lt;integer&gt; &lt;integer&gt;
+##   [1]         4        11         8</code></pre>
+<pre class="r"><code>setdiff(b, a)</code></pre>
+<pre><code>## IRanges object with 1 range and 0 metadata columns:
+##           start       end     width
+##       &lt;integer&gt; &lt;integer&gt; &lt;integer&gt;
+##   [1]        14        17         4</code></pre>
+<pre class="r"><code>union(a, b)</code></pre>
+<pre><code>## IRanges object with 1 range and 0 metadata columns:
+##           start       end     width
+##       &lt;integer&gt; &lt;integer&gt; &lt;integer&gt;
+##   [1]         4        17        14</code></pre>
+<p>存在<code>psetdiff()</code>，<code>pintersect()</code>等系列函数用于成对操作。</p>
+</div>
+<div id="寻找overlap区间" class="section level3">
+<h3>寻找overlap区间</h3>
+<p>寻找overlap区间是需要基因组分析的核心。</p>
+<div id="findoverlaps" class="section level4">
+<h4>findOverlaps</h4>
+<p>这里从最基本的2个IRanges对象的overlap查找开始。</p>
+<pre class="r"><code>qry = IRanges(start=c(1, 26, 19, 11, 21, 7), end=c(16, 30, 19, 15, 24, 8), names=letters[1:6])
+sbj = IRanges(start=c(1, 19, 10), end=c(5, 29, 16), names=letters[24:26])
+qry</code></pre>
+<pre><code>## IRanges object with 6 ranges and 0 metadata columns:
+##         start       end     width
+##     &lt;integer&gt; &lt;integer&gt; &lt;integer&gt;
+##   a         1        16        16
+##   b        26        30         5
+##   c        19        19         1
+##   d        11        15         5
+##   e        21        24         4
+##   f         7         8         2</code></pre>
+<pre class="r"><code>sbj</code></pre>
+<pre><code>## IRanges object with 3 ranges and 0 metadata columns:
+##         start       end     width
+##     &lt;integer&gt; &lt;integer&gt; &lt;integer&gt;
+##   x         1         5         5
+##   y        19        29        11
+##   z        10        16         7</code></pre>
+<p><img src="https://gitee.com/ShixiangWang/ImageCollection/raw/master/png/202111012234896.png" /></p>
+<p>默认调用的结果是返回Hits类对象，它存储了overlaps：</p>
+<pre class="r"><code>hts = findOverlaps(qry, sbj)
+hts</code></pre>
+<pre><code>## Hits object with 6 hits and 0 metadata columns:
+##       queryHits subjectHits
+##       &lt;integer&gt;   &lt;integer&gt;
+##   [1]         1           1
+##   [2]         1           3
+##   [3]         2           2
+##   [4]         3           2
+##   [5]         4           3
+##   [6]         5           2
+##   -------
+##   queryLength: 6 / subjectLength: 3</code></pre>
+<p>这个结果返回的是输入的2个对象之间的映射关系。</p>
+<p><img src="https://gitee.com/ShixiangWang/ImageCollection/raw/master/png/202111012331747.png" /></p>
+<p>最简单的我们可以看出来qry的第6条记录在sbj中找不到overlap。</p>
+<p>我们可以通过下面的操作分别找出2个输入对象的索引：</p>
+<pre class="r"><code>names(qry)[queryHits(hts)]</code></pre>
+<pre><code>## [1] &quot;a&quot; &quot;a&quot; &quot;b&quot; &quot;c&quot; &quot;d&quot; &quot;e&quot;</code></pre>
+<pre class="r"><code>names(sbj)[subjectHits(hts)]</code></pre>
+<pre><code>## [1] &quot;x&quot; &quot;z&quot; &quot;y&quot; &quot;y&quot; &quot;z&quot; &quot;y&quot;</code></pre>
+<p>Overlap查找的逻辑有多种，默认是any。我们可以找在目标区域中的记录。</p>
+<pre class="r"><code>hts_within = findOverlaps(qry, sbj, type = &quot;within&quot;)
+hts_within</code></pre>
+<pre><code>## Hits object with 3 hits and 0 metadata columns:
+##       queryHits subjectHits
+##       &lt;integer&gt;   &lt;integer&gt;
+##   [1]         3           2
+##   [2]         4           3
+##   [3]         5           2
+##   -------
+##   queryLength: 6 / subjectLength: 3</code></pre>
+<p>除了type，还有个select参数可能还有用，默认是返回目标区域中匹配的所有记录，但这个可以更改为第一个或者是最后一个。</p>
+<pre class="r"><code>findOverlaps(qry, sbj, select = &quot;all&quot;)</code></pre>
+<pre><code>## Hits object with 6 hits and 0 metadata columns:
+##       queryHits subjectHits
+##       &lt;integer&gt;   &lt;integer&gt;
+##   [1]         1           1
+##   [2]         1           3
+##   [3]         2           2
+##   [4]         3           2
+##   [5]         4           3
+##   [6]         5           2
+##   -------
+##   queryLength: 6 / subjectLength: 3</code></pre>
+<pre class="r"><code>findOverlaps(qry, sbj, select = &quot;first&quot;)</code></pre>
+<pre><code>## [1]  1  2  2  3  2 NA</code></pre>
+<pre class="r"><code>findOverlaps(qry, sbj, select = &quot;last&quot;)</code></pre>
+<pre><code>## [1]  3  2  2  3  2 NA</code></pre>
+<pre class="r"><code>findOverlaps(qry, sbj, select = &quot;arbitrary&quot;)</code></pre>
+<pre><code>## [1]  1  2  2  3  2 NA</code></pre>
+<p>其他一些有用的操作：</p>
+<pre class="r"><code>countQueryHits(hts)</code></pre>
+<pre><code>## [1] 2 1 1 1 1 0</code></pre>
+<pre class="r"><code>countSubjectHits(hts)</code></pre>
+<pre><code>## [1] 1 3 2</code></pre>
+<pre class="r"><code>countOverlaps(qry, sbj)</code></pre>
+<pre><code>## a b c d e f 
+## 2 1 1 1 1 0</code></pre>
+<pre class="r"><code>subsetByOverlaps(qry, sbj)</code></pre>
+<pre><code>## IRanges object with 5 ranges and 0 metadata columns:
+##         start       end     width
+##     &lt;integer&gt; &lt;integer&gt; &lt;integer&gt;
+##   a         1        16        16
+##   b        26        30         5
+##   c        19        19         1
+##   d        11        15         5
+##   e        21        24         4</code></pre>
+</div>
+</div>
+<div id="寻找最近的区间并计算距离" class="section level3">
+<h3>寻找最近的区间并计算距离</h3>
+<pre class="r"><code>qry = IRanges(6, 13, name = &quot;query&quot;)
+sbj = IRanges(c(2, 4, 18, 19), c(4, 5, 21, 24), names = 1:4)
+qry</code></pre>
+<pre><code>## IRanges object with 1 range and 0 metadata columns:
+##             start       end     width
+##         &lt;integer&gt; &lt;integer&gt; &lt;integer&gt;
+##   query         6        13         8</code></pre>
+<pre class="r"><code>sbj</code></pre>
+<pre><code>## IRanges object with 4 ranges and 0 metadata columns:
+##         start       end     width
+##     &lt;integer&gt; &lt;integer&gt; &lt;integer&gt;
+##   1         2         4         3
+##   2         4         5         2
+##   3        18        21         4
+##   4        19        24         6</code></pre>
+<p>查找临近索引的几个操作：</p>
+<pre class="r"><code>nearest(qry, sbj)</code></pre>
+<pre><code>## [1] 2</code></pre>
+<pre class="r"><code>precede(qry, sbj)</code></pre>
+<pre><code>## [1] 3</code></pre>
+<pre class="r"><code>follow(qry, sbj)</code></pre>
+<pre><code>## [1] 2</code></pre>
+<p>precede操作查找qry领先的区间索引，follow查找到
+区间随后的索引。
+例如这里qry在sbj的第2-3索引的区间之间，所以
+precede是3，而follow是2。</p>
+<p>nearest操作则总是返回最近的区间索引。</p>
+<p>寻找最近的区间操作函数家族还包含了distanceToNearest
+和distance。</p>
+<pre class="r"><code>qry = IRanges(sample(seq_len(1000), 5), width=10)
+sbj = IRanges(sample(seq_len(1000), 5), width=10)
+qry</code></pre>
+<pre><code>## IRanges object with 5 ranges and 0 metadata columns:
+##           start       end     width
+##       &lt;integer&gt; &lt;integer&gt; &lt;integer&gt;
+##   [1]       677       686        10
+##   [2]       802       811        10
+##   [3]       874       883        10
+##   [4]       382       391        10
+##   [5]       601       610        10</code></pre>
+<pre class="r"><code>sbj</code></pre>
+<pre><code>## IRanges object with 5 ranges and 0 metadata columns:
+##           start       end     width
+##       &lt;integer&gt; &lt;integer&gt; &lt;integer&gt;
+##   [1]       940       949        10
+##   [2]       975       984        10
+##   [3]       801       810        10
+##   [4]       852       861        10
+##   [5]       931       940        10</code></pre>
+<p>下面操作和findOverlaps有点像：对于每一个qry的区间，
+它找到对应sbj中最近的区间，然后返回一个Hits对象，但
+包含一个额外的列以显示距离：</p>
+<pre class="r"><code>distanceToNearest(qry, sbj)</code></pre>
+<pre><code>## Hits object with 5 hits and 1 metadata column:
+##       queryHits subjectHits |  distance
+##       &lt;integer&gt;   &lt;integer&gt; | &lt;integer&gt;
+##   [1]         1           3 |       114
+##   [2]         2           3 |         0
+##   [3]         3           4 |        12
+##   [4]         4           3 |       409
+##   [5]         5           3 |       190
+##   -------
+##   queryLength: 5 / subjectLength: 5</code></pre>
+<p>distance操作则返回成对（一一对应）的区间距离：</p>
+<pre class="r"><code>distance(qry, sbj)</code></pre>
+<pre><code>## [1] 253 163  63 460 320</code></pre>
+</div>
+</div>
+<div id="run长度编码rle和视图" class="section level2">
+<h2>Run长度编码（RLE）和视图</h2>
+<p>许多基因组数据其实是不同区间位点的连续数值序列，例如：</p>
+<ul>
+<li>覆盖度</li>
+<li>保守性评分（碱基级别的不同物种演化保守性评分）</li>
+<li>单个碱基位点核苷酸多态性</li>
+</ul>
+<p>这些数据往往几百上千万条，但复用一个有限的数值集合，怎么有效地表示这些数据呢？Run-length encoding出场了。</p>
+<p>拿覆盖度来说，RLE可以对序列进行有效压缩。例如3个4，2个3，1个2，5个1，7个0，3个1，7个4的序列，表示为：</p>
+<pre class="r"><code>x = as.integer(
+  c(4, 4, 4, 3, 3, 2,
+    1, 1, 1, 1, 1,
+    0, 0, 0, 0, 0, 0, 0,
+    1, 1, 1,
+    4, 4, 4, 4, 4, 4, 4)
+)
+xrle = Rle(x)
+xrle</code></pre>
+<pre><code>## integer-Rle of length 28 with 7 runs
+##   Lengths: 3 2 1 5 7 3 7
+##   Values : 4 3 2 1 0 1 4</code></pre>
+<p><code>Rle()</code>以向量为输入，返回以RLE版本的压缩结果。
+以该种方式存储的数据，我们可以逆转为向量形式：</p>
+<pre class="r"><code>as.vector(xrle)</code></pre>
+<pre><code>##  [1] 4 4 4 3 3 2 1 1 1 1 1 0 0 0 0 0 0 0 1 1 1 4 4 4 4 4 4 4</code></pre>
+<p>Rle对象支持绝大部分基本的R向量操作，包括取子集、算术、比较、汇总、数值计算。</p>
+<pre class="r"><code>xrle + 4L</code></pre>
+<pre><code>## integer-Rle of length 28 with 7 runs
+##   Lengths: 3 2 1 5 7 3 7
+##   Values : 8 7 6 5 4 5 8</code></pre>
+<pre class="r"><code>xrle / 2</code></pre>
+<pre><code>## numeric-Rle of length 28 with 7 runs
+##   Lengths:   3   2   1   5   7   3   7
+##   Values : 2.0 1.5 1.0 0.5 0.0 0.5 2.0</code></pre>
+<pre class="r"><code>xrle &gt; 3</code></pre>
+<pre><code>## logical-Rle of length 28 with 3 runs
+##   Lengths:     3    18     7
+##   Values :  TRUE FALSE  TRUE</code></pre>
+<pre class="r"><code>xrle[xrle &gt; 3]</code></pre>
+<pre><code>## integer-Rle of length 10 with 1 run
+##   Lengths: 10
+##   Values :  4</code></pre>
+<pre class="r"><code>sum(xrle)</code></pre>
+<pre><code>## [1] 56</code></pre>
+<pre class="r"><code>summary(xrle)</code></pre>
+<pre><code>##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+##    0.00    0.75    1.00    2.00    4.00    4.00</code></pre>
+<pre class="r"><code>round(cos(xrle), 2)</code></pre>
+<pre><code>## numeric-Rle of length 28 with 7 runs
+##   Lengths:     3     2     1     5     7     3     7
+##   Values : -0.65 -0.99 -0.42  0.54  1.00  0.54 -0.65</code></pre>
+<p>我们可以利用下面的操作把Rle对象表示的长度和数值抓出来：</p>
+<pre class="r"><code>runLength(xrle) # 对应Lengths那一行，称为run</code></pre>
+<pre><code>## [1] 3 2 1 5 7 3 7</code></pre>
+<pre class="r"><code>runValue(xrle)  # run对应的value</code></pre>
+<pre><code>## [1] 4 3 2 1 0 1 4</code></pre>
+<p>当使用coverage操作工作时，我们就会得到一个RLE结果。</p>
+<pre class="r"><code>set.seed(0)
+rngs = IRanges(sample(seq_len(60), 10), width = 7)
+names(rngs)[9] = &quot;A&quot;
+rngs_cov = coverage(rngs)
+rngs_cov</code></pre>
+<pre><code>## integer-Rle of length 66 with 19 runs
+##   Lengths: 3 4 3 3 4 3 2 2 5 4 5 2 2 3 4 7 3 4 3
+##   Values : 1 2 1 0 1 2 1 2 1 0 1 2 1 2 1 0 1 2 1</code></pre>
+<p>利用覆盖度信息，我们可以做一些区间过滤：</p>
+<pre class="r"><code>rngs_cov &gt; 1</code></pre>
+<pre><code>## logical-Rle of length 66 with 13 runs
+##   Lengths:     3     4    10     3     2 ...     2     3    14     4     3
+##   Values : FALSE  TRUE FALSE  TRUE FALSE ... FALSE  TRUE FALSE  TRUE FALSE</code></pre>
+<pre class="r"><code>rngs_cov[as.vector(rngs_cov) &gt; 1]</code></pre>
+<pre><code>## integer-Rle of length 18 with 1 run
+##   Lengths: 18
+##   Values :  2</code></pre>
+<pre class="r"><code>rngs_cov[rngs_cov &gt; 1]</code></pre>
+<pre><code>## integer-Rle of length 18 with 1 run
+##   Lengths: 18
+##   Values :  2</code></pre>
+<p>包括定点选择和计算：</p>
+<pre class="r"><code>rngs_cov[rngs[&#39;A&#39;]]</code></pre>
+<pre><code>## integer-Rle of length 7 with 2 runs
+##   Lengths: 4 3
+##   Values : 2 1</code></pre>
+<pre class="r"><code>mean(rngs_cov[rngs[&#39;A&#39;]])</code></pre>
+<pre><code>## [1] 1.571429</code></pre>
+<div id="从rle到slice" class="section level3">
+<h3>从RLE到slice()</h3>
+<p>前面我们使用比较操作可以获取coverage大于某个计数的逻辑值，
+现实世界中我们可能更需要的是切片操作：获取coverage大于某个计数
+的区间。</p>
+<p>为了从RLE中生成区间，我们需要使用到slice操作：</p>
+<pre class="r"><code>min_cov2 = slice(rngs_cov, lower = 2)
+min_cov2</code></pre>
+<pre><code>## Views on a 66-length Rle subject
+## 
+## views:
+##     start end width
+## [1]     4   7     4 [2 2 2 2]
+## [2]    18  20     3 [2 2 2]
+## [3]    23  24     2 [2 2]
+## [4]    39  40     2 [2 2]
+## [5]    43  45     3 [2 2 2]
+## [6]    60  63     4 [2 2 2 2]</code></pre>
+<p>该对象返回的是一个视图view，视图结合了RLE和区间range。
+区间是序列的一部分。上面的例子中，我们看到的就是序列中
+只有2x以上coverage的序列。如果我们只关注区间：</p>
+<pre class="r"><code>ranges(min_cov2)</code></pre>
+<pre><code>## IRanges object with 6 ranges and 0 metadata columns:
+##           start       end     width
+##       &lt;integer&gt; &lt;integer&gt; &lt;integer&gt;
+##   [1]         4         7         4
+##   [2]        18        20         3
+##   [3]        23        24         2
+##   [4]        39        40         2
+##   [5]        43        45         3
+##   [6]        60        63         4</code></pre>
+<p>slice操作在我们需要定义coverage peak的时候非常方便，peak通常是
+我们根据数据认为定义的。</p>
+</div>
+<div id="视图操作" class="section level3">
+<h3>视图操作</h3>
+<p>视图提供了对序列子集进行操作的基础。
+IRanges提供了一系列函数对视图的每一行数据进行处理。</p>
+<pre class="r"><code>viewMeans(min_cov2)</code></pre>
+<pre><code>## [1] 2 2 2 2 2 2</code></pre>
+<pre class="r"><code>viewMaxs(min_cov2)</code></pre>
+<pre><code>## [1] 2 2 2 2 2 2</code></pre>
+<pre class="r"><code>viewApply(min_cov2, median)</code></pre>
+<pre><code>## [1] 2 2 2 2 2 2</code></pre>
+<p>其他类似方法可以通过<code>?viewMeans</code>查看。</p>
+<p>通过视图，我们可以按照window/bin对序列进行汇总。</p>
+<pre class="r"><code>length(rngs_cov)</code></pre>
+<pre><code>## [1] 66</code></pre>
+<pre class="r"><code>bwidth = 5L
+end = bwidth * floor(length(rngs_cov) / bwidth)
+windows = IRanges(start = seq(1, end, bwidth), width = bwidth)
+
+head(windows)</code></pre>
+<pre><code>## IRanges object with 6 ranges and 0 metadata columns:
+##           start       end     width
+##       &lt;integer&gt; &lt;integer&gt; &lt;integer&gt;
+##   [1]         1         5         5
+##   [2]         6        10         5
+##   [3]        11        15         5
+##   [4]        16        20         5
+##   [5]        21        25         5
+##   [6]        26        30         5</code></pre>
+<pre class="r"><code>cov_by_wnd = Views(rngs_cov, windows)
+head(cov_by_wnd)</code></pre>
+<pre><code>## Views on a 66-length Rle subject
+## 
+## views:
+##     start end width
+## [1]     1   5     5 [1 1 1 2 2]
+## [2]     6  10     5 [2 2 1 1 1]
+## [3]    11  15     5 [0 0 0 1 1]
+## [4]    16  20     5 [1 1 2 2 2]
+## [5]    21  25     5 [1 1 2 2 1]
+## [6]    26  30     5 [1 1 1 1 0]</code></pre>
+<pre class="r"><code>viewMeans(cov_by_wnd)</code></pre>
+<pre><code>##  [1] 1.4 1.4 0.4 1.6 1.4 0.8 0.4 1.4 1.6 0.8 0.0 1.0 1.6</code></pre>
+</div>
+</div>
+<div id="genomicranges存储基因组区间" class="section level2">
+<h2>GenomicRanges存储基因组区间</h2>
+<p>我们知道基因组有不同的染色体，这无法直接用连续的数值区间表示。
+基于IRanges，Bioc提供了GenomicRanges包和GRanges对象来存储和操作基因组区间。它包含2个额外的信息：sequence name/chromosome和strand。
+另外，GRanges对象可以包含metadata列，可以将一些注释数据链接到基因组区间。</p>
+<pre class="r"><code>library(GenomicRanges)
+gr = GRanges(
+  seqnames = c(&quot;chr1&quot;, &quot;chr1&quot;, &quot;chr2&quot;, &quot;chr3&quot;),
+  ranges = IRanges(start = 5:8, width = 10),
+  strand = c(&quot;+&quot;, &quot;-&quot;, &quot;-&quot;, &quot;+&quot;)
+)
+gr</code></pre>
+<pre><code>## GRanges object with 4 ranges and 0 metadata columns:
+##       seqnames    ranges strand
+##          &lt;Rle&gt; &lt;IRanges&gt;  &lt;Rle&gt;
+##   [1]     chr1      5-14      +
+##   [2]     chr1      6-15      -
+##   [3]     chr2      7-16      -
+##   [4]     chr3      8-17      +
+##   -------
+##   seqinfo: 3 sequences from an unspecified genome; no seqlengths</code></pre>
+<p>在上面的构造器中我们可以输入任意多列的额外元信息：</p>
+<pre class="r"><code>gr = GRanges(
+  seqnames = c(&quot;chr1&quot;, &quot;chr1&quot;, &quot;chr2&quot;, &quot;chr3&quot;),
+  ranges = IRanges(start = 5:8, width = 10),
+  strand = c(&quot;+&quot;, &quot;-&quot;, &quot;-&quot;, &quot;+&quot;),
+  gc = round(runif(4), 3)
+)
+gr</code></pre>
+<pre><code>## GRanges object with 4 ranges and 1 metadata column:
+##       seqnames    ranges strand |        gc
+##          &lt;Rle&gt; &lt;IRanges&gt;  &lt;Rle&gt; | &lt;numeric&gt;
+##   [1]     chr1      5-14      + |     0.206
+##   [2]     chr1      6-15      - |     0.177
+##   [3]     chr2      7-16      - |     0.687
+##   [4]     chr3      8-17      + |     0.384
+##   -------
+##   seqinfo: 3 sequences from an unspecified genome; no seqlengths</code></pre>
+<p>所有的metadata都存储的一个<code>data.frame</code>中，它跟R基础的数据框没什么两样，当支持更广泛的列类型。
+实际中我们可以存储非常多的数据：identifier、元件名、实验数据、注释数据。</p>
+<p>前面已经提到基因组区间坐标都是相对于基因组版本和基因组大小而言的，这一点我们也可以在构造器中指定：</p>
+<pre class="r"><code>seqlens = c(chr1 = 152, chr2 = 432, chr3 = 903)
+gr = GRanges(
+  seqnames = c(&quot;chr1&quot;, &quot;chr1&quot;, &quot;chr2&quot;, &quot;chr3&quot;),
+  ranges = IRanges(start = 5:8, width = 10),
+  strand = c(&quot;+&quot;, &quot;-&quot;, &quot;-&quot;, &quot;+&quot;),
+  gc = round(runif(4), 3),
+  seqlengths = seqlens
+)
+# 另一种指定seqlengths的方式
+# seqlengths(gr) = seqlens
+gr</code></pre>
+<pre><code>## GRanges object with 4 ranges and 1 metadata column:
+##       seqnames    ranges strand |        gc
+##          &lt;Rle&gt; &lt;IRanges&gt;  &lt;Rle&gt; | &lt;numeric&gt;
+##   [1]     chr1      5-14      + |     0.770
+##   [2]     chr1      6-15      - |     0.498
+##   [3]     chr2      7-16      - |     0.718
+##   [4]     chr3      8-17      + |     0.992
+##   -------
+##   seqinfo: 3 sequences from an unspecified genome</code></pre>
+<p>GR对象的基础操作很多与IRanges一致。</p>
+<pre class="r"><code>start(gr)</code></pre>
+<pre><code>## [1] 5 6 7 8</code></pre>
+<pre class="r"><code>end(gr)</code></pre>
+<pre><code>## [1] 14 15 16 17</code></pre>
+<pre class="r"><code>width(gr)</code></pre>
+<pre><code>## [1] 10 10 10 10</code></pre>
+<p>一些特定的访问函数：</p>
+<pre class="r"><code>seqnames(gr)</code></pre>
+<pre><code>## factor-Rle of length 4 with 3 runs
+##   Lengths:    2    1    1
+##   Values : chr1 chr2 chr3
+## Levels(3): chr1 chr2 chr3</code></pre>
+<pre class="r"><code>strand(gr)</code></pre>
+<pre><code>## factor-Rle of length 4 with 3 runs
+##   Lengths: 1 2 1
+##   Values : + - +
+## Levels(3): + - *</code></pre>
+<pre class="r"><code>ranges(gr) # 从GR对象中提取IRanges</code></pre>
+<pre><code>## IRanges object with 4 ranges and 0 metadata columns:
+##           start       end     width
+##       &lt;integer&gt; &lt;integer&gt; &lt;integer&gt;
+##   [1]         5        14        10
+##   [2]         6        15        10
+##   [3]         7        16        10
+##   [4]         8        17        10</code></pre>
+<p>提取长度或设定名称：</p>
+<pre class="r"><code>length(gr)</code></pre>
+<pre><code>## [1] 4</code></pre>
+<pre class="r"><code>names(gr) = letters[1:length(gr)]
+gr</code></pre>
+<pre><code>## GRanges object with 4 ranges and 1 metadata column:
+##     seqnames    ranges strand |        gc
+##        &lt;Rle&gt; &lt;IRanges&gt;  &lt;Rle&gt; | &lt;numeric&gt;
+##   a     chr1      5-14      + |     0.770
+##   b     chr1      6-15      - |     0.498
+##   c     chr2      7-16      - |     0.718
+##   d     chr3      8-17      + |     0.992
+##   -------
+##   seqinfo: 3 sequences from an unspecified genome</code></pre>
+<p>一些常见处理操作：</p>
+<pre class="r"><code>start(gr) &gt; 7</code></pre>
+<pre><code>## [1] FALSE FALSE FALSE  TRUE</code></pre>
+<pre class="r"><code>gr[start(gr) &gt; 7]</code></pre>
+<pre><code>## GRanges object with 1 range and 1 metadata column:
+##     seqnames    ranges strand |        gc
+##        &lt;Rle&gt; &lt;IRanges&gt;  &lt;Rle&gt; | &lt;numeric&gt;
+##   d     chr3      8-17      + |     0.992
+##   -------
+##   seqinfo: 3 sequences from an unspecified genome</code></pre>
+<pre class="r"><code>table(seqnames(gr))</code></pre>
+<pre><code>## 
+## chr1 chr2 chr3 
+##    2    1    1</code></pre>
+<pre class="r"><code>gr[seqnames(gr) == &quot;chr1&quot;]</code></pre>
+<pre><code>## GRanges object with 2 ranges and 1 metadata column:
+##     seqnames    ranges strand |        gc
+##        &lt;Rle&gt; &lt;IRanges&gt;  &lt;Rle&gt; | &lt;numeric&gt;
+##   a     chr1      5-14      + |     0.770
+##   b     chr1      6-15      - |     0.498
+##   -------
+##   seqinfo: 3 sequences from an unspecified genome</code></pre>
+<pre class="r"><code># 访问元数据
+mcols(gr)</code></pre>
+<pre><code>## DataFrame with 4 rows and 1 column
+##          gc
+##   &lt;numeric&gt;
+## a     0.770
+## b     0.498
+## c     0.718
+## d     0.992</code></pre>
+<pre class="r"><code># 使用 $ 访问
+gr$gc</code></pre>
+<pre><code>## [1] 0.770 0.498 0.718 0.992</code></pre>
+</div>
+<div id="利用grangeslist对数据分组" class="section level2">
+<h2>利用GRangesList对数据分组</h2>
+<p>数据分组对于组织数据和按块处理非常有用。
+GRanges对象有自身版本的列表集合GRangesList。</p>
+<pre class="r"><code>gr1 = GRanges(c(&quot;chr1&quot;, &quot;chr2&quot;), IRanges(start=c(32, 95), width=c(24, 123)))
+gr2 = GRanges(c(&quot;chr8&quot;, &quot;chr2&quot;), IRanges(start=c(27, 12), width=c(42, 34)))
+grl = GRangesList(gr1, gr2)
+grl</code></pre>
+<pre><code>## GRangesList object of length 2:
+## [[1]]
+## GRanges object with 2 ranges and 0 metadata columns:
+##       seqnames    ranges strand
+##          &lt;Rle&gt; &lt;IRanges&gt;  &lt;Rle&gt;
+##   [1]     chr1     32-55      *
+##   [2]     chr2    95-217      *
+##   -------
+##   seqinfo: 3 sequences from an unspecified genome; no seqlengths
+## 
+## [[2]]
+## GRanges object with 2 ranges and 0 metadata columns:
+##       seqnames    ranges strand
+##          &lt;Rle&gt; &lt;IRanges&gt;  &lt;Rle&gt;
+##   [1]     chr8     27-68      *
+##   [2]     chr2     12-45      *
+##   -------
+##   seqinfo: 3 sequences from an unspecified genome; no seqlengths</code></pre>
+<p>该列表对象的行为与R中自带的list几乎一致。</p>
+<pre class="r"><code>unlist(grl)</code></pre>
+<pre><code>## GRanges object with 4 ranges and 0 metadata columns:
+##       seqnames    ranges strand
+##          &lt;Rle&gt; &lt;IRanges&gt;  &lt;Rle&gt;
+##   [1]     chr1     32-55      *
+##   [2]     chr2    95-217      *
+##   [3]     chr8     27-68      *
+##   [4]     chr2     12-45      *
+##   -------
+##   seqinfo: 3 sequences from an unspecified genome; no seqlengths</code></pre>
+<pre class="r"><code>doubled_grl = c(grl, grl)
+length(doubled_grl)</code></pre>
+<pre><code>## [1] 4</code></pre>
+<pre class="r"><code>doubled_grl[2]</code></pre>
+<pre><code>## GRangesList object of length 1:
+## [[1]]
+## GRanges object with 2 ranges and 0 metadata columns:
+##       seqnames    ranges strand
+##          &lt;Rle&gt; &lt;IRanges&gt;  &lt;Rle&gt;
+##   [1]     chr8     27-68      *
+##   [2]     chr2     12-45      *
+##   -------
+##   seqinfo: 3 sequences from an unspecified genome; no seqlengths</code></pre>
+<pre class="r"><code>doubled_grl[[2]]</code></pre>
+<pre><code>## GRanges object with 2 ranges and 0 metadata columns:
+##       seqnames    ranges strand
+##          &lt;Rle&gt; &lt;IRanges&gt;  &lt;Rle&gt;
+##   [1]     chr8     27-68      *
+##   [2]     chr2     12-45      *
+##   -------
+##   seqinfo: 3 sequences from an unspecified genome; no seqlengths</code></pre>
+<p>针对GRanges对象的函数基本都可以复用。不过返回的是列表。</p>
+<p>split操作有针对GRanges对象的实现，所以我们可以用来拆分。</p>
+<pre class="r"><code>chrs = c(&quot;chr3&quot;, &quot;chr1&quot;, &quot;chr2&quot;, &quot;chr2&quot;, &quot;chr3&quot;, &quot;chr1&quot;)
+gr = GRanges(chrs, IRanges(sample(1:100, 6, replace=TRUE), width=sample(3:30, 6, replace=TRUE)))
+head(gr)</code></pre>
+<pre><code>## GRanges object with 6 ranges and 0 metadata columns:
+##       seqnames    ranges strand
+##          &lt;Rle&gt; &lt;IRanges&gt;  &lt;Rle&gt;
+##   [1]     chr3     74-84      *
+##   [2]     chr1      7-33      *
+##   [3]     chr2     73-88      *
+##   [4]     chr2     79-85      *
+##   [5]     chr3     85-91      *
+##   [6]     chr1     37-40      *
+##   -------
+##   seqinfo: 3 sequences from an unspecified genome; no seqlengths</code></pre>
+<pre class="r"><code>gr_split = split(gr, seqnames(gr))
+gr_split[[1]]</code></pre>
+<pre><code>## GRanges object with 2 ranges and 0 metadata columns:
+##       seqnames    ranges strand
+##          &lt;Rle&gt; &lt;IRanges&gt;  &lt;Rle&gt;
+##   [1]     chr3     74-84      *
+##   [2]     chr3     85-91      *
+##   -------
+##   seqinfo: 3 sequences from an unspecified genome; no seqlengths</code></pre>
+<pre class="r"><code>names(gr_split)</code></pre>
+<pre><code>## [1] &quot;chr3&quot; &quot;chr1&quot; &quot;chr2&quot;</code></pre>
+<p>我们还可以直接应用lapply操作：</p>
+<pre class="r"><code>lapply(gr_split, function(x) order(width(x)))</code></pre>
+<pre><code>## $chr3
+## [1] 2 1
+## 
+## $chr1
+## [1] 2 1
+## 
+## $chr2
+## [1] 2 1</code></pre>
+<pre class="r"><code>sapply(gr_split, function(x) min(start(x)))</code></pre>
+<pre><code>## chr3 chr1 chr2 
+##   74    7   73</code></pre>
+<pre class="r"><code>sapply(gr_split, length)</code></pre>
+<pre><code>## chr3 chr1 chr2 
+##    2    2    2</code></pre>
+<p>这些操作提供了很大的灵活度。然而，对于许多overlap操作（如reduce, flank, coverage等），我们并不需要显式地调用lapply函数，GRangesList对象默认就是以该方式工作的：</p>
+<pre class="r"><code>reduce(gr_split)</code></pre>
+<pre><code>## GRangesList object of length 3:
+## $chr3
+## GRanges object with 1 range and 0 metadata columns:
+##       seqnames    ranges strand
+##          &lt;Rle&gt; &lt;IRanges&gt;  &lt;Rle&gt;
+##   [1]     chr3     74-91      *
+##   -------
+##   seqinfo: 3 sequences from an unspecified genome; no seqlengths
+## 
+## $chr1
+## GRanges object with 2 ranges and 0 metadata columns:
+##       seqnames    ranges strand
+##          &lt;Rle&gt; &lt;IRanges&gt;  &lt;Rle&gt;
+##   [1]     chr1      7-33      *
+##   [2]     chr1     37-40      *
+##   -------
+##   seqinfo: 3 sequences from an unspecified genome; no seqlengths
+## 
+## $chr2
+## GRanges object with 1 range and 0 metadata columns:
+##       seqnames    ranges strand
+##          &lt;Rle&gt; &lt;IRanges&gt;  &lt;Rle&gt;
+##   [1]     chr2     73-88      *
+##   -------
+##   seqinfo: 3 sequences from an unspecified genome; no seqlengths</code></pre>
+</div>
+<div id="处理注释数据genomicfeatures和rtracklayer" class="section level2">
+<h2>处理注释数据：GenomicFeatures和rtracklayer</h2>
+<p>本节介绍2个包用于导入和处理外部的数据。
+GenomicFeatures被设计用来处理基于转录本的基因组注释。
+rtracklayer用于导入和导出不同格式的数据。</p>
+<p>GenomicFeatures提供了创建和使用转录数据库对象的方法。这些转录数据库对象包装注释数据的方式允许以一致的方式提取基因组特征，如基因、转录本、外显子和编码序列（CDS），而不管注释数据的生物体和来源。</p>
+<p>我们先下载用于展示的小鼠注释数据，不同的物种采用相似的命名方式进行存储的：</p>
+<pre class="r"><code>BiocManager::install(&quot;TxDb.Mmusculus.UCSC.mm10.ensGene&quot;)</code></pre>
+<pre class="r"><code>library(TxDb.Mmusculus.UCSC.mm10.ensGene)
+txdb = TxDb.Mmusculus.UCSC.mm10.ensGene
+txdb</code></pre>
+<pre><code>## TxDb object:
+## # Db type: TxDb
+## # Supporting package: GenomicFeatures
+## # Data source: UCSC
+## # Genome: mm10
+## # Organism: Mus musculus
+## # Taxonomy ID: 10090
+## # UCSC Table: ensGene
+## # UCSC Track: Ensembl Genes
+## # Resource URL: http://genome.ucsc.edu/
+## # Type of Gene ID: Ensembl gene ID
+## # Full dataset: yes
+## # miRBase build ID: NA
+## # transcript_nrow: 94647
+## # exon_nrow: 348801
+## # cds_nrow: 226312
+## # Db created by: GenomicFeatures package from Bioconductor
+## # Creation time: 2016-09-29 04:15:25 +0000 (Thu, 29 Sep 2016)
+## # GenomicFeatures version at creation time: 1.25.17
+## # RSQLite version at creation time: 1.0.0
+## # DBSCHEMAVERSION: 1.1</code></pre>
+<pre class="r"><code>class(txdb)</code></pre>
+<pre><code>## [1] &quot;TxDb&quot;
+## attr(,&quot;package&quot;)
+## [1] &quot;GenomicFeatures&quot;</code></pre>
+<p>该对象实质是以SQLite数据库文件存储在本地。
+我们可以把它看作一个数据对象，然后进行各种操作，
+打开连接、筛选数据、关闭连接等操作会自动为我们进行。</p>
+<pre class="r"><code>mm_genes = genes(txdb)
+head(mm_genes)</code></pre>
+<pre><code>## GRanges object with 6 ranges and 1 metadata column:
+##                      seqnames              ranges strand |            gene_id
+##                         &lt;Rle&gt;           &lt;IRanges&gt;  &lt;Rle&gt; |        &lt;character&gt;
+##   ENSMUSG00000000001     chr3 108107280-108146146      - | ENSMUSG00000000001
+##   ENSMUSG00000000003     chrX   77837901-77853623      - | ENSMUSG00000000003
+##   ENSMUSG00000000028    chr16   18780447-18811987      - | ENSMUSG00000000028
+##   ENSMUSG00000000031     chr7 142575529-142578143      - | ENSMUSG00000000031
+##   ENSMUSG00000000037     chrX 161117193-161258213      + | ENSMUSG00000000037
+##   ENSMUSG00000000049    chr11 108343354-108414396      + | ENSMUSG00000000049
+##   -------
+##   seqinfo: 66 sequences (1 circular) from mm10 genome</code></pre>
+<p>GenomicFeatures返回的是一个GRanges对象，所有之前学到的操作都能在这里用上。</p>
+<p>除了提取基因，还可以提取</p>
+<pre class="r"><code>head(transcripts(txdb))</code></pre>
+<pre><code>## GRanges object with 6 ranges and 2 metadata columns:
+##       seqnames          ranges strand |     tx_id            tx_name
+##          &lt;Rle&gt;       &lt;IRanges&gt;  &lt;Rle&gt; | &lt;integer&gt;        &lt;character&gt;
+##   [1]     chr1 3054233-3054733      + |         1 ENSMUST00000160944
+##   [2]     chr1 3102016-3102125      + |         2 ENSMUST00000082908
+##   [3]     chr1 3466587-3513553      + |         3 ENSMUST00000161581
+##   [4]     chr1 4529017-4529123      + |         4 ENSMUST00000180019
+##   [5]     chr1 4807788-4848410      + |         5 ENSMUST00000134384
+##   [6]     chr1 4807823-4846739      + |         6 ENSMUST00000027036
+##   -------
+##   seqinfo: 66 sequences (1 circular) from mm10 genome</code></pre>
+<pre class="r"><code>head(exons(txdb))</code></pre>
+<pre><code>## GRanges object with 6 ranges and 1 metadata column:
+##       seqnames          ranges strand |   exon_id
+##          &lt;Rle&gt;       &lt;IRanges&gt;  &lt;Rle&gt; | &lt;integer&gt;
+##   [1]     chr1 3054233-3054733      + |         1
+##   [2]     chr1 3102016-3102125      + |         2
+##   [3]     chr1 3466587-3466687      + |         3
+##   [4]     chr1 3513405-3513553      + |         4
+##   [5]     chr1 4529017-4529123      + |         5
+##   [6]     chr1 4807788-4807982      + |         6
+##   -------
+##   seqinfo: 66 sequences (1 circular) from mm10 genome</code></pre>
+<pre class="r"><code>head(cds(txdb))</code></pre>
+<pre><code>## GRanges object with 6 ranges and 1 metadata column:
+##       seqnames          ranges strand |    cds_id
+##          &lt;Rle&gt;       &lt;IRanges&gt;  &lt;Rle&gt; | &lt;integer&gt;
+##   [1]     chr1 4807914-4807982      + |         1
+##   [2]     chr1 4807918-4807982      + |         2
+##   [3]     chr1 4808455-4808486      + |         3
+##   [4]     chr1 4828584-4828649      + |         4
+##   [5]     chr1 4830268-4830315      + |         5
+##   [6]     chr1 4830275-4830315      + |         6
+##   -------
+##   seqinfo: 66 sequences (1 circular) from mm10 genome</code></pre>
+<pre class="r"><code>head(promoters(txdb))</code></pre>
+<pre><code>## GRanges object with 6 ranges and 2 metadata columns:
+##                      seqnames          ranges strand |     tx_id
+##                         &lt;Rle&gt;       &lt;IRanges&gt;  &lt;Rle&gt; | &lt;integer&gt;
+##   ENSMUST00000160944     chr1 3052233-3054432      + |         1
+##   ENSMUST00000082908     chr1 3100016-3102215      + |         2
+##   ENSMUST00000161581     chr1 3464587-3466786      + |         3
+##   ENSMUST00000180019     chr1 4527017-4529216      + |         4
+##   ENSMUST00000134384     chr1 4805788-4807987      + |         5
+##   ENSMUST00000027036     chr1 4805823-4808022      + |         6
+##                                 tx_name
+##                             &lt;character&gt;
+##   ENSMUST00000160944 ENSMUST00000160944
+##   ENSMUST00000082908 ENSMUST00000082908
+##   ENSMUST00000161581 ENSMUST00000161581
+##   ENSMUST00000180019 ENSMUST00000180019
+##   ENSMUST00000134384 ENSMUST00000134384
+##   ENSMUST00000027036 ENSMUST00000027036
+##   -------
+##   seqinfo: 66 sequences (1 circular) from mm10 genome</code></pre>
+<p>在数据处理时，我们常常会对不同的元件分别进行操作，所以我们可以先提取出一个GRangesList。</p>
+<pre class="r"><code>mm_exons_by_tx = exonsBy(txdb, by = &quot;tx&quot;)
+mm_exons_by_gn = exonsBy(txdb, by = &quot;gene&quot;)
+length(mm_exons_by_tx)</code></pre>
+<pre><code>## [1] 94647</code></pre>
+<pre class="r"><code>length(mm_exons_by_gn)</code></pre>
+<pre><code>## [1] 39017</code></pre>
+<p>这是一系列函数，包括不仅限于transcriptsBy，exonsBy，cdsBy，intronsBy，fiveUTRsByTranscript，threeUTRsByTranscript。</p>
+<p>GenomicFeatures还提供了函数用于提取元件子集或者计算与一些区间的覆盖情况。</p>
+<pre class="r"><code>qtl_region = GRanges(&quot;chr1&quot;, IRanges(123260562, 123557264)) + 10e3
+transcriptsByOverlaps(txdb, qtl_region)</code></pre>
+<pre><code>## GRanges object with 3 ranges and 2 metadata columns:
+##       seqnames              ranges strand |     tx_id            tx_name
+##          &lt;Rle&gt;           &lt;IRanges&gt;  &lt;Rle&gt; | &lt;integer&gt;        &lt;character&gt;
+##   [1]     chr1 123332142-124045255      - |      3780 ENSMUST00000112603
+##   [2]     chr1 123332142-124045559      - |      3781 ENSMUST00000112606
+##   [3]     chr1 123389801-123389931      - |      3782 ENSMUST00000104284
+##   -------
+##   seqinfo: 66 sequences (1 circular) from mm10 genome</code></pre>
+<p>后面的没数据，不往下跟习了。</p>
+<p>BioC是一个比较大的体系，有很多人的付出，后续要持续关注和学习下，而不仅仅停留CRAN的一些通用数据处理逻辑和手段。</p>
+</div>

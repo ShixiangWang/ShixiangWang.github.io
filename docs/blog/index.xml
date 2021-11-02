@@ -5,10 +5,24 @@
     <description>Recent posts from Garrick Aden-Buie</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 31 Oct 2021 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 01 Nov 2021 00:00:00 +0000</lastBuildDate>
     
         <atom:link href="/blog/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>使用GenomicRanges操作区间数据</title>
+      <link>/blog/operate-range-data-with-genomicranges/</link>
+      <pubDate>Mon, 01 Nov 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/operate-range-data-with-genomicranges/</guid>
+      <description>资料来源：Bioinformatics Data Skills
+ 准备 涉及的包：
+ GenomicRanges - 表示和处理基因组区间 GenomicFeatures - 表示和处理基因组元件（基因、外显子等） Biostrings/BSgenome - 操作基因组序列 rtracklayer - 读入常见生物学数据文件（BED、GTF/GFF和WIG等）   从IRanges开始 基本用法 IRange是区间的基本数据构造：
+library(IRanges) rng = IRanges(start = 1, end = 15) rng ## IRanges object with 1 range and 0 metadata columns: ## start end width ## &amp;amp;lt;integer&amp;amp;gt; &amp;amp;lt;integer&amp;amp;gt; &amp;amp;lt;integer&amp;amp;gt; ## [1] 1 15 15 构造出来的对象区间起始和终止都是闭合的，另外与R索引一致，都是从1开始。
+ 构造向量 向量是最常见的了：
+x = IRanges(start=c(4, 7, 2, 20), end=c(13, 7, 5, 23)) x ## IRanges object with 4 ranges and 0 metadata columns: ## start end width ## &amp;amp;lt;integer&amp;amp;gt; &amp;amp;lt;integer&amp;amp;gt; &amp;amp;lt;integer&amp;amp;gt; ## [1] 4 13 10 ## [2] 7 7 1 ## [3] 2 5 4 ## [4] 20 23 4 给区间命名：</description>
+    </item>
     
     <item>
       <title>机器学习分类性能常用一些指标</title>
