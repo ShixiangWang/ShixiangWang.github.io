@@ -8,7 +8,19 @@
 王诗翔</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 04 Nov 2021 00:00:00 +0000</lastBuildDate><atom:link href="/tags/stats/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 08 Nov 2021 00:00:00 +0000</lastBuildDate><atom:link href="/tags/stats/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>「转载」线性模型</title>
+      <link>/blog/zhibei-linear-model/</link>
+      <pubDate>Mon, 08 Nov 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/zhibei-linear-model/</guid>
+      <description>本文主要是转载《指北》线性模型一节的内容，有删减。
+在线性模型中，如果我们将两个共相关的变量放到同一个线性回归模型之中，那么这两个变量的系数估计的标准误都会扩大。下面我们展示下这个干扰过程：
+set.seed(42) a &amp;lt;- runif(100,min=0,max=10)+rnorm(100) b &amp;lt;- a*1.2+rnorm(100) c &amp;lt;- b*1.2+rnorm(100) y &amp;lt;- a+b+c+rnorm(100) 上面我们由两个变量生成了一个新变量，然而这两个变量是相关的，此时我们进行回归分析：
+summary(lm(y~a)) ## ## Call: ## lm(formula = y ~ a) ## ## Residuals: ## Min 1Q Median 3Q Max ## -4.1929 -1.9935 -0.2595 1.9301 5.3011 ## ## Coefficients: ## Estimate Std. Error t value Pr(&amp;gt;|t|) ## (Intercept) -0.14295 0.44101 -0.324 0.747 ## a 3.65619 0.07162 51.048 &amp;lt;2e-16 *** ## --- ## Signif. codes: 0 &amp;#39;***&amp;#39; 0.</description>
+    </item>
+    
     <item>
       <title>读《指北》：多重假设检验记录与思考</title>
       <link>/blog/multiple-stats-testing-and-thinking/</link>
