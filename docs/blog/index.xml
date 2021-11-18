@@ -5,10 +5,19 @@
     <description>Recent posts from Garrick Aden-Buie</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 08 Nov 2021 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 17 Nov 2021 00:00:00 +0000</lastBuildDate>
     
         <atom:link href="/blog/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>autoxgboost例子</title>
+      <link>/blog/autoxgboost-example/</link>
+      <pubDate>Wed, 17 Nov 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/autoxgboost-example/</guid>
+      <description>library(OpenML) library(autoxgboost) data = getOMLDataSet(31) GermanCredit = convertOMLDataSetToMlr(data) # reg_task &amp;amp;lt;- makeRegrTask(data = data_train, target = &amp;amp;#34;Share_Temporary&amp;amp;#34;) # reg_task &amp;amp;lt;- makeRegrTask(data = data_train, target = &amp;amp;#34;Share_Temporary&amp;amp;#34;) autoxgbparset.mixed = makeParamSet( makeDiscreteParam(&amp;amp;#34;booster&amp;amp;#34;, values = c(&amp;amp;#34;gbtree&amp;amp;#34;, &amp;amp;#34;gblinear&amp;amp;#34;, &amp;amp;#34;dart&amp;amp;#34;)), makeDiscreteParam(&amp;amp;#34;sample_type&amp;amp;#34;, values = c(&amp;amp;#34;uniform&amp;amp;#34;, &amp;amp;#34;weighted&amp;amp;#34;), requires = quote(booster == &amp;amp;#34;dart&amp;amp;#34;)), makeDiscreteParam(&amp;amp;#34;normalize_type&amp;amp;#34;, values = c(&amp;amp;#34;tree&amp;amp;#34;, &amp;amp;#34;forest&amp;amp;#34;), requires = quote(booster == &amp;amp;#34;dart&amp;amp;#34;)), makeNumericParam(&amp;amp;#34;rate_drop&amp;amp;#34;, lower = 0, upper = 1, requires = quote(booster == &amp;amp;#34;dart&amp;amp;#34;)), makeNumericParam(&amp;amp;#34;skip_drop&amp;amp;#34;, lower = 0, upper = 1, requires = quote(booster == &amp;amp;#34;dart&amp;amp;#34;)), makeLogicalParam(&amp;amp;#34;one_drop&amp;amp;#34;, requires = quote(booster == &amp;amp;#34;dart&amp;amp;#34;)), makeDiscreteParam(&amp;amp;#34;grow_policy&amp;amp;#34;, values = c(&amp;amp;#34;depthwise&amp;amp;#34;, &amp;amp;#34;lossguide&amp;amp;#34;)), makeIntegerParam(&amp;amp;#34;max_leaves&amp;amp;#34;, lower = 0, upper = 8, trafo = function(x) 2^x, requires = quote(grow_policy == &amp;amp;#34;lossguide&amp;amp;#34;)), makeIntegerParam(&amp;amp;#34;max_bin&amp;amp;#34;, lower = 2L, upper = 9, trafo = function(x) 2^x), makeNumericParam(&amp;amp;#34;eta&amp;amp;#34;, lower = 0.</description>
+    </item>
     
     <item>
       <title>「转载」线性模型</title>

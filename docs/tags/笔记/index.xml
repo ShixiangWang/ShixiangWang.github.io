@@ -8,7 +8,16 @@
 王诗翔</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 12 Aug 2021 00:00:00 +0000</lastBuildDate><atom:link href="/tags/%E7%AC%94%E8%AE%B0/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 17 Nov 2021 00:00:00 +0000</lastBuildDate><atom:link href="/tags/%E7%AC%94%E8%AE%B0/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>autoxgboost例子</title>
+      <link>/blog/autoxgboost-example/</link>
+      <pubDate>Wed, 17 Nov 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/autoxgboost-example/</guid>
+      <description>library(OpenML) library(autoxgboost) data = getOMLDataSet(31) GermanCredit = convertOMLDataSetToMlr(data) # reg_task &amp;lt;- makeRegrTask(data = data_train, target = &amp;#34;Share_Temporary&amp;#34;) # reg_task &amp;lt;- makeRegrTask(data = data_train, target = &amp;#34;Share_Temporary&amp;#34;) autoxgbparset.mixed = makeParamSet( makeDiscreteParam(&amp;#34;booster&amp;#34;, values = c(&amp;#34;gbtree&amp;#34;, &amp;#34;gblinear&amp;#34;, &amp;#34;dart&amp;#34;)), makeDiscreteParam(&amp;#34;sample_type&amp;#34;, values = c(&amp;#34;uniform&amp;#34;, &amp;#34;weighted&amp;#34;), requires = quote(booster == &amp;#34;dart&amp;#34;)), makeDiscreteParam(&amp;#34;normalize_type&amp;#34;, values = c(&amp;#34;tree&amp;#34;, &amp;#34;forest&amp;#34;), requires = quote(booster == &amp;#34;dart&amp;#34;)), makeNumericParam(&amp;#34;rate_drop&amp;#34;, lower = 0, upper = 1, requires = quote(booster == &amp;#34;dart&amp;#34;)), makeNumericParam(&amp;#34;skip_drop&amp;#34;, lower = 0, upper = 1, requires = quote(booster == &amp;#34;dart&amp;#34;)), makeLogicalParam(&amp;#34;one_drop&amp;#34;, requires = quote(booster == &amp;#34;dart&amp;#34;)), makeDiscreteParam(&amp;#34;grow_policy&amp;#34;, values = c(&amp;#34;depthwise&amp;#34;, &amp;#34;lossguide&amp;#34;)), makeIntegerParam(&amp;#34;max_leaves&amp;#34;, lower = 0, upper = 8, trafo = function(x) 2^x, requires = quote(grow_policy == &amp;#34;lossguide&amp;#34;)), makeIntegerParam(&amp;#34;max_bin&amp;#34;, lower = 2L, upper = 9, trafo = function(x) 2^x), makeNumericParam(&amp;#34;eta&amp;#34;, lower = 0.</description>
+    </item>
+    
     <item>
       <title>RNAseq原理与分析课程笔记</title>
       <link>/blog/rnaseq-cource-notes/</link>

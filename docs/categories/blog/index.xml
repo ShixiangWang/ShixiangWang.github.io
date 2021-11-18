@@ -8,7 +8,16 @@
 王诗翔</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 08 Nov 2021 00:00:00 +0000</lastBuildDate><atom:link href="/categories/blog/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 17 Nov 2021 00:00:00 +0000</lastBuildDate><atom:link href="/categories/blog/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>autoxgboost例子</title>
+      <link>/blog/autoxgboost-example/</link>
+      <pubDate>Wed, 17 Nov 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/autoxgboost-example/</guid>
+      <description>library(OpenML) library(autoxgboost) data = getOMLDataSet(31) GermanCredit = convertOMLDataSetToMlr(data) # reg_task &amp;lt;- makeRegrTask(data = data_train, target = &amp;#34;Share_Temporary&amp;#34;) # reg_task &amp;lt;- makeRegrTask(data = data_train, target = &amp;#34;Share_Temporary&amp;#34;) autoxgbparset.mixed = makeParamSet( makeDiscreteParam(&amp;#34;booster&amp;#34;, values = c(&amp;#34;gbtree&amp;#34;, &amp;#34;gblinear&amp;#34;, &amp;#34;dart&amp;#34;)), makeDiscreteParam(&amp;#34;sample_type&amp;#34;, values = c(&amp;#34;uniform&amp;#34;, &amp;#34;weighted&amp;#34;), requires = quote(booster == &amp;#34;dart&amp;#34;)), makeDiscreteParam(&amp;#34;normalize_type&amp;#34;, values = c(&amp;#34;tree&amp;#34;, &amp;#34;forest&amp;#34;), requires = quote(booster == &amp;#34;dart&amp;#34;)), makeNumericParam(&amp;#34;rate_drop&amp;#34;, lower = 0, upper = 1, requires = quote(booster == &amp;#34;dart&amp;#34;)), makeNumericParam(&amp;#34;skip_drop&amp;#34;, lower = 0, upper = 1, requires = quote(booster == &amp;#34;dart&amp;#34;)), makeLogicalParam(&amp;#34;one_drop&amp;#34;, requires = quote(booster == &amp;#34;dart&amp;#34;)), makeDiscreteParam(&amp;#34;grow_policy&amp;#34;, values = c(&amp;#34;depthwise&amp;#34;, &amp;#34;lossguide&amp;#34;)), makeIntegerParam(&amp;#34;max_leaves&amp;#34;, lower = 0, upper = 8, trafo = function(x) 2^x, requires = quote(grow_policy == &amp;#34;lossguide&amp;#34;)), makeIntegerParam(&amp;#34;max_bin&amp;#34;, lower = 2L, upper = 9, trafo = function(x) 2^x), makeNumericParam(&amp;#34;eta&amp;#34;, lower = 0.</description>
+    </item>
+    
     <item>
       <title>「转载」线性模型</title>
       <link>/blog/zhibei-linear-model/</link>
@@ -143,23 +152,6 @@ library(rstatix)  本文的相关代码文档可以运行?rstatix::fisher_test()
  比较2个比例值 生成数据：
 xtab &amp;lt;- as.table(rbind(c(490, 10), c(400, 100))) dimnames(xtab) &amp;lt;- list( group = c(&amp;quot;grp1&amp;quot;, &amp;quot;grp2&amp;quot;), smoker = c(&amp;quot;yes&amp;quot;, &amp;quot;no&amp;quot;) ) xtab ## smoker ## group yes no ## grp1 490 10 ## grp2 400 100 进行比较：
 fisher_test(xtab) ## # A tibble: 1 × 3 ## n p p.signif ## * &amp;lt;dbl&amp;gt; &amp;lt;dbl&amp;gt; &amp;lt;chr&amp;gt; ## 1 1000 8.77e-22 **** # 给出更多的比较信息 fisher_test(xtab, detailed = TRUE) ## # A tibble: 1 × 8 ## n estimate p conf.</description>
-    </item>
-    
-    <item>
-      <title>解决igraph使用optimap_函数报错：GLPK is not available, Unimplemented function call</title>
-      <link>/blog/fix-igprah-glpk-error/</link>
-      <pubDate>Sat, 02 Oct 2021 00:00:00 +0000</pubDate>
-      
-      <guid>/blog/fix-igprah-glpk-error/</guid>
-      <description>在使用igraph的测试用例时，发生GLPK相关的报错：
-&amp;gt; g &amp;lt;- make_graph(&amp;#34;Zachary&amp;#34;) &amp;gt; oc &amp;lt;- cluster_optimal(g) Error in cluster_optimal(g) : At optimal_modularity.c:85 : GLPK is not available, Unimplemented function call GitHub的帖子#273对该问题进行了一些 积极的讨论，不过主要集中在MacOS系统上。而我要解决的是CentOS上的问题。
-不过原理相通，加上cluster_optimal函数文档的描述，大体知道了CRAN不允许igraph团队 内置该库，所以从1.2.1版本后就移除了，因此需要安装包之前在相关系统上安装好该库， 这样该包安装的时候就能够编译相应的函数。否则，相应的函数使用就会报错。
-一种解决的思路就是安装之前的版本，我尝试了下，发现一些编译报错。可能是旧代码存在一些 bug吧，所以只能用最新版本。
-这样需要先用root权限安装库：
-yum install glpk glpk-devel 然后再安装：
-install.packages(&amp;#34;igraph&amp;#34;) 安装时间会比较长。
-如果仔细观察的话，会发现g++的命令中会指定加入-lglpk选项用于加入相关的库进行编译。
-g++ -m64 -std=gnu++11 -shared -L/usr/lib64/R/lib -Wl,-z,relro -o igraph.so AMD/Source/amd.o AMD/Source/amd_1.o AMD/Source/amd_2.o AMD/Source/amd_aat.o AMD/Source/amd_control.o AMD/Source/amd_defaults.o AMD/Source/amd_dump.o AMD/Source/amd_global.o AMD/Source/amd_info.o AMD/Source/amd_order.o AMD/Source/amd_post_tree.o AMD/Source/amd_postorder.o AMD/Source/amd_preprocess.o AMD/Source/amd_valid.o AMD/Source/amdbar.o CHOLMOD/Check/cholmod_check.o CHOLMOD/Check/cholmod_read.o CHOLMOD/Check/cholmod_write.o CHOLMOD/Cholesky/cholmod_amd.o CHOLMOD/Cholesky/cholmod_analyze.o CHOLMOD/Cholesky/cholmod_colamd.o CHOLMOD/Cholesky/cholmod_etree.o CHOLMOD/Cholesky/cholmod_factorize.o CHOLMOD/Cholesky/cholmod_postorder.</description>
     </item>
     
   </channel>
