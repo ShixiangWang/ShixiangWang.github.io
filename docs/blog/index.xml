@@ -5,10 +5,23 @@
     <description>Recent posts from Garrick Aden-Buie</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 01 Dec 2021 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 02 Dec 2021 00:00:00 +0000</lastBuildDate>
     
         <atom:link href="/blog/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Complexheatmap合并figure legends以利用空间</title>
+      <link>/blog/merge-complexheatmap-figure-legends/</link>
+      <pubDate>Thu, 02 Dec 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/merge-complexheatmap-figure-legends/</guid>
+      <description>最近在绘制热图的时候遇到这样一个问题：
+library(ComplexHeatmap) set.seed(1) m = matrix(sample(c(&amp;amp;quot;&amp;amp;quot;, &amp;amp;quot;AMP&amp;amp;quot;, &amp;amp;quot;DEL&amp;amp;quot;), 100, prob = c(0.8, 0.1, 0.1), replace = TRUE), nrow = 10) rownames(m) = paste0(&amp;amp;quot;A&amp;amp;quot;, 1:10) colnames(m) = paste0(&amp;amp;quot;B&amp;amp;quot;, 1:10) oncoPrint(m, top_annotation = HeatmapAnnotation(cbar = anno_oncoprint_barplot(), g = c(&amp;amp;quot;A&amp;amp;quot;, &amp;amp;quot;A&amp;amp;quot;, &amp;amp;quot;A&amp;amp;quot;, &amp;amp;quot;B&amp;amp;quot;, &amp;amp;quot;B&amp;amp;quot;, &amp;amp;quot;B&amp;amp;quot;, &amp;amp;quot;C&amp;amp;quot;, &amp;amp;quot;C&amp;amp;quot;, &amp;amp;quot;C&amp;amp;quot;, &amp;amp;quot;D&amp;amp;quot;))) 我们可以看到Alterations和g两组图例是按行排列的，这样需要整个图更多的宽度，如果按列排列个人感觉效果更好。 翻遍了complexHeatmap的文档和相关QA，没有搜索到相关的内容。比较接近的是设置legends_param列表，它可以操作单个图例 的排列，比如分类特别多，可以指定为几行几列这种。但无法排布多个legends的布局。
+最终还是把问题抛给了开发者顾神（https://github.com/jokergoo/ComplexHeatmap/issues/850）。
+下面是作者提供的简单解决办法：
+ht = oncoPrint(m, top_annotation = HeatmapAnnotation(cbar = anno_oncoprint_barplot(), g = c(&amp;amp;quot;A&amp;amp;quot;, &amp;amp;quot;A&amp;amp;quot;, &amp;amp;quot;A&amp;amp;quot;, &amp;amp;quot;B&amp;amp;quot;, &amp;amp;quot;B&amp;amp;quot;, &amp;amp;quot;B&amp;amp;quot;, &amp;amp;quot;C&amp;amp;quot;, &amp;amp;quot;C&amp;amp;quot;, &amp;amp;quot;C&amp;amp;quot;, &amp;amp;quot;D&amp;amp;quot;))) draw(ht, merge_legends = TRUE) 感谢感谢！</description>
+    </item>
     
     <item>
       <title>torch入门：使用预训练模型预测图像分类</title>

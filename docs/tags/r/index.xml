@@ -8,7 +8,20 @@
 王诗翔</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 04 Nov 2021 00:00:00 +0000</lastBuildDate><atom:link href="/tags/r/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 02 Dec 2021 00:00:00 +0000</lastBuildDate><atom:link href="/tags/r/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Complexheatmap合并figure legends以利用空间</title>
+      <link>/blog/merge-complexheatmap-figure-legends/</link>
+      <pubDate>Thu, 02 Dec 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/merge-complexheatmap-figure-legends/</guid>
+      <description>最近在绘制热图的时候遇到这样一个问题：
+library(ComplexHeatmap) set.seed(1) m = matrix(sample(c(&amp;quot;&amp;quot;, &amp;quot;AMP&amp;quot;, &amp;quot;DEL&amp;quot;), 100, prob = c(0.8, 0.1, 0.1), replace = TRUE), nrow = 10) rownames(m) = paste0(&amp;quot;A&amp;quot;, 1:10) colnames(m) = paste0(&amp;quot;B&amp;quot;, 1:10) oncoPrint(m, top_annotation = HeatmapAnnotation(cbar = anno_oncoprint_barplot(), g = c(&amp;quot;A&amp;quot;, &amp;quot;A&amp;quot;, &amp;quot;A&amp;quot;, &amp;quot;B&amp;quot;, &amp;quot;B&amp;quot;, &amp;quot;B&amp;quot;, &amp;quot;C&amp;quot;, &amp;quot;C&amp;quot;, &amp;quot;C&amp;quot;, &amp;quot;D&amp;quot;))) 我们可以看到Alterations和g两组图例是按行排列的，这样需要整个图更多的宽度，如果按列排列个人感觉效果更好。 翻遍了complexHeatmap的文档和相关QA，没有搜索到相关的内容。比较接近的是设置legends_param列表，它可以操作单个图例 的排列，比如分类特别多，可以指定为几行几列这种。但无法排布多个legends的布局。
+最终还是把问题抛给了开发者顾神（https://github.com/jokergoo/ComplexHeatmap/issues/850）。
+下面是作者提供的简单解决办法：
+ht = oncoPrint(m, top_annotation = HeatmapAnnotation(cbar = anno_oncoprint_barplot(), g = c(&amp;quot;A&amp;quot;, &amp;quot;A&amp;quot;, &amp;quot;A&amp;quot;, &amp;quot;B&amp;quot;, &amp;quot;B&amp;quot;, &amp;quot;B&amp;quot;, &amp;quot;C&amp;quot;, &amp;quot;C&amp;quot;, &amp;quot;C&amp;quot;, &amp;quot;D&amp;quot;))) draw(ht, merge_legends = TRUE) 感谢感谢！</description>
+    </item>
+    
     <item>
       <title>读《指北》：多重假设检验记录与思考</title>
       <link>/blog/multiple-stats-testing-and-thinking/</link>
@@ -141,20 +154,6 @@ Warning message: glm.fit: fitted probabilities numerically 0 or 1 occurred 当�
 下面是一个示例：
 CC=/opt/local/bin/gcc-mp-4.7 CXX=/opt/local/bin/g++-mp-4.7 CPLUS_INCLUDE_PATH=/opt/local/include:$CPLUS_INCLUDE_PATH LD_LIBRARY_PATH=/opt/local/lib:$LD_LIBRARY_PATH CXXFLAGS= -g0 -O2 -Wall MAKE=make -j4  包括编译器位置、头文件位置、动态库位置、编译参数等。
  安装Rcpp install.packages(&amp;#34;Rcpp&amp;#34;) </description>
-    </item>
-    
-    <item>
-      <title>Rcpp：基本用法</title>
-      <link>/blog/rcpp-basic-usage/</link>
-      <pubDate>Mon, 13 Sep 2021 00:00:00 +0000</pubDate>
-      
-      <guid>/blog/rcpp-basic-usage/</guid>
-      <description>来源：https://teuder.github.io/rcpp4everyone_en/030_basic_usage.html
-使用Rcpp函数只需要3步：
- 编写Rcpp源代码。 编译代码。 执行函数。  编写Rcpp代码 下面是一个对向量求和的Rcpp函数：
-//sum.cpp #include &amp;lt;Rcpp.h&amp;gt;using namespace Rcpp; // [[Rcpp::export]] double rcpp_sum(NumericVector v){ double sum = 0; for(int i=0; i&amp;lt;v.length(); ++i){ sum += v[i]; } return(sum); } Rcpp函数定义格式 下面是定义一个Rcpp函数的基本格式：
-#include&amp;lt;Rcpp.h&amp;gt;using namespace Rcpp; // [[Rcpp::export]] RETURN_TYPE FUNCTION_NAME(ARGUMENT_TYPE ARGUMENT){ //do something  return RETURN_VALUE; }  #include&amp;lt;Rcpp.h&amp;gt;：这个句子允许你使用Rcpp包定义的类和函数。 // [[Rcpp::export]]：这个句子下面定义的函数可以从R中访问。 你需要把这个句子附加到你想从R中使用的每个函数中。 using namespace Rcpp;：这个句子是可选的。但是如果你没有写这个句子， 你必须添加前缀Rcpp::来指定由Rcpp定义的类和函数。(例如：Rcpp::NumericVector) RETURN_TYPE FUNCTION_NAME(ARGUMENT_TYPE ARGUMENT){}：你需要指定函数和参数的数据类型。 return RETURN_VALUE;：如果函数将返回一个值，return语句是强制性的。 然而，如果你的函数没有返回值（即RETURN_TYPE是无效的），返回语句可以省略。  编译代码 函数Rcpp::sourceCpp()将编译你的源代码，并将定义的函数加载到R。
-library(Rcpp) sourceCpp(&amp;#39;sum.cpp&amp;#39;) 使用函数 像正常R函数一样调用它就可以了。</description>
     </item>
     
   </channel>

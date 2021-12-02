@@ -1,0 +1,52 @@
+---
+title: Complexheatmap合并figure legends以利用空间
+author: 王诗翔
+date: '2021-12-02'
+slug: merge-complexheatmap-figure-legends
+categories:
+  - Blog
+tags:
+  - R
+  - heatmap
+description: 空白太多怎么处理？
+---
+
+<!-- Links -->
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo = TRUE, warning = FALSE, message = FALSE,
+  fig.width = 7, fig.height = 6
+)
+```
+
+最近在绘制热图的时候遇到这样一个问题：
+
+```{r}
+library(ComplexHeatmap)
+set.seed(1)
+m = matrix(sample(c("", "AMP", "DEL"), 100, prob = c(0.8, 0.1, 0.1), replace = TRUE), nrow = 10)
+rownames(m) = paste0("A", 1:10)
+colnames(m) = paste0("B", 1:10)
+oncoPrint(m,
+          top_annotation = HeatmapAnnotation(cbar = anno_oncoprint_barplot(), 
+                                             g = c("A", "A", "A", "B", "B", "B", "C", "C", "C", "D")))
+```
+
+我们可以看到`Alterations`和`g`两组图例是按行排列的，这样需要整个图更多的宽度，如果按列排列个人感觉效果更好。
+翻遍了complexHeatmap的文档和相关QA，没有搜索到相关的内容。比较接近的是设置`legends_param`列表，它可以操作单个图例
+的排列，比如分类特别多，可以指定为几行几列这种。但无法排布多个legends的布局。
+
+最终还是把问题抛给了开发者顾神（<https://github.com/jokergoo/ComplexHeatmap/issues/850>）。
+
+下面是作者提供的简单解决办法：
+
+```{r}
+ht = oncoPrint(m,
+          top_annotation = HeatmapAnnotation(cbar = anno_oncoprint_barplot(), 
+                                             g = c("A", "A", "A", "B", "B", "B", "C", "C", "C", "D")))
+draw(ht, merge_legends = TRUE)
+```
+
+感谢感谢！
+

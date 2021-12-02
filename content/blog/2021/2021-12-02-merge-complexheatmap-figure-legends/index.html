@@ -1,0 +1,38 @@
+---
+title: Complexheatmap合并figure legends以利用空间
+author: 王诗翔
+date: '2021-12-02'
+slug: merge-complexheatmap-figure-legends
+categories:
+  - Blog
+tags:
+  - R
+  - heatmap
+description: 空白太多怎么处理？
+---
+
+<script src="{{< blogdown/postref >}}index_files/header-attrs/header-attrs.js"></script>
+
+
+<!-- Links -->
+<p>最近在绘制热图的时候遇到这样一个问题：</p>
+<pre class="r"><code>library(ComplexHeatmap)
+set.seed(1)
+m = matrix(sample(c(&quot;&quot;, &quot;AMP&quot;, &quot;DEL&quot;), 100, prob = c(0.8, 0.1, 0.1), replace = TRUE), nrow = 10)
+rownames(m) = paste0(&quot;A&quot;, 1:10)
+colnames(m) = paste0(&quot;B&quot;, 1:10)
+oncoPrint(m,
+          top_annotation = HeatmapAnnotation(cbar = anno_oncoprint_barplot(), 
+                                             g = c(&quot;A&quot;, &quot;A&quot;, &quot;A&quot;, &quot;B&quot;, &quot;B&quot;, &quot;B&quot;, &quot;C&quot;, &quot;C&quot;, &quot;C&quot;, &quot;D&quot;)))</code></pre>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-1-1.png" width="672" /></p>
+<p>我们可以看到<code>Alterations</code>和<code>g</code>两组图例是按行排列的，这样需要整个图更多的宽度，如果按列排列个人感觉效果更好。
+翻遍了complexHeatmap的文档和相关QA，没有搜索到相关的内容。比较接近的是设置<code>legends_param</code>列表，它可以操作单个图例
+的排列，比如分类特别多，可以指定为几行几列这种。但无法排布多个legends的布局。</p>
+<p>最终还是把问题抛给了开发者顾神（<a href="https://github.com/jokergoo/ComplexHeatmap/issues/850" class="uri">https://github.com/jokergoo/ComplexHeatmap/issues/850</a>）。</p>
+<p>下面是作者提供的简单解决办法：</p>
+<pre class="r"><code>ht = oncoPrint(m,
+          top_annotation = HeatmapAnnotation(cbar = anno_oncoprint_barplot(), 
+                                             g = c(&quot;A&quot;, &quot;A&quot;, &quot;A&quot;, &quot;B&quot;, &quot;B&quot;, &quot;B&quot;, &quot;C&quot;, &quot;C&quot;, &quot;C&quot;, &quot;D&quot;)))
+draw(ht, merge_legends = TRUE)</code></pre>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
+<p>感谢感谢！</p>
