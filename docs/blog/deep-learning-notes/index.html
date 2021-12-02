@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en-US">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1">
+
+		
+		<title>深度学习笔记摘录 &middot; ShixiangWang
+王诗翔</title>
+		
+		<meta property="og:title" content="深度学习笔记摘录 - ShixiangWang
+王诗翔">
+		
+		<meta property="og:type" content="article">
+		
+
+		
+			
+			<meta property="description" content="Deep learning in deep learning!">
+			<meta property="og:description" content="Deep learning in deep learning!">
+			
+			
+    	<meta property="twitter:card" content="summary">
+  		<meta property="twitter:image" content="/apple-touch-icon-152x152.png">
+			
+		
+
+		
+		
+		<meta name="twitter:creator" content="@WangShxiang">
+		<meta name="twitter:site" content="https://shixiangwang.github.io">
+		
+		
+
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+		<link rel="stylesheet" href="../../css/poole.css">
+		<link rel="stylesheet" href="../../css/syntax.css">
+		<link rel="stylesheet" href="../../css/hyde.css">
+		
+		
+		<link rel="stylesheet" href="../../css/hamburgers.css">
+		
+		<link rel="stylesheet" href="../../css/custom.css">
+		
+		
+
+<link rel="apple-touch-icon-precomposed" sizes="57x57" href="../../apple-touch-icon-57x57.png" />
+<link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../apple-touch-icon-114x114.png" />
+<link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../apple-touch-icon-72x72.png" />
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../apple-touch-icon-144x144.png" />
+<link rel="apple-touch-icon-precomposed" sizes="120x120" href="../../apple-touch-icon-120x120.png" />
+<link rel="apple-touch-icon-precomposed" sizes="152x152" href="../../apple-touch-icon-152x152.png" />
+<link rel="icon" type="image/png" href="../../favicon-32x32.png" sizes="32x32" />
+<link rel="icon" type="image/png" href="../../favicon-16x16.png" sizes="16x16" />
+<meta name="application-name" content="Garrick Aden-Buie"/>
+<meta name="msapplication-TileColor" content="#002B36" />
+<meta name="msapplication-TileImage" content="/mstile-144x144.png" />
+<meta name="theme-color" content="#ffffff">
+
+<meta name="mobile-web-app-capable" content="yes">
+
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-title" content="Garrick Aden-Buie">
+
+<link href="../../css/featherlight.min.css" type="text/css" rel="stylesheet" />
+
+<script async defer src="https://buttons.github.io/buttons.js"></script>
+
+<script defer src="../../js/van11y-accessible-hide-show-aria.min.js"></script>
+
+<script defer src="../../js/toc.js"></script>
+
+
+
+		<link href="../../blog/deep-learning-notes" rel="canonical">
+	</head>
+
+	<body class="restyled-garrick  h-entry">
+		<main class="content container" role="main">
+			<article class="post">
+				<header>
+					<a class="u-url" href="../../blog/deep-learning-notes">
+						<h1 class="post-title p-name">深度学习笔记摘录</h1>
+					</a>
+					<h3 class="post-author">王诗翔</h3>
+					<time class="post-date dt-published" datetime="2021-12-02T00:00:00Z">Thursday, 2 December 2021</time>
+					
+				</header>
+				<div class="post-content e-content">
+					<blockquote>
+<p><a href="https://discoverml.github.io/simplified-deeplearning/">https://discoverml.github.io/simplified-deeplearning/</a></p>
+</blockquote>
+<p><img src="https://gitee.com/ShixiangWang/ImageCollection/raw/master/png/202112022046734.png" alt=""></p>
+<p>神经网络中的非线性导致它的大部分代价函数变得非凸，对于非凸的损失函数，梯度下降算法不能保证收敛到全局最优，因此神经网络模型中的参数初始化是非常重要的，通常会将所有的权重初始化为一个较小的随机数，并且将偏置初始化为0或者较小的正值。</p>
+<p>大多数现代神经网络使用极大似然原理，也就是说模型的损失函数和训练数据和模型分布间的交叉熵等价。</p>
+<p>由于神经网络的特殊结构，导致神经网络必须注意的是损失函数的梯度必须有足够大的预测性，这样才能很好的指导算法的学习。很多输出单元都会包含一个指数函数，当变量取绝对值非常大的负值时函数会变得饱和（函数变得很“平”），函数梯度变得很小，而负的对数似然能够抵消输出单元中的指数效果。</p>
+<p>对于实现最大似然估计的交叉熵损失函数通常需要使用正则化技术来避免过拟合的情况。</p>
+<p>对于隐藏单元，logistic sigmoid函数只有在输入接近0的时候它们的梯度才比较大，因此不鼓励将它们作为前馈网络中的隐藏层，对于上文提到的输出层，对数似然损失函数抵消了sigmoid的饱和性，因此可以用在基于梯度学习的输出单元中。</p>
+<p>双曲正切激活函数通常比sigmoid函数表现要好，它和sigmoid激活函数关系密切。</p>
+<p>神经网络的架构（architecture）指网络的整体架构：神经网络需要多少单元以及单元之间的连接方式。大多数神经网络被组织成层的单元组，然后将这些层布置成链式结构，其中每一层是前一层的函数。在这个链式结构中，主要考虑的是网络的深度和每一层的宽度。通常来说更深的网络对每一层能够使用更少的单元数以及参数，并且泛化效果更好，但是它也更能难以训练。</p>
+<p>万能近似定理（universal approximation theorem）表明一个前馈神经网络如果具有线性输出层和至少一层具有任何一种 “挤压”性质的激活函数（如logistic sigmoid激活函数）的隐藏层，只要给与网络足够数量的隐藏单元，它可以以任意精度来近似任何从一个有限维空间到另一有限维空间的Borel可测函数，前馈网络的导数也可以任意精度来近似函数的导数。万能近似定理说明了存在达到任意精度的这么一个神经网络，但是没有指出这个网络有多大。</p>
+<p>在很多情况下，使用更深的模型能够减少表示期望函数所需的单元数量，并且可以减少泛化误差。增加网络的深度往往能够得到比增加宽度更加好的泛化能力。（宽度是指隐藏层的维度）</p>
+<p>过拟合是无法彻底避免的，我们所能做的只是“缓解”以减少其风险。</p>
+<p>L2参数正则化（也称为岭回归、Tikhonov正则）通常被称为权重衰减（weight decay)，是通过向目标函数添加一个正则项使权重更加接近原点。</p>
+<p>将L2正则化的参数惩罚项Ω(θ)由权重衰减项修改为各个参数的绝对值之和，即得到L1正则化</p>
+<p>将目标函数作二次泰勒展开近似</p>
+<p>相比L2正则化，L1正则化会产生更稀疏的解。正则化策略可以被解释为最大后验（MAP）贝叶斯推断。L2 正则化相当于权重是高斯先验的MAP贝叶斯推断L1
+正则化相当于权重是Laplace先验的MAP贝叶斯推。</p>
+<p>作为约束的范数惩罚。较大的α将得到一个较小的约束区域，而较小的α将得到一个较大的约束区域。（重投影的显示约束对优化过程增加了一定的稳定性。例如当学习率较高时，很可能进入正反馈，即大的权重诱导大的梯度，使权重获得较大的更新。如果持续更新增加权重大小，则会使θ迅速增大而远离原点发生溢出。）</p>
+<p>让机器学习模型泛化得更好的最好办法是使用更多的数据进行训练，因此需要在有限的数据中创建假数据并添加到训练集中。数据集增强在对象识别领域是特别有效的方法。</p>
+<ul>
+<li>数据集的各种变换，如对图像的平移、旋转和缩放。</li>
+<li>在输入层注入噪声，也可以看作数据集增强的一种方法（如去噪自编码器）。通过将随机噪声添加到输入再进行训练能够大大改善神经网络的健壮性。</li>
+</ul>
+<p>噪声鲁棒性。</p>
+<ul>
+<li>将噪声加入到输入。在一般情况下,注入噪声远比简单地收缩参数强大,特别是噪声被添加到隐藏单元时会更加强大（如Dropout）。对于某些模型而言，向输入添加方差极小的噪声等价于对权重施加范数惩罚。</li>
+<li>将噪声加入到权重。这项技术主要用于循环神经网络。这可以被解释为关于权重的贝叶斯推断的随机实现。贝叶斯学习过程将权重视为不确定的,并且可以通过概率分布表示这种不确定性，向权重添加噪声是反映这种不确定性的一种实用的随机方法。（这种正则化鼓励参数进入权重小扰动对输出相对影响较小的参数空间区域。换句话说，它推动模型进入对权重小的变化相对不敏感的区域，找到的点不只是极小点，而且是由平坦区域所包围的极小点）</li>
+<li>将噪声加入到输出。即显式地对标签上的噪声进行建模。正则化具有k个输出的softmax函数的模型。softmax函数值永远在0-1区间内而达不到0或1，标签平滑的优势是能够防止模型追求确切概率而不影响模型学习正确分类。</li>
+</ul>
+<p>多任务学习（参数共享）：从深度学习的观点看，底层的先验知识为：能解释数据变化的因素中，某些因素是跨多个任务共享的。</p>
+<p>如果我们只要返回使验证集误差最低的参数，就可以获得验证集误差更低的模型。这种策略被称为提前终止（early stopping）。由于它的有效性和简单性，这可能是深度学习中最常用的正则化形式。（提前终止相当于L2正则化，提前终止为何具有正则化效果？其真正机制可理解为将优化过程的参数空间限制在初始参数值θ0的小邻域内。提前终止比L2正则化更具有优势，提前终止能自动确定正则化的正确量，而权重衰减需要进行多个不同超参数的训练实验。）</p>
+<p>稀疏表示也是卷积神经网络经常用到的正则化方法。L1正则化会诱导稀疏的参数，使得许多参数为0；而稀疏表示是惩罚神经网络的激活单元，稀疏化激活单元。换言之，稀疏表示是使得每个神经元的输入单元变得稀疏，很多输入是0。</p>
+<p>Bagging(bootstrap aggregating)是通过结合几个模型降低泛化误差的技术。主要想法是分别训练几个不同的模型，然后让所有模型表决测试样例的输出。这是机器学习中常规策略的一个例子,被称为模型平均(model averaging)。采用这种策略的技术被称为集成方法。</p>
+<p>Bagging是一种允许重复多次使用同一种模型、训练算法和目标函数的方法。具体来说,Bagging涉及构造k个不同的数据集。每个数据集从原始数据集中重复采样构成，和原始数据集具有相同数量的样例。模型平均是一个减少泛化误差的非常强大可靠的方法。集成平方误差的期望随集成规模的增大而线性减少。</p>
+<p>其他集成方法，如Boosting，通过向集成逐步添加神经网络，可以构建比单个模型容量更高的集成模型。</p>
+<p>Dropout可以被认为是集成大量深层神经网络的实用Bagging方法。但是Bagging方法涉及训练多个模型，并且在每个测试样本上评估多个模型。当每个模型都是一个大型神经网络时，Bagging方法会耗费很多的时间和内存。而Dropout则提供了一种廉价的Bagging集成近似，能够训练和评估指数级数量的神经网络。</p>
+<p>区别：Bagging所有模型都是独立的。Dropout所有模型共享参数，其中每个模型继承父神经网络参数的不同子集。参数共享使得在有限内存下表示指数级数量的模型变得可能。</p>
+<p>Dropout优缺点：</p>
+<ul>
+<li>计算方便</li>
+<li>适用广</li>
+<li>相比其他正则化方法（如权重衰减、过滤器约束和稀疏激活）更有效</li>
+<li>不适合宽度太窄的网络</li>
+<li>不适合训练数据太小（如小于5000）的网络。训练数据太小时，Dropout没有其他方法表现好。</li>
+<li>不适合非常大的数据集。数据集大的时候正则化效果有限（大数据集本身的泛化误差就很小），使用Dropout的代价可能超过正则化的好处。</li>
+</ul>
+<p>有时候我们的真正损失函数，比如 0-1 分类误差并无法被有效的优化，此时我们会使用代理损失函数（surrogate loss function）来作为原来目标的替代，而且会带来好处。比如，正确分类类别的负对数似然通常用作 0-1 损失的替代，。负对数似然允许模型估计给定样本的类别的条件概率，能够输出期望最小分类误差所对应的类型。有些情况下，代理损失函数可以比原损失函数学到更多的东西，比如对数似然代替 0-1 分类误差函数时，当训练集上的误差达到0之后，测试集上的误差还可以持续下降，也就是说此时模型可以继续学习以拉开不同类别直接的距离以提高分类的鲁棒性。也就是说，代理损失函数从训练数据中学到了更多的东西。</p>
+<p>使用整个训练集的优化方法被称为批量(batch) 或确定性（deterministic）梯度算法，他们会在每次更新参数时计算所有样本。通常，“批量梯度下降”指使用全部训练集，而“批量”单独出现时，指一组样本。每次只使用部分样本的方法被称为随机（stochastic）或者在线（online）算法。在线通常是指从连续产生的数据流（stream）中提取样本，而不是从一个固定大小的样本中遍历多次采样的情形。大多数深度学习算法介于两者之间，使用一个以上但不是全部的训练样本，传统上称这种方法为小批量（minibatch）或者小批量随机（minibatch stochastic）方法，现在统称为随机（stochastic）方法。</p>
+<p>在凸优化问题中，优化问题可以简化为寻找一个局部极小值点，因为任何的局部极小值就是全局最小值。虽然有些凸函数底部是一个很大的平坦区域，并非单一的极值点，但是应用过程中实际上该区域中每一个极小值点都是一个可以接受的点。所以说，对于凸优化问题来说，找到任何形式的临界点，就是找到了一个不错的可行解。而对于非凸函数问题，比如神经网络问题，可能会存在很多的局部极小值点。</p>
+<p>在低维空间中，局部极值很长常见，而在高维空间中，鞍点则很常见。理论上已经证明，不具有非线性的浅层自编码器只有全局极小值和鞍点，没有代价比全局极小值更大的局部极小值点。试验中发现，梯度下降在很多情况下可以逃离鞍点。对于牛顿法而言，鞍点是一个问题，因为梯度下降旨在朝着“下坡”方向移动，而非明确寻找梯度为0的点。如果不经修改，牛顿法就会跳进一个鞍点。而在高维空间中，鞍点激增，所以以牛顿法为代表的二阶方法无法成功取代梯度下降。</p>
+<p>多层神经网络因为有大量的因子相乘，典型的比如循环神经网络，因为长的时间序列会有大量因子相乘，这中情况下存在像悬崖一样的斜率较大的区域，当遇到这种悬崖结构时，梯度更新会很大程度的改变参数的值，进而跳过这样的区域。不管是从上还是从下接近悬崖，都会产生不好的结果。如果采用启发式梯度截断可以避免严重的后果。基本想法在于梯度只是指明了移动的最佳方向，并没有指明最佳步长，因此启发式梯度截断会减小步长，使得梯度下降不太可能一步走出最陡下降方向的悬崖区域。</p>
+<p>梯度消失使得我们不知道参数朝那个方向移动可以快速改进代价函数，而梯度爆炸会使得学习不稳定。循环网络中使用的相同的矩阵W并没有在前馈网络中使用，因此即使使用非常深的前馈网络，也能避免梯度消失于爆炸问题。</p>
+<p>大多数优化算法先决条件是我们知道精确的梯度或者是Hessian矩阵，然而在实践中，往往都是有偏的估计，几乎所有的深度学习算法都需要基于采样的估计，比如小批量数据计算更新梯度。有些情况下，我们希望最小化的目标函数实际上是难以处理的，所以此时我们只能使用近似梯度。大多数神经网络算法的设计都考虑到了梯度估计的缺陷，所以选择比真实损失函数更容易估计的代理损失函数来避免这个问题。</p>
+<p>SGD是最受欢迎的优化算法，但是其学习过程有时会有点缓慢，动量方法旨在加速学习过程，特别是处理高曲率，小但一致的梯度，或者是带有噪声的梯度。动量算法积累了之前梯度指数级衰减的移动平均，并且继续沿该方向移动。受Nesterov加速梯度算法的启发，Sutskever等人提出了动量算法的一个变种.</p>
+<p>我们几乎总是初始化模型的权重为高斯或者均匀分布中随机抽取的值，两者似乎没有很大的区别，然而初始分布的大小确实对优化过程的结果和网络的泛化能力都有很大的影响。</p>
+<p>更大的初始权重具有更强的破坏对称性的作用，有助于避免冗余的单元，也有助于避免在每层线性成分的前向或反向传播中丢失信号。如果权重初始太大，那么会在前向或者反向中产生爆炸的值。对于初始化网络，正则化和优化有着不同的观点：优化观点建议权重应该足够大以成功传播信息，正则化则希望参数小一点以降低模型复杂度。</p>
+<p>如果计算资源允许，将每层权重的初始值范围设定为一个超参数通常是一个好主意。</p>
+<p>学习速率对神经网络的性能有着显著的影响，损失通常高度敏感于参数空间的某些方向，而对其他因素不敏感。动量算法可以一定程度上缓解这个问题，但代价是引入了另一个超参数。如果我们相信方向敏感度在某种程度是轴对齐的，那么给每个参数设置不同的学习率，在模型学习训练过程中自动适应这些学习率是有道理的。 AdaGrad算法，独立地适应所有模型参数的学习率，缩放每个参数反比于其所有梯度历史平方值总和和平方根，具有损失最大偏导的参数相应有一个快速下降的学习率，而具有小偏导的参数在学习率上有相对较小的下降。总的效果是在参数空间中更为平缓的倾斜方向会取得更大的进步。</p>
+<p>RMSProp由Hinton于2012年提出，用于修改AdaGrad以在非凸设定下效果更好，将梯度积累改变为指数加权的移动平均。AdaGrad设计以让凸问题能够快速的收敛。当应用于非凸函数训练神经网络时，学习轨迹可能穿过了很多不同的结构，最终到达一个局部是凸碗的结构。AdaGrad根据平方梯度的整个历史来收缩学习率，学习率很可能在到达这样的凸碗结构之前就变得太小。而RMSProp使用指数衰减平均，丢弃遥远过去的历史，使其能够在找到凸碗结构后快速收敛，该算法等效于一个初始化与该碗状结构的AdaGrad算法。实践中和经验上，RMSProp已经被证明是是一种有效而且实用的深度神经网络优化算法，目前是深度学习从业者经常采用的优化方法之一。</p>
+<p>Adam (adaptive moments)，在早期算法的背景下，最好被看成结合RMSProp和具有一些重要区别的动量的变种。Adam通常被认为对超参数的选择相当鲁棒，尽管学习率有时需要从建议的默认值修改。</p>
+<p>目前来说，最流行并且使用率很高的优化算法包括SGD，有动量的SGD，RMSProp，有动量的RMSProp，AdaDelta 和 Adam，选择哪一个算法主要取决于使用者对特定算法的熟悉程度以便调节超参数。</p>
+<p><img src="https://discoverml.github.io/simplified-deeplearning/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E4%B8%AD%E7%9A%84%E4%BC%98%E5%8C%96/img/opt2.gif" alt=""></p>
+<p><img src="https://discoverml.github.io/simplified-deeplearning/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E4%B8%AD%E7%9A%84%E4%BC%98%E5%8C%96/img/opt1.gif" alt=""></p>
+<p>BFGS算法（Broyden-Fletcher-Goldfarb-Shanno）算法具有牛顿法的有点，但是没有牛顿法的计算负担。</p>
+<p>有时如果模型太过复杂难以优化或者任务非常困难，直接训练模型的挑战非常之大，有时训练一个较为简单的问题，然后使得模型逐渐复杂会更有效。训练模型先求解一个简化的问题，然后转移到最后的问题，有时也会更有效些。这种在训练最终模型之前训练简单模型求解简化问题的方法统称为预训练（pretraining）。</p>
+<p>贪心算法（greedy algorithm）将问题分解为许多部分，然后独立地在每个部分求解最优值，往往结合各个最佳部分并不能保证得到一个最优解，但是这种贪心算法计算比求解联合最优解的算法高效很多，并且贪心算法的结果即使不是最优解，往往也是可以接受的。贪心算法之后可以紧随一个精调（fine-tunning）阶段，联合优化算法搜索全问题的最优解。所以，使用贪心算法初始化联合优化算法，可以极大地加速算法，并提高寻找到的解的质量。</p>
+<p>预训练算法，特别是贪心预训练，将监督学习问题分解成其他简化的监督学习问题的预训练算法，叫做贪心监督预训练（greedy supervised pretraining）。这种方法有助于更好的指导深层结构的中间层的学习，且在一般情况下，预训练对于优化和泛化都是有帮助的，它实际上扩展了迁移学习的想法。</p>
+<p>改进优化的最好方法并不总是改进优化算法，相反，在深度学习中的许多改进来自设计易于优化的模型。在实践中，选择一族容易优化的模型比使用一个强大的优化算法更重要。神经网络学习在过去30年的大多数进步主要来自改变模型族，而并非改变优化过程。现代神经网络的设计选择体现在层之间的线性变换，几乎处处可导的激活函数，和大部分定义域都有明显的梯度.</p>
+
+				</div>
+				<footer class="footer">
+				  <hr>
+<div class="post-tags">
+
+<p>
+  <svg xmlns="http://www.w3.org/2000/svg" class="octicon" width="20" height="24" viewBox="0 0 14 16"><path fill-rule="evenodd" d="M8 2H6V0h2v2zm4 5H2c-.55 0-1-.45-1-1V4c0-.55.45-1 1-1h10l2 2-2 2zM8 4H6v2h2V4zM6 16h2V8H6v8z"/></svg>
+	
+	<a class="p-category" href="../../categories/blog/">Blog</a>
+</p>
+
+
+<p>
+  <svg xmlns="http://www.w3.org/2000/svg" class="octicon" width="20" height="24" viewBox="0 0 15 16"><path fill-rule="evenodd" d="M7.73 1.73C7.26 1.26 6.62 1 5.96 1H3.5C2.13 1 1 2.13 1 3.5v2.47c0 .66.27 1.3.73 1.77l6.06 6.06c.39.39 1.02.39 1.41 0l4.59-4.59a.996.996 0 0 0 0-1.41L7.73 1.73zM2.38 7.09c-.31-.3-.47-.7-.47-1.13V3.5c0-.88.72-1.59 1.59-1.59h2.47c.42 0 .83.16 1.13.47l6.14 6.13-4.73 4.73-6.13-6.15zM3.01 3h2v2H3V3h.01z"/></svg>
+	
+	<a class="p-tag" href="../../tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a>
+
+</p>
+</div>
+
+				</footer>
+			</article>
+		</main>
+			  <button class="hamburger hamburger--arrow is-active" type="button" onclick="document.getElementsByClassName('sidebar')[0].classList.toggle('collapsed');document.getElementsByClassName('content')[0].classList.toggle('expanded');document.getElementsByClassName('hamburger')[0].classList.toggle('is-active');document.getElementsByClassName('hamburger-inner')[0].classList.toggle('is-active')">
+      <span class="hamburger-box">
+        <span class="hamburger-inner"></span>
+      </span>
+    </button>
+		<aside class="sidebar">
+			<div class="container sidebar-sticky">
+				<header class="sidebar-about h-card vcard p-author">
+					
+					<a class="u-url u-uid" rel="me" href="../../">
+						<img class="u-photo" src="https://avatars.githubusercontent.com/u/25057508?v=4" width=128 height=128 />
+					</a>
+					
+
+					
+					<span class="site-title u-name fn">
+					  <a class="u-url u-uid" rel="me" href="../../">ShixiangWang
+王诗翔</a>
+				  </span>
+					
+
+					<p class="lead p-note">
+						 Bioinformatics Scholar. Cancer Researcher. Data Scientist. #rstats #python #rust. Always learning something new. 
+					</p>
+
+					<nav>
+						<ul class="sidebar-nav">
+							
+							<li><a href="../../about/"> About </a></li>
+							
+							<li><a href="../../blog/"> Blog </a></li>
+							
+							<li><a href="../../project/"> Projects </a></li>
+							
+							<li><a href="http://42.192.87.178:3838/"> Shiny Apps </a></li>
+							
+							<li><a href="../../talk/"> Talks </a></li>
+							
+							<li><a href="https://github.com/ShixiangWang/self-study/discussions"> Discuss with me? </a></li>
+							
+							<li><a href="https://shixiangwang.netlify.app/"> Mirror #1 </a></li>
+							
+							<li><a href="https://shixiangwang.github.io/"> Mirror #2 </a></li>
+							
+						</ul>
+					</nav>
+
+					
+						<div class="contact">
+						  
+							<ul class="contact-list">
+								
+								<li>
+									
+									  
+		  							  <a href="https://twitter.com/WangShxiang" class="u-url url" rel="me" title="Twitter" aria-label="Twitter">
+		  						    <i class='fab fa-twitter fa-fw'></i>
+		  							  </a>
+		  						  
+								
+								</li>
+								
+								<li>
+									
+									  
+		  							  <a href="https://github.com/ShixiangWang" class="u-url url" rel="me" title="GitHub" aria-label="GitHub">
+		  						    <i class='fab fa-github fa-fw'></i>
+		  							  </a>
+		  						  
+								
+								</li>
+								
+								<li>
+									
+		  							<a href="mailto:shixiang1994wang@gmail.com" class="u-email email" rel="me" title="Email" aria-label="Email">
+		  							<i class='fa fa-envelope fa-fw'></i>
+		  							  
+		  							</a>
+									
+								</li>
+								
+								<li>
+									
+									  
+		  							  <a href="https://shixiangwang.github.io/home/logo/qrcode.jpg" class="u-url url" rel="me" title="Bandcamp" aria-label="Bandcamp">
+		  						    <i class='fab fa-bandcamp fa-fw'></i>
+		  							  </a>
+		  						  
+								
+								</li>
+								
+							</ul>
+						</div>
+					
+				</header>
+
+				<footer>&copy; 2021. All rights reserved. </footer>
+				 <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+            <span id="busuanzi_container_site_pv">本站总访问量&nbsp;<span id="busuanzi_value_site_pv"></span>&nbsp;次</span>
+			</div>
+		</aside>
+
+		  <footer>
+  <script src="../../js/jquery-latest.js"></script>
+<script src="../../js/featherlight.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+
+<script>
+MathJax = {
+  tex: {
+    inlineMath: [['$', '$'], ['\\(', '\\)']]
+  }
+};
+</script>
+<script type="text/javascript" id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+  
+  </footer>
+  </body>
+</html>
+
+	</body>
+</html>

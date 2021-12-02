@@ -43,6 +43,16 @@
   </url>
   
   <url>
+    <loc>/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/</loc>
+    <lastmod>2021-12-02T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/blog/deep-learning-notes/</loc>
+    <lastmod>2021-12-02T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
     <loc>/tags/python/</loc>
     <lastmod>2021-12-01T00:00:00+00:00</lastmod>
   </url>
@@ -54,11 +64,6 @@
   
   <url>
     <loc>/blog/learn-torch-predict-image-with-pretrained-model/</loc>
-    <lastmod>2021-12-01T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/</loc>
     <lastmod>2021-12-01T00:00:00+00:00</lastmod>
   </url>
   
