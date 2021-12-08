@@ -8,7 +8,19 @@
 王诗翔</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 09 Aug 2021 00:00:00 +0000</lastBuildDate><atom:link href="/tags/ggplot/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 08 Dec 2021 00:00:00 +0000</lastBuildDate><atom:link href="/tags/ggplot/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>ggplot结合点图与箱线图的问题与解决</title>
+      <link>/blog/ggplot-overlay-points-on-boxplot-qa/</link>
+      <pubDate>Wed, 08 Dec 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/ggplot-overlay-points-on-boxplot-qa/</guid>
+      <description>最近在使用ggplot2对箱线图叠加点图是发现奇怪的现象，只要我改变点的形状，绘图就出问题了。
+下面我通过一个简单的示例展示这个问题。
+我们先生成一组简单的数据，并绘制一个正常的叠加图：
+library(ggplot2) library(dplyr) head(mtcars) ## mpg cyl disp hp drat wt qsec vs am gear carb ## Mazda RX4 21.0 6 160 110 3.90 2.620 16.46 0 1 4 4 ## Mazda RX4 Wag 21.0 6 160 110 3.90 2.875 17.02 0 1 4 4 ## Datsun 710 22.8 4 108 93 3.85 2.320 18.61 1 1 4 1 ## Hornet 4 Drive 21.4 6 258 110 3.</description>
+    </item>
+    
     <item>
       <title>ggplot构建新图形元素</title>
       <link>/blog/ggplot-build-new-object/</link>

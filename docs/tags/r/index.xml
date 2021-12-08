@@ -8,7 +8,19 @@
 王诗翔</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 02 Dec 2021 00:00:00 +0000</lastBuildDate><atom:link href="/tags/r/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 08 Dec 2021 00:00:00 +0000</lastBuildDate><atom:link href="/tags/r/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>ggplot结合点图与箱线图的问题与解决</title>
+      <link>/blog/ggplot-overlay-points-on-boxplot-qa/</link>
+      <pubDate>Wed, 08 Dec 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/ggplot-overlay-points-on-boxplot-qa/</guid>
+      <description>最近在使用ggplot2对箱线图叠加点图是发现奇怪的现象，只要我改变点的形状，绘图就出问题了。
+下面我通过一个简单的示例展示这个问题。
+我们先生成一组简单的数据，并绘制一个正常的叠加图：
+library(ggplot2) library(dplyr) head(mtcars) ## mpg cyl disp hp drat wt qsec vs am gear carb ## Mazda RX4 21.0 6 160 110 3.90 2.620 16.46 0 1 4 4 ## Mazda RX4 Wag 21.0 6 160 110 3.90 2.875 17.02 0 1 4 4 ## Datsun 710 22.8 4 108 93 3.85 2.320 18.61 1 1 4 1 ## Hornet 4 Drive 21.4 6 258 110 3.</description>
+    </item>
+    
     <item>
       <title>Complexheatmap合并figure legends以利用空间</title>
       <link>/blog/merge-complexheatmap-figure-legends/</link>
@@ -140,20 +152,6 @@ Warning message: glm.fit: fitted probabilities numerically 0 or 1 occurred 当�
 本教程将分享如何在实践中处理此警告消息。
 重复警告 假设我们将logistic回归模型拟合到R中的以下数据框：
 #create data frame df &amp;lt;- data.frame(y = c(0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1), x1 = c(3, 3, 4, 4, 3, 2, 5, 8, 9, 9, 9, 8, 9, 9, 9), x2 = c(8, 7, 7, 6, 5, 6, 5, 2, 2, 3, 4, 3, 7, 4, 4)) #fit logistic regression model model &amp;lt;- glm(y ~ x1 + x2, data=df, family=binomial) #view model summary summary(model) Warning message: glm.</description>
-    </item>
-    
-    <item>
-      <title>Rcpp：什么时候使用Rcpp</title>
-      <link>/blog/when-use-rcpp/</link>
-      <pubDate>Mon, 13 Sep 2021 00:00:00 +0000</pubDate>
-      
-      <guid>/blog/when-use-rcpp/</guid>
-      <description>来源：https://teuder.github.io/rcpp4everyone_en/010_Rcpp_merit.html
-什么时候使用  后面的迭代依赖于前面的迭代的循环操作。 需要访问向量/矩阵的每个元素。 在循环中循环调用函数。 动态更改向量的大小。 需要高级数据结构和算法的操作。  怎么配置 除了Windows需要安装Rtools，其他系统中一般已经装好了。
-如果我们要自定义C++的配置，如更改编译器，需要使用到配置文件.R/Makevars。
-下面是一个示例：
-CC=/opt/local/bin/gcc-mp-4.7 CXX=/opt/local/bin/g++-mp-4.7 CPLUS_INCLUDE_PATH=/opt/local/include:$CPLUS_INCLUDE_PATH LD_LIBRARY_PATH=/opt/local/lib:$LD_LIBRARY_PATH CXXFLAGS= -g0 -O2 -Wall MAKE=make -j4  包括编译器位置、头文件位置、动态库位置、编译参数等。
- 安装Rcpp install.packages(&amp;#34;Rcpp&amp;#34;) </description>
     </item>
     
   </channel>

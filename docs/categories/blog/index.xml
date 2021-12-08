@@ -8,7 +8,19 @@
 王诗翔</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 02 Dec 2021 00:00:00 +0000</lastBuildDate><atom:link href="/categories/blog/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 08 Dec 2021 00:00:00 +0000</lastBuildDate><atom:link href="/categories/blog/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>ggplot结合点图与箱线图的问题与解决</title>
+      <link>/blog/ggplot-overlay-points-on-boxplot-qa/</link>
+      <pubDate>Wed, 08 Dec 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/ggplot-overlay-points-on-boxplot-qa/</guid>
+      <description>最近在使用ggplot2对箱线图叠加点图是发现奇怪的现象，只要我改变点的形状，绘图就出问题了。
+下面我通过一个简单的示例展示这个问题。
+我们先生成一组简单的数据，并绘制一个正常的叠加图：
+library(ggplot2) library(dplyr) head(mtcars) ## mpg cyl disp hp drat wt qsec vs am gear carb ## Mazda RX4 21.0 6 160 110 3.90 2.620 16.46 0 1 4 4 ## Mazda RX4 Wag 21.0 6 160 110 3.90 2.875 17.02 0 1 4 4 ## Datsun 710 22.8 4 108 93 3.85 2.320 18.61 1 1 4 1 ## Hornet 4 Drive 21.4 6 258 110 3.</description>
+    </item>
+    
     <item>
       <title>Complexheatmap合并figure legends以利用空间</title>
       <link>/blog/merge-complexheatmap-figure-legends/</link>
@@ -163,21 +175,6 @@ x = IRanges(start=c(4, 7, 2, 20), end=c(13, 7, 5, 23)) x ## IRanges object with 
 与Accuracy的区别：Accuracy不管正负类，算全部预测正确占总数的比率。而精度关注 预测正确的正类数目占全部正类数目的比率。
 召回率/查全率 recall。对所有所关注的类型（一般就是正类），将其预测出的概率（共 10 个癌症患者，预测出 8 个）。
  本节参考：https://www.jianshu.com/p/dcf4deddff9f  </description>
-    </item>
-    
-    <item>
-      <title>此mutate非彼mutate</title>
-      <link>/blog/this-mutate-is-not-that-mutate/</link>
-      <pubDate>Fri, 29 Oct 2021 00:00:00 +0000</pubDate>
-      
-      <guid>/blog/this-mutate-is-not-that-mutate/</guid>
-      <description>程序出乎意料，怎么办？
-今天在星球圈里收到提问：
-我对ddply()这个函数是不熟悉的，只知道hadley一个过时的包plyr里有一系列这样的函数。 所以我首先想到的是这位朋友用错了。不过我马上就排除了，这种问题是非常容易发现和处理的。
-因此还是得动手实际检验一下这个问题在我的电脑上是否可以重复。
-我们首先把数据导入进来：
-library(scales) library(tidyverse) library(plyr) ts &amp;lt;- openxlsx::read.xlsx(&amp;quot;~/Downloads/示例数据.xlsx&amp;quot;) head(ts) ## Name variable value ## 1 SLCO1B1 TCGA-44-2666 3.52916020 ## 2 GCGR TCGA-44-2666 0.08499940 ## 3 HTR3A TCGA-44-2666 0.05029628 ## 4 CA9 TCGA-44-2666 0.19814361 ## 5 TNFSF11 TCGA-44-2666 0.28202803 ## 6 FGB TCGA-44-2666 4.56223499 按照两种不同的方法生成结果：
-out1 = ts %&amp;gt;% ddply(., .(variable), transform, rescale = rescale(value)) %&amp;gt;% arrange(variable, Name) head(out1) ## Name variable value rescale ## 1 ADRB2 TCGA-05-4390 2.</description>
     </item>
     
   </channel>
