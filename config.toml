@@ -1,4 +1,4 @@
-title = "ShixiangWang\n王诗翔"
+title = "ShixiangWang\n(王诗翔)"
 baseurl = "https://shixiangwang.github.io"
 relativeurls = true
 languageCode = "en-us"
@@ -83,7 +83,7 @@ publishDir = "docs"
     image = "https://avatars.githubusercontent.com/u/25057508?v=4"
 
 [params]
-    description = "Bioinformatics Scholar. Cancer Researcher. Data Scientist. #rstats #python #rust. Always learning something new."
+    description = "Bioinformatics Scholar. Cancer Researcher. Data Scientist. Always learning something new."
     author = "Shixiang Wang"
     EnableEmoji = true
     #contactHeader = "Links"

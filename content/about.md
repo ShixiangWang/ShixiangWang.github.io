@@ -12,7 +12,7 @@ type: page
      style="float:left;margin:0 2em 0.5em 0;"
 />
 
-Hello, my name is Shixiang Wang.
+Hello, my name is Shixiang Wang (王诗翔).
 I'm a PostDoc at SYSUCC. Previously, I was a Ph.D. candidate at the [ShanghaiTech University](https://www.shanghaitech.edu.cn/) ([Xue-Song Liu lab](https://github.com/XSLiuLab)). I obtained my Ph.D. degree in cell biology from [CAS Center for Excellence in Molecular Cell Science](https://cemcs.cas.cn/).
 
 I'm a passionate R user and developer.
@@ -24,7 +24,7 @@ Browse my [list of projects](/project) for examples of my work, or review my [fu
 If you're interested in working with me, please drop me a line at [shixiang1994wang@gmail.com](mailto:shixiang1994wang@gmail.com)!
 
 
-## Research
+## Research IDs
 
 - [Google Scholar](https://scholar.google.com/citations?user=FvNp0NkAAAAJ)
 - [Research Gate](https://www.researchgate.net/profile/Wang-Shixiang-3)
