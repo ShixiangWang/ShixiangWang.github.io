@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>julia on ShixiangWang
+(王诗翔)</title>
+    <link>/tags/julia/</link>
+    <description>Recent content in julia on ShixiangWang
+(王诗翔)</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Mon, 27 Dec 2021 00:00:00 +0000</lastBuildDate><atom:link href="/tags/julia/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>如何用Julia语言创建软件包</title>
+      <link>/blog/julia-packaging/</link>
+      <pubDate>Mon, 27 Dec 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/julia-packaging/</guid>
+      <description>源：https://jaantollander.com/post/how-to-create-software-packages-with-julia-language/
+ 介绍 本文将教你如何用Julia编程语言创建一个开源的软件包，并使用基于git的工作流开发软件包。例如，你将了解如何自动化单元测试和文档部署，以及发布包的新版本。此外，我们创建了Julia播放列表的逐步视频教程，以指导你通过这个过程。
+安装Julia 首先，我们将从julialang网站的下载页面安装Julia编程语言。在Linux中，我们可以将存档解压缩到所需的位置。我们将使用~/software/目录。
+~/.bashrc添加配置如下：
+export PATH=&amp;#34;$PATH:$HOME/software/julia-1.5.3-linux-x86_64/julia-1.5.3/bin&amp;#34; 上面的版本根据你自己的实际情况进行修改。
+Julia REPL  How to use Julia REPL for Developing Packages
+ 我们可以通过在命令行输入Julia来打开Julia REPL。Julia REPL有四种不同的模式：
+ Julia模式julia&amp;gt;用于测试Julia代码。 包管理模式pkg&amp;gt;用于执行包管理命令。可以使用]进行激活。 帮助模式help?&amp;gt;用于打印帮助和文档。我们可以使用?进行激活。 Shell模式shell&amp;gt;用于执行shell命令。我们可以使用分号;进行激活。  我们可以使用回车符从其他模式退回到Julia模式。
+包结构 我们的包结构将遵循使用Julia语言创建软件包的官方示例。我们可以在Example.jl中找到示例库。我们可以克隆示例库并对其进行研究。以点开头的目录可能被操作系统隐藏了。我们可以从文件系统设置中显示隐藏的文件。Julia包结构如下所示：
+Example/ ├─ .git/ ├─ .github/ │ └─ workflows/ │ ├─ TagBot.yml │ └─ ci.yml ├─ docs/ │ ├─ src/ │ │ └─ index.md │ ├─ Project.toml │ └─ make.jl ├─ src/ │ └─ Example.jl ├─ test/ │ └─ runtests.</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -4,17 +4,42 @@
   
   <url>
     <loc>/categories/blog/</loc>
-    <lastmod>2021-12-08T00:00:00+00:00</lastmod>
+    <lastmod>2021-12-27T00:00:00+00:00</lastmod>
   </url>
   
   <url>
     <loc>/blog/</loc>
-    <lastmod>2021-12-08T00:00:00+00:00</lastmod>
+    <lastmod>2021-12-27T00:00:00+00:00</lastmod>
   </url>
   
   <url>
     <loc>/categories/</loc>
-    <lastmod>2021-12-08T00:00:00+00:00</lastmod>
+    <lastmod>2021-12-27T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/development/</loc>
+    <lastmod>2021-12-27T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/julia/</loc>
+    <lastmod>2021-12-27T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/</loc>
+    <lastmod>2021-12-27T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/</loc>
+    <lastmod>2021-12-27T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/blog/julia-packaging/</loc>
+    <lastmod>2021-12-27T00:00:00+00:00</lastmod>
   </url>
   
   <url>
@@ -29,16 +54,6 @@
   
   <url>
     <loc>/tags/r/</loc>
-    <lastmod>2021-12-08T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/</loc>
-    <lastmod>2021-12-08T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/tags/</loc>
     <lastmod>2021-12-08T00:00:00+00:00</lastmod>
   </url>
   

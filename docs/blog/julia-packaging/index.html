@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en-US">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1">
+
+		
+		<title>如何用Julia语言创建软件包 &middot; ShixiangWang
+(王诗翔)</title>
+		
+		<meta property="og:title" content="如何用Julia语言创建软件包 - ShixiangWang
+(王诗翔)">
+		
+		<meta property="og:type" content="article">
+		
+
+		
+			
+			<meta property="description" content="Julia与软件包开发">
+			<meta property="og:description" content="Julia与软件包开发">
+			
+			
+    	<meta property="twitter:card" content="summary">
+  		<meta property="twitter:image" content="/apple-touch-icon-152x152.png">
+			
+		
+
+		
+		
+		<meta name="twitter:creator" content="@WangShxiang">
+		<meta name="twitter:site" content="https://shixiangwang.github.io">
+		
+		
+
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+		<link rel="stylesheet" href="../../css/poole.css">
+		<link rel="stylesheet" href="../../css/syntax.css">
+		<link rel="stylesheet" href="../../css/hyde.css">
+		
+		
+		<link rel="stylesheet" href="../../css/hamburgers.css">
+		
+		<link rel="stylesheet" href="../../css/custom.css">
+		
+		
+
+<link rel="apple-touch-icon-precomposed" sizes="57x57" href="../../apple-touch-icon-57x57.png" />
+<link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../apple-touch-icon-114x114.png" />
+<link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../apple-touch-icon-72x72.png" />
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../apple-touch-icon-144x144.png" />
+<link rel="apple-touch-icon-precomposed" sizes="120x120" href="../../apple-touch-icon-120x120.png" />
+<link rel="apple-touch-icon-precomposed" sizes="152x152" href="../../apple-touch-icon-152x152.png" />
+<link rel="icon" type="image/png" href="../../favicon-32x32.png" sizes="32x32" />
+<link rel="icon" type="image/png" href="../../favicon-16x16.png" sizes="16x16" />
+<meta name="application-name" content="Garrick Aden-Buie"/>
+<meta name="msapplication-TileColor" content="#002B36" />
+<meta name="msapplication-TileImage" content="/mstile-144x144.png" />
+<meta name="theme-color" content="#ffffff">
+
+<meta name="mobile-web-app-capable" content="yes">
+
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-title" content="Garrick Aden-Buie">
+
+<link href="../../css/featherlight.min.css" type="text/css" rel="stylesheet" />
+
+<script async defer src="https://buttons.github.io/buttons.js"></script>
+
+<script defer src="../../js/van11y-accessible-hide-show-aria.min.js"></script>
+
+<script defer src="../../js/toc.js"></script>
+
+
+
+		<link href="../../blog/julia-packaging" rel="canonical">
+	</head>
+
+	<body class="restyled-garrick  h-entry">
+		<main class="content container" role="main">
+			<article class="post">
+				<header>
+					<a class="u-url" href="../../blog/julia-packaging">
+						<h1 class="post-title p-name">如何用Julia语言创建软件包</h1>
+					</a>
+					<h3 class="post-author">王诗翔</h3>
+					<time class="post-date dt-published" datetime="2021-12-27T00:00:00Z">Monday, 27 December 2021</time>
+					
+				</header>
+				<div class="post-content e-content">
+					<blockquote>
+<p>源：<a href="https://jaantollander.com/post/how-to-create-software-packages-with-julia-language/">https://jaantollander.com/post/how-to-create-software-packages-with-julia-language/</a></p>
+</blockquote>
+<p><img src="https://jaantollander.com/post/how-to-create-software-packages-with-julia-language/featured.png" alt=""></p>
+<h2 id="介绍">介绍</h2>
+<p>本文将教你如何用Julia编程语言创建一个开源的软件包，并使用基于git的工作流开发软件包。例如，你将了解如何自动化单元测试和文档部署，以及发布包的新版本。此外，我们创建了<a href="https://www.youtube.com/watch?v=KdfFN02PuFo&amp;list=PLFi8CfyKbgDFYCba471yBhrGc3n2Pd1fu">Julia播放列表</a>的逐步视频教程，以指导你通过这个过程。</p>
+<h2 id="安装julia">安装Julia</h2>
+<p>首先，我们将从<a href="https://julialang.org/">julialang网站</a>的下载页面安装Julia编程语言。在Linux中，我们可以将存档解压缩到所需的位置。我们将使用<code>~/software/</code>目录。</p>
+<p><code>~/.bashrc</code>添加配置如下：</p>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh"><span style="color:#008000">export</span> <span style="color:#19177c">PATH</span><span style="color:#666">=</span><span style="color:#ba2121">&#34;</span><span style="color:#19177c">$PATH</span><span style="color:#ba2121">:</span><span style="color:#19177c">$HOME</span><span style="color:#ba2121">/software/julia-1.5.3-linux-x86_64/julia-1.5.3/bin&#34;</span>
+</code></pre></div><p>上面的版本根据你自己的实际情况进行修改。</p>
+<h2 id="julia-repl">Julia REPL</h2>
+<blockquote>
+<p><a href="https://www.youtube.com/watch?v=fu21WXi726A&amp;list=PLFi8CfyKbgDFYCba471yBhrGc3n2Pd1fu">How to use Julia REPL for Developing Packages</a></p>
+</blockquote>
+<p>我们可以通过在命令行输入Julia来打开Julia REPL。Julia REPL有四种不同的模式：</p>
+<ol>
+<li>Julia模式<code>julia&gt;</code>用于测试Julia代码。</li>
+<li>包管理模式<code>pkg&gt;</code>用于执行包管理命令。可以使用<code>]</code>进行激活。</li>
+<li>帮助模式<code>help?&gt;</code>用于打印帮助和文档。我们可以使用<code>?</code>进行激活。</li>
+<li>Shell模式<code>shell&gt;</code>用于执行shell命令。我们可以使用分号<code>;</code>进行激活。</li>
+</ol>
+<p>我们可以使用回车符从其他模式退回到Julia模式。</p>
+<h2 id="包结构">包结构</h2>
+<p>我们的包结构将遵循使用Julia语言创建软件包的官方示例。我们可以在<a href="https://github.com/JuliaLang/Example.jl/">Example.jl</a>中找到示例库。我们可以克隆示例库并对其进行研究。以点开头的目录可能被操作系统隐藏了。我们可以从文件系统设置中显示隐藏的文件。Julia包结构如下所示：</p>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh">Example/
+├─ .git/
+├─ .github/
+│  └─ workflows/
+│     ├─ TagBot.yml
+│     └─ ci.yml
+├─ docs/
+│  ├─ src/
+│  │  └─ index.md
+│  ├─ Project.toml
+│  └─ make.jl
+├─ src/
+│  └─ Example.jl
+├─ test/
+│  └─ runtests.jl
+├─ .appveyor.yml
+├─ .codecov.yml
+├─ .gitignore
+├─ LICENSE
+├─ Project.toml
+└─ README.md
+</code></pre></div><h2 id="生成包">生成包</h2>
+<blockquote>
+<p><a href="https://www.youtube.com/watch?v=KdfFN02PuFo&amp;list=PLFi8CfyKbgDFYCba471yBhrGc3n2Pd1fu">How to Create Software Packages with Julia Language</a></p>
+</blockquote>
+<p>我们可以使用Julia REPL中的包管理器生成一个新的Julia包。</p>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-julia" data-lang="julia">pkg<span style="color:#666">&gt;</span> generate Example
+</code></pre></div><p>使用<code>generate</code>命令创建<code>src/Example.jl</code>和<code>Project.toml</code>文件。<code>src</code>目录包含软件的源代码。<code>Project.toml</code>文件是一个项目详细信息的配置文件，例如名称、UUID、作者、版本、依赖关系和兼容性。附加项和目标为单元测试定义依赖项。</p>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-toml" data-lang="toml">name = <span style="color:#ba2121">&#34;Example&#34;</span>
+uuid = <span style="color:#ba2121">&#34;...&#34;</span>
+authors = [<span style="color:#ba2121">&#34;author &lt;email&gt;&#34;</span>]
+version = <span style="color:#ba2121">&#34;0.1.0&#34;</span>
+
+[deps]
+<span style="color:#408080;font-style:italic"># &lt;package&gt; = ...</span>
+
+[compat]
+julia = <span style="color:#ba2121">&#34;1&#34;</span>
+
+[extras]
+Test = <span style="color:#ba2121">&#34;8dfed614-e22c-5e08-85e1-65c5234f0b40&#34;</span>
+
+[targets]
+test = [<span style="color:#ba2121">&#34;Test&#34;</span>]
+</code></pre></div><p>我们使用<code>add</code>为包添加新的依赖包：</p>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-julia" data-lang="julia">pkg<span style="color:#666">&gt;</span> activate <span style="color:#666">.</span>
+(Example) pkg<span style="color:#666">&gt;</span> add <span style="color:#666">&lt;</span>package<span style="color:#666">&gt;</span>
+</code></pre></div><p>所有的命令文档在<a href="https://julialang.github.io/Pkg.jl/">Pkg.jl</a>。</p>
+<h2 id="单元测试">单元测试</h2>
+<p><code>test/</code>目录下包含一个Julia包所有用于单元测试的代码。我们可以使用<a href="https://docs.julialang.org/en/v1/stdlib/Test/index.html">Test.jl</a>模块来创建测试。
+下面是存放的测试内容：</p>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-julia" data-lang="julia"><span style="color:#008000;font-weight:bold">using</span> Test
+<span style="color:#a2f">@test</span> [<span style="color:#666">1</span>, <span style="color:#666">2</span>] <span style="color:#666">+</span> [<span style="color:#666">2</span>, <span style="color:#666">1</span>] <span style="color:#666">==</span> [<span style="color:#666">3</span>, <span style="color:#666">3</span>]
+<span style="color:#a2f">@test_throws</span> <span style="color:#b00040">BoundsError</span> [<span style="color:#666">1</span>, <span style="color:#666">2</span>, <span style="color:#666">3</span>][<span style="color:#666">4</span>]
+</code></pre></div><p>我们可以在包管理模式下使用<code>test</code>命令运行单元测试：</p>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-julia" data-lang="julia">pkg<span style="color:#666">&gt;</span> activate <span style="color:#666">.</span>
+(Example) pkg<span style="color:#666">&gt;</span> test
+</code></pre></div><p>稍后，我们设置了GitHub动作来自动执行测试，作为构建过程的一部分。</p>
+<h2 id="文档">文档</h2>
+<p><code>docs/</code>目录包含Julia包的文档。<a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a>是Julia项目的一个文档包。在生成的<code>Example</code>目录下，我们可以使用<a href="https://github.com/JuliaDocs/DocumenterTools.jl">DocumenterTools.jl</a>初始化文档：</p>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-julia" data-lang="julia">pkg<span style="color:#666">&gt;</span> add DocumenterTools
+julia<span style="color:#666">&gt;</span> <span style="color:#008000;font-weight:bold">using</span> DocumenterTools
+julia<span style="color:#666">&gt;</span> DocumenterTools<span style="color:#666">.</span>generate()
+</code></pre></div><p>我们使用Markdown（一种轻量级标记语言）将文档写入<code>docs/src/</code>目录。我们还可以使用文档字符串记录代码，如下所示。</p>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-julia" data-lang="julia"><span style="color:#ba2121">&#34;&#34;&#34;A foo function.
+</span><span style="color:#ba2121">
+</span><span style="color:#ba2121"># Arguments
+</span><span style="color:#ba2121">- `arg::Int`: Function argument.
+</span><span style="color:#ba2121">&#34;&#34;&#34;</span>
+<span style="color:#008000;font-weight:bold">function</span> foo(arg<span style="color:#666">::</span><span style="color:#b00040">Int</span>)
+    <span style="color:#408080;font-style:italic"># ...</span>
+<span style="color:#008000;font-weight:bold">end</span>
+</code></pre></div><p><code>Documenter.jl</code>可以从文档字符串中生成下面的API文档：</p>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-fallback" data-lang="fallback">```@docs
+foo(::Int)
+```
+</code></pre></div><p>我们可以使用语法来引用API文档。</p>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-fallback" data-lang="fallback">[`foo`](@ref)
+</code></pre></div><p>然后通过执行<code>docs/make.jl</code>文件来构建文档。</p>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh">julia make.jl
+</code></pre></div><p>这将在<code>docs/build/</code>目录下生成文档。我们可以通过一个浏览器打开<code>docs/build/index.html</code>文件进行预览。稍后，在GitHub部分，我们解释了如何设置GitHub的动作，以将文档作为网页自动发布到GitHub页面。</p>
+<h2 id="创建git仓库">创建Git仓库</h2>
+<p>在<code>Example</code>目录下我们可以使用下面Git命令初始化Git仓库：</p>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh">git init
+</code></pre></div><p>该命令创建了<code>.git/</code>目录，其中存储了项目的更改历史。我们还应该创建<code>.gitignore</code>文件，它告诉Git忽略更改历史中的特定文件，比如二进制文件和构建文件。我们应该从<a href="https://github.com/github/gitignore/">gitignore</a>模板库中复制相应的模板。对于一个Julia项目，我们复制<code>Julia.gitignore</code>文件。</p>
+<h2 id="github仓库">GitHub仓库</h2>
+<p>接下来我们导航到GitHub网站并创建一个名为<code>Example.jl</code>的仓库。使用<code>.jl</code>拓展是命名Julia包的一个传统。</p>
+<p>然后，我们添加远程仓库作为我们项目的源头。</p>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh">git remote add origin &lt;remote-repository-url&gt;
+</code></pre></div><p>最后，我们应该把本地仓库推送到远程仓库：</p>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh">git push origin master
+</code></pre></div><h2 id="github页面和动作">GitHub页面和动作</h2>
+<blockquote>
+<p><a href="https://www.youtube.com/watch?v=Vi4Ntd_Vf4A&amp;list=PLFi8CfyKbgDFYCba471yBhrGc3n2Pd1fu">How to Setup GitHub Actions for a Julia Package</a></p>
+</blockquote>
+<p>我们可以使用GitHub的Actions和Pages特性来运行单元测试，并在web上自动部署文档。我们可以通过将<code>.github/workflow/</code>目录添加到我们的存储库中，并在其中创建配置文件来激活GitHub Actions。我们已经将这个实例的<code>ci.yml</code>文件分离到<code>Runtests.yml</code>和<code>Documenter.yml</code>文件来独立运行单元测试和文档。</p>
+<p>下面是<code>Runtests.yml</code>文件内容：</p>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-yaml" data-lang="yaml"><span style="color:#008000;font-weight:bold">name</span>:<span style="color:#bbb"> </span>Runtests<span style="color:#bbb">
+</span><span style="color:#bbb"></span><span style="color:#008000;font-weight:bold">on</span>:<span style="color:#bbb"> </span>[push, pull_request]<span style="color:#bbb">
+</span><span style="color:#bbb"></span><span style="color:#008000;font-weight:bold">jobs</span>:<span style="color:#bbb">
+</span><span style="color:#bbb">  </span><span style="color:#008000;font-weight:bold">test</span>:<span style="color:#bbb">
+</span><span style="color:#bbb">    </span><span style="color:#008000;font-weight:bold">runs-on</span>:<span style="color:#bbb"> </span>${{ matrix.os }}<span style="color:#bbb">
+</span><span style="color:#bbb">    </span><span style="color:#008000;font-weight:bold">strategy</span>:<span style="color:#bbb">
+</span><span style="color:#bbb">      </span><span style="color:#008000;font-weight:bold">matrix</span>:<span style="color:#bbb">
+</span><span style="color:#bbb">        </span><span style="color:#008000;font-weight:bold">julia-version</span>:<span style="color:#bbb"> </span>[<span style="color:#ba2121">&#39;1.4&#39;</span>]<span style="color:#bbb">
+</span><span style="color:#bbb">        </span><span style="color:#008000;font-weight:bold">julia-arch</span>:<span style="color:#bbb"> </span>[x64]<span style="color:#bbb">
+</span><span style="color:#bbb">        </span><span style="color:#008000;font-weight:bold">os</span>:<span style="color:#bbb"> </span>[ubuntu-latest]<span style="color:#bbb"> </span><span style="color:#408080;font-style:italic"># [ubuntu-latest, windows-latest, macOS-latest]</span><span style="color:#bbb">
+</span><span style="color:#bbb">    </span><span style="color:#008000;font-weight:bold">steps</span>:<span style="color:#bbb">
+</span><span style="color:#bbb">      </span>- <span style="color:#008000;font-weight:bold">uses</span>:<span style="color:#bbb"> </span>actions/checkout@v2<span style="color:#bbb">
+</span><span style="color:#bbb">      </span>- <span style="color:#008000;font-weight:bold">uses</span>:<span style="color:#bbb"> </span>julia-actions/setup-julia@latest<span style="color:#bbb">
+</span><span style="color:#bbb">        </span><span style="color:#008000;font-weight:bold">with</span>:<span style="color:#bbb">
+</span><span style="color:#bbb">          </span><span style="color:#008000;font-weight:bold">version</span>:<span style="color:#bbb"> </span>${{ matrix.julia-version }}<span style="color:#bbb">
+</span><span style="color:#bbb">      </span>- <span style="color:#008000;font-weight:bold">uses</span>:<span style="color:#bbb"> </span>julia-actions/julia-buildpkg@latest<span style="color:#bbb">
+</span><span style="color:#bbb">      </span>- <span style="color:#008000;font-weight:bold">uses</span>:<span style="color:#bbb"> </span>julia-actions/julia-runtest@latest<span style="color:#bbb">
+</span></code></pre></div><p><code>Documenter.yml</code>文件的内容：</p>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-yaml" data-lang="yaml"><span style="color:#008000;font-weight:bold">name</span>:<span style="color:#bbb"> </span>Documenter<span style="color:#bbb">
+</span><span style="color:#bbb"></span><span style="color:#008000;font-weight:bold">on</span>:<span style="color:#bbb">
+</span><span style="color:#bbb">  </span><span style="color:#008000;font-weight:bold">push</span>:<span style="color:#bbb">
+</span><span style="color:#bbb">    </span><span style="color:#008000;font-weight:bold">branches</span>:<span style="color:#bbb">
+</span><span style="color:#bbb">      </span>- master<span style="color:#bbb">
+</span><span style="color:#bbb">    </span><span style="color:#008000;font-weight:bold">tags</span>:<span style="color:#bbb"> </span><span style="color:#ba2121">&#39;*&#39;</span><span style="color:#bbb">
+</span><span style="color:#bbb">  </span><span style="color:#008000;font-weight:bold">pull_request</span>:<span style="color:#bbb">
+</span><span style="color:#bbb"></span><span style="color:#008000;font-weight:bold">jobs</span>:<span style="color:#bbb">
+</span><span style="color:#bbb">  </span><span style="color:#008000;font-weight:bold">build</span>:<span style="color:#bbb">
+</span><span style="color:#bbb">    </span><span style="color:#008000;font-weight:bold">runs-on</span>:<span style="color:#bbb"> </span>ubuntu-latest<span style="color:#bbb">
+</span><span style="color:#bbb">    </span><span style="color:#008000;font-weight:bold">steps</span>:<span style="color:#bbb">
+</span><span style="color:#bbb">      </span>- <span style="color:#008000;font-weight:bold">uses</span>:<span style="color:#bbb"> </span>actions/checkout@v2<span style="color:#bbb">
+</span><span style="color:#bbb">      </span>- <span style="color:#008000;font-weight:bold">uses</span>:<span style="color:#bbb"> </span>julia-actions/setup-julia@latest<span style="color:#bbb">
+</span><span style="color:#bbb">        </span><span style="color:#008000;font-weight:bold">with</span>:<span style="color:#bbb">
+</span><span style="color:#bbb">          </span><span style="color:#008000;font-weight:bold">version</span>:<span style="color:#bbb"> </span><span style="color:#ba2121">&#39;1.4&#39;</span><span style="color:#bbb">
+</span><span style="color:#bbb">      </span>- <span style="color:#008000;font-weight:bold">name</span>:<span style="color:#bbb"> </span>Install dependencies<span style="color:#bbb">
+</span><span style="color:#bbb">        </span><span style="color:#008000;font-weight:bold">run</span>:<span style="color:#bbb"> </span>julia --project=docs/ -e &#39;using Pkg; Pkg.develop(PackageSpec(path=pwd())); Pkg.instantiate()&#39;<span style="color:#bbb">
+</span><span style="color:#bbb">      </span>- <span style="color:#008000;font-weight:bold">name</span>:<span style="color:#bbb"> </span>Build and deploy<span style="color:#bbb">
+</span><span style="color:#bbb">        </span><span style="color:#008000;font-weight:bold">env</span>:<span style="color:#bbb">
+</span><span style="color:#bbb">          </span><span style="color:#008000;font-weight:bold">GITHUB_TOKEN</span>:<span style="color:#bbb"> </span>${{ secrets.GITHUB_TOKEN }}<span style="color:#bbb"> </span><span style="color:#408080;font-style:italic"># For authentication with GitHub Actions token</span><span style="color:#bbb">
+</span><span style="color:#bbb">          </span><span style="color:#008000;font-weight:bold">DOCUMENTER_KEY</span>:<span style="color:#bbb"> </span>${{ secrets.DOCUMENTER_KEY }}<span style="color:#bbb"> </span><span style="color:#408080;font-style:italic"># For authentication with SSH deploy key</span><span style="color:#bbb">
+</span><span style="color:#bbb">        </span><span style="color:#008000;font-weight:bold">run</span>:<span style="color:#bbb"> </span>julia --project=docs/ docs/make.jl<span style="color:#bbb">
+</span></code></pre></div><p>接下来，我们必须设置GITHUB_TOKEN和DOCUMENTER_KEY的秘值，如<a href="https://juliadocs.github.io/Documenter.jl/stable/man/hosting/index.html">托管文档</a>部分所解释的那样。首先，在Julia REPL上执行以下命令。</p>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-julia" data-lang="julia">pkg<span style="color:#666">&gt;</span> activate <span style="color:#666">.</span>
+julia<span style="color:#666">&gt;</span> <span style="color:#008000;font-weight:bold">using</span> DocumenterTools
+julia<span style="color:#666">&gt;</span> DocumenterTools<span style="color:#666">.</span>genkeys()
+</code></pre></div><p>然后，按照输出的说明进行操作，如下所示:</p>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-fallback" data-lang="fallback">[ Info: add the public key below to https://github.com/$USER/$REPO/settings/keys with read/write access:
+
+[SSH PUBLIC KEY HERE]
+
+[ Info: add a secure environment variable named &#39;DOCUMENTER_KEY&#39; to https://travis-ci.com/$USER/$REPO/settings (if you deploy using Travis CI) or https://github.com/$USER/$REPO/settings/secrets (if you deploy using GitHub Actions) with value:
+
+[LONG BASE64 ENCODED PRIVATE KEY]
+</code></pre></div><p>Documenter动作将生成<code>make.jl</code>的输出到仓库中的gh-pages分支，它形成了GitHub页面的内容。</p>
+<h2 id="版本控制和发布">版本控制和发布</h2>
+<h3 id="语义版本控制">语义版本控制</h3>
+<p>软件版本控制对于标识软件的新开发和确保与其他软件的兼容性至关重要。Julia打包遵循语义版本控制的约定，我们以<code>major.minor.batch</code>形式更新版本号。我们建议阅读<a href="https://semver.org/">semver.org</a>网站上关于语义版本的详细描述和说明。</p>
+<h3 id="包注册登记">包注册登记</h3>
+<p>在软件工程中，发布指的是发布软件包的新版本。我们可以将Julia包发布到<a href="https://github.com/JuliaRegistries/General">Julia包注册中心</a>。Julia包注册中心还维护GitHub的注册器应用程序和TagBot GitHub动作，我们可以使用它来自动化发布过程。</p>
+<p>我们按下安装应用程序按钮安装<a href="https://github.com/JuliaRegistries/Registrator.jl">Registrator.jl</a>GitHub应用程序，并选择我们的存储库。</p>
+<h3 id="标记版本">标记版本</h3>
+<p>我们继续将<a href="https://github.com/JuliaRegistries/TagBot">TagBot</a>GitHub动作添加到我们的库中。TagBot自动标记新版本的发布。我们可以通过添加<code>TagBot.yml</code>到<code>.github/workflows/</code>来设置它。</p>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-yaml" data-lang="yaml"><span style="color:#008000;font-weight:bold">name</span>:<span style="color:#bbb"> </span>TagBot<span style="color:#bbb">
+</span><span style="color:#bbb"></span><span style="color:#008000;font-weight:bold">on</span>:<span style="color:#bbb">
+</span><span style="color:#bbb">  </span><span style="color:#008000;font-weight:bold">issue_comment</span>:<span style="color:#bbb">
+</span><span style="color:#bbb">    </span><span style="color:#008000;font-weight:bold">types</span>:<span style="color:#bbb">
+</span><span style="color:#bbb">      </span>- created<span style="color:#bbb">
+</span><span style="color:#bbb">  </span><span style="color:#008000;font-weight:bold">workflow_dispatch</span>:<span style="color:#bbb">
+</span><span style="color:#bbb"></span><span style="color:#008000;font-weight:bold">jobs</span>:<span style="color:#bbb">
+</span><span style="color:#bbb">  </span><span style="color:#008000;font-weight:bold">TagBot</span>:<span style="color:#bbb">
+</span><span style="color:#bbb">    </span><span style="color:#008000;font-weight:bold">if</span>:<span style="color:#bbb"> </span>github.event_name == &#39;workflow_dispatch&#39; || github.actor == &#39;JuliaTagBot&#39;<span style="color:#bbb">
+</span><span style="color:#bbb">    </span><span style="color:#008000;font-weight:bold">runs-on</span>:<span style="color:#bbb"> </span>ubuntu-latest<span style="color:#bbb">
+</span><span style="color:#bbb">    </span><span style="color:#008000;font-weight:bold">steps</span>:<span style="color:#bbb">
+</span><span style="color:#bbb">      </span>- <span style="color:#008000;font-weight:bold">uses</span>:<span style="color:#bbb"> </span>JuliaRegistries/TagBot@v1<span style="color:#bbb">
+</span><span style="color:#bbb">        </span><span style="color:#008000;font-weight:bold">with</span>:<span style="color:#bbb">
+</span><span style="color:#bbb">          </span><span style="color:#008000;font-weight:bold">token</span>:<span style="color:#bbb"> </span>${{ secrets.GITHUB_TOKEN }}<span style="color:#bbb">
+</span><span style="color:#bbb">          </span><span style="color:#008000;font-weight:bold">ssh</span>:<span style="color:#bbb"> </span>${{ secrets.DOCUMENTER_KEY }}<span style="color:#bbb">
+</span></code></pre></div><h3 id="发布过程">发布过程</h3>
+<p>在设置了Registrator应用和TagBot动作之后，我们可以继续进行发布过程，我们可以使用它来发布我们的包的所有未来版本。</p>
+<p>在发布新版本之前，我们应该更新项目<code>Project.toml</code>中所有依赖项<code>[deps]</code>的兼容性<code>[compat]</code>，并检查自动化单元测试是否通过，文档的构建是否没有错误。</p>
+<p>要发布一个新版本，我们需要使用语义版本原则更新<code>Project.toml</code>中的版本字符串。</p>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-toml" data-lang="toml">name = <span style="color:#ba2121">&#34;Example&#34;</span>
+uuid = <span style="color:#ba2121">&#34;...&#34;</span>
+authors = [<span style="color:#ba2121">&#34;author &lt;email&gt;&#34;</span>]
+version = <span style="color:#ba2121">&#34;0.1.0&#34;</span>  <span style="color:#408080;font-style:italic"># update the version string!</span>
+...
+</code></pre></div><p>然后，我们可以将更新后的版本字符串添加到Git。</p>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh">git add Project.toml
+</code></pre></div><p>最后，我们需要对提交进行如下评论。</p>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh">git commit -m <span style="color:#ba2121">&#34;@JuliaRegistrator register&#34;</span> 
+</code></pre></div><p>一旦我们推送了提交，注册器应用程序注册了一个新版本的包，TagBot动作用新版本字符串标记提交。TagBot动作也会触发新包版本的文档构建。</p>
+<h2 id="readme">readme</h2>
+<p><code>README.md</code>文件的目标是指导人们安装程序，并展示一个简单的使用示例。自述文件应该包含以下部分:</p>
+<ul>
+<li>简短的描述解释了项目的目的和功能。或者，我们可以包含徽章来指示测试成功、代码覆盖率和构建状态。我们可以使用<a href="https://shields.io/">Shields IO</a>制作任意徽章。</li>
+<li>使用实例为开始使用项目提供了一个清晰和直接的例子。</li>
+<li>安装说明提供了关于如何安装项目的明确说明。</li>
+<li>开发说明提供了关于如何开始开发项目的说明。它们应该包括如何运行测试和构建文档。</li>
+</ul>
+<h2 id="许可">许可</h2>
+<p>软件许可证用来传递用户使用和分发软件包的权限。包在license文本文件中包含他的许可证。我们应该总是在项目中包含许可。我们建议使用<a href="https://opensource.org/licenses">开源许可</a>，例如MIT许可。如果计划用商业应用程序创建开源软件，那么应该阅读更多关于许可的内容，特别是来自GNU许可的GPL和AGPL等copyleft许可。</p>
+<h2 id="使用pkgtemplatesjl">使用PkgTemplates.jl</h2>
+<p>一旦您理解了Julia包的基本组件，你就可以通过使用<a href="https://github.com/invenia/PkgTemplates.jl">invenia/PkgTemplates</a>将打包过程提升到下一个层次。使用PkgTemplates，我们可以通过编写和执行一个Julia脚本来生成包含本文中讨论的所有包组件的Julia包。下面是一个小示例脚本，用于创建MyPackage与最小的Julia版本1.3.0，MIT许可证，SSH的Git库，以及用于单元测试和文档器的GitHub操作：</p>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-fallback" data-lang="fallback">using PkgTemplates
+t = Template(
+    user=&#34;jaantollander&#34;,
+    dir=&#34;.&#34;,
+    julia=v&#34;1.3.0&#34;,
+    plugins=[
+        License(; name=&#34;MIT&#34;),
+        Git(; ssh=true),
+        GitHubActions(),
+        Documenter{GitHubActions}(),
+    ]
+)
+t(&#34;MyPackage&#34;)
+</code></pre></div><p>该工具是自Julia 1.6以来创建包的默认方式，我们强烈推荐使用它!</p>
+<h2 id="总结">总结</h2>
+<p>现在，你可以开始创建和发布自己的Julia软件包，为自己赢得Julia开发人员的头衔。Go and get after it!</p>
+
+				</div>
+				<footer class="footer">
+				  <hr>
+<div class="post-tags">
+
+<p>
+  <svg xmlns="http://www.w3.org/2000/svg" class="octicon" width="20" height="24" viewBox="0 0 14 16"><path fill-rule="evenodd" d="M8 2H6V0h2v2zm4 5H2c-.55 0-1-.45-1-1V4c0-.55.45-1 1-1h10l2 2-2 2zM8 4H6v2h2V4zM6 16h2V8H6v8z"/></svg>
+	
+	<a class="p-category" href="../../categories/blog/">Blog</a>
+</p>
+
+
+<p>
+  <svg xmlns="http://www.w3.org/2000/svg" class="octicon" width="20" height="24" viewBox="0 0 15 16"><path fill-rule="evenodd" d="M7.73 1.73C7.26 1.26 6.62 1 5.96 1H3.5C2.13 1 1 2.13 1 3.5v2.47c0 .66.27 1.3.73 1.77l6.06 6.06c.39.39 1.02.39 1.41 0l4.59-4.59a.996.996 0 0 0 0-1.41L7.73 1.73zM2.38 7.09c-.31-.3-.47-.7-.47-1.13V3.5c0-.88.72-1.59 1.59-1.59h2.47c.42 0 .83.16 1.13.47l6.14 6.13-4.73 4.73-6.13-6.15zM3.01 3h2v2H3V3h.01z"/></svg>
+	
+	<a class="p-tag" href="../../tags/julia/">julia</a><a class="p-tag" href="../../tags/development/">development</a>
+
+</p>
+</div>
+
+				</footer>
+			</article>
+		</main>
+			  <button class="hamburger hamburger--arrow is-active" type="button" onclick="document.getElementsByClassName('sidebar')[0].classList.toggle('collapsed');document.getElementsByClassName('content')[0].classList.toggle('expanded');document.getElementsByClassName('hamburger')[0].classList.toggle('is-active');document.getElementsByClassName('hamburger-inner')[0].classList.toggle('is-active')">
+      <span class="hamburger-box">
+        <span class="hamburger-inner"></span>
+      </span>
+    </button>
+		<aside class="sidebar">
+			<div class="container sidebar-sticky">
+				<header class="sidebar-about h-card vcard p-author">
+					
+					<a class="u-url u-uid" rel="me" href="../../">
+						<img class="u-photo" src="https://avatars.githubusercontent.com/u/25057508?v=4" width=128 height=128 />
+					</a>
+					
+
+					
+					<span class="site-title u-name fn">
+					  <a class="u-url u-uid" rel="me" href="../../">ShixiangWang
+(王诗翔)</a>
+				  </span>
+					
+
+					<p class="lead p-note">
+						 Bioinformatics Scholar. Cancer Researcher. Data Scientist. Always learning something new. 
+					</p>
+
+					<nav>
+						<ul class="sidebar-nav">
+							
+							<li><a href="../../about/"> About </a></li>
+							
+							<li><a href="../../blog/"> Blog </a></li>
+							
+							<li><a href="../../project/"> Projects </a></li>
+							
+							<li><a href="http://42.192.87.178:3838/"> Shiny Apps </a></li>
+							
+							<li><a href="../../talk/"> Talks </a></li>
+							
+							<li><a href="https://github.com/ShixiangWang/self-study/discussions"> Discuss with me? </a></li>
+							
+							<li><a href="https://shixiangwang.netlify.app/"> Mirror #1 </a></li>
+							
+							<li><a href="https://shixiangwang.github.io/"> Mirror #2 </a></li>
+							
+						</ul>
+					</nav>
+
+					
+						<div class="contact">
+						  
+							<ul class="contact-list">
+								
+								<li>
+									
+									  
+		  							  <a href="https://twitter.com/WangShxiang" class="u-url url" rel="me" title="Twitter" aria-label="Twitter">
+		  						    <i class='fab fa-twitter fa-fw'></i>
+		  							  </a>
+		  						  
+								
+								</li>
+								
+								<li>
+									
+									  
+		  							  <a href="https://github.com/ShixiangWang" class="u-url url" rel="me" title="GitHub" aria-label="GitHub">
+		  						    <i class='fab fa-github fa-fw'></i>
+		  							  </a>
+		  						  
+								
+								</li>
+								
+								<li>
+									
+		  							<a href="mailto:shixiang1994wang@gmail.com" class="u-email email" rel="me" title="Email" aria-label="Email">
+		  							<i class='fa fa-envelope fa-fw'></i>
+		  							  
+		  							</a>
+									
+								</li>
+								
+								<li>
+									
+									  
+		  							  <a href="https://shixiangwang.github.io/home/logo/qrcode.jpg" class="u-url url" rel="me" title="Bandcamp" aria-label="Bandcamp">
+		  						    <i class='fab fa-bandcamp fa-fw'></i>
+		  							  </a>
+		  						  
+								
+								</li>
+								
+							</ul>
+						</div>
+					
+				</header>
+
+				<footer>&copy; 2021. All rights reserved. </footer>
+				 <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+            <span id="busuanzi_container_site_pv">本站总访问量&nbsp;<span id="busuanzi_value_site_pv"></span>&nbsp;次</span>
+			</div>
+		</aside>
+
+		  <footer>
+  <script src="../../js/jquery-latest.js"></script>
+<script src="../../js/featherlight.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+
+<script>
+MathJax = {
+  tex: {
+    inlineMath: [['$', '$'], ['\\(', '\\)']]
+  }
+};
+</script>
+<script type="text/javascript" id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+  
+  </footer>
+  </body>
+</html>
+
+	</body>
+</html>

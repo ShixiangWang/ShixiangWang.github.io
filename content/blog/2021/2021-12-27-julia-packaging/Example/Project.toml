@@ -1,0 +1,9 @@
+name = "Example"
+uuid = "60ec28e2-db0f-4934-a46d-ec60ccfe24a3"
+authors = ["ShixiangWang <wangshx@shanghaitech.edu.cn>"]
+version = "0.1.0"
+
+[deps]
+DocumenterTools = "35a29f4d-8980-5a13-9543-d66fff28ecb8"
+PkgTemplates = "14b8a8f1-9102-5b29-a752-f990bacb7fe1"
+Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"

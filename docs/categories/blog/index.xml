@@ -8,7 +8,25 @@
 (王诗翔)</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 08 Dec 2021 00:00:00 +0000</lastBuildDate><atom:link href="/categories/blog/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 27 Dec 2021 00:00:00 +0000</lastBuildDate><atom:link href="/categories/blog/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>如何用Julia语言创建软件包</title>
+      <link>/blog/julia-packaging/</link>
+      <pubDate>Mon, 27 Dec 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/julia-packaging/</guid>
+      <description>源：https://jaantollander.com/post/how-to-create-software-packages-with-julia-language/
+ 介绍 本文将教你如何用Julia编程语言创建一个开源的软件包，并使用基于git的工作流开发软件包。例如，你将了解如何自动化单元测试和文档部署，以及发布包的新版本。此外，我们创建了Julia播放列表的逐步视频教程，以指导你通过这个过程。
+安装Julia 首先，我们将从julialang网站的下载页面安装Julia编程语言。在Linux中，我们可以将存档解压缩到所需的位置。我们将使用~/software/目录。
+~/.bashrc添加配置如下：
+export PATH=&amp;#34;$PATH:$HOME/software/julia-1.5.3-linux-x86_64/julia-1.5.3/bin&amp;#34; 上面的版本根据你自己的实际情况进行修改。
+Julia REPL  How to use Julia REPL for Developing Packages
+ 我们可以通过在命令行输入Julia来打开Julia REPL。Julia REPL有四种不同的模式：
+ Julia模式julia&amp;gt;用于测试Julia代码。 包管理模式pkg&amp;gt;用于执行包管理命令。可以使用]进行激活。 帮助模式help?&amp;gt;用于打印帮助和文档。我们可以使用?进行激活。 Shell模式shell&amp;gt;用于执行shell命令。我们可以使用分号;进行激活。  我们可以使用回车符从其他模式退回到Julia模式。
+包结构 我们的包结构将遵循使用Julia语言创建软件包的官方示例。我们可以在Example.jl中找到示例库。我们可以克隆示例库并对其进行研究。以点开头的目录可能被操作系统隐藏了。我们可以从文件系统设置中显示隐藏的文件。Julia包结构如下所示：
+Example/ ├─ .git/ ├─ .github/ │ └─ workflows/ │ ├─ TagBot.yml │ └─ ci.yml ├─ docs/ │ ├─ src/ │ │ └─ index.md │ ├─ Project.toml │ └─ make.jl ├─ src/ │ └─ Example.jl ├─ test/ │ └─ runtests.</description>
+    </item>
+    
     <item>
       <title>ggplot结合点图与箱线图的问题与解决</title>
       <link>/blog/ggplot-overlay-points-on-boxplot-qa/</link>
@@ -153,28 +171,6 @@ summary(lm(y~a)) ## ## Call: ## lm(formula = y ~ a) ## ## Residuals: ## Min 1Q M
 library(IRanges) rng = IRanges(start = 1, end = 15) rng ## IRanges object with 1 range and 0 metadata columns: ## start end width ## &amp;lt;integer&amp;gt; &amp;lt;integer&amp;gt; &amp;lt;integer&amp;gt; ## [1] 1 15 15 构造出来的对象区间起始和终止都是闭合的，另外与R索引一致，都是从1开始。
  构造向量 向量是最常见的了：
 x = IRanges(start=c(4, 7, 2, 20), end=c(13, 7, 5, 23)) x ## IRanges object with 4 ranges and 0 metadata columns: ## start end width ## &amp;lt;integer&amp;gt; &amp;lt;integer&amp;gt; &amp;lt;integer&amp;gt; ## [1] 4 13 10 ## [2] 7 7 1 ## [3] 2 5 4 ## [4] 20 23 4 给区间命名：</description>
-    </item>
-    
-    <item>
-      <title>机器学习分类性能常用一些指标</title>
-      <link>/blog/measures-for-classification-in-ml/</link>
-      <pubDate>Sun, 31 Oct 2021 00:00:00 +0000</pubDate>
-      
-      <guid>/blog/measures-for-classification-in-ml/</guid>
-      <description>这篇文章的目的主要是记录一些分类器相关的度量指标。 从混淆矩阵中衍生出来的指标特别多，而我们中文与英文可能又存在多种对应 关系，这造成了记忆和理解上的困难。
- 来源：https://zhuanlan.zhihu.com/p/111274912
- 灵敏度与特异性 灵敏度 灵敏度（sensitivity），又称真阳性率，即实际有病，并且按照该诊断试验的标准被正确地判为有病的百分比。它反映了诊断试验发现病人的能力。
-该研究中，根据手术病理结果有100例乳腺癌患者，但胸部扪诊只检测出其中80例患者。这说明该诊断试验只能发现80%的病人。
-特异性 特异度（specificity），又称真阴性率，即实际没病，同时被诊断试验正确地判为无病的百分比。它反映了诊断试验确定非病人的能力。
-例如有900例不是乳腺癌患者，但胸部扪诊只识别了其中的800例。特异性为89%。
-比较 如果一项诊断试验的灵敏度比较低，那么会出现很多假阴性的患者。这会延误患者的就诊，影响病程发展和愈后，甚至导致患者过早死亡。
-如果一项诊断试验的特异度比较低，那么会出现很多假阳性的患者。这样会浪费医疗资源、造成患者无端的恐慌和焦虑。
-这两个指标主要可以通过ROC曲线同时查看。
- 本节参考：https://www.mediecogroup.com/zhuanlan/lessons/229/  精度与召回率 首先需要说明的是这两者类似于ROC曲线，可以通过PR曲线同时进行观测。
-精度 精度，precision。预测所关注的事件的结果中，预测正确的概率（共预测了 20 次，8 次正确，12 次错误）。
-与Accuracy的区别：Accuracy不管正负类，算全部预测正确占总数的比率。而精度关注 预测正确的正类数目占全部正类数目的比率。
-召回率/查全率 recall。对所有所关注的类型（一般就是正类），将其预测出的概率（共 10 个癌症患者，预测出 8 个）。
- 本节参考：https://www.jianshu.com/p/dcf4deddff9f  </description>
     </item>
     
   </channel>
