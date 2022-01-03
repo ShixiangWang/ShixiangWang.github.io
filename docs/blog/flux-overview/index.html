@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en-US">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1">
+
+		
+		<title>Flux Overview：建立一个简单的预测 &middot; ShixiangWang
+(王诗翔)</title>
+		
+		<meta property="og:title" content="Flux Overview：建立一个简单的预测 - ShixiangWang
+(王诗翔)">
+		
+		<meta property="og:type" content="article">
+		
+
+		
+			
+			<meta property="description" content="来自官方文档的概览">
+			<meta property="og:description" content="来自官方文档的概览">
+			
+			
+    	<meta property="twitter:card" content="summary">
+  		<meta property="twitter:image" content="/apple-touch-icon-152x152.png">
+			
+		
+
+		
+		
+		<meta name="twitter:creator" content="@WangShxiang">
+		<meta name="twitter:site" content="https://shixiangwang.github.io">
+		
+		
+
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+		<link rel="stylesheet" href="../../css/poole.css">
+		<link rel="stylesheet" href="../../css/syntax.css">
+		<link rel="stylesheet" href="../../css/hyde.css">
+		
+		
+		<link rel="stylesheet" href="../../css/hamburgers.css">
+		
+		<link rel="stylesheet" href="../../css/custom.css">
+		
+		
+
+<link rel="apple-touch-icon-precomposed" sizes="57x57" href="../../apple-touch-icon-57x57.png" />
+<link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../apple-touch-icon-114x114.png" />
+<link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../apple-touch-icon-72x72.png" />
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../apple-touch-icon-144x144.png" />
+<link rel="apple-touch-icon-precomposed" sizes="120x120" href="../../apple-touch-icon-120x120.png" />
+<link rel="apple-touch-icon-precomposed" sizes="152x152" href="../../apple-touch-icon-152x152.png" />
+<link rel="icon" type="image/png" href="../../favicon-32x32.png" sizes="32x32" />
+<link rel="icon" type="image/png" href="../../favicon-16x16.png" sizes="16x16" />
+<meta name="application-name" content="Garrick Aden-Buie"/>
+<meta name="msapplication-TileColor" content="#002B36" />
+<meta name="msapplication-TileImage" content="/mstile-144x144.png" />
+<meta name="theme-color" content="#ffffff">
+
+<meta name="mobile-web-app-capable" content="yes">
+
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-title" content="Garrick Aden-Buie">
+
+<link href="../../css/featherlight.min.css" type="text/css" rel="stylesheet" />
+
+<script async defer src="https://buttons.github.io/buttons.js"></script>
+
+<script defer src="../../js/van11y-accessible-hide-show-aria.min.js"></script>
+
+<script defer src="../../js/toc.js"></script>
+
+
+
+		<link href="../../blog/flux-overview" rel="canonical">
+	</head>
+
+	<body class="restyled-garrick  h-entry">
+		<main class="content container" role="main">
+			<article class="post">
+				<header>
+					<a class="u-url" href="../../blog/flux-overview">
+						<h1 class="post-title p-name">Flux Overview：建立一个简单的预测</h1>
+					</a>
+					<h3 class="post-author">王诗翔</h3>
+					<time class="post-date dt-published" datetime="2021-12-31T00:00:00Z">Friday, 31 December 2021</time>
+					
+				</header>
+				<div class="post-content e-content">
+					<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-julia" data-lang="julia">julia<span style="color:#666">&gt;</span> <span style="color:#008000;font-weight:bold">using</span> Flux
+
+julia<span style="color:#666">&gt;</span> actual(x) <span style="color:#666">=</span> <span style="color:#666">4</span>x <span style="color:#666">+</span> <span style="color:#666">2</span>
+actual (generic <span style="color:#008000;font-weight:bold">function</span> with <span style="color:#666">1</span> method)
+</code></pre></div><h3 id="提供训练和测试集">提供训练和测试集</h3>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-julia" data-lang="julia">julia<span style="color:#666">&gt;</span> x_train, x_test <span style="color:#666">=</span> hcat(<span style="color:#666">0</span><span style="color:#666">:</span><span style="color:#666">5.</span><span style="color:#666">..</span>), hcat(<span style="color:#666">6</span><span style="color:#666">:</span><span style="color:#666">10.</span><span style="color:#666">..</span>)
+([<span style="color:#666">0</span> <span style="color:#666">1</span> … <span style="color:#666">4</span> <span style="color:#666">5</span>], [<span style="color:#666">6</span> <span style="color:#666">7</span> … <span style="color:#666">9</span> <span style="color:#666">10</span>])
+
+julia<span style="color:#666">&gt;</span> y_train, y_test <span style="color:#666">=</span> actual<span style="color:#666">.</span>(x_train), actual<span style="color:#666">.</span>(x_test)
+([<span style="color:#666">2</span> <span style="color:#666">6</span> … <span style="color:#666">18</span> <span style="color:#666">22</span>], [<span style="color:#666">26</span> <span style="color:#666">30</span> … <span style="color:#666">38</span> <span style="color:#666">42</span>])
+</code></pre></div><p>通常，你的训练和测试数据来自真实世界的观察，但这个函数将模拟真实世界的观察。</p>
+<h3 id="构建一个模型预测">构建一个模型预测</h3>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-julia" data-lang="julia">julia<span style="color:#666">&gt;</span> model <span style="color:#666">=</span> Dense(<span style="color:#666">1</span>, <span style="color:#666">1</span>)
+Dense(<span style="color:#666">1</span>, <span style="color:#666">1</span>)         <span style="color:#408080;font-style:italic"># 2 parameters</span>
+
+julia<span style="color:#666">&gt;</span> model<span style="color:#666">.</span>weight
+<span style="color:#666">1</span>×1 <span style="color:#b00040">Matrix</span>{<span style="color:#b00040">Float32</span>}<span style="color:#666">:</span>
+ <span style="color:#666">-</span><span style="color:#666">1.0924082</span>
+
+julia<span style="color:#666">&gt;</span> model<span style="color:#666">.</span>bias
+<span style="color:#666">1</span><span style="color:#666">-</span>element <span style="color:#b00040">Vector</span>{<span style="color:#b00040">Float32</span>}<span style="color:#666">:</span>
+ <span style="color:#666">0.0</span>
+</code></pre></div><p>在底层，一个全连接层是一个含有<code>weight</code>和<code>bias</code>的结构体。<code>weight</code>代表权重矩阵，<code>bias</code>代表偏置向量。
+我们可以使用其他方式思考一个模型。在Flux中，模型是概念上的预测函数：</p>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-julia" data-lang="julia">julia<span style="color:#666">&gt;</span> predict <span style="color:#666">=</span> Dense(<span style="color:#666">1</span>, <span style="color:#666">1</span>)
+Dense(<span style="color:#666">1</span>, <span style="color:#666">1</span>) 
+</code></pre></div><p><code>Dense(1, 1)</code>实现了函数<code>σ(Wx+b)</code>，$\sigma$是激活函数。我们这里的模型
+只有一个权重和偏置，但典型的模型一般有更多。把权重和偏差想象成Flux可以用来调整预测的把手和杠杆。激活函数是你需要定制模型的转换。</p>
+<p>这个模型已经可以预测了，尽管还不准确：</p>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-julia" data-lang="julia">julia<span style="color:#666">&gt;</span> predict(x_train)
+<span style="color:#666">1</span>×6 <span style="color:#b00040">Matrix</span>{<span style="color:#b00040">Float32</span>}<span style="color:#666">:</span>
+ <span style="color:#666">0.0</span>  <span style="color:#666">-</span><span style="color:#666">0.747322</span>  <span style="color:#666">-</span><span style="color:#666">1.49464</span>  <span style="color:#666">-</span><span style="color:#666">2.24196</span>  <span style="color:#666">-</span><span style="color:#666">2.98929</span>  <span style="color:#666">-</span><span style="color:#666">3.73661</span>
+</code></pre></div><p>为了做出更好的预测，你需要提供一个损失函数来告诉Flux如何客观地评估预测的质量。损失函数计算实际值和预测值之间的累积距离。</p>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-julia" data-lang="julia">julia<span style="color:#666">&gt;</span> loss(x, y) <span style="color:#666">=</span> Flux<span style="color:#666">.</span>Losses<span style="color:#666">.</span>mse(predict(x), y)
+loss (generic <span style="color:#008000;font-weight:bold">function</span> with <span style="color:#666">1</span> method)
+
+julia<span style="color:#666">&gt;</span> loss(x_train, y_train)
+<span style="color:#666">258.06296f0</span>
+</code></pre></div><p>预测越准确，损失就越小。你可以编写自己的损失函数或依赖Flux已经提供的函数。这个损失函数叫做均方误差。Flux的工作原理是通过训练迭代地减少损失。</p>
+<h3 id="提升预测">提升预测</h3>
+<p>底层实现Flux的<code>train!</code>函数使用损失函数和训练数据用来基于一个优化器来更新参数。</p>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-julia" data-lang="julia">julia<span style="color:#666">&gt;</span> <span style="color:#008000;font-weight:bold">using</span> Flux<span style="color:#666">:</span> train!
+
+julia<span style="color:#666">&gt;</span> opt <span style="color:#666">=</span> Descent()
+Descent(<span style="color:#666">0.1</span>)
+
+julia<span style="color:#666">&gt;</span> data <span style="color:#666">=</span> [(x_train, y_train)]
+<span style="color:#666">1</span><span style="color:#666">-</span>element <span style="color:#b00040">Vector</span>{<span style="color:#b00040">Tuple</span>{<span style="color:#b00040">Matrix</span>{<span style="color:#b00040">Int64</span>}, <span style="color:#b00040">Matrix</span>{<span style="color:#b00040">Int64</span>}}}<span style="color:#666">:</span>
+ ([<span style="color:#666">0</span> <span style="color:#666">1</span> … <span style="color:#666">4</span> <span style="color:#666">5</span>], [<span style="color:#666">2</span> <span style="color:#666">6</span> … <span style="color:#666">18</span> <span style="color:#666">22</span>])
+</code></pre></div><p>现在，我们有了传给<code>train!</code>的优化器和数据。剩下的就是模型的参数了。记住，每个模型都是一个具有函数和可配置参数的Julia结构。记住，密集层的权重和偏差取决于输入和输出的尺寸：</p>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-julia" data-lang="julia">julia<span style="color:#666">&gt;</span> predict<span style="color:#666">.</span>weight
+<span style="color:#666">1</span>×1 <span style="color:#b00040">Matrix</span>{<span style="color:#b00040">Float32</span>}<span style="color:#666">:</span>
+ <span style="color:#666">-</span><span style="color:#666">0.7473216</span>
+
+julia<span style="color:#666">&gt;</span> predict<span style="color:#666">.</span>bias
+<span style="color:#666">1</span><span style="color:#666">-</span>element <span style="color:#b00040">Vector</span>{<span style="color:#b00040">Float32</span>}<span style="color:#666">:</span>
+ <span style="color:#666">0.0</span>
+</code></pre></div><p>这些模型参数的尺寸取决于输入和输出的数量。由于模型可以有数百个输入和多个层次，有一个函数来收集参数到Flux期望的数据结构中是有用的：</p>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-julia" data-lang="julia">parameters <span style="color:#666">=</span> params(predict)
+Params([<span style="color:#b00040">Float32</span>[<span style="color:#666">-</span><span style="color:#666">0.7473216</span>;;], <span style="color:#b00040">Float32</span>[<span style="color:#666">0.0</span>]])
+</code></pre></div><p>这些是Flux将会改变的参数，一步一次，来改进预测。每个参数都来自预测模型：</p>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-julia" data-lang="julia">predict<span style="color:#666">.</span>weight <span style="color:#008000">in</span> parameters, predict<span style="color:#666">.</span>bias <span style="color:#008000">in</span> parameters
+(<span style="color:#008000;font-weight:bold">true</span>, <span style="color:#008000;font-weight:bold">true</span>)
+</code></pre></div><p>这个优化器实现了经典的梯度下降策略。现在我们使用下面的方式更新模型参数：</p>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-julia" data-lang="julia">train!(loss, parameters, data, opt)
+</code></pre></div><p>检查损失：</p>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-julia" data-lang="julia">julia<span style="color:#666">&gt;</span> loss(x_train, y_train)
+<span style="color:#666">244.93066f0</span>
+</code></pre></div><p>它下降了，为什么？</p>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-julia" data-lang="julia">julia<span style="color:#666">&gt;</span> parameters
+Params([<span style="color:#b00040">Float32</span>[<span style="color:#666">8.956102</span>;;], <span style="color:#b00040">Float32</span>[<span style="color:#666">2.7736611</span>]])
+</code></pre></div><p>参数发生了改变。这一步就是机器学习的本质。</p>
+<h3 id="迭代训练模型">迭代训练模型</h3>
+<p>在前一节中，我们只进行了一次训练。它在我们传入的数据上迭代一次。<code>epoch</code>指的是对数据集的一次训练。通常情况下，我们会进行多个epoch的训练，以进一步降低损失。让我们再运行几次：</p>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-julia" data-lang="julia">julia<span style="color:#666">&gt;</span> <span style="color:#008000;font-weight:bold">for</span> epoch <span style="color:#008000">in</span> <span style="color:#666">1</span><span style="color:#666">:</span><span style="color:#666">200</span>
+         train!(loss, parameters, data, opt)
+       <span style="color:#008000;font-weight:bold">end</span>
+
+julia<span style="color:#666">&gt;</span> loss(x_train, y_train)
+<span style="color:#666">0.007161801f0</span>
+
+julia<span style="color:#666">&gt;</span> parameters
+Params([<span style="color:#b00040">Float32</span>[<span style="color:#666">4.0259266</span>;;], <span style="color:#b00040">Float32</span>[<span style="color:#666">2.0073032</span>]])
+</code></pre></div><p>训练步数达到200步后，损失下降，参数逐渐接近模型预测函数中的参数。</p>
+<h3 id="验证预测">验证预测</h3>
+<p>现在，让我们验证预测：</p>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-julia" data-lang="julia">julia<span style="color:#666">&gt;</span> predict(x_test)
+<span style="color:#666">1</span>×5 <span style="color:#b00040">Matrix</span>{<span style="color:#b00040">Float32</span>}<span style="color:#666">:</span>
+ <span style="color:#666">26.1629</span>  <span style="color:#666">30.1888</span>  <span style="color:#666">34.2147</span>  <span style="color:#666">38.2406</span>  <span style="color:#666">42.2666</span>
+
+julia<span style="color:#666">&gt;</span> y_test
+<span style="color:#666">1</span>×5 <span style="color:#b00040">Matrix</span>{<span style="color:#b00040">Int64</span>}<span style="color:#666">:</span>
+ <span style="color:#666">26</span>  <span style="color:#666">30</span>  <span style="color:#666">34</span>  <span style="color:#666">38</span>  <span style="color:#666">42</span>
+</code></pre></div><p>预测结果是很好的。下面介绍我们是如何得到的。</p>
+<p>首先，我们把真实数据的数据存储到变量<code>x_train</code>，<code>y_train</code>，<code>x_test</code>和<code>y_test</code>中。<code>x_*</code>数据定义了输入，<code>y_*</code>数据定义输出。<code>*_train</code>数据用来训练模型，<code>*_test</code>数据用来验证模型。我们的数据基于函数<code>4x + 2</code>。</p>
+<p>接下来，我们构建了一个单个输入、单个输出的预测模型，<code>predict = Dense(1, 1)</code>。因为我们还没有训练模型，所以初始的预测不准确。</p>
+<p>在构建模型之后，我们使用<code>train!(loss, parameters, data, opt)</code>进行训练。首先是损失函数，然后是存储权重和偏置的<code>parameters</code>、训练数据以及Flux提供的梯度下降优化器。我们执行训练过程一次，观察到参数的改变和损失的下降。然后，我们多次运行<code>train!</code>完成训练过程。</p>
+<p>在训练模型之后，我们使用测试数据验证模型。</p>
+<p>这整个工作流展示了Flux是如何工作的，让我们让我们进一步深入了解Flux的各个层内部发生了什么。</p>
+
+				</div>
+				<footer class="footer">
+				  <hr>
+<div class="post-tags">
+
+<p>
+  <svg xmlns="http://www.w3.org/2000/svg" class="octicon" width="20" height="24" viewBox="0 0 14 16"><path fill-rule="evenodd" d="M8 2H6V0h2v2zm4 5H2c-.55 0-1-.45-1-1V4c0-.55.45-1 1-1h10l2 2-2 2zM8 4H6v2h2V4zM6 16h2V8H6v8z"/></svg>
+	
+	<a class="p-category" href="../../categories/blog/">Blog</a>
+</p>
+
+
+<p>
+  <svg xmlns="http://www.w3.org/2000/svg" class="octicon" width="20" height="24" viewBox="0 0 15 16"><path fill-rule="evenodd" d="M7.73 1.73C7.26 1.26 6.62 1 5.96 1H3.5C2.13 1 1 2.13 1 3.5v2.47c0 .66.27 1.3.73 1.77l6.06 6.06c.39.39 1.02.39 1.41 0l4.59-4.59a.996.996 0 0 0 0-1.41L7.73 1.73zM2.38 7.09c-.31-.3-.47-.7-.47-1.13V3.5c0-.88.72-1.59 1.59-1.59h2.47c.42 0 .83.16 1.13.47l6.14 6.13-4.73 4.73-6.13-6.15zM3.01 3h2v2H3V3h.01z"/></svg>
+	
+	<a class="p-tag" href="../../tags/flux/">Flux</a><a class="p-tag" href="../../tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/">机器学习</a><a class="p-tag" href="../../tags/julia/">julia</a>
+
+</p>
+</div>
+
+				</footer>
+			</article>
+		</main>
+			  <button class="hamburger hamburger--arrow is-active" type="button" onclick="document.getElementsByClassName('sidebar')[0].classList.toggle('collapsed');document.getElementsByClassName('content')[0].classList.toggle('expanded');document.getElementsByClassName('hamburger')[0].classList.toggle('is-active');document.getElementsByClassName('hamburger-inner')[0].classList.toggle('is-active')">
+      <span class="hamburger-box">
+        <span class="hamburger-inner"></span>
+      </span>
+    </button>
+		<aside class="sidebar">
+			<div class="container sidebar-sticky">
+				<header class="sidebar-about h-card vcard p-author">
+					
+					<a class="u-url u-uid" rel="me" href="../../">
+						<img class="u-photo" src="https://avatars.githubusercontent.com/u/25057508?v=4" width=128 height=128 />
+					</a>
+					
+
+					
+					<span class="site-title u-name fn">
+					  <a class="u-url u-uid" rel="me" href="../../">ShixiangWang
+(王诗翔)</a>
+				  </span>
+					
+
+					<p class="lead p-note">
+						 Bioinformatics Scholar. Cancer Researcher. Data Scientist. Always learning something new. 
+					</p>
+
+					<nav>
+						<ul class="sidebar-nav">
+							
+							<li><a href="../../about/"> About </a></li>
+							
+							<li><a href="../../blog/"> Blog </a></li>
+							
+							<li><a href="../../project/"> Projects </a></li>
+							
+							<li><a href="http://42.192.87.178:3838/"> Shiny Apps </a></li>
+							
+							<li><a href="../../talk/"> Talks </a></li>
+							
+							<li><a href="https://github.com/ShixiangWang/self-study/discussions"> Discuss with me? </a></li>
+							
+							<li><a href="https://shixiangwang.netlify.app/"> Mirror #1 </a></li>
+							
+							<li><a href="https://shixiangwang.github.io/"> Mirror #2 </a></li>
+							
+						</ul>
+					</nav>
+
+					
+						<div class="contact">
+						  
+							<ul class="contact-list">
+								
+								<li>
+									
+									  
+		  							  <a href="https://twitter.com/WangShxiang" class="u-url url" rel="me" title="Twitter" aria-label="Twitter">
+		  						    <i class='fab fa-twitter fa-fw'></i>
+		  							  </a>
+		  						  
+								
+								</li>
+								
+								<li>
+									
+									  
+		  							  <a href="https://github.com/ShixiangWang" class="u-url url" rel="me" title="GitHub" aria-label="GitHub">
+		  						    <i class='fab fa-github fa-fw'></i>
+		  							  </a>
+		  						  
+								
+								</li>
+								
+								<li>
+									
+		  							<a href="mailto:shixiang1994wang@gmail.com" class="u-email email" rel="me" title="Email" aria-label="Email">
+		  							<i class='fa fa-envelope fa-fw'></i>
+		  							  
+		  							</a>
+									
+								</li>
+								
+								<li>
+									
+									  
+		  							  <a href="https://shixiangwang.github.io/home/logo/qrcode.jpg" class="u-url url" rel="me" title="Bandcamp" aria-label="Bandcamp">
+		  						    <i class='fab fa-bandcamp fa-fw'></i>
+		  							  </a>
+		  						  
+								
+								</li>
+								
+							</ul>
+						</div>
+					
+				</header>
+
+				<footer>&copy; 2022. All rights reserved. </footer>
+				 <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+            <span id="busuanzi_container_site_pv">本站总访问量&nbsp;<span id="busuanzi_value_site_pv"></span>&nbsp;次</span>
+			</div>
+		</aside>
+
+		  <footer>
+  <script src="../../js/jquery-latest.js"></script>
+<script src="../../js/featherlight.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+
+<script>
+MathJax = {
+  tex: {
+    inlineMath: [['$', '$'], ['\\(', '\\)']]
+  }
+};
+</script>
+<script type="text/javascript" id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+  
+  </footer>
+  </body>
+</html>
+
+	</body>
+</html>

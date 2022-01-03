@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Flux on ShixiangWang
+(王诗翔)</title>
+    <link>/tags/flux/</link>
+    <description>Recent content in Flux on ShixiangWang
+(王诗翔)</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Fri, 31 Dec 2021 00:00:00 +0000</lastBuildDate><atom:link href="/tags/flux/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Flux Overview：建立一个简单的预测</title>
+      <link>/blog/flux-overview/</link>
+      <pubDate>Fri, 31 Dec 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/flux-overview/</guid>
+      <description>julia&amp;gt; using Flux julia&amp;gt; actual(x) = 4x + 2 actual (generic function with 1 method) 提供训练和测试集 julia&amp;gt; x_train, x_test = hcat(0:5...), hcat(6:10...) ([0 1 … 4 5], [6 7 … 9 10]) julia&amp;gt; y_train, y_test = actual.(x_train), actual.(x_test) ([2 6 … 18 22], [26 30 … 38 42]) 通常，你的训练和测试数据来自真实世界的观察，但这个函数将模拟真实世界的观察。
+构建一个模型预测 julia&amp;gt; model = Dense(1, 1) Dense(1, 1) # 2 parameters julia&amp;gt; model.weight 1×1 Matrix{Float32}: -1.0924082 julia&amp;gt; model.bias 1-element Vector{Float32}: 0.0 在底层，一个全连接层是一个含有weight和bias的结构体。weight代表权重矩阵，bias代表偏置向量。 我们可以使用其他方式思考一个模型。在Flux中，模型是概念上的预测函数：</description>
+    </item>
+    
+  </channel>
+</rss>

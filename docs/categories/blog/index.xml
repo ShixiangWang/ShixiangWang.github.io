@@ -8,7 +8,17 @@
 (王诗翔)</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 27 Dec 2021 00:00:00 +0000</lastBuildDate><atom:link href="/categories/blog/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 31 Dec 2021 00:00:00 +0000</lastBuildDate><atom:link href="/categories/blog/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Flux Overview：建立一个简单的预测</title>
+      <link>/blog/flux-overview/</link>
+      <pubDate>Fri, 31 Dec 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/flux-overview/</guid>
+      <description>julia&amp;gt; using Flux julia&amp;gt; actual(x) = 4x + 2 actual (generic function with 1 method) 提供训练和测试集 julia&amp;gt; x_train, x_test = hcat(0:5...), hcat(6:10...) ([0 1 … 4 5], [6 7 … 9 10]) julia&amp;gt; y_train, y_test = actual.(x_train), actual.(x_test) ([2 6 … 18 22], [26 30 … 38 42]) 通常，你的训练和测试数据来自真实世界的观察，但这个函数将模拟真实世界的观察。
+构建一个模型预测 julia&amp;gt; model = Dense(1, 1) Dense(1, 1) # 2 parameters julia&amp;gt; model.weight 1×1 Matrix{Float32}: -1.0924082 julia&amp;gt; model.bias 1-element Vector{Float32}: 0.0 在底层，一个全连接层是一个含有weight和bias的结构体。weight代表权重矩阵，bias代表偏置向量。 我们可以使用其他方式思考一个模型。在Flux中，模型是概念上的预测函数：</description>
+    </item>
+    
     <item>
       <title>如何用Julia语言创建软件包</title>
       <link>/blog/julia-packaging/</link>
@@ -157,20 +167,6 @@ summary(lm(y~a)) ## ## Call: ## lm(formula = y ~ a) ## ## Residuals: ## Min 1Q M
 这个问题在做经典科研实验时往往会忽略，深层次的原因是经典的科研实验往往是理论或经验主导需要进行检验的假说（注：经典实验比较的数目量也上不去）。例如，我测定血液中白血球的数目就可以知道你是不是处于炎症中，其背后是医学知识的支撑。然而，在组学或其他高通量实验中，研究实际是数据导向的，也就是不管有用没用反正我测了一堆指标，然后就去对比差异，然后就是上面的问题了，我们可能分不清楚哪些是真的相关，哪些又是随机出现的。
 对于单次比较，当我们看到显著差异的p值脑子里想的是零假设为真时发生的概率，当我们置信水平设定在0.95而p值低于对应的阈值，那么我们应该拒绝零假设。但对比次数多了从概率上就会出现已经被拒绝的假设实际是错误的而你不知道是哪一个。整体错误率控制的思路就是我不管单次比较了，我只对你这所有的对比次数的总错误率进行控制。还是上面的例子，对于10000次假设检验我只能接受1个错误，整体犯错概率为0.0001，那么对于单次比较，其假阳性也得设定在这个水平上去进行假设检验，结果整体上错误率是控制住了，但对于单次比较就显得十分严格了。下面用一个仿真实验来说明：
 # 随机数的10000次比较 set.seed(42) pvalue &amp;lt;- NULL for (i in 1:10000){ a &amp;lt;- rnorm(10) b &amp;lt;- rnorm(10) c &amp;lt;- t.test(a,b) pvalue[i] &amp;lt;- c$p.value } # 看下p值分布 hist(pvalue) # 小于0.</description>
-    </item>
-    
-    <item>
-      <title>使用GenomicRanges操作区间数据</title>
-      <link>/blog/operate-range-data-with-genomicranges/</link>
-      <pubDate>Mon, 01 Nov 2021 00:00:00 +0000</pubDate>
-      
-      <guid>/blog/operate-range-data-with-genomicranges/</guid>
-      <description>资料来源：Bioinformatics Data Skills
- 准备 涉及的包：
- GenomicRanges - 表示和处理基因组区间 GenomicFeatures - 表示和处理基因组元件（基因、外显子等） Biostrings/BSgenome - 操作基因组序列 rtracklayer - 读入常见生物学数据文件（BED、GTF/GFF和WIG等）   从IRanges开始 基本用法 IRange是区间的基本数据构造：
-library(IRanges) rng = IRanges(start = 1, end = 15) rng ## IRanges object with 1 range and 0 metadata columns: ## start end width ## &amp;lt;integer&amp;gt; &amp;lt;integer&amp;gt; &amp;lt;integer&amp;gt; ## [1] 1 15 15 构造出来的对象区间起始和终止都是闭合的，另外与R索引一致，都是从1开始。
- 构造向量 向量是最常见的了：
-x = IRanges(start=c(4, 7, 2, 20), end=c(13, 7, 5, 23)) x ## IRanges object with 4 ranges and 0 metadata columns: ## start end width ## &amp;lt;integer&amp;gt; &amp;lt;integer&amp;gt; &amp;lt;integer&amp;gt; ## [1] 4 13 10 ## [2] 7 7 1 ## [3] 2 5 4 ## [4] 20 23 4 给区间命名：</description>
     </item>
     
   </channel>
