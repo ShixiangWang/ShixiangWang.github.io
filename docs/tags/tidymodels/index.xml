@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>tidymodels on ShixiangWang
+(王诗翔)</title>
+    <link>/tags/tidymodels/</link>
+    <description>Recent content in tidymodels on ShixiangWang
+(王诗翔)</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 06 Jan 2022 00:00:00 +0000</lastBuildDate><atom:link href="/tags/tidymodels/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>通过tidymodels使用XGBOOST</title>
+      <link>/blog/using-xgboost-with-tidymodels/</link>
+      <pubDate>Thu, 06 Jan 2022 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/using-xgboost-with-tidymodels/</guid>
+      <description>原文：https://www.r-bloggers.com/2020/05/using-xgboost-with-tidymodels/
+ XGBoost是一个最初用C++编写的机器学习库，通过XGBoost R包中移植到R。在过去的几年里，XGBoost在Kaggle竞赛中的有效性让它大受欢迎。在Tychobra, XGBoost是我们的首选机器学习库。
+ 在2016年和2017年，Kaggle被两种方法所主导:梯度升压机和深度学习。具体来说，梯度增强用于结构化数据可用的问题，而深度学习用于图像分类等感知问题。前者的实践者几乎总是使用优秀的XGBoost库。
+ Max Kuhn和Rstudio的其他人最近将他们的注意力从caret转向了 tidymodels （caret的继承者）。“tidymodels”是一个R包的集合，它们一起工作来简化和加强模型训练和优化。随着最近发布的tidymodels.org，我们觉得是时候给tidymodels R包一个机会了。
+概览 这篇文章中我们使用tidymodels包训练和优化XGBoost模型。我们使用的AmesHousing数据集，其中包含来自艾奥瓦州艾姆斯的住房数据。我们的模型将预测房屋销售价格。
+加载包：
+# data library(AmesHousing) # data cleaning library(janitor) # data prep library(dplyr) # tidymodels library(rsample) library(recipes) library(parsnip) library(tune) library(dials) library(workflows) library(yardstick) # speed up computation with parrallel processing (optional) library(doParallel) all_cores &amp;lt;- parallel::detectCores(logical = FALSE) registerDoParallel(cores = all_cores) 加载数据：
+# set the random seed so we can reproduce any simulated results. set.seed(1234) # load the housing data and clean names ames_data &amp;lt;- make_ames() %&amp;gt;% janitor::clean_names()  Step 0：探索性数据分析 在这一点上，我们通常会对数据做一些简单的图表和总结，以获得对数据的高层次理解。为了简单起见，我们将从这篇文章中删除EDA过程，但是，在实际分析中，理解业务问题和执行有效的EDA通常是分析中最耗时和最关键的方面。</description>
+    </item>
+    
+  </channel>
+</rss>
