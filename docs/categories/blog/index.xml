@@ -8,7 +8,16 @@
 (王诗翔)</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 06 Jan 2022 00:00:00 +0000</lastBuildDate><atom:link href="/categories/blog/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 13 Jan 2022 00:00:00 +0000</lastBuildDate><atom:link href="/categories/blog/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>dials自定义grid示例</title>
+      <link>/blog/dials-grid/</link>
+      <pubDate>Thu, 13 Jan 2022 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/dials-grid/</guid>
+      <description>  library(dials) library(dplyr) param_quant = function (label, range = c(10L, 1000L), type = &amp;quot;integer&amp;quot;, trans = NULL) { stopifnot(length(label) == 1L) names(label) = label new_quant_param(type = type, range = range, inclusive = c(TRUE, TRUE), trans = trans, label = label, finalize = NULL) } param_class = function (label, values) { stopifnot(length(label) == 1L) names(label) = label new_qual_param(type = &amp;quot;character&amp;quot;, values = values, label = label, finalize = NULL) } abc = grid_max_entropy(param_quant(&amp;quot;scale&amp;quot;), param_quant(&amp;quot;abc&amp;quot;, range = c(0, 1), trans = scales::log10_trans()), param_class(&amp;quot;gender&amp;quot;, c(&amp;quot;F&amp;quot;, &amp;quot;M&amp;quot;)), size = 100, original = FALSE) plot(abc$scale, abc$abc) </description>
+    </item>
+    
     <item>
       <title>通过tidymodels使用XGBOOST</title>
       <link>/blog/using-xgboost-with-tidymodels/</link>
@@ -145,18 +154,6 @@ sudo yum upgrade git  参考：https://www.seozen.top/centos-update-upgrade-git.
       
       <guid>/blog/autoxgboost-example/</guid>
       <description>library(OpenML) library(autoxgboost) data = getOMLDataSet(31) GermanCredit = convertOMLDataSetToMlr(data) # reg_task &amp;lt;- makeRegrTask(data = data_train, target = &amp;#34;Share_Temporary&amp;#34;) # reg_task &amp;lt;- makeRegrTask(data = data_train, target = &amp;#34;Share_Temporary&amp;#34;) autoxgbparset.mixed = makeParamSet( makeDiscreteParam(&amp;#34;booster&amp;#34;, values = c(&amp;#34;gbtree&amp;#34;, &amp;#34;gblinear&amp;#34;, &amp;#34;dart&amp;#34;)), makeDiscreteParam(&amp;#34;sample_type&amp;#34;, values = c(&amp;#34;uniform&amp;#34;, &amp;#34;weighted&amp;#34;), requires = quote(booster == &amp;#34;dart&amp;#34;)), makeDiscreteParam(&amp;#34;normalize_type&amp;#34;, values = c(&amp;#34;tree&amp;#34;, &amp;#34;forest&amp;#34;), requires = quote(booster == &amp;#34;dart&amp;#34;)), makeNumericParam(&amp;#34;rate_drop&amp;#34;, lower = 0, upper = 1, requires = quote(booster == &amp;#34;dart&amp;#34;)), makeNumericParam(&amp;#34;skip_drop&amp;#34;, lower = 0, upper = 1, requires = quote(booster == &amp;#34;dart&amp;#34;)), makeLogicalParam(&amp;#34;one_drop&amp;#34;, requires = quote(booster == &amp;#34;dart&amp;#34;)), makeDiscreteParam(&amp;#34;grow_policy&amp;#34;, values = c(&amp;#34;depthwise&amp;#34;, &amp;#34;lossguide&amp;#34;)), makeIntegerParam(&amp;#34;max_leaves&amp;#34;, lower = 0, upper = 8, trafo = function(x) 2^x, requires = quote(grow_policy == &amp;#34;lossguide&amp;#34;)), makeIntegerParam(&amp;#34;max_bin&amp;#34;, lower = 2L, upper = 9, trafo = function(x) 2^x), makeNumericParam(&amp;#34;eta&amp;#34;, lower = 0.</description>
-    </item>
-    
-    <item>
-      <title>「转载」线性模型</title>
-      <link>/blog/zhibei-linear-model/</link>
-      <pubDate>Mon, 08 Nov 2021 00:00:00 +0000</pubDate>
-      
-      <guid>/blog/zhibei-linear-model/</guid>
-      <description>本文主要是转载《指北》线性模型一节的内容，有删减。
-在线性模型中，如果我们将两个共相关的变量放到同一个线性回归模型之中，那么这两个变量的系数估计的标准误都会扩大。下面我们展示下这个干扰过程：
-set.seed(42) a &amp;lt;- runif(100,min=0,max=10)+rnorm(100) b &amp;lt;- a*1.2+rnorm(100) c &amp;lt;- b*1.2+rnorm(100) y &amp;lt;- a+b+c+rnorm(100) 上面我们由两个变量生成了一个新变量，然而这两个变量是相关的，此时我们进行回归分析：
-summary(lm(y~a)) ## ## Call: ## lm(formula = y ~ a) ## ## Residuals: ## Min 1Q Median 3Q Max ## -4.1929 -1.9935 -0.2595 1.9301 5.3011 ## ## Coefficients: ## Estimate Std. Error t value Pr(&amp;gt;|t|) ## (Intercept) -0.14295 0.44101 -0.324 0.747 ## a 3.65619 0.07162 51.048 &amp;lt;2e-16 *** ## --- ## Signif. codes: 0 &amp;#39;***&amp;#39; 0.</description>
     </item>
     
   </channel>

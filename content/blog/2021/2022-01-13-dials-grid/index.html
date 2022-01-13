@@ -1,0 +1,41 @@
+---
+title: dials自定义grid示例
+author: 王诗翔
+date: '2022-01-13'
+slug: dials-grid
+categories:
+  - Blog
+tags:
+  - 机器学习
+  - tidymodels
+---
+
+<script src="{{< blogdown/postref >}}index_files/header-attrs/header-attrs.js"></script>
+
+
+<!-- Links -->
+<pre class="r"><code>library(dials)
+library(dplyr)
+
+param_quant =  function (label, range = c(10L, 1000L), type = &quot;integer&quot;, trans = NULL) {
+  stopifnot(length(label) == 1L)
+  names(label) = label
+  new_quant_param(type = type, range = range, 
+                  inclusive = c(TRUE, TRUE),
+                  trans = trans, label = label, 
+                  finalize = NULL)
+}
+
+param_class =  function (label, values) {
+  stopifnot(length(label) == 1L)
+  names(label) = label
+  new_qual_param(type = &quot;character&quot;, values = values, label = label, 
+                 finalize = NULL)
+}
+
+abc = grid_max_entropy(param_quant(&quot;scale&quot;),
+                       param_quant(&quot;abc&quot;, range = c(0, 1), trans = scales::log10_trans()),
+                       param_class(&quot;gender&quot;, c(&quot;F&quot;, &quot;M&quot;)),
+                       size = 100, original = FALSE)</code></pre>
+<pre class="r"><code>plot(abc$scale, abc$abc)</code></pre>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
