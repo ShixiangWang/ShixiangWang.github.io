@@ -8,7 +8,21 @@
 (王诗翔)</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 13 Jan 2022 00:00:00 +0000</lastBuildDate><atom:link href="/categories/blog/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 19 Jan 2022 00:00:00 +0000</lastBuildDate><atom:link href="/categories/blog/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>R(Studio)中指定外部软件路径</title>
+      <link>/blog/r-studio-specify-path/</link>
+      <pubDate>Wed, 19 Jan 2022 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/r-studio-specify-path/</guid>
+      <description>在安装R kernel时报错：
+&amp;gt; IRkernel::installspec() Error in IRkernel::installspec() : jupyter-client has to be installed but “jupyter kernelspec --version” exited with code 127. In addition: Warning message: In system2(&amp;#34;jupyter&amp;#34;, c(&amp;#34;kernelspec&amp;#34;, &amp;#34;--version&amp;#34;), FALSE, FALSE) : error in running command 这种情况是R识别不了外部的$PATH，我们可以通过~/.Rprofile进行修改配置。
+在RStudio中运行file.edit(&amp;quot;~/.Rprofile&amp;quot;)或者手动打开，添加如下内容：
+old_path = Sys.getenv(&amp;#34;PATH&amp;#34;) Sys.setenv(PATH = paste(old_path, &amp;#34;~/miniconda3/bin/&amp;#34;, sep = &amp;#34;:&amp;#34;)) 北外镜像近期使用经验整体还是比较稳定的，不妨添加：
+options(BioC_mirror=&amp;#34;https://mirrors.bfsu.edu.cn/bioconductor&amp;#34;) options(&amp;#34;repos&amp;#34; = c(CRAN=&amp;#34;https://mirrors.bfsu.edu.cn/CRAN/&amp;#34;)) ~/.condarc中可以添加：
+channels: - defaults show_channel_urls: true default_channels: - https://mirrors.bfsu.edu.cn/anaconda/pkgs/main - https://mirrors.bfsu.edu.cn/anaconda/pkgs/r - https://mirrors.bfsu.edu.cn/anaconda/pkgs/msys2 custom_channels: conda-forge: https://mirrors.bfsu.edu.cn/anaconda/cloud msys2: https://mirrors.</description>
+    </item>
+    
     <item>
       <title>dials自定义grid示例</title>
       <link>/blog/dials-grid/</link>
@@ -145,15 +159,6 @@ from torchvision import models import torch dir(models) resnet = models.resnet10
 sudo yum -y install https://packages.endpoint.com/rhel/7/os/x86_64/endpoint-repo-1.7-1.x86_64.rpm 更新Git：
 sudo yum upgrade git  参考：https://www.seozen.top/centos-update-upgrade-git.html
  </description>
-    </item>
-    
-    <item>
-      <title>autoxgboost例子</title>
-      <link>/blog/autoxgboost-example/</link>
-      <pubDate>Wed, 17 Nov 2021 00:00:00 +0000</pubDate>
-      
-      <guid>/blog/autoxgboost-example/</guid>
-      <description>library(OpenML) library(autoxgboost) data = getOMLDataSet(31) GermanCredit = convertOMLDataSetToMlr(data) # reg_task &amp;lt;- makeRegrTask(data = data_train, target = &amp;#34;Share_Temporary&amp;#34;) # reg_task &amp;lt;- makeRegrTask(data = data_train, target = &amp;#34;Share_Temporary&amp;#34;) autoxgbparset.mixed = makeParamSet( makeDiscreteParam(&amp;#34;booster&amp;#34;, values = c(&amp;#34;gbtree&amp;#34;, &amp;#34;gblinear&amp;#34;, &amp;#34;dart&amp;#34;)), makeDiscreteParam(&amp;#34;sample_type&amp;#34;, values = c(&amp;#34;uniform&amp;#34;, &amp;#34;weighted&amp;#34;), requires = quote(booster == &amp;#34;dart&amp;#34;)), makeDiscreteParam(&amp;#34;normalize_type&amp;#34;, values = c(&amp;#34;tree&amp;#34;, &amp;#34;forest&amp;#34;), requires = quote(booster == &amp;#34;dart&amp;#34;)), makeNumericParam(&amp;#34;rate_drop&amp;#34;, lower = 0, upper = 1, requires = quote(booster == &amp;#34;dart&amp;#34;)), makeNumericParam(&amp;#34;skip_drop&amp;#34;, lower = 0, upper = 1, requires = quote(booster == &amp;#34;dart&amp;#34;)), makeLogicalParam(&amp;#34;one_drop&amp;#34;, requires = quote(booster == &amp;#34;dart&amp;#34;)), makeDiscreteParam(&amp;#34;grow_policy&amp;#34;, values = c(&amp;#34;depthwise&amp;#34;, &amp;#34;lossguide&amp;#34;)), makeIntegerParam(&amp;#34;max_leaves&amp;#34;, lower = 0, upper = 8, trafo = function(x) 2^x, requires = quote(grow_policy == &amp;#34;lossguide&amp;#34;)), makeIntegerParam(&amp;#34;max_bin&amp;#34;, lower = 2L, upper = 9, trafo = function(x) 2^x), makeNumericParam(&amp;#34;eta&amp;#34;, lower = 0.</description>
     </item>
     
   </channel>

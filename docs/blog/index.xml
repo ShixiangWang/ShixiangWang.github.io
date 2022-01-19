@@ -5,10 +5,24 @@
     <description>Recent posts from Garrick Aden-Buie</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 13 Jan 2022 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 19 Jan 2022 00:00:00 +0000</lastBuildDate>
     
         <atom:link href="/blog/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>R(Studio)中指定外部软件路径</title>
+      <link>/blog/r-studio-specify-path/</link>
+      <pubDate>Wed, 19 Jan 2022 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/r-studio-specify-path/</guid>
+      <description>在安装R kernel时报错：
+&amp;amp;gt; IRkernel::installspec() Error in IRkernel::installspec() : jupyter-client has to be installed but “jupyter kernelspec --version” exited with code 127. In addition: Warning message: In system2(&amp;amp;#34;jupyter&amp;amp;#34;, c(&amp;amp;#34;kernelspec&amp;amp;#34;, &amp;amp;#34;--version&amp;amp;#34;), FALSE, FALSE) : error in running command 这种情况是R识别不了外部的$PATH，我们可以通过~/.Rprofile进行修改配置。
+在RStudio中运行file.edit(&amp;amp;quot;~/.Rprofile&amp;amp;quot;)或者手动打开，添加如下内容：
+old_path = Sys.getenv(&amp;amp;#34;PATH&amp;amp;#34;) Sys.setenv(PATH = paste(old_path, &amp;amp;#34;~/miniconda3/bin/&amp;amp;#34;, sep = &amp;amp;#34;:&amp;amp;#34;)) 北外镜像近期使用经验整体还是比较稳定的，不妨添加：
+options(BioC_mirror=&amp;amp;#34;https://mirrors.bfsu.edu.cn/bioconductor&amp;amp;#34;) options(&amp;amp;#34;repos&amp;amp;#34; = c(CRAN=&amp;amp;#34;https://mirrors.bfsu.edu.cn/CRAN/&amp;amp;#34;)) ~/.condarc中可以添加：
+channels: - defaults show_channel_urls: true default_channels: - https://mirrors.bfsu.edu.cn/anaconda/pkgs/main - https://mirrors.bfsu.edu.cn/anaconda/pkgs/r - https://mirrors.bfsu.edu.cn/anaconda/pkgs/msys2 custom_channels: conda-forge: https://mirrors.bfsu.edu.cn/anaconda/cloud msys2: https://mirrors.</description>
+    </item>
     
     <item>
       <title>dials自定义grid示例</title>
