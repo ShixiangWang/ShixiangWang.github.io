@@ -8,7 +8,24 @@
 (王诗翔)</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 08 Aug 2021 00:00:00 +0000</lastBuildDate><atom:link href="/tags/jupyter/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 20 Jan 2022 00:00:00 +0000</lastBuildDate><atom:link href="/tags/jupyter/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>R使用Jupyter Notebook那些事</title>
+      <link>/blog/r-jupyter-notebook/</link>
+      <pubDate>Thu, 20 Jan 2022 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/r-jupyter-notebook/</guid>
+      <description>在操作的一台服务器的R没有X11支持，Jupyter一运行代码就报错Kernel挂掉。而RStudio Server可以直接点击切换图形后端为Cairo。 Jupyter 怎么搞呢？
+首先尝试了Stack Overflow的一个办法，在 ~/.Rprofile 中加入代码：
+setHook(packageEvent(&amp;#34;grDevices&amp;#34;, &amp;#34;onLoad&amp;#34;), function(...) grDevices::X11.options(type = &amp;#34;cairo&amp;#34;)) options(device = &amp;#34;x11&amp;#34;) 最后还是在IRkernel的官方仓库问题区看到解决的办法：
+ https://github.com/IRkernel/IRkernel/issues/388
+ 加入下面的语句就可以了。
+## Set default &amp;#39;type&amp;#39; for png() calls - useful when X11 device is not available! ## NOTE: Needs &amp;#39;cairo&amp;#39; capability options(bitmapType=&amp;#39;cairo&amp;#39;) 完成后重启下Jupyter，然后等待一会，再试一试。
+另外，由于Jupyter无法像R一样拖动绘图窗口实时修改图形大小，如果要改动的话需要 提前用下面的语句设置：
+options(repr.plot.width = 4, repr.plot.height = 3) 我们可以写一个简化函数：
+setplot = function(w=5, h=4, d = c(&amp;#34;svg&amp;#34;, &amp;#34;png&amp;#34;)) { options(repr.plot.width = w, repr.plot.height = h) options(jupyter.plot_mimetypes = paste0(&amp;#34;image/&amp;#34;, switch( match.</description>
+    </item>
+    
     <item>
       <title>Jupyter Notebook 插件配置</title>
       <link>/blog/jupyter-notebook-plugin-configs/</link>

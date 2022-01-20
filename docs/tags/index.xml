@@ -8,11 +8,20 @@
 (王诗翔)</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 19 Jan 2022 00:00:00 +0000</lastBuildDate><atom:link href="/tags/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 20 Jan 2022 00:00:00 +0000</lastBuildDate><atom:link href="/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Jupyter</title>
+      <link>/tags/jupyter/</link>
+      <pubDate>Thu, 20 Jan 2022 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/jupyter/</guid>
+      <description></description>
+    </item>
+    
     <item>
       <title>R</title>
       <link>/tags/r/</link>
-      <pubDate>Wed, 19 Jan 2022 00:00:00 +0000</pubDate>
+      <pubDate>Thu, 20 Jan 2022 00:00:00 +0000</pubDate>
       
       <guid>/tags/r/</guid>
       <description></description>
@@ -87,15 +96,6 @@
       <pubDate>Thu, 02 Dec 2021 00:00:00 +0000</pubDate>
       
       <guid>/tags/heatmap/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>深度学习</title>
-      <link>/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/</link>
-      <pubDate>Thu, 02 Dec 2021 00:00:00 +0000</pubDate>
-      
-      <guid>/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/</guid>
       <description></description>
     </item>
     

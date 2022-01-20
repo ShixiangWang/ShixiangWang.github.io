@@ -8,7 +8,24 @@
 (王诗翔)</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 19 Jan 2022 00:00:00 +0000</lastBuildDate><atom:link href="/categories/blog/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 20 Jan 2022 00:00:00 +0000</lastBuildDate><atom:link href="/categories/blog/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>R使用Jupyter Notebook那些事</title>
+      <link>/blog/r-jupyter-notebook/</link>
+      <pubDate>Thu, 20 Jan 2022 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/r-jupyter-notebook/</guid>
+      <description>在操作的一台服务器的R没有X11支持，Jupyter一运行代码就报错Kernel挂掉。而RStudio Server可以直接点击切换图形后端为Cairo。 Jupyter 怎么搞呢？
+首先尝试了Stack Overflow的一个办法，在 ~/.Rprofile 中加入代码：
+setHook(packageEvent(&amp;#34;grDevices&amp;#34;, &amp;#34;onLoad&amp;#34;), function(...) grDevices::X11.options(type = &amp;#34;cairo&amp;#34;)) options(device = &amp;#34;x11&amp;#34;) 最后还是在IRkernel的官方仓库问题区看到解决的办法：
+ https://github.com/IRkernel/IRkernel/issues/388
+ 加入下面的语句就可以了。
+## Set default &amp;#39;type&amp;#39; for png() calls - useful when X11 device is not available! ## NOTE: Needs &amp;#39;cairo&amp;#39; capability options(bitmapType=&amp;#39;cairo&amp;#39;) 完成后重启下Jupyter，然后等待一会，再试一试。
+另外，由于Jupyter无法像R一样拖动绘图窗口实时修改图形大小，如果要改动的话需要 提前用下面的语句设置：
+options(repr.plot.width = 4, repr.plot.height = 3) 我们可以写一个简化函数：
+setplot = function(w=5, h=4, d = c(&amp;#34;svg&amp;#34;, &amp;#34;png&amp;#34;)) { options(repr.plot.width = w, repr.plot.height = h) options(jupyter.plot_mimetypes = paste0(&amp;#34;image/&amp;#34;, switch( match.</description>
+    </item>
+    
     <item>
       <title>R(Studio)中指定外部软件路径</title>
       <link>/blog/r-studio-specify-path/</link>
@@ -147,18 +164,6 @@ Dropout优缺点：
       <guid>/blog/learn-torch-predict-image-with-pretrained-model/</guid>
       <description>代码来源图书 deep-learning-with-pytorch。
 from torchvision import models import torch dir(models) resnet = models.resnet101(pretrained=True) from torchvision import transforms preprocess = transforms.Compose([ transforms.Resize(256), transforms.CenterCrop(224), transforms.ToTensor(), transforms.Normalize( mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225] )]) from PIL import Image img = Image.open(&amp;#34;../data/p1ch2/bobby.jpg&amp;#34;) img_t = preprocess(img) batch_t = torch.unsqueeze(img_t, 0) resnet.eval() out = resnet(batch_t) out with open(&amp;#39;../data/p1ch2/imagenet_classes.txt&amp;#39;) as f: labels = [line.strip() for line in f.readlines()] _, index = torch.max(out, 1) percentage = torch.nn.functional.softmax(out, dim=1)[0] * 100 # 转换为概率 labels[index[0]], percentage[index[0]].</description>
-    </item>
-    
-    <item>
-      <title>yum升级git版本</title>
-      <link>/blog/yum-upgrade-git/</link>
-      <pubDate>Mon, 29 Nov 2021 00:00:00 +0000</pubDate>
-      
-      <guid>/blog/yum-upgrade-git/</guid>
-      <description>安装新的RPM仓库：
-sudo yum -y install https://packages.endpoint.com/rhel/7/os/x86_64/endpoint-repo-1.7-1.x86_64.rpm 更新Git：
-sudo yum upgrade git  参考：https://www.seozen.top/centos-update-upgrade-git.html
- </description>
     </item>
     
   </channel>

@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en-US">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1">
+
+		
+		<title>R使用Jupyter Notebook那些事 &middot; ShixiangWang
+(王诗翔)</title>
+		
+		<meta property="og:title" content="R使用Jupyter Notebook那些事 - ShixiangWang
+(王诗翔)">
+		
+		<meta property="og:type" content="article">
+		
+
+		
+			
+			<meta property="description" content="人用的少就问题多～">
+			<meta property="og:description" content="人用的少就问题多～">
+			
+			
+    	<meta property="twitter:card" content="summary">
+  		<meta property="twitter:image" content="/apple-touch-icon-152x152.png">
+			
+		
+
+		
+		
+		<meta name="twitter:creator" content="@WangShxiang">
+		<meta name="twitter:site" content="https://shixiangwang.github.io">
+		
+		
+
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+		<link rel="stylesheet" href="../../css/poole.css">
+		<link rel="stylesheet" href="../../css/syntax.css">
+		<link rel="stylesheet" href="../../css/hyde.css">
+		
+		
+		<link rel="stylesheet" href="../../css/hamburgers.css">
+		
+		<link rel="stylesheet" href="../../css/custom.css">
+		
+		
+
+<link rel="apple-touch-icon-precomposed" sizes="57x57" href="../../apple-touch-icon-57x57.png" />
+<link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../apple-touch-icon-114x114.png" />
+<link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../apple-touch-icon-72x72.png" />
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../apple-touch-icon-144x144.png" />
+<link rel="apple-touch-icon-precomposed" sizes="120x120" href="../../apple-touch-icon-120x120.png" />
+<link rel="apple-touch-icon-precomposed" sizes="152x152" href="../../apple-touch-icon-152x152.png" />
+<link rel="icon" type="image/png" href="../../favicon-32x32.png" sizes="32x32" />
+<link rel="icon" type="image/png" href="../../favicon-16x16.png" sizes="16x16" />
+<meta name="application-name" content="Garrick Aden-Buie"/>
+<meta name="msapplication-TileColor" content="#002B36" />
+<meta name="msapplication-TileImage" content="/mstile-144x144.png" />
+<meta name="theme-color" content="#ffffff">
+
+<meta name="mobile-web-app-capable" content="yes">
+
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-title" content="Garrick Aden-Buie">
+
+<link href="../../css/featherlight.min.css" type="text/css" rel="stylesheet" />
+
+<script async defer src="https://buttons.github.io/buttons.js"></script>
+
+<script defer src="../../js/van11y-accessible-hide-show-aria.min.js"></script>
+
+<script defer src="../../js/toc.js"></script>
+
+
+
+		<link href="../../blog/r-jupyter-notebook" rel="canonical">
+	</head>
+
+	<body class="restyled-garrick  h-entry">
+		<main class="content container" role="main">
+			<article class="post">
+				<header>
+					<a class="u-url" href="../../blog/r-jupyter-notebook">
+						<h1 class="post-title p-name">R使用Jupyter Notebook那些事</h1>
+					</a>
+					<h3 class="post-author">王诗翔</h3>
+					<time class="post-date dt-published" datetime="2022-01-20T00:00:00Z">Thursday, 20 January 2022</time>
+					
+				</header>
+				<div class="post-content e-content">
+					<!-- Links -->
+<p>在操作的一台服务器的R没有X11支持，Jupyter一运行代码就报错Kernel挂掉。而RStudio Server可以直接点击切换图形后端为Cairo。
+Jupyter 怎么搞呢？</p>
+<p>首先尝试了Stack Overflow的一个办法，在 <code>~/.Rprofile</code> 中加入代码：</p>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-r" data-lang="r"><span style="color:#00f">setHook</span>(<span style="color:#00f">packageEvent</span>(<span style="color:#ba2121">&#34;grDevices&#34;</span>, <span style="color:#ba2121">&#34;onLoad&#34;</span>),
+        <span style="color:#00f">function</span>(<span style="color:#008000;font-weight:bold">...</span>) grDevices<span style="color:#666">::</span><span style="color:#00f">X11.options</span>(type <span style="color:#666">=</span> <span style="color:#ba2121">&#34;cairo&#34;</span>))
+<span style="color:#00f">options</span>(device <span style="color:#666">=</span> <span style="color:#ba2121">&#34;x11&#34;</span>)
+</code></pre></div><p>最后还是在IRkernel的官方仓库问题区看到解决的办法：</p>
+<blockquote>
+<p><a href="https://github.com/IRkernel/IRkernel/issues/388">https://github.com/IRkernel/IRkernel/issues/388</a></p>
+</blockquote>
+<p>加入下面的语句就可以了。</p>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-r" data-lang="r"><span style="color:#408080;font-style:italic">## Set default &#39;type&#39; for png() calls - useful when X11 device is not available!</span>
+<span style="color:#408080;font-style:italic">## NOTE: Needs &#39;cairo&#39; capability</span>
+<span style="color:#00f">options</span>(bitmapType<span style="color:#666">=</span><span style="color:#ba2121">&#39;cairo&#39;</span>)
+</code></pre></div><p>完成后重启下Jupyter，然后等待一会，再试一试。</p>
+<p>另外，由于Jupyter无法像R一样拖动绘图窗口实时修改图形大小，如果要改动的话需要
+提前用下面的语句设置：</p>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-r" data-lang="r"><span style="color:#00f">options</span>(repr.plot.width <span style="color:#666">=</span> <span style="color:#666">4</span>, repr.plot.height <span style="color:#666">=</span> <span style="color:#666">3</span>)
+</code></pre></div><p>我们可以写一个简化函数：</p>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-r" data-lang="r">setplot <span style="color:#666">=</span> <span style="color:#00f">function</span>(w<span style="color:#666">=</span><span style="color:#666">5</span>, h<span style="color:#666">=</span><span style="color:#666">4</span>, d <span style="color:#666">=</span> <span style="color:#00f">c</span>(<span style="color:#ba2121">&#34;svg&#34;</span>, <span style="color:#ba2121">&#34;png&#34;</span>)) {
+  <span style="color:#00f">options</span>(repr.plot.width <span style="color:#666">=</span> w, repr.plot.height <span style="color:#666">=</span> h)
+  <span style="color:#00f">options</span>(jupyter.plot_mimetypes <span style="color:#666">=</span> <span style="color:#00f">paste0</span>(<span style="color:#ba2121">&#34;image/&#34;</span>, <span style="color:#00f">switch</span>(
+    <span style="color:#00f">match.arg</span>(d),
+    png <span style="color:#666">=</span> <span style="color:#ba2121">&#34;png&#34;</span>,
+    svg <span style="color:#666">=</span> <span style="color:#ba2121">&#34;svg+xml&#34;</span>
+  )))
+}
+<span style="color:#00f">setplot</span>()
+</code></pre></div><blockquote>
+<p>Jupyter 对 SVG 支持的更好，默认用这个看起来更舒服。</p>
+</blockquote>
+
+				</div>
+				<footer class="footer">
+				  <hr>
+<div class="post-tags">
+
+<p>
+  <svg xmlns="http://www.w3.org/2000/svg" class="octicon" width="20" height="24" viewBox="0 0 14 16"><path fill-rule="evenodd" d="M8 2H6V0h2v2zm4 5H2c-.55 0-1-.45-1-1V4c0-.55.45-1 1-1h10l2 2-2 2zM8 4H6v2h2V4zM6 16h2V8H6v8z"/></svg>
+	
+	<a class="p-category" href="../../categories/blog/">Blog</a>
+</p>
+
+
+<p>
+  <svg xmlns="http://www.w3.org/2000/svg" class="octicon" width="20" height="24" viewBox="0 0 15 16"><path fill-rule="evenodd" d="M7.73 1.73C7.26 1.26 6.62 1 5.96 1H3.5C2.13 1 1 2.13 1 3.5v2.47c0 .66.27 1.3.73 1.77l6.06 6.06c.39.39 1.02.39 1.41 0l4.59-4.59a.996.996 0 0 0 0-1.41L7.73 1.73zM2.38 7.09c-.31-.3-.47-.7-.47-1.13V3.5c0-.88.72-1.59 1.59-1.59h2.47c.42 0 .83.16 1.13.47l6.14 6.13-4.73 4.73-6.13-6.15zM3.01 3h2v2H3V3h.01z"/></svg>
+	
+	<a class="p-tag" href="../../tags/r/">R</a><a class="p-tag" href="../../tags/jupyter/">Jupyter</a>
+
+</p>
+</div>
+
+				</footer>
+			</article>
+		</main>
+			  <button class="hamburger hamburger--arrow is-active" type="button" onclick="document.getElementsByClassName('sidebar')[0].classList.toggle('collapsed');document.getElementsByClassName('content')[0].classList.toggle('expanded');document.getElementsByClassName('hamburger')[0].classList.toggle('is-active');document.getElementsByClassName('hamburger-inner')[0].classList.toggle('is-active')">
+      <span class="hamburger-box">
+        <span class="hamburger-inner"></span>
+      </span>
+    </button>
+		<aside class="sidebar">
+			<div class="container sidebar-sticky">
+				<header class="sidebar-about h-card vcard p-author">
+					
+					<a class="u-url u-uid" rel="me" href="../../">
+						<img class="u-photo" src="https://avatars.githubusercontent.com/u/25057508?v=4" width=128 height=128 />
+					</a>
+					
+
+					
+					<span class="site-title u-name fn">
+					  <a class="u-url u-uid" rel="me" href="../../">ShixiangWang
+(王诗翔)</a>
+				  </span>
+					
+
+					<p class="lead p-note">
+						 Bioinformatics Scholar. Cancer Researcher. Data Scientist. Always learning something new. 
+					</p>
+
+					<nav>
+						<ul class="sidebar-nav">
+							
+							<li><a href="../../about/"> About </a></li>
+							
+							<li><a href="../../blog/"> Blog </a></li>
+							
+							<li><a href="../../project/"> Projects </a></li>
+							
+							<li><a href="http://42.192.87.178:3838/"> Shiny Apps </a></li>
+							
+							<li><a href="../../talk/"> Talks </a></li>
+							
+							<li><a href="https://github.com/ShixiangWang/self-study/discussions"> Discuss with me? </a></li>
+							
+							<li><a href="https://shixiangwang.netlify.app/"> Mirror #1 </a></li>
+							
+							<li><a href="https://shixiangwang.github.io/"> Mirror #2 </a></li>
+							
+						</ul>
+					</nav>
+
+					
+						<div class="contact">
+						  
+							<ul class="contact-list">
+								
+								<li>
+									
+									  
+		  							  <a href="https://twitter.com/WangShxiang" class="u-url url" rel="me" title="Twitter" aria-label="Twitter">
+		  						    <i class='fab fa-twitter fa-fw'></i>
+		  							  </a>
+		  						  
+								
+								</li>
+								
+								<li>
+									
+									  
+		  							  <a href="https://github.com/ShixiangWang" class="u-url url" rel="me" title="GitHub" aria-label="GitHub">
+		  						    <i class='fab fa-github fa-fw'></i>
+		  							  </a>
+		  						  
+								
+								</li>
+								
+								<li>
+									
+		  							<a href="mailto:shixiang1994wang@gmail.com" class="u-email email" rel="me" title="Email" aria-label="Email">
+		  							<i class='fa fa-envelope fa-fw'></i>
+		  							  
+		  							</a>
+									
+								</li>
+								
+								<li>
+									
+									  
+		  							  <a href="https://shixiangwang.github.io/home/logo/qrcode.jpg" class="u-url url" rel="me" title="Bandcamp" aria-label="Bandcamp">
+		  						    <i class='fab fa-bandcamp fa-fw'></i>
+		  							  </a>
+		  						  
+								
+								</li>
+								
+							</ul>
+						</div>
+					
+				</header>
+
+				<footer>&copy; 2022. All rights reserved. </footer>
+				 <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+            <span id="busuanzi_container_site_pv">本站总访问量&nbsp;<span id="busuanzi_value_site_pv"></span>&nbsp;次</span>
+			</div>
+		</aside>
+
+		  <footer>
+  <script src="../../js/jquery-latest.js"></script>
+<script src="../../js/featherlight.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+
+<script>
+MathJax = {
+  tex: {
+    inlineMath: [['$', '$'], ['\\(', '\\)']]
+  }
+};
+</script>
+<script type="text/javascript" id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+  
+  </footer>
+  </body>
+</html>
+
+	</body>
+</html>
