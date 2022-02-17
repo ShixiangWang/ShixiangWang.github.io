@@ -5,10 +5,10 @@
 		<meta name="viewport" content="width=device-width,initial-scale=1">
 
 		
-		<title>📦 UCSCXenaTools &middot; ShixiangWang
+		<title>4步为Jupyter Notebook添加Conda环境 &middot; ShixiangWang
 (王诗翔)</title>
 		
-		<meta property="og:title" content="📦 UCSCXenaTools - ShixiangWang
+		<meta property="og:title" content="4步为Jupyter Notebook添加Conda环境 - ShixiangWang
 (王诗翔)">
 		
 		<meta property="og:type" content="article">
@@ -16,8 +16,8 @@
 
 		
 			
-			<meta property="description" content="An R/CRAN package for accessing genomics data from UCSC Xena platform, from cancer multi-omics to single-cell RNA-seq.">
-			<meta property="og:description" content="An R/CRAN package for accessing genomics data from UCSC Xena platform, from cancer multi-omics to single-cell RNA-seq.">
+			<meta property="description" content="译文">
+			<meta property="og:description" content="译文">
 			
 			
     	<meta property="twitter:card" content="summary">
@@ -69,45 +69,100 @@
 
 <script defer src="../../js/van11y-accessible-hide-show-aria.min.js"></script>
 
+<script defer src="../../js/toc.js"></script>
 
 
-		<link href="../../project/ucscxenatools" rel="canonical">
+
+		<link href="../../blog/4-jupyter-notebook-conda" rel="canonical">
 	</head>
 
 	<body class="restyled-garrick  h-entry">
 		<main class="content container" role="main">
 			<article class="post">
 				<header>
-					<a class="u-url" href="../../project/ucscxenatools">
-						<h1 class="post-title p-name">📦 UCSCXenaTools</h1>
+					<a class="u-url" href="../../blog/4-jupyter-notebook-conda">
+						<h1 class="post-title p-name">4步为Jupyter Notebook添加Conda环境</h1>
 					</a>
-					<h3 class="post-author">ShixiangWang
-(王诗翔)</h3>
+					<h3 class="post-author">王诗翔</h3>
+					<time class="post-date dt-published" datetime="2022-02-17T00:00:00Z">Thursday, 17 February 2022</time>
+					
 				</header>
-				<main class="post-content e-content">
-					<ul>
-<li>Project repo: <a href="https://github.com/ropensci/UCSCXenaTools">https://github.com/ropensci/UCSCXenaTools</a></li>
-<li>Paper: Wang et al., (2019). The UCSCXenaTools R package: a toolkit for accessing genomics data
-from UCSC Xena platform, from cancer multi-omics to single-cell RNA-seq. 
-Journal of Open Source Software, 4(40), 1627, <a href="https://doi.org/10.21105/joss.01627">https://doi.org/10.21105/joss.01627</a>.</li>
-</ul>
+				<div class="post-content e-content">
+					<h3 id="第一步创建conda环境">第一步，创建conda环境</h3>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-fallback" data-lang="fallback">conda create --name firstEnv
+</code></pre></div><p>你会看到类似下面的内容：</p>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-go" data-lang="go">(base) PS C:<span style="">\</span>Users<span style="">\</span>Administrator&gt; conda create <span style="color:#666">--</span>name firstEnv
+Collecting <span style="color:#008000;font-weight:bold">package</span> <span style="color:#00f">metadata</span> (current_repodata.json): done
+Solving environment: done
 
-				</main>
+<span style="">##</span> Package Plan <span style="">##</span>
+
+  environment location: C:<span style="">\</span>miniconda<span style="">\</span>envs<span style="">\</span>firstEnv
+
+
+
+<span style="color:#00f">Proceed</span> ([y]<span style="color:#666">/</span>n)<span style="">?</span> y
+
+Preparing transaction: done
+Verifying transaction: done
+Executing transaction: done
+<span style="">#</span>
+<span style="">#</span> To activate this environment, use
+<span style="">#</span>
+<span style="">#</span>     <span style="">$</span> conda activate firstEnv
+<span style="">#</span>
+<span style="">#</span> To deactivate an active environment, use
+<span style="">#</span>
+<span style="">#</span>     <span style="">$</span> conda deactivate
+</code></pre></div><h3 id="第二步激活环境并安装你需要的软件包">第二步，激活环境并安装你需要的软件包</h3>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-fallback" data-lang="fallback">conda activate firstEnv
+conda install -c conda-forge datar
+</code></pre></div><p>这里以datar举例。</p>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-go" data-lang="go">(firstEnv) PS C:<span style="">\</span>Users<span style="">\</span>Administrator&gt; conda install <span style="color:#666">-</span>c conda<span style="color:#666">-</span>forge datar
+Collecting <span style="color:#008000;font-weight:bold">package</span> <span style="color:#00f">metadata</span> (current_repodata.json): done
+Solving environment: done
+
+<span style="">##</span> Package Plan <span style="">##</span>
+
+  environment location: C:<span style="">\</span>miniconda<span style="">\</span>envs<span style="">\</span>firstEnv
+
+  added <span style="color:#666">/</span> updated specs:
+    <span style="color:#666">-</span> datar
+
+<span style="color:#666">...</span>
+</code></pre></div><h3 id="第三步安装和配置ipykernel">第三步，安装和配置ipykernel</h3>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-fallback" data-lang="fallback">conda install -c conda-forge ipykernel
+</code></pre></div><p>然后运行：</p>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-fallback" data-lang="fallback">python -m ipykernel install --user --name=firstEnv
+</code></pre></div><h3 id="第四步检查安装">第四步，检查安装</h3>
+<p>打开你的Jupyter Notebook，查看界面是否已经可以选择firstEnv作为新的环境。</p>
+<p><img src="https://miro.medium.com/max/1400/1*QpkEdJSnvDDhIWRIxGMr5A.png" alt=""></p>
+<h3 id="收尾">收尾</h3>
+<p>如果不想在Jupyter Notebook中保留该环境，可以移除：</p>
+<div class="highlight"><pre style=";-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-fallback" data-lang="fallback">(base) PS C:\Users\Administrator&gt; jupyter kernelspec remove firstenv
+Kernel specs to remove:
+  firstenv              C:\Users\Administrator\AppData\Roaming\jupyter\kernels\firstenv
+</code></pre></div><p>参考：</p>
+<blockquote>
+<p><a href="https://medium.com/@nrk25693/how-to-add-your-conda-environment-to-your-jupyter-notebook-in-just-4-steps-abeab8b8d084">https://medium.com/@nrk25693/how-to-add-your-conda-environment-to-your-jupyter-notebook-in-just-4-steps-abeab8b8d084</a></p>
+</blockquote>
+
+				</div>
 				<footer class="footer">
-					<hr>
+				  <hr>
 <div class="post-tags">
 
 <p>
   <svg xmlns="http://www.w3.org/2000/svg" class="octicon" width="20" height="24" viewBox="0 0 14 16"><path fill-rule="evenodd" d="M8 2H6V0h2v2zm4 5H2c-.55 0-1-.45-1-1V4c0-.55.45-1 1-1h10l2 2-2 2zM8 4H6v2h2V4zM6 16h2V8H6v8z"/></svg>
 	
-	<a class="p-category" href="../../categories/project/">Project</a>
+	<a class="p-category" href="../../categories/blog/">Blog</a>
 </p>
 
 
 <p>
   <svg xmlns="http://www.w3.org/2000/svg" class="octicon" width="20" height="24" viewBox="0 0 15 16"><path fill-rule="evenodd" d="M7.73 1.73C7.26 1.26 6.62 1 5.96 1H3.5C2.13 1 1 2.13 1 3.5v2.47c0 .66.27 1.3.73 1.77l6.06 6.06c.39.39 1.02.39 1.41 0l4.59-4.59a.996.996 0 0 0 0-1.41L7.73 1.73zM2.38 7.09c-.31-.3-.47-.7-.47-1.13V3.5c0-.88.72-1.59 1.59-1.59h2.47c.42 0 .83.16 1.13.47l6.14 6.13-4.73 4.73-6.13-6.15zM3.01 3h2v2H3V3h.01z"/></svg>
 	
-	<a class="p-tag" href="../../tags/r/">R</a><a class="p-tag" href="../../tags/ucsc-xena/">UCSC Xena</a><a class="p-tag" href="../../tags/package/">package</a>
+	<a class="p-tag" href="../../tags/jupyter/">Jupyter</a><a class="p-tag" href="../../tags/conda/">conda</a>
 
 </p>
 </div>

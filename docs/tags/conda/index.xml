@@ -8,7 +8,17 @@
 (王诗翔)</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 14 Sep 2021 00:00:00 +0000</lastBuildDate><atom:link href="/tags/conda/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 17 Feb 2022 00:00:00 +0000</lastBuildDate><atom:link href="/tags/conda/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>4步为Jupyter Notebook添加Conda环境</title>
+      <link>/blog/4-jupyter-notebook-conda/</link>
+      <pubDate>Thu, 17 Feb 2022 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/4-jupyter-notebook-conda/</guid>
+      <description>第一步，创建conda环境 conda create --name firstEnv 你会看到类似下面的内容：
+(base) PS C:\Users\Administrator&amp;gt; conda create --name firstEnv Collecting package metadata (current_repodata.json): done Solving environment: done ## Package Plan ## environment location: C:\miniconda\envs\firstEnv Proceed ([y]/n)? y Preparing transaction: done Verifying transaction: done Executing transaction: done # # To activate this environment, use # # $ conda activate firstEnv # # To deactivate an active environment, use # # $ conda deactivate 第二步，激活环境并安装你需要的软件包 conda activate firstEnv conda install -c conda-forge datar 这里以datar举例。</description>
+    </item>
+    
     <item>
       <title>解决conda报错：Module _sysconfigdata_x86_64_conda_linux_gnu not found</title>
       <link>/blog/conda-error-sysconfigdata-not-found/</link>

@@ -3,23 +3,43 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>/blog/4-jupyter-notebook-conda/</loc>
+    <lastmod>2022-02-17T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
     <loc>/categories/blog/</loc>
-    <lastmod>2022-01-20T00:00:00+00:00</lastmod>
+    <lastmod>2022-02-17T00:00:00+00:00</lastmod>
   </url>
   
   <url>
     <loc>/blog/</loc>
-    <lastmod>2022-01-20T00:00:00+00:00</lastmod>
+    <lastmod>2022-02-17T00:00:00+00:00</lastmod>
   </url>
   
   <url>
     <loc>/categories/</loc>
-    <lastmod>2022-01-20T00:00:00+00:00</lastmod>
+    <lastmod>2022-02-17T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/conda/</loc>
+    <lastmod>2022-02-17T00:00:00+00:00</lastmod>
   </url>
   
   <url>
     <loc>/tags/jupyter/</loc>
-    <lastmod>2022-01-20T00:00:00+00:00</lastmod>
+    <lastmod>2022-02-17T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/</loc>
+    <lastmod>2022-02-17T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/</loc>
+    <lastmod>2022-02-17T00:00:00+00:00</lastmod>
   </url>
   
   <url>
@@ -29,16 +49,6 @@
   
   <url>
     <loc>/blog/r-jupyter-notebook/</loc>
-    <lastmod>2022-01-20T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/</loc>
-    <lastmod>2022-01-20T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/tags/</loc>
     <lastmod>2022-01-20T00:00:00+00:00</lastmod>
   </url>
   
@@ -280,11 +290,6 @@
   <url>
     <loc>/blog/process-glm-logistic-warning/</loc>
     <lastmod>2021-09-26T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/tags/conda/</loc>
-    <lastmod>2021-09-14T00:00:00+00:00</lastmod>
   </url>
   
   <url>
