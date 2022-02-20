@@ -5,10 +5,26 @@
     <description>Recent posts from Garrick Aden-Buie</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 17 Feb 2022 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sun, 20 Feb 2022 00:00:00 +0000</lastBuildDate>
     
         <atom:link href="/blog/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>《生物学是什么》书摘</title>
+      <link>/blog/whats-biology-notes/</link>
+      <pubDate>Sun, 20 Feb 2022 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/whats-biology-notes/</guid>
+      <description>现代综合进化论。
+分子进化的中性理论。
+操纵子。
+反转座子。
+全基因模型（Omnigenic Model）。
+生物大分子的化学修饰主要涉及三类蛋白质分子：
+ 书写器Writer：负责催化化学修饰。 擦除器Eraser：移除化学修饰。 阅读器Reader：识别携带修饰的分子。  生物体在响应内外环境变化和执行生命活动时通常采用2种调控模式：
+ 改变核酸和蛋白分子零件的数量和类型。 改变生物大分子的化学修饰状态。  </description>
+    </item>
     
     <item>
       <title>4步为Jupyter Notebook添加Conda环境</title>
@@ -57,7 +73,7 @@ channels: - defaults show_channel_urls: true default_channels: - https://mirrors
       <pubDate>Thu, 13 Jan 2022 00:00:00 +0000</pubDate>
       
       <guid>/blog/dials-grid/</guid>
-      <description>library(dials)library(dplyr)param_quant = function (label, range = c(10L, 1000L), type = &amp;amp;quot;integer&amp;amp;quot;, trans = NULL) {stopifnot(length(label) == 1L)names(label) = labelnew_quant_param(type = type, range = range, inclusive = c(TRUE, TRUE),trans = trans, label = label, finalize = NULL)}param_class = function (label, values) {stopifnot(length(label) == 1L)names(label) = labelnew_qual_param(type = &amp;amp;quot;character&amp;amp;quot;, values = values, label = label, finalize = NULL)}abc = grid_max_entropy(param_quant(&amp;amp;quot;scale&amp;amp;quot;),param_quant(&amp;amp;quot;abc&amp;amp;quot;, range = c(0, 1), trans = scales::log10_trans()),param_class(&amp;amp;quot;gender&amp;amp;quot;, c(&amp;amp;quot;F&amp;amp;quot;, &amp;amp;quot;M&amp;amp;quot;)),size = 100, original = FALSE)plot(abc$scale, abc$abc)</description>
+      <description>  library(dials) library(dplyr) param_quant = function (label, range = c(10L, 1000L), type = &amp;amp;quot;integer&amp;amp;quot;, trans = NULL) { stopifnot(length(label) == 1L) names(label) = label new_quant_param(type = type, range = range, inclusive = c(TRUE, TRUE), trans = trans, label = label, finalize = NULL) } param_class = function (label, values) { stopifnot(length(label) == 1L) names(label) = label new_qual_param(type = &amp;amp;quot;character&amp;amp;quot;, values = values, label = label, finalize = NULL) } abc = grid_max_entropy(param_quant(&amp;amp;quot;scale&amp;amp;quot;), param_quant(&amp;amp;quot;abc&amp;amp;quot;, range = c(0, 1), trans = scales::log10_trans()), param_class(&amp;amp;quot;gender&amp;amp;quot;, c(&amp;amp;quot;F&amp;amp;quot;, &amp;amp;quot;M&amp;amp;quot;)), size = 100, original = FALSE) plot(abc$scale, abc$abc) </description>
     </item>
     
     <item>
@@ -67,13 +83,13 @@ channels: - defaults show_channel_urls: true default_channels: - https://mirrors
       
       <guid>/blog/using-xgboost-with-tidymodels/</guid>
       <description>原文：https://www.r-bloggers.com/2020/05/using-xgboost-with-tidymodels/
-XGBoost是一个最初用C&#43;&#43;编写的机器学习库，通过XGBoost R包中移植到R。在过去的几年里，XGBoost在Kaggle竞赛中的有效性让它大受欢迎。在Tychobra, XGBoost是我们的首选机器学习库。
-在2016年和2017年，Kaggle被两种方法所主导:梯度升压机和深度学习。具体来说，梯度增强用于结构化数据可用的问题，而深度学习用于图像分类等感知问题。前者的实践者几乎总是使用优秀的XGBoost库。
-Max Kuhn和Rstudio的其他人最近将他们的注意力从caret转向了 tidymodels （caret的继承者）。“tidymodels”是一个R包的集合，它们一起工作来简化和加强模型训练和优化。随着最近发布的tidymodels.org，我们觉得是时候给tidymodels R包一个机会了。
-概览这篇文章中我们使用tidymodels包训练和优化XGBoost模型。我们使用的AmesHousing数据集，其中包含来自艾奥瓦州艾姆斯的住房数据。我们的模型将预测房屋销售价格。
+ XGBoost是一个最初用C&#43;&#43;编写的机器学习库，通过XGBoost R包中移植到R。在过去的几年里，XGBoost在Kaggle竞赛中的有效性让它大受欢迎。在Tychobra, XGBoost是我们的首选机器学习库。
+ 在2016年和2017年，Kaggle被两种方法所主导:梯度升压机和深度学习。具体来说，梯度增强用于结构化数据可用的问题，而深度学习用于图像分类等感知问题。前者的实践者几乎总是使用优秀的XGBoost库。
+ Max Kuhn和Rstudio的其他人最近将他们的注意力从caret转向了 tidymodels （caret的继承者）。“tidymodels”是一个R包的集合，它们一起工作来简化和加强模型训练和优化。随着最近发布的tidymodels.org，我们觉得是时候给tidymodels R包一个机会了。
+概览 这篇文章中我们使用tidymodels包训练和优化XGBoost模型。我们使用的AmesHousing数据集，其中包含来自艾奥瓦州艾姆斯的住房数据。我们的模型将预测房屋销售价格。
 加载包：
-# datalibrary(AmesHousing)# data cleaninglibrary(janitor)# data preplibrary(dplyr)# tidymodelslibrary(rsample)library(recipes)library(parsnip)library(tune)library(dials)library(workflows)library(yardstick)# speed up computation with parrallel processing (optional)library(doParallel)all_cores &amp;amp;lt;- parallel::detectCores(logical = FALSE)registerDoParallel(cores = all_cores)加载数据：
-# set the random seed so we can reproduce any simulated results.set.seed(1234)# load the housing data and clean namesames_data &amp;amp;lt;- make_ames() %&amp;amp;gt;%janitor::clean_names()Step 0：探索性数据分析在这一点上，我们通常会对数据做一些简单的图表和总结，以获得对数据的高层次理解。为了简单起见，我们将从这篇文章中删除EDA过程，但是，在实际分析中，理解业务问题和执行有效的EDA通常是分析中最耗时和最关键的方面。</description>
+# data library(AmesHousing) # data cleaning library(janitor) # data prep library(dplyr) # tidymodels library(rsample) library(recipes) library(parsnip) library(tune) library(dials) library(workflows) library(yardstick) # speed up computation with parrallel processing (optional) library(doParallel) all_cores &amp;amp;lt;- parallel::detectCores(logical = FALSE) registerDoParallel(cores = all_cores) 加载数据：
+# set the random seed so we can reproduce any simulated results. set.seed(1234) # load the housing data and clean names ames_data &amp;amp;lt;- make_ames() %&amp;amp;gt;% janitor::clean_names()  Step 0：探索性数据分析 在这一点上，我们通常会对数据做一些简单的图表和总结，以获得对数据的高层次理解。为了简单起见，我们将从这篇文章中删除EDA过程，但是，在实际分析中，理解业务问题和执行有效的EDA通常是分析中最耗时和最关键的方面。</description>
     </item>
     
     <item>
@@ -113,7 +129,7 @@ Example/ ├─ .git/ ├─ .github/ │ └─ workflows/ │ ├─ TagBot.ym
       <description>最近在使用ggplot2对箱线图叠加点图是发现奇怪的现象，只要我改变点的形状，绘图就出问题了。
 下面我通过一个简单的示例展示这个问题。
 我们先生成一组简单的数据，并绘制一个正常的叠加图：
-library(ggplot2)library(dplyr)head(mtcars)## mpg cyl disp hp drat wt qsec vs am gear carb## Mazda RX4 21.0 6 160 110 3.90 2.620 16.46 0 1 4 4## Mazda RX4 Wag 21.0 6 160 110 3.90 2.875 17.02 0 1 4 4## Datsun 710 22.8 4 108 93 3.85 2.320 18.61 1 1 4 1## Hornet 4 Drive 21.4 6 258 110 3.</description>
+library(ggplot2) library(dplyr) head(mtcars) ## mpg cyl disp hp drat wt qsec vs am gear carb ## Mazda RX4 21.0 6 160 110 3.90 2.620 16.46 0 1 4 4 ## Mazda RX4 Wag 21.0 6 160 110 3.90 2.875 17.02 0 1 4 4 ## Datsun 710 22.8 4 108 93 3.85 2.320 18.61 1 1 4 1 ## Hornet 4 Drive 21.4 6 258 110 3.</description>
     </item>
     
     <item>
@@ -123,10 +139,10 @@ library(ggplot2)library(dplyr)head(mtcars)## mpg cyl disp hp drat wt qsec vs 
       
       <guid>/blog/merge-complexheatmap-figure-legends/</guid>
       <description>最近在绘制热图的时候遇到这样一个问题：
-library(ComplexHeatmap)set.seed(1)m = matrix(sample(c(&amp;amp;quot;&amp;amp;quot;, &amp;amp;quot;AMP&amp;amp;quot;, &amp;amp;quot;DEL&amp;amp;quot;), 100, prob = c(0.8, 0.1, 0.1), replace = TRUE), nrow = 10)rownames(m) = paste0(&amp;amp;quot;A&amp;amp;quot;, 1:10)colnames(m) = paste0(&amp;amp;quot;B&amp;amp;quot;, 1:10)oncoPrint(m,top_annotation = HeatmapAnnotation(cbar = anno_oncoprint_barplot(), g = c(&amp;amp;quot;A&amp;amp;quot;, &amp;amp;quot;A&amp;amp;quot;, &amp;amp;quot;A&amp;amp;quot;, &amp;amp;quot;B&amp;amp;quot;, &amp;amp;quot;B&amp;amp;quot;, &amp;amp;quot;B&amp;amp;quot;, &amp;amp;quot;C&amp;amp;quot;, &amp;amp;quot;C&amp;amp;quot;, &amp;amp;quot;C&amp;amp;quot;, &amp;amp;quot;D&amp;amp;quot;)))我们可以看到Alterations和g两组图例是按行排列的，这样需要整个图更多的宽度，如果按列排列个人感觉效果更好。翻遍了complexHeatmap的文档和相关QA，没有搜索到相关的内容。比较接近的是设置legends_param列表，它可以操作单个图例的排列，比如分类特别多，可以指定为几行几列这种。但无法排布多个legends的布局。
+library(ComplexHeatmap) set.seed(1) m = matrix(sample(c(&amp;amp;quot;&amp;amp;quot;, &amp;amp;quot;AMP&amp;amp;quot;, &amp;amp;quot;DEL&amp;amp;quot;), 100, prob = c(0.8, 0.1, 0.1), replace = TRUE), nrow = 10) rownames(m) = paste0(&amp;amp;quot;A&amp;amp;quot;, 1:10) colnames(m) = paste0(&amp;amp;quot;B&amp;amp;quot;, 1:10) oncoPrint(m, top_annotation = HeatmapAnnotation(cbar = anno_oncoprint_barplot(), g = c(&amp;amp;quot;A&amp;amp;quot;, &amp;amp;quot;A&amp;amp;quot;, &amp;amp;quot;A&amp;amp;quot;, &amp;amp;quot;B&amp;amp;quot;, &amp;amp;quot;B&amp;amp;quot;, &amp;amp;quot;B&amp;amp;quot;, &amp;amp;quot;C&amp;amp;quot;, &amp;amp;quot;C&amp;amp;quot;, &amp;amp;quot;C&amp;amp;quot;, &amp;amp;quot;D&amp;amp;quot;))) 我们可以看到Alterations和g两组图例是按行排列的，这样需要整个图更多的宽度，如果按列排列个人感觉效果更好。 翻遍了complexHeatmap的文档和相关QA，没有搜索到相关的内容。比较接近的是设置legends_param列表，它可以操作单个图例 的排列，比如分类特别多，可以指定为几行几列这种。但无法排布多个legends的布局。
 最终还是把问题抛给了开发者顾神（https://github.com/jokergoo/ComplexHeatmap/issues/850）。
 下面是作者提供的简单解决办法：
-ht = oncoPrint(m,top_annotation = HeatmapAnnotation(cbar = anno_oncoprint_barplot(), g = c(&amp;amp;quot;A&amp;amp;quot;, &amp;amp;quot;A&amp;amp;quot;, &amp;amp;quot;A&amp;amp;quot;, &amp;amp;quot;B&amp;amp;quot;, &amp;amp;quot;B&amp;amp;quot;, &amp;amp;quot;B&amp;amp;quot;, &amp;amp;quot;C&amp;amp;quot;, &amp;amp;quot;C&amp;amp;quot;, &amp;amp;quot;C&amp;amp;quot;, &amp;amp;quot;D&amp;amp;quot;)))draw(ht, merge_legends = TRUE)感谢感谢！</description>
+ht = oncoPrint(m, top_annotation = HeatmapAnnotation(cbar = anno_oncoprint_barplot(), g = c(&amp;amp;quot;A&amp;amp;quot;, &amp;amp;quot;A&amp;amp;quot;, &amp;amp;quot;A&amp;amp;quot;, &amp;amp;quot;B&amp;amp;quot;, &amp;amp;quot;B&amp;amp;quot;, &amp;amp;quot;B&amp;amp;quot;, &amp;amp;quot;C&amp;amp;quot;, &amp;amp;quot;C&amp;amp;quot;, &amp;amp;quot;C&amp;amp;quot;, &amp;amp;quot;D&amp;amp;quot;))) draw(ht, merge_legends = TRUE) 感谢感谢！</description>
     </item>
     
     <item>
@@ -206,8 +222,8 @@ sudo yum upgrade git  参考：https://www.seozen.top/centos-update-upgrade-git.
       <guid>/blog/zhibei-linear-model/</guid>
       <description>本文主要是转载《指北》线性模型一节的内容，有删减。
 在线性模型中，如果我们将两个共相关的变量放到同一个线性回归模型之中，那么这两个变量的系数估计的标准误都会扩大。下面我们展示下这个干扰过程：
-set.seed(42)a &amp;amp;lt;- runif(100,min=0,max=10)&#43;rnorm(100)b &amp;amp;lt;- a*1.2&#43;rnorm(100)c &amp;amp;lt;- b*1.2&#43;rnorm(100)y &amp;amp;lt;- a&#43;b&#43;c&#43;rnorm(100)上面我们由两个变量生成了一个新变量，然而这两个变量是相关的，此时我们进行回归分析：
-summary(lm(y~a))## ## Call:## lm(formula = y ~ a)## ## Residuals:## Min 1Q Median 3Q Max ## -4.1929 -1.9935 -0.2595 1.9301 5.3011 ## ## Coefficients:## Estimate Std. Error t value Pr(&amp;amp;gt;|t|) ## (Intercept) -0.14295 0.44101 -0.324 0.747 ## a 3.65619 0.07162 51.048 &amp;amp;lt;2e-16 ***## ---## Signif. codes: 0 &amp;amp;#39;***&amp;amp;#39; 0.</description>
+set.seed(42) a &amp;amp;lt;- runif(100,min=0,max=10)&#43;rnorm(100) b &amp;amp;lt;- a*1.2&#43;rnorm(100) c &amp;amp;lt;- b*1.2&#43;rnorm(100) y &amp;amp;lt;- a&#43;b&#43;c&#43;rnorm(100) 上面我们由两个变量生成了一个新变量，然而这两个变量是相关的，此时我们进行回归分析：
+summary(lm(y~a)) ## ## Call: ## lm(formula = y ~ a) ## ## Residuals: ## Min 1Q Median 3Q Max ## -4.1929 -1.9935 -0.2595 1.9301 5.3011 ## ## Coefficients: ## Estimate Std. Error t value Pr(&amp;amp;gt;|t|) ## (Intercept) -0.14295 0.44101 -0.324 0.747 ## a 3.65619 0.07162 51.048 &amp;amp;lt;2e-16 *** ## --- ## Signif. codes: 0 &amp;amp;#39;***&amp;amp;#39; 0.</description>
     </item>
     
     <item>
@@ -217,23 +233,23 @@ summary(lm(y~a))## ## Call:## lm(formula = y ~ a)## ## Residuals:## Min 1Q M
       
       <guid>/blog/multiple-stats-testing-and-thinking/</guid>
       <description>本文有记录和思考2个方面，记录是根据《现代科研指北》的统计推断的一部分内容进行记录和学习，思考是在记录和学习的过程中添加一些自己的理解和思索。
-首先谈谈为什么是这样的形式，而不是直接转载。对于个人而言，学习的本质是为了掌握知识，而不是记录知识。本文的主题是统计分析特别是组学统计分析中常用却甚少思考的一个基本点：多重比较与假设检验。我不知道有多少人像我一样，在有几年的数据处理经验之后，对这种比较基础的理论还一知半解。现在，我们可以轻而易举的使用R的p.adj()对p值进行校正，甚至使用Bioconductor的一些专门的包（如qvalue）进行处理。但我们真的了解它吗？你能简单地说出p.adj()中提供的方法原理和区别吗？如果你的目标是数据分析师，完成工作任务，仅仅作为赚钱养家的技能。ok，没必要深入学习，会调包调函数完全足够了。但如果我们有更高的追求，比如数据科学家，无论是工业界还是学术界，那么我们必须对概念和问题产生自己的见解。
+首先谈谈为什么是这样的形式，而不是直接转载。对于个人而言，学习的本质是为了掌握知识，而不是记录知识。本文的主题是统计分析特别是组学统计分析中常用却甚少思考的一个基本点：多重比较与假设检验。我不知道有多少人像我一样，在有几年的数据处理经验之后，对这种比较基础的理论还一知半解。 现在，我们可以轻而易举的使用R的p.adj()对p值进行校正，甚至使用 Bioconductor的一些专门的包（如qvalue）进行处理。但我们真的了解它吗？你能简单地说出p.adj()中提供的方法原理和区别吗？如果你的目标是数据分析师，完成工作任务，仅仅作为赚钱养家的技能。ok，没必要深入学习，会调包调函数完全足够了。但如果我们有更高的追求，比如数据科学家， 无论是工业界还是学术界，那么我们必须对概念和问题产生自己的见解。
 下面是《指北》中的一些内容。
-多重比较的场景科研里最常用的比较是两独立样本均值比较的t检验与评价单因素多水平影响的方差分析。t检验可以看作方差分析的特例，使用统计量t来比较而方差分析通常是用分类变量所解释的变异比上分类变量以外的变异去进行F检验。换句话讲，如果分类变量可以解释大部分响应变量的变异，我们就说这种分类变量对响应变量的解释有意义。
+多重比较的场景 科研里最常用的比较是两独立样本均值比较的t检验与评价单因素多水平影响的方差分析。t检验可以看作方差分析的特例，使用统计量t来比较而方差分析通常是用分类变量所解释的变异比上分类变量以外的变异去进行F检验。换句话讲，如果分类变量可以解释大部分响应变量的变异，我们就说这种分类变量对响应变量的解释有意义。
 但是仅仅知道是否受影响是不够的，我们知道的仅仅是存在一种分类方法可以解释响应的全部变化，其内部也是均匀的，但不同分类水平间的差异我们并不知道，这就需要多重比较了。例如，当我们对两组数据做置信度0.05的t检验，我们遇到假阳性的概率为5%。但如果面对多组数据例如3组，进行两两比较的话就有\(3\choose2\)也就是3组对比，那么我们遇到假阳性的概率就为\(1-(1-0.05)^3\)，也就是14.3%，远高于0.05的置信度。组越多，两两对比就越多，整体上假阳性的概率就越来越大，到最后就是两组数据去对比，无论如何你都会检验出差异。
-值得思考的一个点是：这里一般提出的比较是多组，如A、B、C这3个组比较同一个指标的差异。而在组学分析中的比较是固定的A、B这2个组不同的指标的比较。它们能看作一样的事情吗？
-本质上是一样的，关键在对比的数量。我们可以把比较拆开为独立的1对1的比较。那么比较一次假设出现错误的概率是0.05，那么比对的数量越多，整体上的分析结果中出现一次错误的概率会越大于0.05。
-此外就方向而样，虽然我们都不承认零假设（要不然还做什么实验），但当我们默认设定为双尾检验时，假阳性就被默认发生在两个方向上了，这样的多重比较必然导致在其中一个方向上的错误率被夸大了。就影响大小而言，如果我们每次重复都选择效应最强的那一组，重复越多，预设的偏态就越重，换言之，我们的零假设因为重复实验的选择偏好而发生了改变。
-多重比较那么多重比较如何应对这个问题呢？有两种思路，一种思路是我依旧采取两两对比，进行t检验，但p值的选取方法要修改，例如Bonferroni方法中就把p的阈值调整为进行多重比较的次数乘以计算得到的p值。如果我们关心的因素为2，那么计算得到的p值都要乘2来跟0.05或0.01的边界置信度进行比较；另一种思路则是修改两两比较所用的统计量，给出一个更保守的分布，那么得到p值就会更大。不论怎样，我们这样做都是为了降低假阳性，但同时功效不可避免的降低了。（有得必有失）
-多重比较的方法类型包括单步法与逐步法。单步法只考虑对零假设的影响而不考虑其他影响而逐步法则会考虑其他假设检验对单一检验的影响，例如可以先按不同分组均值差异从大到小排序，先对比第一个，有差异对比下一个，当出现无差异时停止对比；或者从下到大排序，有差异时停止对比，之后均认为有差异。此时还要注意一种特殊情况，因为F检验是从方差角度来考虑影响显著性与否，所以可能存在F检验显著但组间均值差异均不显著的情况，此时要考虑均值间线性组合的新均值的差异性（？？？）。不过，大多数情况我们只用考虑不同组间两两差异比较即可。
+ 值得思考的一个点是：这里一般提出的比较是多组，如A、B、C这3个组比较同一个指标的差异。而在组学分析中的比较是固定的A、B这2个组不同的指标的比较。它们能看作一样的事情吗？
+  本质上是一样的，关键在对比的数量。我们可以把比较拆开为独立的1对1的比较。那么比较一次假设出现错误的概率是0.05，那么比对的数量越多，整体上的分析结果中出现一次错误的概率会越大于0.05。
+ 此外就方向而样，虽然我们都不承认零假设（要不然还做什么实验），但当我们默认设定为双尾检验时，假阳性就被默认发生在两个方向上了，这样的多重比较必然导致在其中一个方向上的错误率被夸大了。就影响大小而言，如果我们每次重复都选择效应最强的那一组，重复越多，预设的偏态就越重，换言之，我们的零假设因为重复实验的选择偏好而发生了改变。
+ 多重比较 那么多重比较如何应对这个问题呢？有两种思路，一种思路是我依旧采取两两对比，进行t检验，但p值的选取方法要修改，例如Bonferroni方法中就把p的阈值调整为进行多重比较的次数乘以计算得到的p值。如果我们关心的因素为2，那么计算得到的p值都要乘2来跟0.05或0.01的边界置信度进行比较；另一种思路则是修改两两比较所用的统计量，给出一个更保守的分布，那么得到p值就会更大。不论怎样，我们这样做都是为了降低假阳性，但同时功效不可避免的降低了。（有得必有失）
+多重比较的方法类型包括单步法与逐步法。 单步法只考虑对零假设的影响而不考虑其他影响而逐步法则会考虑其他假设检验对单一检验的影响，例如可以先按不同分组均值差异从大到小排序，先对比第一个，有差异对比下一个，当出现无差异时停止对比；或者从下到大排序，有差异时停止对比，之后均认为有差异。此时还要注意一种特殊情况，因为F检验是从方差角度来考虑影响显著性与否，所以可能存在F检验显著但组间均值差异均不显著的情况，此时要考虑均值间线性组合的新均值的差异性（？？？）。不过，大多数情况我们只用考虑不同组间两两差异比较即可。
 具体而言，单步法等方差多重比较最常见的是Tukey’s HSD方法，这是一个两两比较的方法，基于 studentized range 分布计算出q统计量，然后基于这个统计量进行两两间差异的假设检验。该方法适用于分组间等方差等数目的场景，如果分组内数目不同，需要用 Tukey-Kranmer 方法。该方法适用于两两比较，在分组数目相同时统计功效等同于从大到小排序的逐步法。
 此外，还有些多重比较的方法在特定学科里也很常见。从总体控制错误率的角度，如果是两两比较应该选 Tukey’s HSD方法；如果侧重组间差异线性组合的均值用 Scheffe test；如果对比数指定了，功效按 Gabriel、GT2、DST、 Bonferroni顺序来选；如果是各分组都跟控制组比，应该选Dunnett法；如果各分组方差不相等，用GH，C，T3等方法。此外，如果打算保证每个比较中的置信水平，应该选 Tukey、 Scheffe、Dunnett法。
-远比想象中要复杂。
-多重检验与多重比较类似的一个统计推断问题是多重检验问题。多重检验指的是同时进行多次假设检验的场景，其实多重比较可以看作多重检验在方差分析里的一个特例。
+ 远比想象中要复杂。
+  多重检验 与多重比较类似的一个统计推断问题是多重检验问题。多重检验指的是同时进行多次假设检验的场景，其实多重比较可以看作多重检验在方差分析里的一个特例。
 举例而言，我对两组样品（暴露组跟对照组）中每一个样品测定了10000个指标，每组有10个样品，那么如果我想知道差异有多大就需要对比10000次，具体说就是10000次双样本t检验。那么如果我对t检验的置信水平设置在95%，也就是5%假阳性，做完这10000次检验，我会期望看到500个假阳性，而这500个有显著差异的指标其实对分组不敏感也可以随机生成。假如真实测到了600个有显著差异的指标，那么如何区分其中哪些是对分组敏感？哪些又仅仅只是随机的呢？随机的会不会只有500个整呢？这个场景在组学技术与传感器技术采集高通量高维数据的今天变得越来越普遍。
 这个问题在做经典科研实验时往往会忽略，深层次的原因是经典的科研实验往往是理论或经验主导需要进行检验的假说（注：经典实验比较的数目量也上不去）。例如，我测定血液中白血球的数目就可以知道你是不是处于炎症中，其背后是医学知识的支撑。然而，在组学或其他高通量实验中，研究实际是数据导向的，也就是不管有用没用反正我测了一堆指标，然后就去对比差异，然后就是上面的问题了，我们可能分不清楚哪些是真的相关，哪些又是随机出现的。
 对于单次比较，当我们看到显著差异的p值脑子里想的是零假设为真时发生的概率，当我们置信水平设定在0.95而p值低于对应的阈值，那么我们应该拒绝零假设。但对比次数多了从概率上就会出现已经被拒绝的假设实际是错误的而你不知道是哪一个。整体错误率控制的思路就是我不管单次比较了，我只对你这所有的对比次数的总错误率进行控制。还是上面的例子，对于10000次假设检验我只能接受1个错误，整体犯错概率为0.0001，那么对于单次比较，其假阳性也得设定在这个水平上去进行假设检验，结果整体上错误率是控制住了，但对于单次比较就显得十分严格了。下面用一个仿真实验来说明：
-# 随机数的10000次比较set.seed(42)pvalue &amp;amp;lt;- NULLfor (i in 1:10000){a &amp;amp;lt;- rnorm(10)b &amp;amp;lt;- rnorm(10)c &amp;amp;lt;- t.test(a,b)pvalue[i] &amp;amp;lt;- c$p.value}# 看下p值分布hist(pvalue)# 小于0.</description>
+# 随机数的10000次比较 set.seed(42) pvalue &amp;amp;lt;- NULL for (i in 1:10000){ a &amp;amp;lt;- rnorm(10) b &amp;amp;lt;- rnorm(10) c &amp;amp;lt;- t.test(a,b) pvalue[i] &amp;amp;lt;- c$p.value } # 看下p值分布 hist(pvalue) # 小于0.</description>
     </item>
     
     <item>
@@ -243,11 +259,11 @@ summary(lm(y~a))## ## Call:## lm(formula = y ~ a)## ## Residuals:## Min 1Q M
       
       <guid>/blog/operate-range-data-with-genomicranges/</guid>
       <description>资料来源：Bioinformatics Data Skills
-准备涉及的包：
-GenomicRanges - 表示和处理基因组区间GenomicFeatures - 表示和处理基因组元件（基因、外显子等）Biostrings/BSgenome - 操作基因组序列rtracklayer - 读入常见生物学数据文件（BED、GTF/GFF和WIG等）从IRanges开始基本用法IRange是区间的基本数据构造：
-library(IRanges)rng = IRanges(start = 1, end = 15)rng## IRanges object with 1 range and 0 metadata columns:## start end width## &amp;amp;lt;integer&amp;amp;gt; &amp;amp;lt;integer&amp;amp;gt; &amp;amp;lt;integer&amp;amp;gt;## [1] 1 15 15构造出来的对象区间起始和终止都是闭合的，另外与R索引一致，都是从1开始。
-构造向量向量是最常见的了：
-x = IRanges(start=c(4, 7, 2, 20), end=c(13, 7, 5, 23))x## IRanges object with 4 ranges and 0 metadata columns:## start end width## &amp;amp;lt;integer&amp;amp;gt; &amp;amp;lt;integer&amp;amp;gt; &amp;amp;lt;integer&amp;amp;gt;## [1] 4 13 10## [2] 7 7 1## [3] 2 5 4## [4] 20 23 4给区间命名：</description>
+ 准备 涉及的包：
+ GenomicRanges - 表示和处理基因组区间 GenomicFeatures - 表示和处理基因组元件（基因、外显子等） Biostrings/BSgenome - 操作基因组序列 rtracklayer - 读入常见生物学数据文件（BED、GTF/GFF和WIG等）   从IRanges开始 基本用法 IRange是区间的基本数据构造：
+library(IRanges) rng = IRanges(start = 1, end = 15) rng ## IRanges object with 1 range and 0 metadata columns: ## start end width ## &amp;amp;lt;integer&amp;amp;gt; &amp;amp;lt;integer&amp;amp;gt; &amp;amp;lt;integer&amp;amp;gt; ## [1] 1 15 15 构造出来的对象区间起始和终止都是闭合的，另外与R索引一致，都是从1开始。
+ 构造向量 向量是最常见的了：
+x = IRanges(start=c(4, 7, 2, 20), end=c(13, 7, 5, 23)) x ## IRanges object with 4 ranges and 0 metadata columns: ## start end width ## &amp;amp;lt;integer&amp;amp;gt; &amp;amp;lt;integer&amp;amp;gt; &amp;amp;lt;integer&amp;amp;gt; ## [1] 4 13 10 ## [2] 7 7 1 ## [3] 2 5 4 ## [4] 20 23 4 给区间命名：</description>
     </item>
     
     <item>
@@ -280,11 +296,11 @@ x = IRanges(start=c(4, 7, 2, 20), end=c(13, 7, 5, 23))x## IRanges object with 
       <guid>/blog/this-mutate-is-not-that-mutate/</guid>
       <description>程序出乎意料，怎么办？
 今天在星球圈里收到提问：
-我对ddply()这个函数是不熟悉的，只知道hadley一个过时的包plyr里有一系列这样的函数。所以我首先想到的是这位朋友用错了。不过我马上就排除了，这种问题是非常容易发现和处理的。
+我对ddply()这个函数是不熟悉的，只知道hadley一个过时的包plyr里有一系列这样的函数。 所以我首先想到的是这位朋友用错了。不过我马上就排除了，这种问题是非常容易发现和处理的。
 因此还是得动手实际检验一下这个问题在我的电脑上是否可以重复。
 我们首先把数据导入进来：
-library(scales)library(tidyverse)library(plyr)ts &amp;amp;lt;- openxlsx::read.xlsx(&amp;amp;quot;~/Downloads/示例数据.xlsx&amp;amp;quot;)head(ts)## Name variable value## 1 SLCO1B1 TCGA-44-2666 3.52916020## 2 GCGR TCGA-44-2666 0.08499940## 3 HTR3A TCGA-44-2666 0.05029628## 4 CA9 TCGA-44-2666 0.19814361## 5 TNFSF11 TCGA-44-2666 0.28202803## 6 FGB TCGA-44-2666 4.56223499按照两种不同的方法生成结果：
-out1 = ts %&amp;amp;gt;%ddply(., .(variable), transform, rescale = rescale(value)) %&amp;amp;gt;%arrange(variable, Name)head(out1)## Name variable value rescale## 1 ADRB2 TCGA-05-4390 2.</description>
+library(scales) library(tidyverse) library(plyr) ts &amp;amp;lt;- openxlsx::read.xlsx(&amp;amp;quot;~/Downloads/示例数据.xlsx&amp;amp;quot;) head(ts) ## Name variable value ## 1 SLCO1B1 TCGA-44-2666 3.52916020 ## 2 GCGR TCGA-44-2666 0.08499940 ## 3 HTR3A TCGA-44-2666 0.05029628 ## 4 CA9 TCGA-44-2666 0.19814361 ## 5 TNFSF11 TCGA-44-2666 0.28202803 ## 6 FGB TCGA-44-2666 4.56223499 按照两种不同的方法生成结果：
+out1 = ts %&amp;amp;gt;% ddply(., .(variable), transform, rescale = rescale(value)) %&amp;amp;gt;% arrange(variable, Name) head(out1) ## Name variable value rescale ## 1 ADRB2 TCGA-05-4390 2.</description>
     </item>
     
     <item>
@@ -293,9 +309,9 @@ out1 = ts %&amp;amp;gt;%ddply(., .(variable), transform, rescale = rescale(valu
       <pubDate>Fri, 22 Oct 2021 00:00:00 +0000</pubDate>
       
       <guid>/blog/ezcox-v1-2-update/</guid>
-      <description>针对@lijing-lin在GitHub的ezcox仓库提出的Fast way to add interaction terms?问题，这两天闲暇时废了些脑细胞进行解决。同时也fix之前记录的一个遗留问题。
-remotes::install_github(&amp;amp;quot;ShixiangWang/ezcox&amp;amp;quot;)交互项支持之前为了解决用户数据列名不符合的R命名规则，在源代码例自动对不合法名字进行了反撇号标记。这会导致R的公式没法进行解析，例如sex:age会被判断为一个列名，R的公式没法解析它，因为找不到数据中对应的sex:age列，所以会报错。
-library(survival)library(ezcox)lung$ph.ecog &amp;amp;lt;- factor(lung$ph.ecog)ezcox(lung, covariates = c(&amp;amp;quot;age&amp;amp;quot;), controls = &amp;amp;quot;sex:ph.ecog&amp;amp;quot;)## # A tibble: 5 × 12## Variable is_control contrast_level ref_level n_contrast n_ref beta HR## &amp;amp;lt;chr&amp;amp;gt; &amp;amp;lt;lgl&amp;amp;gt; &amp;amp;lt;chr&amp;amp;gt; &amp;amp;lt;lgl&amp;amp;gt; &amp;amp;lt;lgl&amp;amp;gt; &amp;amp;lt;lgl&amp;amp;gt; &amp;amp;lt;dbl&amp;amp;gt; &amp;amp;lt;dbl&amp;amp;gt;## 1 age FALSE age NA NA NA 0.00844 1.01 ## 2 age TRUE sex:ph.ecog0 NA NA NA -0.890 0.</description>
+      <description>针对@lijing-lin在GitHub的ezcox仓库提出的Fast way to add interaction terms?问题， 这两天闲暇时废了些脑细胞进行解决。同时也fix之前记录的一个遗留问题。
+remotes::install_github(&amp;amp;quot;ShixiangWang/ezcox&amp;amp;quot;) 交互项支持 之前为了解决用户数据列名不符合的R命名规则，在源代码例自动对不合法名字进行了反撇号标记。 这会导致R的公式没法进行解析，例如sex:age会被判断为一个列名，R的公式没法解析它，因为 找不到数据中对应的sex:age列，所以会报错。
+library(survival) library(ezcox) lung$ph.ecog &amp;amp;lt;- factor(lung$ph.ecog) ezcox(lung, covariates = c(&amp;amp;quot;age&amp;amp;quot;), controls = &amp;amp;quot;sex:ph.ecog&amp;amp;quot;) ## # A tibble: 5 × 12 ## Variable is_control contrast_level ref_level n_contrast n_ref beta HR ## &amp;amp;lt;chr&amp;amp;gt; &amp;amp;lt;lgl&amp;amp;gt; &amp;amp;lt;chr&amp;amp;gt; &amp;amp;lt;lgl&amp;amp;gt; &amp;amp;lt;lgl&amp;amp;gt; &amp;amp;lt;lgl&amp;amp;gt; &amp;amp;lt;dbl&amp;amp;gt; &amp;amp;lt;dbl&amp;amp;gt; ## 1 age FALSE age NA NA NA 0.00844 1.01 ## 2 age TRUE sex:ph.ecog0 NA NA NA -0.890 0.</description>
     </item>
     
     <item>
@@ -305,11 +321,11 @@ library(survival)library(ezcox)lung$ph.ecog &amp;amp;lt;- factor(lung$ph.ecog)
       
       <guid>/blog/r6-programming/</guid>
       <description>原文来源：https://r6.r-lib.org/articles/Introduction.html
-R6包为R提供了封装的面向对象编程的实现（有时也被称为经典的面向对象编程）。它类似于R的引用类，但它更高效，不依赖于S4类和方法包。
+ R6包为R提供了封装的面向对象编程的实现（有时也被称为经典的面向对象编程）。它类似于R的引用类，但它更高效，不依赖于S4类和方法包。
 与R中的许多对象不同，R6类的实例(对象)具有引用语义。R6类还支持：
-公共和私有方法active bindings跨包工作的继承(超类)基础下面是如何创建一个简单的R6类。public参数是一个项目列表，可以是函数和字段(非函数)。函数将被用作方法。
-library(R6)Person &amp;amp;lt;- R6Class(&amp;amp;quot;Person&amp;amp;quot;,public = list(name = NULL,hair = NULL,initialize = function(name = NA, hair = nA) {self$name &amp;amp;lt;- nameself$hair &amp;amp;lt;- hairself$greet()},set_hair = function(val) {self$hair &amp;amp;lt;- val},greet = function() {cat(paste0(&amp;amp;quot;Hello, my name is &amp;amp;quot;, self$name, &amp;amp;quot;.\n&amp;amp;quot;))}))使用$new()进行初始化：
-ann &amp;amp;lt;- Person$new(&amp;amp;quot;Ann&amp;amp;quot;, &amp;amp;quot;black&amp;amp;quot;)## Hello, my name is Ann.</description>
+ 公共和私有方法 active bindings 跨包工作的继承(超类)  基础 下面是如何创建一个简单的R6类。public参数是一个项目列表，可以是函数和字段(非函数)。函数将被用作方法。
+library(R6) Person &amp;amp;lt;- R6Class( &amp;amp;quot;Person&amp;amp;quot;, public = list( name = NULL, hair = NULL, initialize = function(name = NA, hair = nA) { self$name &amp;amp;lt;- name self$hair &amp;amp;lt;- hair self$greet() }, set_hair = function(val) { self$hair &amp;amp;lt;- val }, greet = function() { cat(paste0(&amp;amp;quot;Hello, my name is &amp;amp;quot;, self$name, &amp;amp;quot;.\n&amp;amp;quot;)) } ) ) 使用$new()进行初始化：
+ann &amp;amp;lt;- Person$new(&amp;amp;quot;Ann&amp;amp;quot;, &amp;amp;quot;black&amp;amp;quot;) ## Hello, my name is Ann.</description>
     </item>
     
     <item>
@@ -327,11 +343,11 @@ ann &amp;amp;lt;- Person$new(&amp;amp;quot;Ann&amp;amp;quot;, &amp;amp;quot;blac
       <pubDate>Tue, 19 Oct 2021 00:00:00 +0000</pubDate>
       
       <guid>/blog/rstatix-fisher-test/</guid>
-      <description>Fisher检验R默认就可以做，但是只支持一次检验，为了更好地处理数据，这篇文章通过rstatix包的相关功能来学习一些新知识。
-library(rstatix)本文的相关代码文档可以运行?rstatix::fisher_test()查看。
-比较2个比例值生成数据：
-xtab &amp;amp;lt;- as.table(rbind(c(490, 10), c(400, 100)))dimnames(xtab) &amp;amp;lt;- list(group = c(&amp;amp;quot;grp1&amp;amp;quot;, &amp;amp;quot;grp2&amp;amp;quot;),smoker = c(&amp;amp;quot;yes&amp;amp;quot;, &amp;amp;quot;no&amp;amp;quot;))xtab## smoker## group yes no## grp1 490 10## grp2 400 100进行比较：
-fisher_test(xtab)## # A tibble: 1 × 3## n p p.signif## * &amp;amp;lt;dbl&amp;amp;gt; &amp;amp;lt;dbl&amp;amp;gt; &amp;amp;lt;chr&amp;amp;gt; ## 1 1000 8.77e-22 ****# 给出更多的比较信息fisher_test(xtab, detailed = TRUE)## # A tibble: 1 × 8## n estimate p conf.</description>
+      <description>Fisher检验R默认就可以做，但是只支持一次检验，为了更好地处理数据，这篇文章通过rstatix包的相关功能来 学习一些新知识。
+library(rstatix)  本文的相关代码文档可以运行?rstatix::fisher_test()查看。
+ 比较2个比例值 生成数据：
+xtab &amp;amp;lt;- as.table(rbind(c(490, 10), c(400, 100))) dimnames(xtab) &amp;amp;lt;- list( group = c(&amp;amp;quot;grp1&amp;amp;quot;, &amp;amp;quot;grp2&amp;amp;quot;), smoker = c(&amp;amp;quot;yes&amp;amp;quot;, &amp;amp;quot;no&amp;amp;quot;) ) xtab ## smoker ## group yes no ## grp1 490 10 ## grp2 400 100 进行比较：
+fisher_test(xtab) ## # A tibble: 1 × 3 ## n p p.signif ## * &amp;amp;lt;dbl&amp;amp;gt; &amp;amp;lt;dbl&amp;amp;gt; &amp;amp;lt;chr&amp;amp;gt; ## 1 1000 8.77e-22 **** # 给出更多的比较信息 fisher_test(xtab, detailed = TRUE) ## # A tibble: 1 × 8 ## n estimate p conf.</description>
     </item>
     
     <item>
@@ -458,21 +474,21 @@ $ top -H top - 19:47:30 up 72 days, 4:01, 1 user, load average: 3.46, 3.17, 3.12
 模型优化
 机器学习算法为其超参数设置了默认值。不管怎样，用户需要更改这些超参数，以在给定的数据集上实现最佳性能。不建议手动选择超参数值，因为这种方法很少能获得最佳性能。为了证实所选超参数（=调优）的有效性，建议进行数据驱动的优化。为了优化机器学习算法，必须指定（1）搜索空间，（2）优化算法(又称调优方法)，（3）评估方法，即重采样策略，（4）性能度量。
 总而言之，关于调优的小节介绍：
-进行经验超参数选择选择优化算法简洁地指定搜索空间触发调优自动调优本小节还需要包mlr3tuning，这是一个支持超参数调优的扩展包。
+ 进行经验超参数选择 选择优化算法 简洁地指定搜索空间 触发调优 自动调优  本小节还需要包mlr3tuning，这是一个支持超参数调优的扩展包。
 特征选择
 本章的第二部分介绍特征选择，也称为变量选择。特征选择是寻找数据相关特征子集的过程。执行选择的一些原因：
-增强模型的可解释性加速模型拟合通过降低数据中的噪声来提高学习性能在本文中，我们主要集中在最后一个方面。有不同的方法来识别相关的特征。在特征选择的分章中，我们强调了三种方法：
-运用过滤算法根据分数独立地选择特征根据变量重要性过滤选择特征包装器方法迭代地选择特性以优化性能度量注意，过滤器不需要学习器。变量重要性过滤器需要一个学习器，该学习器在训练时可以计算特征的重要性值。获得的重要值可用于数据子集，然后可用于训练学习器。包装器方法可以用于任何学习器，但需要对学习器进行多次训练。
+ 增强模型的可解释性 加速模型拟合 通过降低数据中的噪声来提高学习性能  在本文中，我们主要集中在最后一个方面。有不同的方法来识别相关的特征。在特征选择的分章中，我们强调了三种方法：
+ 运用过滤算法根据分数独立地选择特征 根据变量重要性过滤选择特征 包装器方法迭代地选择特性以优化性能度量  注意，过滤器不需要学习器。变量重要性过滤器需要一个学习器，该学习器在训练时可以计算特征的重要性值。获得的重要值可用于数据子集，然后可用于训练学习器。包装器方法可以用于任何学习器，但需要对学习器进行多次训练。
 嵌套重采样
 为了更好地估计泛化性能并避免数据泄漏，外部（性能）和内部（调优/特征选择）重采样过程都是必要的。本章将讨论以下特点：
-嵌套重采样中的内重采样和外重采样策略嵌套重采样的执行执行重采样迭代的评估本小节将提供如何实现嵌套重采样的说明，包括mlr3中的内重采样和外重采样。
-超参数调优超参数是机器学习模型的二阶参数，虽然在模型估计过程中往往没有明确优化，但会对模型的结果和预测性能产生重要影响。通常，超参数在训练模型之前是固定的。但是，由于模型的输出可能对超参数的规范很敏感，因此通常建议对哪些超参数设置可以产生更好的模型性能做出明智的决定。在许多情况下，超参数设置可能是预先选择的，但在将模型拟合到训练数据上之前，尝试不同的设置可能是有利的。这个过程通常被称为模型“调优”。
+ 嵌套重采样中的内重采样和外重采样策略 嵌套重采样的执行 执行重采样迭代的评估  本小节将提供如何实现嵌套重采样的说明，包括mlr3中的内重采样和外重采样。
+超参数调优 超参数是机器学习模型的二阶参数，虽然在模型估计过程中往往没有明确优化，但会对模型的结果和预测性能产生重要影响。通常，超参数在训练模型之前是固定的。但是，由于模型的输出可能对超参数的规范很敏感，因此通常建议对哪些超参数设置可以产生更好的模型性能做出明智的决定。在许多情况下，超参数设置可能是预先选择的，但在将模型拟合到训练数据上之前，尝试不同的设置可能是有利的。这个过程通常被称为模型“调优”。
 超参数调优是通过mlr3tuning扩展包支持的。下面是这个过程的说明：
 mlr3tuning的核心是R6类：
 TuningInstanceSingleCrit，TuningInstanceMultiCrit：这两个类描述调优问题并存储结果。
 Tuner：这个类是调优算法实现的基类。
-TuningInstance* 类下面的小节审查了皮马印度糖尿病数据集上的简单分类树的优化。
-library(&amp;amp;quot;mlr3verse&amp;amp;quot;)task = tsk(&amp;amp;quot;pima&amp;amp;quot;)print(task)## &amp;amp;lt;TaskClassif:pima&amp;amp;gt; (768 x 9)## * Target: diabetes## * Properties: twoclass## * Features (8):## - dbl (8): age, glucose, insulin, mass, pedigree, pregnant, pressure,## triceps我们使用rpart中的分类树，并选择我们想要调优的超参数的子集。这通常被称为“调优空间”。</description>
+TuningInstance* 类 下面的小节审查了皮马印度糖尿病数据集上的简单分类树的优化。
+library(&amp;amp;quot;mlr3verse&amp;amp;quot;) task = tsk(&amp;amp;quot;pima&amp;amp;quot;) print(task) ## &amp;amp;lt;TaskClassif:pima&amp;amp;gt; (768 x 9) ## * Target: diabetes ## * Properties: twoclass ## * Features (8): ## - dbl (8): age, glucose, insulin, mass, pedigree, pregnant, pressure, ## triceps 我们使用rpart中的分类树，并选择我们想要调优的超参数的子集。这通常被称为“调优空间”。</description>
     </item>
     
     <item>
@@ -483,26 +499,26 @@ library(&amp;amp;quot;mlr3verse&amp;amp;quot;)task = tsk(&amp;amp;quot;pima&amp
       <guid>/blog/mlr3-basics/</guid>
       <description>来源：https://mlr3book.mlr-org.com/basics.html
 本文将教你基本的mlr3知识，以及它的R6类和操作以用于机器学习。典型的机器学习工作流是这样的:
-Figure 1: 机器学习流程 source: https://mlr3book.mlr-org.com/images/ml_abstraction.svgmlr3将数据封装在任务中，并将其分解为互不重叠的训练集和测试集。由于我们感兴趣的模型外推到新的数据，而不仅仅是记忆训练数据，独立的测试数据允许客观地评估模型的泛化。训练数据被提供给一个机器学习算法，在mlr3中我们称之为learner。learner利用训练数据建立输入特征与输出目标值之间关系的模型。然后使用该模型对测试数据进行预测，并将其与参考真值进行比较，以评估模型的质量。mlr3提供了许多不同的度量方法，根据预测值和实际值之间的差异来量化模型的执行情况。通常这是一个数字分数。
+ Figure 1: 机器学习流程 source: https://mlr3book.mlr-org.com/images/ml_abstraction.svg  mlr3将数据封装在任务中，并将其分解为互不重叠的训练集和测试集。由于我们感兴趣的模型外推到新的数据，而不仅仅是记忆训练数据，独立的测试数据允许客观地评估模型的泛化。训练数据被提供给一个机器学习算法，在mlr3中我们称之为learner。learner利用训练数据建立输入特征与输出目标值之间关系的模型。然后使用该模型对测试数据进行预测，并将其与参考真值进行比较，以评估模型的质量。mlr3提供了许多不同的度量方法，根据预测值和实际值之间的差异来量化模型的执行情况。通常这是一个数字分数。
 将数据分割为训练集和测试集、建立模型并对其进行评估的过程可能会重复多次，每次从原始数据中重新采样不同的训练集和测试集。多重重采样迭代允许我们对特定类型的模型获得更好、更一般化的性能估计，因为它是在不同的条件下测试的，而且由于数据重采样的特定方式，它不太容易产生偏差。
 在许多情况下，这个简单的工作流不足以处理真实世界的数据，可能需要规范化（标准化）、缺失值的输入或特征选择。我们将在以后介绍更复杂的工作流程。
 本文涵盖以下小主题：
 任务：
 任务用元信息封装数据，比如预测目标列的名称。我们将介绍如何：
-访问预定义的任务指定一个任务类型创建一个任务使用任务的API工作为任务的行和列分配角色实施任务mutator获取存储在任务中的数据学习器
+ 访问预定义的任务 指定一个任务类型 创建一个任务 使用任务的API工作 为任务的行和列分配角色 实施任务mutator 获取存储在任务中的数据  学习器
 学习器封装机器学习算法来训练模型并对任务进行预测。它们由R和其他包提供。我们将介绍如何：
-访问随mlr3而来的分类和回归学习器集合，并检索特定的学习器访问学习器的超参数值集并修改它们如何修改和扩展学习器涵盖在补充高级技术部分。
+ 访问随mlr3而来的分类和回归学习器集合，并检索特定的学习器 访问学习器的超参数值集并修改它们  如何修改和扩展学习器涵盖在补充高级技术部分。
 训练和预测
 关于训练和预测方法的部分说明了如何使用任务和学习器训练模型并对新数据集进行预测。特别地，我们将介绍如何：
-正确设置任务和学习器为一项任务设置训练和测试分割（集）在训练集上训练学习器以生成模型生成测试集的预测通过比较预测值和实际值来评估模型的性能重采样
+ 正确设置任务和学习器 为一项任务设置训练和测试分割（集） 在训练集上训练学习器以生成模型 生成测试集的预测 通过比较预测值和实际值来评估模型的性能  重采样
 重采样是一种创建训练和测试分割（集）的方法。我们将介绍：
-访问和选择重采样策略通过应用重采样实例化分割到训练集和测试集执行重采样以获得结果关于重采样的附加信息可以在嵌套重采样部分和模型优化一章中找到。
+ 访问和选择重采样策略 通过应用重采样实例化分割到训练集和测试集 执行重采样以获得结果  关于重采样的附加信息可以在嵌套重采样部分和模型优化一章中找到。
 基准测试
 基准测试用于比较不同模型的性能，例如不同学习器训练的模型，不同任务训练的模型，或不同重采样方法训练的模型。我们介绍如何
-创建一个基准设计执行设计并汇总结果将基准测试对象转换为重采样对象二分类
+ 创建一个基准设计 执行设计并汇总结果 将基准测试对象转换为重采样对象  二分类
 二值分类是分类的一种特殊情况，预测的目标变量只有两个可能的值。在这种情况下，还需要考虑其他因素。特别是：
-ROC曲线和预测一个类和另一个类的阈值阈值调整在详细介绍如何使用mlr3进行机器学习之前，我们先简要介绍一下R6，因为它是R相对较新的一部分。mlr3严重依赖于R6，它提供的所有基本构造都是R6类：
-任务 task学习器 learner测量 measure重采样 resamplings快速R6入门介绍R6是R最新的面向对象编程(OO)方言之一。它解决了R中早期OO实现的缺点，比如我们在mlr中使用的S3。如果你以前做过面向对象编程，那么R6应该很熟悉。我们关注的是R6的部分，你需要知道在这里使用mlr3。</description>
+ ROC曲线和预测一个类和另一个类的阈值 阈值调整  在详细介绍如何使用mlr3进行机器学习之前，我们先简要介绍一下R6，因为它是R相对较新的一部分。mlr3严重依赖于R6，它提供的所有基本构造都是R6类：
+ 任务 task 学习器 learner 测量 measure 重采样 resamplings  快速R6入门介绍 R6是R最新的面向对象编程(OO)方言之一。它解决了R中早期OO实现的缺点，比如我们在mlr中使用的S3。如果你以前做过面向对象编程，那么R6应该很熟悉。我们关注的是R6的部分，你需要知道在这里使用mlr3。</description>
     </item>
     
     <item>
@@ -511,11 +527,11 @@ library(&amp;amp;quot;mlr3verse&amp;amp;quot;)task = tsk(&amp;amp;quot;pima&amp
       <pubDate>Wed, 01 Sep 2021 00:00:00 +0000</pubDate>
       
       <guid>/blog/r-tricks-remove-duplicates-after-ordering/</guid>
-      <description>问题与方案假设我们有这样一个数据集：
-df &amp;amp;lt;- data.frame(c1 = c(&amp;amp;quot;a&amp;amp;quot;, &amp;amp;quot;a&amp;amp;quot;, &amp;amp;quot;a&amp;amp;quot;, &amp;amp;quot;b&amp;amp;quot;, &amp;amp;quot;b&amp;amp;quot;, &amp;amp;quot;c&amp;amp;quot;),c2 = c(1, 3, 2, 1, 4, 2))dfout c1 c2out 1 a 1out 2 a 3out 3 a 2out 4 b 1out 5 b 4out 6 c 2如果我们想保留每个c1分类和分类下的最大值，你会怎么操作？
+      <description>问题与方案 假设我们有这样一个数据集：
+df &amp;amp;lt;- data.frame( c1 = c(&amp;amp;quot;a&amp;amp;quot;, &amp;amp;quot;a&amp;amp;quot;, &amp;amp;quot;a&amp;amp;quot;, &amp;amp;quot;b&amp;amp;quot;, &amp;amp;quot;b&amp;amp;quot;, &amp;amp;quot;c&amp;amp;quot;), c2 = c(1, 3, 2, 1, 4, 2) ) df out c1 c2 out 1 a 1 out 2 a 3 out 3 a 2 out 4 b 1 out 5 b 4 out 6 c 2 如果我们想保留每个c1分类和分类下的最大值，你会怎么操作？
 思考一分钟。
 如果使用惯了tidyverse套装，我们脑子里容易冒出来的是这样的解法：使用分组应用。
-library(dplyr)df |&amp;amp;gt; group_by(c1) |&amp;amp;gt; summarize(c2 = max(c2, na.rm = TRUE))out # A tibble: 3 × 2out c1 c2out &amp;amp;lt;chr&amp;amp;gt; &amp;amp;lt;dbl&amp;amp;gt;out 1 a 3out 2 b 4out 3 c 2在数据不是特别大的时候，使用这种策略没有任何问题。但如果分组有成千上万，分组的时间代价就很高了。有没有其他的方式可以解决该问题呢？</description>
+library(dplyr) df |&amp;amp;gt; group_by(c1) |&amp;amp;gt; summarize(c2 = max(c2, na.rm = TRUE)) out # A tibble: 3 × 2 out c1 c2 out &amp;amp;lt;chr&amp;amp;gt; &amp;amp;lt;dbl&amp;amp;gt; out 1 a 3 out 2 b 4 out 3 c 2 在数据不是特别大的时候，使用这种策略没有任何问题。但如果分组有成千上万，分组的时间代价就很高了。有没有其他的方式可以解决该问题呢？</description>
     </item>
     
     <item>
@@ -537,8 +553,8 @@ Hi Aniket, I am not the author of forestmodel, you can see from https://github.<
       <guid>/blog/mlr3-quickstart/</guid>
       <description>来源：https://mlr3book.mlr-org.com/quickstart.html
 安装包：
-install.packages(&amp;amp;quot;mlr3&amp;amp;quot;)作为一个30秒的介绍性示例，我们将在虹膜数据集的前120行训练决策树模型，并对最后30行进行预测，测量训练模型的准确性。
-library(&amp;amp;quot;mlr3&amp;amp;quot;)task = tsk(&amp;amp;quot;iris&amp;amp;quot;)learner = lrn(&amp;amp;quot;classif.rpart&amp;amp;quot;)# 为任务的一个子集（前120行）训练这个学习器的模型learner$train(task, row_ids = 1:120)# 决策树模型learner$model## n= 120 ## ## node), split, n, loss, yval, (yprob)## * denotes terminal node## ## 1) root 120 70 setosa (0.41666667 0.41666667 0.16666667) ## 2) Petal.Length&amp;amp;lt; 2.45 50 0 setosa (1.00000000 0.00000000 0.00000000) *## 3) Petal.Length&amp;amp;gt;=2.45 70 20 versicolor (0.00000000 0.71428571 0.28571429) ## 6) Petal.</description>
+install.packages(&amp;amp;quot;mlr3&amp;amp;quot;) 作为一个30秒的介绍性示例，我们将在虹膜数据集的前120行训练决策树模型，并对最后30行进行预测，测量训练模型的准确性。
+library(&amp;amp;quot;mlr3&amp;amp;quot;) task = tsk(&amp;amp;quot;iris&amp;amp;quot;) learner = lrn(&amp;amp;quot;classif.rpart&amp;amp;quot;) # 为任务的一个子集（前120行）训练这个学习器的模型 learner$train(task, row_ids = 1:120) # 决策树模型 learner$model ## n= 120 ## ## node), split, n, loss, yval, (yprob) ## * denotes terminal node ## ## 1) root 120 70 setosa (0.41666667 0.41666667 0.16666667) ## 2) Petal.Length&amp;amp;lt; 2.45 50 0 setosa (1.00000000 0.00000000 0.00000000) * ## 3) Petal.Length&amp;amp;gt;=2.45 70 20 versicolor (0.00000000 0.71428571 0.28571429) ## 6) Petal.</description>
     </item>
     
     <item>
@@ -548,8 +564,8 @@ library(&amp;amp;quot;mlr3&amp;amp;quot;)task = tsk(&amp;amp;quot;iris&amp;amp;
       
       <guid>/blog/pr-curve-and-auc-value/</guid>
       <description>这里直接使用ROCR包提供的数据作为示例：
-library(ROCR)data(ROCR.simple)pred &amp;amp;lt;- prediction(ROCR.simple$predictions, ROCR.simple$labels)perf &amp;amp;lt;- performance(pred,&amp;amp;quot;tpr&amp;amp;quot;,&amp;amp;quot;fpr&amp;amp;quot;)plot(perf)## precision/recall curve (x-axis: recall, y-axis: precision)perf1 &amp;amp;lt;- performance(pred, &amp;amp;quot;prec&amp;amp;quot;, &amp;amp;quot;rec&amp;amp;quot;)plot(perf1, xlim = c(0, 1), ylim = c(0, 1))使用 PRROC 包获取PR AUC值并且绘图：
-pr &amp;amp;lt;- PRROC::pr.curve(ROCR.simple$predictions, weights.class0 = ROCR.simple$labels, curve = TRUE)pr## ## Precision-recall curve## ## Area under curve (Integral):## 0.7815038 ## ## Area under curve (Davis &amp;amp;amp; Goadrich):## 0.7814246 ## ## Curve for scores from 0.</description>
+library(ROCR) data(ROCR.simple) pred &amp;amp;lt;- prediction(ROCR.simple$predictions, ROCR.simple$labels) perf &amp;amp;lt;- performance(pred,&amp;amp;quot;tpr&amp;amp;quot;,&amp;amp;quot;fpr&amp;amp;quot;) plot(perf) ## precision/recall curve (x-axis: recall, y-axis: precision) perf1 &amp;amp;lt;- performance(pred, &amp;amp;quot;prec&amp;amp;quot;, &amp;amp;quot;rec&amp;amp;quot;) plot(perf1, xlim = c(0, 1), ylim = c(0, 1)) 使用 PRROC 包获取PR AUC值并且绘图：
+pr &amp;amp;lt;- PRROC::pr.curve(ROCR.simple$predictions, weights.class0 = ROCR.simple$labels, curve = TRUE) pr ## ## Precision-recall curve ## ## Area under curve (Integral): ## 0.7815038 ## ## Area under curve (Davis &amp;amp;amp; Goadrich): ## 0.7814246 ## ## Curve for scores from 0.</description>
     </item>
     
     <item>
@@ -926,10 +942,10 @@ Go package main import &amp;amp;#34;fmt&amp;amp;#34; func twoSum(nums []int, tar
       <pubDate>Tue, 16 Mar 2021 00:00:00 +0000</pubDate>
       
       <guid>/blog/questions-answers-and-reprexes/</guid>
-      <description>I stumbled into a niche YouTube genre:Web Development online instructors (a.k.a content creators)challenge each other to “CSS Battles”.
-Turns out they are fascinating videoswhere experienced programmers talk and fumbletheir way through their coding.
-As they talked through their thought processes,I thought about the questions we askwhen our code goes wrongand the answers we get when we reprex.
-CSS Battle with The CSS King  I challenged The CSS King to a CSS Battle on YouTubeI’ve thought a lot about this video since I watched it.</description>
+      <description>I stumbled into a niche YouTube genre: Web Development online instructors (a.k.a content creators) challenge each other to “CSS Battles”.
+Turns out they are fascinating videos where experienced programmers talk and fumble their way through their coding.
+As they talked through their thought processes, I thought about the questions we ask when our code goes wrong and the answers we get when we reprex.
+ CSS Battle with The CSS King     I challenged The CSS King to a CSS Battle on YouTube   I’ve thought a lot about this video since I watched it.</description>
     </item>
     
   </channel>

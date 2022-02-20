@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Biology on ShixiangWang
+(王诗翔)</title>
+    <link>/tags/biology/</link>
+    <description>Recent content in Biology on ShixiangWang
+(王诗翔)</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sun, 20 Feb 2022 00:00:00 +0000</lastBuildDate><atom:link href="/tags/biology/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>《生物学是什么》书摘</title>
+      <link>/blog/whats-biology-notes/</link>
+      <pubDate>Sun, 20 Feb 2022 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/whats-biology-notes/</guid>
+      <description>现代综合进化论。
+分子进化的中性理论。
+操纵子。
+反转座子。
+全基因模型（Omnigenic Model）。
+生物大分子的化学修饰主要涉及三类蛋白质分子：
+ 书写器Writer：负责催化化学修饰。 擦除器Eraser：移除化学修饰。 阅读器Reader：识别携带修饰的分子。  生物体在响应内外环境变化和执行生命活动时通常采用2种调控模式：
+ 改变核酸和蛋白分子零件的数量和类型。 改变生物大分子的化学修饰状态。  </description>
+    </item>
+    
+  </channel>
+</rss>

@@ -15,9 +15,9 @@
       <pubDate>Fri, 22 Oct 2021 00:00:00 +0000</pubDate>
       
       <guid>/blog/ezcox-v1-2-update/</guid>
-      <description>针对@lijing-lin在GitHub的ezcox仓库提出的Fast way to add interaction terms?问题，这两天闲暇时废了些脑细胞进行解决。同时也fix之前记录的一个遗留问题。
-remotes::install_github(&amp;quot;ShixiangWang/ezcox&amp;quot;)交互项支持之前为了解决用户数据列名不符合的R命名规则，在源代码例自动对不合法名字进行了反撇号标记。这会导致R的公式没法进行解析，例如sex:age会被判断为一个列名，R的公式没法解析它，因为找不到数据中对应的sex:age列，所以会报错。
-library(survival)library(ezcox)lung$ph.ecog &amp;lt;- factor(lung$ph.ecog)ezcox(lung, covariates = c(&amp;quot;age&amp;quot;), controls = &amp;quot;sex:ph.ecog&amp;quot;)## # A tibble: 5 × 12## Variable is_control contrast_level ref_level n_contrast n_ref beta HR## &amp;lt;chr&amp;gt; &amp;lt;lgl&amp;gt; &amp;lt;chr&amp;gt; &amp;lt;lgl&amp;gt; &amp;lt;lgl&amp;gt; &amp;lt;lgl&amp;gt; &amp;lt;dbl&amp;gt; &amp;lt;dbl&amp;gt;## 1 age FALSE age NA NA NA 0.00844 1.01 ## 2 age TRUE sex:ph.ecog0 NA NA NA -0.890 0.</description>
+      <description>针对@lijing-lin在GitHub的ezcox仓库提出的Fast way to add interaction terms?问题， 这两天闲暇时废了些脑细胞进行解决。同时也fix之前记录的一个遗留问题。
+remotes::install_github(&amp;quot;ShixiangWang/ezcox&amp;quot;) 交互项支持 之前为了解决用户数据列名不符合的R命名规则，在源代码例自动对不合法名字进行了反撇号标记。 这会导致R的公式没法进行解析，例如sex:age会被判断为一个列名，R的公式没法解析它，因为 找不到数据中对应的sex:age列，所以会报错。
+library(survival) library(ezcox) lung$ph.ecog &amp;lt;- factor(lung$ph.ecog) ezcox(lung, covariates = c(&amp;quot;age&amp;quot;), controls = &amp;quot;sex:ph.ecog&amp;quot;) ## # A tibble: 5 × 12 ## Variable is_control contrast_level ref_level n_contrast n_ref beta HR ## &amp;lt;chr&amp;gt; &amp;lt;lgl&amp;gt; &amp;lt;chr&amp;gt; &amp;lt;lgl&amp;gt; &amp;lt;lgl&amp;gt; &amp;lt;lgl&amp;gt; &amp;lt;dbl&amp;gt; &amp;lt;dbl&amp;gt; ## 1 age FALSE age NA NA NA 0.00844 1.01 ## 2 age TRUE sex:ph.ecog0 NA NA NA -0.890 0.</description>
     </item>
     
   </channel>
