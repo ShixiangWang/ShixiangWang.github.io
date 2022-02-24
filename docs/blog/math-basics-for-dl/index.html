@@ -101,19 +101,19 @@
 <h3 id="向量">向量</h3>
 <p>本书中的向量指的是列向量。一个$n$维向量$\boldsymbol{x}$的表达式可写成</p>
 <p>$$
-\boldsymbol{x} =
+\boldsymbol{x} = 
 \begin{bmatrix}
 x_{1}  \\<br>
 x_{2}  \\<br>
 \vdots  \\<br>
-x_{n}
+x_{n} 
 \end{bmatrix},
 $$</p>
 <p>其中$x_1, \ldots, x_n$是向量的元素。我们将各元素均为实数的$n$维向量$\boldsymbol{x}$记作$\boldsymbol{x} \in \mathbb{R}^{n}$或$\boldsymbol{x} \in \mathbb{R}^{n \times 1}$。</p>
 <h3 id="矩阵">矩阵</h3>
 <p>一个$m$行$n$列矩阵的表达式可写成</p>
 <p>$$
-\boldsymbol{X} =
+\boldsymbol{X} = 
 \begin{bmatrix}
 x_{11} &amp; x_{12}  &amp; \dots  &amp; x_{1n} \\<br>
 x_{21} &amp; x_{22}  &amp; \dots  &amp; x_{2n} \\<br>
@@ -127,14 +127,14 @@ $$</p>
 <p>$$\boldsymbol{a} \cdot \boldsymbol{b} = a_1 b_1 + \ldots + a_n b_n.$$</p>
 <p>设两个$m$行$n$列矩阵</p>
 <p>$$
-\boldsymbol{A} =
+\boldsymbol{A} = 
 \begin{bmatrix}
 a_{11} &amp; a_{12} &amp; \dots  &amp; a_{1n} \\<br>
 a_{21} &amp; a_{22} &amp; \dots  &amp; a_{2n} \\<br>
 \vdots &amp; \vdots &amp; \ddots &amp; \vdots \\<br>
 a_{m1} &amp; a_{m2} &amp; \dots  &amp; a_{mn}
 \end{bmatrix},\quad
-\boldsymbol{B} =
+\boldsymbol{B} = 
 \begin{bmatrix}
 b_{11} &amp; b_{12} &amp; \dots  &amp; b_{1n} \\<br>
 b_{21} &amp; b_{22} &amp; \dots  &amp; b_{2n} \\<br>
@@ -144,7 +144,7 @@ b_{m1} &amp; b_{m2} &amp; \dots  &amp; b_{mn}
 $$</p>
 <p>矩阵$\boldsymbol{A}$的转置是一个$n$行$m$列矩阵，它的每一行其实是原矩阵的每一列：</p>
 <p>$$
-\boldsymbol{A}^\top =
+\boldsymbol{A}^\top = 
 \begin{bmatrix}
 a_{11} &amp; a_{21} &amp; \dots  &amp; a_{m1} \\<br>
 a_{12} &amp; a_{22} &amp; \dots  &amp; a_{m2} \\<br>
@@ -154,7 +154,7 @@ a_{1n} &amp; a_{2n} &amp; \dots  &amp; a_{mn}
 $$</p>
 <p>两个相同形状的矩阵的加法是将两个矩阵按元素做加法：</p>
 <p>$$
-\boldsymbol{A} + \boldsymbol{B} =
+\boldsymbol{A} + \boldsymbol{B} = 
 \begin{bmatrix}
 a_{11} + b_{11} &amp; a_{12} + b_{12} &amp; \dots  &amp; a_{1n} + b_{1n} \\<br>
 a_{21} + b_{21} &amp; a_{22} + b_{22} &amp; \dots  &amp; a_{2n} + b_{2n} \\<br>
@@ -164,7 +164,7 @@ a_{m1} + b_{m1} &amp; a_{m2} + b_{m2} &amp; \dots  &amp; a_{mn} + b_{mn}
 $$</p>
 <p>我们使用符号$\odot$表示两个矩阵按元素做乘法的运算：</p>
 <p>$$
-\boldsymbol{A} \odot \boldsymbol{B} =
+\boldsymbol{A} \odot \boldsymbol{B} = 
 \begin{bmatrix}
 a_{11}  b_{11} &amp; a_{12}  b_{12} &amp; \dots  &amp; a_{1n}  b_{1n} \\<br>
 a_{21}  b_{21} &amp; a_{22}  b_{22} &amp; \dots  &amp; a_{2n}  b_{2n} \\<br>
@@ -174,7 +174,7 @@ a_{m1}  b_{m1} &amp; a_{m2}  b_{m2} &amp; \dots  &amp; a_{mn}  b_{mn}
 $$</p>
 <p>定义一个标量$k$。标量与矩阵的乘法也是按元素做乘法的运算：</p>
 <p>$$
-k\boldsymbol{A} =
+k\boldsymbol{A} = 
 \begin{bmatrix}
 ka_{11} &amp; ka_{12} &amp; \dots  &amp; ka_{1n} \\<br>
 ka_{21} &amp; ka_{22} &amp; \dots  &amp; ka_{2n} \\<br>
@@ -185,7 +185,7 @@ $$</p>
 <p>其他诸如标量与矩阵按元素相加、相除等运算与上式中的相乘运算类似。矩阵按元素开根号、取对数等运算也就是对矩阵每个元素开根号、取对数等，并得到和原矩阵形状相同的矩阵。</p>
 <p>矩阵乘法和按元素的乘法不同。设$\boldsymbol{A}$为$m$行$p$列的矩阵，$\boldsymbol{B}$为$p$行$n$列的矩阵。两个矩阵相乘的结果</p>
 <p>$$
-\boldsymbol{A} \boldsymbol{B} =
+\boldsymbol{A} \boldsymbol{B} = 
 \begin{bmatrix}
 a_{11} &amp; a_{12} &amp; \dots  &amp; a_{1p} \\<br>
 a_{21} &amp; a_{22} &amp; \dots  &amp; a_{2p} \\<br>
@@ -233,7 +233,7 @@ $$</p>
 <p>$$
 \begin{aligned}
 \frac{\text{d}}{\text{d}x} [Cf(x)] &amp;= C \frac{\text{d}}{\text{d}x} f(x),\\<br>
-\frac{\text{d}}{\text{d}x} [f(x) + g(x)] &amp;= \frac{\text{d}}{\text{d}x} f(x) + \frac{\text{d}}{\text{d}x} g(x),\\
+\frac{\text{d}}{\text{d}x} [f(x) + g(x)] &amp;= \frac{\text{d}}{\text{d}x} f(x) + \frac{\text{d}}{\text{d}x} g(x),\\ 
 \frac{\text{d}}{\text{d}x} [f(x)g(x)] &amp;= f(x) \frac{\text{d}}{\text{d}x} [g(x)] + g(x) \frac{\text{d}}{\text{d}x} [f(x)],\\<br>
 \frac{\text{d}}{\text{d}x} \left[\frac{f(x)}{g(x)}\right] &amp;= \frac{g(x) \frac{\text{d}}{\text{d}x} [f(x)] - f(x) \frac{\text{d}}{\text{d}x} [g(x)]}{[g(x)]^2}.
 \end{aligned}
@@ -271,7 +271,7 @@ $$\nabla_{\boldsymbol{X}} |\boldsymbol{X} |_F^2 = 2\boldsymbol{X}.$$</p>
 <h3 id="海森矩阵">海森矩阵</h3>
 <p>假设函数$f: \mathbb{R}^n \rightarrow \mathbb{R}$的输入是一个$n$维向量$\boldsymbol{x} = [x_1, x_2, \ldots, x_n]^\top$，输出是标量。假定函数$f$所有的二阶偏导数都存在，$f$的海森矩阵$\boldsymbol{H}$是一个$n$行$n$列的矩阵：</p>
 <p>$$
-\boldsymbol{H} =
+\boldsymbol{H} = 
 \begin{bmatrix}
 \frac{\partial^2 f}{\partial x_1^2} &amp; \frac{\partial^2 f}{\partial x_1 \partial x_2} &amp; \dots  &amp; \frac{\partial^2 f}{\partial x_1 \partial x_n} \\<br>
 \frac{\partial^2 f}{\partial x_2 \partial x_1} &amp; \frac{\partial^2 f}{\partial x_2^2} &amp; \dots  &amp; \frac{\partial^2 f}{\partial x_2 \partial x_n} \\<br>

@@ -8,7 +8,17 @@
 (王诗翔)</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 17 Feb 2022 00:00:00 +0000</lastBuildDate><atom:link href="/tags/conda/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 24 Feb 2022 00:00:00 +0000</lastBuildDate><atom:link href="/tags/conda/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>conda安装samtools包使用报错：libcrypto.so.1.0.0 not found</title>
+      <link>/blog/conda-samtools-libcrypto-so-1-0-0-not-found/</link>
+      <pubDate>Thu, 24 Feb 2022 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/conda-samtools-libcrypto-so-1-0-0-not-found/</guid>
+      <description>通过conda的bioconda Channel安装samtools后，使用时发现报错。
+(biosoft) wsx 11:55:46 ~ $ conda install -c bioconda samtools Collecting package metadata (current_repodata.json): done Solving environment: done ## Package Plan ## environment location: /home/wsx/miniconda3/envs/biosoft added / updated specs: - samtools The following packages will be downloaded: package | build ---------------------------|----------------- bzip2-1.0.8 | h7b6447c_0 78 KB defaults c-ares-1.18.1 | h7f8727e_0 114 KB defaults curl-7.80.0 | h7f8727e_0 95 KB defaults krb5-1.19.2 | hac12032_0 1.2 MB defaults libcurl-7.80.0 | h0b77cf5_0 339 KB defaults libedit-3.</description>
+    </item>
+    
     <item>
       <title>4步为Jupyter Notebook添加Conda环境</title>
       <link>/blog/4-jupyter-notebook-conda/</link>
