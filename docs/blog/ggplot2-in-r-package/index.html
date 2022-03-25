@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en-US">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1">
+
+		
+		<title>ggplot2在R包开发中的使用 &middot; ShixiangWang
+(王诗翔)</title>
+		
+		<meta property="og:title" content="ggplot2在R包开发中的使用 - ShixiangWang
+(王诗翔)">
+		
+		<meta property="og:type" content="article">
+		
+
+		
+			
+			<meta property="description" content="R包开发使用ggplot绘图最佳姿势">
+			<meta property="og:description" content="R包开发使用ggplot绘图最佳姿势">
+			
+			
+    	<meta property="twitter:card" content="summary">
+  		<meta property="twitter:image" content="/apple-touch-icon-152x152.png">
+			
+		
+
+		
+		
+		<meta name="twitter:creator" content="@WangShxiang">
+		<meta name="twitter:site" content="https://shixiangwang.github.io">
+		
+		
+
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+		<link rel="stylesheet" href="../../css/poole.css">
+		<link rel="stylesheet" href="../../css/syntax.css">
+		<link rel="stylesheet" href="../../css/hyde.css">
+		
+		
+		<link rel="stylesheet" href="../../css/hamburgers.css">
+		
+		<link rel="stylesheet" href="../../css/custom.css">
+		
+		
+
+<link rel="apple-touch-icon-precomposed" sizes="57x57" href="../../apple-touch-icon-57x57.png" />
+<link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../apple-touch-icon-114x114.png" />
+<link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../apple-touch-icon-72x72.png" />
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../apple-touch-icon-144x144.png" />
+<link rel="apple-touch-icon-precomposed" sizes="120x120" href="../../apple-touch-icon-120x120.png" />
+<link rel="apple-touch-icon-precomposed" sizes="152x152" href="../../apple-touch-icon-152x152.png" />
+<link rel="icon" type="image/png" href="../../favicon-32x32.png" sizes="32x32" />
+<link rel="icon" type="image/png" href="../../favicon-16x16.png" sizes="16x16" />
+<meta name="application-name" content="Garrick Aden-Buie"/>
+<meta name="msapplication-TileColor" content="#002B36" />
+<meta name="msapplication-TileImage" content="/mstile-144x144.png" />
+<meta name="theme-color" content="#ffffff">
+
+<meta name="mobile-web-app-capable" content="yes">
+
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-title" content="Garrick Aden-Buie">
+
+<link href="../../css/featherlight.min.css" type="text/css" rel="stylesheet" />
+
+<script async defer src="https://buttons.github.io/buttons.js"></script>
+
+<script defer src="../../js/van11y-accessible-hide-show-aria.min.js"></script>
+
+<script defer src="../../js/toc.js"></script>
+
+
+
+		<link href="../../blog/ggplot2-in-r-package" rel="canonical">
+	</head>
+
+	<body class="restyled-garrick  h-entry">
+		<main class="content container" role="main">
+			<article class="post">
+				<header>
+					<a class="u-url" href="../../blog/ggplot2-in-r-package">
+						<h1 class="post-title p-name">ggplot2在R包开发中的使用</h1>
+					</a>
+					<h3 class="post-author">王诗翔</h3>
+					<time class="post-date dt-published" datetime="2022-03-25T00:00:00Z">Friday, 25 March 2022</time>
+					
+				</header>
+				<div class="post-content e-content">
+					
+<script src="../../blog/ggplot2-in-r-package/index_files/header-attrs/header-attrs.js"></script>
+
+
+<p>没有特别系统的学习 tidy evaluation 这方面的高级操作，最近有空准备补一补，学习下这方面的知识。</p>
+<blockquote>
+<p>原英文：<a href="https://github.com/tidyverse/ggplot2/blob/HEAD/vignettes/ggplot2-in-packages.Rmd" class="uri">https://github.com/tidyverse/ggplot2/blob/HEAD/vignettes/ggplot2-in-packages.Rmd</a></p>
+</blockquote>
+<p>这篇文章是为在包代码中使用ggplot2的包开发人员准备的。在撰写本文时，ggplot2涉及在CRAN上的超过2,000个包和其他地方的更多包！在包中使用ggplot2编程增加了几个约束，特别是如果你想将包提交给CRAN。尤其是在R包中编程改变了从ggplot2引用函数的方式，以及在<code>aes()</code>和<code>vars()</code>中使用ggplot2的非标准求值的方式。</p>
+<div id="引用ggplot2函数" class="section level2">
+<h2>引用ggplot2函数</h2>
+<p>与引用其他包类似，你需要在<code>DESCRIPTION</code>文件下的<code>Imports</code>条目下列出ggplot2，并使用<code>::</code>访问ggplot2提供的函数。（例如， <code>ggplot2::function_name</code>）：</p>
+<pre class="r"><code>mpg_drv_summary &lt;- function() {
+  ggplot2::ggplot(ggplot2::mpg) + 
+    ggplot2::geom_bar(ggplot2::aes(x = .data$drv)) + 
+    ggplot2::coord_flip()
+}</code></pre>
+<p>如果你经常使用ggplot2，你可能希望将<code>ggplot2</code>的多个函数写入<code>NAMESPACE</code>文件。如果你使用<a href="https://cran.r-project.org/package=roxygen2">roxygen2</a>，那么你可以利用注释代码块 <code>#' @importFrom ggplot2 &lt;one or more object names&gt;</code> （注意，这对数据集<code>mpg</code>不起作用）。</p>
+<pre class="r"><code>#&#39; @importFrom ggplot2 ggplot aes geom_bar coord_flip
+mpg_drv_summary &lt;- function() {
+  ggplot(ggplot2::mpg) + 
+    geom_bar(aes(x = drv)) + 
+    coord_flip()
+}</code></pre>
+<p>即使你的包里使用了很多的ggplot2函数，将ggplot2列入<code>Depends</code>条目或者将它整个导入<code>NAMESPACE</code>（例如，通过<code>#' @import ggplot2</code>）都是不明智的。
+将ggplot2列入<code>Depends</code>会让你的包在被加载/测试的同时加载ggplot2。这会让其他想要使用你包的人通过<code>::</code>使用你的函数而无需加载它。
+同样地，导入ggplot2全部450个导出对象到你的命名空间会让分离你的包和ggplot2包的责任变得困难，特别是读者会搞不清这些函数到底来自哪里。</p>
+<blockquote>
+<p>我个人碰到过很多这种情况。有时候在开发R包时为了保证正常运行，不得不将依赖包列入<code>Depdens</code>。
+实际上，如上所说，这一方面会让使用者懵逼，另一方面会造成开发病毒式感染，既不方便调试错误，
+想要使用你的包开发的人又不得不将你的包列入<code>Depends</code>。</p>
+</blockquote>
+</div>
+<div id="在包函数中使用-aes-和-vars" class="section level2">
+<h2>在包函数中使用 <code>aes()</code> 和 <code>vars()</code></h2>
+<p>为了使用ggplot2创建图形，你很可能至少要使用一次<code>aes()</code>函数。如果你的图形使用了分面操作，你可能也会使用<code>vars()</code>用来指向绘图数据。
+而这两个函数都使用了非标准计算，如果你在包中直接使用它，后面再CMD check的使用会引入一个note。</p>
+<blockquote>
+<p>所有的Error, warning和note都需要解决才能上传到CRAN。</p>
+</blockquote>
+<pre class="r"><code>mpg_drv_summary &lt;- function() {
+  ggplot(ggplot2::mpg) + 
+    geom_bar(aes(x = drv)) + 
+    coord_flip()
+}</code></pre>
+<pre><code>N  checking R code for possible problems (2.7s)
+   mpg_drv_summary: no visible binding for global variable ‘drv’
+   Undefined global functions or variables:
+     drv</code></pre>
+<p>这大体又分为3种情况：</p>
+<ul>
+<li>你事先已经知道了列名和表达式。</li>
+<li>你用字符串向量来表示列名。</li>
+<li>由用户指定列名和表达式，而你想要你的函数能够有<code>aes()</code>同样的方式执行非标准计算。</li>
+</ul>
+<p>如果你已经像上面的例子一样事先知道了列名，你可以使用来自<a href="https://rlang.r-lib.org/">rlang</a>的代词<code>.data</code>指代你要使用的图层数据。
+为了避免CMD check抛出note，你需要<code>#' @importFrom rlang .data</code>注释块引入该符号名。（通常你可以通过<code>usethis::use_package_doc()</code>生成包的注释块）</p>
+<pre class="r"><code>mpg_drv_summary &lt;- function() {
+  ggplot(ggplot2::mpg) + 
+    geom_bar(aes(x = .data$drv)) + 
+    coord_flip()
+}</code></pre>
+<p>如果你的列名是字符串向量（例如， <code>col = "drv"</code>），使用 <code>.data[[col]]</code> 这种方式：</p>
+<pre class="r"><code>col_summary &lt;- function(df, col) {
+  ggplot(df) + 
+    geom_bar(aes(x = .data[[col]])) + 
+    coord_flip()
+}
+col_summary(mpg, &quot;drv&quot;)</code></pre>
+<p>如果列名或者表达式是由用户提供的，你可以以 <code>{{ col }}</code>的方式将其传入<code>aes()</code>或<code>vars()</code>。
+这种tidy eval计算符号会捕捉用户提供的表达式，并将其传递给使用非标准计算的函数，如<code>aes()</code>或<code>vars()</code>。</p>
+<pre class="r"><code>col_summary &lt;- function(df, col) {
+  ggplot(df) + 
+    geom_bar(aes(x = {{ col }})) + 
+    coord_flip()
+}
+col_summary(mpg, drv)</code></pre>
+<p>你可能看到了其他的一些方式可以达到相同的目的，但我们（ggplot2的作者）只会保证上述的用法在未来也是有效的。
+特别的，不要使用<code>aes_()</code>或<code>aes_string()</code>，它们已经过时了，未来的版本中将不再支持。</p>
+<blockquote>
+<p>这里有一些删减，没有特别的意义。</p>
+</blockquote>
+</div>
+<div id="常规任务最佳实践" class="section level2">
+<h2>常规任务最佳实践</h2>
+<div id="使用ggplot2可视化一个对象" class="section level3">
+<h3>使用ggplot2可视化一个对象</h3>
+<p>ggplot2在包中通常用于可视化对象（例如，在一个<code>plot()</code>-风格的函数中）。例如，一个包可能定义了
+如下一个S3类用于表达式不同离散值的概率：</p>
+<pre class="r"><code>mpg_drv_dist &lt;- structure(
+  c(
+    &quot;4&quot; = 103 / 234,
+    &quot;f&quot; = 106 / 234,
+    &quot;r&quot; = 25 / 234
+  ),
+  class = &quot;discrete_distr&quot;
+)</code></pre>
+<p>R中需要的类都有<code>plot()</code>方法，但想要依赖一个单一的<code>plot()</code>为你的每个用户都提供他们所需要的可视化需求是不现实的。然而，提供一个
+<code>plot()</code>用于一个对象的可视化总结帮助用户理解该对象是有帮助的。
+为了满足你的所有用户，我们建议写一个函数将这个对象转换为一个数据框（如果更加复杂，可以是包含数据框的列表）。
+一个很好的例子是<a href="https://cran.r-project.org/package=ggdendro">ggdendro</a>，它创建系统树图但同时计算出数据以方便用户干自己想要做的事情。
+对于上面的例子，函数可能是这样的：</p>
+<pre class="r"><code>discrete_distr_data &lt;- function(x) {
+  tibble::tibble(
+    value = names(x),
+    probability = as.numeric(x)
+  )
+}
+discrete_distr_data(mpg_drv_dist)
+#&gt; # A tibble: 3 x 2
+#&gt;   value probability
+#&gt;   &lt;chr&gt;       &lt;dbl&gt;
+#&gt; 1 4           0.440
+#&gt; 2 f           0.453
+#&gt; 3 r           0.107</code></pre>
+<p>通常，<code>plot()</code>的使用者调用它是为了它的副作用：它生成一个图形用于展示。这与<code>ggplot()</code>不同，除非交互使用或者显式地调用<code>print()</code>，否则是不是展示的。因为这个原因，ggplot2定义了一个自己的泛型函数<code>autoplot()</code>，调用它会返回一个<code>ggplot()</code>。</p>
+<pre class="r"><code>#&#39; @importFrom ggplot2 autoplot
+autoplot.discrete_distr &lt;- function(object, ...) {
+  plot_data &lt;- discrete_distr_data(object)
+  ggplot(plot_data, aes(.data$value, .data$probability)) +
+    geom_col() +
+    coord_flip() +
+    labs(x = &quot;Value&quot;, y = &quot;Probability&quot;)
+}</code></pre>
+<p>一旦定义了 <code>autoplot()</code>，可以接着创建一个<code>plot()</code>方法包含（打印）绘图步骤：</p>
+<pre class="r"><code>#&#39; @importFrom graphics plot
+plot.discrete_distr &lt;- function(x, ...) {
+  print(autoplot(x, ...))
+}</code></pre>
+<p>如果你不懂S3类，实现像<code>plot()</code>或者<code>autoplot()</code>这种泛型是一个不好的实践，因为这限制了包开发者自己控制S3用于实现自己的方法。
+不应该停止你创建自己的函数可视化对象！</p>
+</div>
+<div id="创建一个新的主题" class="section level3">
+<h3>创建一个新的主题</h3>
+<p>当创建一个新的主题时，从已有主题出发总是好的实践（例如，<code>theme_grey()</code>），然后使用<code>%+replace%</code>替换需要该包的元素。
+这是一种好的策略，哪怕几乎所有的元素都要替换，如果不这样做会让我们通过添加元素优化主题变得困难。
+<a href="https://cran.r-project.org/package=ggthemes">ggthemes</a>包中有很多好的主题作为参考。</p>
+<pre class="r"><code>#&#39; @importFrom ggplot2 %+replace%
+theme_custom &lt;- function(...) {
+  theme_grey(...) %+replace% 
+    theme(
+      panel.border = element_rect(size = 1, fill = NA),
+      panel.background = element_blank(),
+      panel.grid = element_line(colour = &quot;grey80&quot;)
+    )
+}
+mpg_drv_summary() + theme_custom()</code></pre>
+<p>在加载包之后计算主题是很重要的。如果没有，则会将主题对象存储在编译后的包的字节码中，<strong>而该字节码可能与安装的ggplot2不一致</strong>！
+如果你的包有一个默认的可视化主题，正确的加载方法是使用一个返回默认主题的函数：</p>
+<pre class="r"><code>default_theme &lt;- function() {
+  theme_custom()
+}
+mpg_drv_summary2 &lt;- function() {
+  mpg_drv_summary() + default_theme()
+}</code></pre>
+</div>
+<div id="测试ggplot2输出" class="section level3">
+<h3>测试ggplot2输出</h3>
+<p>我们建议使用<a href="https://cran.r-project.org/package=vdiffr">vdiffr</a>测试ggplot2的输出，这是一个管理可视化测试案例的工具（这是我们测试ggplot2的方式之一）。如果ggplot2或者你代码的改变对可视化输出引入了改变，当你在本地或者Travis运行测试时会失败。为了使用vdiffr，你需要将<a href="https://testthat.r-lib.org/">testthat</a>（通过<code>usethis::use_testthat()</code>初始化）和vdiffr加入<code>DESCRIPTION</code>的<code>Suggests</code>条目。然后，使用
+<code>vdiffr::expect_doppleganger(&lt;name of plot&gt;, &lt;ggplot object&gt;)</code>创建一个测试。</p>
+<pre class="r"><code>test_that(&quot;output of ggplot() is stable&quot;, {
+  vdiffr::expect_doppelganger(&quot;A blank plot&quot;, ggplot())
+})</code></pre>
+</div>
+<div id="ggplot2在suggests" class="section level3">
+<h3>ggplot2在<code>Suggests</code></h3>
+<p>如果你在包中使用ggplot2，大概率你会想要将它列入<code>Imports</code>。如果你想要将它列入<code>Suggests</code>，那么你不能使用<code>#' @importFrom ggplot2 ...</code>载入函数，但是如果你仍然想要使用ggplot2的像<code>%+replace%</code>这样的中缀操作符号，你可以在函数中进行赋值，然后再使用。</p>
+<pre class="r"><code>theme_custom &lt;- function(...) {
+  `%+replace%` &lt;- ggplot2::`%+replace%`
+  
+  ggplot2::theme_grey(...) %+replace% 
+    ggplot2::theme(panel.background = ggplot2::element_blank())
+}</code></pre>
+<p>通过，如果你为ggplot2的<code>autoplot()</code>等泛型创建了新的方法，ggplot2应该列入<code>Imports</code>。
+如果出于一些原因你想要将其保留在<code>Suggests</code>，那么可以利用<code>vctrs::s3_register()</code>仅当ggplot2被安装时才注册你的泛型函数。
+为了达到这样的目的，你需要拷贝和粘贴<code>vctrs::s3_register()</code>的源代码，以避免引入<a href="https://vctrs.r-lib.org/">vctrs</a>作为依赖。</p>
+<pre class="r"><code>.onLoad &lt;- function(...) {
+  if (requireNamespace(&quot;ggplot2&quot;, quietly = TRUE)) {
+    vctrs::s3_register(&quot;ggplot2::autoplot&quot;, &quot;discrete_distr&quot;)
+  }
+}</code></pre>
+</div>
+</div>
+
+				</div>
+				<footer class="footer">
+				  <hr>
+<div class="post-tags">
+
+<p>
+  <svg xmlns="http://www.w3.org/2000/svg" class="octicon" width="20" height="24" viewBox="0 0 14 16"><path fill-rule="evenodd" d="M8 2H6V0h2v2zm4 5H2c-.55 0-1-.45-1-1V4c0-.55.45-1 1-1h10l2 2-2 2zM8 4H6v2h2V4zM6 16h2V8H6v8z"/></svg>
+	
+	<a class="p-category" href="../../categories/blog/">Blog</a>
+</p>
+
+
+<p>
+  <svg xmlns="http://www.w3.org/2000/svg" class="octicon" width="20" height="24" viewBox="0 0 15 16"><path fill-rule="evenodd" d="M7.73 1.73C7.26 1.26 6.62 1 5.96 1H3.5C2.13 1 1 2.13 1 3.5v2.47c0 .66.27 1.3.73 1.77l6.06 6.06c.39.39 1.02.39 1.41 0l4.59-4.59a.996.996 0 0 0 0-1.41L7.73 1.73zM2.38 7.09c-.31-.3-.47-.7-.47-1.13V3.5c0-.88.72-1.59 1.59-1.59h2.47c.42 0 .83.16 1.13.47l6.14 6.13-4.73 4.73-6.13-6.15zM3.01 3h2v2H3V3h.01z"/></svg>
+	
+	<a class="p-tag" href="../../tags/ggplot/">ggplot</a><a class="p-tag" href="../../tags/development/">development</a>
+
+</p>
+</div>
+
+				</footer>
+			</article>
+		</main>
+			  <button class="hamburger hamburger--arrow is-active" type="button" onclick="document.getElementsByClassName('sidebar')[0].classList.toggle('collapsed');document.getElementsByClassName('content')[0].classList.toggle('expanded');document.getElementsByClassName('hamburger')[0].classList.toggle('is-active');document.getElementsByClassName('hamburger-inner')[0].classList.toggle('is-active')">
+      <span class="hamburger-box">
+        <span class="hamburger-inner"></span>
+      </span>
+    </button>
+		<aside class="sidebar">
+			<div class="container sidebar-sticky">
+				<header class="sidebar-about h-card vcard p-author">
+					
+					<a class="u-url u-uid" rel="me" href="../../">
+						<img class="u-photo" src="https://avatars.githubusercontent.com/u/25057508?v=4" width=128 height=128 />
+					</a>
+					
+
+					
+					<span class="site-title u-name fn">
+					  <a class="u-url u-uid" rel="me" href="../../">ShixiangWang
+(王诗翔)</a>
+				  </span>
+					
+
+					<p class="lead p-note">
+						 Bioinformatics Scholar. Cancer Researcher. Data Scientist. Always learning something new. 
+					</p>
+
+					<nav>
+						<ul class="sidebar-nav">
+							
+							<li><a href="../../about/"> About </a></li>
+							
+							<li><a href="../../blog/"> Blog </a></li>
+							
+							<li><a href="../../project/"> Projects </a></li>
+							
+							<li><a href="http://42.192.87.178:3838/"> Shiny Apps </a></li>
+							
+							<li><a href="../../talk/"> Talks </a></li>
+							
+							<li><a href="https://github.com/ShixiangWang/self-study/discussions"> Discuss with me? </a></li>
+							
+							<li><a href="https://shixiangwang.netlify.app/"> Mirror #1 </a></li>
+							
+							<li><a href="https://shixiangwang.github.io/"> Mirror #2 </a></li>
+							
+						</ul>
+					</nav>
+
+					
+						<div class="contact">
+						  
+							<ul class="contact-list">
+								
+								<li>
+									
+									  
+		  							  <a href="https://twitter.com/WangShxiang" class="u-url url" rel="me" title="Twitter" aria-label="Twitter">
+		  						    <i class='fab fa-twitter fa-fw'></i>
+		  							  </a>
+		  						  
+								
+								</li>
+								
+								<li>
+									
+									  
+		  							  <a href="https://github.com/ShixiangWang" class="u-url url" rel="me" title="GitHub" aria-label="GitHub">
+		  						    <i class='fab fa-github fa-fw'></i>
+		  							  </a>
+		  						  
+								
+								</li>
+								
+								<li>
+									
+		  							<a href="mailto:shixiang1994wang@gmail.com" class="u-email email" rel="me" title="Email" aria-label="Email">
+		  							<i class='fa fa-envelope fa-fw'></i>
+		  							  
+		  							</a>
+									
+								</li>
+								
+								<li>
+									
+									  
+		  							  <a href="https://shixiangwang.github.io/home/logo/qrcode.jpg" class="u-url url" rel="me" title="Bandcamp" aria-label="Bandcamp">
+		  						    <i class='fab fa-bandcamp fa-fw'></i>
+		  							  </a>
+		  						  
+								
+								</li>
+								
+							</ul>
+						</div>
+					
+				</header>
+
+				<footer>&copy; 2022. All rights reserved. </footer>
+				 <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+            <span id="busuanzi_container_site_pv">本站总访问量&nbsp;<span id="busuanzi_value_site_pv"></span>&nbsp;次</span>
+			</div>
+		</aside>
+
+		  <footer>
+  <script src="../../js/jquery-latest.js"></script>
+<script src="../../js/featherlight.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+
+<script>
+MathJax = {
+  tex: {
+    inlineMath: [['$', '$'], ['\\(', '\\)']]
+  }
+};
+</script>
+<script type="text/javascript" id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+  
+  </footer>
+  </body>
+</html>
+
+	</body>
+</html>
