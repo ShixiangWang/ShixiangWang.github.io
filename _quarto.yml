@@ -18,8 +18,13 @@ website:
           - text: Code and Books
             file: resource.qmd
     right:
+    # https://icons.getbootstrap.com/ for icon list
       - text: Resume
         href: https://shixiangwang.github.io/cv-shixiang/
+      - icon: wechat
+        href: https://shixiangwang.github.io/home/logo/qrcode.jpg
+      - icon: quora
+        href: https://www.zhihu.com/people/shixiangwang
       - icon: github
         href: https://github.com/ShixiangWang
       - icon: twitter
@@ -27,7 +32,7 @@ website:
       - icon: rss
         href: index.xml
   page-footer:
-    left: "Blog made with 💜 and [Quarto](https://quarto.org/), by Beatriz Milz. License: [CC BY-SA 2.0](https://creativecommons.org/licenses/by-sa/2.0/)."
+    left: "Blog made with 💜 and [Quarto](https://quarto.org/), by Shixiang Wang. License: [CC BY-SA 2.0](https://creativecommons.org/licenses/by-sa/2.0/)."
     right:
       - icon: github
         href: https://github.com/shixiangwang/
