@@ -6,12 +6,19 @@ website:
   title: "Reasoning"
   site-url: https://shixiangwang.github.io
   description: "Reasoning is a blog dedicated to exploring the intersection of data science, bioinformatics, and personal insights."
+  page-navigation: true
+  twitter-card:
+    creator: "@WangShxiang"
+    card-style: summary_large_image
   navbar:
     left:
-      - text: "Resource"
-        file: resource.qmd
+      - text: Resources
+        #file: resource.qmd
+        menu:
+          - text: Code and Books
+            file: resource.qmd
     right:
-      - text: About
+      - text: Resume
         href: https://shixiangwang.github.io/cv-shixiang/
       - icon: github
         href: https://github.com/ShixiangWang
@@ -19,10 +26,27 @@ website:
         href: https://twitter.com/WangShxiang
       - icon: rss
         href: index.xml
+  page-footer:
+    left: "Blog made with 💜 and [Quarto](https://quarto.org/), by Beatriz Milz. License: [CC BY-SA 2.0](https://creativecommons.org/licenses/by-sa/2.0/)."
+    right:
+      - icon: github
+        href: https://github.com/shixiangwang/
+      - icon: twitter
+        href: https://twitter.com/WangShxiang
+      - icon: envelope
+        href: mailto:shixiang1994wang@gmail.com
+      - icon: rss
+        href: index.xml
 format:
   html:
     theme: morph
     css: styles.css
+    smooth-scroll: true
+    citations-hover: true
+    footnotes-hover: true
+    include-in-header: meta.html
+    toc: true
+    code-link: true
 
 comments:
   giscus:
