@@ -24,5 +24,7 @@ format:
     theme: morph
     css: styles.css
 
-
+comments:
+  giscus:
+    repo: shixiangwang/shixiangwang.github.io
 
