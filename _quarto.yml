@@ -1,0 +1,28 @@
+project:
+  type: website
+  output-dir: docs
+
+website:
+  title: "Reasoning"
+  site-url: https://shixiangwang.github.io
+  description: "Reasoning is a blog dedicated to exploring the intersection of data science, bioinformatics, and personal insights."
+  navbar:
+    left:
+      - text: "Resource"
+        file: resource.qmd
+    right:
+      - text: About
+        href: https://shixiangwang.github.io/cv-shixiang/
+      - icon: github
+        href: https://github.com/ShixiangWang
+      - icon: twitter
+        href: https://twitter.com/WangShxiang
+      - icon: rss
+        href: index.xml
+format:
+  html:
+    theme: morph
+    css: styles.css
+
+
+

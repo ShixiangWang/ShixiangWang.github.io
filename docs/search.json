@@ -1,0 +1,30 @@
+[
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Write programs that do one thing and do it well.",
+    "section": "",
+    "text": "Welcome To My Blog\n\n\n\n\n\n\n\nnews\n\n\n\n\n\n\n\n\n\n\n\nMar 28, 2023\n\n\nShixiang Wang\n\n\n\n\n\n\nNo matching items"
+  },
+  {
+    "objectID": "posts/welcome/index.html",
+    "href": "posts/welcome/index.html",
+    "title": "Welcome To My Blog",
+    "section": "",
+    "text": "This is the first post in a Quarto blog. Welcome!"
+  },
+  {
+    "objectID": "resource.html",
+    "href": "resource.html",
+    "title": "Resource",
+    "section": "",
+    "text": "一些比较有用的 R 包都列入了 r-universe，无论是否发布在 CRAN。这里也进行了一些罗列。\n\n\n\n\nloon - 不再维护\n\n\n\n\n\nsync-deploy\nR Search Extension"
+  },
+  {
+    "objectID": "resource.html#图书教程",
+    "href": "resource.html#图书教程",
+    "title": "Resource",
+    "section": "图书/教程 📖",
+    "text": "图书/教程 📖\n\n交互的Python：数据分析入门 - 阅读地址\n极客R：数据分析之道\n\nhttps://github.com/ShixiangWang/geek-r-tutorial\n\nCookbook for R 中文版- 阅读地址\n\nhttps://github.com/openbiox/Cookbook-for-R-Chinese\n\n生信爱好者周刊"
+  }
+]

@@ -1,0 +1,30 @@
+---
+title: "Resource"
+author: "Shixiang Wang"
+date: "2023-03-28"
+categories: [resource]
+---
+
+## 软件 📦
+
+### R 包
+
+一些比较有用的 R 包都列入了 [r-universe](https://shixiangwang.r-universe.dev/)，无论是否发布在 CRAN。[这里](https://shixiangwang.github.io/project/)也进行了一些罗列。
+
+### Python
+
+- [loon](https://shixiangwang.github.io/project/loon/) - 不再维护
+
+### 其他
+
+- [sync-deploy](https://github.com/ShixiangWang/sync-deploy)
+- [R Search Extension](https://github.com/ShixiangWang/r-search-extension)
+
+## 图书/教程 📖
+
+- [交互的Python：数据分析入门](https://shixiangwang.github.io/pybook) - [阅读地址](https://pybook.shixiangwang.work/)
+- 极客R：数据分析之道
+  - <https://github.com/ShixiangWang/geek-r-tutorial>
+- Cookbook for R 中文版- [阅读地址](https://cookbook4r.shixiangwang.work/index.html)
+  - <https://github.com/openbiox/Cookbook-for-R-Chinese>
+- [生信爱好者周刊](https://shixiangwang.github.io/weekly/)

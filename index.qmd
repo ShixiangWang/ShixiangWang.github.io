@@ -1,0 +1,14 @@
+---
+title: "Write programs that do one thing and do it well."
+listing:
+  contents: posts
+  sort: "date desc"
+  type: default
+  feed: true
+    # categories: [news, posts]
+  categories: true
+  sort-ui: false
+  filter-ui: false
+page-layout: full
+title-block-banner: true
+---
