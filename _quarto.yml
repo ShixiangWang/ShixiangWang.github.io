@@ -44,7 +44,7 @@ website:
         href: index.xml
 format:
   html:
-    theme: morph
+    theme: vapor
     css: styles.css
     smooth-scroll: true
     citations-hover: true

@@ -2,6 +2,7 @@
   {
     "listing": "/index.html",
     "items": [
+      "/posts/2023-03-29-chatgpt-help-me-understand-rust-ownership/index.html",
       "/posts/welcome/index.html"
     ]
   }

@@ -4,7 +4,7 @@
     "href": "index.html",
     "title": "Write programs that do one thing and do it well.",
     "section": "",
-    "text": "Welcome To My Blog\n\n\n\n\n\n\n\nnews\n\n\n\n\n\n\n\n\n\n\n\nMar 28, 2023\n\n\nShixiang Wang\n\n\n\n\n\n\nNo matching items"
+    "text": "ChatGPT 帮助我理解 Rust 的所有权\n\n\n\n\n\n\n\nRust\n\n\nAI\n\n\n\n\n\n\n\n\n\n\n\nMar 29, 2023\n\n\nShixiang Wang\n\n\n\n\n\n\n  \n\n\n\n\nWelcome To My Blog\n\n\n\n\n\n\n\nnews\n\n\n\n\n\n\n\n\n\n\n\nMar 28, 2023\n\n\nShixiang Wang\n\n\n\n\n\n\nNo matching items"
   },
   {
     "objectID": "posts/welcome/index.html",
@@ -26,5 +26,40 @@
     "title": "Resource",
     "section": "图书/教程 📖",
     "text": "图书/教程 📖\n\n交互的Python：数据分析入门 - 阅读地址\n极客R：数据分析之道\n\nhttps://github.com/ShixiangWang/geek-r-tutorial\n\nCookbook for R 中文版- 阅读地址\n\nhttps://github.com/openbiox/Cookbook-for-R-Chinese\n\n生信爱好者周刊"
+  },
+  {
+    "objectID": "posts/2023-03-29-chatgpt-help-me-understand-rust-ownership/index.html",
+    "href": "posts/2023-03-29-chatgpt-help-me-understand-rust-ownership/index.html",
+    "title": "ChatGPT 帮助我理解 Rust 的所有权",
+    "section": "",
+    "text": "这篇文章以我和 ChatGPT 的问答进行。"
+  },
+  {
+    "objectID": "posts/2023-03-29-chatgpt-help-me-understand-rust-ownership/index.html#怎么理解rust的所有权",
+    "href": "posts/2023-03-29-chatgpt-help-me-understand-rust-ownership/index.html#怎么理解rust的所有权",
+    "title": "ChatGPT 帮助我理解 Rust 的所有权",
+    "section": "怎么理解rust的所有权？",
+    "text": "怎么理解rust的所有权？\nRust的所有权是其独特的内存管理系统，用于动态内存分配和释放。它基于以下原则：\n\n每个值在任何时刻只能有一个所有者。\n所有权只能转移，不能共享。\n默认情况下，所有权的转移是按值而不是按引用进行的。\n\n这种所有权系统有助于避免内存泄漏、空引用和数据竞争等常见的错误。在Rust中，通过为每个值分配一个所有者来跟踪内存中的数据是如何使用的，每一个所有者离开作用域时，它拥有的值都会被销毁。因此，Rust所有权系统能够自动管理内存，而且无需额外的垃圾回收机制。这一特性让Rust成为一个高效、安全和可靠的编程语言。需要注意的是，所有权机制对于Rust的初学者来说是一个相对复杂的概念，需要一定的理解和实践才能更好地应用它并编写出高质量的Rust代码。"
+  },
+  {
+    "objectID": "posts/2023-03-29-chatgpt-help-me-understand-rust-ownership/index.html#怎么理解-所有权的主要目的就是为了管理堆数据",
+    "href": "posts/2023-03-29-chatgpt-help-me-understand-rust-ownership/index.html#怎么理解-所有权的主要目的就是为了管理堆数据",
+    "title": "ChatGPT 帮助我理解 Rust 的所有权",
+    "section": "怎么理解 所有权的主要目的就是为了管理堆数据？",
+    "text": "怎么理解 所有权的主要目的就是为了管理堆数据？\nRust中的所有权确实是用于管理堆数据的，因为堆数据是在运行时动态分配的，并且在内存中存在一定的问题，如内存泄漏、数据竞争等。因此需要一种机制来管理堆数据并解决这些问题。所有权机制可以确保在动态分配内存的情况下，内存得到正确的释放，每个heap上的数据有且仅有一个所有者对其进行管理，从而避免了数据竞争和其他常见的错误。\n此外，Rust还使用采取堆管理的方式为其他类型的数据分配内存。例如，当一个Vector或String类型增长时，它们必须重新分配和复制所有的数据，同时保证新的数据具有唯一的所有者。这使得Rust的动态内存分配和释放机制非常高效、可靠和安全，在许多应用程序场景中可以提供非常好的性能。"
+  },
+  {
+    "objectID": "posts/2023-03-29-chatgpt-help-me-understand-rust-ownership/index.html#为什么所有权不是管理栈数据的呢",
+    "href": "posts/2023-03-29-chatgpt-help-me-understand-rust-ownership/index.html#为什么所有权不是管理栈数据的呢",
+    "title": "ChatGPT 帮助我理解 Rust 的所有权",
+    "section": "为什么所有权不是管理栈数据的呢？",
+    "text": "为什么所有权不是管理栈数据的呢？\n所有权的设计之所以没有涉及栈，是因为栈上的数据是随着当前作用域结束而自动释放的。栈上的数据的分配和释放是编译时完成的，编译器可以自己进行管理，从而不需要特别的内存管理机制。当在栈上分配数据时，其生命周期的结束是在编译器处理的代码块退出前的最后一个语句执行后就会自动发生。此时编译器会自动释放它们的空间，没有必要使用所有权。因此，所有权机制主要应用于需要在运行时动态分配内存的场景，例如堆上存储的大型数据结构、字符串、闭包等。相比于栈上的数据，堆上的数据需要更加灵活和高级的处理方式，所以所有权体系的设计针对的是动态内存的管理，而不是栈上的处理。"
+  },
+  {
+    "objectID": "posts/2023-03-29-chatgpt-help-me-understand-rust-ownership/index.html#所有权造成的操作障碍",
+    "href": "posts/2023-03-29-chatgpt-help-me-understand-rust-ownership/index.html#所有权造成的操作障碍",
+    "title": "ChatGPT 帮助我理解 Rust 的所有权",
+    "section": "所有权造成的操作障碍",
+    "text": "所有权造成的操作障碍\n由于所有权的问题，Rust 变得安全有效，但对于开发者也造成了一些理解和操作问题。 例如，同一个堆数据（栈数据不会受到影响，因为它们在编译时已经被决定了，堆数据在运行时是可变的，所以才会有内存问题）不能指向两个不同的变量，当新的变量出现时，所有权被转移，之前的变量就无效无法使用了。\nfn main() {\n    let s1 = String::from(\"hello\");\n    let s2 = s1;\n\n    println!(\"{}, world!\", s1);\n}\n\n为了生成两个拷贝，需要用到克隆。\nfn main() {\n    let s1 = String::from(\"hello\");\n    let s2 = s1.clone();\n\n    println!(\"s1 = {}, s2 = {}\", s1, s2);\n}\n这个 Rust 的 trait 设计也有关系（我理解就是实际的实现）\n\nRust 有一个叫做 Copy trait 的特殊注解，可以用在类似整型这样的存储在栈上的类型上。如果一个类型实现了 Copy trait，那么一个旧的变量在将其赋值给其他变量后仍然可用。\nRust 不允许自身或其任何部分实现了 Drop trait 的类型使用 Copy trait。如果我们对其值离开作用域时需要特殊处理的类型使用 Copy 注解，将会出现一个编译时错误。\n那么哪些类型实现了 Copy trait 呢？你可以查看给定类型的文档来确认，不过作为一个通用的规则，任何一组简单标量值的组合都可以实现 Copy，任何不需要分配内存或某种形式资源的类型都可以实现 Copy 。如下是一些 Copy 的类型：\n所有整数类型，比如 u32。 布尔类型，bool，它的值是 true 和 false。 所有浮点数类型，比如 f64。 字符类型，char。 元组，当且仅当其包含的类型也都实现 Copy 的时候。比如，(i32, i32) 实现了 Copy，但 (i32, String) 就没有。\n\n变量的所有权总是遵循相同的模式：将值赋给另一个变量时移动它。当持有堆中数据值的变量离开作用域时，其值将通过 drop 被清理掉，除非数据被移动为另一个变量所有。\n\n参考：\n\nhttps://kaisery.github.io/trpl-zh-cn/ch04-01-what-is-ownership.html"
   }
 ]
