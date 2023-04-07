@@ -64,9 +64,13 @@
 <p>那么哪些类型实现了 Copy trait 呢？你可以查看给定类型的文档来确认，不过作为一个通用的规则，任何一组简单标量值的组合都可以实现 Copy，任何不需要分配内存或某种形式资源的类型都可以实现 Copy 。如下是一些 Copy 的类型：</p>
 <p>所有整数类型，比如 u32。 布尔类型，bool，它的值是 true 和 false。 所有浮点数类型，比如 f64。 字符类型，char。 元组，当且仅当其包含的类型也都实现 Copy 的时候。比如，(i32, i32) 实现了 Copy，但 (i32, String) 就没有。</p>
 </blockquote>
+<p>变量的所有权总是遵循相同的模式：将值赋给另一个变量时移动它。当持有堆中数据值的变量离开作用域时，其值将通过 drop 被清理掉，除非数据被移动为另一个变量所有。</p>
+<hr>
+<p>参考：</p>
+<ul>
+<li><a href="https://kaisery.github.io/trpl-zh-cn/ch04-01-what-is-ownership.html" class="uri">https://kaisery.github.io/trpl-zh-cn/ch04-01-what-is-ownership.html</a></li>
+</ul>
 
-
-<!-- -->
 
 </section>
 
