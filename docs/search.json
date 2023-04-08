@@ -4,7 +4,7 @@
     "href": "index.html",
     "title": "Write programs that do one thing and do it well.",
     "section": "",
-    "text": "ChatGPT 帮助我理解 Rust 的所有权\n\n\n\n\n\n\n\nRust\n\n\nAI\n\n\n\n\n\n\n\n\n\n\n\nMar 29, 2023\n\n\nShixiang Wang\n\n\n\n\n\n\n  \n\n\n\n\nWelcome To My Blog\n\n\n\n\n\n\n\nnews\n\n\n\n\n\n\n\n\n\n\n\nMar 28, 2023\n\n\nShixiang Wang\n\n\n\n\n\n\nNo matching items"
+    "text": "晒晒娃和Y叔R书的合照\n\n\n\n\n\n\n\npersonal\n\n\nR\n\n\n\n\n\n\n\n\n\n\n\nApr 8, 2023\n\n\nShixiang Wang\n\n\n\n\n\n\n  \n\n\n\n\nChatGPT 帮助我理解 Rust 的所有权\n\n\n\n\n\n\n\nRust\n\n\nAI\n\n\n\n\n\n\n\n\n\n\n\nMar 29, 2023\n\n\nShixiang Wang\n\n\n\n\n\n\n  \n\n\n\n\nWelcome To My Blog\n\n\n\n\n\n\n\nnews\n\n\n\n\n\n\n\n\n\n\n\nMar 28, 2023\n\n\nShixiang Wang\n\n\n\n\n\n\nNo matching items"
   },
   {
     "objectID": "posts/welcome/index.html",
@@ -61,5 +61,12 @@
     "title": "ChatGPT 帮助我理解 Rust 的所有权",
     "section": "所有权造成的操作障碍",
     "text": "所有权造成的操作障碍\n由于所有权的问题，Rust 变得安全有效，但对于开发者也造成了一些理解和操作问题。 例如，同一个堆数据（栈数据不会受到影响，因为它们在编译时已经被决定了，堆数据在运行时是可变的，所以才会有内存问题）不能指向两个不同的变量，当新的变量出现时，所有权被转移，之前的变量就无效无法使用了。\nfn main() {\n    let s1 = String::from(\"hello\");\n    let s2 = s1;\n\n    println!(\"{}, world!\", s1);\n}\n\n为了生成两个拷贝，需要用到克隆。\nfn main() {\n    let s1 = String::from(\"hello\");\n    let s2 = s1.clone();\n\n    println!(\"s1 = {}, s2 = {}\", s1, s2);\n}\n这个 Rust 的 trait 设计也有关系（我理解就是实际的实现）\n\nRust 有一个叫做 Copy trait 的特殊注解，可以用在类似整型这样的存储在栈上的类型上。如果一个类型实现了 Copy trait，那么一个旧的变量在将其赋值给其他变量后仍然可用。\nRust 不允许自身或其任何部分实现了 Drop trait 的类型使用 Copy trait。如果我们对其值离开作用域时需要特殊处理的类型使用 Copy 注解，将会出现一个编译时错误。\n那么哪些类型实现了 Copy trait 呢？你可以查看给定类型的文档来确认，不过作为一个通用的规则，任何一组简单标量值的组合都可以实现 Copy，任何不需要分配内存或某种形式资源的类型都可以实现 Copy 。如下是一些 Copy 的类型：\n所有整数类型，比如 u32。 布尔类型，bool，它的值是 true 和 false。 所有浮点数类型，比如 f64。 字符类型，char。 元组，当且仅当其包含的类型也都实现 Copy 的时候。比如，(i32, i32) 实现了 Copy，但 (i32, String) 就没有。\n\n变量的所有权总是遵循相同的模式：将值赋给另一个变量时移动它。当持有堆中数据值的变量离开作用域时，其值将通过 drop 被清理掉，除非数据被移动为另一个变量所有。\n\n参考：\n\nhttps://kaisery.github.io/trpl-zh-cn/ch04-01-what-is-ownership.html"
+  },
+  {
+    "objectID": "posts/2023-04-08-yiyi-with-book-by-y/index.html",
+    "href": "posts/2023-04-08-yiyi-with-book-by-y/index.html",
+    "title": "晒晒娃和Y叔R书的合照",
+    "section": "",
+    "text": "买了一本Y叔最新出的新书，出版社的张编辑又送了一本，这里晒一下崽崽和图书的照片。\n\n\n摄影自我媳妇"
   }
 ]

@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://shixiangwang.github.io/index.html</loc>
-    <lastmod>2023-04-07T03:15:44.922Z</lastmod>
+    <lastmod>2023-04-08T15:02:45.231Z</lastmod>
   </url>
   <url>
     <loc>https://shixiangwang.github.io/posts/welcome/index.html</loc>
@@ -15,5 +15,9 @@
   <url>
     <loc>https://shixiangwang.github.io/posts/2023-03-29-chatgpt-help-me-understand-rust-ownership/index.html</loc>
     <lastmod>2023-04-07T03:16:05.917Z</lastmod>
+  </url>
+  <url>
+    <loc>https://shixiangwang.github.io/posts/2023-04-08-yiyi-with-book-by-y/index.html</loc>
+    <lastmod>2023-04-08T15:05:22.479Z</lastmod>
   </url>
 </urlset>

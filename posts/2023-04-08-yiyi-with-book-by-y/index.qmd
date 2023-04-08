@@ -1,0 +1,25 @@
+---
+title: 晒晒娃和Y叔R书的合照
+author: Shixiang Wang
+date: 2023-04-08
+categories: [personal,R]
+draft: false
+description: ''
+image: ''
+archives:
+  - 2023/04
+toc: true
+
+format:
+  html:
+    code-fold: show
+    code-tools: false
+---
+
+买了一本Y叔最新出的新书，出版社的张编辑又送了一本，这里晒一下崽崽和图书的照片。
+
+![](IMG_6364.JPG)
+
+> 摄影自我媳妇
+
+
