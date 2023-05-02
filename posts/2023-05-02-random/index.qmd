@@ -1,0 +1,27 @@
+---
+title: 随想
+author: Shixiang Wang
+date: 2023-04-08
+categories: [personal]
+draft: false
+description: ''
+image: ''
+archives:
+  - 2023/05
+toc: true
+
+format:
+  html:
+    code-fold: show
+    code-tools: false
+---
+
+越长大，突然明白这个世界都是在玩一场资源分配的游戏。
+
+卷不是目的，只是无能为力。
+
+超脱者永远是少数。
+
+所谓，求仙不得仙，只能老实做人。
+
+
