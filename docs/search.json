@@ -4,7 +4,7 @@
     "href": "index.html",
     "title": "Write programs that do one thing and do it well.",
     "section": "",
-    "text": "Start a new research direction\n\n\n\n\n\n\n\nacademic\n\n\n\n\n\n\n\n\n\n\n\nMay 12, 2023\n\n\nShixiang Wang\n\n\n\n\n\n\n  \n\n\n\n\n晒晒娃和Y叔R书的合照\n\n\n\n\n\n\n\npersonal\n\n\nR\n\n\n\n\n\n\n\n\n\n\n\nApr 8, 2023\n\n\nShixiang Wang\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n随想\n\n\n\n\n\n\n\npersonal\n\n\n\n\n\n\n\n\n\n\n\nApr 8, 2023\n\n\nShixiang Wang\n\n\n\n\n\n\n  \n\n\n\n\nChatGPT 帮助我理解 Rust 的所有权\n\n\n\n\n\n\n\nRust\n\n\nAI\n\n\n\n\n\n\n\n\n\n\n\nMar 29, 2023\n\n\nShixiang Wang\n\n\n\n\n\n\n  \n\n\n\n\nWelcome To My Blog\n\n\n\n\n\n\n\nnews\n\n\n\n\n\n\n\n\n\n\n\nMar 28, 2023\n\n\nShixiang Wang\n\n\n\n\n\n\nNo matching items"
+    "text": "Start a new research direction\n\n\n\n\n\n\n\nacademic\n\n\n\n\n\n\n\n\n\n\n\nMay 12, 2023\n\n\nShixiang Wang\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nSingle-cell sequencing protocols\n\n\n\n\n\n\n\nbioinformatics\n\n\nnote\n\n\n\n\n\n\n\n\n\n\n\nMay 12, 2023\n\n\nShixiang Wang\n\n\n\n\n\n\n  \n\n\n\n\n晒晒娃和Y叔R书的合照\n\n\n\n\n\n\n\npersonal\n\n\nR\n\n\n\n\n\n\n\n\n\n\n\nApr 8, 2023\n\n\nShixiang Wang\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n随想\n\n\n\n\n\n\n\npersonal\n\n\n\n\n\n\n\n\n\n\n\nApr 8, 2023\n\n\nShixiang Wang\n\n\n\n\n\n\n  \n\n\n\n\nChatGPT 帮助我理解 Rust 的所有权\n\n\n\n\n\n\n\nRust\n\n\nAI\n\n\n\n\n\n\n\n\n\n\n\nMar 29, 2023\n\n\nShixiang Wang\n\n\n\n\n\n\n  \n\n\n\n\nWelcome To My Blog\n\n\n\n\n\n\n\nnews\n\n\n\n\n\n\n\n\n\n\n\nMar 28, 2023\n\n\nShixiang Wang\n\n\n\n\n\n\nNo matching items"
   },
   {
     "objectID": "posts/welcome/index.html",
@@ -82,5 +82,47 @@
     "title": "随想",
     "section": "",
     "text": "越长大，突然明白这个世界都是在玩一场资源分配的游戏。\n卷不是目的，只是无能为力。\n超脱者永远是少数。\n所谓，求仙不得仙，只能老实做人。"
+  },
+  {
+    "objectID": "posts/2023-05-12-single-cell-sequencing-protocols/index.html",
+    "href": "posts/2023-05-12-single-cell-sequencing-protocols/index.html",
+    "title": "Single-cell sequencing protocols",
+    "section": "",
+    "text": "From https://www.sc-best-practices.org/introduction/scrna_seq.html\nTypes:"
+  },
+  {
+    "objectID": "posts/2023-05-12-single-cell-sequencing-protocols/index.html#基于微流控装置",
+    "href": "posts/2023-05-12-single-cell-sequencing-protocols/index.html#基于微流控装置",
+    "title": "Single-cell sequencing protocols",
+    "section": "基于微流控装置",
+    "text": "基于微流控装置\n基于微流控芯片的单细胞策略可以将细胞固定在水凝胶液滴内部，实现将其分隔到单细胞反应室中。最广泛使用的协议有inDrop [Klein等人，2015]、Drop-seq [Macosko等人，2015]和商业可用的10x Genomics Chromium [Zheng等人，2017]，能够每秒生成数千个这样的液滴。这种大规模并行的过程以相对较低的成本生成非常多的液滴。虽然这三个协议在细节上有所不同，但始终设计了包含携带PCR处理程序、细胞条形码和4-8个碱基对长的唯一分子标识符（UMI）和poly-T尾巴的专门微珠来封装细胞的纳升级液滴，以便同时捕获微珠和细胞。封装过程是使用具有on-bead引物的专门微珠进行的，这些引物包含一个PCR处理程序、一个细胞条形码和一个4-8 bp长的唯一分子标识符（UMI）和一个poly-T尾巴。在裂解后，细胞的mRNA立即被释放，并被附加在微珠上的带条形码的寡核苷酸捕获。接下来，收集液滴并将其打破以释放连接到微粒（STAMPs）上的单个细胞转录组。然后进行PCR和反转录以捕获和扩增转录物。最后进行标签切割，其中转录本被随机切割并附加测序适配器。该过程产生了用于测序的测序文库，如上所述。在基于微流控芯片的协议中，细胞的约10%的转录本会被检测到[Islam等人，2014]。值得注意的是，这种低测序量已足以稳健地识别细胞类型。\n所有三种基于微流控芯片的方法都会产生特定的偏差。所使用的微珠材料在协议之间存在差异。Drop-seq使用脆性树脂制成的微珠，因此微珠被以泊松分布封装，而InDrop和10X Genomics微珠是可变形的，导致微珠的占用率超过80%[Zhang等人，2019]。此外，Drop-Seq中使用表面固定引物可能会影响捕获效率。InDrop使用光解引物释放，而10X genomics则溶解微珠。这种差异也影响了反转录过程的位置。在Drop-seq中，反转录发生在微珠从液滴中释放后，而在InDrop和10X genomics协议中，反转录发生在液滴内部[Zhang等人，2019]。\n2019年张等人的比较发现，就微珠质量而言，10X Genomics比inDrop和Drop-seq表现更好，因为前两个系统中的细胞条形码存在明显的不匹配。此外，从有效条形码中产生的读数比例对于10X Genomics是75%，而对于InDrop和Drop-seq仅分别为25%和30%。\n在敏感性方面，10X Genomics也表现出类似的优势。他们的比较显示，平均而言，10X Genomics捕获了来自3000个基因的约17000份转录本，而Drop-seq只有来自2500个基因的约8000份转录本，InDrop则只有来自1250个基因的约2700份转录本。技术噪音最小的是10X Genomics，其次是Drop-seq和InDrop[Zhang等人，2019]。\n实际生成的数据展示了大量的协议偏差。10X Genomics更倾向于捕获和扩增长度较短的基因和GC含量较高的基因，而相比之下，Drop-seq更倾向于GC含量较低的基因。尽管10X Genomics在各个方面的表现都超过了其他协议，但它每个细胞的成本也是其他协议的两倍左右。此外，除了微珠以外，Drop-seq是开源的，协议可以更容易地进行适应性调整。InDrop完全是开放源代码的，甚至可以在实验室中制造和修改微珠。因此，InDrop是三种协议中最灵活的一种。\n\n优点：\n\n可以以成本效益的方式对大量细胞进行测序，以识别组织的总体组成并表征罕见的细胞类型。\n可以加入唯一分子标识符（UMIs）。\n\n限制：\n\n与其他方法相比，转录本检测率较低。\n只能捕获3’端而非全长转录本，因为细胞条形码和PCR处理程序仅添加到转录本的末端。"
+  },
+  {
+    "objectID": "posts/2023-05-12-single-cell-sequencing-protocols/index.html#基于板",
+    "href": "posts/2023-05-12-single-cell-sequencing-protocols/index.html#基于板",
+    "title": "Single-cell sequencing protocols",
+    "section": "基于板",
+    "text": "基于板\n基于板的协议通常将细胞物理地分离到微孔板中。第一步涉及通过荧光激活细胞分选（FACS）等方法对细胞进行分选，其中根据特定的细胞表面标记对细胞进行排序；或通过微型移液进行。然后将所选细胞放入含有细胞裂解缓冲液的单个孔中，随后进行反转录。这样可以在单次实验中分析数百个细胞，并每个细胞捕获5000至10000个基因。基于板的测序协议包括但不限于SMART-seq2、MARS-seq、QUARTZ-seq和SRCB-seq。总的来说，这些协议在其多重复合能力方面存在差异。例如，MARS-seq允许三个条形码级别，即分子、细胞和板级标签，以实现强大的多重复合功能。相反，SMART-seq2不允许早期多重复合，从而限制了细胞数目。Mereu等人在2020年进行的系统比较显示，与SMART-seq2、MARS-seq或SRCB-seq相比，QUARTZ-seq2能够捕获更多的基因[Mereu等人，2020]，这意味着QUARTZ-seq2能够很好地捕获细胞类型特异性标记基因，从而实现可靠的细胞类型注释。\n\n优点：\n\n每个细胞可以恢复许多基因，从而进行深入的表征。\n可能在库制备之前收集信息，例如通过FACS排序将细胞大小和任何使用的标记的强度与孔座标关联起来。\n允许完整的转录本恢复。\n\n限制：\n\n基于板的实验规模受到其单个处理单元较低的吞吐量的限制。\n断裂步骤会消除链特异性信息[Hrdlickova等人，2017]。\n根据协议不同，基于板的协议可能是人力密集型的，需要许多必需的移液步骤，导致潜在的技术噪声和批次效应。"
+  },
+  {
+    "objectID": "posts/2023-05-12-single-cell-sequencing-protocols/index.html#fluidigm-c1",
+    "href": "posts/2023-05-12-single-cell-sequencing-protocols/index.html#fluidigm-c1",
+    "title": "Single-cell sequencing protocols",
+    "section": "Fluidigm C1",
+    "text": "Fluidigm C1\n商业的Fluidigm C1系统是一种微流控芯片，可以自动将细胞加载和分离到小反应室中。 CEL-seq2和SMART-seq（版本1）协议在其工作流程中使用Fluidigm C1芯片，允许RNA提取和文库制备步骤同时进行，从而减少所需的手动劳动。但是，Fluidigm C1需要相对均匀的细胞混合物，因为细胞基于其大小会到达微流控芯片上的不同位置，可能会引入潜在的空间偏差。由于扩增步骤是在单个孔中进行的，因此可以实现全长测序，有效地减少了许多其他单细胞RNA测序协议的3’偏差。该协议通常也更昂贵，因此主要用于特定细胞群的广泛检查。\n\n优点：\n\n允许全长转录本覆盖。\n可以恢复剪接变异和T/B细胞受体多样性。\n\n限制：\n\n仅允许对最多800个细胞进行测序[Fluidigm，2022]。\n每个细胞的成本比其他协议更高。"
+  },
+  {
+    "objectID": "posts/2023-05-12-single-cell-sequencing-protocols/index.html#纳米孔单细胞转录组测序",
+    "href": "posts/2023-05-12-single-cell-sequencing-protocols/index.html#纳米孔单细胞转录组测序",
+    "title": "Single-cell sequencing protocols",
+    "section": "纳米孔单细胞转录组测序",
+    "text": "纳米孔单细胞转录组测序\n长读单细胞测序方法很少使用UMI [Singh等人，2019]或未执行UMI校正[Gupta等人，2018]，因此将新的UMI读取分配给新的UMI。由于长读测序器的较高测序误差率，这会导致严重问题[Lebrigand等人，2020]。Lebigrand等人引入了ScNaUmi-seq（带有UMI的单细胞Nanopore测序），它将Nanopore测序与细胞条形码和UMI分配相结合。通过比较在Nanopore读取中发现的细胞条形码序列和从同一区域或基因恢复的 Illumina读取中发现的序列，利用Illumina数据指导条形码分配[Lebrigand等人，2020]。然而，这实际上需要两个单细胞库。scCOLOR-seq使用在整个条形码长度上互补的核苷酸对计算识别无误差的条形码。然后使用这些条形码作为指南来纠正其余的错误条形码[Philpott等人，2021]。修改过的UMI-tools定向网络方法可以纠正UMI序列重复。\n\n优点：\n\n恢复剪接和序列异质性信息\n\n缺点：\n\nNanopore试剂昂贵。\n细胞条形码恢复错误率高。\n根据协议不同，条形码分配使用Illumina数据进行指导，需要两个测序试验。 只有约10%的提取细胞被捕获，使该协议不适用于罕见细胞类型或低输入。\n使用的阵列仅捕获特定的细胞大小，可能会引入偏差。"
+  },
+  {
+    "objectID": "posts/2023-05-12-single-cell-sequencing-protocols/index.html#总结",
+    "href": "posts/2023-05-12-single-cell-sequencing-protocols/index.html#总结",
+    "title": "Single-cell sequencing protocols",
+    "section": "总结",
+    "text": "总结\n总的来说，我们强烈建议湿实验室和干实验室的科学家根据研究目的选择测序协议。是希望对特定细胞类型人群进行深入表征吗？在这种情况下，其中一种基于板的方法可能更适合。相反，基于液滴的测定会更好地捕获异质性混合物，从而允许更广泛的细胞表征。此外，如果预算是一个限制因素，则应选择更具成本效益和稳健性的协议。在分析数据时，请注意测序试验特异性偏差。为了全面比较所有单细胞测序协议，我们建议参考Mereu等人的“Benchmarking single-cell RNA-sequencing protocols for cell atlas projects”论文[Mereu等人，2020]。"
   }
 ]
