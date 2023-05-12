@@ -1,0 +1,25 @@
+---
+title: Start a new research direction
+author: Shixiang Wang
+date: 2023-05-12
+categories: [academic]
+draft: false
+description: ''
+image: ''
+toc: true
+
+format:
+  html:
+    code-fold: show
+    code-tools: false
+---
+
+> Copied from a slide (Liulab?).
+
+- Is the new direction is important?
+    - I can explain its importance to laymen
+    - There are basic science, translational and industry interests
+    - I am willing to devote the next 5-10 years working on it
+- Do we have any advantage working on this?
+- What can we actually do (expertise)?
+
