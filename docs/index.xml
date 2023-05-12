@@ -66,6 +66,27 @@
   <media:content url="https://shixiangwang.github.io/posts/2023-04-08-yiyi-with-book-by-y/IMG_6364.JPG" medium="image"/>
 </item>
 <item>
+  <title>随想</title>
+  <dc:creator>Shixiang Wang</dc:creator>
+  <link>https://shixiangwang.github.io/posts/2023-05-02-random/index.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<p>越长大，突然明白这个世界都是在玩一场资源分配的游戏。</p>
+<p>卷不是目的，只是无能为力。</p>
+<p>超脱者永远是少数。</p>
+<p>所谓，求仙不得仙，只能老实做人。</p>
+
+
+
+ ]]></description>
+  <category>personal</category>
+  <guid>https://shixiangwang.github.io/posts/2023-05-02-random/index.html</guid>
+  <pubDate>Fri, 07 Apr 2023 16:00:00 GMT</pubDate>
+</item>
+<item>
   <title>ChatGPT 帮助我理解 Rust 的所有权</title>
   <dc:creator>Shixiang Wang</dc:creator>
   <link>https://shixiangwang.github.io/posts/2023-03-29-chatgpt-help-me-understand-rust-ownership/index.html</link>
