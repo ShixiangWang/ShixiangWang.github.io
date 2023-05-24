@@ -1,0 +1,111 @@
+---
+title: "nextflow 运行 singularity no space left"
+author: "Shixiang Wang"
+date: 2023-05-23
+categories: [debug]
+draft: false
+description: ''
+image: ''
+toc: true
+
+format:
+  html:
+    code-fold: show
+    code-tools: false
+---
+
+运行 nextflow 时报错没有空间：
+
+```sh
+Error executing process > 'NFCORE_CIRCDNA:CIRCDNA:CNVKIT_BATCH (N87-TR)'
+
+Caused by:
+  Process `NFCORE_CIRCDNA:CIRCDNA:CNVKIT_BATCH (N87-TR)` terminated with an error exit status (255)
+
+Command executed:
+
+  cnvkit.py \
+      batch \
+      N87-TR.bam \
+       \
+      --reference GRCh38_cnvkit_filtered_ref.cnn \
+      --processes 4 \
+      --method wgs
+
+  cat <<-END_VERSIONS > versions.yml
+  "NFCORE_CIRCDNA:CIRCDNA:CNVKIT_BATCH":
+      cnvkit: $(cnvkit.py version | sed -e "s/cnvkit v//g")
+  END_VERSIONS
+
+Command exit status:
+  255
+
+Command output:
+  (empty)
+
+Command error:
+  INFO:    Converting SIF file to temporary sandbox...
+  FATAL:   while extracting /data3/wsx/nf-core-circdna-dev/workflow/../singularity-images/depot.galaxyproject.org-singularity-cnvkit-0.9.9--pyhdfd78af_0.img: root filesystem extraction failed: extract command failed: WARNING: passwd file doesn't exist in container, not updating
+  WARNING: group file doesn't exist in container, not updating
+  WARNING: Skipping mount /etc/hosts [binds]: /etc/hosts doesn't exist in container
+  WARNING: Skipping mount /etc/localtime [binds]: /etc/localtime doesn't exist in container
+  WARNING: Skipping mount proc [kernel]: /proc doesn't exist in container
+  WARNING: Skipping mount /data3/wsx/miniconda3/var/singularity/mnt/session/tmp [tmp]: /tmp doesn't exist in container
+  WARNING: Skipping mount /data3/wsx/miniconda3/var/singularity/mnt/session/var/tmp [tmp]: /var/tmp doesn't exist in container
+  WARNING: Skipping mount /data3/wsx/miniconda3/var/singularity/mnt/session/etc/resolv.conf [files]: /etc/resolv.conf doesn't exist in container
+
+  Write on output file failed because No space left on device
+
+  FATAL ERROR:writer: failed to write file /image/root/.singularity.d/startscript
+  Parallel unsquashfs: Using 48 processors
+  29783 inodes (35465 blocks) to write
+
+  : exit status 1
+
+Work dir:
+  /data3/wsx/nxf_wgs/work/e9/902f1684d95d41a61ae28ef3e529b3
+
+Tip: when you have fixed the problem you can continue the execution adding the option `-resume` to the run command line
+```
+
+我查了下 `/tmp` 缺失很少或没有了，尝试删除我自己产生的临时目录再次运行还是报错。原因是 singularity 镜像在 `/tmp` 目录下解压空间不够导致的。
+
+实际上我在 `~/.bashrc` 下是设置过临时目录和singularity的缓存的：
+
+```sh
+export TMPDIR=$HOME/TEMPDIR
+export TEMP=$HOME/TEMPDIR
+export TMP=$HOME/TEMPDIR
+
+export NXF_SINGULARITY_CACHEDIR=$HOME/NXF_singularity
+export SINGULARITY_TMPDIR=$HOME/singularity-env
+export SINGULARITY_CACHEDIR=$HOME/singularity-env
+```
+
+这就相当纳闷了。在 Github 发现一个[帖子](https://github.com/nextflow-io/nextflow/issues/2786)，讨论说这个问题是 nextflow 没有正常地读取和设置 singularity 的临时目录磁盘挂载。
+
+想一想，确实是这个问题。为了确定，我在报错的 work 目录下查看和调试了 `.command.run` 文件，当设置挂载后确实是可以正常工作的。
+
+于是按照下面进行了 `nextflow.config` 的配置：
+
+```
+singularity {
+enabled = true
+autoMounts = true
+runOptions = '-B $SINGULARITY_TMPDIR:/tmp -B $SINGULARITY_TMPDIR:/scratch'
+//Used to allow Singularity to access bashrc variables
+envWhitelist = ['SINGULARITY_TMPDIR']
+}
+```
+
+还是不行，后面对比时猛然发现在 `nextflow.config` 中 `autoMounts` 的写法是 `singularity.autoMounts = true`。
+所以我添加了前缀：
+
+```
+singularity.autoMounts = true
+singularity.runOptions = '-B $SINGULARITY_TMPDIR:/tmp'
+singularity.envWhitelist = ['SINGULARITY_TMPDIR']
+```
+
+这样就没有问题了。
+

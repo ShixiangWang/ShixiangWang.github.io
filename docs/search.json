@@ -4,7 +4,7 @@
     "href": "index.html",
     "title": "Write programs that do one thing and do it well.",
     "section": "",
-    "text": "Start a new research direction\n\n\n\n\n\n\n\nacademic\n\n\n\n\n\n\n\n\n\n\n\nMay 12, 2023\n\n\nShixiang Wang\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nSingle-cell sequencing protocols\n\n\n\n\n\n\n\nbioinformatics\n\n\nnote\n\n\n\n\n\n\n\n\n\n\n\nMay 12, 2023\n\n\nShixiang Wang\n\n\n\n\n\n\n  \n\n\n\n\n晒晒娃和Y叔R书的合照\n\n\n\n\n\n\n\npersonal\n\n\nR\n\n\n\n\n\n\n\n\n\n\n\nApr 8, 2023\n\n\nShixiang Wang\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n随想\n\n\n\n\n\n\n\npersonal\n\n\n\n\n\n\n\n\n\n\n\nApr 8, 2023\n\n\nShixiang Wang\n\n\n\n\n\n\n  \n\n\n\n\nChatGPT 帮助我理解 Rust 的所有权\n\n\n\n\n\n\n\nRust\n\n\nAI\n\n\n\n\n\n\n\n\n\n\n\nMar 29, 2023\n\n\nShixiang Wang\n\n\n\n\n\n\n  \n\n\n\n\nWelcome To My Blog\n\n\n\n\n\n\n\nnews\n\n\n\n\n\n\n\n\n\n\n\nMar 28, 2023\n\n\nShixiang Wang\n\n\n\n\n\n\nNo matching items"
+    "text": "debug\n\n\n\n\n\n\n\n\n\n\n\nMay 23, 2023\n\n\nShixiang Wang\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nbioinformatics\n\n\nnote\n\n\n\n\n\n\n\n\n\n\n\nMay 12, 2023\n\n\nShixiang Wang\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nacademic\n\n\n\n\n\n\n\n\n\n\n\nMay 12, 2023\n\n\nShixiang Wang\n\n\n\n\n\n\n  \n\n\n\n\n\n\n\n\n\n\npersonal\n\n\nR\n\n\n\n\n\n\n\n\n\n\n\nApr 8, 2023\n\n\nShixiang Wang\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\npersonal\n\n\n\n\n\n\n\n\n\n\n\nApr 8, 2023\n\n\nShixiang Wang\n\n\n\n\n\n\n  \n\n\n\n\n\n\n\n\n\n\nRust\n\n\nAI\n\n\n\n\n\n\n\n\n\n\n\nMar 29, 2023\n\n\nShixiang Wang\n\n\n\n\n\n\n  \n\n\n\n\n\n\n\n\n\n\nnews\n\n\n\n\n\n\n\n\n\n\n\nMar 28, 2023\n\n\nShixiang Wang\n\n\n\n\n\n\nNo matching items"
   },
   {
     "objectID": "posts/welcome/index.html",
@@ -67,21 +67,21 @@
     "href": "posts/2023-04-08-yiyi-with-book-by-y/index.html",
     "title": "晒晒娃和Y叔R书的合照",
     "section": "",
-    "text": "买了一本Y叔最新出的新书，出版社的张编辑又送了一本，这里晒一下崽崽和图书的照片。\n\n\n摄影自我媳妇"
+    "text": "摄影自我媳妇"
   },
   {
     "objectID": "posts/2023-05-12-start-a-new-research-direction/index.html",
     "href": "posts/2023-05-12-start-a-new-research-direction/index.html",
     "title": "Start a new research direction",
     "section": "",
-    "text": "Copied from a slide (Liulab?).\n\n\nIs the new direction is important?\n\nI can explain its importance to laymen\nThere are basic science, translational and industry interests\nI am willing to devote the next 5-10 years working on it\n\nDo we have any advantage working on this?\nWhat can we actually do (expertise)?"
+    "text": "Is the new direction is important?\n\nI can explain its importance to laymen\nThere are basic science, translational and industry interests\nI am willing to devote the next 5-10 years working on it\n\nDo we have any advantage working on this?\nWhat can we actually do (expertise)?"
   },
   {
     "objectID": "posts/2023-05-02-random/index.html",
     "href": "posts/2023-05-02-random/index.html",
     "title": "随想",
     "section": "",
-    "text": "越长大，突然明白这个世界都是在玩一场资源分配的游戏。\n卷不是目的，只是无能为力。\n超脱者永远是少数。\n所谓，求仙不得仙，只能老实做人。"
+    "text": "卷不是目的，只是无能为力。\n超脱者永远是少数。\n所谓，求仙不得仙，只能老实做人。"
   },
   {
     "objectID": "posts/2023-05-12-single-cell-sequencing-protocols/index.html",
@@ -124,5 +124,12 @@
     "title": "Single-cell sequencing protocols",
     "section": "总结",
     "text": "总结\n总的来说，我们强烈建议湿实验室和干实验室的科学家根据研究目的选择测序协议。是希望对特定细胞类型人群进行深入表征吗？在这种情况下，其中一种基于板的方法可能更适合。相反，基于液滴的测定会更好地捕获异质性混合物，从而允许更广泛的细胞表征。此外，如果预算是一个限制因素，则应选择更具成本效益和稳健性的协议。在分析数据时，请注意测序试验特异性偏差。为了全面比较所有单细胞测序协议，我们建议参考Mereu等人的“Benchmarking single-cell RNA-sequencing protocols for cell atlas projects”论文[Mereu等人，2020]。"
+  },
+  {
+    "objectID": "posts/2023-05-23-nextflow-singularity-no-space-left/index.html",
+    "href": "posts/2023-05-23-nextflow-singularity-no-space-left/index.html",
+    "title": "nextflow 运行 singularity no space left",
+    "section": "",
+    "text": "Error executing process > 'NFCORE_CIRCDNA:CIRCDNA:CNVKIT_BATCH (N87-TR)'\n\nCaused by:\n  Process `NFCORE_CIRCDNA:CIRCDNA:CNVKIT_BATCH (N87-TR)` terminated with an error exit status (255)\n\nCommand executed:\n\n  cnvkit.py \\\n      batch \\\n      N87-TR.bam \\\n       \\\n      --reference GRCh38_cnvkit_filtered_ref.cnn \\\n      --processes 4 \\\n      --method wgs\n\n  cat <<-END_VERSIONS > versions.yml\n  \"NFCORE_CIRCDNA:CIRCDNA:CNVKIT_BATCH\":\n      cnvkit: $(cnvkit.py version | sed -e \"s/cnvkit v//g\")\n  END_VERSIONS\n\nCommand exit status:\n  255\n\nCommand output:\n  (empty)\n\nCommand error:\n  INFO:    Converting SIF file to temporary sandbox...\n  FATAL:   while extracting /data3/wsx/nf-core-circdna-dev/workflow/../singularity-images/depot.galaxyproject.org-singularity-cnvkit-0.9.9--pyhdfd78af_0.img: root filesystem extraction failed: extract command failed: WARNING: passwd file doesn't exist in container, not updating\n  WARNING: group file doesn't exist in container, not updating\n  WARNING: Skipping mount /etc/hosts [binds]: /etc/hosts doesn't exist in container\n  WARNING: Skipping mount /etc/localtime [binds]: /etc/localtime doesn't exist in container\n  WARNING: Skipping mount proc [kernel]: /proc doesn't exist in container\n  WARNING: Skipping mount /data3/wsx/miniconda3/var/singularity/mnt/session/tmp [tmp]: /tmp doesn't exist in container\n  WARNING: Skipping mount /data3/wsx/miniconda3/var/singularity/mnt/session/var/tmp [tmp]: /var/tmp doesn't exist in container\n  WARNING: Skipping mount /data3/wsx/miniconda3/var/singularity/mnt/session/etc/resolv.conf [files]: /etc/resolv.conf doesn't exist in container\n\n  Write on output file failed because No space left on device\n\n  FATAL ERROR:writer: failed to write file /image/root/.singularity.d/startscript\n  Parallel unsquashfs: Using 48 processors\n  29783 inodes (35465 blocks) to write\n\n  : exit status 1\n\nWork dir:\n  /data3/wsx/nxf_wgs/work/e9/902f1684d95d41a61ae28ef3e529b3\n\nTip: when you have fixed the problem you can continue the execution adding the option `-resume` to the run command line\n我查了下 /tmp 缺失很少或没有了，尝试删除我自己产生的临时目录再次运行还是报错。原因是 singularity 镜像在 /tmp 目录下解压空间不够导致的。\n实际上我在 ~/.bashrc 下是设置过临时目录和singularity的缓存的：\nexport TMPDIR=$HOME/TEMPDIR\nexport TEMP=$HOME/TEMPDIR\nexport TMP=$HOME/TEMPDIR\n\nexport NXF_SINGULARITY_CACHEDIR=$HOME/NXF_singularity\nexport SINGULARITY_TMPDIR=$HOME/singularity-env\nexport SINGULARITY_CACHEDIR=$HOME/singularity-env\n这就相当纳闷了。在 Github 发现一个帖子，讨论说这个问题是 nextflow 没有正常地读取和设置 singularity 的临时目录磁盘挂载。\n想一想，确实是这个问题。为了确定，我在报错的 work 目录下查看和调试了 .command.run 文件，当设置挂载后确实是可以正常工作的。\n于是按照下面进行了 nextflow.config 的配置：\nsingularity {\nenabled = true\nautoMounts = true\nrunOptions = '-B $SINGULARITY_TMPDIR:/tmp -B $SINGULARITY_TMPDIR:/scratch'\n//Used to allow Singularity to access bashrc variables\nenvWhitelist = ['SINGULARITY_TMPDIR']\n}\n还是不行，后面对比时猛然发现在 nextflow.config 中 autoMounts 的写法是 singularity.autoMounts = true。 所以我添加了前缀：\nsingularity.autoMounts = true\nsingularity.runOptions = '-B $SINGULARITY_TMPDIR:/tmp'\nsingularity.envWhitelist = ['SINGULARITY_TMPDIR']\n这样就没有问题了。"
   }
 ]
