@@ -7,9 +7,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Shixiang Wang">
-<meta name="dcterms.date" content="2023-05-12">
+<meta name="dcterms.date" content="2023-05-29">
 
-<title>Reasoning - Single-cell sequencing protocols</title>
+<title>Reasoning - TCCIA：第一个连接CircRNA和免疫治疗的数据库</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -69,7 +69,7 @@ ul.task-list li input[type="checkbox"] {
 <!-- Open Graph / Facebook -->
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://shixiangwang.github.io/posts/welcome/">
-<meta property="og:title" content="Reasoning - Single-cell sequencing protocols">
+<meta property="og:title" content="Reasoning - TCCIA：第一个连接CircRNA和免疫治疗的数据库">
 <meta property="og:description" content="Reasoning is a blog dedicated to exploring the intersection of data science, bioinformatics, and personal insights.">
 <meta property="og:image" content="https://avatars.githubusercontent.com/u/25057508?v=4">
 
@@ -82,8 +82,8 @@ ul.task-list li input[type="checkbox"] {
 
 
 <link rel="stylesheet" href="../../styles.css">
-<meta name="twitter:title" content="Reasoning - Single-cell sequencing protocols">
-<meta name="twitter:description" content="Types:">
+<meta name="twitter:title" content="Reasoning - TCCIA：第一个连接CircRNA和免疫治疗的数据库">
+<meta name="twitter:description" content="CircRNA是一种形成闭环结构的RNA类型，已被证明在调节基因表达方面发挥重要作用。 然而，CircRNA在免疫治疗中的作用和标志物潜能仍未被充分研究。我们很高兴地向大家介绍TCCIA（The Cancer CircRNA Immunome…">
 <meta name="twitter:image" content="">
 <meta name="twitter:creator" content="@WangShxiang">
 <meta name="twitter:card" content="summary_large_image">
@@ -157,10 +157,10 @@ ul.task-list li input[type="checkbox"] {
 <header id="title-block-header" class="quarto-title-block default page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-body">
-      <h1 class="title">Single-cell sequencing protocols</h1>
+      <h1 class="title">TCCIA：第一个连接CircRNA和免疫治疗的数据库</h1>
                                 <div class="quarto-categories">
-                <div class="quarto-category">bioinformatics</div>
-                <div class="quarto-category">note</div>
+                <div class="quarto-category">personal</div>
+                <div class="quarto-category">R</div>
               </div>
                   </div>
   </div>
@@ -178,7 +178,7 @@ ul.task-list li input[type="checkbox"] {
       <div>
       <div class="quarto-title-meta-heading">Published</div>
       <div class="quarto-title-meta-contents">
-        <p class="date">May 12, 2023</p>
+        <p class="date">May 29, 2023</p>
       </div>
     </div>
     
@@ -194,11 +194,7 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#基于微流控装置" id="toc-基于微流控装置" class="nav-link active" data-scroll-target="#基于微流控装置">基于微流控装置</a></li>
-  <li><a href="#基于板" id="toc-基于板" class="nav-link" data-scroll-target="#基于板">基于板</a></li>
-  <li><a href="#fluidigm-c1" id="toc-fluidigm-c1" class="nav-link" data-scroll-target="#fluidigm-c1">Fluidigm C1</a></li>
-  <li><a href="#纳米孔单细胞转录组测序" id="toc-纳米孔单细胞转录组测序" class="nav-link" data-scroll-target="#纳米孔单细胞转录组测序">纳米孔单细胞转录组测序</a></li>
-  <li><a href="#总结" id="toc-总结" class="nav-link" data-scroll-target="#总结">总结</a></li>
+  <li><a href="#tccia第一个连接circrna和免疫治疗的数据库" id="toc-tccia第一个连接circrna和免疫治疗的数据库" class="nav-link active" data-scroll-target="#tccia第一个连接circrna和免疫治疗的数据库">TCCIA：第一个连接CircRNA和免疫治疗的数据库</a></li>
   </ul>
 </nav>
     </div>
@@ -208,81 +204,21 @@ ul.task-list li input[type="checkbox"] {
 
 
 
-<blockquote class="blockquote">
-<p>From <a href="https://www.sc-best-practices.org/introduction/scrna_seq.html" class="uri">https://www.sc-best-practices.org/introduction/scrna_seq.html</a></p>
-</blockquote>
-<p>Types:</p>
-<ul>
-<li>microfluidic device-based strategies where cells are encapsulated into hydrogel droplets</li>
-<li>well plate based protocols where cells are physically separated into wells</li>
-<li>the commercial Fluidigm C1 microfluidic chip based solution which loads and separates cells into small reaction chambers</li>
-</ul>
-<section id="基于微流控装置" class="level2">
-<h2 class="anchored" data-anchor-id="基于微流控装置">基于微流控装置</h2>
-<p>基于微流控芯片的单细胞策略可以将细胞固定在水凝胶液滴内部，实现将其分隔到单细胞反应室中。最广泛使用的协议有inDrop [Klein等人，2015]、Drop-seq [Macosko等人，2015]和商业可用的10x Genomics Chromium [Zheng等人，2017]，能够每秒生成数千个这样的液滴。这种大规模并行的过程以相对较低的成本生成非常多的液滴。虽然这三个协议在细节上有所不同，但始终设计了包含携带PCR处理程序、细胞条形码和4-8个碱基对长的唯一分子标识符（UMI）和poly-T尾巴的专门微珠来封装细胞的纳升级液滴，以便同时捕获微珠和细胞。封装过程是使用具有on-bead引物的专门微珠进行的，这些引物包含一个PCR处理程序、一个细胞条形码和一个4-8 bp长的唯一分子标识符（UMI）和一个poly-T尾巴。在裂解后，细胞的mRNA立即被释放，并被附加在微珠上的带条形码的寡核苷酸捕获。接下来，收集液滴并将其打破以释放连接到微粒（STAMPs）上的单个细胞转录组。然后进行PCR和反转录以捕获和扩增转录物。最后进行标签切割，其中转录本被随机切割并附加测序适配器。该过程产生了用于测序的测序文库，如上所述。在基于微流控芯片的协议中，细胞的约10%的转录本会被检测到[Islam等人，2014]。值得注意的是，这种低测序量已足以稳健地识别细胞类型。</p>
-<p>所有三种基于微流控芯片的方法都会产生特定的偏差。所使用的微珠材料在协议之间存在差异。Drop-seq使用脆性树脂制成的微珠，因此微珠被以泊松分布封装，而InDrop和10X Genomics微珠是可变形的，导致微珠的占用率超过80%[Zhang等人，2019]。此外，Drop-Seq中使用表面固定引物可能会影响捕获效率。InDrop使用光解引物释放，而10X genomics则溶解微珠。这种差异也影响了反转录过程的位置。在Drop-seq中，反转录发生在微珠从液滴中释放后，而在InDrop和10X genomics协议中，反转录发生在液滴内部[Zhang等人，2019]。</p>
-<p>2019年张等人的比较发现，就微珠质量而言，10X Genomics比inDrop和Drop-seq表现更好，因为前两个系统中的细胞条形码存在明显的不匹配。此外，从有效条形码中产生的读数比例对于10X Genomics是75%，而对于InDrop和Drop-seq仅分别为25%和30%。</p>
-<p>在敏感性方面，10X Genomics也表现出类似的优势。他们的比较显示，平均而言，10X Genomics捕获了来自3000个基因的约17000份转录本，而Drop-seq只有来自2500个基因的约8000份转录本，InDrop则只有来自1250个基因的约2700份转录本。技术噪音最小的是10X Genomics，其次是Drop-seq和InDrop[Zhang等人，2019]。</p>
-<p>实际生成的数据展示了大量的协议偏差。10X Genomics更倾向于捕获和扩增长度较短的基因和GC含量较高的基因，而相比之下，Drop-seq更倾向于GC含量较低的基因。尽管10X Genomics在各个方面的表现都超过了其他协议，但它每个细胞的成本也是其他协议的两倍左右。此外，除了微珠以外，Drop-seq是开源的，协议可以更容易地进行适应性调整。InDrop完全是开放源代码的，甚至可以在实验室中制造和修改微珠。因此，InDrop是三种协议中最灵活的一种。</p>
-<ul>
-<li>优点：</li>
-</ul>
-<p>可以以成本效益的方式对大量细胞进行测序，以识别组织的总体组成并表征罕见的细胞类型。</p>
-<p>可以加入唯一分子标识符（UMIs）。</p>
-<ul>
-<li>限制：</li>
-</ul>
-<p>与其他方法相比，转录本检测率较低。</p>
-<p>只能捕获3’端而非全长转录本，因为细胞条形码和PCR处理程序仅添加到转录本的末端。</p>
-</section>
-<section id="基于板" class="level2">
-<h2 class="anchored" data-anchor-id="基于板">基于板</h2>
-<p>基于板的协议通常将细胞物理地分离到微孔板中。第一步涉及通过荧光激活细胞分选（FACS）等方法对细胞进行分选，其中根据特定的细胞表面标记对细胞进行排序；或通过微型移液进行。然后将所选细胞放入含有细胞裂解缓冲液的单个孔中，随后进行反转录。这样可以在单次实验中分析数百个细胞，并每个细胞捕获5000至10000个基因。基于板的测序协议包括但不限于SMART-seq2、MARS-seq、QUARTZ-seq和SRCB-seq。总的来说，这些协议在其多重复合能力方面存在差异。例如，MARS-seq允许三个条形码级别，即分子、细胞和板级标签，以实现强大的多重复合功能。相反，SMART-seq2不允许早期多重复合，从而限制了细胞数目。Mereu等人在2020年进行的系统比较显示，与SMART-seq2、MARS-seq或SRCB-seq相比，QUARTZ-seq2能够捕获更多的基因[Mereu等人，2020]，这意味着QUARTZ-seq2能够很好地捕获细胞类型特异性标记基因，从而实现可靠的细胞类型注释。</p>
-<ul>
-<li>优点：</li>
-</ul>
-<p>每个细胞可以恢复许多基因，从而进行深入的表征。</p>
-<p>可能在库制备之前收集信息，例如通过FACS排序将细胞大小和任何使用的标记的强度与孔座标关联起来。</p>
-<p>允许完整的转录本恢复。</p>
-<ul>
-<li>限制：</li>
-</ul>
-<p>基于板的实验规模受到其单个处理单元较低的吞吐量的限制。</p>
-<p>断裂步骤会消除链特异性信息[Hrdlickova等人，2017]。</p>
-<p>根据协议不同，基于板的协议可能是人力密集型的，需要许多必需的移液步骤，导致潜在的技术噪声和批次效应。</p>
-</section>
-<section id="fluidigm-c1" class="level2">
-<h2 class="anchored" data-anchor-id="fluidigm-c1">Fluidigm C1</h2>
-<p>商业的Fluidigm C1系统是一种微流控芯片，可以自动将细胞加载和分离到小反应室中。 CEL-seq2和SMART-seq（版本1）协议在其工作流程中使用Fluidigm C1芯片，允许RNA提取和文库制备步骤同时进行，从而减少所需的手动劳动。但是，Fluidigm C1需要相对均匀的细胞混合物，因为细胞基于其大小会到达微流控芯片上的不同位置，可能会引入潜在的空间偏差。由于扩增步骤是在单个孔中进行的，因此可以实现全长测序，有效地减少了许多其他单细胞RNA测序协议的3’偏差。该协议通常也更昂贵，因此主要用于特定细胞群的广泛检查。</p>
-<ul>
-<li>优点：</li>
-</ul>
-<p>允许全长转录本覆盖。</p>
-<p>可以恢复剪接变异和T/B细胞受体多样性。</p>
-<ul>
-<li>限制：</li>
-</ul>
-<p>仅允许对最多800个细胞进行测序[Fluidigm，2022]。</p>
-<p>每个细胞的成本比其他协议更高。</p>
-</section>
-<section id="纳米孔单细胞转录组测序" class="level2">
-<h2 class="anchored" data-anchor-id="纳米孔单细胞转录组测序">纳米孔单细胞转录组测序</h2>
-<p>长读单细胞测序方法很少使用UMI [Singh等人，2019]或未执行UMI校正[Gupta等人，2018]，因此将新的UMI读取分配给新的UMI。由于长读测序器的较高测序误差率，这会导致严重问题[Lebrigand等人，2020]。Lebigrand等人引入了ScNaUmi-seq（带有UMI的单细胞Nanopore测序），它将Nanopore测序与细胞条形码和UMI分配相结合。通过比较在Nanopore读取中发现的细胞条形码序列和从同一区域或基因恢复的 Illumina读取中发现的序列，利用Illumina数据指导条形码分配[Lebrigand等人，2020]。然而，这实际上需要两个单细胞库。scCOLOR-seq使用在整个条形码长度上互补的核苷酸对计算识别无误差的条形码。然后使用这些条形码作为指南来纠正其余的错误条形码[Philpott等人，2021]。修改过的UMI-tools定向网络方法可以纠正UMI序列重复。</p>
-<ul>
-<li>优点：</li>
-</ul>
-<p>恢复剪接和序列异质性信息</p>
-<ul>
-<li>缺点：</li>
-</ul>
-<p>Nanopore试剂昂贵。</p>
-<p>细胞条形码恢复错误率高。</p>
-<p>根据协议不同，条形码分配使用Illumina数据进行指导，需要两个测序试验。 只有约10%的提取细胞被捕获，使该协议不适用于罕见细胞类型或低输入。</p>
-<p>使用的阵列仅捕获特定的细胞大小，可能会引入偏差。</p>
-</section>
-<section id="总结" class="level2">
-<h2 class="anchored" data-anchor-id="总结">总结</h2>
-<p>总的来说，我们强烈建议湿实验室和干实验室的科学家根据研究目的选择测序协议。是希望对特定细胞类型人群进行深入表征吗？在这种情况下，其中一种基于板的方法可能更适合。相反，基于液滴的测定会更好地捕获异质性混合物，从而允许更广泛的细胞表征。此外，如果预算是一个限制因素，则应选择更具成本效益和稳健性的协议。在分析数据时，请注意测序试验特异性偏差。为了全面比较所有单细胞测序协议，我们建议参考Mereu等人的“<a href="https://www.nature.com/articles/s41587-020-0469-4">Benchmarking single-cell RNA-sequencing protocols for cell atlas projects</a>”论文[Mereu等人，2020]。</p>
+<section id="tccia第一个连接circrna和免疫治疗的数据库" class="level1">
+<h1>TCCIA：第一个连接CircRNA和免疫治疗的数据库</h1>
+<p>CircRNA是一种形成闭环结构的RNA类型，已被证明在调节基因表达方面发挥重要作用。 然而，CircRNA在免疫治疗中的作用和标志物潜能仍未被充分研究。我们很高兴地向大家介绍TCCIA（The Cancer CircRNA Immunome Atlas），它是一个广泛且用户友好的数据库，用于研究接受针对CTLA4，PD-1或PDL-1等靶点的免疫治疗的18个临床队列中的circRNA表达和分析。这一创新资源提供了cohorts和molecular级别上circRNAs、临床表型和免疫特征/浸润的系统比较。该数据库包括3700多个癌症样本，来自5种不同类型的癌症患者，这些患者单独或与化疗、靶向治疗以及其他免疫治疗药物联合使用免疫检查点抑制剂（ICI）进行治疗。</p>
+<p>TCCIA代表了研究circRNA及其作为预测免疫治疗响应生物标志物的潜力以及它们在癌症中的广泛功能的独特机会。无论你是研究circRNA的研究人员还是对改善新治疗策略以提高患者预后感兴趣的临床医生，TCCIA都提供了有价值的信息，可以深入了解circRNA、免疫系统和癌症之间复杂的相互作用。</p>
+<p><img src="https://files.mdnice.com/user/4331/1ad12065-d1c6-4296-8e26-1365cc53643e.png" class="img-fluid"></p>
+<p>TCCIA 分为多个不同的一面，它以仓库页面的数据查阅和筛选为起点，允许用户从多个不同的层面和角度探索CircRNA在免疫治疗中的价值。</p>
+<p><img src="https://files.mdnice.com/user/4331/dc109156-fe23-4428-aeb0-1b79678d623a.png" class="img-fluid"></p>
+<p>TCCIA 是一次成功的线上科研协作，来自国内外各地的研究者贡献自己的数据和知识、资源与技术。我们旨在提供一个有用且好用的CircRNA在线研究平台，希望CircRNA领域的研究者能从中获益。目前，TCCIA正式进入开放测试阶段，它可以通过 <a href="http://biotrainee.vip:18888/TCCIA/" class="uri">http://biotrainee.vip:18888/TCCIA/</a> 和 <a href="https://shiny.hiplot.cn/TCCIA" class="uri">https://shiny.hiplot.cn/TCCIA</a> 进行在线访问。我们欢迎大家进行试用并提供宝贵的反馈意见，任何使用不便或者新功能特性的提议请发送到王诗翔（shixiang1994wang@gmail.com）或周建国（jianguo.zhou@zmu.edu.cn），我们团队将尽力回复和解决，我们期待大家的参与，一起为该领域的进步添砖加瓦。</p>
+<hr>
+<p>下面是一些功能的预览图：</p>
+<p><img src="https://files.mdnice.com/user/4331/7198a287-71c5-46fc-ba07-c994450a00e4.png" class="img-fluid"></p>
+<p><img src="https://files.mdnice.com/user/4331/fbb7b00d-5ea5-47c5-b711-a0edef0cde71.png" class="img-fluid"></p>
+<p><img src="https://files.mdnice.com/user/4331/8df4b0c0-a40a-4dbd-a877-da7a6433d3b3.png" class="img-fluid"></p>
+<p><img src="https://files.mdnice.com/user/4331/94865b31-638b-4023-b59d-1c91efbae0d8.png" class="img-fluid"></p>
+<p><img src="https://files.mdnice.com/user/4331/3b41c7d9-b2a2-467e-a6bc-2f4604a9711c.png" class="img-fluid"></p>
 
 
 </section>
