@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://shixiangwang.github.io/index.html</loc>
-    <lastmod>2023-05-29T15:25:55.273Z</lastmod>
+    <lastmod>2023-05-31T15:16:32.848Z</lastmod>
   </url>
   <url>
     <loc>https://shixiangwang.github.io/posts/welcome/index.html</loc>
@@ -10,7 +10,7 @@
   </url>
   <url>
     <loc>https://shixiangwang.github.io/resource.html</loc>
-    <lastmod>2023-05-23T10:30:29.731Z</lastmod>
+    <lastmod>2023-05-31T15:16:39.884Z</lastmod>
   </url>
   <url>
     <loc>https://shixiangwang.github.io/posts/2023-03-29-chatgpt-help-me-understand-rust-ownership/index.html</loc>
@@ -38,6 +38,10 @@
   </url>
   <url>
     <loc>https://shixiangwang.github.io/posts/2023-05-29-tccia/index.html</loc>
-    <lastmod>2023-05-29T15:23:45.856Z</lastmod>
+    <lastmod>2023-05-31T15:15:11.862Z</lastmod>
+  </url>
+  <url>
+    <loc>https://shixiangwang.github.io/posts/2023-05-31-scrna-seq_online-00/index.html</loc>
+    <lastmod>2023-05-31T15:13:19.158Z</lastmod>
   </url>
 </urlset>

@@ -1,0 +1,53 @@
+---
+title: scRNA-seq_online 00：包准备
+author: Shixiang Wang
+date: 2023-05-31
+categories: [bioinformatics,scRNA-seq]
+draft: false
+description: ''
+image: ''
+toc: true
+
+format:
+  html:
+    code-fold: show
+    code-tools: false
+---
+
+> 参考资料：<https://hbctraining.github.io/scRNA-seq_online/>
+
+## 安装包
+
+安装 CRAN 包：
+
+```r
+install.packages("BiocManager")
+BiocManager::install(c("tidyverse", "Matrix", "RCurl", "scales", "cowplot", "Seurat", "metap"))
+```
+
+安装 Bioc 包：
+
+```r
+# options(BioC_mirror="https://mirrors.tuna.tsinghua.edu.cn/bioconductor")
+BiocManager::install(c("AnnotationHub", "ensembldb", "multtest", "glmGamPoi"))
+```
+
+## 测试包的安装
+
+```{r}
+library(Seurat)
+library(tidyverse)
+library(Matrix)
+library(RCurl)
+library(scales)
+library(cowplot)
+library(AnnotationHub)
+library(ensembldb)
+```
+
+## 查看会话信息
+
+```{r}
+sessionInfo()
+```
+

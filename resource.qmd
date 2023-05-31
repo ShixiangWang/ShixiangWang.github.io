@@ -27,4 +27,4 @@ categories: [resource]
   - <https://github.com/ShixiangWang/geek-r-tutorial>
 - Cookbook for R 中文版- [阅读地址](https://cookbook4r.shixiangwang.work/index.html)
   - <https://github.com/openbiox/Cookbook-for-R-Chinese>
-- [生信爱好者周刊](https://shixiangwang.github.io/weekly/)
+- [生信爱好者周刊](https://openbiox.github.io/weekly/)
