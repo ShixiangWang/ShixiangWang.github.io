@@ -131,6 +131,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <meta property="twitter:title" content="Reasoning - ShixiangWang's blog">
 <meta property="twitter:description" content="Reasoning is a blog dedicated to exploring the intersection of data science, bioinformatics, and personal insights.">
 <meta property="twitter:image" content="https://avatars.githubusercontent.com/u/25057508?v=4">
+<meta name="referrer" content="no-referrer">
 <link rel="stylesheet" href="../../styles.css">
 <meta name="twitter:title" content="Reasoning - scRNA-seq_online 00：包准备">
 <meta name="twitter:description" content="安装 CRAN 包：">
@@ -254,192 +255,172 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span><span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/BiocManager/man/install.html">install</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"AnnotationHub"</span>, <span class="st">"ensembldb"</span>, <span class="st">"multtest"</span>, <span class="st">"glmGamPoi"</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section><section id="测试包的安装" class="level2"><h2 class="anchored" data-anchor-id="测试包的安装">测试包的安装</h2>
 <div class="cell">
-<details open=""><summary>Code</summary><div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://satijalab.org/seurat">Seurat</a></span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details><div class="cell-output cell-output-stderr">
-<pre><code>The legacy packages maptools, rgdal, and rgeos, underpinning this package
-will retire shortly. Please refer to R-spatial evolution reports on
-https://r-spatial.org/r/2023/05/15/evolution4.html for details.
-This package is now running under evolution status 0 </code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Attaching SeuratObject</code></pre>
-</div>
-<details open=""><summary>Code</summary><div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details><div class="cell-output cell-output-stderr">
-<pre><code>── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
-✔ dplyr     1.1.2     ✔ readr     2.1.4
-✔ forcats   1.0.0     ✔ stringr   1.5.0
-✔ ggplot2   3.4.2     ✔ tibble    3.2.1
-✔ lubridate 1.9.2     ✔ tidyr     1.3.0
-✔ purrr     1.0.1     </code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
-✖ dplyr::filter() masks stats::filter()
-✖ dplyr::lag()    masks stats::lag()
-ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
-</div>
-<details open=""><summary>Code</summary><div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://Matrix.R-forge.R-project.org">Matrix</a></span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details><div class="cell-output cell-output-stderr">
-<pre><code>
-Attaching package: 'Matrix'
-
-The following objects are masked from 'package:tidyr':
-
-    expand, pack, unpack</code></pre>
-</div>
-<details open=""><summary>Code</summary><div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">RCurl</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details><div class="cell-output cell-output-stderr">
-<pre><code>
-Attaching package: 'RCurl'
-
-The following object is masked from 'package:tidyr':
-
-    complete</code></pre>
-</div>
-<details open=""><summary>Code</summary><div class="sourceCode" id="cb13"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://scales.r-lib.org">scales</a></span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details><div class="cell-output cell-output-stderr">
-<pre><code>
-Attaching package: 'scales'
-
-The following object is masked from 'package:purrr':
-
-    discard
-
-The following object is masked from 'package:readr':
-
-    col_factor</code></pre>
-</div>
-<details open=""><summary>Code</summary><div class="sourceCode" id="cb15"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://wilkelab.org/cowplot/">cowplot</a></span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details><div class="cell-output cell-output-stderr">
-<pre><code>
-Attaching package: 'cowplot'
-
-The following object is masked from 'package:lubridate':
-
-    stamp</code></pre>
-</div>
-<details open=""><summary>Code</summary><div class="sourceCode" id="cb17"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">AnnotationHub</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details><div class="cell-output cell-output-stderr">
-<pre><code>Loading required package: BiocGenerics
-
-Attaching package: 'BiocGenerics'
-
-The following objects are masked from 'package:lubridate':
-
-    intersect, setdiff, union
-
-The following objects are masked from 'package:dplyr':
-
-    combine, intersect, setdiff, union
-
-The following objects are masked from 'package:stats':
-
-    IQR, mad, sd, var, xtabs
-
-The following objects are masked from 'package:base':
-
-    anyDuplicated, aperm, append, as.data.frame, basename, cbind,
-    colnames, dirname, do.call, duplicated, eval, evalq, Filter, Find,
-    get, grep, grepl, intersect, is.unsorted, lapply, Map, mapply,
-    match, mget, order, paste, pmax, pmax.int, pmin, pmin.int,
-    Position, rank, rbind, Reduce, rownames, sapply, setdiff, sort,
-    table, tapply, union, unique, unsplit, which.max, which.min
-
-Loading required package: BiocFileCache
-Loading required package: dbplyr
-
-Attaching package: 'dbplyr'
-
-The following objects are masked from 'package:dplyr':
-
-    ident, sql</code></pre>
-</div>
-<details open=""><summary>Code</summary><div class="sourceCode" id="cb19"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/jorainer/ensembldb">ensembldb</a></span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details><div class="cell-output cell-output-stderr">
-<pre><code>Loading required package: GenomicRanges
-Loading required package: stats4
-Loading required package: S4Vectors
-
-Attaching package: 'S4Vectors'
-
-The following objects are masked from 'package:Matrix':
-
-    expand, unname
-
-The following objects are masked from 'package:lubridate':
-
-    second, second&lt;-
-
-The following objects are masked from 'package:dplyr':
-
-    first, rename
-
-The following object is masked from 'package:tidyr':
-
-    expand
-
-The following objects are masked from 'package:base':
-
-    expand.grid, I, unname
-
-Loading required package: IRanges
-
-Attaching package: 'IRanges'
-
-The following object is masked from 'package:lubridate':
-
-    %within%
-
-The following objects are masked from 'package:dplyr':
-
-    collapse, desc, slice
-
-The following object is masked from 'package:purrr':
-
-    reduce
-
-Loading required package: GenomeInfoDb
-Loading required package: GenomicFeatures
-Loading required package: AnnotationDbi
-Loading required package: Biobase
-Welcome to Bioconductor
-
-    Vignettes contain introductory material; view with
-    'browseVignettes()'. To cite Bioconductor, see
-    'citation("Biobase")', and for packages 'citation("pkgname")'.
-
-
-Attaching package: 'Biobase'
-
-The following object is masked from 'package:AnnotationHub':
-
-    cache
-
-
-Attaching package: 'AnnotationDbi'
-
-The following object is masked from 'package:dplyr':
-
-    select
-
-Loading required package: AnnotationFilter
-
-Attaching package: 'ensembldb'
-
-The following object is masked from 'package:dplyr':
-
-    filter
-
-The following object is masked from 'package:stats':
-
-    filter</code></pre>
-</div>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://satijalab.org/seurat">Seurat</a></span><span class="op">)</span></span>
+<span><span class="co">## The legacy packages maptools, rgdal, and rgeos, underpinning this package</span></span>
+<span><span class="co">## will retire shortly. Please refer to R-spatial evolution reports on</span></span>
+<span><span class="co">## https://r-spatial.org/r/2023/05/15/evolution4.html for details.</span></span>
+<span><span class="co">## This package is now running under evolution status 0</span></span>
+<span><span class="co">## Attaching SeuratObject</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span></span>
+<span><span class="co">## ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──</span></span>
+<span><span class="co">## ✔ dplyr     1.1.2     ✔ readr     2.1.4</span></span>
+<span><span class="co">## ✔ forcats   1.0.0     ✔ stringr   1.5.0</span></span>
+<span><span class="co">## ✔ ggplot2   3.4.2     ✔ tibble    3.2.1</span></span>
+<span><span class="co">## ✔ lubridate 1.9.2     ✔ tidyr     1.3.0</span></span>
+<span><span class="co">## ✔ purrr     1.0.1</span></span>
+<span><span class="co">## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──</span></span>
+<span><span class="co">## ✖ dplyr::filter() masks stats::filter()</span></span>
+<span><span class="co">## ✖ dplyr::lag()    masks stats::lag()</span></span>
+<span><span class="co">## ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://Matrix.R-forge.R-project.org">Matrix</a></span><span class="op">)</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## Attaching package: 'Matrix'</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## The following objects are masked from 'package:tidyr':</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">##     expand, pack, unpack</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">RCurl</span><span class="op">)</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## Attaching package: 'RCurl'</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## The following object is masked from 'package:tidyr':</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">##     complete</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://scales.r-lib.org">scales</a></span><span class="op">)</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## Attaching package: 'scales'</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## The following object is masked from 'package:purrr':</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">##     discard</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## The following object is masked from 'package:readr':</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">##     col_factor</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://wilkelab.org/cowplot/">cowplot</a></span><span class="op">)</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## Attaching package: 'cowplot'</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## The following object is masked from 'package:lubridate':</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">##     stamp</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">AnnotationHub</span><span class="op">)</span></span>
+<span><span class="co">## Loading required package: BiocGenerics</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## Attaching package: 'BiocGenerics'</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## The following objects are masked from 'package:lubridate':</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">##     intersect, setdiff, union</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## The following objects are masked from 'package:dplyr':</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">##     combine, intersect, setdiff, union</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## The following objects are masked from 'package:stats':</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">##     IQR, mad, sd, var, xtabs</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## The following objects are masked from 'package:base':</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">##     anyDuplicated, aperm, append, as.data.frame, basename, cbind,</span></span>
+<span><span class="co">##     colnames, dirname, do.call, duplicated, eval, evalq, Filter, Find,</span></span>
+<span><span class="co">##     get, grep, grepl, intersect, is.unsorted, lapply, Map, mapply,</span></span>
+<span><span class="co">##     match, mget, order, paste, pmax, pmax.int, pmin, pmin.int,</span></span>
+<span><span class="co">##     Position, rank, rbind, Reduce, rownames, sapply, setdiff, sort,</span></span>
+<span><span class="co">##     table, tapply, union, unique, unsplit, which.max, which.min</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## Loading required package: BiocFileCache</span></span>
+<span><span class="co">## Loading required package: dbplyr</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## Attaching package: 'dbplyr'</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## The following objects are masked from 'package:dplyr':</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">##     ident, sql</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/jorainer/ensembldb">ensembldb</a></span><span class="op">)</span></span>
+<span><span class="co">## Loading required package: GenomicRanges</span></span>
+<span><span class="co">## Loading required package: stats4</span></span>
+<span><span class="co">## Loading required package: S4Vectors</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## Attaching package: 'S4Vectors'</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## The following objects are masked from 'package:Matrix':</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">##     expand, unname</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## The following objects are masked from 'package:lubridate':</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">##     second, second&lt;-</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## The following objects are masked from 'package:dplyr':</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">##     first, rename</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## The following object is masked from 'package:tidyr':</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">##     expand</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## The following objects are masked from 'package:base':</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">##     expand.grid, I, unname</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## Loading required package: IRanges</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## Attaching package: 'IRanges'</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## The following object is masked from 'package:lubridate':</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">##     %within%</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## The following objects are masked from 'package:dplyr':</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">##     collapse, desc, slice</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## The following object is masked from 'package:purrr':</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">##     reduce</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## Loading required package: GenomeInfoDb</span></span>
+<span><span class="co">## Loading required package: GenomicFeatures</span></span>
+<span><span class="co">## Loading required package: AnnotationDbi</span></span>
+<span><span class="co">## Loading required package: Biobase</span></span>
+<span><span class="co">## Welcome to Bioconductor</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">##     Vignettes contain introductory material; view with</span></span>
+<span><span class="co">##     'browseVignettes()'. To cite Bioconductor, see</span></span>
+<span><span class="co">##     'citation("Biobase")', and for packages 'citation("pkgname")'.</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## Attaching package: 'Biobase'</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## The following object is masked from 'package:AnnotationHub':</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">##     cache</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## Attaching package: 'AnnotationDbi'</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## The following object is masked from 'package:dplyr':</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">##     select</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## Loading required package: AnnotationFilter</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## Attaching package: 'ensembldb'</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## The following object is masked from 'package:dplyr':</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">##     filter</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## The following object is masked from 'package:stats':</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">##     filter</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section><section id="查看会话信息" class="level2"><h2 class="anchored" data-anchor-id="查看会话信息">查看会话信息</h2>
 <div class="cell">
-<details open=""><summary>Code</summary><div class="sourceCode" id="cb21"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html">sessionInfo</a></span><span class="op">(</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details><div class="cell-output cell-output-stdout">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html">sessionInfo</a></span><span class="op">(</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
 <pre><code>R version 4.2.2 (2022-10-31)
 Platform: aarch64-apple-darwin20 (64-bit)
 Running under: macOS Ventura 13.3.1

@@ -32,7 +32,8 @@ toc: true
 
 format:
   html:
-    code-fold: show
+    code-fold: false
+    code-overflow: wrap
     code-tools: false
 ---
 ", post_name, Sys.Date())

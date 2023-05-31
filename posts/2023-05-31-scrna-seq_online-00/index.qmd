@@ -10,7 +10,8 @@ toc: true
 
 format:
   html:
-    code-fold: show
+    code-fold: false
+    code-overflow: wrap
     code-tools: false
 ---
 
@@ -34,7 +35,7 @@ BiocManager::install(c("AnnotationHub", "ensembldb", "multtest", "glmGamPoi"))
 
 ## 测试包的安装
 
-```{r}
+```{r, collapse=TRUE}
 library(Seurat)
 library(tidyverse)
 library(Matrix)
