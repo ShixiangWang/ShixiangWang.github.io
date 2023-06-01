@@ -256,10 +256,6 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </section><section id="测试包的安装" class="level2"><h2 class="anchored" data-anchor-id="测试包的安装">测试包的安装</h2>
 <div class="cell">
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://satijalab.org/seurat">Seurat</a></span><span class="op">)</span></span>
-<span><span class="co">## The legacy packages maptools, rgdal, and rgeos, underpinning this package</span></span>
-<span><span class="co">## will retire shortly. Please refer to R-spatial evolution reports on</span></span>
-<span><span class="co">## https://r-spatial.org/r/2023/05/15/evolution4.html for details.</span></span>
-<span><span class="co">## This package is now running under evolution status 0</span></span>
 <span><span class="co">## Attaching SeuratObject</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span></span>
 <span><span class="co">## ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──</span></span>
@@ -422,12 +418,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html">sessionInfo</a></span><span class="op">(</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>R version 4.2.2 (2022-10-31)
-Platform: aarch64-apple-darwin20 (64-bit)
-Running under: macOS Ventura 13.3.1
+Platform: x86_64-apple-darwin17.0 (64-bit)
+Running under: macOS Big Sur ... 10.16
 
 Matrix products: default
-BLAS:   /Library/Frameworks/R.framework/Versions/4.2-arm64/Resources/lib/libRblas.0.dylib
-LAPACK: /Library/Frameworks/R.framework/Versions/4.2-arm64/Resources/lib/libRlapack.dylib
+BLAS:   /Library/Frameworks/R.framework/Versions/4.2/Resources/lib/libRblas.0.dylib
+LAPACK: /Library/Frameworks/R.framework/Versions/4.2/Resources/lib/libRlapack.dylib
 
 locale:
 [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
@@ -498,7 +494,7 @@ loaded via a namespace (and not attached):
  [93] rappdirs_0.3.3                cli_3.6.1                    
  [95] parallel_4.2.2                igraph_1.4.3                 
  [97] pkgconfig_2.0.3               GenomicAlignments_1.34.1     
- [99] sp_1.6-1                      plotly_4.10.1                
+ [99] sp_1.6-0                      plotly_4.10.1                
 [101] spatstat.sparse_3.0-1         xml2_1.3.4                   
 [103] XVector_0.38.0                digest_0.6.31                
 [105] sctransform_0.3.5             RcppAnnoy_0.0.20             

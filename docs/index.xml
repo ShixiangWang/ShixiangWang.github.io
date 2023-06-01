@@ -10,7 +10,36 @@
 <atom:link href="https://shixiangwang.github.io/index.xml" rel="self" type="application/rss+xml"/>
 <description>Reasoning is a blog dedicated to exploring the intersection of data science, bioinformatics, and personal insights.</description>
 <generator>quarto-1.2.475</generator>
-<lastBuildDate>Tue, 30 May 2023 16:00:00 GMT</lastBuildDate>
+<lastBuildDate>Wed, 31 May 2023 16:00:00 GMT</lastBuildDate>
+<item>
+  <title>概率与似然——摘要</title>
+  <dc:creator>Shixiang Wang</dc:creator>
+  <link>https://shixiangwang.github.io/posts/2023-06-01-likelihood/index.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<p>概率(probability)和似然(Likelihood)是两个经常被混淆使用的概念。</p>
+<p>概率质量函数（PMF）是用于描述离散随机变量的概率分布的函数。对于给定的随机变量取值，概率质量函数给出了该取值发生的概率。概率质量函数的输入是随机变量的取值，输出是对应取值的概率。</p>
+<p>似然函数（Likelihood Function）是用于估计模型参数的函数。对于给定的模型参数值，似然函数衡量了观测数据出现该参数值的可能性。似然函数的输入是模型参数的取值，输出是在给定参数下观测数据出现的可能性。</p>
+<p>概率质量函数和似然函数的区别在于它们关注的对象不同。概率质量函数是给定参数值时，计算随机变量的取值的概率；而似然函数是给定观测数据时，评估参数值的可能性。因此，似然函数通常用于参数估计，而概率质量函数用于描述随机变量的分布。</p>
+<p>简而言之，当我们有一个固定参数集的模型并且我们对可能生成的数据类型感兴趣时，通常会考虑概率。相反，当我们已经观察到数据并且我们想要检查某些模型参数的可能性时，就会使用似然。</p>
+<p>概率质量函数（PMF）：参数已知，观察数据。</p>
+<p>似然函数(Likelihood Function)：数据已知，评估参数。</p>
+<hr>
+<p>来源：</p>
+<blockquote class="blockquote">
+<p><a href="https://mp.weixin.qq.com/s/4alhSw4oicj2KM-y1xEYtA">一文了解最大似然估计(Maximum Likelihood Estimation)</a></p>
+</blockquote>
+
+
+
+ ]]></description>
+  <category>stats</category>
+  <guid>https://shixiangwang.github.io/posts/2023-06-01-likelihood/index.html</guid>
+  <pubDate>Wed, 31 May 2023 16:00:00 GMT</pubDate>
+</item>
 <item>
   <title>scRNA-seq_online 00：包准备</title>
   <dc:creator>Shixiang Wang</dc:creator>
@@ -28,10 +57,6 @@
 </section><section id="测试包的安装" class="level2"><h2 class="anchored" data-anchor-id="测试包的安装">测试包的安装</h2>
 <div class="cell">
 <div class="sourceCode" id="cb3" style="background: #f1f3f5;"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw" style="color: #003B4F;"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op" style="color: #5E5E5E;">(</span><span class="va" style="color: #111111;"><a href="https://satijalab.org/seurat">Seurat</a></span><span class="op" style="color: #5E5E5E;">)</span></span>
-<span><span class="co" style="color: #5E5E5E;">## The legacy packages maptools, rgdal, and rgeos, underpinning this package</span></span>
-<span><span class="co" style="color: #5E5E5E;">## will retire shortly. Please refer to R-spatial evolution reports on</span></span>
-<span><span class="co" style="color: #5E5E5E;">## https://r-spatial.org/r/2023/05/15/evolution4.html for details.</span></span>
-<span><span class="co" style="color: #5E5E5E;">## This package is now running under evolution status 0</span></span>
 <span><span class="co" style="color: #5E5E5E;">## Attaching SeuratObject</span></span>
 <span><span class="kw" style="color: #003B4F;"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op" style="color: #5E5E5E;">(</span><span class="va" style="color: #111111;"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op" style="color: #5E5E5E;">)</span></span>
 <span><span class="co" style="color: #5E5E5E;">## ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──</span></span>
@@ -194,12 +219,12 @@
 <div class="sourceCode" id="cb4" style="background: #f1f3f5;"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu" style="color: #4758AB;"><a href="https://rdrr.io/r/utils/sessionInfo.html">sessionInfo</a></span><span class="op" style="color: #5E5E5E;">(</span><span class="op" style="color: #5E5E5E;">)</span></span></code></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>R version 4.2.2 (2022-10-31)
-Platform: aarch64-apple-darwin20 (64-bit)
-Running under: macOS Ventura 13.3.1
+Platform: x86_64-apple-darwin17.0 (64-bit)
+Running under: macOS Big Sur ... 10.16
 
 Matrix products: default
-BLAS:   /Library/Frameworks/R.framework/Versions/4.2-arm64/Resources/lib/libRblas.0.dylib
-LAPACK: /Library/Frameworks/R.framework/Versions/4.2-arm64/Resources/lib/libRlapack.dylib
+BLAS:   /Library/Frameworks/R.framework/Versions/4.2/Resources/lib/libRblas.0.dylib
+LAPACK: /Library/Frameworks/R.framework/Versions/4.2/Resources/lib/libRlapack.dylib
 
 locale:
 [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
@@ -270,7 +295,7 @@ loaded via a namespace (and not attached):
  [93] rappdirs_0.3.3                cli_3.6.1                    
  [95] parallel_4.2.2                igraph_1.4.3                 
  [97] pkgconfig_2.0.3               GenomicAlignments_1.34.1     
- [99] sp_1.6-1                      plotly_4.10.1                
+ [99] sp_1.6-0                      plotly_4.10.1                
 [101] spatstat.sparse_3.0-1         xml2_1.3.4                   
 [103] XVector_0.38.0                digest_0.6.31                
 [105] sctransform_0.3.5             RcppAnnoy_0.0.20             
