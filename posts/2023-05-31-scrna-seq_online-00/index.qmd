@@ -52,3 +52,12 @@ library(ensembldb)
 sessionInfo()
 ```
 
+
+## 阅读
+
+接下来就可以阅读以下两份非常好的材料了解单细胞的预备知识。
+
+- [Introduction to single-cell RNA-seq](https://hbctraining.github.io/scRNA-seq_online/lessons/01_intro_to_scRNA-seq.html)
+- [Generation of count matrix](https://hbctraining.github.io/scRNA-seq_online/lessons/02_SC_generation_of_count_matrix.html)
+
+

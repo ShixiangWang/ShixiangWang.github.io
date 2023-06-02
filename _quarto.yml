@@ -50,6 +50,7 @@ format:
     citations-hover: true
     footnotes-hover: true
     include-in-header: meta.html
+    include-after-body: stats.html
     toc: true
     code-link: true
 

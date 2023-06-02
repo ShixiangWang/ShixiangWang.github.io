@@ -240,6 +240,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="#%E5%AE%89%E8%A3%85%E5%8C%85" id="toc-安装包" class="nav-link active" data-scroll-target="#%E5%AE%89%E8%A3%85%E5%8C%85">安装包</a></li>
   <li><a href="#%E6%B5%8B%E8%AF%95%E5%8C%85%E7%9A%84%E5%AE%89%E8%A3%85" id="toc-测试包的安装" class="nav-link" data-scroll-target="#%E6%B5%8B%E8%AF%95%E5%8C%85%E7%9A%84%E5%AE%89%E8%A3%85">测试包的安装</a></li>
   <li><a href="#%E6%9F%A5%E7%9C%8B%E4%BC%9A%E8%AF%9D%E4%BF%A1%E6%81%AF" id="toc-查看会话信息" class="nav-link" data-scroll-target="#%E6%9F%A5%E7%9C%8B%E4%BC%9A%E8%AF%9D%E4%BF%A1%E6%81%AF">查看会话信息</a></li>
+  <li><a href="#%E9%98%85%E8%AF%BB" id="toc-阅读" class="nav-link" data-scroll-target="#%E9%98%85%E8%AF%BB">阅读</a></li>
   </ul></nav>
     </div>
 <!-- main -->
@@ -256,6 +257,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </section><section id="测试包的安装" class="level2"><h2 class="anchored" data-anchor-id="测试包的安装">测试包的安装</h2>
 <div class="cell">
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://satijalab.org/seurat">Seurat</a></span><span class="op">)</span></span>
+<span><span class="co">## The legacy packages maptools, rgdal, and rgeos, underpinning this package</span></span>
+<span><span class="co">## will retire shortly. Please refer to R-spatial evolution reports on</span></span>
+<span><span class="co">## https://r-spatial.org/r/2023/05/15/evolution4.html for details.</span></span>
+<span><span class="co">## This package is now running under evolution status 0</span></span>
 <span><span class="co">## Attaching SeuratObject</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span></span>
 <span><span class="co">## ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──</span></span>
@@ -418,12 +423,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html">sessionInfo</a></span><span class="op">(</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>R version 4.2.2 (2022-10-31)
-Platform: x86_64-apple-darwin17.0 (64-bit)
-Running under: macOS Big Sur ... 10.16
+Platform: aarch64-apple-darwin20 (64-bit)
+Running under: macOS Ventura 13.4
 
 Matrix products: default
-BLAS:   /Library/Frameworks/R.framework/Versions/4.2/Resources/lib/libRblas.0.dylib
-LAPACK: /Library/Frameworks/R.framework/Versions/4.2/Resources/lib/libRlapack.dylib
+BLAS:   /Library/Frameworks/R.framework/Versions/4.2-arm64/Resources/lib/libRblas.0.dylib
+LAPACK: /Library/Frameworks/R.framework/Versions/4.2-arm64/Resources/lib/libRlapack.dylib
 
 locale:
 [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
@@ -494,7 +499,7 @@ loaded via a namespace (and not attached):
  [93] rappdirs_0.3.3                cli_3.6.1                    
  [95] parallel_4.2.2                igraph_1.4.3                 
  [97] pkgconfig_2.0.3               GenomicAlignments_1.34.1     
- [99] sp_1.6-0                      plotly_4.10.1                
+ [99] sp_1.6-1                      plotly_4.10.1                
 [101] spatstat.sparse_3.0-1         xml2_1.3.4                   
 [103] XVector_0.38.0                digest_0.6.31                
 [105] sctransform_0.3.5             RcppAnnoy_0.0.20             
@@ -516,6 +521,12 @@ loaded via a namespace (and not attached):
 [137] future.apply_1.11.0          </code></pre>
 </div>
 </div>
+</section><section id="阅读" class="level2"><h2 class="anchored" data-anchor-id="阅读">阅读</h2>
+<p>接下来就可以阅读以下两份非常好的材料了解单细胞的预备知识。</p>
+<ul>
+<li><a href="https://hbctraining.github.io/scRNA-seq_online/lessons/01_intro_to_scRNA-seq.html">Introduction to single-cell RNA-seq</a></li>
+<li><a href="https://hbctraining.github.io/scRNA-seq_online/lessons/02_SC_generation_of_count_matrix.html">Generation of count matrix</a></li>
+</ul>
 
 
 </section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
