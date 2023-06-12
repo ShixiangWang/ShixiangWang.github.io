@@ -4,7 +4,7 @@
     "href": "index.html",
     "title": "Write programs that do one thing and do it well.",
     "section": "",
-    "text": "概率与似然——摘要\n\n\n\n\n\n\n\nstats\n\n\n\n\n\n\n\n\n\n\n\nJun 1, 2023\n\n\nShixiang Wang\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nscRNA-seq_online 00：包准备\n\n\n\n\n\n\n\nbioinformatics\n\n\nscRNA-seq\n\n\n\n\n\n\n\n\n\n\n\nMay 31, 2023\n\n\nShixiang Wang\n\n\n\n\n\n\n  \n\n\n\n\nTCCIA：第一个连接CircRNA和免疫治疗的数据库\n\n\n\n\n\n\n\nbioinformatics\n\n\nshiny\n\n\n\n\n\n\n\n\n\n\n\nMay 29, 2023\n\n\nShixiang Wang\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nnextflow 运行 singularity no space left\n\n\n\n\n\n\n\ndebug\n\n\n\n\n\n\n\n\n\n\n\nMay 23, 2023\n\n\nShixiang Wang\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nStart a new research direction\n\n\n\n\n\n\n\nacademic\n\n\n\n\n\n\n\n\n\n\n\nMay 12, 2023\n\n\nShixiang Wang\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nSingle-cell sequencing protocols\n\n\n\n\n\n\n\nbioinformatics\n\n\nnote\n\n\n\n\n\n\n\n\n\n\n\nMay 12, 2023\n\n\nShixiang Wang\n\n\n\n\n\n\n  \n\n\n\n\n晒晒娃和Y叔R书的合照\n\n\n\n\n\n\n\npersonal\n\n\nR\n\n\n\n\n\n\n\n\n\n\n\nApr 8, 2023\n\n\nShixiang Wang\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n随想\n\n\n\n\n\n\n\npersonal\n\n\n\n\n\n\n\n\n\n\n\nApr 8, 2023\n\n\nShixiang Wang\n\n\n\n\n\n\n  \n\n\n\n\nChatGPT 帮助我理解 Rust 的所有权\n\n\n\n\n\n\n\nRust\n\n\nAI\n\n\n\n\n\n\n\n\n\n\n\nMar 29, 2023\n\n\nShixiang Wang\n\n\n\n\n\n\n  \n\n\n\n\nWelcome To My Blog\n\n\n\n\n\n\n\nnews\n\n\n\n\n\n\n\n\n\n\n\nMar 28, 2023\n\n\nShixiang Wang\n\n\n\n\n\n\nNo matching items"
+    "text": "准备好应对验证\n\n\n\n\n\n\n\nbioinformatics\n\n\nthought\n\n\n\n\n\n\n\n\n\n\n\nJun 12, 2023\n\n\nShixiang Wang\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n概率与似然——摘要\n\n\n\n\n\n\n\nstats\n\n\n\n\n\n\n\n\n\n\n\nJun 1, 2023\n\n\nShixiang Wang\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nscRNA-seq_online 00：包准备\n\n\n\n\n\n\n\nbioinformatics\n\n\nscRNA-seq\n\n\n\n\n\n\n\n\n\n\n\nMay 31, 2023\n\n\nShixiang Wang\n\n\n\n\n\n\n  \n\n\n\n\nTCCIA：第一个连接CircRNA和免疫治疗的数据库\n\n\n\n\n\n\n\nbioinformatics\n\n\nshiny\n\n\n\n\n\n\n\n\n\n\n\nMay 29, 2023\n\n\nShixiang Wang\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nnextflow 运行 singularity no space left\n\n\n\n\n\n\n\ndebug\n\n\n\n\n\n\n\n\n\n\n\nMay 23, 2023\n\n\nShixiang Wang\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nStart a new research direction\n\n\n\n\n\n\n\nacademic\n\n\n\n\n\n\n\n\n\n\n\nMay 12, 2023\n\n\nShixiang Wang\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nSingle-cell sequencing protocols\n\n\n\n\n\n\n\nbioinformatics\n\n\nnote\n\n\n\n\n\n\n\n\n\n\n\nMay 12, 2023\n\n\nShixiang Wang\n\n\n\n\n\n\n  \n\n\n\n\n晒晒娃和Y叔R书的合照\n\n\n\n\n\n\n\npersonal\n\n\nR\n\n\n\n\n\n\n\n\n\n\n\nApr 8, 2023\n\n\nShixiang Wang\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n随想\n\n\n\n\n\n\n\npersonal\n\n\n\n\n\n\n\n\n\n\n\nApr 8, 2023\n\n\nShixiang Wang\n\n\n\n\n\n\n  \n\n\n\n\nChatGPT 帮助我理解 Rust 的所有权\n\n\n\n\n\n\n\nRust\n\n\nAI\n\n\n\n\n\n\n\n\n\n\n\nMar 29, 2023\n\n\nShixiang Wang\n\n\n\n\n\n\n  \n\n\n\n\nWelcome To My Blog\n\n\n\n\n\n\n\nnews\n\n\n\n\n\n\n\n\n\n\n\nMar 28, 2023\n\n\nShixiang Wang\n\n\n\n\n\n\nNo matching items"
   },
   {
     "objectID": "posts/welcome/index.html",
@@ -180,5 +180,12 @@
     "title": "scRNA-seq_online 00：包准备",
     "section": "阅读",
     "text": "阅读\n接下来就可以阅读以下两份非常好的材料了解单细胞的预备知识。\n\nIntroduction to single-cell RNA-seq\nGeneration of count matrix"
+  },
+  {
+    "objectID": "posts/2023-06-12-prepare-for-validation/index.html",
+    "href": "posts/2023-06-12-prepare-for-validation/index.html",
+    "title": "准备好应对验证",
+    "section": "",
+    "text": "个人感觉有效地验证的必要的，但过度的验证是次要的。但作为一个生信从业者，当文章投出去之后，总会遇到认为全世界的数据（包括原始数据）都供你可用的，任意挥霍的评审人。我并不认为这是真正的专家，因为它把一个次要的问题当作major concern，由此来否决你整个方法研究的科学性。\n事实是，文章总能在由高到低的期刊列表的评审过程中发出去。真正付出的代价是研究者的时间。 这也是预印本为什么正在走向科学发表主流的根本原因，人们越来越没有耐心了，专业化让人们产生越来越大的隔阂，但评审在大部分情况下并没有快捷有效地提升文章的真正质量。实际上，大部分的审稿人可能并不具备评估某一篇文章的能力，邀请审稿大多数只是一种资历。\n我比较痛恨当前科学研究赢者通吃的规则。eLife 等期刊的新理念或许是一个好的方向。更让我思考和困惑的是，如何不在所谓大树的阴凉下，有且做好独立创新，并能够追求内心倾向、自由探索的学术。\n可能当前阶段，我的想法过于理想和幼稚。但如果我不想和尝试做做，我的人生也总归不会交到别人的手上。"
   }
 ]

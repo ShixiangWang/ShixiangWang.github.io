@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://shixiangwang.github.io/index.html</loc>
-    <lastmod>2023-06-02T15:38:46.705Z</lastmod>
+    <lastmod>2023-06-12T07:43:12.129Z</lastmod>
   </url>
   <url>
     <loc>https://shixiangwang.github.io/posts/welcome/index.html</loc>
@@ -42,10 +42,14 @@
   </url>
   <url>
     <loc>https://shixiangwang.github.io/posts/2023-05-31-scrna-seq_online-00/index.html</loc>
-    <lastmod>2023-06-02T15:20:53.271Z</lastmod>
+    <lastmod>2023-06-12T07:41:21.431Z</lastmod>
   </url>
   <url>
     <loc>https://shixiangwang.github.io/posts/2023-06-01-likelihood/index.html</loc>
     <lastmod>2023-06-02T15:37:14.205Z</lastmod>
+  </url>
+  <url>
+    <loc>https://shixiangwang.github.io/posts/2023-06-12-prepare-for-validation/index.html</loc>
+    <lastmod>2023-06-12T07:43:09.954Z</lastmod>
   </url>
 </urlset>
