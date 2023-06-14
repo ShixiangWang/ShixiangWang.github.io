@@ -39,6 +39,6 @@ format:
 ", post_name, Sys.Date())
   
   xfun::write_utf8(contents, path_post)
-  file.edit(path_post)
+  if (interactive()) file.edit(path_post)
   message("Start writing now!")
 }

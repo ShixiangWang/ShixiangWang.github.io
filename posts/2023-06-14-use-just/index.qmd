@@ -1,0 +1,27 @@
+---
+title: 使用 Just 重复构建
+author: Shixiang Wang
+date: 2023-06-14
+categories: [Linux]
+draft: false
+description: ''
+image: ''
+toc: true
+
+format:
+  html:
+    code-fold: false
+    code-overflow: wrap
+    code-tools: false
+---
+
+Just（<https://just.systems/>）是一个命令行运行容器，它只是简单的运行你输入的命令，以方便重复构建。
+
+它没有 Make 那么复杂，这真是我喜欢它的原因。很久之前我很想学习 Make/Makefile，但一直未能成行。Just 让我意识到，我可能根本不需要学习 Make，也能开始很好地学会使用构建。
+
+我把 Just 的文档看完后发现，其实核心要点就在 README 的图里，而复杂的特征需求往后再说，可能一直都用不上。
+
+![](https://raw.githubusercontent.com/casey/just/master/screenshot.png)
+
+> 来源：<https://github.com/casey/just>
+

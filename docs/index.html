@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.2.475">
+<meta name="generator" content="quarto-1.3.361">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -17,7 +17,7 @@ div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
   width: 0.8em;
-  margin: 0 0.8em 0.2em -1.6em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
 </style>
@@ -57,7 +57,8 @@ ul.task-list li input[type="checkbox"] {
     "search-more-matches-text": "more matches in this document",
     "search-clear-button-title": "Clear",
     "search-detached-cancel-button-title": "Cancel",
-    "search-submit-button-title": "Submit"
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
   }
 }</script>
 <script>
@@ -99,7 +100,7 @@ ul.task-list li input[type="checkbox"] {
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://shixiangwang.github.io/posts/welcome/">
 <meta property="og:title" content="Reasoning - Write programs that do one thing and do it well.">
-<meta property="og:description" content="Reasoning is a blog dedicated to exploring the intersection of data science, bioinformatics, and personal insights.">
+<meta property="og:description" content="">
 <meta property="og:image" content="https://avatars.githubusercontent.com/u/25057508?v=4">
 
 <!-- Twitter -->
@@ -112,11 +113,12 @@ ul.task-list li input[type="checkbox"] {
 
 <meta name="referrer" content="no-referrer">
 
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 <link rel="stylesheet" href="styles.css">
 <link rel="alternate" type="application/rss+xml" title="Reasoning" href="index.xml"><meta name="twitter:title" content="Reasoning - Write programs that do one thing and do it well.">
-<meta name="twitter:image" content="https://shixiangwang.github.io/posts/welcome/thumbnail.jpg">
+<meta name="twitter:image" content="https://shixiangwang.github.io/posts/2023-06-14-use-just">
 <meta name="twitter:creator" content="@WangShxiang">
 <meta name="twitter:card" content="summary_large_image">
 </head>
@@ -132,18 +134,19 @@ ul.task-list li input[type="checkbox"] {
     <span class="navbar-title">Reasoning</span>
     </a>
   </div>
+            <div id="quarto-search" class="" title="Search"></div>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
   <span class="navbar-toggler-icon"></span>
 </button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item dropdown ">
-    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-resources" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-resources" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
  <span class="menu-text">Resources</span>
     </a>
     <ul class="dropdown-menu" aria-labelledby="nav-menu-resources">    
         <li>
-    <a class="dropdown-item" href="./resource.html">
+    <a class="dropdown-item" href="./resource.html" rel="" target="">
  <span class="dropdown-text">Code and Books</span></a>
   </li>  
     </ul>
@@ -151,36 +154,37 @@ ul.task-list li input[type="checkbox"] {
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link" href="https://shixiangwang.github.io/cv-shixiang/">
+    <a class="nav-link" href="https://shixiangwang.github.io/cv-shixiang/" rel="" target="">
  <span class="menu-text">Resume</span></a>
   </li>  
   <li class="nav-item compact">
-    <a class="nav-link" href="https://shixiangwang.github.io/home/logo/qrcode.jpg"><i class="bi bi-wechat" role="img">
+    <a class="nav-link" href="https://shixiangwang.github.io/home/logo/qrcode.jpg" rel="" target=""><i class="bi bi-wechat" role="img">
 </i> 
  <span class="menu-text"></span></a>
   </li>  
   <li class="nav-item compact">
-    <a class="nav-link" href="https://www.zhihu.com/people/shixiangwang"><i class="bi bi-quora" role="img">
+    <a class="nav-link" href="https://www.zhihu.com/people/shixiangwang" rel="" target=""><i class="bi bi-quora" role="img">
 </i> 
  <span class="menu-text"></span></a>
   </li>  
   <li class="nav-item compact">
-    <a class="nav-link" href="https://github.com/ShixiangWang"><i class="bi bi-github" role="img">
+    <a class="nav-link" href="https://github.com/ShixiangWang" rel="" target=""><i class="bi bi-github" role="img">
 </i> 
  <span class="menu-text"></span></a>
   </li>  
   <li class="nav-item compact">
-    <a class="nav-link" href="https://twitter.com/WangShxiang"><i class="bi bi-twitter" role="img">
+    <a class="nav-link" href="https://twitter.com/WangShxiang" rel="" target=""><i class="bi bi-twitter" role="img">
 </i> 
  <span class="menu-text"></span></a>
   </li>  
   <li class="nav-item compact">
-    <a class="nav-link" href="./index.xml"><i class="bi bi-rss" role="img">
+    <a class="nav-link" href="./index.xml" rel="" target=""><i class="bi bi-rss" role="img">
 </i> 
  <span class="menu-text"></span></a>
   </li>  
 </ul>
-              <div id="quarto-search" class="" title="Search"></div>
+            <div class="quarto-navbar-tools">
+</div>
           </div> <!-- /navcollapse -->
       </div> <!-- /container-fluid -->
     </nav>
@@ -207,7 +211,7 @@ ul.task-list li input[type="checkbox"] {
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
         
-    <h5 class="quarto-listing-category-title">Categories</h5><div class="quarto-listing-category category-default"><div class="category" data-category="">All <span class="quarto-category-count">(11)</span></div><div class="category" data-category="AI">AI <span class="quarto-category-count">(1)</span></div><div class="category" data-category="R">R <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Rust">Rust <span class="quarto-category-count">(1)</span></div><div class="category" data-category="academic">academic <span class="quarto-category-count">(1)</span></div><div class="category" data-category="bioinformatics">bioinformatics <span class="quarto-category-count">(4)</span></div><div class="category" data-category="debug">debug <span class="quarto-category-count">(1)</span></div><div class="category" data-category="news">news <span class="quarto-category-count">(1)</span></div><div class="category" data-category="note">note <span class="quarto-category-count">(1)</span></div><div class="category" data-category="personal">personal <span class="quarto-category-count">(2)</span></div><div class="category" data-category="scRNA-seq">scRNA-seq <span class="quarto-category-count">(1)</span></div><div class="category" data-category="shiny">shiny <span class="quarto-category-count">(1)</span></div><div class="category" data-category="stats">stats <span class="quarto-category-count">(1)</span></div><div class="category" data-category="thought">thought <span class="quarto-category-count">(1)</span></div></div></div>
+    <h5 class="quarto-listing-category-title">Categories</h5><div class="quarto-listing-category category-default"><div class="category" data-category="">All <span class="quarto-category-count">(12)</span></div><div class="category" data-category="AI">AI <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Linux">Linux <span class="quarto-category-count">(1)</span></div><div class="category" data-category="R">R <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Rust">Rust <span class="quarto-category-count">(1)</span></div><div class="category" data-category="academic">academic <span class="quarto-category-count">(1)</span></div><div class="category" data-category="bioinformatics">bioinformatics <span class="quarto-category-count">(4)</span></div><div class="category" data-category="debug">debug <span class="quarto-category-count">(1)</span></div><div class="category" data-category="news">news <span class="quarto-category-count">(1)</span></div><div class="category" data-category="note">note <span class="quarto-category-count">(1)</span></div><div class="category" data-category="personal">personal <span class="quarto-category-count">(2)</span></div><div class="category" data-category="scRNA-seq">scRNA-seq <span class="quarto-category-count">(1)</span></div><div class="category" data-category="shiny">shiny <span class="quarto-category-count">(1)</span></div><div class="category" data-category="stats">stats <span class="quarto-category-count">(1)</span></div><div class="category" data-category="thought">thought <span class="quarto-category-count">(1)</span></div></div></div>
 <!-- main -->
 <main class="content quarto-banner-title-block column-page-left" id="quarto-document-content">
 
@@ -220,13 +224,44 @@ ul.task-list li input[type="checkbox"] {
 
 <div class="quarto-listing quarto-listing-container-default" id="listing-listing">
 <div class="list quarto-listing-default">
-<div class="quarto-post image-right" data-index="0" data-categories="bioinformatics,thought" data-listing-date-sort="1686499200000" data-listing-file-modified-sort="1686555779243" data-listing-reading-time-sort="0.015">
+<div class="quarto-post image-right" data-index="0" data-categories="Linux" data-listing-date-sort="1686672000000" data-listing-file-modified-sort="1686731823421" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1">
 <div class="thumbnail">
-<a href="./posts/2023-06-12-prepare-for-validation/index.html">
-<div class="thumbnail-image">
+<p><a href="./posts/2023-06-14-use-just/index.html"> <img src="./posts/2023-06-14-use-just" class="thumbnail-image"> </a></p>
+</div>
+<div class="body">
+<a href="./posts/2023-06-14-use-just/index.html">
+<h3 class="no-anchor listing-title">
+使用 Just 重复构建
+</h3>
+<div class="listing-subtitle">
 
 </div>
-</a><p><a href="./posts/2023-06-12-prepare-for-validation/index.html"></a></p>
+</a>
+<div class="listing-categories">
+<div class="listing-category" onclick="window.quartoListingCategory('Linux'); return false;">
+Linux
+</div>
+</div>
+<a href="./posts/2023-06-14-use-just/index.html">
+<div class="listing-description">
+Just（https://just.systems/）是一个命令行运行容器，它只是简单的运行你输入的命令，以方便重复构建。
+</div>
+</a>
+</div>
+<div class="metadata">
+<a href="./posts/2023-06-14-use-just/index.html">
+<div class="listing-date">
+Jun 14, 2023
+</div>
+<div class="listing-author">
+Shixiang Wang
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="1" data-categories="bioinformatics,thought" data-listing-date-sort="1686499200000" data-listing-file-modified-sort="1686555779243" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1">
+<div class="thumbnail">
+<p><a href="./posts/2023-06-12-prepare-for-validation/index.html"> <img src="./posts/2023-06-12-prepare-for-validation" class="thumbnail-image"> </a></p>
 </div>
 <div class="body">
 <a href="./posts/2023-06-12-prepare-for-validation/index.html">
@@ -262,13 +297,9 @@ Shixiang Wang
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="1" data-categories="stats" data-listing-date-sort="1685548800000" data-listing-file-modified-sort="1685612711268" data-listing-reading-time-sort="0.03">
+<div class="quarto-post image-right" data-index="2" data-categories="stats" data-listing-date-sort="1685548800000" data-listing-file-modified-sort="1685612711268" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1">
 <div class="thumbnail">
-<a href="./posts/2023-06-01-likelihood/index.html">
-<div class="thumbnail-image">
-
-</div>
-</a><p><a href="./posts/2023-06-01-likelihood/index.html"></a></p>
+<p><a href="./posts/2023-06-01-likelihood/index.html"> <img src="./posts/2023-06-01-likelihood" class="thumbnail-image"> </a></p>
 </div>
 <div class="body">
 <a href="./posts/2023-06-01-likelihood/index.html">
@@ -301,13 +332,9 @@ Shixiang Wang
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="2" data-categories="bioinformatics,scRNA-seq" data-listing-date-sort="1685462400000" data-listing-file-modified-sort="1686050299803" data-listing-reading-time-sort="0.14">
+<div class="quarto-post image-right" data-index="3" data-categories="bioinformatics,scRNA-seq" data-listing-date-sort="1685462400000" data-listing-file-modified-sort="1686050299803" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1">
 <div class="thumbnail">
-<a href="./posts/2023-05-31-scrna-seq_online-00/index.html">
-<div class="thumbnail-image">
-
-</div>
-</a><p><a href="./posts/2023-05-31-scrna-seq_online-00/index.html"></a></p>
+<p><a href="./posts/2023-05-31-scrna-seq_online-00/index.html"> <img src="./posts/2023-05-31-scrna-seq_online-00" class="thumbnail-image"> </a></p>
 </div>
 <div class="body">
 <a href="./posts/2023-05-31-scrna-seq_online-00/index.html">
@@ -343,9 +370,9 @@ Shixiang Wang
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="3" data-categories="bioinformatics,shiny" data-listing-date-sort="1685289600000" data-listing-file-modified-sort="1685615289395" data-listing-reading-time-sort="0.06">
+<div class="quarto-post image-right" data-index="4" data-categories="bioinformatics,shiny" data-listing-date-sort="1685289600000" data-listing-file-modified-sort="1685615289395" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1">
 <div class="thumbnail">
-<p><a href="./posts/2023-05-29-tccia/index.html"> <img src="https://files.mdnice.com/user/4331/1ad12065-d1c6-4296-8e26-1365cc53643e.png" class="thumnail-image"> </a></p>
+<p><a href="./posts/2023-05-29-tccia/index.html"> <img src="./posts/2023-05-29-tccia" class="thumbnail-image"> </a></p>
 </div>
 <div class="body">
 <a href="./posts/2023-05-29-tccia/index.html">
@@ -381,13 +408,9 @@ Shixiang Wang
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="4" data-categories="debug" data-listing-date-sort="1684771200000" data-listing-file-modified-sort="1685612210307" data-listing-reading-time-sort="1.64">
+<div class="quarto-post image-right" data-index="5" data-categories="debug" data-listing-date-sort="1684771200000" data-listing-file-modified-sort="1685612210307" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="2">
 <div class="thumbnail">
-<a href="./posts/2023-05-23-nextflow-singularity-no-space-left/index.html">
-<div class="thumbnail-image">
-
-</div>
-</a><p><a href="./posts/2023-05-23-nextflow-singularity-no-space-left/index.html"></a></p>
+<p><a href="./posts/2023-05-23-nextflow-singularity-no-space-left/index.html"> <img src="./posts/2023-05-23-nextflow-singularity-no-space-left" class="thumbnail-image"> </a></p>
 </div>
 <div class="body">
 <a href="./posts/2023-05-23-nextflow-singularity-no-space-left/index.html">
@@ -420,13 +443,9 @@ Shixiang Wang
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="5" data-categories="academic" data-listing-date-sort="1683820800000" data-listing-file-modified-sort="1683878231330" data-listing-reading-time-sort="0.325">
+<div class="quarto-post image-right" data-index="6" data-categories="academic" data-listing-date-sort="1683820800000" data-listing-file-modified-sort="1683878231330" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1">
 <div class="thumbnail">
-<a href="./posts/2023-05-12-start-a-new-research-direction/index.html">
-<div class="thumbnail-image">
-
-</div>
-</a><p><a href="./posts/2023-05-12-start-a-new-research-direction/index.html"></a></p>
+<p><a href="./posts/2023-05-12-start-a-new-research-direction/index.html"> <img src="./posts/2023-05-12-start-a-new-research-direction" class="thumbnail-image"> </a></p>
 </div>
 <div class="body">
 <a href="./posts/2023-05-12-start-a-new-research-direction/index.html">
@@ -459,13 +478,9 @@ Shixiang Wang
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="6" data-categories="bioinformatics,note" data-listing-date-sort="1683820800000" data-listing-file-modified-sort="1683887199362" data-listing-reading-time-sort="0.415">
+<div class="quarto-post image-right" data-index="7" data-categories="bioinformatics,note" data-listing-date-sort="1683820800000" data-listing-file-modified-sort="1683887199362" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1">
 <div class="thumbnail">
-<a href="./posts/2023-05-12-single-cell-sequencing-protocols/index.html">
-<div class="thumbnail-image">
-
-</div>
-</a><p><a href="./posts/2023-05-12-single-cell-sequencing-protocols/index.html"></a></p>
+<p><a href="./posts/2023-05-12-single-cell-sequencing-protocols/index.html"> <img src="./posts/2023-05-12-single-cell-sequencing-protocols" class="thumbnail-image"> </a></p>
 </div>
 <div class="body">
 <a href="./posts/2023-05-12-single-cell-sequencing-protocols/index.html">
@@ -501,9 +516,9 @@ Shixiang Wang
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="7" data-categories="personal,R" data-listing-date-sort="1680883200000" data-listing-file-modified-sort="1681044667421" data-listing-reading-time-sort="0.01">
+<div class="quarto-post image-right" data-index="8" data-categories="personal,R" data-listing-date-sort="1680883200000" data-listing-file-modified-sort="1681044667421" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1">
 <div class="thumbnail">
-<p><a href="./posts/2023-04-08-yiyi-with-book-by-y/index.html"> <img src="./posts/2023-04-08-yiyi-with-book-by-y/IMG_6364.JPG" class="thumnail-image"> </a></p>
+<p><a href="./posts/2023-04-08-yiyi-with-book-by-y/index.html"> <img src="./posts/2023-04-08-yiyi-with-book-by-y" class="thumbnail-image"> </a></p>
 </div>
 <div class="body">
 <a href="./posts/2023-04-08-yiyi-with-book-by-y/index.html">
@@ -539,13 +554,9 @@ Shixiang Wang
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="8" data-categories="personal" data-listing-date-sort="1680883200000" data-listing-file-modified-sort="1683878536089" data-listing-reading-time-sort="0.005">
+<div class="quarto-post image-right" data-index="9" data-categories="personal" data-listing-date-sort="1680883200000" data-listing-file-modified-sort="1683878536089" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1">
 <div class="thumbnail">
-<a href="./posts/2023-05-02-random/index.html">
-<div class="thumbnail-image">
-
-</div>
-</a><p><a href="./posts/2023-05-02-random/index.html"></a></p>
+<p><a href="./posts/2023-05-02-random/index.html"> <img src="./posts/2023-05-02-random" class="thumbnail-image"> </a></p>
 </div>
 <div class="body">
 <a href="./posts/2023-05-02-random/index.html">
@@ -578,9 +589,9 @@ Shixiang Wang
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="9" data-categories="Rust,AI" data-listing-date-sort="1680019200000" data-listing-file-modified-sort="1680837341764" data-listing-reading-time-sort="0.51">
+<div class="quarto-post image-right" data-index="10" data-categories="Rust,AI" data-listing-date-sort="1680019200000" data-listing-file-modified-sort="1680837341764" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1">
 <div class="thumbnail">
-<p><a href="./posts/2023-03-29-chatgpt-help-me-understand-rust-ownership/index.html"> <img src="https://kaisery.github.io/trpl-zh-cn/img/trpl04-04.svg" class="thumnail-image"> </a></p>
+<p><a href="./posts/2023-03-29-chatgpt-help-me-understand-rust-ownership/index.html"> <img src="./posts/2023-03-29-chatgpt-help-me-understand-rust-ownership" class="thumbnail-image"> </a></p>
 </div>
 <div class="body">
 <a href="./posts/2023-03-29-chatgpt-help-me-understand-rust-ownership/index.html">
@@ -616,9 +627,9 @@ Shixiang Wang
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="10" data-categories="news" data-listing-date-sort="1679932800000" data-listing-file-modified-sort="1679998742413" data-listing-reading-time-sort="0.05">
+<div class="quarto-post image-right" data-index="11" data-categories="news" data-listing-date-sort="1679932800000" data-listing-file-modified-sort="1679998742413" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1">
 <div class="thumbnail">
-<p><a href="./posts/welcome/index.html"> <img src="./posts/welcome/thumbnail.jpg" class="thumnail-image"> </a></p>
+<p><a href="./posts/welcome/index.html"> <p class="card-img-top"><img src="posts/welcome/thumbnail.jpg"  class="thumbnail-image card-img"/></p> </a></p>
 </div>
 <div class="body">
 <a href="./posts/welcome/index.html">
@@ -684,9 +695,23 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     icon: icon
   };
   anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
   const clipboard = new window.ClipboardJS('.code-copy-button', {
-    target: function(trigger) {
-      return trigger.previousElementSibling;
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
     }
   });
   clipboard.on('success', function(e) {
@@ -751,6 +776,92 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       return note.innerHTML;
     });
   }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
   const findCites = (el) => {
     const parentEl = el.parentElement;
     if (parentEl) {
@@ -796,6 +907,9 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <footer class="footer">
   <div class="nav-footer">
     <div class="nav-footer-left">Blog made with 💜 and <a href="https://quarto.org/">Quarto</a>, by Shixiang Wang. License: <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC BY-SA 2.0</a>.</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    </div>
     <div class="nav-footer-right">
       <ul class="footer-items list-unstyled">
     <li class="nav-item compact">
