@@ -5,7 +5,6 @@ date: 2023-04-08
 categories: [personal,R]
 draft: false
 description: ''
-image: ''
 archives:
   - 2023/04
 toc: true

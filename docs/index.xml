@@ -34,7 +34,27 @@
   <category>Linux</category>
   <guid>https://shixiangwang.github.io/posts/2023-06-14-use-just/index.html</guid>
   <pubDate>Tue, 13 Jun 2023 16:00:00 GMT</pubDate>
-  <media:content url="https://shixiangwang.github.io/posts/2023-06-14-use-just" medium="image"/>
+</item>
+<item>
+  <title>应该写写日记</title>
+  <dc:creator>Shixiang Wang</dc:creator>
+  <link>https://shixiangwang.github.io/posts/2023-06-14-write-journal/index.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<p>吴军在《阅读与写作讲义》中写道工作日记、读书心得以及对特殊经历的记录值得人写下来。</p>
+<p>我很认同这个看法。回望过去一到两年的时间，写东西的次数少了以后，我竟常常难以思考出来过去一段时间做了什么，是浪费了时间还是利用了时间都搞不清楚。</p>
+<p>这让我联想到博士后期间做的工作，我不禁反思：是否是平常太过随意，导致工作和论文写作不严谨，所以论文评审才常常收到负面意见？心态可以放松，思想应当解放，但平时无论是工作或是生活中都要严谨，这样可能才能做好真正的科学研究工作。做人首先还是要对自己负责，毕竟生命只有一次啊！</p>
+<p>很多东西真的不重要，很多东西真的很重要。</p>
+
+
+
+ ]]></description>
+  <category>journal</category>
+  <guid>https://shixiangwang.github.io/posts/2023-06-14-write-journal/index.html</guid>
+  <pubDate>Tue, 13 Jun 2023 16:00:00 GMT</pubDate>
 </item>
 <item>
   <title>准备好应对验证</title>
@@ -57,7 +77,6 @@
   <category>thought</category>
   <guid>https://shixiangwang.github.io/posts/2023-06-12-prepare-for-validation/index.html</guid>
   <pubDate>Sun, 11 Jun 2023 16:00:00 GMT</pubDate>
-  <media:content url="https://shixiangwang.github.io/posts/2023-06-12-prepare-for-validation" medium="image"/>
 </item>
 <item>
   <title>概率与似然——摘要</title>
@@ -87,7 +106,6 @@
   <category>stats</category>
   <guid>https://shixiangwang.github.io/posts/2023-06-01-likelihood/index.html</guid>
   <pubDate>Wed, 31 May 2023 16:00:00 GMT</pubDate>
-  <media:content url="https://shixiangwang.github.io/posts/2023-06-01-likelihood" medium="image"/>
 </item>
 <item>
   <title>scRNA-seq_online 00：包准备</title>
@@ -823,7 +841,6 @@ loaded via a namespace (and not attached):
   <category>scRNA-seq</category>
   <guid>https://shixiangwang.github.io/posts/2023-05-31-scrna-seq_online-00/index.html</guid>
   <pubDate>Tue, 30 May 2023 16:00:00 GMT</pubDate>
-  <media:content url="https://shixiangwang.github.io/posts/2023-05-31-scrna-seq_online-00" medium="image"/>
 </item>
 <item>
   <title>TCCIA：第一个连接CircRNA和免疫治疗的数据库</title>
@@ -855,7 +872,6 @@ loaded via a namespace (and not attached):
   <category>shiny</category>
   <guid>https://shixiangwang.github.io/posts/2023-05-29-tccia/index.html</guid>
   <pubDate>Sun, 28 May 2023 16:00:00 GMT</pubDate>
-  <media:content url="https://shixiangwang.github.io/posts/2023-05-29-tccia" medium="image"/>
 </item>
 <item>
   <title>nextflow 运行 singularity no space left</title>
@@ -1119,7 +1135,6 @@ singularity.envWhitelist = ['SINGULARITY_TMPDIR']</code></pre>
   <category>debug</category>
   <guid>https://shixiangwang.github.io/posts/2023-05-23-nextflow-singularity-no-space-left/index.html</guid>
   <pubDate>Mon, 22 May 2023 16:00:00 GMT</pubDate>
-  <media:content url="https://shixiangwang.github.io/posts/2023-05-23-nextflow-singularity-no-space-left" medium="image"/>
 </item>
 <item>
   <title>Start a new research direction</title>
@@ -1150,7 +1165,6 @@ singularity.envWhitelist = ['SINGULARITY_TMPDIR']</code></pre>
   <category>academic</category>
   <guid>https://shixiangwang.github.io/posts/2023-05-12-start-a-new-research-direction/index.html</guid>
   <pubDate>Thu, 11 May 2023 16:00:00 GMT</pubDate>
-  <media:content url="https://shixiangwang.github.io/posts/2023-05-12-start-a-new-research-direction" medium="image"/>
 </item>
 <item>
   <title>Single-cell sequencing protocols</title>
@@ -1245,7 +1259,6 @@ singularity.envWhitelist = ['SINGULARITY_TMPDIR']</code></pre>
   <category>note</category>
   <guid>https://shixiangwang.github.io/posts/2023-05-12-single-cell-sequencing-protocols/index.html</guid>
   <pubDate>Thu, 11 May 2023 16:00:00 GMT</pubDate>
-  <media:content url="https://shixiangwang.github.io/posts/2023-05-12-single-cell-sequencing-protocols" medium="image"/>
 </item>
 <item>
   <title>晒晒娃和Y叔R书的合照</title>
@@ -1269,7 +1282,6 @@ singularity.envWhitelist = ['SINGULARITY_TMPDIR']</code></pre>
   <category>R</category>
   <guid>https://shixiangwang.github.io/posts/2023-04-08-yiyi-with-book-by-y/index.html</guid>
   <pubDate>Fri, 07 Apr 2023 16:00:00 GMT</pubDate>
-  <media:content url="https://shixiangwang.github.io/posts/2023-04-08-yiyi-with-book-by-y" medium="image"/>
 </item>
 <item>
   <title>随想</title>
@@ -1291,7 +1303,6 @@ singularity.envWhitelist = ['SINGULARITY_TMPDIR']</code></pre>
   <category>personal</category>
   <guid>https://shixiangwang.github.io/posts/2023-05-02-random/index.html</guid>
   <pubDate>Fri, 07 Apr 2023 16:00:00 GMT</pubDate>
-  <media:content url="https://shixiangwang.github.io/posts/2023-05-02-random" medium="image"/>
 </item>
 <item>
   <title>ChatGPT 帮助我理解 Rust 的所有权</title>
@@ -1429,7 +1440,6 @@ font-style: inherit;">}</span></span></code></pre></div>
   <category>AI</category>
   <guid>https://shixiangwang.github.io/posts/2023-03-29-chatgpt-help-me-understand-rust-ownership/index.html</guid>
   <pubDate>Tue, 28 Mar 2023 16:00:00 GMT</pubDate>
-  <media:content url="https://shixiangwang.github.io/posts/2023-03-29-chatgpt-help-me-understand-rust-ownership" medium="image"/>
 </item>
 <item>
   <title>Welcome To My Blog</title>

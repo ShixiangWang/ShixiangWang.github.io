@@ -5,7 +5,7 @@ date: 2023-06-12
 categories: [bioinformatics, thought]
 draft: false
 description: ''
-image: ''
+
 toc: true
 
 format:

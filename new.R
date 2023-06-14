@@ -27,7 +27,7 @@ date: %s
 categories: [personal,R]
 draft: false
 description: ''
-image: ''
+
 toc: true
 
 format:
