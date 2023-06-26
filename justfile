@@ -1,5 +1,5 @@
 all:
-    echo "default will do nothing"
+    quarto preview
 new POST:
     R -e "source('new.R'); .new_post('{{POST}}')"
 refresh:
