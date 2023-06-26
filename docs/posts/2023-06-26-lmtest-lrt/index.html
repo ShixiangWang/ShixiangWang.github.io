@@ -1,15 +1,12 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
-
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
 <meta name="generator" content="quarto-1.3.361">
-
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-
 <meta name="author" content="Shixiang Wang">
-<meta name="dcterms.date" content="2023-05-23">
-
-<title>Reasoning - nextflow 运行 singularity no space left</title>
+<meta name="dcterms.date" content="2023-06-26">
+<title>Reasoning - lmtest 似然比检验Likelihood Ratio Test 比较两个线性模型</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -58,7 +55,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 }
 </style>
 
-
 <script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
 <script src="../../site_libs/quarto-nav/headroom.min.js"></script>
 <script src="../../site_libs/clipboard/clipboard.min.js"></script>
@@ -74,8 +70,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="dark">
-<script id="quarto-search-options" type="application/json">{
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="dark"><script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
   "collapse-after": 3,
@@ -94,44 +89,31 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-submit-button-title": "Submit",
     "search-label": "Search"
   }
-}</script>
-<style>html{ scroll-behavior: smooth; }</style>
-<!-- Primary Meta Tags -->
-<title>Reasoning - ShixiangWang's blog</title>
+}</script><style>html{ scroll-behavior: smooth; }</style>
+<!-- Primary Meta Tags --><title>Reasoning - ShixiangWang's blog</title>
 <meta name="title" content="Reasoning - ShixiangWang's blog">
 <meta name="description" content="Reasoning is a blog dedicated to exploring the intersection of data science, bioinformatics, and personal insights.">
-
-<!-- Open Graph / Facebook -->
-<meta property="og:type" content="website">
+<!-- Open Graph / Facebook --><meta property="og:type" content="website">
 <meta property="og:url" content="https://shixiangwang.github.io/posts/welcome/">
-<meta property="og:title" content="Reasoning - nextflow 运行 singularity no space left">
+<meta property="og:title" content="Reasoning - lmtest 似然比检验Likelihood Ratio Test 比较两个线性模型">
 <meta property="og:description" content="">
 <meta property="og:image" content="https://avatars.githubusercontent.com/u/25057508?v=4">
-
-<!-- Twitter -->
-<meta property="twitter:card" content="summary_large_image">
+<!-- Twitter --><meta property="twitter:card" content="summary_large_image">
 <meta property="twitter:url" content="https://shixiangwang.github.io/posts/welcome/">
 <meta property="twitter:title" content="Reasoning - ShixiangWang's blog">
 <meta property="twitter:description" content="Reasoning is a blog dedicated to exploring the intersection of data science, bioinformatics, and personal insights.">
 <meta property="twitter:image" content="https://avatars.githubusercontent.com/u/25057508?v=4">
-
-
 <meta name="referrer" content="no-referrer">
-
-
 <link rel="stylesheet" href="../../styles.css">
-<meta name="twitter:title" content="Reasoning - nextflow 运行 singularity no space left">
+<meta name="twitter:title" content="Reasoning - lmtest 似然比检验Likelihood Ratio Test 比较两个线性模型">
 <meta name="twitter:description" content="">
 <meta name="twitter:creator" content="@WangShxiang">
 <meta name="twitter:card" content="summary_large_image">
 </head>
-
 <body class="nav-fixed">
 
 <div id="quarto-search-results"></div>
-  <header id="quarto-header" class="headroom fixed-top">
-    <nav class="navbar navbar-expand-lg navbar-dark ">
-      <div class="navbar-container container-fluid">
+  <header id="quarto-header" class="headroom fixed-top"><nav class="navbar navbar-expand-lg navbar-dark "><div class="navbar-container container-fluid">
       <div class="navbar-brand-container">
     <a class="navbar-brand" href="../../index.html">
     <span class="navbar-title">Reasoning</span>
@@ -143,20 +125,20 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
-  <li class="nav-item dropdown ">
+<li class="nav-item dropdown ">
     <a class="nav-link dropdown-toggle" href="#" id="nav-menu-resources" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
  <span class="menu-text">Resources</span>
     </a>
-    <ul class="dropdown-menu" aria-labelledby="nav-menu-resources">    
-        <li>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-resources">
+<li>
     <a class="dropdown-item" href="../../resource.html" rel="" target="">
  <span class="dropdown-text">Code and Books</span></a>
   </li>  
     </ul>
-  </li>
+</li>
 </ul>
-            <ul class="navbar-nav navbar-nav-scroll ms-auto">
-  <li class="nav-item">
+<ul class="navbar-nav navbar-nav-scroll ms-auto">
+<li class="nav-item">
     <a class="nav-link" href="https://shixiangwang.github.io/cv-shixiang/" rel="" target="">
  <span class="menu-text">Resume</span></a>
   </li>  
@@ -186,19 +168,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  <span class="menu-text"></span></a>
   </li>  
 </ul>
-            <div class="quarto-navbar-tools">
+<div class="quarto-navbar-tools">
 </div>
           </div> <!-- /navcollapse -->
       </div> <!-- /container-fluid -->
-    </nav>
-</header>
-<!-- content -->
-<header id="title-block-header" class="quarto-title-block default page-columns page-full">
-  <div class="quarto-title-banner page-columns page-full">
+    </nav></header><!-- content --><header id="title-block-header" class="quarto-title-block default page-columns page-full"><div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-body">
-      <h1 class="title">nextflow 运行 singularity no space left</h1>
+      <h1 class="title">lmtest 似然比检验Likelihood Ratio Test 比较两个线性模型</h1>
                                 <div class="quarto-categories">
-                <div class="quarto-category">debug</div>
+                <div class="quarto-category">stats</div>
+                <div class="quarto-category">R</div>
               </div>
                   </div>
   </div>
@@ -216,7 +195,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <div>
       <div class="quarto-title-meta-heading">Published</div>
       <div class="quarto-title-meta-contents">
-        <p class="date">May 23, 2023</p>
+        <p class="date">June 26, 2023</p>
       </div>
     </div>
     
@@ -231,91 +210,138 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
         
     </div>
 <!-- main -->
-<main class="content quarto-banner-title-block" id="quarto-document-content">
+<main class="content quarto-banner-title-block" id="quarto-document-content"><div class="cell">
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">lmtest</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: zoo</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'zoo'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following objects are masked from 'package:base':
+
+    as.Date, as.Date.numeric</code></pre>
+</div>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">## with data from Greene (1993):</span></span>
+<span><span class="co">## load data and compute lags</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="st">"USDistLag"</span><span class="op">)</span></span>
+<span><span class="va">usdl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/na.contiguous.html">na.contiguous</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html">cbind</a></span><span class="op">(</span><span class="va">USDistLag</span>, <span class="fu"><a href="https://rdrr.io/r/stats/lag.html">lag</a></span><span class="op">(</span><span class="va">USDistLag</span>, k <span class="op">=</span> <span class="op">-</span><span class="fl">1</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span><span class="op">(</span><span class="va">usdl</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"con"</span>, <span class="st">"gnp"</span>, <span class="st">"con1"</span>, <span class="st">"gnp1"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">fm1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">con</span> <span class="op">~</span> <span class="va">gnp</span> <span class="op">+</span> <span class="va">gnp1</span>, data <span class="op">=</span> <span class="va">usdl</span><span class="op">)</span></span>
+<span><span class="va">fm2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">con</span> <span class="op">~</span> <span class="va">gnp</span> <span class="op">+</span> <span class="va">con1</span> <span class="op">+</span> <span class="va">gnp1</span>, data <span class="op">=</span> <span class="va">usdl</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">## various equivalent specifications of the LR test</span></span>
+<span><span class="co">## 下面4种操作方法是等价的</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/lmtest/man/lrtest.html">lrtest</a></span><span class="op">(</span><span class="va">fm2</span>, <span class="va">fm1</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Likelihood ratio test
+
+Model 1: con ~ gnp + con1 + gnp1
+Model 2: con ~ gnp + gnp1
+  #Df  LogLik Df  Chisq Pr(&gt;Chisq)    
+1   5 -56.069                         
+2   4 -65.871 -1 19.605  9.524e-06 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
+</div>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/lmtest/man/lrtest.html">lrtest</a></span><span class="op">(</span><span class="va">fm2</span>, <span class="fl">2</span><span class="op">)</span> <span class="co"># Remove variable with idx 2</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Likelihood ratio test
+
+Model 1: con ~ gnp + con1 + gnp1
+Model 2: con ~ gnp + gnp1
+  #Df  LogLik Df  Chisq Pr(&gt;Chisq)    
+1   5 -56.069                         
+2   4 -65.871 -1 19.605  9.524e-06 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
+</div>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/lmtest/man/lrtest.html">lrtest</a></span><span class="op">(</span><span class="va">fm2</span>, <span class="st">"con1"</span><span class="op">)</span> <span class="co"># Remove variable cond 1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Likelihood ratio test
+
+Model 1: con ~ gnp + con1 + gnp1
+Model 2: con ~ gnp + gnp1
+  #Df  LogLik Df  Chisq Pr(&gt;Chisq)    
+1   5 -56.069                         
+2   4 -65.871 -1 19.605  9.524e-06 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
+</div>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/lmtest/man/lrtest.html">lrtest</a></span><span class="op">(</span><span class="va">fm2</span>, <span class="va">.</span> <span class="op">~</span> <span class="va">.</span> <span class="op">-</span> <span class="va">con1</span><span class="op">)</span>  <span class="co"># Remove con1 by formula</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Likelihood ratio test
+
+Model 1: con ~ gnp + con1 + gnp1
+Model 2: con ~ gnp + gnp1
+  #Df  LogLik Df  Chisq Pr(&gt;Chisq)    
+1   5 -56.069                         
+2   4 -65.871 -1 19.605  9.524e-06 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
+</div>
+</div>
+<p>Survival 模型交互项：</p>
+<div class="cell">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/therneau/survival">survival</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">fit2</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/survival/man/coxph.html">coxph</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/survival/man/Surv.html">Surv</a></span><span class="op">(</span><span class="va">time</span>, <span class="va">status</span><span class="op">)</span> <span class="op">~</span> <span class="va">age</span> <span class="op">+</span> <span class="va">sex</span><span class="op">*</span><span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="va">ph.ecog</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">lung</span><span class="op">)</span></span>
+<span><span class="fu">lmtest</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/lmtest/man/lrtest.html">lrtest</a></span><span class="op">(</span><span class="va">fit2</span>, <span class="va">.</span> <span class="op">~</span> <span class="va">.</span> <span class="op">-</span> <span class="va">sex</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="va">ph.ecog</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Likelihood ratio test
+
+Model 1: Surv(time, status) ~ age + sex * factor(ph.ecog)
+Model 2: Surv(time, status) ~ age + sex + factor(ph.ecog)
+  #Df  LogLik Df  Chisq Pr(&gt;Chisq)
+1   7 -728.93                     
+2   5 -729.05 -2 0.2263      0.893</code></pre>
+</div>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">fit2</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Call:
+coxph(formula = Surv(time, status) ~ age + sex * factor(ph.ecog), 
+    data = lung)
+
+  n= 227, number of events= 164 
+   (1 observation deleted due to missingness)
+
+                          coef exp(coef)  se(coef)      z Pr(&gt;|z|)  
+age                   0.009667  1.009714  0.009601  1.007   0.3140  
+sex                  -0.641345  0.526583  0.385890 -1.662   0.0965 .
+factor(ph.ecog)1      0.335017  1.397964  0.609291  0.550   0.5824  
+factor(ph.ecog)2      0.618092  1.855384  0.686960  0.900   0.3683  
+factor(ph.ecog)3      1.941570  6.969687  1.033409  1.879   0.0603 .
+sex:factor(ph.ecog)1  0.063350  1.065400  0.451918  0.140   0.8885  
+sex:factor(ph.ecog)2  0.221865  1.248403  0.507016  0.438   0.6617  
+sex:factor(ph.ecog)3        NA        NA  0.000000     NA       NA  
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+                     exp(coef) exp(-coef) lower .95 upper .95
+age                     1.0097     0.9904    0.9909     1.029
+sex                     0.5266     1.8990    0.2472     1.122
+factor(ph.ecog)1        1.3980     0.7153    0.4235     4.615
+factor(ph.ecog)2        1.8554     0.5390    0.4827     7.131
+factor(ph.ecog)3        6.9697     0.1435    0.9195    52.827
+sex:factor(ph.ecog)1    1.0654     0.9386    0.4394     2.583
+sex:factor(ph.ecog)2    1.2484     0.8010    0.4621     3.372
+sex:factor(ph.ecog)3        NA         NA        NA        NA
+
+Concordance= 0.636  (se = 0.025 )
+Likelihood ratio test= 31.09  on 7 df,   p=6e-05
+Wald test            = 30.72  on 7 df,   p=7e-05
+Score (logrank) test = 33.92  on 7 df,   p=2e-05</code></pre>
+</div>
+</div>
+<p>除了用 likelihood ratio test，还可以使用 <code><a href="https://rdrr.io/r/stats/anova.html">anova()</a></code> 去对比。</p>
+<p>但如果数据不一致时，上述模型无法见效。这时，应把不同的对比作为变量构建模型，然后可以采用 <code><a href="https://rdrr.io/r/stats/aov.html">aov()</a></code> 进行方差分析，看变量是否显著以评估是否有组间差异。</p>
 
 
 
-
-<p>运行 nextflow 时报错没有空间：</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">Error</span> executing process <span class="op">&gt;</span> <span class="st">'NFCORE_CIRCDNA:CIRCDNA:CNVKIT_BATCH (N87-TR)'</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="ex">Caused</span> by:</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="ex">Process</span> <span class="kw">`</span><span class="ex">NFCORE_CIRCDNA:CIRCDNA:CNVKIT_BATCH</span> <span class="er">(</span><span class="ex">N87-TR</span><span class="kw">)`</span> terminated with an error exit status <span class="er">(</span><span class="ex">255</span><span class="kw">)</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="ex">Command</span> executed:</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  <span class="ex">cnvkit.py</span> <span class="dt">\</span></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>      batch <span class="dt">\</span></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>      N87-TR.bam <span class="dt">\</span></span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>       <span class="dt">\</span></span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>      <span class="at">--reference</span> GRCh38_cnvkit_filtered_ref.cnn <span class="dt">\</span></span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>      <span class="at">--processes</span> 4 <span class="dt">\</span></span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>      <span class="at">--method</span> wgs</span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span> <span class="op">&lt;&lt;-END_VERSIONS</span> <span class="op">&gt;</span> versions.yml</span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="st">  "NFCORE_CIRCDNA:CIRCDNA:CNVKIT_BATCH":</span></span>
-<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="st">      cnvkit: </span><span class="va">$(</span><span class="ex">cnvkit.py</span> version <span class="kw">|</span> <span class="fu">sed</span> <span class="at">-e</span> <span class="st">"s/cnvkit v//g"</span><span class="va">)</span></span>
-<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="st">  END_VERSIONS</span></span>
-<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a><span class="st">Command exit status:</span></span>
-<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a><span class="st">  255</span></span>
-<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a><span class="st">Command output:</span></span>
-<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a><span class="st">  (empty)</span></span>
-<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a><span class="st">Command error:</span></span>
-<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a><span class="st">  INFO:    Converting SIF file to temporary sandbox...</span></span>
-<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a><span class="st">  FATAL:   while extracting /data3/wsx/nf-core-circdna-dev/workflow/../singularity-images/depot.galaxyproject.org-singularity-cnvkit-0.9.9--pyhdfd78af_0.img: root filesystem extraction failed: extract command failed: WARNING: passwd file doesn't exist in container, not updating</span></span>
-<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a><span class="st">  WARNING: group file doesn't exist in container, not updating</span></span>
-<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a><span class="st">  WARNING: Skipping mount /etc/hosts [binds]: /etc/hosts doesn't exist in container</span></span>
-<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a><span class="st">  WARNING: Skipping mount /etc/localtime [binds]: /etc/localtime doesn't exist in container</span></span>
-<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a><span class="st">  WARNING: Skipping mount proc [kernel]: /proc doesn't exist in container</span></span>
-<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a><span class="st">  WARNING: Skipping mount /data3/wsx/miniconda3/var/singularity/mnt/session/tmp [tmp]: /tmp doesn't exist in container</span></span>
-<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a><span class="st">  WARNING: Skipping mount /data3/wsx/miniconda3/var/singularity/mnt/session/var/tmp [tmp]: /var/tmp doesn't exist in container</span></span>
-<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a><span class="st">  WARNING: Skipping mount /data3/wsx/miniconda3/var/singularity/mnt/session/etc/resolv.conf [files]: /etc/resolv.conf doesn't exist in container</span></span>
-<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a><span class="st">  Write on output file failed because No space left on device</span></span>
-<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a><span class="st">  FATAL ERROR:writer: failed to write file /image/root/.singularity.d/startscript</span></span>
-<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a><span class="st">  Parallel unsquashfs: Using 48 processors</span></span>
-<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a><span class="st">  29783 inodes (35465 blocks) to write</span></span>
-<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a><span class="st">  : exit status 1</span></span>
-<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a><span class="st">Work dir:</span></span>
-<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a><span class="st">  /data3/wsx/nxf_wgs/work/e9/902f1684d95d41a61ae28ef3e529b3</span></span>
-<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a><span class="st">Tip: when you have fixed the problem you can continue the execution adding the option </span><span class="kw">`</span><span class="ex">-resume</span><span class="kw">`</span> to the run command line</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>我查了下 <code>/tmp</code> 缺失很少或没有了，尝试删除我自己产生的临时目录再次运行还是报错。原因是 singularity 镜像在 <code>/tmp</code> 目录下解压空间不够导致的。</p>
-<p>实际上我在 <code>~/.bashrc</code> 下是设置过临时目录和singularity的缓存的：</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="bu">export</span> <span class="va">TMPDIR</span><span class="op">=</span><span class="va">$HOME</span>/TEMPDIR</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="bu">export</span> <span class="va">TEMP</span><span class="op">=</span><span class="va">$HOME</span>/TEMPDIR</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="bu">export</span> <span class="va">TMP</span><span class="op">=</span><span class="va">$HOME</span>/TEMPDIR</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="bu">export</span> <span class="va">NXF_SINGULARITY_CACHEDIR</span><span class="op">=</span><span class="va">$HOME</span>/NXF_singularity</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="bu">export</span> <span class="va">SINGULARITY_TMPDIR</span><span class="op">=</span><span class="va">$HOME</span>/singularity-env</span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="bu">export</span> <span class="va">SINGULARITY_CACHEDIR</span><span class="op">=</span><span class="va">$HOME</span>/singularity-env</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>这就相当纳闷了。在 Github 发现一个<a href="https://github.com/nextflow-io/nextflow/issues/2786">帖子</a>，讨论说这个问题是 nextflow 没有正常地读取和设置 singularity 的临时目录磁盘挂载。</p>
-<p>想一想，确实是这个问题。为了确定，我在报错的 work 目录下查看和调试了 <code>.command.run</code> 文件，当设置挂载后确实是可以正常工作的。</p>
-<p>于是按照下面进行了 <code>nextflow.config</code> 的配置：</p>
-<pre><code>singularity {
-enabled = true
-autoMounts = true
-runOptions = '-B $SINGULARITY_TMPDIR:/tmp -B $SINGULARITY_TMPDIR:/scratch'
-//Used to allow Singularity to access bashrc variables
-envWhitelist = ['SINGULARITY_TMPDIR']
-}</code></pre>
-<p>还是不行，后面对比时猛然发现在 <code>nextflow.config</code> 中 <code>autoMounts</code> 的写法是 <code>singularity.autoMounts = true</code>。 所以我添加了前缀：</p>
-<pre><code>singularity.autoMounts = true
-singularity.runOptions = '-B $SINGULARITY_TMPDIR:/tmp'
-singularity.envWhitelist = ['SINGULARITY_TMPDIR']</code></pre>
-<p>这样就没有问题了。</p>
-
-
-
-</main> <!-- /main -->
-<script type="text/javascript" src="//rf.revolvermaps.com/0/0/7.js?i=5j5b62dhqyd&amp;m=7&amp;c=ff0000&amp;cr1=ffffff&amp;sx=0" async="async"></script>
-<script id="quarto-html-after-body" type="application/javascript">
+</main><!-- /main --><script type="text/javascript" src="//rf.revolvermaps.com/0/0/7.js?i=5j5b62dhqyd&amp;m=7&amp;c=ff0000&amp;cr1=ffffff&amp;sx=0" async="async"></script><script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
     const mode = bsSheetEl.getAttribute("data-mode");
@@ -547,19 +573,17 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }
   }
 });
-</script>
-<script src="https://giscus.app/client.js" data-repo="shixiangwang/shixiangwang.github.io" data-repo-id="MDEwOlJlcG9zaXRvcnkzNDgxODQ1MTY=" data-category="General" data-category-id="DIC_kwDOFMDfxM4CVXEf" data-mapping="title" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="top" data-theme="light" data-lang="en" crossorigin="anonymous" async="">
+</script><script src="https://giscus.app/client.js" data-repo="shixiangwang/shixiangwang.github.io" data-repo-id="MDEwOlJlcG9zaXRvcnkzNDgxODQ1MTY=" data-category="General" data-category-id="DIC_kwDOFMDfxM4CVXEf" data-mapping="title" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="top" data-theme="light" data-lang="en" crossorigin="anonymous" async="">
 </script>
 </div> <!-- /content -->
-<footer class="footer">
-  <div class="nav-footer">
+<footer class="footer"><div class="nav-footer">
     <div class="nav-footer-left">Blog made with 💜 and <a href="https://quarto.org/">Quarto</a>, by Shixiang Wang. License: <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC BY-SA 2.0</a>.</div>   
     <div class="nav-footer-center">
       &nbsp;
     </div>
     <div class="nav-footer-right">
       <ul class="footer-items list-unstyled">
-    <li class="nav-item compact">
+<li class="nav-item compact">
     <a class="nav-link" href="https://github.com/shixiangwang/">
       <i class="bi bi-github" role="img">
 </i> 
@@ -584,10 +608,9 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     </a>
   </li>  
 </ul>
-    </div>
+</div>
   </div>
 </footer>
-
 
 
 <script src="../../site_libs/quarto-html/zenscroll-min.js"></script>

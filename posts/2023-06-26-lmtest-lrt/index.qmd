@@ -1,0 +1,51 @@
+---
+title: lmtest 似然比检验Likelihood Ratio Test 比较两个线性模型
+author: Shixiang Wang
+date: 2023-06-26
+categories: [stats,R]
+draft: false
+description: ''
+
+toc: true
+
+format:
+  html:
+    code-fold: false
+    code-overflow: wrap
+    code-tools: false
+---
+
+
+```{r}
+library(lmtest)
+
+## with data from Greene (1993):
+## load data and compute lags
+data("USDistLag")
+usdl <- na.contiguous(cbind(USDistLag, lag(USDistLag, k = -1)))
+colnames(usdl) <- c("con", "gnp", "con1", "gnp1")
+
+fm1 <- lm(con ~ gnp + gnp1, data = usdl)
+fm2 <- lm(con ~ gnp + con1 + gnp1, data = usdl)
+
+## various equivalent specifications of the LR test
+## 下面4种操作方法是等价的
+lrtest(fm2, fm1)
+lrtest(fm2, 2) # Remove variable with idx 2
+lrtest(fm2, "con1") # Remove variable cond 1
+lrtest(fm2, . ~ . - con1)  # Remove con1 by formula
+```
+
+Survival 模型交互项：
+
+```{r}
+library(survival)
+
+fit2 = coxph(Surv(time, status) ~ age + sex*factor(ph.ecog), data = lung)
+lmtest::lrtest(fit2, . ~ . - sex:factor(ph.ecog))
+summary(fit2)
+```
+
+除了用 likelihood ratio test，还可以使用 `anova()` 去对比。
+
+但如果数据不一致时，上述模型无法见效。这时，应把不同的对比作为变量构建模型，然后可以采用 `aov()` 进行方差分析，看变量是否显著以评估是否有组间差异。
