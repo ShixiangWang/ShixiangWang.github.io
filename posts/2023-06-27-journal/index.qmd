@@ -1,0 +1,21 @@
+---
+title: 2023-06-27
+author: Shixiang Wang
+date: 2023-06-27
+categories: [journal]
+draft: false
+description: ''
+
+toc: true
+
+format:
+  html:
+    code-fold: false
+    code-overflow: wrap
+    code-tools: false
+---
+
+今天记录在《经济学讲义》中看到的一句话：
+
+> 你拥有你的生命，但是你的生命是怎么度过的，你的职业是怎样选择的，很大程度上是由社会上其他人决定的。
+

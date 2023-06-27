@@ -10,7 +10,28 @@
 <atom:link href="https://shixiangwang.github.io/index.xml" rel="self" type="application/rss+xml"/>
 <description>Reasoning is a blog dedicated to exploring the intersection of data science, bioinformatics, and personal insights.</description>
 <generator>quarto-1.3.361</generator>
-<lastBuildDate>Sun, 25 Jun 2023 16:00:00 GMT</lastBuildDate>
+<lastBuildDate>Mon, 26 Jun 2023 16:00:00 GMT</lastBuildDate>
+<item>
+  <title>2023-06-27</title>
+  <dc:creator>Shixiang Wang</dc:creator>
+  <link>https://shixiangwang.github.io/posts/2023-06-27-journal/index.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<p>今天记录在《经济学讲义》中看到的一句话：</p>
+<blockquote class="blockquote">
+<p>你拥有你的生命，但是你的生命是怎么度过的，你的职业是怎样选择的，很大程度上是由社会上其他人决定的。</p>
+</blockquote>
+
+
+
+ ]]></description>
+  <category>journal</category>
+  <guid>https://shixiangwang.github.io/posts/2023-06-27-journal/index.html</guid>
+  <pubDate>Mon, 26 Jun 2023 16:00:00 GMT</pubDate>
+</item>
 <item>
   <title>2023-06-26</title>
   <dc:creator>Shixiang Wang</dc:creator>
