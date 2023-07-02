@@ -1,0 +1,24 @@
+---
+title: 博客 links
+author: Shixiang Wang
+date: 2023-07-02
+categories: [note]
+draft: false
+description: ''
+
+toc: true
+
+format:
+  html:
+    code-fold: false
+    code-overflow: wrap
+    code-tools: false
+---
+
+之前在构建个人域名网站 <shixiangwang.work> 时，把浏览器书签的所有博客链接都进行了整理。
+
+由于云服务器的时间有限，运维实际成本想了想还是蛮高的，没多久后也没考虑再维护了。
+这里把之前整理的链接备份一下，以方便查找复用，如果对一些读者有帮助也是极好的了。
+
+[点击查看链接](友链 _ 王诗翔 NetSpace.html)
+

@@ -10,7 +10,27 @@
 <atom:link href="https://shixiangwang.github.io/index.xml" rel="self" type="application/rss+xml"/>
 <description>Reasoning is a blog dedicated to exploring the intersection of data science, bioinformatics, and personal insights.</description>
 <generator>quarto-1.3.361</generator>
-<lastBuildDate>Tue, 27 Jun 2023 16:00:00 GMT</lastBuildDate>
+<lastBuildDate>Sat, 01 Jul 2023 16:00:00 GMT</lastBuildDate>
+<item>
+  <title>博客 links</title>
+  <dc:creator>Shixiang Wang</dc:creator>
+  <link>https://shixiangwang.github.io/posts/2023-07-02-links/index.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<p>之前在构建个人域名网站 &lt;shixiangwang.work&gt; 时，把浏览器书签的所有博客链接都进行了整理。</p>
+<p>由于云服务器的时间有限，运维实际成本想了想还是蛮高的，没多久后也没考虑再维护了。 这里把之前整理的链接备份一下，以方便查找复用，如果对一些读者有帮助也是极好的了。</p>
+<p><a href="友链 _ 王诗翔 NetSpace.html">点击查看链接</a></p>
+
+
+
+ ]]></description>
+  <category>note</category>
+  <guid>https://shixiangwang.github.io/posts/2023-07-02-links/index.html</guid>
+  <pubDate>Sat, 01 Jul 2023 16:00:00 GMT</pubDate>
+</item>
 <item>
   <title>2023-06-28</title>
   <dc:creator>Shixiang Wang</dc:creator>
