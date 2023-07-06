@@ -1,0 +1,23 @@
+---
+title: 生物医学能离开生物信息学吗？
+author: Shixiang Wang
+date: 2023-07-06
+categories: [thought]
+draft: false
+description: ''
+
+toc: true
+
+format:
+  html:
+    code-fold: false
+    code-overflow: wrap
+    code-tools: false
+---
+
+不能。
+
+整个生物医学领域，已经由实验科学进入了数据科学的层次，而这一点无法再倒退。
+生物信息学者/家（bioinformatian/computational biologist），已经成为了该领域不可或缺的存在。无论是狭义的组学，还是更广义的分子结构计算/图形处理等，生物信息学者已经成为了科学发现/技术创造的中间力量。这也正是为什么从事生物信息学的人能从致谢名单中走到作者列表，走到第一/通讯作者的根本原因。
+
+如果你是一个纯湿实验的研究者，你还在心里鄙夷这个行业，你就应该反思了，时代的进步不会等待你的落后。
