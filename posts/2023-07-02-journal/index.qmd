@@ -1,0 +1,23 @@
+---
+title: 2023-07-02
+author: Shixiang Wang
+date: 2023-07-02
+categories: [journal]
+draft: false
+description: ''
+
+toc: true
+
+format:
+  html:
+    code-fold: false
+    code-overflow: wrap
+    code-tools: false
+---
+
+今天摘录从书中看到的一句话。
+
+> 我们应该利用自己有限的时间、有限的精力，在自己所能涉及的所有领域、所有活动、所有选项中，
+> 根据边际平衡的规律来分配时间、金钱、精力和其他资源，从而使总效用达到最大。
+
+这概括了生命一生的所有努力。
