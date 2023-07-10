@@ -1,0 +1,28 @@
+---
+title: might & right
+author: Shixiang Wang
+date: 2023-07-10
+categories: [note]
+draft: false
+description: ''
+
+toc: true
+
+format:
+  html:
+    code-fold: false
+    code-overflow: wrap
+    code-tools: false
+---
+
+摘录一句话。
+
+能力：might
+
+权利：right
+
+能力取决于自己能够占有多少，而权利取决于社会上其他人愿意给你多少。
+
+---
+
+所以，该追求哪种呢？

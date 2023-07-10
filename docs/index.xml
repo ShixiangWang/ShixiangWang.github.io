@@ -12,6 +12,243 @@
 <generator>quarto-1.3.361</generator>
 <lastBuildDate>Sun, 09 Jul 2023 16:00:00 GMT</lastBuildDate>
 <item>
+  <title>scrna 核心工具</title>
+  <dc:creator>Shixiang Wang</dc:creator>
+  <link>https://shixiangwang.github.io/posts/2023-07-10-scrna-recom/index.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<p>Repo {<a href="https://github.com/WXlab-NJMU/scrna-recom">scrna-recom</a>} 单细胞综述文章关于单细胞转录组分析的流程、软件、安装等的一些说明。这里我主要是拷贝下其中关于核心工具的整理，防止迷失。</p>
+
+<style>
+    table {
+        border-collapse: collapse;
+        width: 100%;
+        font-family: Arial, sans-serif;
+    }
+
+    th,
+    td {
+        border: 1px solid #ddd;
+        padding: 8px;
+    }
+
+    th {
+        background-color: #f2f2f2;
+    }
+
+    a {
+        text-decoration: underline;
+    }
+</style>
+<table>
+<thead>
+<tr>
+<th>
+</th>
+<th>
+Package
+</th>
+<th>
+Tutorial
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td rowspan="1">
+Raw Data Processing
+</td>
+<td>
+Cell Ranger
+</td>
+<td>
+<a href="https://support.10xgenomics.com/single-cell-gene-expression/software/pipelines/latest/what-is-cell-ranger">https://support.10xgenomics.com/single-cell-gene-expression/software/pipelines/latest/what-is-cell-ranger</a>
+</td>
+</tr>
+<tr>
+<td rowspan="3">
+Quality Control
+</td>
+<td>
+DoubletFinder
+</td>
+<td>
+<a href="https://github.com/chris-mcginnis-ucsf/DoubletFinder">https://github.com/chris-mcginnis-ucsf/DoubletFinder</a>
+</td>
+</tr>
+<tr>
+<td>
+Seurat
+</td>
+<td>
+<a href="https://satijalab.org/seurat/articles/pbmc3k_tutorial.html">https://satijalab.org/seurat/articles/pbmc3k_tutorial.html</a>
+</td>
+</tr>
+<tr>
+<td>
+SoupX
+</td>
+<td>
+<a href="https://rawcdn.githack.com/constantAmateur/SoupX/204b602418df12e9fdb4b68775a8b486c6504fe4/inst/doc/pbmcTutorial.html">https://rawcdn.githack.com/constantAmateur/SoupX/204b602418df12e9fdb4b68775a8b486c6504fe4/inst/doc/pbmcTutorial.html</a>
+</td>
+</tr>
+<tr>
+<td rowspan="1">
+Normalization
+</td>
+<td>
+Seurat
+</td>
+<td>
+<a href="https://satijalab.org/seurat/articles/pbmc3k_tutorial.html#normalizing-the-data-1">https://satijalab.org/seurat/articles/pbmc3k_tutorial.html#normalizing-the-data-1</a>
+</td>
+</tr>
+<tr>
+<td rowspan="3">
+Integration
+</td>
+<td>
+Seurat:CCA,RPCA
+</td>
+<td>
+<a href="https://satijalab.org/seurat/articles/integration_rpca.html">https://satijalab.org/seurat/articles/integration_rpca.html</a>
+</td>
+</tr>
+<tr>
+<td>
+Liger
+</td>
+<td>
+<a href="https://github.com/welch-lab/liger">https://github.com/welch-lab/liger</a>
+</td>
+</tr>
+<tr>
+<td>
+Harmony
+</td>
+<td>
+<a href="https://github.com/immunogenomics/harmony">https://github.com/immunogenomics/harmony</a>
+</td>
+</tr>
+<tr>
+<td rowspan="1">
+Dimensional Reduction
+</td>
+<td>
+Seurat:PCA,UMAP
+</td>
+<td>
+<a href="https://satijalab.org/seurat/articles/pbmc3k_tutorial.html#perform-linear-dimensional-reduction-1">https://satijalab.org/seurat/articles/pbmc3k_tutorial.html#perform-linear-dimensional-reduction-1</a>
+</td>
+</tr>
+<tr>
+<td rowspan="1">
+Clustering
+</td>
+<td>
+Seurat
+</td>
+<td>
+<a href="https://satijalab.org/seurat/articles/pbmc3k_tutorial.html#cluster-the-cells-1">https://satijalab.org/seurat/articles/pbmc3k_tutorial.html#cluster-the-cells-1</a>
+</td>
+</tr>
+<tr>
+<td rowspan="2">
+Cell type annotation
+</td>
+<td>
+SingleR
+</td>
+<td>
+<a href="https://github.com/dviraran/SingleR">https://github.com/dviraran/SingleR</a>
+</td>
+</tr>
+<tr>
+<td>
+scCATCH
+</td>
+<td>
+<a href="https://github.com/ZJUFanLab/scCATCH">https://github.com/ZJUFanLab/scCATCH</a>
+</td>
+</tr>
+<tr>
+<td rowspan="1">
+Regulon analysis
+</td>
+<td>
+SCENIC
+</td>
+<td>
+<a href="https://pyscenic.readthedocs.io/en/latest/">https://pyscenic.readthedocs.io/en/latest/</a>
+</td>
+</tr>
+<tr>
+<td rowspan="2">
+Trajectory inference
+</td>
+<td>
+Monocle3
+</td>
+<td>
+<a href="https://cole-trapnell-lab.github.io/monocle3/">https://cole-trapnell-lab.github.io/monocle3/</a>
+</td>
+</tr>
+<tr>
+<td>
+scVelo
+</td>
+<td>
+<a href="https://github.com/theislab/scvelo">https://github.com/theislab/scvelo</a>
+</td>
+</tr>
+<tr>
+<td rowspan="1">
+Cell communication
+</td>
+<td>
+CellChat
+</td>
+<td>
+<a href="https://github.com/sqjin/CellChat">https://github.com/sqjin/CellChat</a>
+</td>
+</tr>
+<tr>
+<td rowspan="2">
+Metabolic analysis
+</td>
+<td>
+scMetabolism
+</td>
+<td>
+<a href="https://github.com/wu-yc/scMetabolism">https://github.com/wu-yc/scMetabolism</a>
+</td>
+</tr>
+<tr>
+<td>
+scFEA
+</td>
+<td>
+<a href="https://github.com/changwn/scFEA">https://github.com/changwn/scFEA</a>
+</td>
+</tr>
+</tbody>
+
+</table>
+<p>Workflow:</p>
+<p><img src="https://shixiangwang.github.io/posts/2023-07-10-scrna-recom/https:/raw.githubusercontent.com/WXlab-NJMU/scrna-recom/main/img/workflow.png" class="img-fluid"></p>
+
+
+
+ ]]></description>
+  <category>note</category>
+  <category>scRNA-seq</category>
+  <guid>https://shixiangwang.github.io/posts/2023-07-10-scrna-recom/index.html</guid>
+  <pubDate>Sun, 09 Jul 2023 16:00:00 GMT</pubDate>
+</item>
+<item>
   <title>2023-07-10</title>
   <dc:creator>Shixiang Wang</dc:creator>
   <link>https://shixiangwang.github.io/posts/2023-07-10-journal/index.html</link>
@@ -37,6 +274,29 @@
  ]]></description>
   <category>journal</category>
   <guid>https://shixiangwang.github.io/posts/2023-07-10-journal/index.html</guid>
+  <pubDate>Sun, 09 Jul 2023 16:00:00 GMT</pubDate>
+</item>
+<item>
+  <title>might &amp; right</title>
+  <dc:creator>Shixiang Wang</dc:creator>
+  <link>https://shixiangwang.github.io/posts/2023-07-10-might-and-right/index.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<p>摘录一句话。</p>
+<p>能力：might</p>
+<p>权利：right</p>
+<p>能力取决于自己能够占有多少，而权利取决于社会上其他人愿意给你多少。</p>
+<hr>
+<p>所以，该追求哪种呢？</p>
+
+
+
+ ]]></description>
+  <category>note</category>
+  <guid>https://shixiangwang.github.io/posts/2023-07-10-might-and-right/index.html</guid>
   <pubDate>Sun, 09 Jul 2023 16:00:00 GMT</pubDate>
 </item>
 <item>
@@ -1842,50 +2102,6 @@ singularity.envWhitelist = ['SINGULARITY_TMPDIR']</code></pre>
   <category>note</category>
   <guid>https://shixiangwang.github.io/posts/2023-05-12-single-cell-sequencing-protocols/index.html</guid>
   <pubDate>Thu, 11 May 2023 16:00:00 GMT</pubDate>
-</item>
-<item>
-  <title>晒晒娃和Y叔R书的合照</title>
-  <dc:creator>Shixiang Wang</dc:creator>
-  <link>https://shixiangwang.github.io/posts/2023-04-08-yiyi-with-book-by-y/index.html</link>
-  <description><![CDATA[ 
-
-
-
-
-<p>买了一本Y叔最新出的新书，出版社的张编辑又送了一本，这里晒一下崽崽和图书的照片。</p>
-<p><img src="https://shixiangwang.github.io/posts/2023-04-08-yiyi-with-book-by-y/IMG_6364.JPG" class="img-fluid"></p>
-<blockquote class="blockquote">
-<p>摄影自我媳妇</p>
-</blockquote>
-
-
-
- ]]></description>
-  <category>personal</category>
-  <category>R</category>
-  <guid>https://shixiangwang.github.io/posts/2023-04-08-yiyi-with-book-by-y/index.html</guid>
-  <pubDate>Fri, 07 Apr 2023 16:00:00 GMT</pubDate>
-</item>
-<item>
-  <title>随想</title>
-  <dc:creator>Shixiang Wang</dc:creator>
-  <link>https://shixiangwang.github.io/posts/2023-05-02-random/index.html</link>
-  <description><![CDATA[ 
-
-
-
-
-<p>越长大，突然明白这个世界都是在玩一场资源分配的游戏。</p>
-<p>卷不是目的，只是无能为力。</p>
-<p>超脱者永远是少数。</p>
-<p>所谓，求仙不得仙，只能老实做人。</p>
-
-
-
- ]]></description>
-  <category>personal</category>
-  <guid>https://shixiangwang.github.io/posts/2023-05-02-random/index.html</guid>
-  <pubDate>Fri, 07 Apr 2023 16:00:00 GMT</pubDate>
 </item>
 </channel>
 </rss>
