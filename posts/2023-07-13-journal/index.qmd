@@ -1,0 +1,27 @@
+---
+title: 2023-07-13
+author: Shixiang Wang
+date: 2023-07-13
+categories: [journal]
+draft: false
+description: ''
+
+toc: true
+
+format:
+  html:
+    code-fold: false
+    code-overflow: wrap
+    code-tools: false
+---
+
+今天还是摘要书中看到的话。
+
+> 我们面临的，就是两个分离的世界：一个世界是我们真实的世界、看得见摸得着的物理世界。
+> 在这里，一切都按照自然规律有条不紊地进行着。另一个是看不见、摸不着的观念世界。
+> 在那里，人们时刻在形成、比较、交换和修正对未来的预期。
+
+> 每个人生活在世界上，都至少面临四种最基本的约束，那就是：
+> 东西不够、时间有限、相互依赖、需要协调。
+
+——《薛兆丰经济学讲义》
