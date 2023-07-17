@@ -16,4 +16,5 @@ fn main() {
     
     println!("{:#?}", user1);
     dbg!(user1);
+
 }
