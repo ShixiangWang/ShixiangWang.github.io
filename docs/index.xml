@@ -10,7 +10,25 @@
 <atom:link href="https://shixiangwang.github.io/index.xml" rel="self" type="application/rss+xml"/>
 <description>Reasoning is a blog dedicated to exploring the intersection of data science, bioinformatics, and personal insights.</description>
 <generator>quarto-1.3.361</generator>
-<lastBuildDate>Wed, 12 Jul 2023 16:00:00 GMT</lastBuildDate>
+<lastBuildDate>Mon, 17 Jul 2023 16:00:00 GMT</lastBuildDate>
+<item>
+  <title>2023-07-18</title>
+  <dc:creator>Shixiang Wang</dc:creator>
+  <link>https://shixiangwang.github.io/posts/2023-07-18-journal/index.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<p>Without hard work, nothing grows but weeds.</p>
+
+
+
+ ]]></description>
+  <category>journal</category>
+  <guid>https://shixiangwang.github.io/posts/2023-07-18-journal/index.html</guid>
+  <pubDate>Mon, 17 Jul 2023 16:00:00 GMT</pubDate>
+</item>
 <item>
   <title>Single-cell Workshop 2021 - 01 - scRNASeq 分析基础</title>
   <dc:creator>Shixiang Wang</dc:creator>
@@ -3018,37 +3036,6 @@ loaded via a namespace (and not attached):
   <category>scRNA-seq</category>
   <guid>https://shixiangwang.github.io/posts/2023-05-31-scrna-seq_online-00/index.html</guid>
   <pubDate>Tue, 30 May 2023 16:00:00 GMT</pubDate>
-</item>
-<item>
-  <title>TCCIA：第一个连接CircRNA和免疫治疗的数据库</title>
-  <dc:creator>Shixiang Wang</dc:creator>
-  <link>https://shixiangwang.github.io/posts/2023-05-29-tccia/index.html</link>
-  <description><![CDATA[ 
-
-
-
-
-<p>CircRNA是一种形成闭环结构的RNA类型，已被证明在调节基因表达方面发挥重要作用。 然而，CircRNA在免疫治疗中的作用和标志物潜能仍未被充分研究。我们很高兴地向大家介绍TCCIA（The Cancer CircRNA Immunome Atlas），它是一个广泛且用户友好的数据库，用于研究接受针对CTLA4，PD-1或PDL-1等靶点的免疫治疗的18个临床队列中的circRNA表达和分析。这一创新资源提供了cohorts和molecule级别上circRNAs、临床表型和免疫特征/浸润的系统比较。该数据库包括3700多个癌症样本，来自5种不同类型的癌症患者，这些患者单独或与化疗、靶向治疗以及其他免疫治疗药物联合使用免疫检查点抑制剂（ICI）进行治疗。</p>
-<p>TCCIA代表了研究circRNA及其作为预测免疫治疗响应生物标志物的潜力以及它们在癌症中的广泛功能的独特机会。无论你是研究circRNA的研究人员还是对改善新治疗策略以提高患者预后感兴趣的临床医生，TCCIA都提供了有价值的信息，可以深入了解circRNA、免疫系统和癌症之间复杂的相互作用。</p>
-<p><img src="https://shixiangwang.github.io/posts/2023-05-29-tccia/https:/files.mdnice.com/user/4331/1ad12065-d1c6-4296-8e26-1365cc53643e.png" class="img-fluid"></p>
-<p>TCCIA 分为多个不同的页面，它以仓库页面的数据查阅和筛选为起点，允许用户从多个不同的层面和角度探索CircRNA在免疫治疗中的价值。</p>
-<p><img src="https://shixiangwang.github.io/posts/2023-05-29-tccia/https:/files.mdnice.com/user/4331/dc109156-fe23-4428-aeb0-1b79678d623a.png" class="img-fluid"></p>
-<p>TCCIA 是一次成功的线上科研协作，来自国内外各地的研究者贡献自己的数据和知识、资源与技术。我们旨在提供一个有用且好用的CircRNA在线研究平台，希望CircRNA领域的研究者能从中获益。目前，TCCIA正式进入开放测试阶段，它可以通过 <a href="http://biotrainee.vip:18888/TCCIA/" class="uri">http://biotrainee.vip:18888/TCCIA/</a> 和 <a href="https://shiny.hiplot.cn/TCCIA" class="uri">https://shiny.hiplot.cn/TCCIA</a> 进行在线访问。我们欢迎大家进行试用并提供宝贵的反馈意见，任何使用不便或者新功能特性的提议请发送到王诗翔（shixiang1994wang@gmail.com）或周建国（jianguo.zhou@zmu.edu.cn），我们团队将尽力回复和解决，我们期待大家的参与，一起为该领域的进步添砖加瓦。</p>
-<hr>
-<p>下面是一些功能的预览图：</p>
-<p><img src="https://shixiangwang.github.io/posts/2023-05-29-tccia/https:/files.mdnice.com/user/4331/7198a287-71c5-46fc-ba07-c994450a00e4.png" class="img-fluid"></p>
-<p><img src="https://shixiangwang.github.io/posts/2023-05-29-tccia/https:/files.mdnice.com/user/4331/fbb7b00d-5ea5-47c5-b711-a0edef0cde71.png" class="img-fluid"></p>
-<p><img src="https://shixiangwang.github.io/posts/2023-05-29-tccia/https:/files.mdnice.com/user/4331/8df4b0c0-a40a-4dbd-a877-da7a6433d3b3.png" class="img-fluid"></p>
-<p><img src="https://shixiangwang.github.io/posts/2023-05-29-tccia/https:/files.mdnice.com/user/4331/94865b31-638b-4023-b59d-1c91efbae0d8.png" class="img-fluid"></p>
-<p><img src="https://shixiangwang.github.io/posts/2023-05-29-tccia/https:/files.mdnice.com/user/4331/3b41c7d9-b2a2-467e-a6bc-2f4604a9711c.png" class="img-fluid"></p>
-
-
-
- ]]></description>
-  <category>bioinformatics</category>
-  <category>shiny</category>
-  <guid>https://shixiangwang.github.io/posts/2023-05-29-tccia/index.html</guid>
-  <pubDate>Sun, 28 May 2023 16:00:00 GMT</pubDate>
 </item>
 </channel>
 </rss>

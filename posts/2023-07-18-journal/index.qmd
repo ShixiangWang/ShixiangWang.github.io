@@ -1,0 +1,18 @@
+---
+title: 2023-07-18
+author: Shixiang Wang
+date: 2023-07-18
+categories: [journal]
+draft: false
+description: ''
+
+toc: true
+
+format:
+  html:
+    code-fold: false
+    code-overflow: wrap
+    code-tools: false
+---
+
+Without hard work, nothing grows but weeds.
