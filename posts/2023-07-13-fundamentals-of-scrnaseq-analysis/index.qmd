@@ -464,7 +464,6 @@ plot1 + plot2
 - 结果存储在 `pbmc[["RNA"]]@scale.data`。
 
 
-
 ```{r}
 all.genes <- rownames(pbmc)
 pbmc <- ScaleData(pbmc, features = all.genes, verbose = FALSE)
@@ -484,4 +483,104 @@ pbmc <- ScaleData(pbmc, vars.to.regress = "percent.mt")
 但是，特别是对于想要使用此功能的高级用户，Seurat 建议使用他们新的标准化工作流 `SCTransform()`。该方法在 Seurat 论文(Hafemeister and Satija 2019)中进行了描述，并有一个[单独的技术文档](https://satijalab.org/seurat/articles/sctransform_vignette.html)。与`ScaleData()` 一样，函数`SCTransform()`也包含一个`vars.to.regress`参数。
 
 
+### 执行线性降维
+
+接下来，我们对缩放后的数据执行 PCA。默认情况下，只使用先前确定的可变特征作为输入，但是如果你希望选择不同的子集，则可以使用 features 参数定义。
+
+```{r}
+pbmc <- RunPCA(pbmc, features = VariableFeatures(object = pbmc), verbose = FALSE)
+```
+
+Seurat提供了几种有用的方法来可视化定义 PCA 的细胞和特征，包括`VizDimLoadings()`、`DimPlot()` 和 `DimHeatmap()`。
+
+
+```{r}
+# Examine and visualize PCA results a few different ways
+print(pbmc[["pca"]], dims = 1:5, nfeatures = 5)
+```
+
+
+```{r}
+VizDimLoadings(pbmc, dims = 1:2, reduction = "pca")
+```
+
+
+```{r}
+DimPlot(pbmc, reduction = "pca")
+```
+
+特别是 `DimHeatmap() 允许轻松地探索数据集中异构的主要来源，并且在试图决定将哪些pc包括在进一步的下游分析中时非常有用。
+
+
+```{r}
+DimHeatmap(pbmc, dims = 1, cells = 500, balanced = TRUE)
+```
+
+
+```{r}
+DimHeatmap(pbmc, dims = 1:9, cells = 500, balanced = TRUE)
+```
+
+为了克服scRNA-seq数据中任何单个特征中广泛的技术噪声，Seurat基于它们的PCA分数对细胞进行聚类，每个 PC 本质上代表一个“元特征”，该元特征结合了相关特征集中的信息。因此，顶部主成分代表了数据集的鲁棒压缩。在这里，我们选择前20 个 PC。
+
+### 细胞聚类
+
+Seurat v3采用了基于图的聚类方法，基于(Macosko等人，2015)中的初始策略进行改进。重要的是，驱动聚类分析的距离度量（基于先前确定的主成分）保持不变。然而，Seurat在将细胞距离矩阵划分为聚类的方法有了显著改进。这种方法受到最近一些研究的启发，这些研究将基于图的聚类方法应用于scRNA-seq数据（Xu和Su，2015）和CyTOF数据（Levine等人，2015）。简而言之，这些方法将细胞嵌入到一个图结构中，例如K最近邻（KNN）图，其中类似特征表达模式的细胞之间有边连接，然后尝试将该图划分为高度相互连接的“拟团”或“社区”。
+
+就像PhenoGraph一样，首先根据PCA空间中的欧氏距离构建了一个K最近邻图，然后根据局部邻域中的重叠情况（Jaccard相似性）调整任意两个细胞之间的边权重。这个步骤是使用`FindNeighbors()`函数完成的，它的输入是之前定义的数据集的维度（前20个主成分）。
+
+为了对细胞进行聚类，接下来我们应用模块度优化技术，如Louvain算法（默认）或SLM（Blondel等人，2008），以迭代地将细胞分组在一起，目标是优化标准的模块度函数。`FindClusters()`函数实现了这个过程，并包含一个分辨率参数，用于设置下游聚类的“粒度”，增大的值会导致更多的聚类。我们发现，在大约3K个细胞的单细胞数据集中，将此参数设置在 0.4-1.2 之间通常会得到良好的结果。对于更大的数据集，通常需要增加最佳分辨率。可以使用`Idents()`函数找到这些聚类。
+
+
+```{r}
+pbmc <- FindNeighbors(pbmc, dims = 1:20, verbose = FALSE)
+pbmc <- FindClusters(pbmc, resolution = 0.5, verbose = FALSE)
+```
+
+
+```{r}
+# Look at cluster IDs of the first 5 cells
+head(Idents(pbmc), 5)
+```
+
+### 运行非线性降维 UMAP/tSNE
+
+Seurat提供多种非线性降维技术，例如tSNE和UMAP，用于可视化和探索这些数据集。这些算法的目标是学习数据的潜在流形，以便将相似的细胞放置在低维空间中的一起。在上述基于图的聚类中确定的细胞应在这些降维图中共同定位。作为UMAP和tSNE的输入，我们建议使用与聚类分析相同的主成分作为输入。
+
+```{r}
+pbmc <- RunUMAP(pbmc, dims = 1:20, verbose = FALSE)
+```
+
+然后得到单细胞聚类结果的UMAP图。
+
+
+```{r}
+DimPlot(pbmc, reduction = "umap")
+```
+
+类似地，tSNE。
+
+
+```{r}
+pbmc <- RunTSNE(pbmc, dims = 1:20, verbose = FALSE)
+DimPlot(pbmc, reduction = "tsne")
+```
+
+贴上聚类标签：
+
+
+```{r}
+DimPlot(pbmc, reduction = "umap", label = TRUE)
+
+plot <- DimPlot(object = pbmc)
+LabelClusters(plot = plot, id = 'ident')
+```
+
+是时候保存我们的分析结果了：
+
+
+```{r}
+saveRDS(pbmc, 
+file = "/Users/wsx/Library/CloudStorage/OneDrive-shanghaitech.edu.cn/Public/data/pbmc_processed.rds")
+```
 
