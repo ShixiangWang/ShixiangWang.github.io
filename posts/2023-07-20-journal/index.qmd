@@ -1,0 +1,28 @@
+---
+title: 2023-07-20
+author: Shixiang Wang
+date: 2023-07-20
+categories: [journal]
+draft: false
+description: ''
+
+toc: true
+
+format:
+  html:
+    code-fold: false
+    code-overflow: wrap
+    code-tools: false
+---
+
+今天很是犯困😪，很困。
+
+可能因为要早起找人签字，中午睡得昏昏沉沉。
+
+可能今天早上下午都有会议，坐久后的麻痹。
+
+可能今天精神太过紧绷，站中特别资助没上，又一直在编写和测试分析流程。
+
+总之，今天确实很犯困。一天看是什么都没做，但好歹有了记录，记录今天大体发生过什么。
+
+😪
