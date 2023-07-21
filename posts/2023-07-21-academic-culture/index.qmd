@@ -1,0 +1,30 @@
+---
+title: 学术的价值观
+author: Shixiang Wang
+date: 2023-07-21
+categories: [academic]
+draft: false
+description: ''
+
+toc: true
+
+format:
+  html:
+    code-fold: false
+    code-overflow: wrap
+    code-tools: false
+---
+
+这篇小文主要是记录、推荐和分享下吴思涵 Lab 的科学价值观条目。
+
+![](wulab_culture.jpg)
+
+我觉得非常好，也非常佩服吴思涵创建这个条目和对每个进入 Lab 的成员进行宣读。
+
+有时候，科研工作的环境的喧嚣让人煎熬。在心中悬着一把价值之剑🗡️，我觉得既是告诫，也是指引。
+这把剑有离得近和离得远的时候，但如果没有它，我们的心中会缺乏终极目标🎯。
+科学的路，是永无止境的，我们一直在寻觅、挣扎、成长，也弯弯曲曲地走向岁月长河的下一步，
+但是否在前进、是否在后退，是否能永远前进、是否会永远后退，真的不知道。
+
+当前，全国进入了“卷”时代，respect science value, keep deep think。
+
