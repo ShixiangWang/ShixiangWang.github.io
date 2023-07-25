@@ -1,0 +1,30 @@
+---
+title: 2023-07-25
+author: Shixiang Wang
+date: 2023-07-25
+categories: [journal]
+draft: false
+description: ''
+
+toc: true
+
+format:
+  html:
+    code-fold: false
+    code-overflow: wrap
+    code-tools: false
+---
+
+为什么事情容易堆积在一起发生？
+
+为什么越忙的时候越不想忙？忙的时候越容易分散精力？
+
+这是人类的什么心理呢？
+
+那些先圣先贤们究竟是如何塑造的呢？
+
+是什么在压抑着思潮，捶打着自信？
+
+怎样才能把想做的真正做好？不关注别人？多关注别人？
+
+哪里是智慧的真谛，生命的妙门？
