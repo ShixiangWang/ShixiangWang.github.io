@@ -15,7 +15,7 @@ format:
     code-tools: false
 ---
 
-学习资料：<https://github.com/pkuerten/single_cell_clustering_annotation.github.io/blob/main/index.md>
+学习资料：[GitHub 地址](https://github.com/pkuerten/single_cell_clustering_annotation.github.io/blob/main/index.md)
 
 ## 数据下载
 
