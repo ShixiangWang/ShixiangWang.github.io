@@ -10,7 +10,1625 @@
 <atom:link href="https://shixiangwang.github.io/index.xml" rel="self" type="application/rss+xml"/>
 <description>Reasoning is a blog dedicated to exploring the intersection of data science, bioinformatics, and personal insights.</description>
 <generator>quarto-1.3.361</generator>
-<lastBuildDate>Tue, 25 Jul 2023 16:00:00 GMT</lastBuildDate>
+<lastBuildDate>Sun, 30 Jul 2023 16:00:00 GMT</lastBuildDate>
+<item>
+  <title>Single-cell Workshop 2021 - 03 - 细胞相互作用分析</title>
+  <dc:creator>Shixiang Wang</dc:creator>
+  <link>https://shixiangwang.github.io/posts/2023-07-31-cell-interaction-analysis/index.html</link>
+  <description><![CDATA[ <p>学习资料：<a href="https://github.com/pkuerten/single_cell_interaction.github.io/blob/main/index.md">GitHub 地址</a></p>
+<section id="尴尬了流程跑不通" class="level2"><h2 class="anchored" data-anchor-id="尴尬了流程跑不通">尴尬了，流程跑不通</h2>
+<p>这个教程在运行到 <code><a href="https://rdrr.io/pkg/nichenetr/man/predict_ligand_activities.html">predict_ligand_activities()</a></code> 就出现了问题。后面就走不下去了。</p>
+<pre><code>predict_ligand_activities(geneset = geneset_oi, background_expressed_genes = background_expressed_genes, ligand_target_matrix = ligand_target_matrix, potential_
+    ligands = potential_ligands)
+Error in evaluate_target_prediction(setting, ligand_target_matrix, ligands_position) : 
+  all genes have same response</code></pre>
+<p>我自己也懒得折腾了，本身就是想简单学习了解流程，走不通就不走了。如果有读者看到这个文章，感兴趣可以钻研下。</p>
+<p>我查了下，<a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9184522/">Comparison of methods and resources for cell-cell communication inference from single-cell RNA-Seq data</a> 显示CellChat、CellPhoneDB和SingleCellSignalR，对数据和资源中的噪声都相当稳健。因而NicheNet并不在推荐范围内。</p>
+<p>不过也提到：</p>
+<blockquote class="blockquote">
+<p>Methods that additionally infer intracellular processes, such as NicheNet19, Cytotalk22, and SoptSC20 are not directly comparable but instead provide complementary analyses.</p>
+</blockquote>
+<p>说明目前看，还是有一些特定的分析有可取之处。</p>
+</section><section id="数据下载" class="level2"><h2 class="anchored" data-anchor-id="数据下载">数据下载</h2>
+<p>我们将使用SeuratData软件包提供的PBMC数据集。该数据集包含两个PBMC样本：经过IFN Beta处理的刺激样本和对照样本。</p>
+<p>对于细胞交互分析，我们将使用NicheNet，它需要一些精心策划的数据集。虽然这些数据集可以在R环境内下载，但对我来说下载速度太慢了。这些文件可以从Zenodo下（<a href="https://zenodo.org/record/3260758" class="uri">https://zenodo.org/record/3260758</a>）载：gr_network.rds、ligand_target_matrix.rds、lr_network.rds和weighted_networks.rds。</p>
+<p>请将这些数据集放到你的工作目录中。</p>
+</section><section id="准备" class="level2"><h2 class="anchored" data-anchor-id="准备">准备</h2>
+<p>本文参考 Seurat <a href="https://satijalab.org/seurat/articles/integration_introduction.html">数据整合文档进行分析的输入数据准备</a>，假设你对数据预处理部分已经很熟悉。</p>
+</section><section id="安装包" class="level2"><h2 class="anchored" data-anchor-id="安装包">安装包</h2>
+<p>安装所需要的包。</p>
+<div class="sourceCode" id="cb2" style="background: #f1f3f5;"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">BiocManager</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;"><a href="https://rdrr.io/pkg/BiocManager/man/install.html">install</a></span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">(</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"limma"</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">)</span></span>
+<span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">BiocManager</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;"><a href="https://rdrr.io/pkg/BiocManager/man/install.html">install</a></span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">(</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"glmGamPoi"</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">)</span></span>
+<span><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># install.packages("devtools")</span></span>
+<span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">(</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"https://seurat.nygenome.org/src/contrib/ifnb.SeuratData_3.0.0.tar.gz"</span>, repos <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">NULL</span>, type <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"source"</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">)</span> </span>
+<span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">devtools</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;"><a href="https://remotes.r-lib.org/reference/install_github.html">install_github</a></span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">(</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"saeyslab/nichenetr"</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">)</span></span>
+<span><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># 可以下载之后安装，避免安装不上</span></span>
+<span><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># https://github.com/saeyslab/nichenetr</span></span>
+<span><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># unzip("~/Downloads/nichenetr-master.zip")</span></span>
+<span><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># 缺什么装什么</span></span>
+<span><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># BiocManager::install(c("fdrtool", "DiagrammeR", "mlrMBO", "parallelMap", "emoa", "DiceKriging"))</span></span>
+<span><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># install.packages("nichenetr-master", repos = NULL, type = "source")</span></span>
+<span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">(</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"tidyverse"</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">)</span></span></code></pre></div>
+<p>加载包：</p>
+<div class="cell">
+<div class="sourceCode" id="cb3" style="background: #f1f3f5;"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># load into your session</span></span>
+<span><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">(</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">ifnb.SeuratData</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">)</span></span>
+<span><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">(</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;"><a href="https://satijalab.org/seurat">Seurat</a></span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">)</span></span></code></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Attaching SeuratObject</code></pre>
+</div>
+<div class="sourceCode" id="cb5" style="background: #f1f3f5;"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># load dataset</span></span>
+<span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">(</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"ifnb"</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">)</span></span></code></pre></div>
+</div>
+</section><section id="读取数据集并创建一个seurat对象" class="level2"><h2 class="anchored" data-anchor-id="读取数据集并创建一个seurat对象">读取数据集并创建一个Seurat对象</h2>
+<p>第一步是从SeuratData软件包中读取数据。输入数据根据样本进行拆分，并分别应用SCtranform。请注意，这取代了NormalizeData、ScaleData和FindVariableFeatures的步骤。SCTransform是一种专门设计用于单细胞UMI计数数据的统计方法。它克服了之前批量设计的归一化方法中一些过度拟合的限制。有关其优势的更多详细信息可以在<a href="https://genomebiology.biomedcentral.com/articles/10.1186/s13059-019-1874-1">SCtranform的论文</a>中找到。请注意，我们没有应用任何质控步骤。这是因为数据已经预先清洁，因此无需重复这些步骤。</p>
+<div class="cell">
+<div class="sourceCode" id="cb6" style="background: #f1f3f5;"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">ifnb.list</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;"><a href="https://satijalab.org/seurat/reference/SplitObject.html">SplitObject</a></span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">(</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">ifnb</span>, split.by <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"stim"</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">)</span></span>
+<span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">ifnb.list</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">(</span>X <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">ifnb.list</span>, FUN <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">SCTransform</span>, method <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"glmGamPoi"</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">)</span></span></code></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Calculating cell attributes from input UMI matrix: log_umi</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Variance stabilizing transformation of count matrix of size 12747 by 6548</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Model formula is y ~ log_umi</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Get Negative Binomial regression parameters per gene</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Using 2000 genes, 5000 cells</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+  |                                                                            
+  |                                                                      |   0%
+  |                                                                            
+  |==================                                                    |  25%
+  |                                                                            
+  |===================================                                   |  50%
+  |                                                                            
+  |====================================================                  |  75%
+  |                                                                            
+  |======================================================================| 100%</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Found 95 outliers - those will be ignored in fitting/regularization step</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Second step: Get residuals using fitted parameters for 12747 genes</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+  |                                                                            
+  |                                                                      |   0%
+  |                                                                            
+  |===                                                                   |   4%
+  |                                                                            
+  |=====                                                                 |   8%
+  |                                                                            
+  |========                                                              |  12%
+  |                                                                            
+  |===========                                                           |  15%
+  |                                                                            
+  |=============                                                         |  19%
+  |                                                                            
+  |================                                                      |  23%
+  |                                                                            
+  |===================                                                   |  27%
+  |                                                                            
+  |======================                                                |  31%
+  |                                                                            
+  |========================                                              |  35%
+  |                                                                            
+  |===========================                                           |  38%
+  |                                                                            
+  |==============================                                        |  42%
+  |                                                                            
+  |================================                                      |  46%
+  |                                                                            
+  |===================================                                   |  50%
+  |                                                                            
+  |======================================                                |  54%
+  |                                                                            
+  |========================================                              |  58%
+  |                                                                            
+  |===========================================                           |  62%
+  |                                                                            
+  |==============================================                        |  65%
+  |                                                                            
+  |================================================                      |  69%
+  |                                                                            
+  |===================================================                   |  73%
+  |                                                                            
+  |======================================================                |  77%
+  |                                                                            
+  |=========================================================             |  81%
+  |                                                                            
+  |===========================================================           |  85%
+  |                                                                            
+  |==============================================================        |  88%
+  |                                                                            
+  |=================================================================     |  92%
+  |                                                                            
+  |===================================================================   |  96%
+  |                                                                            
+  |======================================================================| 100%</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Computing corrected count matrix for 12747 genes</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+  |                                                                            
+  |                                                                      |   0%
+  |                                                                            
+  |===                                                                   |   4%
+  |                                                                            
+  |=====                                                                 |   8%
+  |                                                                            
+  |========                                                              |  12%
+  |                                                                            
+  |===========                                                           |  15%
+  |                                                                            
+  |=============                                                         |  19%
+  |                                                                            
+  |================                                                      |  23%
+  |                                                                            
+  |===================                                                   |  27%
+  |                                                                            
+  |======================                                                |  31%
+  |                                                                            
+  |========================                                              |  35%
+  |                                                                            
+  |===========================                                           |  38%
+  |                                                                            
+  |==============================                                        |  42%
+  |                                                                            
+  |================================                                      |  46%
+  |                                                                            
+  |===================================                                   |  50%
+  |                                                                            
+  |======================================                                |  54%
+  |                                                                            
+  |========================================                              |  58%
+  |                                                                            
+  |===========================================                           |  62%
+  |                                                                            
+  |==============================================                        |  65%
+  |                                                                            
+  |================================================                      |  69%
+  |                                                                            
+  |===================================================                   |  73%
+  |                                                                            
+  |======================================================                |  77%
+  |                                                                            
+  |=========================================================             |  81%
+  |                                                                            
+  |===========================================================           |  85%
+  |                                                                            
+  |==============================================================        |  88%
+  |                                                                            
+  |=================================================================     |  92%
+  |                                                                            
+  |===================================================================   |  96%
+  |                                                                            
+  |======================================================================| 100%</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Calculating gene attributes</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Wall clock passed: Time difference of 31.92474 secs</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Determine variable features</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Place corrected count matrix in counts slot</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Centering data matrix</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Set default assay to SCT</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Calculating cell attributes from input UMI matrix: log_umi</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Variance stabilizing transformation of count matrix of size 12658 by 7451</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Model formula is y ~ log_umi</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Get Negative Binomial regression parameters per gene</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Using 2000 genes, 5000 cells</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+  |                                                                            
+  |                                                                      |   0%
+  |                                                                            
+  |==================                                                    |  25%
+  |                                                                            
+  |===================================                                   |  50%
+  |                                                                            
+  |====================================================                  |  75%
+  |                                                                            
+  |======================================================================| 100%</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Found 101 outliers - those will be ignored in fitting/regularization step</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Second step: Get residuals using fitted parameters for 12658 genes</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+  |                                                                            
+  |                                                                      |   0%
+  |                                                                            
+  |===                                                                   |   4%
+  |                                                                            
+  |=====                                                                 |   8%
+  |                                                                            
+  |========                                                              |  12%
+  |                                                                            
+  |===========                                                           |  15%
+  |                                                                            
+  |=============                                                         |  19%
+  |                                                                            
+  |================                                                      |  23%
+  |                                                                            
+  |===================                                                   |  27%
+  |                                                                            
+  |======================                                                |  31%
+  |                                                                            
+  |========================                                              |  35%
+  |                                                                            
+  |===========================                                           |  38%
+  |                                                                            
+  |==============================                                        |  42%
+  |                                                                            
+  |================================                                      |  46%
+  |                                                                            
+  |===================================                                   |  50%
+  |                                                                            
+  |======================================                                |  54%
+  |                                                                            
+  |========================================                              |  58%
+  |                                                                            
+  |===========================================                           |  62%
+  |                                                                            
+  |==============================================                        |  65%
+  |                                                                            
+  |================================================                      |  69%
+  |                                                                            
+  |===================================================                   |  73%
+  |                                                                            
+  |======================================================                |  77%
+  |                                                                            
+  |=========================================================             |  81%
+  |                                                                            
+  |===========================================================           |  85%
+  |                                                                            
+  |==============================================================        |  88%
+  |                                                                            
+  |=================================================================     |  92%
+  |                                                                            
+  |===================================================================   |  96%
+  |                                                                            
+  |======================================================================| 100%</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Computing corrected count matrix for 12658 genes</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+  |                                                                            
+  |                                                                      |   0%
+  |                                                                            
+  |===                                                                   |   4%
+  |                                                                            
+  |=====                                                                 |   8%
+  |                                                                            
+  |========                                                              |  12%
+  |                                                                            
+  |===========                                                           |  15%
+  |                                                                            
+  |=============                                                         |  19%
+  |                                                                            
+  |================                                                      |  23%
+  |                                                                            
+  |===================                                                   |  27%
+  |                                                                            
+  |======================                                                |  31%
+  |                                                                            
+  |========================                                              |  35%
+  |                                                                            
+  |===========================                                           |  38%
+  |                                                                            
+  |==============================                                        |  42%
+  |                                                                            
+  |================================                                      |  46%
+  |                                                                            
+  |===================================                                   |  50%
+  |                                                                            
+  |======================================                                |  54%
+  |                                                                            
+  |========================================                              |  58%
+  |                                                                            
+  |===========================================                           |  62%
+  |                                                                            
+  |==============================================                        |  65%
+  |                                                                            
+  |================================================                      |  69%
+  |                                                                            
+  |===================================================                   |  73%
+  |                                                                            
+  |======================================================                |  77%
+  |                                                                            
+  |=========================================================             |  81%
+  |                                                                            
+  |===========================================================           |  85%
+  |                                                                            
+  |==============================================================        |  88%
+  |                                                                            
+  |=================================================================     |  92%
+  |                                                                            
+  |===================================================================   |  96%
+  |                                                                            
+  |======================================================================| 100%</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Calculating gene attributes</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Wall clock passed: Time difference of 30.21689 secs</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Determine variable features</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Place corrected count matrix in counts slot</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Centering data matrix</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Set default assay to SCT</code></pre>
+</div>
+<div class="sourceCode" id="cb41" style="background: #f1f3f5;"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">features</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;"><a href="https://satijalab.org/seurat/reference/SelectIntegrationFeatures.html">SelectIntegrationFeatures</a></span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">(</span>object.list <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">ifnb.list</span>, nfeatures <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">3000</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">)</span></span>
+<span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">ifnb.list</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;"><a href="https://satijalab.org/seurat/reference/PrepSCTIntegration.html">PrepSCTIntegration</a></span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">(</span>object.list <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">ifnb.list</span>, anchor.features <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">features</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">)</span></span>
+<span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">ifnb.list</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">(</span>X <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">ifnb.list</span>, FUN <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">RunPCA</span>, features <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">features</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">)</span></span></code></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>PC_ 1 
+Positive:  FTL, TIMP1, IL8, CCL2, FTH1, C15orf48, S100A8, SOD2, ACTB, S100A9 
+       LYZ, FCER1G, TYROBP, S100A4, HLA-DRA, CD63, CD14, S100A11, LGALS3, ANXA5 
+       LGALS1, CXCL3, S100A10, IL1B, CTSL, PLAUR, CTSB, TYMP, S100A6, CST3 
+Negative:  RPL3, RPS18, RPS6, LTB, RPL13, CCR7, GIMAP7, RPL13A, PTMA, CXCR4 
+       RPSA, RPS2, RPL21, CD3D, RPS5, LDHB, NPM1, RPS4X, CCL5, RPS3 
+       TMEM66, RPS14, RPS27, PABPC1, RPL10A, RPS15A, RPL5, RPL32, RPS19, RPL34 
+PC_ 2 
+Positive:  CCL2, CCL5, GNLY, S100A8, NKG7, FTL, S100A9, GZMB, GIMAP7, CD7 
+       CD3D, CD14, FTH1, IL8, CXCL3, CD2, FGFBP2, CCL7, RGCC, RARRES3 
+       GZMH, APOBEC3G, TMEM66, CLIC3, ITM2A, CTSL, LTB, IL32, LCK, GIMAP5 
+Negative:  HLA-DRA, CD74, HLA-DQA1, HLA-DPA1, HLA-DRB1, HLA-DPB1, HLA-DQB1, CD83, TXN, CCR7 
+       CCL22, HLA-DMA, IDO1, ACTB, HERPUD1, LYZ, SYNGR2, CD79A, MIR155HG, BIRC3 
+       PKIB, RAB9A, SERPINB1, RAMP1, GPR183, CST3, FABP5, HLA-DRB5, TVP23A, ID2 
+PC_ 3 
+Positive:  RPS18, RPL13, LTB, RPS6, FTL, RPL3, RPL32, RPL10, RPS2, PABPC1 
+       RPL34, RPL13A, RPS14, RPS4X, RPL21, S100A8, CCL2, RPS12, RPL11, RPL7 
+       RPS3A, RPL18A, LDHB, SELL, RPS15A, RPS3, RPS8, S100A9, RPS5, RPS27A 
+Negative:  GNLY, NKG7, CCL5, GZMB, CST7, APOBEC3G, FGFBP2, CLIC3, GZMH, KLRD1 
+       GZMA, CTSW, PRF1, HOPX, KLRC1, CHST12, TNFRSF18, CCL4, VMO1, FCGR3A 
+       DUSP2, LDHA, CXCR3, C1orf21, ID2, MATK, SPON2, SH2D1B, RARRES3, APMAP 
+PC_ 4 
+Positive:  HSPB1, HSP90AB1, HSPE1, CACYBP, CCL2, HSPA8, CREM, HSPD1, SRSF7, HSPH1 
+       HSPA1A, FTL, CD69, UBB, GADD45B, UBC, SRSF2, ZFAND2A, HSP90AA1, IL8 
+       NOP58, DDIT4, NR4A2, CHORDC1, H3F3B, BTG1, RSRC2, DNAJB1, SNHG15, YPEL5 
+Negative:  VMO1, FCGR3A, TIMP1, MS4A7, RPL3, FAM26F, TNFSF10, RPS4X, RPS2, RPS19 
+       RPL10, RPS18, PLAC8, CXCL16, CXCL10, HLA-DPA1, LST1, HLA-DPB1, RPL13, TNFSF13B 
+       MS4A4A, RPS14, IFITM3, HN1, AIF1, GBP5, RPS6, CCL5, CD74, GBP1 
+PC_ 5 
+Positive:  CCL2, FTL, GNLY, CCL5, NKG7, IL8, GZMB, S100A8, S100A9, LYZ 
+       HLA-DRA, CST7, CD74, HLA-DQA1, CXCL3, TXN, FGFBP2, CD63, GAPDH, CLIC3 
+       IL1B, HLA-DPB1, HLA-DRB1, VIM, RPL3, GZMH, CCL7, APOBEC3G, C15orf48, HLA-DQB1 
+Negative:  VMO1, FCGR3A, MS4A7, TIMP1, FAM26F, TNFSF10, CXCL10, HSPB1, IFITM3, GBP1 
+       AIF1, PLAC8, MS4A4A, LST1, GBP5, CXCL16, HN1, SAT1, ATP1B3, OAS1 
+       ISG15, C3AR1, WARS, CTSC, PPM1N, RGS2, TNFSF13B, SOD2, IFIT3, FGL2 </code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>PC_ 1 
+Positive:  FTL, CXCL10, CCL2, CCL8, APOBEC3A, SOD2, TIMP1, C15orf48, CCL7, APOBEC3B 
+       ISG15, IDO1, CCL3, IFITM3, CXCL11, LYZ, TYROBP, CCL4, IFI27, FCER1G 
+       FTH1, CTSL, SAT1, TYMP, IL1RN, LGALS3, S100A11, CTSC, CD63, LGALS1 
+Negative:  RPL3, RPS6, RPS18, RPL13, RPL21, RPL7, RPL13A, CCR7, RPL10A, RPS4X 
+       RPS2, GIMAP7, RPS3, RPS3A, RPS14, RPS27A, PTMA, RPL10, RPS15A, RPL34 
+       RPS5, RPL32, PABPC1, RPL5, CXCR4, RPS27, RPL31, LTB, MALAT1, RPL14 
+PC_ 2 
+Positive:  CCL2, CCL8, CCL7, RPS18, RPL13, RPS6, FTL, RPL3, RPL32, SELL 
+       RPS14, RPL34, LTB, RPL7, RPL13A, RPL21, RPL10, GIMAP7, PABPC1, RPS2 
+       RPS4X, APOBEC3B, RPL10A, RPS15A, RPS3A, LDHB, S100A9, RPS12, RPL35A, RPL31 
+Negative:  GNLY, GZMB, NKG7, CCL5, PRF1, CD74, CLIC3, CST7, GZMA, HLA-DRA 
+       APOBEC3G, GZMH, HLA-DPB1, HLA-DPA1, KLRD1, CTSW, TXN, FCGR3A, HLA-DQA1, VMO1 
+       HLA-DRB1, FASLG, ID2, FGFBP2, CD83, KLRC1, MS4A7, HLA-DQB1, RARRES3, TIMP1 
+PC_ 3 
+Positive:  CD74, HLA-DRA, HLA-DPB1, CXCL10, HLA-DPA1, HLA-DQA1, HLA-DRB1, TXN, TIMP1, CD83 
+       VMO1, FCGR3A, CCR7, HLA-DQB1, MS4A7, MARCKSL1, IRF8, CST3, BIRC3, SYNGR2 
+       MS4A4A, SERPINB1, CD79A, CXCL16, CD86, MIR155HG, HLA-DMA, CCL22, ACTB, FAM26F 
+Negative:  GNLY, CCL2, CCL8, NKG7, CCL5, GZMB, CCL7, PRF1, GZMA, GZMH 
+       CLIC3, KLRD1, CTSW, RARRES3, S100A9, ALOX5AP, FASLG, APOBEC3G, FGFBP2, CTSL 
+       CD7, CCL4, KLRC1, CST7, S100A8, ANXA1, CCL3, CD247, IL32, LGALS3 
+PC_ 4 
+Positive:  FCGR3A, VMO1, MS4A7, TIMP1, MS4A4A, CXCL16, FAM26F, PLAC8, TNFSF10, TNFAIP6 
+       C3AR1, LST1, FTH1, CXCL10, TYROBP, CTSC, AIF1, GBP5, PPM1N, CFD 
+       MT2A, CDKN1C, SERPINA1, IFITM3, SLC31A2, HN1, PLAUR, FCER1G, FCGR3B, EDN1 
+Negative:  CCL2, CCL8, CD74, HLA-DRA, TXN, HLA-DQA1, CCL7, HLA-DPB1, FTL, HLA-DRB1 
+       LYZ, MIR155HG, HLA-DQB1, CD83, IRF8, FABP5, CCR7, MARCKSL1, BIRC3, APOBEC3B 
+       TSPAN13, HERPUD1, HSPE1, HSPD1, HLA-DPA1, ID3, PMAIP1, HSP90AB1, CD79A, NME1 
+PC_ 5 
+Positive:  CD74, HLA-DPB1, HLA-DRA, RPL3, TXN, RPS18, RPS4X, MARCKSL1, HLA-DPA1, RPL10 
+       RPL13, LYZ, HLA-DRB1, FTL, RPS2, GNLY, RPS14, GZMB, CCL5, RPS3 
+       RPL34, NKG7, RPL11, RPL13A, CST3, RPL32, RPS6, RPL21, HLA-DQA1, LSP1 
+Negative:  CCL4, CCL3, CD69, SRSF7, HSPE1, HSP90AB1, CACYBP, HSPA8, HSPD1, SRSF2 
+       DDIT4, CREM, GADD45B, UBC, NOP58, UBB, HSPH1, TCP1, JUNB, SOD1 
+       SAT1, CLK1, RSRC2, BTG1, DNAJB6, NR4A2, MYC, IRF1, DNAJB1, BATF </code></pre>
+</div>
+</div>
+<p>接下来，我们将两个数据集进行整合。整合依赖于在两个数据集中都存在的高变量特征，并且分为两个步骤。第一步FindIntegrationAnchors定义锚点或细胞对（每个样本中各选择一个细胞），这些细胞非常相似，因此可以有信心地将它们分配到相同的簇（细胞类型和状态）。第二步IntegrateData使用所定义的锚点对齐完整的数据集。有关整合方法的更多详细信息和自原始Seurat论文以来的改进可以在他们<a href="https://pubmed.ncbi.nlm.nih.gov/34062119/">最近的出版物</a>中找到。</p>
+<div class="cell">
+<div class="sourceCode" id="cb44" style="background: #f1f3f5;"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">immune.anchors</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;"><a href="https://satijalab.org/seurat/reference/FindIntegrationAnchors.html">FindIntegrationAnchors</a></span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">(</span>object.list <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">ifnb.list</span>, normalization.method <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"SCT"</span>, anchor.features <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">features</span>, dims <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">:</span><span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">30</span>, reduction <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"rpca"</span>, k.anchor <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">20</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">)</span></span></code></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Computing within dataset neighborhoods</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Finding all pairwise anchors</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Projecting new data onto SVD
+Projecting new data onto SVD</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Finding neighborhoods</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Finding anchors</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>    Found 32565 anchors</code></pre>
+</div>
+<div class="sourceCode" id="cb51" style="background: #f1f3f5;"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">immune.combined.sct</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;"><a href="https://satijalab.org/seurat/reference/IntegrateData.html">IntegrateData</a></span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">(</span>anchorset <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">immune.anchors</span>, normalization.method <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"SCT"</span>, dims <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">:</span><span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">30</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">)</span></span></code></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Merging dataset 1 into 2</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Extracting anchors for merged samples</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Finding integration vectors</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Finding integration vector weights</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Integrating data</code></pre>
+</div>
+</div>
+<p>整合后的对象包含经过批次效应校正的值，以及原始计数值作为单独的测定。</p>
+<div class="cell">
+<div class="sourceCode" id="cb57" style="background: #f1f3f5;"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">immune.combined.sct</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;"><a href="https://satijalab.org/seurat/reference/RunPCA.html">RunPCA</a></span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">(</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">immune.combined.sct</span>, verbose <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">FALSE</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">)</span></span>
+<span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">immune.combined.sct</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;"><a href="https://satijalab.org/seurat/reference/RunUMAP.html">RunUMAP</a></span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">(</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">immune.combined.sct</span>, reduction <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"pca"</span>, dims <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">:</span><span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">30</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">)</span></span></code></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: The default method for RunUMAP has changed from calling Python UMAP via reticulate to the R-native UWOT using the cosine metric
+To use Python UMAP via reticulate, set umap.method to 'umap-learn' and metric to 'correlation'
+This message will be shown once per session</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>15:39:33 UMAP embedding parameters a = 0.9922 b = 1.112</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>15:39:33 Read 13999 rows and found 30 numeric columns</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>15:39:33 Using Annoy for neighbor search, n_neighbors = 30</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>15:39:33 Building Annoy index with metric = cosine, n_trees = 50</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>0%   10   20   30   40   50   60   70   80   90   100%</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>[----|----|----|----|----|----|----|----|----|----|</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>**************************************************|
+15:39:35 Writing NN index file to temp file /var/folders/bj/nw1w4g1j37ddpgb6zmh3sfh80000gn/T//RtmpF254ot/file1575b69d2520a
+15:39:35 Searching Annoy index using 1 thread, search_k = 3000
+15:39:38 Annoy recall = 100%
+15:39:39 Commencing smooth kNN distance calibration using 1 thread with target n_neighbors = 30
+15:39:40 Initializing from normalized Laplacian + noise (using irlba)
+15:39:41 Commencing optimization for 200 epochs, with 600044 positive edges
+15:39:49 Optimization finished</code></pre>
+</div>
+</div>
+<p>可视化：</p>
+<div class="cell">
+<div class="sourceCode" id="cb66" style="background: #f1f3f5;"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">p1</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;"><a href="https://satijalab.org/seurat/reference/DimPlot.html">DimPlot</a></span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">(</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">immune.combined.sct</span>, reduction <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"umap"</span>, group.by <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"stim"</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">)</span></span>
+<span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">p2</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;"><a href="https://satijalab.org/seurat/reference/DimPlot.html">DimPlot</a></span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">(</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">immune.combined.sct</span>, reduction <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"umap"</span>, group.by <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"seurat_annotations"</span>, label <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">TRUE</span>,</span>
+<span>    repel <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">TRUE</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">)</span></span>
+<span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">p1</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">p2</span></span></code></pre></div>
+<div class="cell-output-display">
+<p><img src="https://shixiangwang.github.io/posts/2023-07-31-cell-interaction-analysis/index_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section><section id="细胞相互作用分析" class="level2"><h2 class="anchored" data-anchor-id="细胞相互作用分析">细胞相互作用分析</h2>
+<p><a href="https://pubmed.ncbi.nlm.nih.gov/31819264/">NicheNet</a>旨在通过将特定簇的单细胞表达数据与关于配体-受体对和目标下游的基因调控网络的先验知识相结合，预测配体和目标细胞之间的相互作用连接。特别地，它旨在定义能够最好解释目标簇中观察到的差异表达的配体。</p>
+<p>我们首先加载必要的R软件包。⚠️在我加载了NicheNet软件包后，部分Seurat整合命令未能成功执行。两个软件包之间可能存在一些不兼容性。</p>
+<div class="cell">
+<div class="sourceCode" id="cb67" style="background: #f1f3f5;"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">(</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;"><a href="https://github.com/saeyslab/nichenetr">nichenetr</a></span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">)</span></span>
+<span><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">(</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">)</span></span></code></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+✔ dplyr     1.1.2     ✔ readr     2.1.4
+✔ forcats   1.0.0     ✔ stringr   1.5.0
+✔ ggplot2   3.4.2     ✔ tibble    3.2.1
+✔ lubridate 1.9.2     ✔ tidyr     1.3.0
+✔ purrr     1.0.1     
+── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+✖ dplyr::filter() masks stats::filter()
+✖ dplyr::lag()    masks stats::lag()
+ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
+</div>
+</div>
+<p>加载数据集：</p>
+<div class="cell">
+<div class="sourceCode" id="cb69" style="background: #f1f3f5;"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">ligand_target_matrix</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;"><a href="https://rdrr.io/r/base/readRDS.html">readRDS</a></span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">(</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"/Users/wsx/Library/CloudStorage/OneDrive-shanghaitech.edu.cn/Public/data/ligand_target_matrix.rds"</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">)</span></span>
+<span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">ligand_target_matrix</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">[</span><span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">:</span><span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">5</span>,<span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">:</span><span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">5</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">]</span></span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                CXCL1        CXCL2        CXCL3        CXCL5         PPBP
+A1BG     3.534343e-04 4.041324e-04 3.729920e-04 3.080640e-04 2.628388e-04
+A1BG-AS1 1.650894e-04 1.509213e-04 1.583594e-04 1.317253e-04 1.231819e-04
+A1CF     5.787175e-04 4.596295e-04 3.895907e-04 3.293275e-04 3.211944e-04
+A2M      6.027058e-04 5.996617e-04 5.164365e-04 4.517236e-04 4.590521e-04
+A2M-AS1  8.898724e-05 8.243341e-05 7.484018e-05 4.912514e-05 5.120439e-05</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode" id="cb71" style="background: #f1f3f5;"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">lr_network</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;"><a href="https://rdrr.io/r/base/readRDS.html">readRDS</a></span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">(</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"/Users/wsx/Library/CloudStorage/OneDrive-shanghaitech.edu.cn/Public/data/lr_network.rds"</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">)</span></span>
+<span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">(</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">lr_network</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">)</span></span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 4
+  from  to    source         database
+  &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;          &lt;chr&gt;   
+1 CXCL1 CXCR2 kegg_cytokines kegg    
+2 CXCL2 CXCR2 kegg_cytokines kegg    
+3 CXCL3 CXCR2 kegg_cytokines kegg    
+4 CXCL5 CXCR2 kegg_cytokines kegg    
+5 PPBP  CXCR2 kegg_cytokines kegg    
+6 CXCL6 CXCR2 kegg_cytokines kegg    </code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode" id="cb73" style="background: #f1f3f5;"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">weighted_networks</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;"><a href="https://rdrr.io/r/base/readRDS.html">readRDS</a></span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">(</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"/Users/wsx/Library/CloudStorage/OneDrive-shanghaitech.edu.cn/Public/data/weighted_networks.rds"</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">)</span></span>
+<span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">weighted_networks_lr</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">weighted_networks</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">lr_sig</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html">inner_join</a></span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">(</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">lr_network</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;"><a href="https://dplyr.tidyverse.org/reference/distinct.html">distinct</a></span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">(</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">from</span>,<span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">to</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">)</span>, by <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">(</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"from"</span>,<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"to"</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">)</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">)</span></span>
+<span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">(</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">weighted_networks</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">lr_sig</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">)</span> <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># interactions and their weights in the ligand-receptor + signaling network</span></span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 3
+  from  to     weight
+  &lt;chr&gt; &lt;chr&gt;   &lt;dbl&gt;
+1 A1BG  ABCC6  0.422 
+2 A1BG  ACE2   0.101 
+3 A1BG  ADAM10 0.0970
+4 A1BG  AGO1   0.0525
+5 A1BG  AKT1   0.0855
+6 A1BG  ANXA7  0.457 </code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode" id="cb75" style="background: #f1f3f5;"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;"><a href="https://mojaveazure.github.io/seurat-object/reference/Idents.html">Idents</a></span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">(</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">immune.combined.sct</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">)</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&lt;-</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">immune.combined.sct</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">seurat_annotations</span></span>
+<span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;"><a href="https://mojaveazure.github.io/seurat-object/reference/DefaultAssay.html">DefaultAssay</a></span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">(</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">immune.combined.sct</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">)</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"integrated"</span></span></code></pre></div>
+</div>
+<p>在本文中，我们依赖于数据提供的筛选细胞注释。 我们将重点放在CD8 T细胞作为接收细胞，并寻找pDC、CD14 Mono、CD16 Mono、NK、B、DC、B Activated群集中的发送器配体。</p>
+<p>我们定义接收细胞和发送器细胞群体。此外，我们还识别在接收细胞中表达的基因，这些基因也是我们知识库的一部分。</p>
+<p>💡如果某个基因在数据库中没有被知道由任何配体调控，该方法将无法在其预测中使用它。</p>
+<div class="cell">
+<div class="sourceCode" id="cb76" style="background: #f1f3f5;"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">receiver</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"CD8 T"</span></span>
+<span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">expressed_genes_receiver</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;"><a href="https://rdrr.io/pkg/nichenetr/man/get_expressed_genes.html">get_expressed_genes</a></span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">(</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">receiver</span>, <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">immune.combined.sct</span>, pct <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0.10</span>, assay_oi<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"RNA"</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">)</span></span>
+<span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">background_expressed_genes</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">expressed_genes_receiver</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">.</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">[</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">.</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"><a href="https://rdrr.io/r/base/match.html">%in%</a></span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">(</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">ligand_target_matrix</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">)</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">]</span></span>
+<span></span>
+<span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">sender_celltypes</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">(</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"pDC"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"CD14 Mono"</span> ,  <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"CD16 Mono"</span>,  <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"NK"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"B"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"DC"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"B Activated"</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">)</span></span>
+<span></span>
+<span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">list_expressed_genes_sender</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">sender_celltypes</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;"><a href="https://rdrr.io/r/base/unique.html">unique</a></span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">(</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">)</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">(</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">get_expressed_genes</span>, <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">immune.combined.sct</span>, <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0.10</span>, assay_oi<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"RNA"</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">)</span> </span>
+<span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">expressed_genes_sender</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">list_expressed_genes_sender</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;"><a href="https://rdrr.io/r/base/unlist.html">unlist</a></span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">(</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">)</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;"><a href="https://rdrr.io/r/base/unique.html">unique</a></span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">(</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">)</span></span></code></pre></div>
+</div>
+<p>定义接收细胞中相对于样本处理的差异基因。</p>
+<div class="cell">
+<div class="sourceCode" id="cb77" style="background: #f1f3f5;"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">seurat_obj_receiver</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;"><a href="https://rdrr.io/r/base/subset.html">subset</a></span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">(</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">immune.combined.sct</span>, idents <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">receiver</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">)</span></span>
+<span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">seurat_obj_receiver</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;"><a href="https://mojaveazure.github.io/seurat-object/reference/Idents.html">SetIdent</a></span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">(</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">immune.combined.sct</span>, value <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">seurat_obj_receiver</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">[[</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"orig.ident"</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">]</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">]</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">)</span></span>
+<span></span>
+<span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">condition_oi</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"IMMUNE_STIM"</span></span>
+<span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">condition_reference</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"IMMUNE_CTRL"</span> </span>
+<span></span>
+<span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">DE_table_receiver</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;"><a href="https://satijalab.org/seurat/reference/FindMarkers.html">FindMarkers</a></span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">(</span>object <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">seurat_obj_receiver</span>, ident.1 <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">condition_oi</span>, ident.2 <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">condition_reference</span>, min.pct <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0.10</span>, assay<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"RNA"</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">)</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;"><a href="https://tibble.tidyverse.org/reference/rownames.html">rownames_to_column</a></span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">(</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"gene"</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">)</span></span>
+<span></span>
+<span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">geneset_oi</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">DE_table_receiver</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">(</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">p_val</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&lt;=</span> <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0.05</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&amp;</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;"><a href="https://rdrr.io/r/base/MathFun.html">abs</a></span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">(</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">avg_log2FC</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">)</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&gt;=</span> <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0.25</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">)</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;"><a href="https://dplyr.tidyverse.org/reference/pull.html">pull</a></span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">(</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">gene</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">)</span></span>
+<span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">geneset_oi</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">geneset_oi</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">.</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">[</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">.</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"><a href="https://rdrr.io/r/base/match.html">%in%</a></span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">(</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">ligand_target_matrix</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">)</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">]</span></span></code></pre></div>
+</div>
+<p>定义在各自群集中表达的配体和受体基因。潜在的配体集被缩小为在接收细胞群集中表达的具有靶标的配体。</p>
+<div class="cell">
+<div class="sourceCode" id="cb78" style="background: #f1f3f5;"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">ligands</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">lr_network</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;"><a href="https://dplyr.tidyverse.org/reference/pull.html">pull</a></span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">(</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">from</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">)</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;"><a href="https://rdrr.io/r/base/unique.html">unique</a></span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">(</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">)</span></span>
+<span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">receptors</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">lr_network</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;"><a href="https://dplyr.tidyverse.org/reference/pull.html">pull</a></span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">(</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">to</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">)</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;"><a href="https://rdrr.io/r/base/unique.html">unique</a></span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">(</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">)</span></span>
+<span></span>
+<span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">expressed_ligands</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;"><a href="https://generics.r-lib.org/reference/setops.html">intersect</a></span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">(</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">ligands</span>,<span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">expressed_genes_sender</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">)</span></span>
+<span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">expressed_receptors</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;"><a href="https://generics.r-lib.org/reference/setops.html">intersect</a></span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">(</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">receptors</span>,<span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">expressed_genes_receiver</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">)</span></span>
+<span></span>
+<span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">potential_ligands</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">lr_network</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">(</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">from</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"><a href="https://rdrr.io/r/base/match.html">%in%</a></span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">expressed_ligands</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&amp;</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">to</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"><a href="https://rdrr.io/r/base/match.html">%in%</a></span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">expressed_receptors</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">)</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;"><a href="https://dplyr.tidyverse.org/reference/pull.html">pull</a></span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">(</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">from</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">)</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;"><a href="https://rdrr.io/r/base/unique.html">unique</a></span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">(</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">)</span></span></code></pre></div>
+</div>
+<p>NicheNet的配体活性分析根据接收细胞中存在的表达靶标基因的情况对配体进行排名。</p>
+<div class="cell">
+<div class="sourceCode" id="cb79" style="background: #f1f3f5;"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># ligand_activities = predict_ligand_activities(geneset = geneset_oi, background_expressed_genes = background_expressed_genes, ligand_target_matrix = ligand_target_matrix, potential_ligands = potential_ligands)</span></span>
+<span></span>
+<span><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># ligand_activities = ligand_activities %&gt;% arrange(-pearson) %&gt;% mutate(rank = rank(desc(pearson)))</span></span>
+<span><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># ligand_activities</span></span></code></pre></div>
+</div>
+
+
+</section> ]]></description>
+  <category>note</category>
+  <category>scRNA-seq</category>
+  <category>R</category>
+  <guid>https://shixiangwang.github.io/posts/2023-07-31-cell-interaction-analysis/index.html</guid>
+  <pubDate>Sun, 30 Jul 2023 16:00:00 GMT</pubDate>
+</item>
 <item>
   <title>Single-cell Workshop 2021 - 02 - 聚类和细胞类型鉴定</title>
   <dc:creator>Shixiang Wang</dc:creator>
@@ -4034,26 +5652,6 @@ scFEA
   <category>journal</category>
   <guid>https://shixiangwang.github.io/posts/2023-06-27-journal/index.html</guid>
   <pubDate>Mon, 26 Jun 2023 16:00:00 GMT</pubDate>
-</item>
-<item>
-  <title>2023-06-26</title>
-  <dc:creator>Shixiang Wang</dc:creator>
-  <link>https://shixiangwang.github.io/posts/2023-06-26-journal/index.html</link>
-  <description><![CDATA[ 
-
-
-
-
-<p>疫情之后抗感冒能力确实变得更加糟糕了，上一次二阳（本以为是重感冒）十多天之后在端午之前终于感觉到差不多好了，端午去了趟深圳回家又感觉不好了，特别是前天晚上睡觉时突然感觉喉咙很痒，频繁咳嗽，把自己咳起来去喝水。</p>
-<p>工作后老是感觉时间少，做什么都不够用似的，而且身体在变形和走下坡路。所以，<strong>成年人需要合理地管理自己的时间</strong>：身体、工作、生活、家人（陪伴）、休闲娱乐。其实，人生存在很强的悖论，要保持理性追求职业上升的同时，又要把关自身的感性的体态面貌健康/快乐渴望，很难做到，真的很难做到。</p>
-<p>我总是在想起我自己常想的一句话：我们是看着别人在过自己的人生。这也是非常矛盾的，合理的把握至关重要。在平衡这方面，我们国家的哲学理论实在是一言蔽之——<strong>阴阳</strong>！</p>
-
-
-
- ]]></description>
-  <category>journal</category>
-  <guid>https://shixiangwang.github.io/posts/2023-06-26-journal/index.html</guid>
-  <pubDate>Sun, 25 Jun 2023 16:00:00 GMT</pubDate>
 </item>
 </channel>
 </rss>

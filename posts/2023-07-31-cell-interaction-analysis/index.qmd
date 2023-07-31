@@ -1,0 +1,214 @@
+---
+title: Single-cell Workshop 2021 - 03 - 细胞相互作用分析
+author: Shixiang Wang
+date: 2023-07-31
+categories: [note,scRNA-seq,R]
+draft: false
+description: ''
+
+toc: true
+
+format:
+  html:
+    code-fold: false
+    code-overflow: wrap
+    code-tools: false
+---
+
+学习资料：[GitHub 地址](https://github.com/pkuerten/single_cell_interaction.github.io/blob/main/index.md)
+
+## 尴尬了，流程跑不通
+
+这个教程在运行到 `predict_ligand_activities()` 就出现了问题。后面就走不下去了。
+
+```
+predict_ligand_activities(geneset = geneset_oi, background_expressed_genes = background_expressed_genes, ligand_target_matrix = ligand_target_matrix, potential_
+    ligands = potential_ligands)
+Error in evaluate_target_prediction(setting, ligand_target_matrix, ligands_position) : 
+  all genes have same response
+```
+
+我自己也懒得折腾了，本身就是想简单学习了解流程，走不通就不走了。如果有读者看到这个文章，感兴趣可以钻研下。
+
+我查了下，[Comparison of methods and resources for cell-cell communication inference from single-cell RNA-Seq data](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9184522/) 显示CellChat、CellPhoneDB和SingleCellSignalR，对数据和资源中的噪声都相当稳健。因而NicheNet并不在推荐范围内。
+
+不过也提到：
+
+> Methods that additionally infer intracellular processes, such as NicheNet19, Cytotalk22, and SoptSC20 are not directly comparable but instead provide complementary analyses.
+
+说明目前看，还是有一些特定的分析有可取之处。
+
+## 数据下载
+
+我们将使用SeuratData软件包提供的PBMC数据集。该数据集包含两个PBMC样本：经过IFN Beta处理的刺激样本和对照样本。
+
+对于细胞交互分析，我们将使用NicheNet，它需要一些精心策划的数据集。虽然这些数据集可以在R环境内下载，但对我来说下载速度太慢了。这些文件可以从Zenodo下（<https://zenodo.org/record/3260758>）载：gr_network.rds、ligand_target_matrix.rds、lr_network.rds和weighted_networks.rds。
+
+请将这些数据集放到你的工作目录中。
+
+## 准备
+
+本文参考 Seurat [数据整合文档进行分析的输入数据准备](https://satijalab.org/seurat/articles/integration_introduction.html)，假设你对数据预处理部分已经很熟悉。
+
+## 安装包
+
+安装所需要的包。
+
+```R
+BiocManager::install("limma")
+BiocManager::install("glmGamPoi")
+# install.packages("devtools")
+install.packages("https://seurat.nygenome.org/src/contrib/ifnb.SeuratData_3.0.0.tar.gz", repos = NULL, type = "source") 
+devtools::install_github("saeyslab/nichenetr")
+# 可以下载之后安装，避免安装不上
+# https://github.com/saeyslab/nichenetr
+# unzip("~/Downloads/nichenetr-master.zip")
+# 缺什么装什么
+# BiocManager::install(c("fdrtool", "DiagrammeR", "mlrMBO", "parallelMap", "emoa", "DiceKriging"))
+# install.packages("nichenetr-master", repos = NULL, type = "source")
+install.packages("tidyverse")
+```
+
+加载包：
+
+```{r}
+# load into your session
+library(ifnb.SeuratData)
+library(Seurat)
+
+# load dataset
+data("ifnb")
+```
+
+## 读取数据集并创建一个Seurat对象
+
+第一步是从SeuratData软件包中读取数据。输入数据根据样本进行拆分，并分别应用SCtranform。请注意，这取代了NormalizeData、ScaleData和FindVariableFeatures的步骤。SCTransform是一种专门设计用于单细胞UMI计数数据的统计方法。它克服了之前批量设计的归一化方法中一些过度拟合的限制。有关其优势的更多详细信息可以在[SCtranform的论文](https://genomebiology.biomedcentral.com/articles/10.1186/s13059-019-1874-1)中找到。请注意，我们没有应用任何质控步骤。这是因为数据已经预先清洁，因此无需重复这些步骤。
+
+```{r}
+ifnb.list <- SplitObject(ifnb, split.by = "stim")
+ifnb.list <- lapply(X = ifnb.list, FUN = SCTransform, method = "glmGamPoi")
+features <- SelectIntegrationFeatures(object.list = ifnb.list, nfeatures = 3000)
+ifnb.list <- PrepSCTIntegration(object.list = ifnb.list, anchor.features = features)
+ifnb.list <- lapply(X = ifnb.list, FUN = RunPCA, features = features)
+```
+
+接下来，我们将两个数据集进行整合。整合依赖于在两个数据集中都存在的高变量特征，并且分为两个步骤。第一步FindIntegrationAnchors定义锚点或细胞对（每个样本中各选择一个细胞），这些细胞非常相似，因此可以有信心地将它们分配到相同的簇（细胞类型和状态）。第二步IntegrateData使用所定义的锚点对齐完整的数据集。有关整合方法的更多详细信息和自原始Seurat论文以来的改进可以在他们[最近的出版物](https://pubmed.ncbi.nlm.nih.gov/34062119/)中找到。
+
+```{r}
+immune.anchors <- FindIntegrationAnchors(object.list = ifnb.list, normalization.method = "SCT", anchor.features = features, dims = 1:30, reduction = "rpca", k.anchor = 20)
+immune.combined.sct <- IntegrateData(anchorset = immune.anchors, normalization.method = "SCT", dims = 1:30)
+```
+
+整合后的对象包含经过批次效应校正的值，以及原始计数值作为单独的测定。
+
+```{r}
+immune.combined.sct <- RunPCA(immune.combined.sct, verbose = FALSE)
+immune.combined.sct <- RunUMAP(immune.combined.sct, reduction = "pca", dims = 1:30)
+```
+
+可视化：
+
+```{r}
+p1 <- DimPlot(immune.combined.sct, reduction = "umap", group.by = "stim")
+p2 <- DimPlot(immune.combined.sct, reduction = "umap", group.by = "seurat_annotations", label = TRUE,
+    repel = TRUE)
+p1 + p2
+```
+
+## 细胞相互作用分析
+
+[NicheNet](https://pubmed.ncbi.nlm.nih.gov/31819264/)旨在通过将特定簇的单细胞表达数据与关于配体-受体对和目标下游的基因调控网络的先验知识相结合，预测配体和目标细胞之间的相互作用连接。特别地，它旨在定义能够最好解释目标簇中观察到的差异表达的配体。
+
+我们首先加载必要的R软件包。⚠️在我加载了NicheNet软件包后，部分Seurat整合命令未能成功执行。两个软件包之间可能存在一些不兼容性。
+
+
+```{r}
+library(nichenetr)
+library(tidyverse)
+```
+
+加载数据集：
+
+```{r}
+ligand_target_matrix = readRDS("/Users/wsx/Library/CloudStorage/OneDrive-shanghaitech.edu.cn/Public/data/ligand_target_matrix.rds")
+ligand_target_matrix[1:5,1:5]
+```
+
+
+```{r}
+lr_network = readRDS("/Users/wsx/Library/CloudStorage/OneDrive-shanghaitech.edu.cn/Public/data/lr_network.rds")
+head(lr_network)
+```
+
+
+```{r}
+weighted_networks = readRDS("/Users/wsx/Library/CloudStorage/OneDrive-shanghaitech.edu.cn/Public/data/weighted_networks.rds")
+weighted_networks_lr = weighted_networks$lr_sig %>% inner_join(lr_network %>% distinct(from,to), by = c("from","to"))
+head(weighted_networks$lr_sig) # interactions and their weights in the ligand-receptor + signaling network
+```
+
+
+```{r}
+Idents(immune.combined.sct) <-immune.combined.sct$seurat_annotations
+DefaultAssay(immune.combined.sct) <- "integrated"
+```
+
+在本文中，我们依赖于数据提供的筛选细胞注释。
+我们将重点放在CD8 T细胞作为接收细胞，并寻找pDC、CD14 Mono、CD16 Mono、NK、B、DC、B Activated群集中的发送器配体。
+
+我们定义接收细胞和发送器细胞群体。此外，我们还识别在接收细胞中表达的基因，这些基因也是我们知识库的一部分。
+
+💡如果某个基因在数据库中没有被知道由任何配体调控，该方法将无法在其预测中使用它。
+
+
+```{r}
+receiver = "CD8 T"
+expressed_genes_receiver = get_expressed_genes(receiver, immune.combined.sct, pct = 0.10, assay_oi="RNA")
+background_expressed_genes = expressed_genes_receiver %>% .[. %in% rownames(ligand_target_matrix)]
+
+sender_celltypes = c("pDC", "CD14 Mono" ,  "CD16 Mono",  "NK", "B", "DC", "B Activated")
+
+list_expressed_genes_sender = sender_celltypes %>% unique() %>% lapply(get_expressed_genes, immune.combined.sct, 0.10, assay_oi="RNA") 
+expressed_genes_sender = list_expressed_genes_sender %>% unlist() %>% unique()
+```
+
+定义接收细胞中相对于样本处理的差异基因。
+
+
+```{r}
+seurat_obj_receiver= subset(immune.combined.sct, idents = receiver)
+seurat_obj_receiver = SetIdent(immune.combined.sct, value = seurat_obj_receiver[["orig.ident"]])
+
+condition_oi = "IMMUNE_STIM"
+condition_reference = "IMMUNE_CTRL" 
+
+DE_table_receiver = FindMarkers(object = seurat_obj_receiver, ident.1 = condition_oi, ident.2 = condition_reference, min.pct = 0.10, assay="RNA") %>% rownames_to_column("gene")
+
+geneset_oi = DE_table_receiver %>% filter(p_val <= 0.05 & abs(avg_log2FC) >= 0.25) %>% pull(gene)
+geneset_oi = geneset_oi %>% .[. %in% rownames(ligand_target_matrix)]
+
+```
+
+定义在各自群集中表达的配体和受体基因。潜在的配体集被缩小为在接收细胞群集中表达的具有靶标的配体。
+
+
+```{r}
+ligands = lr_network %>% pull(from) %>% unique()
+receptors = lr_network %>% pull(to) %>% unique()
+
+expressed_ligands = intersect(ligands,expressed_genes_sender)
+expressed_receptors = intersect(receptors,expressed_genes_receiver)
+
+potential_ligands = lr_network %>% filter(from %in% expressed_ligands & to %in% expressed_receptors) %>% pull(from) %>% unique()
+```
+
+NicheNet的配体活性分析根据接收细胞中存在的表达靶标基因的情况对配体进行排名。
+
+
+```{r}
+# ligand_activities = predict_ligand_activities(geneset = geneset_oi, background_expressed_genes = background_expressed_genes, ligand_target_matrix = ligand_target_matrix, potential_ligands = potential_ligands)
+
+# ligand_activities = ligand_activities %>% arrange(-pearson) %>% mutate(rank = rank(desc(pearson)))
+# ligand_activities
+```
+
