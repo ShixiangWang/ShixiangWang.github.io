@@ -1,0 +1,34 @@
+---
+title: Duplication Rate 经验值
+author: Shixiang Wang
+date: 2023-08-01
+categories: [note,bioinformatics]
+draft: false
+description: ''
+
+toc: true
+
+format:
+  html:
+    code-fold: false
+    code-overflow: wrap
+    code-tools: false
+---
+
+最近处理 RNA-Seq 的原始数据，用 fastp 发现 duplication rate 很高，有不少 60% 的，比较奇怪。
+
+搜索了下常见的值，记录一下。
+
+## Duplication Rate经验值
+
+WES：数据量约10G时，Duplication rate在10%左右;
+
+WGS：数据量约90G时，Duplication rate在10%左右;
+
+RNA-seq：Duplication rate在40% ~ 50%左右;
+
+WGBS：>10G, Duplication rate > 10%；
+
+多重PCR试剂盒和靶向捕获Panel，差异很大，跟需要测序的区域以及测序量有关，通常情况下只要中靶部分数据质量足够好，Duplication rate不是一个重要的考虑指标。
+
+> 参考文章：https://zhuanlan.zhihu.com/p/635160066

@@ -10,7 +10,38 @@
 <atom:link href="https://shixiangwang.github.io/index.xml" rel="self" type="application/rss+xml"/>
 <description>Reasoning is a blog dedicated to exploring the intersection of data science, bioinformatics, and personal insights.</description>
 <generator>quarto-1.3.361</generator>
-<lastBuildDate>Sun, 30 Jul 2023 16:00:00 GMT</lastBuildDate>
+<lastBuildDate>Mon, 31 Jul 2023 16:00:00 GMT</lastBuildDate>
+<item>
+  <title>Duplication Rate 经验值</title>
+  <dc:creator>Shixiang Wang</dc:creator>
+  <link>https://shixiangwang.github.io/posts/2023-08-01-duplication-rate/index.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<p>最近处理 RNA-Seq 的原始数据，用 fastp 发现 duplication rate 很高，有不少 60% 的，比较奇怪。</p>
+<p>搜索了下常见的值，记录一下。</p>
+<section id="duplication-rate经验值" class="level2">
+<h2 class="anchored" data-anchor-id="duplication-rate经验值">Duplication Rate经验值</h2>
+<p>WES：数据量约10G时，Duplication rate在10%左右;</p>
+<p>WGS：数据量约90G时，Duplication rate在10%左右;</p>
+<p>RNA-seq：Duplication rate在40% ~ 50%左右;</p>
+<p>WGBS：&gt;10G, Duplication rate &gt; 10%；</p>
+<p>多重PCR试剂盒和靶向捕获Panel，差异很大，跟需要测序的区域以及测序量有关，通常情况下只要中靶部分数据质量足够好，Duplication rate不是一个重要的考虑指标。</p>
+<blockquote class="blockquote">
+<p>参考文章：https://zhuanlan.zhihu.com/p/635160066</p>
+</blockquote>
+
+
+</section>
+
+ ]]></description>
+  <category>note</category>
+  <category>bioinformatics</category>
+  <guid>https://shixiangwang.github.io/posts/2023-08-01-duplication-rate/index.html</guid>
+  <pubDate>Mon, 31 Jul 2023 16:00:00 GMT</pubDate>
+</item>
 <item>
   <title>Single-cell Workshop 2021 - 03 - 细胞相互作用分析</title>
   <dc:creator>Shixiang Wang</dc:creator>
@@ -5631,27 +5662,6 @@ scFEA
   <category>journal</category>
   <guid>https://shixiangwang.github.io/posts/2023-06-28-journal/index.html</guid>
   <pubDate>Tue, 27 Jun 2023 16:00:00 GMT</pubDate>
-</item>
-<item>
-  <title>2023-06-27</title>
-  <dc:creator>Shixiang Wang</dc:creator>
-  <link>https://shixiangwang.github.io/posts/2023-06-27-journal/index.html</link>
-  <description><![CDATA[ 
-
-
-
-
-<p>今天记录在《经济学讲义》中看到的一句话：</p>
-<blockquote class="blockquote">
-<p>你拥有你的生命，但是你的生命是怎么度过的，你的职业是怎样选择的，很大程度上是由社会上其他人决定的。</p>
-</blockquote>
-
-
-
- ]]></description>
-  <category>journal</category>
-  <guid>https://shixiangwang.github.io/posts/2023-06-27-journal/index.html</guid>
-  <pubDate>Mon, 26 Jun 2023 16:00:00 GMT</pubDate>
 </item>
 </channel>
 </rss>

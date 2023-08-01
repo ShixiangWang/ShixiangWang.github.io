@@ -2,6 +2,7 @@
   {
     "listing": "/index.html",
     "items": [
+      "/posts/2023-08-01-duplication-rate/index.html",
       "/posts/2023-07-31-cell-interaction-analysis/index.html",
       "/posts/2023-07-26-clustering-and-cell-type-identification/index.html",
       "/posts/2023-07-25-small-notes/index.html",
