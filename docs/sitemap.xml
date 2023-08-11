@@ -50,7 +50,7 @@
   </url>
   <url>
     <loc>https://shixiangwang.github.io/index.html</loc>
-    <lastmod>2023-08-01T07:20:46.036Z</lastmod>
+    <lastmod>2023-08-11T04:26:53.595Z</lastmod>
   </url>
   <url>
     <loc>https://shixiangwang.github.io/resource.html</loc>
@@ -151,5 +151,9 @@
   <url>
     <loc>https://shixiangwang.github.io/posts/2023-08-01-duplication-rate/index.html</loc>
     <lastmod>2023-08-01T07:20:42.165Z</lastmod>
+  </url>
+  <url>
+    <loc>https://shixiangwang.github.io/posts/2023-08-11-caddyfile/index.html</loc>
+    <lastmod>2023-08-11T04:26:48.279Z</lastmod>
   </url>
 </urlset>

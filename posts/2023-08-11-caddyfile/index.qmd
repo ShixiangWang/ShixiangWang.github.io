@@ -1,0 +1,82 @@
+---
+title: caddyfile
+author: Shixiang Wang
+date: 2023-08-11
+categories: [note, Linux]
+draft: false
+description: ''
+
+toc: true
+
+format:
+  html:
+    code-fold: false
+    code-overflow: wrap
+    code-tools: false
+---
+
+
+Caddy 是一个反向代理工具，自动支持 https。
+这里我记录下之前弄的代理配置，免得服务器到期了这段经验被遗忘掉了。
+
+```sh
+$ cat /etc/caddy/Caddyfile 
+# The Caddyfile is an easy way to configure your Caddy web server.
+#
+# Unless the file starts with a global options block, the first
+# uncommented line is always the address of your site.
+#
+# To use your own domain name (with automatic HTTPS), first make
+# sure your domain's A/AAAA DNS records are properly pointed to
+# this machine's public IP, then replace ":80" below with your
+# domain name.
+
+#:80, 139.9.81.126:80 {
+#	# Set this path to your site's directory.
+#	#root * /usr/share/caddy
+#
+#	# Enable the static file server.
+#	#file_server
+#
+#        #tls self_signed
+#
+#	# Another common task is to set up a reverse proxy:
+#	reverse_proxy localhost:8090
+#
+#	# Or serve a PHP site through php-fpm:
+#	# php_fastcgi localhost:9000
+#}
+
+shixiangwang.work {
+
+  encode gzip
+  reverse_proxy localhost:8090
+
+  #handle_path /blog/zd* {
+  #  reverse_proxy localhost:8091
+  #}
+}
+
+mia.shixiangwang.work {
+  encode gzip
+  reverse_proxy localhost:8091
+}
+
+love.shixiangwang.work {
+  root * /var/www/love
+  file_server
+}
+
+pybook.shixiangwang.work {
+  root * /var/www/pybook
+  file_server
+}
+
+cookbook4r.shixiangwang.work {
+  root * /var/www/Cookbook-for-R-Chinese/docs
+  file_server
+}
+
+# Refer to the Caddy docs for more information:
+# https://caddyserver.com/docs/caddyfile
+```
