@@ -5678,6 +5678,201 @@ scFEA
 </table>
 <p>Workflow:</p>
 <p><img src="https://shixiangwang.github.io/posts/2023-07-10-scrna-recom/https:/raw.githubusercontent.com/WXlab-NJMU/scrna-recom/main/img/workflow.png" class="img-fluid"></p>
+<p>下图展示了从测序read比对参考基因组根据barcode和UMI产生Count matrix的过程。</p>
+<p><img src="https://shixiangwang.github.io/posts/2023-07-10-scrna-recom/https:/cdn.jsdelivr.net/gh/shixiangwang/cdn/img/202308171442271.png" class="img-fluid"></p>
+<blockquote class="blockquote">
+<p>scRNA-seq利用PCR技术对cDNA分子进行指数级扩增，而UMIs技术可以帮助用户识别并消除在扩增过程中可能产生的重复序列，从而降低技术噪音。值得注意的是，UMI中的测序错误可以人为地提高基因表达，因为应该被消除的重复序列被视为了不同的分子。相反，不同的分子可能会被错误地标记为具有相同的UMI序列，从而被视为同一个分子。</p>
+</blockquote>
+<p>FASTQ 预处理工具：</p>
+<p><img src="https://shixiangwang.github.io/posts/2023-07-10-scrna-recom/https:/cdn.jsdelivr.net/gh/shixiangwang/cdn/img/20230817150145.png" class="img-fluid"></p>
+<blockquote class="blockquote">
+<p>CellRanger、DropEst、Kallisto-BUStools、UMI-Tools、STARSolo和Alevin都是可选的read处理方法，</p>
+</blockquote>
+<p>Cell QC is commonly performed based on three QC covariates:</p>
+<p>the number of counts per barcode (count depth)：每个细胞的测序深度，gene count数总和</p>
+<p>the number of genes per barcode：每个细胞内表达基因的数目</p>
+<p>the fraction of counts from mitochondrial genes per barcode：每个细胞中线粒体基因的比例</p>
+<p>标准的 R 处理流程大概如下：</p>
+<div class="sourceCode" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1">Seurat_preprocessing <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">function</span>(counts, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">project =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Scissor_Single_Cell"</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">min.cells =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">400</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">min.features =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>,</span>
+<span id="cb1-2">                                 <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">normalization.method =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"LogNormalize"</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">scale.factor =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">10000</span>,</span>
+<span id="cb1-3">                                 <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">selection.method =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"vst"</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">resolution =</span> <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0.6</span>,</span>
+<span id="cb1-4">                                 <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">dims_Neighbors =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">:</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">10</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">dims_TSNE =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">:</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">10</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">dims_UMAP =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">:</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">10</span>,</span>
+<span id="cb1-5">                                 <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">verbose =</span> <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">TRUE</span>){</span>
+<span id="cb1-6">    <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">library</span>(Seurat)</span>
+<span id="cb1-7">    data <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">CreateSeuratObject</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">counts =</span> counts, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">project =</span> project, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">min.cells =</span> min.cells, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">min.features =</span> min.features)</span>
+<span id="cb1-8">    data <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">NormalizeData</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">object =</span> data, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">normalization.method =</span> normalization.method, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">scale.factor =</span> scale.factor, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">verbose =</span> verbose)</span>
+<span id="cb1-9">    data <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">FindVariableFeatures</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">object =</span> data, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">selection.method =</span> selection.method, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">verbose =</span> verbose)</span>
+<span id="cb1-10">    data <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">ScaleData</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">object =</span> data, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">verbose =</span> verbose)</span>
+<span id="cb1-11">    data <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">RunPCA</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">object =</span> data, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">features =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">VariableFeatures</span>(data), <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">verbose =</span> verbose)</span>
+<span id="cb1-12">    data <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">FindNeighbors</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">object =</span> data, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">dims =</span> dims_Neighbors, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">verbose =</span> verbose)</span>
+<span id="cb1-13">    data <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">FindClusters</span>( <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">object =</span> data, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">resolution =</span> resolution, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">verbose =</span> verbose)</span>
+<span id="cb1-14">    data <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">RunTSNE</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">object =</span> data, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">dims =</span> dims_TSNE)</span>
+<span id="cb1-15">    data <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">RunUMAP</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">object =</span> data, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">dims =</span> dims_UMAP, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">verbose =</span> verbose)</span>
+<span id="cb1-16"></span>
+<span id="cb1-17">    <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">return</span>(data)</span>
+<span id="cb1-18">}</span></code></pre></div>
+<blockquote class="blockquote">
+<p>来源：https://github.com/sunduanchen/Scissor/blob/master/R/Seurat_preprocessing.R</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>在过去的几年里，UMAP已经取代t-SNE成为scRNA-seq数据的默认可视化方法。与图聚类类似，UMAP生成细胞的最近邻图，根据相似度的强弱对每个细胞间的连接进行加权，然后将图形嵌入到二维空间中。还可以使用PAGA图初始化UMAP，以生成连续开发数据集的高度精确可视化。在实践中，人们发现UMAP在可视化数据集的局部结构方面表现得和t-SNE一样好，包括分离密切相关的细胞类型，同时在可视化数据的全局属性方面表现得更好。因此，对于大多数用户来说，UMAP是一个非常有用的默认可视化选项。对UMAP和t-SNE的其他测试表明，初始化这些方法的方式对它们的整体性能非常重要。实际上，在使用PCA初始化时，t-SNE和UMAP在保存全局结构方面表现得同样好。</p>
+</blockquote>
 
 
 

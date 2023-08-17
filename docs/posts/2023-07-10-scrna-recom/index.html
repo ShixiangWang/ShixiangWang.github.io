@@ -22,6 +22,40 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -423,6 +457,45 @@ scFEA
 </table>
 <p>Workflow:</p>
 <p><img src="https://raw.githubusercontent.com/WXlab-NJMU/scrna-recom/main/img/workflow.png" class="img-fluid"></p>
+<p>下图展示了从测序read比对参考基因组根据barcode和UMI产生Count matrix的过程。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/shixiangwang/cdn/img/202308171442271.png" class="img-fluid"></p>
+<blockquote class="blockquote">
+<p>scRNA-seq利用PCR技术对cDNA分子进行指数级扩增，而UMIs技术可以帮助用户识别并消除在扩增过程中可能产生的重复序列，从而降低技术噪音。值得注意的是，UMI中的测序错误可以人为地提高基因表达，因为应该被消除的重复序列被视为了不同的分子。相反，不同的分子可能会被错误地标记为具有相同的UMI序列，从而被视为同一个分子。</p>
+</blockquote>
+<p>FASTQ 预处理工具：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/shixiangwang/cdn/img/20230817150145.png" class="img-fluid"></p>
+<blockquote class="blockquote">
+<p>CellRanger、DropEst、Kallisto-BUStools、UMI-Tools、STARSolo和Alevin都是可选的read处理方法，</p>
+</blockquote>
+<p>Cell QC is commonly performed based on three QC covariates:</p>
+<p>the number of counts per barcode (count depth)：每个细胞的测序深度，gene count数总和</p>
+<p>the number of genes per barcode：每个细胞内表达基因的数目</p>
+<p>the fraction of counts from mitochondrial genes per barcode：每个细胞中线粒体基因的比例</p>
+<p>标准的 R 处理流程大概如下：</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>Seurat_preprocessing <span class="ot">&lt;-</span> <span class="cf">function</span>(counts, <span class="at">project =</span> <span class="st">"Scissor_Single_Cell"</span>, <span class="at">min.cells =</span> <span class="dv">400</span>, <span class="at">min.features =</span> <span class="dv">0</span>,</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>                                 <span class="at">normalization.method =</span> <span class="st">"LogNormalize"</span>, <span class="at">scale.factor =</span> <span class="dv">10000</span>,</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>                                 <span class="at">selection.method =</span> <span class="st">"vst"</span>, <span class="at">resolution =</span> <span class="fl">0.6</span>,</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>                                 <span class="at">dims_Neighbors =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>, <span class="at">dims_TSNE =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>, <span class="at">dims_UMAP =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>,</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>                                 <span class="at">verbose =</span> <span class="cn">TRUE</span>){</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">library</span>(Seurat)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    data <span class="ot">&lt;-</span> <span class="fu">CreateSeuratObject</span>(<span class="at">counts =</span> counts, <span class="at">project =</span> project, <span class="at">min.cells =</span> min.cells, <span class="at">min.features =</span> min.features)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    data <span class="ot">&lt;-</span> <span class="fu">NormalizeData</span>(<span class="at">object =</span> data, <span class="at">normalization.method =</span> normalization.method, <span class="at">scale.factor =</span> scale.factor, <span class="at">verbose =</span> verbose)</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    data <span class="ot">&lt;-</span> <span class="fu">FindVariableFeatures</span>(<span class="at">object =</span> data, <span class="at">selection.method =</span> selection.method, <span class="at">verbose =</span> verbose)</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    data <span class="ot">&lt;-</span> <span class="fu">ScaleData</span>(<span class="at">object =</span> data, <span class="at">verbose =</span> verbose)</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    data <span class="ot">&lt;-</span> <span class="fu">RunPCA</span>(<span class="at">object =</span> data, <span class="at">features =</span> <span class="fu">VariableFeatures</span>(data), <span class="at">verbose =</span> verbose)</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    data <span class="ot">&lt;-</span> <span class="fu">FindNeighbors</span>(<span class="at">object =</span> data, <span class="at">dims =</span> dims_Neighbors, <span class="at">verbose =</span> verbose)</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    data <span class="ot">&lt;-</span> <span class="fu">FindClusters</span>( <span class="at">object =</span> data, <span class="at">resolution =</span> resolution, <span class="at">verbose =</span> verbose)</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>    data <span class="ot">&lt;-</span> <span class="fu">RunTSNE</span>(<span class="at">object =</span> data, <span class="at">dims =</span> dims_TSNE)</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>    data <span class="ot">&lt;-</span> <span class="fu">RunUMAP</span>(<span class="at">object =</span> data, <span class="at">dims =</span> dims_UMAP, <span class="at">verbose =</span> verbose)</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>(data)</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<blockquote class="blockquote">
+<p>来源：https://github.com/sunduanchen/Scissor/blob/master/R/Seurat_preprocessing.R</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>在过去的几年里，UMAP已经取代t-SNE成为scRNA-seq数据的默认可视化方法。与图聚类类似，UMAP生成细胞的最近邻图，根据相似度的强弱对每个细胞间的连接进行加权，然后将图形嵌入到二维空间中。还可以使用PAGA图初始化UMAP，以生成连续开发数据集的高度精确可视化。在实践中，人们发现UMAP在可视化数据集的局部结构方面表现得和t-SNE一样好，包括分离密切相关的细胞类型，同时在可视化数据的全局属性方面表现得更好。因此，对于大多数用户来说，UMAP是一个非常有用的默认可视化选项。对UMAP和t-SNE的其他测试表明，初始化这些方法的方式对它们的整体性能非常重要。实际上，在使用PCA初始化时，t-SNE和UMAP在保存全局结构方面表现得同样好。</p>
+</blockquote>
 
 
 
