@@ -2,6 +2,7 @@
   {
     "listing": "/index.html",
     "items": [
+      "/posts/2023-08-17-normalize-and-scale-data/index.html",
       "/posts/2023-08-11-caddyfile/index.html",
       "/posts/2023-08-01-duplication-rate/index.html",
       "/posts/2023-07-31-cell-interaction-analysis/index.html",

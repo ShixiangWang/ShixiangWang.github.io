@@ -1,0 +1,55 @@
+---
+title: normalize data 和 scale data 的差异
+author: Shixiang Wang
+date: 2023-08-17
+categories: [note,stats]
+draft: false
+description: ''
+
+toc: true
+
+format:
+  html:
+    code-fold: false
+    code-overflow: wrap
+    code-tools: false
+---
+
+"Normalize data" 和 "scale data" 都是数据预处理的步骤，但它们在具体操作和效果上有所不同。
+
+**Normalize Data (数据归一化):**
+数据归一化是一种常见的预处理方法，用于将不同特征的数据调整到相同的尺度范围内。这有助于避免在模型训练中因为某些特征值范围较大而导致的模型收敛问题。通常，数据归一化意味着将数据缩放到0到1之间的范围，使其具有相似的尺度。常见的归一化方法包括最小-最大缩放、Z-得分标准化等。数据归一化通常不会改变数据的分布形状，只是将其映射到一个更统一的尺度。
+
+**Scale Data (数据标准化):**
+数据标准化也是数据预处理的一部分，但它更注重将数据转换成特定的分布，通常是均值为0，标准差为1的正态分布。标准化后，数据的均值会接近0，标准差接近1，从而使得数据更适合一些要求数据服从正态分布的模型。标准化通常用于在特征之间的差异较大且可能对模型性能产生影响时。
+
+因此，"normalize data" 侧重于将数据映射到相同的尺度范围内，而 "scale data" 则强调将数据调整为特定分布的形式，通常是标准正态分布。选择使用哪种方法取决于具体的问题和模型需求。
+
+> 问题是我问的，回答是 ChatGPT。我觉得很好。
+
+我继续问：“z score 变换不就是数据转换成特定的分布，通常是均值为0，标准差为1的正态分布？”
+
+回答来了：
+
+是的，您说得对。Z-score标准化（Z-score transformation）是一种常见的数据标准化方法，其目的正是将数据转换为均值为0，标准差为1的正态分布。这种标准化方法通过减去均值，然后除以标准差，使数据的分布接近标准正态分布。这有助于使数据适用于那些要求数据服从正态分布的模型，同时也有助于处理不同尺度和范围的特征，以提高模型的稳定性和效果。
+
+在前面的回答中，我没有清晰地表达出 "scale data" 的概念，我混淆了 "normalize data" 和 Z-score标准化。非常抱歉对此造成了困扰。事实上，Z-score标准化就是 "scale data" 的一个具体示例，用于将数据进行标准化，使其符合均值为0，标准差为1的正态分布。
+
+> 看来机器人也有点懵。
+
+我们看看别人的回答，下面的比较对味：
+
+One of the reasons that it's easy to get confused between scaling and normalization is because the terms are sometimes used interchangeably and, to make it even more confusing, they are very similar! In both cases, you're transforming the values of numeric variables so that the transformed data points have specific helpful properties. The difference is that:
+
+in scaling, you're changing the range of your data, while
+in normalization, you're changing the shape of the distribution of your data.
+
+为了尽量避免误读，我这里放了英文原文。感兴趣的可以看下 <https://www.kaggle.com/code/alexisbcook/scaling-and-normalization/tutorial> 具体说明。
+
+简而言之：
+
+- scaling 改变数据取值范围（比如 min-max 变换，z-score 变换）。
+- normalization 改变数据的分布（如 log 变换）。
+
+
+
