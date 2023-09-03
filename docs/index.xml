@@ -10,7 +10,371 @@
 <atom:link href="https://shixiangwang.github.io/index.xml" rel="self" type="application/rss+xml"/>
 <description>Reasoning is a blog dedicated to exploring the intersection of data science, bioinformatics, and personal insights.</description>
 <generator>quarto-1.3.361</generator>
-<lastBuildDate>Wed, 30 Aug 2023 16:00:00 GMT</lastBuildDate>
+<lastBuildDate>Sat, 02 Sep 2023 16:00:00 GMT</lastBuildDate>
+<item>
+  <title>circRNA鉴定流程-使用手册</title>
+  <dc:creator>Shixiang Wang</dc:creator>
+  <link>https://shixiangwang.github.io/posts/2023-09-03-use-circrna-pipeline/index.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<p>本系统提供了一个使用四种方法（CIRIquant、Circexplorer2、find_circ和circRNA_finder）从转录组双端测序的FASTQ文件中轻松且可重复地检测环状RNA（circRNA）的计算流程。</p>
+<section id="功能特性" class="level2">
+<h2 class="anchored" data-anchor-id="功能特性">功能特性</h2>
+<ul>
+<li>多方法鉴定和整合</li>
+<li>并行计算支持</li>
+<li>断点续跑</li>
+<li>结果整合和规整化输出</li>
+<li>日志记录</li>
+</ul>
+</section>
+<section id="准备工作" class="level2">
+<h2 class="anchored" data-anchor-id="准备工作">准备工作</h2>
+<section id="操作系统环境" class="level3">
+<h3 class="anchored" data-anchor-id="操作系统环境">操作系统环境</h3>
+<p>本系统需要运行在 Linux 系统环境中（不限发行版本，测试系统包括 Ubuntu、CentOS）。 需要用户知道如何操作 Linux 系统。</p>
+</section>
+<section id="步骤1.-安装所需的conda环境" class="level3">
+<h3 class="anchored" data-anchor-id="步骤1.-安装所需的conda环境">步骤1. 安装所需的conda环境</h3>
+<ol type="1">
+<li><p>（可选）创建一个名为’circrna’的独立Linux帐户，用于部署和运行循环RNA识别流程。</p></li>
+<li><p>安装<a href="https://docs.conda.io/en/latest/miniconda.html">miniconda3</a>到默认路径，即<code>~/miniconda3</code>。 如果按照上述推荐设置，conda应该可在<code>/home/circrna/miniconda3</code>处使用。</p></li>
+<li><p>使用<code>conda install -n base --override-channels -c conda-forge mamba 'python_abi=*=*cp*'</code>将<a href="https://mamba.readthedocs.io/en/latest/installation.html">mamba</a>安装到<code>base</code>环境中。</p></li>
+<li><p>使用以下命令安装<a href="https://just.systems/">just</a>：<code>curl --proto '=https' --tlsv1.2 -sSf https://just.systems/install.sh | bash -s -- --to ~/bin</code>。请将<code>~/bin</code>添加到您的<code>$PATH</code>中。 您可以将<code>~/bin</code>更改为任何位置，但在进入终端时需要使<code>just</code>可用。</p></li>
+<li><p>安装<a href="https://github.com/shenwei356/rush">rush</a>并将其路径添加到<code>$PATH</code>，类似于<code>just</code>。</p></li>
+<li><p>（可选）如果需要，设置conda和pypi（pip）的注册表。例如，如果您在中国，我建议使用以下链接进行设置：<a href="https://mirrors.tuna.tsinghua.edu.cn/help/anaconda/">https://mirrors.tuna.tsinghua.edu.cn/help/anaconda/</a> 和 <a href="https://mirrors.tuna.tsinghua.edu.cn/help/pypi/">https://mirrors.tuna.tsinghua.edu.cn/help/pypi/</a>。</p></li>
+<li><p>使用本软著提供的代码，并切换到代码目录。</p></li>
+<li><p>按顺序安装conda环境。</p>
+<div class="sourceCode" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">cd</span> circrna-pipeline</span>
+<span id="cb1-2"><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">cd</span> CIRIquant</span>
+<span id="cb1-3"><span class="ex" style="color: null;
+background-color: null;
+font-style: inherit;">just</span> install</span>
+<span id="cb1-4"><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">cd</span> ../FindCirc</span>
+<span id="cb1-5"><span class="ex" style="color: null;
+background-color: null;
+font-style: inherit;">just</span> install</span>
+<span id="cb1-6"><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">cd</span> ../Circexplorer2</span>
+<span id="cb1-7"><span class="ex" style="color: null;
+background-color: null;
+font-style: inherit;">just</span> install</span>
+<span id="cb1-8"><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">cd</span> ../circRNA_finder</span>
+<span id="cb1-9"><span class="ex" style="color: null;
+background-color: null;
+font-style: inherit;">just</span> install</span></code></pre></div></li>
+</ol>
+<p>请确保已创建所有conda环境并安装了所需的软件。</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://shixiangwang.github.io/posts/2023-09-03-use-circrna-pipeline/https:/cdn.jsdelivr.net/gh/shixiangwang/cdn/img/image-20230903160124763.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">image-20230903160124763</figcaption>
+</figure>
+</div>
+</section>
+<section id="步骤2.-准备比对索引参考文件和配置文件" class="level3">
+<h3 class="anchored" data-anchor-id="步骤2.-准备比对索引参考文件和配置文件">步骤2. 准备比对索引、参考文件和配置文件</h3>
+<p>要运行流程，需要准备好一些参考数据文件。</p>
+<ol type="1">
+<li><p>准备基因组fasta文件和gtf文件。我们使用<code>GRCh38.primary_assembly.genome.fa</code>和<code>gencode.v34.annotation.gtf</code>。</p></li>
+<li><p>对于Circexplorer2，您需要使用<code>Circexplorer2</code>环境中的<code>fetch_ucsc.py</code>脚本下载参考文件<code>hg38_ref_all.txt</code>（应与您的参考基因组相对应）。</p></li>
+<li><p>准备比对索引，<a href="config_zhou.sh">config_zhou.sh</a>中记录了命令和配置，截图如下。</p>
+<img src="https://shixiangwang.github.io/posts/2023-09-03-use-circrna-pipeline/https:/cdn.jsdelivr.net/gh/shixiangwang/cdn/img/image-20230903160258992.png" class="img-fluid" alt="image-20230903160258992">
+<p>请注意，在运行索引命令之前，您需要激活相应的环境。</p>
+<p>例如，为CIRIquant准备索引。 <code>sh  source activate CIRIquant  bwa index -a bwtsw -p /path/to/GRCh38.primary_assembly.genome.fa /path/to/GRCh38.primary_assembly.genome.fa  hisat2-build -p 40 /path/to/GRCh38.primary_assembly.genome.fa /path/to/GRCh38.primary_assembly.genome.fa</code></p></li>
+<li><p>对于CIRIquant，需要一个<code>yml</code>文件来设置软件和文件的路径，例如hg38.yml (CIRIquant/hg38.yml，截图如下)。您需要修改内容以适应您的设置（也可以创建另一个<code>yml</code>文件）。</p>
+<img src="https://shixiangwang.github.io/posts/2023-09-03-use-circrna-pipeline/https:/cdn.jsdelivr.net/gh/shixiangwang/cdn/img/image-20230903160451460.png" class="img-fluid" alt="image-20230903160451460"></li>
+<li><p>设置一个<code>config.sh</code>文件，它使用SHELL变量设置了所有必需的设置，config_zhou.sh (config_zhou.sh) 是一个很好的参考（当然，您可以根据需要修改其内容）。</p>
+<img src="https://shixiangwang.github.io/posts/2023-09-03-use-circrna-pipeline/https:/cdn.jsdelivr.net/gh/shixiangwang/cdn/img/image-20230903160258992.png" class="img-fluid" alt="image-20230903160258992"></li>
+</ol>
+</section>
+</section>
+<section id="使用流程" class="level2">
+<h2 class="anchored" data-anchor-id="使用流程">使用流程</h2>
+<section id="预处理转录组双端测序的-fastq-文件" class="level3">
+<h3 class="anchored" data-anchor-id="预处理转录组双端测序的-fastq-文件">预处理转录组双端测序的 fastq 文件</h3>
+<p>这一部分的代码存储在 qc 和common目录下面，我们提供了 <code>md5check.sh</code> 方便用户对自己的数据进行 md5 完整性检查，确保数据完整后可以开始进行数据的预处理步骤，包括质控、去除双端的人为标记序列（adapters）。用户输入的文件后缀需要确保为<code>_1.fastq.gz</code>和<code>_2.fastq.gz</code>。示例文件列表截图如下，红色框选了文件后缀。</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://shixiangwang.github.io/posts/2023-09-03-use-circrna-pipeline/https:/cdn.jsdelivr.net/gh/shixiangwang/cdn/img/image-20230903160856615.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">image-20230903160856615</figcaption>
+</figure>
+</div>
+<p>完成后可以进行预处理操作，下面提供了示例的 Shell 脚本。</p>
+<div class="sourceCode" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#!/usr/bin/env bash</span></span>
+<span id="cb2-2"></span>
+<span id="cb2-3"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># 指定软件路径</span></span>
+<span id="cb2-4"><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">py</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>/home/circrna/miniconda3/bin/python3</span>
+<span id="cb2-5"><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">fp</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>/home/circrna/miniconda3/bin/fastp</span>
+<span id="cb2-6"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># 指定代码目录</span></span>
+<span id="cb2-7"><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">PIPELINE</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>/home/circrna/circrna-pipeline</span>
+<span id="cb2-8"></span>
+<span id="cb2-9"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># 指定输入、输出路径</span></span>
+<span id="cb2-10"><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">fqfile</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>./sample_list.txt</span>
+<span id="cb2-11"><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">indir</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>/path/to/input</span>
+<span id="cb2-12"><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">oudir</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>/path/to/output</span>
+<span id="cb2-13"></span>
+<span id="cb2-14"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># 配置 CPU 数目</span></span>
+<span id="cb2-15"><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">nthreads</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>20</span>
+<span id="cb2-16"></span>
+<span id="cb2-17"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># 调用脚本生成输入目录下的样本 ID 列表</span></span>
+<span id="cb2-18"><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">${py}</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">${PIPELINE}</span>/common/ll_fq.py <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">${indir}</span> <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">--output</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">${fqfile}</span></span>
+<span id="cb2-19"></span>
+<span id="cb2-20"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># 调用预处理命令到后台运行，并将运行的日志导出到 test_qc.log</span></span>
+<span id="cb2-21"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">nohup</span> bash <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">${PIPELINE}</span>/qc/fp.sh <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">${fqfile}</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">${indir}</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">${oudir}</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">${nthreads}</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">${fp}</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&amp;&gt;</span> test_qc.log <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&amp;</span></span></code></pre></div>
+<p>下面截图展示了预处理的日志信息，最终会生成样本的质量检测报告（html文件）。</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://shixiangwang.github.io/posts/2023-09-03-use-circrna-pipeline/https:/cdn.jsdelivr.net/gh/shixiangwang/cdn/img/image-20230903161015118.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">image-20230903161015118</figcaption>
+</figure>
+</div>
+<p>报告文件截图：</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://shixiangwang.github.io/posts/2023-09-03-use-circrna-pipeline/https:/cdn.jsdelivr.net/gh/shixiangwang/cdn/img/image-20230903161412806.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">image-20230903161412806</figcaption>
+</figure>
+</div>
+</section>
+<section id="运行检测流程" class="level3">
+<h3 class="anchored" data-anchor-id="运行检测流程">运行检测流程</h3>
+<p>创建一个包含以下设置和命令的shell脚本。</p>
+<div class="sourceCode" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># 指定输入、输出路径</span></span>
+<span id="cb3-2"><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">fqfile</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>./sample_list.txt</span>
+<span id="cb3-3"><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">indir</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>/path/include/paired/fastq/files</span>
+<span id="cb3-4"><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">oudir</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>/path/to/output</span>
+<span id="cb3-5"><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">nthreads</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>20</span>
+<span id="cb3-6"><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">config</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>/path/to/your/config.sh</span>
+<span id="cb3-7"></span>
+<span id="cb3-8"><span class="ex" style="color: null;
+background-color: null;
+font-style: inherit;">common/ll_fq.py</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">${indir}</span> <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">--output</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">${fqfile}</span></span>
+<span id="cb3-9"></span>
+<span id="cb3-10"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">nohup</span> bash caller.sh <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">${fqfile}</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">${indir}</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">${oudir}</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">${nthreads}</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">${config}</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&amp;&gt;</span> run.log <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&amp;</span></span></code></pre></div>
+<blockquote class="blockquote">
+<p>必须在conda <code>base</code>环境中（或已安装<code>python3</code>的情况下）执行该脚本。 如果您已经自己准备了<code>sample_list.txt</code>文件。 您可以注释掉<code>common/ll_fq.py</code>这一行，然后可以在bash中运行该脚本 而无需任何其他要求（例如，不需要从<code>base</code>环境中安装<code>python3</code>）。</p>
+</blockquote>
+<p>我建议使用2个样本测试流程。如果一切顺利，然后运行您拥有的所有数据文件。流程将跳过已生成结果文件的样本。</p>
+<p>日志截图：</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://shixiangwang.github.io/posts/2023-09-03-use-circrna-pipeline/https:/cdn.jsdelivr.net/gh/shixiangwang/cdn/img/image-20230903162126629.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">image-20230903162126629</figcaption>
+</figure>
+</div>
+<p>如果运行出现中断，再次运行脚本/命令即可，流程会自动跳过已检测完成的样本。</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://shixiangwang.github.io/posts/2023-09-03-use-circrna-pipeline/https:/cdn.jsdelivr.net/gh/shixiangwang/cdn/img/image-20230903162238611.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">image-20230903162238611</figcaption>
+</figure>
+</div>
+</section>
+<section id="检查检测输出结果" class="level3">
+<h3 class="anchored" data-anchor-id="检查检测输出结果">检查检测输出结果</h3>
+<p>输出目录包含根据样本名称和方法组合的结果文件。</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://shixiangwang.github.io/posts/2023-09-03-use-circrna-pipeline/https:/cdn.jsdelivr.net/gh/shixiangwang/cdn/img/image-20230903161627392.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">image-20230903161627392</figcaption>
+</figure>
+</div>
+<p>结果文件通常包含循环RNA的位置和计数值。</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://shixiangwang.github.io/posts/2023-09-03-use-circrna-pipeline/https:/cdn.jsdelivr.net/gh/shixiangwang/cdn/img/image-20230903161702141.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">image-20230903161702141</figcaption>
+</figure>
+</div>
+</section>
+<section id="聚合结果" class="level3">
+<h3 class="anchored" data-anchor-id="聚合结果">聚合结果</h3>
+<p>上述生成了 4 种检测方法的单独结果，我们下一步需要对结果进行聚合，相关代码放在 aggr 目录下。</p>
+<p><code>aggr_beds.R</code> 提供了对方法结果聚合的代码，示例运行命令为：</p>
+<div class="sourceCode" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><span class="ex" style="color: null;
+background-color: null;
+font-style: inherit;">./aggr/aggr_dataset.R</span> /path/to/result /path/to/aggr_output</span></code></pre></div>
+<p>这样每一个样本都有一个聚合的结果文件。</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://shixiangwang.github.io/posts/2023-09-03-use-circrna-pipeline/https:/cdn.jsdelivr.net/gh/shixiangwang/cdn/img/image-20230903161752469.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">image-20230903161752469</figcaption>
+</figure>
+</div>
+<p>进一步，用户还可以利用 <code>aggr_dataset.R</code> 对全部的样本（即整个输入数据集）结果生成一个整合结果。</p>
+<p>调用命令为：</p>
+<div class="sourceCode" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><span class="ex" style="color: null;
+background-color: null;
+font-style: inherit;">./aggr/aggr_dataset.R</span> /path/to/aggr_output /path/to/dataset_output</span></code></pre></div>
+<p>最后结果会在 <code>/path/to/dataset_output</code> 生成 <code>aggr_output_circRNA.tsv.gz</code> 文件，这是一个大的压缩数据表格，包含以下一些列信息。</p>
+<pre><code>id, symbol, strand, chrom, startUpBSE, endDownBSE, tool, samples...</code></pre>
+<ul>
+<li>id: circRNA 的唯一标记信息</li>
+<li>symbol: 基因名</li>
+<li>strand: 链信息</li>
+<li>chrom: circRNA 染色体信息</li>
+<li>startUpBSE: circRNA 染色体起点</li>
+<li>endDownBSE: circRNA 染色体终点</li>
+<li>tool: 方法标记</li>
+<li>samples…：其他每列都对应处理的一个样本</li>
+</ul>
+<p>下面是测试生成的文件：</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://shixiangwang.github.io/posts/2023-09-03-use-circrna-pipeline/https:/cdn.jsdelivr.net/gh/shixiangwang/cdn/img/image-20230903162442921.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">image-20230903162442921</figcaption>
+</figure>
+</div>
+<p>查看它的部分内容数据：</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://shixiangwang.github.io/posts/2023-09-03-use-circrna-pipeline/https:/cdn.jsdelivr.net/gh/shixiangwang/cdn/img/image-20230903162511289.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">image-20230903162511289</figcaption>
+</figure>
+</div>
+<p>用户可以利用流程不同的结果进行下游的分析和研究，包括：</p>
+<ul>
+<li>不同方法的检测结果</li>
+<li>同一个样本不同方法检测的聚合结果</li>
+<li>整个输入样本数据集的检测整合结果</li>
+</ul>
+
+
+</section>
+</section>
+
+ ]]></description>
+  <category>bioinformatics</category>
+  <guid>https://shixiangwang.github.io/posts/2023-09-03-use-circrna-pipeline/index.html</guid>
+  <pubDate>Sat, 02 Sep 2023 16:00:00 GMT</pubDate>
+</item>
 <item>
   <title>pnas</title>
   <dc:creator>Shixiang Wang</dc:creator>
@@ -6016,26 +6380,6 @@ font-style: inherit;">return</span>(data)</span>
  ]]></description>
   <category>journal</category>
   <guid>https://shixiangwang.github.io/posts/2023-07-06-journal/index.html</guid>
-  <pubDate>Wed, 05 Jul 2023 16:00:00 GMT</pubDate>
-</item>
-<item>
-  <title>生物医学能离开生物信息学吗？</title>
-  <dc:creator>Shixiang Wang</dc:creator>
-  <link>https://shixiangwang.github.io/posts/2023-07-06-can-biology-live-without-bioinformatics/index.html</link>
-  <description><![CDATA[ 
-
-
-
-
-<p>不能。</p>
-<p>整个生物医学领域，已经由实验科学进入了数据科学的层次，而这一点无法再倒退。 生物信息学者/家（bioinformatian/computational biologist），已经成为了该领域不可或缺的存在。无论是狭义的组学，还是更广义的分子结构计算/图形处理等，生物信息学者已经成为了科学发现/技术创造的中间力量。这也正是为什么从事生物信息学的人能从致谢名单中走到作者列表，走到第一/通讯作者的根本原因。</p>
-<p>如果你是一个纯湿实验的研究者，你还在心里鄙夷这个行业，你就应该反思了，时代的进步不会等待你的落后。</p>
-
-
-
- ]]></description>
-  <category>thought</category>
-  <guid>https://shixiangwang.github.io/posts/2023-07-06-can-biology-live-without-bioinformatics/index.html</guid>
   <pubDate>Wed, 05 Jul 2023 16:00:00 GMT</pubDate>
 </item>
 </channel>

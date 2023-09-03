@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.361">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Shixiang Wang">
+<meta name="dcterms.date" content="2023-09-03">
+
+<title>Reasoning - circRNA鉴定流程-使用手册</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="dark">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<style>html{ scroll-behavior: smooth; }</style>
+<!-- Primary Meta Tags -->
+<title>Reasoning - ShixiangWang's blog</title>
+<meta name="title" content="Reasoning - ShixiangWang's blog">
+<meta name="description" content="Reasoning is a blog dedicated to exploring the intersection of data science, bioinformatics, and personal insights.">
+
+<!-- Open Graph / Facebook -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://shixiangwang.github.io/posts/welcome/">
+<meta property="og:title" content="Reasoning - circRNA鉴定流程-使用手册">
+<meta property="og:description" content="">
+<meta property="og:image" content="https://avatars.githubusercontent.com/u/25057508?v=4">
+
+<!-- Twitter -->
+<meta property="twitter:card" content="summary_large_image">
+<meta property="twitter:url" content="https://shixiangwang.github.io/posts/welcome/">
+<meta property="twitter:title" content="Reasoning - ShixiangWang's blog">
+<meta property="twitter:description" content="Reasoning is a blog dedicated to exploring the intersection of data science, bioinformatics, and personal insights.">
+<meta property="twitter:image" content="https://avatars.githubusercontent.com/u/25057508?v=4">
+
+
+<meta name="referrer" content="no-referrer">
+
+
+<link rel="stylesheet" href="../../styles.css">
+<meta name="twitter:title" content="Reasoning - circRNA鉴定流程-使用手册">
+<meta name="twitter:description" content="">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/shixiangwang/cdn/img/image-20230903160124763.png">
+<meta name="twitter:creator" content="@WangShxiang">
+<meta name="twitter:card" content="summary_large_image">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">Reasoning</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-resources" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
+ <span class="menu-text">Resources</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-resources">    
+        <li>
+    <a class="dropdown-item" href="../../resource.html" rel="" target="">
+ <span class="dropdown-text">Code and Books</span></a>
+  </li>  
+    </ul>
+  </li>
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="https://shixiangwang.github.io/cv-shixiang/" rel="" target="">
+ <span class="menu-text">Resume</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://shixiangwang.github.io/home/logo/qrcode.jpg" rel="" target=""><i class="bi bi-wechat" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://www.zhihu.com/people/shixiangwang" rel="" target=""><i class="bi bi-quora" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/ShixiangWang" rel="" target=""><i class="bi bi-github" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com/WangShxiang" rel="" target=""><i class="bi bi-twitter" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="../../index.xml" rel="" target=""><i class="bi bi-rss" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+</ul>
+            <div class="quarto-navbar-tools">
+</div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">circRNA鉴定流程-使用手册</h1>
+                                <div class="quarto-categories">
+                <div class="quarto-category">bioinformatics</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Shixiang Wang </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">September 3, 2023</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#功能特性" id="toc-功能特性" class="nav-link active" data-scroll-target="#功能特性">功能特性</a></li>
+  <li><a href="#准备工作" id="toc-准备工作" class="nav-link" data-scroll-target="#准备工作">准备工作</a>
+  <ul class="collapse">
+  <li><a href="#操作系统环境" id="toc-操作系统环境" class="nav-link" data-scroll-target="#操作系统环境">操作系统环境</a></li>
+  <li><a href="#步骤1.-安装所需的conda环境" id="toc-步骤1.-安装所需的conda环境" class="nav-link" data-scroll-target="#步骤1.-安装所需的conda环境">步骤1. 安装所需的conda环境</a></li>
+  <li><a href="#步骤2.-准备比对索引参考文件和配置文件" id="toc-步骤2.-准备比对索引参考文件和配置文件" class="nav-link" data-scroll-target="#步骤2.-准备比对索引参考文件和配置文件">步骤2. 准备比对索引、参考文件和配置文件</a></li>
+  </ul></li>
+  <li><a href="#使用流程" id="toc-使用流程" class="nav-link" data-scroll-target="#使用流程">使用流程</a>
+  <ul class="collapse">
+  <li><a href="#预处理转录组双端测序的-fastq-文件" id="toc-预处理转录组双端测序的-fastq-文件" class="nav-link" data-scroll-target="#预处理转录组双端测序的-fastq-文件">预处理转录组双端测序的 fastq 文件</a></li>
+  <li><a href="#运行检测流程" id="toc-运行检测流程" class="nav-link" data-scroll-target="#运行检测流程">运行检测流程</a></li>
+  <li><a href="#检查检测输出结果" id="toc-检查检测输出结果" class="nav-link" data-scroll-target="#检查检测输出结果">检查检测输出结果</a></li>
+  <li><a href="#聚合结果" id="toc-聚合结果" class="nav-link" data-scroll-target="#聚合结果">聚合结果</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+<p>本系统提供了一个使用四种方法（CIRIquant、Circexplorer2、find_circ和circRNA_finder）从转录组双端测序的FASTQ文件中轻松且可重复地检测环状RNA（circRNA）的计算流程。</p>
+<section id="功能特性" class="level2">
+<h2 class="anchored" data-anchor-id="功能特性">功能特性</h2>
+<ul>
+<li>多方法鉴定和整合</li>
+<li>并行计算支持</li>
+<li>断点续跑</li>
+<li>结果整合和规整化输出</li>
+<li>日志记录</li>
+</ul>
+</section>
+<section id="准备工作" class="level2">
+<h2 class="anchored" data-anchor-id="准备工作">准备工作</h2>
+<section id="操作系统环境" class="level3">
+<h3 class="anchored" data-anchor-id="操作系统环境">操作系统环境</h3>
+<p>本系统需要运行在 Linux 系统环境中（不限发行版本，测试系统包括 Ubuntu、CentOS）。 需要用户知道如何操作 Linux 系统。</p>
+</section>
+<section id="步骤1.-安装所需的conda环境" class="level3">
+<h3 class="anchored" data-anchor-id="步骤1.-安装所需的conda环境">步骤1. 安装所需的conda环境</h3>
+<ol type="1">
+<li><p>（可选）创建一个名为’circrna’的独立Linux帐户，用于部署和运行循环RNA识别流程。</p></li>
+<li><p>安装<a href="https://docs.conda.io/en/latest/miniconda.html">miniconda3</a>到默认路径，即<code>~/miniconda3</code>。 如果按照上述推荐设置，conda应该可在<code>/home/circrna/miniconda3</code>处使用。</p></li>
+<li><p>使用<code>conda install -n base --override-channels -c conda-forge mamba 'python_abi=*=*cp*'</code>将<a href="https://mamba.readthedocs.io/en/latest/installation.html">mamba</a>安装到<code>base</code>环境中。</p></li>
+<li><p>使用以下命令安装<a href="https://just.systems/">just</a>：<code>curl --proto '=https' --tlsv1.2 -sSf https://just.systems/install.sh | bash -s -- --to ~/bin</code>。请将<code>~/bin</code>添加到您的<code>$PATH</code>中。 您可以将<code>~/bin</code>更改为任何位置，但在进入终端时需要使<code>just</code>可用。</p></li>
+<li><p>安装<a href="https://github.com/shenwei356/rush">rush</a>并将其路径添加到<code>$PATH</code>，类似于<code>just</code>。</p></li>
+<li><p>（可选）如果需要，设置conda和pypi（pip）的注册表。例如，如果您在中国，我建议使用以下链接进行设置：<a href="https://mirrors.tuna.tsinghua.edu.cn/help/anaconda/">https://mirrors.tuna.tsinghua.edu.cn/help/anaconda/</a> 和 <a href="https://mirrors.tuna.tsinghua.edu.cn/help/pypi/">https://mirrors.tuna.tsinghua.edu.cn/help/pypi/</a>。</p></li>
+<li><p>使用本软著提供的代码，并切换到代码目录。</p></li>
+<li><p>按顺序安装conda环境。</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> circrna-pipeline</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> CIRIquant</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="ex">just</span> install</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ../FindCirc</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="ex">just</span> install</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ../Circexplorer2</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="ex">just</span> install</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ../circRNA_finder</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="ex">just</span> install</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+</ol>
+<p>请确保已创建所有conda环境并安装了所需的软件。</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://cdn.jsdelivr.net/gh/shixiangwang/cdn/img/image-20230903160124763.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">image-20230903160124763</figcaption>
+</figure>
+</div>
+</section>
+<section id="步骤2.-准备比对索引参考文件和配置文件" class="level3">
+<h3 class="anchored" data-anchor-id="步骤2.-准备比对索引参考文件和配置文件">步骤2. 准备比对索引、参考文件和配置文件</h3>
+<p>要运行流程，需要准备好一些参考数据文件。</p>
+<ol type="1">
+<li><p>准备基因组fasta文件和gtf文件。我们使用<code>GRCh38.primary_assembly.genome.fa</code>和<code>gencode.v34.annotation.gtf</code>。</p></li>
+<li><p>对于Circexplorer2，您需要使用<code>Circexplorer2</code>环境中的<code>fetch_ucsc.py</code>脚本下载参考文件<code>hg38_ref_all.txt</code>（应与您的参考基因组相对应）。</p></li>
+<li><p>准备比对索引，<a href="config_zhou.sh">config_zhou.sh</a>中记录了命令和配置，截图如下。</p>
+<img src="https://cdn.jsdelivr.net/gh/shixiangwang/cdn/img/image-20230903160258992.png" class="img-fluid" alt="image-20230903160258992">
+<p>请注意，在运行索引命令之前，您需要激活相应的环境。</p>
+<p>例如，为CIRIquant准备索引。 <code>sh  source activate CIRIquant  bwa index -a bwtsw -p /path/to/GRCh38.primary_assembly.genome.fa /path/to/GRCh38.primary_assembly.genome.fa  hisat2-build -p 40 /path/to/GRCh38.primary_assembly.genome.fa /path/to/GRCh38.primary_assembly.genome.fa</code></p></li>
+<li><p>对于CIRIquant，需要一个<code>yml</code>文件来设置软件和文件的路径，例如hg38.yml (CIRIquant/hg38.yml，截图如下)。您需要修改内容以适应您的设置（也可以创建另一个<code>yml</code>文件）。</p>
+<img src="https://cdn.jsdelivr.net/gh/shixiangwang/cdn/img/image-20230903160451460.png" class="img-fluid" alt="image-20230903160451460"></li>
+<li><p>设置一个<code>config.sh</code>文件，它使用SHELL变量设置了所有必需的设置，config_zhou.sh (config_zhou.sh) 是一个很好的参考（当然，您可以根据需要修改其内容）。</p>
+<img src="https://cdn.jsdelivr.net/gh/shixiangwang/cdn/img/image-20230903160258992.png" class="img-fluid" alt="image-20230903160258992"></li>
+</ol>
+</section>
+</section>
+<section id="使用流程" class="level2">
+<h2 class="anchored" data-anchor-id="使用流程">使用流程</h2>
+<section id="预处理转录组双端测序的-fastq-文件" class="level3">
+<h3 class="anchored" data-anchor-id="预处理转录组双端测序的-fastq-文件">预处理转录组双端测序的 fastq 文件</h3>
+<p>这一部分的代码存储在 qc 和common目录下面，我们提供了 <code>md5check.sh</code> 方便用户对自己的数据进行 md5 完整性检查，确保数据完整后可以开始进行数据的预处理步骤，包括质控、去除双端的人为标记序列（adapters）。用户输入的文件后缀需要确保为<code>_1.fastq.gz</code>和<code>_2.fastq.gz</code>。示例文件列表截图如下，红色框选了文件后缀。</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://cdn.jsdelivr.net/gh/shixiangwang/cdn/img/image-20230903160856615.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">image-20230903160856615</figcaption>
+</figure>
+</div>
+<p>完成后可以进行预处理操作，下面提供了示例的 Shell 脚本。</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/usr/bin/env bash</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co"># 指定软件路径</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="va">py</span><span class="op">=</span>/home/circrna/miniconda3/bin/python3</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="va">fp</span><span class="op">=</span>/home/circrna/miniconda3/bin/fastp</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="co"># 指定代码目录</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="va">PIPELINE</span><span class="op">=</span>/home/circrna/circrna-pipeline</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="co"># 指定输入、输出路径</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="va">fqfile</span><span class="op">=</span>./sample_list.txt</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="va">indir</span><span class="op">=</span>/path/to/input</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="va">oudir</span><span class="op">=</span>/path/to/output</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="co"># 配置 CPU 数目</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="va">nthreads</span><span class="op">=</span>20</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a><span class="co"># 调用脚本生成输入目录下的样本 ID 列表</span></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a><span class="va">${py}</span> <span class="va">${PIPELINE}</span>/common/ll_fq.py <span class="va">${indir}</span> <span class="at">--output</span> <span class="va">${fqfile}</span></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a><span class="co"># 调用预处理命令到后台运行，并将运行的日志导出到 test_qc.log</span></span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a><span class="fu">nohup</span> bash <span class="va">${PIPELINE}</span>/qc/fp.sh <span class="va">${fqfile}</span> <span class="va">${indir}</span> <span class="va">${oudir}</span> <span class="va">${nthreads}</span> <span class="va">${fp}</span> <span class="op">&amp;&gt;</span> test_qc.log <span class="kw">&amp;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>下面截图展示了预处理的日志信息，最终会生成样本的质量检测报告（html文件）。</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://cdn.jsdelivr.net/gh/shixiangwang/cdn/img/image-20230903161015118.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">image-20230903161015118</figcaption>
+</figure>
+</div>
+<p>报告文件截图：</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://cdn.jsdelivr.net/gh/shixiangwang/cdn/img/image-20230903161412806.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">image-20230903161412806</figcaption>
+</figure>
+</div>
+</section>
+<section id="运行检测流程" class="level3">
+<h3 class="anchored" data-anchor-id="运行检测流程">运行检测流程</h3>
+<p>创建一个包含以下设置和命令的shell脚本。</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 指定输入、输出路径</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="va">fqfile</span><span class="op">=</span>./sample_list.txt</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="va">indir</span><span class="op">=</span>/path/include/paired/fastq/files</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="va">oudir</span><span class="op">=</span>/path/to/output</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="va">nthreads</span><span class="op">=</span>20</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="va">config</span><span class="op">=</span>/path/to/your/config.sh</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="ex">common/ll_fq.py</span> <span class="va">${indir}</span> <span class="at">--output</span> <span class="va">${fqfile}</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="fu">nohup</span> bash caller.sh <span class="va">${fqfile}</span> <span class="va">${indir}</span> <span class="va">${oudir}</span> <span class="va">${nthreads}</span> <span class="va">${config}</span> <span class="op">&amp;&gt;</span> run.log <span class="kw">&amp;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<blockquote class="blockquote">
+<p>必须在conda <code>base</code>环境中（或已安装<code>python3</code>的情况下）执行该脚本。 如果您已经自己准备了<code>sample_list.txt</code>文件。 您可以注释掉<code>common/ll_fq.py</code>这一行，然后可以在bash中运行该脚本 而无需任何其他要求（例如，不需要从<code>base</code>环境中安装<code>python3</code>）。</p>
+</blockquote>
+<p>我建议使用2个样本测试流程。如果一切顺利，然后运行您拥有的所有数据文件。流程将跳过已生成结果文件的样本。</p>
+<p>日志截图：</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://cdn.jsdelivr.net/gh/shixiangwang/cdn/img/image-20230903162126629.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">image-20230903162126629</figcaption>
+</figure>
+</div>
+<p>如果运行出现中断，再次运行脚本/命令即可，流程会自动跳过已检测完成的样本。</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://cdn.jsdelivr.net/gh/shixiangwang/cdn/img/image-20230903162238611.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">image-20230903162238611</figcaption>
+</figure>
+</div>
+</section>
+<section id="检查检测输出结果" class="level3">
+<h3 class="anchored" data-anchor-id="检查检测输出结果">检查检测输出结果</h3>
+<p>输出目录包含根据样本名称和方法组合的结果文件。</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://cdn.jsdelivr.net/gh/shixiangwang/cdn/img/image-20230903161627392.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">image-20230903161627392</figcaption>
+</figure>
+</div>
+<p>结果文件通常包含循环RNA的位置和计数值。</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://cdn.jsdelivr.net/gh/shixiangwang/cdn/img/image-20230903161702141.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">image-20230903161702141</figcaption>
+</figure>
+</div>
+</section>
+<section id="聚合结果" class="level3">
+<h3 class="anchored" data-anchor-id="聚合结果">聚合结果</h3>
+<p>上述生成了 4 种检测方法的单独结果，我们下一步需要对结果进行聚合，相关代码放在 aggr 目录下。</p>
+<p><code>aggr_beds.R</code> 提供了对方法结果聚合的代码，示例运行命令为：</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">./aggr/aggr_dataset.R</span> /path/to/result /path/to/aggr_output</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>这样每一个样本都有一个聚合的结果文件。</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://cdn.jsdelivr.net/gh/shixiangwang/cdn/img/image-20230903161752469.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">image-20230903161752469</figcaption>
+</figure>
+</div>
+<p>进一步，用户还可以利用 <code>aggr_dataset.R</code> 对全部的样本（即整个输入数据集）结果生成一个整合结果。</p>
+<p>调用命令为：</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">./aggr/aggr_dataset.R</span> /path/to/aggr_output /path/to/dataset_output</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>最后结果会在 <code>/path/to/dataset_output</code> 生成 <code>aggr_output_circRNA.tsv.gz</code> 文件，这是一个大的压缩数据表格，包含以下一些列信息。</p>
+<pre><code>id, symbol, strand, chrom, startUpBSE, endDownBSE, tool, samples...</code></pre>
+<ul>
+<li>id: circRNA 的唯一标记信息</li>
+<li>symbol: 基因名</li>
+<li>strand: 链信息</li>
+<li>chrom: circRNA 染色体信息</li>
+<li>startUpBSE: circRNA 染色体起点</li>
+<li>endDownBSE: circRNA 染色体终点</li>
+<li>tool: 方法标记</li>
+<li>samples…：其他每列都对应处理的一个样本</li>
+</ul>
+<p>下面是测试生成的文件：</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://cdn.jsdelivr.net/gh/shixiangwang/cdn/img/image-20230903162442921.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">image-20230903162442921</figcaption>
+</figure>
+</div>
+<p>查看它的部分内容数据：</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://cdn.jsdelivr.net/gh/shixiangwang/cdn/img/image-20230903162511289.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">image-20230903162511289</figcaption>
+</figure>
+</div>
+<p>用户可以利用流程不同的结果进行下游的分析和研究，包括：</p>
+<ul>
+<li>不同方法的检测结果</li>
+<li>同一个样本不同方法检测的聚合结果</li>
+<li>整个输入样本数据集的检测整合结果</li>
+</ul>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script type="text/javascript" src="//rf.revolvermaps.com/0/0/7.js?i=5j5b62dhqyd&amp;m=7&amp;c=ff0000&amp;cr1=ffffff&amp;sx=0" async="async"></script>
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<script src="https://giscus.app/client.js" data-repo="shixiangwang/shixiangwang.github.io" data-repo-id="MDEwOlJlcG9zaXRvcnkzNDgxODQ1MTY=" data-category="General" data-category-id="DIC_kwDOFMDfxM4CVXEf" data-mapping="title" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="top" data-theme="light" data-lang="en" crossorigin="anonymous" async="">
+</script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">Blog made with 💜 and <a href="https://quarto.org/">Quarto</a>, by Shixiang Wang. License: <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC BY-SA 2.0</a>.</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    </div>
+    <div class="nav-footer-right">
+      <ul class="footer-items list-unstyled">
+    <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/shixiangwang/">
+      <i class="bi bi-github" role="img">
+</i> 
+    </a>
+  </li>  
+    <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com/WangShxiang">
+      <i class="bi bi-twitter" role="img">
+</i> 
+    </a>
+  </li>  
+    <li class="nav-item compact">
+    <a class="nav-link" href="mailto:shixiang1994wang@gmail.com">
+      <i class="bi bi-envelope" role="img">
+</i> 
+    </a>
+  </li>  
+    <li class="nav-item compact">
+    <a class="nav-link" href="../../index.xml">
+      <i class="bi bi-rss" role="img">
+</i> 
+    </a>
+  </li>  
+</ul>
+    </div>
+  </div>
+</footer>
+
+
+
+<script src="../../site_libs/quarto-html/zenscroll-min.js"></script>
+</body></html>

@@ -1,0 +1,229 @@
+---
+title: circRNA鉴定流程-使用手册
+author: Shixiang Wang
+date: 2023-09-03
+categories: [bioinformatics]
+draft: false
+description: ''
+
+toc: true
+
+format:
+  html:
+    code-fold: false
+    code-overflow: wrap
+    code-tools: false
+---
+
+本系统提供了一个使用四种方法（CIRIquant、Circexplorer2、find_circ和circRNA_finder）从转录组双端测序的FASTQ文件中轻松且可重复地检测环状RNA（circRNA）的计算流程。
+
+## 功能特性
+
+- 多方法鉴定和整合
+- 并行计算支持
+- 断点续跑
+- 结果整合和规整化输出
+- 日志记录
+
+## 准备工作
+
+### 操作系统环境
+
+本系统需要运行在 Linux 系统环境中（不限发行版本，测试系统包括 Ubuntu、CentOS）。
+需要用户知道如何操作 Linux 系统。
+
+### 步骤1. 安装所需的conda环境
+
+1. （可选）创建一个名为'circrna'的独立Linux帐户，用于部署和运行循环RNA识别流程。
+2. 安装[miniconda3](https://docs.conda.io/en/latest/miniconda.html)到默认路径，即`~/miniconda3`。
+   如果按照上述推荐设置，conda应该可在`/home/circrna/miniconda3`处使用。
+3. 使用`conda install -n base --override-channels -c conda-forge mamba 'python_abi=*=*cp*'`将[mamba](https://mamba.readthedocs.io/en/latest/installation.html)安装到`base`环境中。
+4. 使用以下命令安装[just](https://just.systems/)：`curl --proto '=https' --tlsv1.2 -sSf https://just.systems/install.sh | bash -s -- --to ~/bin`。请将`~/bin`添加到您的`$PATH`中。
+   您可以将`~/bin`更改为任何位置，但在进入终端时需要使`just`可用。
+5. 安装[rush](https://github.com/shenwei356/rush)并将其路径添加到`$PATH`，类似于`just`。
+6. （可选）如果需要，设置conda和pypi（pip）的注册表。例如，如果您在中国，我建议使用以下链接进行设置：[https://mirrors.tuna.tsinghua.edu.cn/help/anaconda/](https://mirrors.tuna.tsinghua.edu.cn/help/anaconda/) 和 [https://mirrors.tuna.tsinghua.edu.cn/help/pypi/](https://mirrors.tuna.tsinghua.edu.cn/help/pypi/)。
+7. 使用本软著提供的代码，并切换到代码目录。
+8. 按顺序安装conda环境。
+
+    ```sh
+    cd circrna-pipeline
+    cd CIRIquant
+    just install
+    cd ../FindCirc
+    just install
+    cd ../Circexplorer2
+    just install
+    cd ../circRNA_finder
+    just install
+    ```
+
+请确保已创建所有conda环境并安装了所需的软件。
+
+![image-20230903160124763](https://cdn.jsdelivr.net/gh/shixiangwang/cdn/img/image-20230903160124763.png)
+
+### 步骤2. 准备比对索引、参考文件和配置文件
+
+要运行流程，需要准备好一些参考数据文件。
+
+1. 准备基因组fasta文件和gtf文件。我们使用`GRCh38.primary_assembly.genome.fa`和`gencode.v34.annotation.gtf`。
+
+2. 对于Circexplorer2，您需要使用`Circexplorer2`环境中的`fetch_ucsc.py`脚本下载参考文件`hg38_ref_all.txt`（应与您的参考基因组相对应）。
+
+3. 准备比对索引，[config_zhou.sh](config_zhou.sh)中记录了命令和配置，截图如下。
+   
+   ![image-20230903160258992](https://cdn.jsdelivr.net/gh/shixiangwang/cdn/img/image-20230903160258992.png)
+   
+   请注意，在运行索引命令之前，您需要激活相应的环境。
+   
+    例如，为CIRIquant准备索引。
+    ```sh
+    source activate CIRIquant
+    bwa index -a bwtsw -p /path/to/GRCh38.primary_assembly.genome.fa /path/to/GRCh38.primary_assembly.genome.fa
+    hisat2-build -p 40 /path/to/GRCh38.primary_assembly.genome.fa /path/to/GRCh38.primary_assembly.genome.fa
+    ```
+   
+4. 对于CIRIquant，需要一个`yml`文件来设置软件和文件的路径，例如hg38.yml (CIRIquant/hg38.yml，截图如下)。您需要修改内容以适应您的设置（也可以创建另一个`yml`文件）。
+
+   ![image-20230903160451460](https://cdn.jsdelivr.net/gh/shixiangwang/cdn/img/image-20230903160451460.png)
+
+5. 设置一个`config.sh`文件，它使用SHELL变量设置了所有必需的设置，config_zhou.sh (config_zhou.sh) 是一个很好的参考（当然，您可以根据需要修改其内容）。
+
+   ![image-20230903160258992](https://cdn.jsdelivr.net/gh/shixiangwang/cdn/img/image-20230903160258992.png)
+
+## 使用流程
+
+### 预处理转录组双端测序的 fastq 文件
+
+这一部分的代码存储在 qc 和common目录下面，我们提供了 `md5check.sh` 方便用户对自己的数据进行 md5 完整性检查，确保数据完整后可以开始进行数据的预处理步骤，包括质控、去除双端的人为标记序列（adapters）。用户输入的文件后缀需要确保为`_1.fastq.gz`和`_2.fastq.gz`。示例文件列表截图如下，红色框选了文件后缀。
+
+![image-20230903160856615](https://cdn.jsdelivr.net/gh/shixiangwang/cdn/img/image-20230903160856615.png)
+
+完成后可以进行预处理操作，下面提供了示例的 Shell 脚本。
+
+```sh
+#!/usr/bin/env bash
+
+# 指定软件路径
+py=/home/circrna/miniconda3/bin/python3
+fp=/home/circrna/miniconda3/bin/fastp
+# 指定代码目录
+PIPELINE=/home/circrna/circrna-pipeline
+
+# 指定输入、输出路径
+fqfile=./sample_list.txt
+indir=/path/to/input
+oudir=/path/to/output
+
+# 配置 CPU 数目
+nthreads=20
+
+# 调用脚本生成输入目录下的样本 ID 列表
+${py} ${PIPELINE}/common/ll_fq.py ${indir} --output ${fqfile}
+
+# 调用预处理命令到后台运行，并将运行的日志导出到 test_qc.log
+nohup bash ${PIPELINE}/qc/fp.sh ${fqfile} ${indir} ${oudir} ${nthreads} ${fp} &> test_qc.log &
+```
+
+下面截图展示了预处理的日志信息，最终会生成样本的质量检测报告（html文件）。
+
+![image-20230903161015118](https://cdn.jsdelivr.net/gh/shixiangwang/cdn/img/image-20230903161015118.png)
+
+报告文件截图：
+
+![image-20230903161412806](https://cdn.jsdelivr.net/gh/shixiangwang/cdn/img/image-20230903161412806.png)
+
+### 运行检测流程
+
+创建一个包含以下设置和命令的shell脚本。
+
+```sh
+# 指定输入、输出路径
+fqfile=./sample_list.txt
+indir=/path/include/paired/fastq/files
+oudir=/path/to/output
+nthreads=20
+config=/path/to/your/config.sh
+
+common/ll_fq.py ${indir} --output ${fqfile}
+
+nohup bash caller.sh ${fqfile} ${indir} ${oudir} ${nthreads} ${config} &> run.log &
+```
+
+> 必须在conda `base`环境中（或已安装`python3`的情况下）执行该脚本。
+> 如果您已经自己准备了`sample_list.txt`文件。
+> 您可以注释掉`common/ll_fq.py`这一行，然后可以在bash中运行该脚本
+> 而无需任何其他要求（例如，不需要从`base`环境中安装`python3`）。
+
+我建议使用2个样本测试流程。如果一切顺利，然后运行您拥有的所有数据文件。流程将跳过已生成结果文件的样本。
+
+日志截图：
+
+![image-20230903162126629](https://cdn.jsdelivr.net/gh/shixiangwang/cdn/img/image-20230903162126629.png)
+
+如果运行出现中断，再次运行脚本/命令即可，流程会自动跳过已检测完成的样本。
+
+![image-20230903162238611](https://cdn.jsdelivr.net/gh/shixiangwang/cdn/img/image-20230903162238611.png)
+
+
+
+### 检查检测输出结果
+
+输出目录包含根据样本名称和方法组合的结果文件。
+
+![image-20230903161627392](https://cdn.jsdelivr.net/gh/shixiangwang/cdn/img/image-20230903161627392.png)
+
+结果文件通常包含循环RNA的位置和计数值。
+
+![image-20230903161702141](https://cdn.jsdelivr.net/gh/shixiangwang/cdn/img/image-20230903161702141.png)
+
+### 聚合结果
+
+上述生成了 4 种检测方法的单独结果，我们下一步需要对结果进行聚合，相关代码放在 aggr 目录下。
+
+`aggr_beds.R` 提供了对方法结果聚合的代码，示例运行命令为：
+
+```sh
+./aggr/aggr_dataset.R /path/to/result /path/to/aggr_output
+```
+
+这样每一个样本都有一个聚合的结果文件。
+
+![image-20230903161752469](https://cdn.jsdelivr.net/gh/shixiangwang/cdn/img/image-20230903161752469.png)
+
+进一步，用户还可以利用 `aggr_dataset.R` 对全部的样本（即整个输入数据集）结果生成一个整合结果。
+
+调用命令为：
+
+```sh
+./aggr/aggr_dataset.R /path/to/aggr_output /path/to/dataset_output
+```
+
+最后结果会在 `/path/to/dataset_output` 生成 `aggr_output_circRNA.tsv.gz` 文件，这是一个大的压缩数据表格，包含以下一些列信息。
+
+```
+id, symbol, strand, chrom, startUpBSE, endDownBSE, tool, samples...
+```
+
+- id: circRNA 的唯一标记信息
+- symbol: 基因名
+- strand: 链信息
+- chrom: circRNA 染色体信息
+- startUpBSE: circRNA 染色体起点
+- endDownBSE: circRNA 染色体终点
+- tool: 方法标记
+- samples...：其他每列都对应处理的一个样本
+
+下面是测试生成的文件：
+
+![image-20230903162442921](https://cdn.jsdelivr.net/gh/shixiangwang/cdn/img/image-20230903162442921.png)
+
+查看它的部分内容数据：
+
+![image-20230903162511289](https://cdn.jsdelivr.net/gh/shixiangwang/cdn/img/image-20230903162511289.png)
+
+用户可以利用流程不同的结果进行下游的分析和研究，包括：
+
+- 不同方法的检测结果
+- 同一个样本不同方法检测的聚合结果
+- 整个输入样本数据集的检测整合结果
+
