@@ -1,0 +1,35 @@
+---
+title: MAPQ（映射质量）与-AS（比对得分）
+author: Shixiang Wang
+date: 2023-09-12
+categories: [bioinformatics]
+draft: false
+description: ''
+
+toc: true
+
+format:
+  html:
+    code-fold: false
+    code-overflow: wrap
+    code-tools: false
+---
+
+今天看 bwa mem 的 `-q` 选项，非常困惑：“-q, Don't reduce the mapping quality of split alignment of lower alignment score”。
+与我原来想象中 mapping quality 和 alignment score 两个东西应该相同所不同的是，我查询后发现这的确是两个不同的概念。
+
+mapping quality (MAPQ) 是告诉你某一个 read 来自某一个基因组区域的可靠程度（可信度），而 alignment score（AS）告诉你的是这个序列与参考序列有多相似（生信图书/教程中一般说的比对算法得分就是这个），匹配的多得分就高。
+
+如果你的 reads 完美的匹配到了多个基因组区域，那 AS 就会高但是 MAPQ 会低，如果你的 reads 有一些错配之类的，但匹配到某些位点的可信度比其他位点高，那么 AS 会低，但 MAPQ 会高。
+
+> 参考： https://www.biostars.org/p/179457/ 
+
+
+### 更多阅读
+
+
+- https://genome.cshlp.org/content/suppl/2008/09/26/gr.078212.108.DC1/maq-supp.pdf
+- https://bioinformatics.stackexchange.com/questions/2417/meaning-of-bwa-mem-mapq-scores
+- https://maq.sourceforge.net/qual.shtml
+- https://support.illumina.com/content/dam/illumina-support/help/Illumina_DRAGEN_Bio_IT_Platform_v3_7_1000000141465/Content/SW/Informatics/Dragen/TPipelineMAPQ_fDG.htm
+- https://blog.csdn.net/tanzuozhev/article/details/89115080

@@ -10,7 +10,40 @@
 <atom:link href="https://shixiangwang.github.io/index.xml" rel="self" type="application/rss+xml"/>
 <description>Reasoning is a blog dedicated to exploring the intersection of data science, bioinformatics, and personal insights.</description>
 <generator>quarto-1.3.361</generator>
-<lastBuildDate>Sun, 03 Sep 2023 16:00:00 GMT</lastBuildDate>
+<lastBuildDate>Mon, 11 Sep 2023 16:00:00 GMT</lastBuildDate>
+<item>
+  <title>MAPQ（映射质量）与-AS（比对得分）</title>
+  <dc:creator>Shixiang Wang</dc:creator>
+  <link>https://shixiangwang.github.io/posts/2023-09-12-mapq-and-as/index.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<p>今天看 bwa mem 的 <code>-q</code> 选项，非常困惑：“-q, Don’t reduce the mapping quality of split alignment of lower alignment score”。 与我原来想象中 mapping quality 和 alignment score 两个东西应该相同所不同的是，我查询后发现这的确是两个不同的概念。</p>
+<p>mapping quality (MAPQ) 是告诉你某一个 read 来自某一个基因组区域的可靠程度（可信度），而 alignment score（AS）告诉你的是这个序列与参考序列有多相似（生信图书/教程中一般说的比对算法得分就是这个），匹配的多得分就高。</p>
+<p>如果你的 reads 完美的匹配到了多个基因组区域，那 AS 就会高但是 MAPQ 会低，如果你的 reads 有一些错配之类的，但匹配到某些位点的可信度比其他位点高，那么 AS 会低，但 MAPQ 会高。</p>
+<blockquote class="blockquote">
+<p>参考： https://www.biostars.org/p/179457/</p>
+</blockquote>
+<section id="更多阅读" class="level3">
+<h3 class="anchored" data-anchor-id="更多阅读">更多阅读</h3>
+<ul>
+<li>https://genome.cshlp.org/content/suppl/2008/09/26/gr.078212.108.DC1/maq-supp.pdf</li>
+<li>https://bioinformatics.stackexchange.com/questions/2417/meaning-of-bwa-mem-mapq-scores</li>
+<li>https://maq.sourceforge.net/qual.shtml</li>
+<li>https://support.illumina.com/content/dam/illumina-support/help/Illumina_DRAGEN_Bio_IT_Platform_v3_7_1000000141465/Content/SW/Informatics/Dragen/TPipelineMAPQ_fDG.htm</li>
+<li>https://blog.csdn.net/tanzuozhev/article/details/89115080</li>
+</ul>
+
+
+</section>
+
+ ]]></description>
+  <category>bioinformatics</category>
+  <guid>https://shixiangwang.github.io/posts/2023-09-12-mapq-and-as/index.html</guid>
+  <pubDate>Mon, 11 Sep 2023 16:00:00 GMT</pubDate>
+</item>
 <item>
   <title>discourse on the method</title>
   <dc:creator>Shixiang Wang</dc:creator>
@@ -6368,29 +6401,6 @@ font-style: inherit;">return</span>(data)</span>
  ]]></description>
   <category>journal</category>
   <guid>https://shixiangwang.github.io/posts/2023-07-10-journal/index.html</guid>
-  <pubDate>Sun, 09 Jul 2023 16:00:00 GMT</pubDate>
-</item>
-<item>
-  <title>might &amp; right</title>
-  <dc:creator>Shixiang Wang</dc:creator>
-  <link>https://shixiangwang.github.io/posts/2023-07-10-might-and-right/index.html</link>
-  <description><![CDATA[ 
-
-
-
-
-<p>摘录一句话。</p>
-<p>能力：might</p>
-<p>权利：right</p>
-<p>能力取决于自己能够占有多少，而权利取决于社会上其他人愿意给你多少。</p>
-<hr>
-<p>所以，该追求哪种呢？</p>
-
-
-
- ]]></description>
-  <category>note</category>
-  <guid>https://shixiangwang.github.io/posts/2023-07-10-might-and-right/index.html</guid>
   <pubDate>Sun, 09 Jul 2023 16:00:00 GMT</pubDate>
 </item>
 </channel>
