@@ -10,7 +10,67 @@
 <atom:link href="https://shixiangwang.github.io/index.xml" rel="self" type="application/rss+xml"/>
 <description>Reasoning is a blog dedicated to exploring the intersection of data science, bioinformatics, and personal insights.</description>
 <generator>quarto-1.3.361</generator>
-<lastBuildDate>Mon, 11 Sep 2023 16:00:00 GMT</lastBuildDate>
+<lastBuildDate>Tue, 12 Sep 2023 16:00:00 GMT</lastBuildDate>
+<item>
+  <title>检查 CPU 的使用量</title>
+  <dc:creator>Shixiang Wang</dc:creator>
+  <link>https://shixiangwang.github.io/posts/2023-09-13-check-cpu-usage/index.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<p>在 Linux 服务器上有时候需要检查下 CPU 的使用量，现在一般 server 的 CPU 都比较多，而在计算的时候 CPU 也是在动态切换的，像 htop 这种命令输出可以直观的看大体有多少被占用，但没法得到具体的数值。 而传统的指标 cpu load，一般也不太会去看，我们在运算时想的是尽量占用剩余的 CPU，所以如果能够得到比较直观的数字比较好。下面是一个 bash 函数，可以放到 <code>~/.bashrc</code> 中去。 也可以直接在 Shell 中运行。</p>
+<div class="sourceCode" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">cpu()</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">{</span></span>
+<span id="cb1-2">  <span class="ex" style="color: null;
+background-color: null;
+font-style: inherit;">top</span> <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">-bn2</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">|</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">grep</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'%Cpu'</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">|</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">tail</span> <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">-1</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">|</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">grep</span> <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">-P</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'(....|...) id,'</span><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">|</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">awk</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'{print "CPU Usage: " 100-$8 "%"}'</span></span>
+<span id="cb1-3"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">}</span></span></code></pre></div>
+<p>具体的解释可以看来源文章：https://www.baeldung.com/linux/get-cpu-usage</p>
+
+
+
+ ]]></description>
+  <category>Linux</category>
+  <category>bioinformatics</category>
+  <category>note</category>
+  <guid>https://shixiangwang.github.io/posts/2023-09-13-check-cpu-usage/index.html</guid>
+  <pubDate>Tue, 12 Sep 2023 16:00:00 GMT</pubDate>
+</item>
 <item>
   <title>MAPQ（映射质量）与-AS（比对得分）</title>
   <dc:creator>Shixiang Wang</dc:creator>
@@ -6373,34 +6433,6 @@ font-style: inherit;">return</span>(data)</span>
   <category>note</category>
   <category>scRNA-seq</category>
   <guid>https://shixiangwang.github.io/posts/2023-07-10-scrna-recom/index.html</guid>
-  <pubDate>Sun, 09 Jul 2023 16:00:00 GMT</pubDate>
-</item>
-<item>
-  <title>2023-07-10</title>
-  <dc:creator>Shixiang Wang</dc:creator>
-  <link>https://shixiangwang.github.io/posts/2023-07-10-journal/index.html</link>
-  <description><![CDATA[ 
-
-
-
-
-<p>今天终于看完了《癌生物学》，具体而言，是「珠江肿瘤」公众号整理的中文版《癌生物学》的内容。</p>
-<p>当年阅读计划单上终于可以划去一项了，稍稍松了一口气。这几年，虽然我读完了不少“闲书”和网文小说，但阅读，特别是 读完的工作领域相关图书几乎是没有的。教科书类字少，但理解、思考却非常费时费力，充满挑战。 这里需要感谢公众号的作者的悉心整理，当然也特别感谢图书的作者和译者。</p>
-<blockquote class="blockquote">
-<ul>
-<li><p>公众号<a href="https://mp.weixin.qq.com/s/J8pCYKlkM9t0k2_IiJYd3A">癌生物学汇总帖</a></p></li>
-<li><p><a href="https://www.aliyundrive.com/s/LH337LnhkzX">癌生物学PDF.pdf</a></p></li>
-</ul>
-</blockquote>
-<p>很多内容读的很浅，有些内容也跳读了，但翻完了，心里好像“靴子落地”了。这也给了我自信和时间去关注和完成其他的事情。</p>
-<p>这两年，我在生活和工作中都遇到了心里难以言表的困难，这种困难来自感受，也部分来自物质。切实地融入生活，才发生生活有那么多的琐事，很多事情需要耗费心力，却感受上“憋”的很。我常常会想在心里找个角落躲起来。也有时会在游戏、小说和心灵的孤独中放逐自我。 人不是机器，它不能一直产生正能量。我们都是大大宇宙中小小地球上一个个活着的卑微的人，我们想要诉求伟大，但跌入的是统计的深渊。</p>
-<p>不管怎样，我们的道路，就是要完成一个一个想做的事情，然后继续向前。</p>
-
-
-
- ]]></description>
-  <category>journal</category>
-  <guid>https://shixiangwang.github.io/posts/2023-07-10-journal/index.html</guid>
   <pubDate>Sun, 09 Jul 2023 16:00:00 GMT</pubDate>
 </item>
 </channel>

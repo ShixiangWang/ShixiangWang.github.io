@@ -1,0 +1,28 @@
+---
+title: 检查 CPU 的使用量
+author: Shixiang Wang
+date: 2023-09-13
+categories: [Linux,bioinformatics,note]
+draft: false
+description: ''
+
+toc: true
+
+format:
+  html:
+    code-fold: false
+    code-overflow: wrap
+    code-tools: false
+---
+
+在 Linux 服务器上有时候需要检查下 CPU 的使用量，现在一般 server 的 CPU 都比较多，而在计算的时候 CPU 也是在动态切换的，像 htop 这种命令输出可以直观的看大体有多少被占用，但没法得到具体的数值。
+而传统的指标 cpu load，一般也不太会去看，我们在运算时想的是尽量占用剩余的 CPU，所以如果能够得到比较直观的数字比较好。下面是一个 bash 函数，可以放到 `~/.bashrc` 中去。
+也可以直接在 Shell 中运行。
+
+```sh
+cpu() {
+  top -bn2 | grep '%Cpu' | tail -1 | grep -P '(....|...) id,'|awk '{print "CPU Usage: " 100-$8 "%"}'
+}
+```
+
+具体的解释可以看来源文章：https://www.baeldung.com/linux/get-cpu-usage

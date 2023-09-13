@@ -2,6 +2,7 @@
   {
     "listing": "/index.html",
     "items": [
+      "/posts/2023-09-13-check-cpu-usage/index.html",
       "/posts/2023-09-12-mapq-and-as/index.html",
       "/posts/2023-09-04-discourse-on-the-method/index.html",
       "/posts/2023-09-03-use-circrna-pipeline/index.html",
