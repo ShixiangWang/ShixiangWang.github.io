@@ -1,0 +1,19 @@
+---
+title: 服务生信的 Shiny 开发学习路径
+author: Shixiang Wang
+date: 2023-09-13
+categories: [shiny,R,bioinformatics]
+draft: false
+description: ''
+
+toc: true
+
+format:
+  html:
+    code-fold: false
+    code-overflow: wrap
+    code-tools: false
+---
+
+https://github.com/ShixiangWang/shinyapps/issues/1
+
