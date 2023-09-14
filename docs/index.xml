@@ -12,6 +12,123 @@
 <generator>quarto-1.3.361</generator>
 <lastBuildDate>Tue, 12 Sep 2023 16:00:00 GMT</lastBuildDate>
 <item>
+  <title>Shiny 开发学习路径</title>
+  <dc:creator>Shixiang Wang</dc:creator>
+  <link>https://shixiangwang.github.io/posts/2023-09-13-shiny-learning-path-for-bioinformatics/index.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<p>生信领域越来越多的数据库/网页工具采用 <a href="https://shiny.posit.co/">Shiny</a> 框架进行搭建，Shiny 的流行度/拓展性在随着时间增加。因此，掌握 Shiny 服务于自己的项目/课题成为生信人的一个新的技能。 在这篇文章中，作为一个有经验的 Shiny 学习者和 Shiny 工具的开发者，我将介绍学习和掌握 Shiny 进行开发的核心路径和相关推荐的（免费）资料。对于每一个关卡（技能点）， 我会给出大致的（<strong>全职学习</strong>）时间估计（以周为单位）。</p>
+<blockquote class="blockquote">
+<p>网络上的资料对于个人来说是无穷尽的，我会尽量选择我认可的最核心读物，方便大家进行相关的学习。当然， 个人的能力有限，欢迎讨论和补充。</p>
+<p>注意，Shiny 现在已经支持了 Python 的实现，但本文只介绍以 R 为基础的学习路径。</p>
+</blockquote>
+<section id="关卡1r-基础2-3-周" class="level2">
+<h2 class="anchored" data-anchor-id="关卡1r-基础2-3-周">关卡1：R 基础（2-3 周）</h2>
+<p>学习 <a href="https://r4ds.had.co.nz/"><em>R for Data Science</em></a>。</p>
+<p><img src="https://shixiangwang.github.io/posts/2023-09-13-shiny-learning-path-for-bioinformatics/https:/d33wubrfki0l68.cloudfront.net/b88ef926a004b0fce72b2526b0b5c4413666a4cb/24a30/cover.png" class="img-fluid"></p>
+<p>要求掌握 1-21 章的全部内容，后续章节初学者以了解为主，根据兴趣和时间进行实践。</p>
+<p>核心要点：</p>
+<ul>
+<li>tidyverse 的数据处理理念</li>
+<li>readr 读取操作</li>
+<li>dplyr 数据处理理念和核心操作</li>
+<li>ggplot2 可视化理念和核心操作</li>
+</ul>
+<p>读者目标自查：可以独自完成从磁盘读取文件、过滤/转换数据、分组处理/聚合数据、生成可视化图表。</p>
+</section>
+<section id="关卡2-网页基础-html5css-0.5-1-周" class="level2">
+<h2 class="anchored" data-anchor-id="关卡2-网页基础-html5css-0.5-1-周">关卡2: 网页基础 HTML5/CSS （0.5-1 周）</h2>
+<p>阅读一遍 <a href="https://www.runoob.com/html/html-tutorial.html">HTML 教程</a> 和 <a href="https://www.runoob.com/css/css-tutorial.html">CSS 教程</a>。</p>
+<p>HTML 教程是重点，建议花多一些时间阅读；CSS 起到辅助和美化的作用，对于初学者，了解其基本语法、如何设定即可。</p>
+<p>核心要点：</p>
+<ul>
+<li>网页结构</li>
+<li>网页标签语法以及条目</li>
+<li>CSS 的设定</li>
+</ul>
+<p>读者目标自查：可以徒手写一个简单的网页，并通过 CSS 引入一些格式化。</p>
+</section>
+<section id="关卡3shiny-学习2-3-周" class="level2">
+<h2 class="anchored" data-anchor-id="关卡3shiny-学习2-3-周">关卡3：Shiny 学习（2-3 周）</h2>
+<p>学习 <a href="https://mastering-shiny.org/"><em>Mastering Shiny</em></a>。</p>
+<p><img src="https://shixiangwang.github.io/posts/2023-09-13-shiny-learning-path-for-bioinformatics/https:/d33wubrfki0l68.cloudfront.net/0c97eee3d8fc820f3a8d670c08b286e8a524257b/e426c/cover.png" class="img-fluid"></p>
+<p>要求认真阅读全部内容，并根据读物的代码进行实践，边学边练。</p>
+<p>核心要点：</p>
+<ul>
+<li>Shiny app 结构</li>
+<li>Shiny 网页布局</li>
+<li>Shiny reactivity</li>
+<li>Shiny module</li>
+</ul>
+<p>读者目标自查：可以在关卡1的基础上，将可视化展示通过 Shiny app 实现，并提供多个选项用于控制图形的输出展示。</p>
+</section>
+<section id="关卡4-学习如何组织-shiny-app-代码1-周以上" class="level2">
+<h2 class="anchored" data-anchor-id="关卡4-学习如何组织-shiny-app-代码1-周以上">关卡4: 学习如何组织 Shiny app 代码（1 周以上）</h2>
+<p>好的代码结构，会极大地方便运维和拓展你写的 Shiny app。 下面有几种推荐的代码组织形式，读者可以根据自己的需求参考设定，也可以根据罗列的资料逐步学习。</p>
+<ul>
+<li>Shiny 默认的代码部署方式
+<ul>
+<li>使用一个 <code>app.R</code> 文件存储全部的前后端代码，适合非常小的应用。</li>
+<li>使用单独的 <code>ui.R</code> 和 <code>server.R</code> 文件放前后端代码，适合稍微复杂一点的小应用。</li>
+<li>在以上两种设定的基础上，将复杂的操作逻辑统统整理为函数，放到单独的 <code>R/</code> 目录下或者一个 <code>functions.R</code> 文件中方便调用和维护。如果更复杂一点，可以整理为一个 R 包，需要通过 <a href="https://r-pkgs.org/"><em>R Packages</em></a> 学习如何开发 R 包。</li>
+</ul></li>
+<li>使用 <a href="https://github.com/ThinkR-open/golem">golem</a> 框架，学习 <a href="https://engineering-shiny.org/index.html"><em>Engineering Production-Grade Shiny Apps</em></a></li>
+<li>使用 <a href="https://github.com/Appsilon/rhino">rhino</a> 框架，通过 <a href="https://appsilon.github.io/rhino/">官方各种文档</a> 学习。</li>
+</ul>
+<p>读者目标自查：理解和熟练掌握 Shiny 默认的代码部署方式。</p>
+</section>
+<section id="关卡5-学习如何部署-shiny-app1-2-周" class="level2">
+<h2 class="anchored" data-anchor-id="关卡5-学习如何部署-shiny-app1-2-周">关卡5: 学习如何部署 Shiny app（1-2 周）</h2>
+<p>但你开发的 app 可用时，我们可以进行部署，方便自己测试或者他人使用。有以下几种部署的方式：</p>
+<ol type="1">
+<li>通过 Posit 公司提供的 <a href="https://www.shinyapps.io/">shinyapps 服务</a>。推荐初学者尝试和摸索。</li>
+<li>自己在本地的/云服务商的 Linux 服务器上进行部署，需要了解 Linux 系统并掌握 Linux 的基本操作（阅读 <a href="https://seankross.com/the-unix-workbench/">The Unix Workbench</a>）。具体的部署可以参考以下几篇文章：
+<ol type="1">
+<li><a href="https://mp.weixin.qq.com/s/f8QWD8RH6MTfvHSd57t2FQ"><em>在Ubuntu服务器上配置Shiny应用</em></a></li>
+<li><a href="https://www.linode.com/docs/guides/how-to-deploy-rshiny-server-on-ubuntu-and-debian"><em>How to Deploy Interactive R Apps with Shiny Server</em></a></li>
+<li><a href="https://www.digitalocean.com/community/tutorials/how-to-set-up-shiny-server-on-ubuntu-20-04"><em>How To Set Up Shiny Server on Ubuntu 20.04</em></a></li>
+</ol></li>
+</ol>
+<p>读者目标自查：掌握第 1 种应用部署方式；探索第 2 种部署方式并能解决遇到的问题。</p>
+</section>
+<section id="关卡6-学习和重现完整的-shiny-app2周以上" class="level2">
+<h2 class="anchored" data-anchor-id="关卡6-学习和重现完整的-shiny-app2周以上">关卡6: 学习和重现完整的 Shiny app（2周以上）</h2>
+<p>这是最后一道关口，闯关意味着你具备了独立完成 app 开发的能力。大家（特别是初学者）需要谨记，一个好的 app 在于它的代码结构清晰、能够完成任务，不在于漂亮的 UI。 所有的功能实现应当把完成分析/可视化目标为第一位，然后再花时间探索具体的 UI 美化。</p>
+<p>由于各类读者背景和需求不一致，我这里只做一些通用的学习资料推荐，针对读者所在领域的 app 开发，需要读者自行了解和掌握相关知识背景、分析技能，在此基础上寻找一些已经通过 Shiny 实现的数据库/工具的源代码仓库进行学习。</p>
+<ul>
+<li>Shiny examples: <a href="https://github.com/rstudio/shiny-examples" class="uri">https://github.com/rstudio/shiny-examples</a></li>
+<li>Shiny gallery：<a href="https://shiny.posit.co/r/gallery/" class="uri">https://shiny.posit.co/r/gallery/</a>。官方提供了很多功能特性的 app 实现。</li>
+<li>Shiny Data Portal: <a href="https://github.com/SebKrantz/shiny-data-portal" class="uri">https://github.com/SebKrantz/shiny-data-portal</a>。A free Shiny Application to host, filter, aggregate and and download data in various formats.</li>
+<li>machLearn, Machine learning dashboard created with R/shiny: <a href="https://github.com/davesteps/machLearn" class="uri">https://github.com/davesteps/machLearn</a></li>
+<li>Shiny app for customizing Raincloud plots: <a href="https://github.com/gabrifc/raincloud-shiny" class="uri">https://github.com/gabrifc/raincloud-shiny</a></li>
+</ul>
+</section>
+<section id="推荐资料" class="level2">
+<h2 class="anchored" data-anchor-id="推荐资料">推荐资料</h2>
+<p>在本文中，我尽量避免推荐比较多的资料，因为对于初学者过多的资料带来的是混淆与压力。我希望你能够通过上述的关卡真正有效地学习和掌握 Shiny 开发的知识要点，并应用于你感兴趣的项目中去。 作为本文的最后一部分，我将提供一些非常重要的资源地址，希望在你困惑或者想要学习更多内容时找到灵感！</p>
+<ul>
+<li><a href="https://github.com/veeps/shiny_workshop" class="uri">https://github.com/veeps/shiny_workshop</a></li>
+<li><a href="https://github.com/grabear/awesome-rshiny" class="uri">https://github.com/grabear/awesome-rshiny</a></li>
+<li><a href="https://github.com/nanxstats/awesome-shiny-extensions" class="uri">https://github.com/nanxstats/awesome-shiny-extensions</a></li>
+<li><a href="https://github.com/davidruvolo51/shinyAppTutorials" class="uri">https://github.com/davidruvolo51/shinyAppTutorials</a></li>
+<li><a href="https://github.com/daattali/advanced-shiny" class="uri">https://github.com/daattali/advanced-shiny</a></li>
+</ul>
+<p>Enjoy playing with Shiny!</p>
+
+
+</section>
+
+ ]]></description>
+  <category>shiny</category>
+  <category>R</category>
+  <category>bioinformatics</category>
+  <guid>https://shixiangwang.github.io/posts/2023-09-13-shiny-learning-path-for-bioinformatics/index.html</guid>
+  <pubDate>Tue, 12 Sep 2023 16:00:00 GMT</pubDate>
+</item>
+<item>
   <title>检查 CPU 的使用量</title>
   <dc:creator>Shixiang Wang</dc:creator>
   <link>https://shixiangwang.github.io/posts/2023-09-13-check-cpu-usage/index.html</link>
@@ -6002,438 +6119,6 @@ font-style: inherit;">)</span></span></code></pre></div>
   <category>machine-learning</category>
   <guid>https://shixiangwang.github.io/posts/2023-07-12-journal/index.html</guid>
   <pubDate>Tue, 11 Jul 2023 16:00:00 GMT</pubDate>
-</item>
-<item>
-  <title>scrna 核心工具</title>
-  <dc:creator>Shixiang Wang</dc:creator>
-  <link>https://shixiangwang.github.io/posts/2023-07-10-scrna-recom/index.html</link>
-  <description><![CDATA[ 
-
-
-
-
-<p>Repo {<a href="https://github.com/WXlab-NJMU/scrna-recom">scrna-recom</a>} 单细胞综述文章关于单细胞转录组分析的流程、软件、安装等的一些说明。这里我主要是拷贝下其中关于核心工具的整理，防止迷失。</p>
-
-<style>
-    table {
-        border-collapse: collapse;
-        width: 100%;
-        font-family: Arial, sans-serif;
-    }
-
-    th,
-    td {
-        border: 1px solid #ddd;
-        padding: 8px;
-    }
-
-    th {
-        background-color: #f2f2f2;
-    }
-
-    a {
-        text-decoration: underline;
-    }
-</style>
-<table>
-<thead>
-<tr>
-<th>
-</th>
-<th>
-Package
-</th>
-<th>
-Tutorial
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td rowspan="1">
-Raw Data Processing
-</td>
-<td>
-Cell Ranger
-</td>
-<td>
-<a href="https://support.10xgenomics.com/single-cell-gene-expression/software/pipelines/latest/what-is-cell-ranger">https://support.10xgenomics.com/single-cell-gene-expression/software/pipelines/latest/what-is-cell-ranger</a>
-</td>
-</tr>
-<tr>
-<td rowspan="3">
-Quality Control
-</td>
-<td>
-DoubletFinder
-</td>
-<td>
-<a href="https://github.com/chris-mcginnis-ucsf/DoubletFinder">https://github.com/chris-mcginnis-ucsf/DoubletFinder</a>
-</td>
-</tr>
-<tr>
-<td>
-Seurat
-</td>
-<td>
-<a href="https://satijalab.org/seurat/articles/pbmc3k_tutorial.html">https://satijalab.org/seurat/articles/pbmc3k_tutorial.html</a>
-</td>
-</tr>
-<tr>
-<td>
-SoupX
-</td>
-<td>
-<a href="https://rawcdn.githack.com/constantAmateur/SoupX/204b602418df12e9fdb4b68775a8b486c6504fe4/inst/doc/pbmcTutorial.html">https://rawcdn.githack.com/constantAmateur/SoupX/204b602418df12e9fdb4b68775a8b486c6504fe4/inst/doc/pbmcTutorial.html</a>
-</td>
-</tr>
-<tr>
-<td rowspan="1">
-Normalization
-</td>
-<td>
-Seurat
-</td>
-<td>
-<a href="https://satijalab.org/seurat/articles/pbmc3k_tutorial.html#normalizing-the-data-1">https://satijalab.org/seurat/articles/pbmc3k_tutorial.html#normalizing-the-data-1</a>
-</td>
-</tr>
-<tr>
-<td rowspan="3">
-Integration
-</td>
-<td>
-Seurat:CCA,RPCA
-</td>
-<td>
-<a href="https://satijalab.org/seurat/articles/integration_rpca.html">https://satijalab.org/seurat/articles/integration_rpca.html</a>
-</td>
-</tr>
-<tr>
-<td>
-Liger
-</td>
-<td>
-<a href="https://github.com/welch-lab/liger">https://github.com/welch-lab/liger</a>
-</td>
-</tr>
-<tr>
-<td>
-Harmony
-</td>
-<td>
-<a href="https://github.com/immunogenomics/harmony">https://github.com/immunogenomics/harmony</a>
-</td>
-</tr>
-<tr>
-<td rowspan="1">
-Dimensional Reduction
-</td>
-<td>
-Seurat:PCA,UMAP
-</td>
-<td>
-<a href="https://satijalab.org/seurat/articles/pbmc3k_tutorial.html#perform-linear-dimensional-reduction-1">https://satijalab.org/seurat/articles/pbmc3k_tutorial.html#perform-linear-dimensional-reduction-1</a>
-</td>
-</tr>
-<tr>
-<td rowspan="1">
-Clustering
-</td>
-<td>
-Seurat
-</td>
-<td>
-<a href="https://satijalab.org/seurat/articles/pbmc3k_tutorial.html#cluster-the-cells-1">https://satijalab.org/seurat/articles/pbmc3k_tutorial.html#cluster-the-cells-1</a>
-</td>
-</tr>
-<tr>
-<td rowspan="2">
-Cell type annotation
-</td>
-<td>
-SingleR
-</td>
-<td>
-<a href="https://github.com/dviraran/SingleR">https://github.com/dviraran/SingleR</a>
-</td>
-</tr>
-<tr>
-<td>
-scCATCH
-</td>
-<td>
-<a href="https://github.com/ZJUFanLab/scCATCH">https://github.com/ZJUFanLab/scCATCH</a>
-</td>
-</tr>
-<tr>
-<td rowspan="1">
-Regulon analysis
-</td>
-<td>
-SCENIC
-</td>
-<td>
-<a href="https://pyscenic.readthedocs.io/en/latest/">https://pyscenic.readthedocs.io/en/latest/</a>
-</td>
-</tr>
-<tr>
-<td rowspan="2">
-Trajectory inference
-</td>
-<td>
-Monocle3
-</td>
-<td>
-<a href="https://cole-trapnell-lab.github.io/monocle3/">https://cole-trapnell-lab.github.io/monocle3/</a>
-</td>
-</tr>
-<tr>
-<td>
-scVelo
-</td>
-<td>
-<a href="https://github.com/theislab/scvelo">https://github.com/theislab/scvelo</a>
-</td>
-</tr>
-<tr>
-<td rowspan="1">
-Cell communication
-</td>
-<td>
-CellChat
-</td>
-<td>
-<a href="https://github.com/sqjin/CellChat">https://github.com/sqjin/CellChat</a>
-</td>
-</tr>
-<tr>
-<td rowspan="2">
-Metabolic analysis
-</td>
-<td>
-scMetabolism
-</td>
-<td>
-<a href="https://github.com/wu-yc/scMetabolism">https://github.com/wu-yc/scMetabolism</a>
-</td>
-</tr>
-<tr>
-<td>
-scFEA
-</td>
-<td>
-<a href="https://github.com/changwn/scFEA">https://github.com/changwn/scFEA</a>
-</td>
-</tr>
-</tbody>
-
-</table>
-<p>Workflow:</p>
-<p><img src="https://shixiangwang.github.io/posts/2023-07-10-scrna-recom/https:/raw.githubusercontent.com/WXlab-NJMU/scrna-recom/main/img/workflow.png" class="img-fluid"></p>
-<p>下图展示了从测序read比对参考基因组根据barcode和UMI产生Count matrix的过程。</p>
-<p><img src="https://shixiangwang.github.io/posts/2023-07-10-scrna-recom/https:/cdn.jsdelivr.net/gh/shixiangwang/cdn/img/202308171442271.png" class="img-fluid"></p>
-<blockquote class="blockquote">
-<p>scRNA-seq利用PCR技术对cDNA分子进行指数级扩增，而UMIs技术可以帮助用户识别并消除在扩增过程中可能产生的重复序列，从而降低技术噪音。值得注意的是，UMI中的测序错误可以人为地提高基因表达，因为应该被消除的重复序列被视为了不同的分子。相反，不同的分子可能会被错误地标记为具有相同的UMI序列，从而被视为同一个分子。</p>
-</blockquote>
-<p>FASTQ 预处理工具：</p>
-<p><img src="https://shixiangwang.github.io/posts/2023-07-10-scrna-recom/https:/cdn.jsdelivr.net/gh/shixiangwang/cdn/img/20230817150145.png" class="img-fluid"></p>
-<blockquote class="blockquote">
-<p>CellRanger、DropEst、Kallisto-BUStools、UMI-Tools、STARSolo和Alevin都是可选的read处理方法，</p>
-</blockquote>
-<p>Cell QC is commonly performed based on three QC covariates:</p>
-<p>the number of counts per barcode (count depth)：每个细胞的测序深度，gene count数总和</p>
-<p>the number of genes per barcode：每个细胞内表达基因的数目</p>
-<p>the fraction of counts from mitochondrial genes per barcode：每个细胞中线粒体基因的比例</p>
-<p>标准的 R 处理流程大概如下：</p>
-<div class="sourceCode" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1">Seurat_preprocessing <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="cf" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">function</span>(counts, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">project =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"Scissor_Single_Cell"</span>, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">min.cells =</span> <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">400</span>, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">min.features =</span> <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">0</span>,</span>
-<span id="cb1-2">                                 <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">normalization.method =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"LogNormalize"</span>, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">scale.factor =</span> <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">10000</span>,</span>
-<span id="cb1-3">                                 <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">selection.method =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"vst"</span>, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">resolution =</span> <span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">0.6</span>,</span>
-<span id="cb1-4">                                 <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">dims_Neighbors =</span> <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">1</span><span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">:</span><span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">10</span>, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">dims_TSNE =</span> <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">1</span><span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">:</span><span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">10</span>, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">dims_UMAP =</span> <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">1</span><span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">:</span><span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">10</span>,</span>
-<span id="cb1-5">                                 <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">verbose =</span> <span class="cn" style="color: #8f5902;
-background-color: null;
-font-style: inherit;">TRUE</span>){</span>
-<span id="cb1-6">    <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">library</span>(Seurat)</span>
-<span id="cb1-7">    data <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">CreateSeuratObject</span>(<span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">counts =</span> counts, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">project =</span> project, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">min.cells =</span> min.cells, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">min.features =</span> min.features)</span>
-<span id="cb1-8">    data <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">NormalizeData</span>(<span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">object =</span> data, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">normalization.method =</span> normalization.method, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">scale.factor =</span> scale.factor, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">verbose =</span> verbose)</span>
-<span id="cb1-9">    data <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">FindVariableFeatures</span>(<span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">object =</span> data, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">selection.method =</span> selection.method, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">verbose =</span> verbose)</span>
-<span id="cb1-10">    data <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">ScaleData</span>(<span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">object =</span> data, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">verbose =</span> verbose)</span>
-<span id="cb1-11">    data <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">RunPCA</span>(<span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">object =</span> data, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">features =</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">VariableFeatures</span>(data), <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">verbose =</span> verbose)</span>
-<span id="cb1-12">    data <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">FindNeighbors</span>(<span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">object =</span> data, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">dims =</span> dims_Neighbors, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">verbose =</span> verbose)</span>
-<span id="cb1-13">    data <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">FindClusters</span>( <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">object =</span> data, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">resolution =</span> resolution, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">verbose =</span> verbose)</span>
-<span id="cb1-14">    data <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">RunTSNE</span>(<span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">object =</span> data, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">dims =</span> dims_TSNE)</span>
-<span id="cb1-15">    data <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">RunUMAP</span>(<span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">object =</span> data, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">dims =</span> dims_UMAP, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">verbose =</span> verbose)</span>
-<span id="cb1-16"></span>
-<span id="cb1-17">    <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">return</span>(data)</span>
-<span id="cb1-18">}</span></code></pre></div>
-<blockquote class="blockquote">
-<p>来源：https://github.com/sunduanchen/Scissor/blob/master/R/Seurat_preprocessing.R</p>
-</blockquote>
-<blockquote class="blockquote">
-<p>在过去的几年里，UMAP已经取代t-SNE成为scRNA-seq数据的默认可视化方法。与图聚类类似，UMAP生成细胞的最近邻图，根据相似度的强弱对每个细胞间的连接进行加权，然后将图形嵌入到二维空间中。还可以使用PAGA图初始化UMAP，以生成连续开发数据集的高度精确可视化。在实践中，人们发现UMAP在可视化数据集的局部结构方面表现得和t-SNE一样好，包括分离密切相关的细胞类型，同时在可视化数据的全局属性方面表现得更好。因此，对于大多数用户来说，UMAP是一个非常有用的默认可视化选项。对UMAP和t-SNE的其他测试表明，初始化这些方法的方式对它们的整体性能非常重要。实际上，在使用PCA初始化时，t-SNE和UMAP在保存全局结构方面表现得同样好。</p>
-</blockquote>
-
-
-
- ]]></description>
-  <category>note</category>
-  <category>scRNA-seq</category>
-  <guid>https://shixiangwang.github.io/posts/2023-07-10-scrna-recom/index.html</guid>
-  <pubDate>Sun, 09 Jul 2023 16:00:00 GMT</pubDate>
 </item>
 </channel>
 </rss>

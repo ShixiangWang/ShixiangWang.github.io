@@ -1,5 +1,5 @@
 ---
-title: 服务生信的 Shiny 开发学习路径
+title: Shiny 开发学习路径
 author: Shixiang Wang
 date: 2023-09-13
 categories: [shiny,R,bioinformatics]
@@ -15,5 +15,115 @@ format:
     code-tools: false
 ---
 
-https://github.com/ShixiangWang/shinyapps/issues/1
+生信领域越来越多的数据库/网页工具采用 [Shiny](https://shiny.posit.co/) 框架进行搭建，Shiny 的流行度/拓展性在随着时间增加。因此，掌握 Shiny 服务于自己的项目/课题成为生信人的一个新的技能。
+在这篇文章中，作为一个有经验的 Shiny 学习者和 Shiny 工具的开发者，我将介绍学习和掌握 Shiny 进行开发的核心路径和相关推荐的（免费）资料。对于每一个关卡（技能点），
+我会给出大致的（**全职学习**）时间估计（以周为单位）。
+
+> 网络上的资料对于个人来说是无穷尽的，我会尽量选择我认可的最核心读物，方便大家进行相关的学习。当然，
+> 个人的能力有限，欢迎讨论和补充。
+>
+>
+> 注意，Shiny 现在已经支持了 Python 的实现，但本文只介绍以 R 为基础的学习路径。
+
+## 关卡1：R 基础（2-3 周）
+
+学习 [*R for Data Science*](https://r4ds.had.co.nz/)。
+
+![](https://d33wubrfki0l68.cloudfront.net/b88ef926a004b0fce72b2526b0b5c4413666a4cb/24a30/cover.png)
+
+要求掌握 1-21 章的全部内容，后续章节初学者以了解为主，根据兴趣和时间进行实践。
+
+核心要点：
+
+- tidyverse 的数据处理理念
+- readr 读取操作
+- dplyr 数据处理理念和核心操作
+- ggplot2 可视化理念和核心操作
+
+读者目标自查：可以独自完成从磁盘读取文件、过滤/转换数据、分组处理/聚合数据、生成可视化图表。
+
+## 关卡2: 网页基础 HTML5/CSS （0.5-1 周）
+
+阅读一遍 [HTML 教程](https://www.runoob.com/html/html-tutorial.html) 和 [CSS 教程](https://www.runoob.com/css/css-tutorial.html)。
+
+HTML 教程是重点，建议花多一些时间阅读；CSS 起到辅助和美化的作用，对于初学者，了解其基本语法、如何设定即可。
+
+核心要点：
+
+- 网页结构
+- 网页标签语法以及条目
+- CSS 的设定
+
+读者目标自查：可以徒手写一个简单的网页，并通过 CSS 引入一些格式化。
+
+## 关卡3：Shiny 学习（2-3 周）
+
+学习 [*Mastering Shiny*](https://mastering-shiny.org/)。
+
+![](https://d33wubrfki0l68.cloudfront.net/0c97eee3d8fc820f3a8d670c08b286e8a524257b/e426c/cover.png)
+
+要求认真阅读全部内容，并根据读物的代码进行实践，边学边练。
+
+核心要点：
+
+- Shiny app 结构
+- Shiny 网页布局
+- Shiny reactivity
+- Shiny module
+
+读者目标自查：可以在关卡1的基础上，将可视化展示通过 Shiny app 实现，并提供多个选项用于控制图形的输出展示。
+
+
+## 关卡4: 学习如何组织 Shiny app 代码（1 周以上）
+
+好的代码结构，会极大地方便运维和拓展你写的 Shiny app。
+下面有几种推荐的代码组织形式，读者可以根据自己的需求参考设定，也可以根据罗列的资料逐步学习。
+
+- Shiny 默认的代码部署方式
+  - 使用一个 `app.R` 文件存储全部的前后端代码，适合非常小的应用。
+  - 使用单独的 `ui.R` 和 `server.R` 文件放前后端代码，适合稍微复杂一点的小应用。
+  - 在以上两种设定的基础上，将复杂的操作逻辑统统整理为函数，放到单独的 `R/` 目录下或者一个 `functions.R` 文件中方便调用和维护。如果更复杂一点，可以整理为一个 R 包，需要通过 [*R Packages*](https://r-pkgs.org/) 学习如何开发 R 包。
+- 使用 [golem](https://github.com/ThinkR-open/golem) 框架，学习 [*Engineering Production-Grade Shiny Apps*](https://engineering-shiny.org/index.html)
+- 使用 [rhino](https://github.com/Appsilon/rhino) 框架，通过 [官方各种文档](https://appsilon.github.io/rhino/) 学习。
+
+
+读者目标自查：理解和熟练掌握 Shiny 默认的代码部署方式。
+
+## 关卡5: 学习如何部署 Shiny app（1-2 周）
+
+但你开发的 app 可用时，我们可以进行部署，方便自己测试或者他人使用。有以下几种部署的方式：
+
+1. 通过 Posit 公司提供的 [shinyapps 服务](https://www.shinyapps.io/)。推荐初学者尝试和摸索。
+2. 自己在本地的/云服务商的 Linux 服务器上进行部署，需要了解 Linux 系统并掌握 Linux 的基本操作（阅读 [The Unix Workbench](https://seankross.com/the-unix-workbench/)）。具体的部署可以参考以下几篇文章：
+   1. [*在Ubuntu服务器上配置Shiny应用*](https://mp.weixin.qq.com/s/f8QWD8RH6MTfvHSd57t2FQ)
+   2. [*How to Deploy Interactive R Apps with Shiny Server*](https://www.linode.com/docs/guides/how-to-deploy-rshiny-server-on-ubuntu-and-debian)
+   3. [*How To Set Up Shiny Server on Ubuntu 20.04*](https://www.digitalocean.com/community/tutorials/how-to-set-up-shiny-server-on-ubuntu-20-04)
+
+读者目标自查：掌握第 1 种应用部署方式；探索第 2 种部署方式并能解决遇到的问题。
+
+## 关卡6: 学习和重现完整的 Shiny app（2周以上）
+
+这是最后一道关口，闯关意味着你具备了独立完成 app 开发的能力。大家（特别是初学者）需要谨记，一个好的 app 在于它的代码结构清晰、能够完成任务，不在于漂亮的 UI。
+所有的功能实现应当把完成分析/可视化目标为第一位，然后再花时间探索具体的 UI 美化。
+
+由于各类读者背景和需求不一致，我这里只做一些通用的学习资料推荐，针对读者所在领域的 app 开发，需要读者自行了解和掌握相关知识背景、分析技能，在此基础上寻找一些已经通过 Shiny 实现的数据库/工具的源代码仓库进行学习。
+
+- Shiny examples: <https://github.com/rstudio/shiny-examples>
+- Shiny gallery：<https://shiny.posit.co/r/gallery/>。官方提供了很多功能特性的 app 实现。
+- Shiny Data Portal: <https://github.com/SebKrantz/shiny-data-portal>。A free Shiny Application to host, filter, aggregate and and download data in various formats.
+- machLearn, Machine learning dashboard created with R/shiny: <https://github.com/davesteps/machLearn>
+- Shiny app for customizing Raincloud plots: <https://github.com/gabrifc/raincloud-shiny>
+
+## 推荐资料
+
+在本文中，我尽量避免推荐比较多的资料，因为对于初学者过多的资料带来的是混淆与压力。我希望你能够通过上述的关卡真正有效地学习和掌握 Shiny 开发的知识要点，并应用于你感兴趣的项目中去。
+作为本文的最后一部分，我将提供一些非常重要的资源地址，希望在你困惑或者想要学习更多内容时找到灵感！
+
+- <https://github.com/veeps/shiny_workshop>
+- <https://github.com/grabear/awesome-rshiny>
+- <https://github.com/nanxstats/awesome-shiny-extensions>
+- <https://github.com/davidruvolo51/shinyAppTutorials>
+- <https://github.com/daattali/advanced-shiny>
+
+Enjoy playing with Shiny!
 
