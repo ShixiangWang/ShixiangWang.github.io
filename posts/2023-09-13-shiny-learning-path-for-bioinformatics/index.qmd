@@ -91,7 +91,7 @@ HTML 教程是重点，建议花多一些时间阅读；CSS 起到辅助和美�
 
 ## 关卡5: 学习如何部署 Shiny app（1-2 周）
 
-但你开发的 app 可用时，我们可以进行部署，方便自己测试或者他人使用。有以下几种部署的方式：
+当你开发的 app 可用时，接下来就是进行部署，方便自己测试或者他人使用。有以下几种部署的方式：
 
 1. 通过 Posit 公司提供的 [shinyapps 服务](https://www.shinyapps.io/)。推荐初学者尝试和摸索。
 2. 自己在本地的/云服务商的 Linux 服务器上进行部署，需要了解 Linux 系统并掌握 Linux 的基本操作（阅读 [The Unix Workbench](https://seankross.com/the-unix-workbench/)）。具体的部署可以参考以下几篇文章：

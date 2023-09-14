@@ -620,7 +620,7 @@
     "href": "posts/2023-09-13-shiny-learning-path-for-bioinformatics/index.html#关卡5-学习如何部署-shiny-app1-2-周",
     "title": "Shiny 开发学习路径",
     "section": "关卡5: 学习如何部署 Shiny app（1-2 周）",
-    "text": "关卡5: 学习如何部署 Shiny app（1-2 周）\n但你开发的 app 可用时，我们可以进行部署，方便自己测试或者他人使用。有以下几种部署的方式：\n\n通过 Posit 公司提供的 shinyapps 服务。推荐初学者尝试和摸索。\n自己在本地的/云服务商的 Linux 服务器上进行部署，需要了解 Linux 系统并掌握 Linux 的基本操作（阅读 The Unix Workbench）。具体的部署可以参考以下几篇文章：\n\n在Ubuntu服务器上配置Shiny应用\nHow to Deploy Interactive R Apps with Shiny Server\nHow To Set Up Shiny Server on Ubuntu 20.04\n\n\n读者目标自查：掌握第 1 种应用部署方式；探索第 2 种部署方式并能解决遇到的问题。"
+    "text": "关卡5: 学习如何部署 Shiny app（1-2 周）\n当你开发的 app 可用时，接下来就是进行部署，方便自己测试或者他人使用。有以下几种部署的方式：\n\n通过 Posit 公司提供的 shinyapps 服务。推荐初学者尝试和摸索。\n自己在本地的/云服务商的 Linux 服务器上进行部署，需要了解 Linux 系统并掌握 Linux 的基本操作（阅读 The Unix Workbench）。具体的部署可以参考以下几篇文章：\n\n在Ubuntu服务器上配置Shiny应用\nHow to Deploy Interactive R Apps with Shiny Server\nHow To Set Up Shiny Server on Ubuntu 20.04\n\n\n读者目标自查：掌握第 1 种应用部署方式；探索第 2 种部署方式并能解决遇到的问题。"
   },
   {
     "objectID": "posts/2023-09-13-shiny-learning-path-for-bioinformatics/index.html#关卡6-学习和重现完整的-shiny-app2周以上",
