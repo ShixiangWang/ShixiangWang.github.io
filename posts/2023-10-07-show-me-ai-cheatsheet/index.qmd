@@ -1,0 +1,20 @@
+---
+title: ShowMeAI 速查表
+author: Shixiang Wang
+date: 2023-10-07
+categories: [machine-learning,Python,resource]
+draft: false
+description: ''
+
+toc: true
+
+format:
+  html:
+    code-fold: false
+    code-overflow: wrap
+    code-tools: false
+---
+
+#分享# #AI# 今天看到 showmeAI（<https://github.com/ShowMeAI-Hub>），有一些速查表非常不错，这里整理分享给大家。
+<https://www.aliyundrive.com/s/mogzKzDSinf>
+点击链接保存，或者复制本段内容，打开「阿里云盘」APP ，无需下载极速在线查看，视频原画倍速播放。
