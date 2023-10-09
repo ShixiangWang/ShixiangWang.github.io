@@ -1,0 +1,49 @@
+---
+title: 结合 quarto 出版系统和 webr 技术
+author: Shixiang Wang
+date: 2023-10-09
+categories: [R]
+draft: false
+description: ''
+resources:
+  - webr-serviceworker.js
+  - webr-worker.js
+toc: true
+
+format:
+  html:
+    code-fold: false
+    code-overflow: wrap
+    code-tools: false
+engine: knitr
+filters:
+  - webr
+---
+
+这是一个简单的例子，直接通过浏览器运行 [webr 技术](https://docs.r-wasm.org/webr/latest/)来实时运行 R 代码。你还可以实时修改代码进行交互式探索！
+
+```{webr-r}
+fit = lm(mpg ~ am, data = mtcars)
+summary(fit)
+```
+
+
+```{webr-r}
+par(bg = "#f7f7f7")
+
+plot(x = mtcars$mpg, y = mtcars$am)
+```
+
+```{webr-r}
+par(bg = "#f7f7f7")
+
+set.seed(2)
+x <- rnorm(100)
+boxplot(x)
+```
+
+
+技术详情可以参阅 [quarto-webr 拓展文档](https://quarto-webr.thecoatlessprofessor.com/)。
+目前该插件（包括 webR）还在积极的开发中，期待未来更加成熟稳定，跟本地执行代码一样方便和容易，
+我相信这会极大地改变开发者和使用者的交互方式。
+

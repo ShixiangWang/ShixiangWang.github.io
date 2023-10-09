@@ -1,0 +1,14 @@
+{
+  "hash": "a827d6f650c2d243a80a84f361ce242c",
+  "result": {
+    "markdown": "---\ntitle: 结合 quarto 出版系统和 webr 技术\nauthor: Shixiang Wang\ndate: 2023-10-09\ncategories: [R]\ndraft: false\ndescription: ''\nresources:\n  - webr-serviceworker.js\n  - webr-worker.js\ntoc: true\n\nformat:\n  html:\n    code-fold: false\n    code-overflow: wrap\n    code-tools: false\nengine: knitr\nfilters:\n  - webr\n---\n\n\n这是一个简单的例子，直接通过浏览器运行 [webr 技术](https://docs.r-wasm.org/webr/latest/)来实时运行 R 代码。你还可以实时修改代码进行交互式探索！\n\n```{webr-r}\nfit = lm(mpg ~ am, data = mtcars)\nsummary(fit)\n```\n\n\n```{webr-r}\npar(bg = \"#f7f7f7\")\n\nplot(x = mtcars$mpg, y = mtcars$am)\n```\n\n```{webr-r}\npar(bg = \"#f7f7f7\")\n\nset.seed(2)\nx <- rnorm(100)\nboxplot(x)\n```\n\n\n技术详情可以参阅 [quarto-webr 拓展文档](https://quarto-webr.thecoatlessprofessor.com/)。\n目前该插件（包括 webR）还在积极的开发中，期待未来更加成熟稳定，跟本地执行代码一样方便和容易，\n我相信这会极大地改变开发者和使用者的交互方式。\n\n",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

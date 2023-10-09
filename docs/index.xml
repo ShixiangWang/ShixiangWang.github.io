@@ -12,6 +12,689 @@
 <generator>quarto-1.3.361</generator>
 <lastBuildDate>Sun, 08 Oct 2023 16:00:00 GMT</lastBuildDate>
 <item>
+  <title>结合 quarto 出版系统和 webr 技术</title>
+  <dc:creator>Shixiang Wang</dc:creator>
+  <link>https://shixiangwang.github.io/posts/2023-10-09-webr-in-quarto/index.html</link>
+  <description><![CDATA[ <script src="https://cdn.jsdelivr.net/npm/monaco-editor@0.43.0/min/vs/loader.js"></script><script type="module" id="webr-monaco-editor-init">
+
+  // Configure the Monaco Editor's loader
+  require.config({
+    paths: {
+      'vs': 'https://cdn.jsdelivr.net/npm/monaco-editor@0.43.0/min/vs'
+    }
+  });
+</script><p>这是一个简单的例子，直接通过浏览器运行 <a href="https://docs.r-wasm.org/webr/latest/">webr 技术</a>来实时运行 R 代码。你还可以实时修改代码进行交互式探索！</p>
+<button class="btn btn-default btn-webr" disabled="" type="button" id="webr-run-button-1">🟡 Loading
+  webR...</button>
+<div id="webr-editor-1"></div>
+<div id="webr-code-output-1" aria-live="assertive">
+  <pre style="visibility: hidden"></pre>
+</div>
+<script type="module">
+  // Retrieve webR code cell information
+  const runButton = document.getElementById("webr-run-button-1");
+  const outputDiv = document.getElementById("webr-code-output-1");
+  const editorDiv = document.getElementById("webr-editor-1");
+
+  // Add a light grey outline around the code editor
+  editorDiv.style.border = "1px solid #eee";
+
+  // Load the Monaco Editor and create an instance
+  let editor;
+  require(['vs/editor/editor.main'], function () {
+    editor = monaco.editor.create(editorDiv, {
+      value: `fit = lm(mpg ~ am, data = mtcars)
+summary(fit)`,
+      language: 'r',
+      theme: 'vs-light',
+      automaticLayout: true,           // TODO: Could be problematic for slide decks
+      scrollBeyondLastLine: false,
+      minimap: {
+        enabled: false
+      },
+      fontSize: '17.5rem',               // Bootstrap is 1 rem
+      renderLineHighlight: "none",     // Disable current line highlighting
+      hideCursorInOverviewRuler: true  // Remove cursor indictor in right hand side scroll bar
+    });
+
+    // Dynamically modify the height of the editor window if new lines are added.
+    let ignoreEvent = false;
+    const updateHeight = () => {
+      const contentHeight = editor.getContentHeight();
+      // We're avoiding a width change
+      //editorDiv.style.width = `${width}px`;
+      editorDiv.style.height = `${contentHeight}px`;
+      try {
+        ignoreEvent = true;
+
+        // The key to resizing is this call
+        editor.layout();
+      } finally {
+        ignoreEvent = false;
+      }
+    };
+
+    // Helper function to check if selected text is empty
+    function isEmptyCodeText(selectedCodeText) {
+      return (selectedCodeText === null || selectedCodeText === undefined || selectedCodeText === "");
+    }
+
+    // Registry of keyboard shortcuts that should be re-added to each editor window
+    // when focus changes.
+    const addWebRKeyboardShortCutCommands = () => {
+      // Add a keydown event listener for Shift+Enter to run all code in cell
+      editor.addCommand(monaco.KeyMod.Shift | monaco.KeyCode.Enter, () => {
+
+        // Retrieve all text inside the editor
+        executeCode(editor.getValue());
+      });
+
+      // Add a keydown event listener for CMD/Ctrl+Enter to run selected code
+      editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.Enter, () => {
+
+        // Get the selected text from the editor
+        const selectedText = editor.getModel().getValueInRange(editor.getSelection());
+        // Check if no code is selected
+        if (isEmptyCodeText(selectedText)) {
+          // Obtain the current cursor position
+          let currentPosition = editor.getPosition();
+          // Retrieve the current line content
+          let currentLine = editor.getModel().getLineContent(currentPosition.lineNumber);
+
+          // Propose a new position to move the cursor to
+          let newPosition = new monaco.Position(currentPosition.lineNumber + 1, 1);
+
+          // Check if the new position is beyond the last line of the editor
+          if (newPosition.lineNumber > editor.getModel().getLineCount()) {
+            // Add a new line at the end of the editor
+            editor.executeEdits("addNewLine", [{
+            range: new monaco.Range(newPosition.lineNumber, 1, newPosition.lineNumber, 1),
+            text: "\n", 
+            forceMoveMarkers: true,
+            }]);
+          }
+          
+          // Run the entire line of code.
+          executeCode(currentLine);
+
+          // Move cursor to new position
+          editor.setPosition(newPosition);
+        } else {
+          // Code to run when Ctrl+Enter is pressed with selected code
+          executeCode(selectedText);
+        }
+      });
+    }
+
+    // Register an on focus event handler for when a code cell is selected to update
+    // what keyboard shortcut commands should work.
+    // This is a workaround to fix a regression that happened with multiple
+    // editor windows since Monaco 0.32.0 
+    // https://github.com/microsoft/monaco-editor/issues/2947
+    editor.onDidFocusEditorText(addWebRKeyboardShortCutCommands);
+
+    // Register an on change event for when new code is added to the editor window
+    editor.onDidContentSizeChange(updateHeight);
+
+    // Manually re-update height to account for the content we inserted into the call
+    updateHeight();
+  });
+
+  // Function to execute the code (accepts code as an argument)
+  async function executeCode(codeToRun) {
+    // Disable run button for code cell active
+    runButton.disabled = true;
+
+    // Disallowing execution of other code cells
+    document.querySelectorAll(".btn-webr").forEach((btn) => {
+      btn.disabled = true;
+    });
+
+    // Emphasize the active code cell
+    runButton.innerHTML = '<i class="fa-solid fa-spinner fa-spin" style="color: #7894c4;"></i> <span>Run Code</span>';
+
+    // Create a canvas variable for graphics
+    let canvas = undefined;
+
+    // Initialize webR
+    await globalThis.webR.init();
+
+    // Setup a webR canvas by making a namespace call into the {webr} package
+    await webR.evalRVoid("webr::canvas(width=504, height=360)");
+
+    // Capture output data from evaluating the code
+    const result = await webRCodeShelter.captureR(codeToRun, {
+      withAutoprint: true,
+      captureStreams: true,
+      captureConditions: false//,
+      // env: webR.objs.emptyEnv, // maintain a global environment for webR v0.2.0
+    });
+
+    // Start attempting to parse the result data
+    try {
+
+      // Stop creating images
+      await webR.evalRVoid("dev.off()");
+
+      // Merge output streams of STDOUT and STDErr (messages and errors are combined.)
+      const out = result.output.filter(
+        evt => evt.type == "stdout" || evt.type == "stderr"
+      ).map((evt) => evt.data).join("\n");
+
+      // Clean the state
+      const msgs = await webR.flush();
+
+      // Output each image stored
+      msgs.forEach(msg => {
+        // Determine if old canvas can be used or a new canvas is required.
+        if (msg.type === 'canvas'){
+          // Add image to the current canvas
+          if (msg.data.event === 'canvasImage') {
+            canvas.getContext('2d').drawImage(msg.data.image, 0, 0);
+          } else if (msg.data.event === 'canvasNewPage') {
+            // Generate a new canvas element
+            canvas = document.createElement("canvas");
+            canvas.setAttribute("width", 2 * 504);
+            canvas.setAttribute("height", 2 * 360);
+            canvas.style.width = "700px";
+            canvas.style.display = "block";
+            canvas.style.margin = "auto";
+          }
+        }
+      });
+
+      // Nullify the outputDiv of content
+      outputDiv.innerHTML = "";
+
+      // Design an output object for messages
+      const pre = document.createElement("pre");
+      if (/\S/.test(out)) {
+        // Display results as text
+        const code = document.createElement("code");
+        code.innerText = out;
+        pre.appendChild(code);
+      } else {
+        // If nothing is present, hide the element.
+        pre.style.visibility = "hidden";
+      }
+      outputDiv.appendChild(pre);
+
+      // Place the graphics on the canvas
+      if (canvas) {
+        const p = document.createElement("p");
+        p.appendChild(canvas);
+        outputDiv.appendChild(p);
+      }
+    } finally {
+      // Clean up the remaining code
+      webRCodeShelter.purge();
+    }
+
+    // Switch to allowing execution of code
+    document.querySelectorAll(".btn-webr").forEach((btn) => {
+      btn.disabled = false;
+    });
+
+    // Revert to the initial code cell state
+    runButton.innerHTML = '<i class="fa-solid fa-play" style="color: #0d9c29;"></i> <span>Run Code</span>';
+  }
+
+  // Add a click event listener to the run button
+  runButton.onclick = function () {
+    executeCode(editor.getValue());
+  };
+</script><button class="btn btn-default btn-webr" disabled="" type="button" id="webr-run-button-2">🟡 Loading
+  webR...</button>
+<div id="webr-editor-2"></div>
+<div id="webr-code-output-2" aria-live="assertive">
+  <pre style="visibility: hidden"></pre>
+</div>
+<script type="module">
+  // Retrieve webR code cell information
+  const runButton = document.getElementById("webr-run-button-2");
+  const outputDiv = document.getElementById("webr-code-output-2");
+  const editorDiv = document.getElementById("webr-editor-2");
+
+  // Add a light grey outline around the code editor
+  editorDiv.style.border = "1px solid #eee";
+
+  // Load the Monaco Editor and create an instance
+  let editor;
+  require(['vs/editor/editor.main'], function () {
+    editor = monaco.editor.create(editorDiv, {
+      value: `par(bg = "#f7f7f7")
+
+plot(x = mtcars$mpg, y = mtcars$am)`,
+      language: 'r',
+      theme: 'vs-light',
+      automaticLayout: true,           // TODO: Could be problematic for slide decks
+      scrollBeyondLastLine: false,
+      minimap: {
+        enabled: false
+      },
+      fontSize: '17.5rem',               // Bootstrap is 1 rem
+      renderLineHighlight: "none",     // Disable current line highlighting
+      hideCursorInOverviewRuler: true  // Remove cursor indictor in right hand side scroll bar
+    });
+
+    // Dynamically modify the height of the editor window if new lines are added.
+    let ignoreEvent = false;
+    const updateHeight = () => {
+      const contentHeight = editor.getContentHeight();
+      // We're avoiding a width change
+      //editorDiv.style.width = `${width}px`;
+      editorDiv.style.height = `${contentHeight}px`;
+      try {
+        ignoreEvent = true;
+
+        // The key to resizing is this call
+        editor.layout();
+      } finally {
+        ignoreEvent = false;
+      }
+    };
+
+    // Helper function to check if selected text is empty
+    function isEmptyCodeText(selectedCodeText) {
+      return (selectedCodeText === null || selectedCodeText === undefined || selectedCodeText === "");
+    }
+
+    // Registry of keyboard shortcuts that should be re-added to each editor window
+    // when focus changes.
+    const addWebRKeyboardShortCutCommands = () => {
+      // Add a keydown event listener for Shift+Enter to run all code in cell
+      editor.addCommand(monaco.KeyMod.Shift | monaco.KeyCode.Enter, () => {
+
+        // Retrieve all text inside the editor
+        executeCode(editor.getValue());
+      });
+
+      // Add a keydown event listener for CMD/Ctrl+Enter to run selected code
+      editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.Enter, () => {
+
+        // Get the selected text from the editor
+        const selectedText = editor.getModel().getValueInRange(editor.getSelection());
+        // Check if no code is selected
+        if (isEmptyCodeText(selectedText)) {
+          // Obtain the current cursor position
+          let currentPosition = editor.getPosition();
+          // Retrieve the current line content
+          let currentLine = editor.getModel().getLineContent(currentPosition.lineNumber);
+
+          // Propose a new position to move the cursor to
+          let newPosition = new monaco.Position(currentPosition.lineNumber + 1, 1);
+
+          // Check if the new position is beyond the last line of the editor
+          if (newPosition.lineNumber > editor.getModel().getLineCount()) {
+            // Add a new line at the end of the editor
+            editor.executeEdits("addNewLine", [{
+            range: new monaco.Range(newPosition.lineNumber, 1, newPosition.lineNumber, 1),
+            text: "\n", 
+            forceMoveMarkers: true,
+            }]);
+          }
+          
+          // Run the entire line of code.
+          executeCode(currentLine);
+
+          // Move cursor to new position
+          editor.setPosition(newPosition);
+        } else {
+          // Code to run when Ctrl+Enter is pressed with selected code
+          executeCode(selectedText);
+        }
+      });
+    }
+
+    // Register an on focus event handler for when a code cell is selected to update
+    // what keyboard shortcut commands should work.
+    // This is a workaround to fix a regression that happened with multiple
+    // editor windows since Monaco 0.32.0 
+    // https://github.com/microsoft/monaco-editor/issues/2947
+    editor.onDidFocusEditorText(addWebRKeyboardShortCutCommands);
+
+    // Register an on change event for when new code is added to the editor window
+    editor.onDidContentSizeChange(updateHeight);
+
+    // Manually re-update height to account for the content we inserted into the call
+    updateHeight();
+  });
+
+  // Function to execute the code (accepts code as an argument)
+  async function executeCode(codeToRun) {
+    // Disable run button for code cell active
+    runButton.disabled = true;
+
+    // Disallowing execution of other code cells
+    document.querySelectorAll(".btn-webr").forEach((btn) => {
+      btn.disabled = true;
+    });
+
+    // Emphasize the active code cell
+    runButton.innerHTML = '<i class="fa-solid fa-spinner fa-spin" style="color: #7894c4;"></i> <span>Run Code</span>';
+
+    // Create a canvas variable for graphics
+    let canvas = undefined;
+
+    // Initialize webR
+    await globalThis.webR.init();
+
+    // Setup a webR canvas by making a namespace call into the {webr} package
+    await webR.evalRVoid("webr::canvas(width=504, height=360)");
+
+    // Capture output data from evaluating the code
+    const result = await webRCodeShelter.captureR(codeToRun, {
+      withAutoprint: true,
+      captureStreams: true,
+      captureConditions: false//,
+      // env: webR.objs.emptyEnv, // maintain a global environment for webR v0.2.0
+    });
+
+    // Start attempting to parse the result data
+    try {
+
+      // Stop creating images
+      await webR.evalRVoid("dev.off()");
+
+      // Merge output streams of STDOUT and STDErr (messages and errors are combined.)
+      const out = result.output.filter(
+        evt => evt.type == "stdout" || evt.type == "stderr"
+      ).map((evt) => evt.data).join("\n");
+
+      // Clean the state
+      const msgs = await webR.flush();
+
+      // Output each image stored
+      msgs.forEach(msg => {
+        // Determine if old canvas can be used or a new canvas is required.
+        if (msg.type === 'canvas'){
+          // Add image to the current canvas
+          if (msg.data.event === 'canvasImage') {
+            canvas.getContext('2d').drawImage(msg.data.image, 0, 0);
+          } else if (msg.data.event === 'canvasNewPage') {
+            // Generate a new canvas element
+            canvas = document.createElement("canvas");
+            canvas.setAttribute("width", 2 * 504);
+            canvas.setAttribute("height", 2 * 360);
+            canvas.style.width = "700px";
+            canvas.style.display = "block";
+            canvas.style.margin = "auto";
+          }
+        }
+      });
+
+      // Nullify the outputDiv of content
+      outputDiv.innerHTML = "";
+
+      // Design an output object for messages
+      const pre = document.createElement("pre");
+      if (/\S/.test(out)) {
+        // Display results as text
+        const code = document.createElement("code");
+        code.innerText = out;
+        pre.appendChild(code);
+      } else {
+        // If nothing is present, hide the element.
+        pre.style.visibility = "hidden";
+      }
+      outputDiv.appendChild(pre);
+
+      // Place the graphics on the canvas
+      if (canvas) {
+        const p = document.createElement("p");
+        p.appendChild(canvas);
+        outputDiv.appendChild(p);
+      }
+    } finally {
+      // Clean up the remaining code
+      webRCodeShelter.purge();
+    }
+
+    // Switch to allowing execution of code
+    document.querySelectorAll(".btn-webr").forEach((btn) => {
+      btn.disabled = false;
+    });
+
+    // Revert to the initial code cell state
+    runButton.innerHTML = '<i class="fa-solid fa-play" style="color: #0d9c29;"></i> <span>Run Code</span>';
+  }
+
+  // Add a click event listener to the run button
+  runButton.onclick = function () {
+    executeCode(editor.getValue());
+  };
+</script><button class="btn btn-default btn-webr" disabled="" type="button" id="webr-run-button-3">🟡 Loading
+  webR...</button>
+<div id="webr-editor-3"></div>
+<div id="webr-code-output-3" aria-live="assertive">
+  <pre style="visibility: hidden"></pre>
+</div>
+<script type="module">
+  // Retrieve webR code cell information
+  const runButton = document.getElementById("webr-run-button-3");
+  const outputDiv = document.getElementById("webr-code-output-3");
+  const editorDiv = document.getElementById("webr-editor-3");
+
+  // Add a light grey outline around the code editor
+  editorDiv.style.border = "1px solid #eee";
+
+  // Load the Monaco Editor and create an instance
+  let editor;
+  require(['vs/editor/editor.main'], function () {
+    editor = monaco.editor.create(editorDiv, {
+      value: `par(bg = "#f7f7f7")
+
+set.seed(2)
+x <- rnorm(100)
+boxplot(x)`,
+      language: 'r',
+      theme: 'vs-light',
+      automaticLayout: true,           // TODO: Could be problematic for slide decks
+      scrollBeyondLastLine: false,
+      minimap: {
+        enabled: false
+      },
+      fontSize: '17.5rem',               // Bootstrap is 1 rem
+      renderLineHighlight: "none",     // Disable current line highlighting
+      hideCursorInOverviewRuler: true  // Remove cursor indictor in right hand side scroll bar
+    });
+
+    // Dynamically modify the height of the editor window if new lines are added.
+    let ignoreEvent = false;
+    const updateHeight = () => {
+      const contentHeight = editor.getContentHeight();
+      // We're avoiding a width change
+      //editorDiv.style.width = `${width}px`;
+      editorDiv.style.height = `${contentHeight}px`;
+      try {
+        ignoreEvent = true;
+
+        // The key to resizing is this call
+        editor.layout();
+      } finally {
+        ignoreEvent = false;
+      }
+    };
+
+    // Helper function to check if selected text is empty
+    function isEmptyCodeText(selectedCodeText) {
+      return (selectedCodeText === null || selectedCodeText === undefined || selectedCodeText === "");
+    }
+
+    // Registry of keyboard shortcuts that should be re-added to each editor window
+    // when focus changes.
+    const addWebRKeyboardShortCutCommands = () => {
+      // Add a keydown event listener for Shift+Enter to run all code in cell
+      editor.addCommand(monaco.KeyMod.Shift | monaco.KeyCode.Enter, () => {
+
+        // Retrieve all text inside the editor
+        executeCode(editor.getValue());
+      });
+
+      // Add a keydown event listener for CMD/Ctrl+Enter to run selected code
+      editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.Enter, () => {
+
+        // Get the selected text from the editor
+        const selectedText = editor.getModel().getValueInRange(editor.getSelection());
+        // Check if no code is selected
+        if (isEmptyCodeText(selectedText)) {
+          // Obtain the current cursor position
+          let currentPosition = editor.getPosition();
+          // Retrieve the current line content
+          let currentLine = editor.getModel().getLineContent(currentPosition.lineNumber);
+
+          // Propose a new position to move the cursor to
+          let newPosition = new monaco.Position(currentPosition.lineNumber + 1, 1);
+
+          // Check if the new position is beyond the last line of the editor
+          if (newPosition.lineNumber > editor.getModel().getLineCount()) {
+            // Add a new line at the end of the editor
+            editor.executeEdits("addNewLine", [{
+            range: new monaco.Range(newPosition.lineNumber, 1, newPosition.lineNumber, 1),
+            text: "\n", 
+            forceMoveMarkers: true,
+            }]);
+          }
+          
+          // Run the entire line of code.
+          executeCode(currentLine);
+
+          // Move cursor to new position
+          editor.setPosition(newPosition);
+        } else {
+          // Code to run when Ctrl+Enter is pressed with selected code
+          executeCode(selectedText);
+        }
+      });
+    }
+
+    // Register an on focus event handler for when a code cell is selected to update
+    // what keyboard shortcut commands should work.
+    // This is a workaround to fix a regression that happened with multiple
+    // editor windows since Monaco 0.32.0 
+    // https://github.com/microsoft/monaco-editor/issues/2947
+    editor.onDidFocusEditorText(addWebRKeyboardShortCutCommands);
+
+    // Register an on change event for when new code is added to the editor window
+    editor.onDidContentSizeChange(updateHeight);
+
+    // Manually re-update height to account for the content we inserted into the call
+    updateHeight();
+  });
+
+  // Function to execute the code (accepts code as an argument)
+  async function executeCode(codeToRun) {
+    // Disable run button for code cell active
+    runButton.disabled = true;
+
+    // Disallowing execution of other code cells
+    document.querySelectorAll(".btn-webr").forEach((btn) => {
+      btn.disabled = true;
+    });
+
+    // Emphasize the active code cell
+    runButton.innerHTML = '<i class="fa-solid fa-spinner fa-spin" style="color: #7894c4;"></i> <span>Run Code</span>';
+
+    // Create a canvas variable for graphics
+    let canvas = undefined;
+
+    // Initialize webR
+    await globalThis.webR.init();
+
+    // Setup a webR canvas by making a namespace call into the {webr} package
+    await webR.evalRVoid("webr::canvas(width=504, height=360)");
+
+    // Capture output data from evaluating the code
+    const result = await webRCodeShelter.captureR(codeToRun, {
+      withAutoprint: true,
+      captureStreams: true,
+      captureConditions: false//,
+      // env: webR.objs.emptyEnv, // maintain a global environment for webR v0.2.0
+    });
+
+    // Start attempting to parse the result data
+    try {
+
+      // Stop creating images
+      await webR.evalRVoid("dev.off()");
+
+      // Merge output streams of STDOUT and STDErr (messages and errors are combined.)
+      const out = result.output.filter(
+        evt => evt.type == "stdout" || evt.type == "stderr"
+      ).map((evt) => evt.data).join("\n");
+
+      // Clean the state
+      const msgs = await webR.flush();
+
+      // Output each image stored
+      msgs.forEach(msg => {
+        // Determine if old canvas can be used or a new canvas is required.
+        if (msg.type === 'canvas'){
+          // Add image to the current canvas
+          if (msg.data.event === 'canvasImage') {
+            canvas.getContext('2d').drawImage(msg.data.image, 0, 0);
+          } else if (msg.data.event === 'canvasNewPage') {
+            // Generate a new canvas element
+            canvas = document.createElement("canvas");
+            canvas.setAttribute("width", 2 * 504);
+            canvas.setAttribute("height", 2 * 360);
+            canvas.style.width = "700px";
+            canvas.style.display = "block";
+            canvas.style.margin = "auto";
+          }
+        }
+      });
+
+      // Nullify the outputDiv of content
+      outputDiv.innerHTML = "";
+
+      // Design an output object for messages
+      const pre = document.createElement("pre");
+      if (/\S/.test(out)) {
+        // Display results as text
+        const code = document.createElement("code");
+        code.innerText = out;
+        pre.appendChild(code);
+      } else {
+        // If nothing is present, hide the element.
+        pre.style.visibility = "hidden";
+      }
+      outputDiv.appendChild(pre);
+
+      // Place the graphics on the canvas
+      if (canvas) {
+        const p = document.createElement("p");
+        p.appendChild(canvas);
+        outputDiv.appendChild(p);
+      }
+    } finally {
+      // Clean up the remaining code
+      webRCodeShelter.purge();
+    }
+
+    // Switch to allowing execution of code
+    document.querySelectorAll(".btn-webr").forEach((btn) => {
+      btn.disabled = false;
+    });
+
+    // Revert to the initial code cell state
+    runButton.innerHTML = '<i class="fa-solid fa-play" style="color: #0d9c29;"></i> <span>Run Code</span>';
+  }
+
+  // Add a click event listener to the run button
+  runButton.onclick = function () {
+    executeCode(editor.getValue());
+  };
+</script><p>技术详情可以参阅 <a href="https://quarto-webr.thecoatlessprofessor.com/">quarto-webr 拓展文档</a>。 目前该插件（包括 webR）还在积极的开发中，期待未来更加成熟稳定，跟本地执行代码一样方便和容易， 我相信这会极大地改变开发者和使用者的交互方式。</p>
+
+
+
+ ]]></description>
+  <category>R</category>
+  <guid>https://shixiangwang.github.io/posts/2023-10-09-webr-in-quarto/index.html</guid>
+  <pubDate>Sun, 08 Oct 2023 16:00:00 GMT</pubDate>
+</item>
+<item>
   <title>2023 年诺贝尔生理或医学奖授予 KK</title>
   <dc:creator>Shixiang Wang</dc:creator>
   <link>https://shixiangwang.github.io/posts/2023-10-09-kk-nobel/index.html</link>
@@ -4393,1730 +5076,6 @@ font-style: inherit;">predicted_Monaco</span></span></code></pre></div>
   <category>journal</category>
   <guid>https://shixiangwang.github.io/posts/2023-07-18-journal/index.html</guid>
   <pubDate>Mon, 17 Jul 2023 16:00:00 GMT</pubDate>
-</item>
-<item>
-  <title>Single-cell Workshop 2021 - 01 - scRNASeq 分析基础</title>
-  <dc:creator>Shixiang Wang</dc:creator>
-  <link>https://shixiangwang.github.io/posts/2023-07-13-fundamentals-of-scrnaseq-analysis/index.html</link>
-  <description><![CDATA[ <p>学习资料：<a href="https://holab-hku.github.io/Fundamental-scRNA/" class="uri">https://holab-hku.github.io/Fundamental-scRNA/</a></p>
-<section id="准备" class="level2"><h2 class="anchored" data-anchor-id="准备">准备</h2>
-<section id="软件包" class="level3"><h3 class="anchored" data-anchor-id="软件包">软件包</h3>
-<p>载入下面的包，如果没有就先安装下。</p>
-<div class="cell">
-<div class="sourceCode" id="cb1" style="background: #f1f3f5;"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-style: inherit;"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">(</span><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;"><a href="https://satijalab.org/seurat">Seurat</a></span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">)</span></span></code></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Attaching SeuratObject</code></pre>
-</div>
-<div class="sourceCode" id="cb3" style="background: #f1f3f5;"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-style: inherit;"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">(</span><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;"><a href="https://ggplot2.tidyverse.org">ggplot2</a></span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">)</span></span>
-<span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-style: inherit;"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">(</span><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;"><a href="https://patchwork.data-imaginist.com">patchwork</a></span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">)</span></span>
-<span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-style: inherit;"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">(</span><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;"><a href="https://dplyr.tidyverse.org">dplyr</a></span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">)</span></span></code></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>
-Attaching package: 'dplyr'</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>The following objects are masked from 'package:stats':
-
-    filter, lag</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>The following objects are masked from 'package:base':
-
-    intersect, setdiff, setequal, union</code></pre>
-</div>
-<div class="sourceCode" id="cb7" style="background: #f1f3f5;"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-style: inherit;"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">(</span><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;"><a href="https://hhoeflin.github.io/hdf5r/">hdf5r</a></span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">)</span></span></code></pre></div>
-</div>
-</section><section id="数据" class="level3"><h3 class="anchored" data-anchor-id="数据">数据</h3>
-<p>下载数据：</p>
-<blockquote class="blockquote">
-<p>Data used in this material is a 10k PBMC data getting from <a href="https://support.10xgenomics.com/single-cell-gene-expression/datasets">10x Genomics website</a></p>
-<p><a href="https://github.com/holab-hku/Fundamental-scRNA/blob/master/data/10k_PBMC.h5" class="uri">https://github.com/holab-hku/Fundamental-scRNA/blob/master/data/10k_PBMC.h5</a></p>
-</blockquote>
-</section></section><section id="单细胞技术介绍" class="level2"><h2 class="anchored" data-anchor-id="单细胞技术介绍">单细胞技术介绍</h2>
-<section id="技术流程" class="level3"><h3 class="anchored" data-anchor-id="技术流程">技术流程</h3>
-<p>单细胞RNA测序（scRNA-seq）包括一系列技术，以产生许多单个细胞的全基因组表达数据。</p>
-<p><img src="https://shixiangwang.github.io/posts/2023-07-13-fundamentals-of-scrnaseq-analysis/https:/encyclopedia.pub/media/item_content/202206/62bc1112b6b12biosensors-12-00450-g001.png" class="img-fluid"></p>
-</section><section id="细胞分离" class="level3"><h3 class="anchored" data-anchor-id="细胞分离">细胞分离</h3>
-<p>根据技术主要可以分为两类：Droplet-based 和 Non droplet-based。</p>
-<p>Droplet-based：</p>
-<ul>
-<li>组织样品必须解离成悬浮液</li>
-<li>细胞将被单独封装成一个油包水滴</li>
-<li>高通量，低成本</li>
-<li>相关技术：Drop-seq (Macosko et al.&nbsp;2015), inDrop (Klein et al.&nbsp;2015), Chromium 10X (Zheng et al.&nbsp;2017)</li>
-</ul>
-<p>Non droplet-based：</p>
-<ul>
-<li>Smart-seq2 (Ramsköld et al.&nbsp;2012)：用微型毛细管移液器手工细胞取样</li>
-<li>CEL-seq (Hashimshony et al.&nbsp;2012)：单个细胞被添加到试管中；第一个介绍了条形码和RNA聚合</li>
-<li>MARS-seq (Jaitin et al.&nbsp;2014)是第一个使用FACS将单细胞分离到单孔中的方法，优化版MARS-seq2 (Keren-Shaul et al.&nbsp;2019)的推出成本更低，可重复性更高，井间污染更少</li>
-</ul>
-<p>下图显示了一些常见的单细胞分离技术（Hwang, Lee, and Bang 2018）</p>
-<div style="background-color: white; padding: 10px;">
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure"><p><img src="https://shixiangwang.github.io/posts/2023-07-13-fundamentals-of-scrnaseq-analysis/https:/holab-hku.github.io/Fundamental-scRNA/figs/seq_techs.jpg" class="img-fluid figure-img"></p>
-<figcaption class="figure-caption">Single Cell Isolation (modified from Hwang, Lee, and Bang 2018)</figcaption></figure>
-</div>
-</div>
-</section><section id="条形码和唯一分子标识符umi" class="level3"><h3 class="anchored" data-anchor-id="条形码和唯一分子标识符umi">条形码和唯一分子标识符（UMI）</h3>
-<p>双端测序输出两个 fastq 文件，分别对应测序的5′和3′方向。使用这种测序技术，配对的第一个read总是与引物的细胞（条形码+UMI）部分一致。</p>
-<div style="background-color: white; padding: 10px;">
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure"><p><img src="https://shixiangwang.github.io/posts/2023-07-13-fundamentals-of-scrnaseq-analysis/https:/holab-hku.github.io/Fundamental-scRNA/figs/biasedreads.png" class="img-fluid figure-img"></p>
-<figcaption class="figure-caption">Biased paired-end reads (David Tse et.al)</figcaption></figure>
-</div>
-</div>
-<p>根据获得的细胞条形码、UMI 和 cDNA 的 reads，我们可以估计转录物的丰度。这允许 mapping 算法区分哪些序列是条形码，哪些是转录序列。因此，在确定细胞条形码和 UMI 条形码序列的长度和位置时，识别用于测序的文库制备化学方法非常重要。</p>
-<p>为了获得 UMIs 的计数，我们可以首先通过细胞条形码对 reads 进行分组，然后对齐 cDNA reads 并使用 UMIs 对每个细胞每个基因的独特分子进行计数。</p>
-<div style="background-color: white; padding: 10px;">
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure"><p><img src="https://shixiangwang.github.io/posts/2023-07-13-fundamentals-of-scrnaseq-analysis/https:/holab-hku.github.io/Fundamental-scRNA/figs/biasedreads2.png" class="img-fluid figure-img"></p>
-<figcaption class="figure-caption">Grouping barcodes to assign reads to cells (modified from David Tse et.al)</figcaption></figure>
-</div>
-</div>
-<p>对细胞条形码和 UMIs 的分析包括在校准过程中，我们将在下一节中介绍更多内容。</p>
-</section><section id="广泛应用的scrna-seq技术汇总" class="level3"><h3 class="anchored" data-anchor-id="广泛应用的scrna-seq技术汇总">广泛应用的scRNA-seq技术汇总</h3>
-<table class="table">
-<thead><tr class="header">
-<th>Methods</th>
-<th>Transcript coverage</th>
-<th>UMI possibility</th>
-<th>Strand specific</th>
-<th>References</th>
-</tr></thead>
-<tbody>
-<tr class="odd">
-<td>Tang method</td>
-<td>Nearly full-length</td>
-<td>No</td>
-<td>No</td>
-<td>Tang et al.&nbsp;(<a href="https://holab-hku.github.io/Fundamental-scRNA/background.html#ref-tang2009mrna">2009</a>)</td>
-</tr>
-<tr class="even">
-<td>Quartz-Seq</td>
-<td>Full-length</td>
-<td>No</td>
-<td>No</td>
-<td>Sasagawa et al.&nbsp;(<a href="https://holab-hku.github.io/Fundamental-scRNA/background.html#ref-sasagawa2013quartz">2013</a>)</td>
-</tr>
-<tr class="odd">
-<td>SUPeR-seq</td>
-<td>Full-length</td>
-<td>No</td>
-<td>No</td>
-<td>X. Fan et al.&nbsp;(<a href="https://holab-hku.github.io/Fundamental-scRNA/background.html#ref-fan2015single">2015</a>)</td>
-</tr>
-<tr class="even">
-<td>Smart-seq</td>
-<td>Full-length</td>
-<td>No</td>
-<td>No</td>
-<td>Ramsköld et al.&nbsp;(<a href="https://holab-hku.github.io/Fundamental-scRNA/background.html#ref-ramskold2012full">2012</a>)</td>
-</tr>
-<tr class="odd">
-<td>Smart-seq2</td>
-<td>Full-length</td>
-<td>No</td>
-<td>No</td>
-<td>Picelli et al.&nbsp;(<a href="https://holab-hku.github.io/Fundamental-scRNA/background.html#ref-picelli2013smart">2013</a>)</td>
-</tr>
-<tr class="even">
-<td>MATQ-seq</td>
-<td>Full-length</td>
-<td>Yes</td>
-<td>Yes</td>
-<td>Sheng et al.&nbsp;(<a href="https://holab-hku.github.io/Fundamental-scRNA/background.html#ref-sheng2017effective">2017</a>)</td>
-</tr>
-<tr class="odd">
-<td>STRT-seq STRT/C1</td>
-<td>5′-only</td>
-<td>Yes</td>
-<td>Yes</td>
-<td>Islam et al.&nbsp;(<a href="https://holab-hku.github.io/Fundamental-scRNA/background.html#ref-islam2011characterization">2011</a>)</td>
-</tr>
-<tr class="even">
-<td>CEL-seq</td>
-<td>3′-only</td>
-<td>Yes</td>
-<td>Yes</td>
-<td>Hashimshony et al.&nbsp;(<a href="https://holab-hku.github.io/Fundamental-scRNA/background.html#ref-hashimshony2012cel">2012</a>)</td>
-</tr>
-<tr class="odd">
-<td>CEL-seq2</td>
-<td>3′-only</td>
-<td>Yes</td>
-<td>Yes</td>
-<td>Hashimshony et al.&nbsp;(<a href="https://holab-hku.github.io/Fundamental-scRNA/background.html#ref-hashimshony2016cel">2016</a>)</td>
-</tr>
-<tr class="even">
-<td>MARS-seq</td>
-<td>3′-only</td>
-<td>Yes</td>
-<td>Yes</td>
-<td>Jaitin et al.&nbsp;(<a href="https://holab-hku.github.io/Fundamental-scRNA/background.html#ref-jaitin2014massively">2014</a>)</td>
-</tr>
-<tr class="odd">
-<td>CytoSeq</td>
-<td>3′-only</td>
-<td>Yes</td>
-<td>Yes</td>
-<td>H. C. Fan, Fu, and Fodor (<a href="https://holab-hku.github.io/Fundamental-scRNA/background.html#ref-fan2015combinatorial">2015</a>)</td>
-</tr>
-<tr class="even">
-<td>Drop-seq</td>
-<td>3′-only</td>
-<td>Yes</td>
-<td>Yes</td>
-<td>Macosko et al.&nbsp;(<a href="https://holab-hku.github.io/Fundamental-scRNA/background.html#ref-macosko2015highly">2015</a>)</td>
-</tr>
-<tr class="odd">
-<td>InDrop</td>
-<td>3′-only</td>
-<td>Yes</td>
-<td>Yes</td>
-<td>Klein et al.&nbsp;(<a href="https://holab-hku.github.io/Fundamental-scRNA/background.html#ref-klein2015droplet">2015</a>)</td>
-</tr>
-<tr class="even">
-<td>Chromium</td>
-<td>3′-only</td>
-<td>Yes</td>
-<td>Yes</td>
-<td>Zheng et al.&nbsp;(<a href="https://holab-hku.github.io/Fundamental-scRNA/background.html#ref-zheng2017massively">2017</a>)</td>
-</tr>
-<tr class="odd">
-<td>SPLiT-seq</td>
-<td>3′-only</td>
-<td>Yes</td>
-<td>Yes</td>
-<td>Rosenberg et al.&nbsp;(<a href="https://holab-hku.github.io/Fundamental-scRNA/background.html#ref-rosenberg2018single">2018</a>)</td>
-</tr>
-<tr class="even">
-<td>sci-RNA-seq</td>
-<td>3′-only</td>
-<td>Yes</td>
-<td>Yes</td>
-<td>Cao et al.&nbsp;(<a href="https://holab-hku.github.io/Fundamental-scRNA/background.html#ref-cao2017comprehensive">2017</a>)</td>
-</tr>
-<tr class="odd">
-<td>Seq-Well</td>
-<td>3′-only</td>
-<td>Yes</td>
-<td>Yes</td>
-<td>Gierahn et al.&nbsp;(<a href="https://holab-hku.github.io/Fundamental-scRNA/background.html#ref-gierahn2017seq">2017</a>)</td>
-</tr>
-<tr class="even">
-<td>DroNC-seq</td>
-<td>3′-only</td>
-<td>Yes</td>
-<td>Yes</td>
-<td>Habib et al.&nbsp;(<a href="https://holab-hku.github.io/Fundamental-scRNA/background.html#ref-habib2017massively">2017</a>)</td>
-</tr>
-<tr class="odd">
-<td>Quartz-Seq2</td>
-<td>3′-only</td>
-<td>Yes</td>
-<td>Yes</td>
-<td>Sasagawa et al.&nbsp;(<a href="https://holab-hku.github.io/Fundamental-scRNA/background.html#ref-sasagawa2018quartz">2018</a>)</td>
-</tr>
-</tbody>
-</table></section></section><section id="预处理和质量控制" class="level2"><h2 class="anchored" data-anchor-id="预处理和质量控制">预处理和质量控制</h2>
-<section id="fastq-文件" class="level3"><h3 class="anchored" data-anchor-id="fastq-文件">FASTQ 文件</h3>
-<p>原始 RNA 测序数据可能在 <a href="https://sapac.support.illumina.com/bulletins/2016/04/fastq-files-explained.html">FASTQ</a> 文件中。它是一种基于文本的格式，用于存储由单字母代码表示的读序列。 FASTQ 文件中的序列以<code>@</code>符号开头的readID开始，然后是序列数据行，一个简单的加号<code>+</code>分隔符和碱基质量分数。</p>
-<p>它以以下格式表示:</p>
-<div class="sourceCode" id="cb8" style="background: #f1f3f5;"><pre class="sourceCode txt code-with-copy"><code class="sourceCode default"><span id="cb8-1">@ReadID</span>
-<span id="cb8-2">READ SEQUENCE</span>
-<span id="cb8-3">+</span>
-<span id="cb8-4">SEQUENCING QUALITY SCORES</span></code></pre></div>
-<p>一般来说，fastq 文件是使用质量控制工具（如 <a href="https://www.bioinformatics.babraham.ac.uk/projects/fastqc/">FastQC</a>）进行预处理的。这将输出一系列评估序列 reads 质量的指标。</p>
-</section><section id="cell-ranger" class="level3"><h3 class="anchored" data-anchor-id="cell-ranger">Cell Ranger</h3>
-<p><a href="https://support.10xgenomics.com/single-cell-gene-expression/software/pipelines/latest/what-is-cell-ranger">Cell Ranger</a> 是一组分析管道，用于处理 Chromium 单细胞数据以对齐 reads，生成特征条形码矩阵，执行聚类和其他二次分析等等。 它帮助我们生成 RNA reads 计数矩阵，我们将在学习中使用。</p>
-<p>一些概念：</p>
-<ul>
-<li>GEM 孔（以前称为 GEM 组）：来自单个 10x Chromium™ 芯片通道的分隔单元（凝胶颗粒悬浮液）集合。可以从一个 GEM 孔中获得一个或多个测序文库。</li>
-<li>文库（或测序文库）：从单个 GEM 孔中制备的带有 10x 条形码的测序文库。借助特征条形码或 V(D)J 分析，可以从同一个 GEM 孔中创建多个文库。文库类型可能包括基因表达、抗体捕获、CRISPR 引导捕获、TCR 富集等。</li>
-<li>测序 Run（或 Flowcell）: A flowcell containing data from one sequencing instrument run.（这个从英文直译上很难理解，通俗的说就是一次上机测序得到的数据流）</li>
-</ul>
-<section id="通用流程" class="level4"><h4 class="anchored" data-anchor-id="通用流程">通用流程</h4>
-<p>从 Chromium 10X 管道获得的单细胞数据可以使用 cellranger 通过以下工作流程进行处理。</p>
-<div style="background-color: white; padding: 10px;">
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure"><p><img src="https://shixiangwang.github.io/posts/2023-07-13-fundamentals-of-scrnaseq-analysis/https:/holab-hku.github.io/Fundamental-scRNA/figs/cellranger_workflow.png" class="img-fluid figure-img"></p>
-<figcaption class="figure-caption">Cellranger Workflow (taken from the cellranger website)</figcaption></figure>
-</div>
-</div>
-</section><section id="输出文件" class="level4"><h4 class="anchored" data-anchor-id="输出文件">输出文件</h4>
-<p>下面是我们将从 cellranger 获得的输出文件夹。outs 文件夹包含最终的管道输出文件，其中包括我们需要用于下游分析的内容。</p>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure"><p><img src="https://shixiangwang.github.io/posts/2023-07-13-fundamentals-of-scrnaseq-analysis/https:/holab-hku.github.io/Fundamental-scRNA/figs/cellranger_output.png" class="img-fluid figure-img"></p>
-<figcaption class="figure-caption">Overview of the folder generate from cellranger</figcaption></figure>
-</div>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure"><p><img src="https://shixiangwang.github.io/posts/2023-07-13-fundamentals-of-scrnaseq-analysis/https:/holab-hku.github.io/Fundamental-scRNA/figs/cellranger_output2.png" class="img-fluid figure-img"></p>
-<figcaption class="figure-caption">Overview of the outs folder</figcaption></figure>
-</div>
-<p>以上是我们可以在outs文件夹中找到的内容。它包含了一些测序数据的总结信息，注释的读取序列，以及我们通常工作的基因表达矩阵。下面是我们想看的一些重要的输出文件。</p>
-<ul>
-<li><a href="https://support.10xgenomics.com/single-cell-gene-expression/software/pipelines/latest/output/matrices">Matrices</a></li>
-<li><a href="https://support.10xgenomics.com/single-cell-gene-expression/software/pipelines/latest/output/summary">Web Summary .html</a></li>
-<li><a href="https://support.10xgenomics.com/single-cell-gene-expression/software/pipelines/latest/output/analysis">Secondary Analysis CSV</a></li>
-<li><a href="https://support.10xgenomics.com/single-cell-gene-expression/software/pipelines/latest/output/bam">BAM</a></li>
-<li><a href="https://support.10xgenomics.com/single-cell-gene-expression/software/pipelines/latest/output/molecule_info">Molecule Info (h5)</a></li>
-<li><a href="https://support.10xgenomics.com/single-cell-gene-expression/software/visualization/latest/what-is-loupe-cell-browser">Loupe File (.cloupe)</a></li>
-</ul>
-<p><strong>矩阵</strong></p>
-<p>测序时，Chromium 10X 不仅对转录组进行测序，还对任何可能的分子进行测序。这就导致了背景条形码的存在。细胞相关条形码是cellranger 认为标记来自真实细胞的转录组而不是背景的条形码。</p>
-<p>对于不同版本的cellranger，使用不同的算法来检测细胞相关条形码。一般的想法是，细胞的条形码应该比背景条形码有更多的转录本计数。更多信息请访问：https://kb.10xgenomics.com/hc/en-us/articles/115003480523-How-are-barcodes-classified-as-cell-associated-。</p>
-<p>cellranger管道输出两种类型的特征条形码矩阵：</p>
-<ul>
-<li>未经过滤的特征条形码矩阵存储在raw_feature_bc_matrix（1-1）文件夹下。它包含了来自已知良好条形码序列固定列表的每个条形码，其中至少有一个读取，这意味着它包括背景和与细胞相关的条形码。</li>
-<li>经过过滤的特征条形码矩阵存储在filtered_feature_bc_matrix（1-2）文件夹下。它只包括已检测到的与细胞相关的条形码。</li>
-</ul>
-<p>raw_feature_bc_matrix和filtered_feature_bc_matrix文件夹中都包含三个文件。</p>
-<ul>
-<li>matrix.mtx.gz文件以稀疏矩阵的形式存储 reads 计数，其中每一行表示scRNA-seq数据中的一个基因，每一列表示一个细胞。行索引的信息存储在features.tsv.gz文件中，而列索引的信息存储在barcodes.tsv.gz文件中。</li>
-<li>features.tsv.gz文件对应于行索引。在scRNA-seq数据中，“features”实际上指的是基因。features.tsv.gz文件包含三列：feature ID：参考GTF文件的注释字段中的gene_id，表示特征的ID。 name：参考GTF文件的注释字段中的gene_name，如果参考GTF中没有gene_name字段，则基因名称等同于基因ID。 type of feature：描述特征类型，可以是Gene Expression、Antibody Capture、CRISPR或CUSTOM之一。对于scRNA-seq数据，它将是Gene Expression（基因表达）。</li>
-<li>barcodes.tsv.gz对应于列索引，它包含了每个列的条形码。有关条形码序列格式的更多详细信息，请参考<a href="https://support.10xgenomics.com/single-cell-gene-expression/software/pipelines/latest/output/bam">条形码BAM部分</a>。</li>
-</ul>
-<p><strong>Web Summary .html</strong></p>
-<p>一个概要的HTML文件包含了摘要指标和自动化二次分析结果。如果在流程运行期间检测到问题，将在此页面上显示警报。</p>
-<p>该HTML文件包括两个部分，SUMMARY（摘要）和ANALYSIS（分析）。您还可以点击每个仪表板顶部的“?”以获取有关每个指标的更多信息。</p>
-<ol type="1">
-<li>SUMMARY（摘要）指标描述了测序质量和检测到的细胞的各种特征。在页面顶部附近醒目地显示了检测到的细胞数量、每个细胞的平均reads数以及每个细胞检测到的基因的中位数。</li>
-</ol>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure"><p><img src="https://shixiangwang.github.io/posts/2023-07-13-fundamentals-of-scrnaseq-analysis/https:/holab-hku.github.io/Fundamental-scRNA/figs/cells_summary.png" class="img-fluid figure-img"></p>
-<figcaption class="figure-caption">Cells dashboard (modified from the cellranger website)</figcaption></figure>
-</div>
-<ol start="2" type="1">
-<li>在“Cells”仪表板下的“Barcode Rank Plot”显示了条形码计数的分布以及被推断与细胞相关的条形码。y轴表示每个条形码映射到的UMI计数，x轴表示低于该值的条形码数量。陡峭的下降表示细胞关联的条形码与与空分区相关的条形码之间有良好的分离。条形码可以通过其UMI计数或其RNA配置文件确定为与细胞相关，因此图表的某些区域可能同时包含细胞关联和背景关联的条形码。图表的颜色表示与细胞关联的条形码的局部密度。</li>
-</ol>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure"><p><img src="https://shixiangwang.github.io/posts/2023-07-13-fundamentals-of-scrnaseq-analysis/https:/holab-hku.github.io/Fundamental-scRNA/figs/seq_map.png" class="img-fluid figure-img"></p>
-<figcaption class="figure-caption">Sequencing and Mapping dashboards (modified from the cellranger website)</figcaption></figure>
-</div>
-<p>其他用于评估的指标：</p>
-<ul>
-<li>
-<code>Estimated Number of Cells</code>: 500-10,000</li>
-<li>
-<code>Mean Reads per Cell</code>: 20,000 reads/cell minimum recommended reads per cell around 10,000</li>
-<li>
-<code>Valid barcodes</code>: greater than 75%</li>
-<li>
-<code>Q30 bases in RNA read</code>: ideally greater than 65%</li>
-<li>
-<code>Reads mapped confidently to transcriptome</code>: ideally greater than 30%</li>
-<li>
-<code>Reads mapped antisense to gene</code>: ideally smaller than 10%</li>
-</ul>
-<ol start="3" type="1">
-<li>分析（ANALYSIS）指标包括以下自动化的二次分析：</li>
-</ol>
-<ul>
-<li>降维分析：将细胞投影到二维空间（t-SNE），以展示它们之间的关系。</li>
-<li>自动聚类分析：将具有相似表达特征的细胞分组在一起，形成聚类。</li>
-<li>差异表达基因列表：列出在所选聚类之间表达差异显著的基因。</li>
-<li>显示测序深度降低对观察到的文库复杂性的影响的图表。</li>
-<li>显示测序深度降低对每个细胞检测到的平均基因数的影响的图表。</li>
-</ul>
-<p><strong>BAM</strong></p>
-<p>BAM文件以二进制压缩格式保存了关于 mapping reads 的信息。它由可选的头部部分和对齐部分组成。如果存在头部部分，它将通过第一列中的<code>@</code>与对齐部分区分，并位于对齐部分之前。</p>
-<p>当解压缩成SAM文件时，信息以制表符分隔的表格形式存储，其中包含一些标准列和由 Cell Ranger 软件生成的特定列。Cell Ranger特定的列包含与 BAM 条形码、BAM 对齐和特征条形码相关的信息。标准列对应以下内容：</p>
-<pre><code>QNAME : read name (generally will include UMI barcode if applicable)
-FLAG : number tag indicating the “type” of alignment, link to explanation of all possible “types”
-RNAME : reference sequence name (i.e. chromosome read is mapped to).
-POS : leftmost mapping position
-MAPQ : Mapping quality
-CIGAR : string indicating the matching/mismatching parts of the read (may include soft-clipping).
-RNEXT : reference name of the mate/next read
-PNEXT : POS for mate/next read
-TLEN : Template length (length of reference region the read is mapped to)
-SEQ : read sequence
-QUAL : read quality</code></pre>
-<p>可以使用 SAMtools 查看 BAM 文件：</p>
-<pre><code>samtools view output.bam</code></pre>
-<p>为了进行基于 RNA 速率的轨迹分析，需要 bam 文件。</p>
-<p><strong>分子信息（h5）</strong></p>
-<p>它是一个 HDF5 文件，包含有效条形码和有效 UMI 的所有分子的每分子信息，并以高置信度分配给基因或特征条形码。该 HDF5 文件包含与观察到的分子相对应的数据，以及有关所使用的库和特征集的数据。这个文件的结构是：</p>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure"><p><img src="https://shixiangwang.github.io/posts/2023-07-13-fundamentals-of-scrnaseq-analysis/https:/holab-hku.github.io/Fundamental-scRNA/figs/hdf5.png" class="img-fluid figure-img"></p>
-<figcaption class="figure-caption">HDF5 File Hierarchy(taken from the cellranger website)</figcaption></figure>
-</div>
-<p><strong>二级分析 CSV 文件</strong></p>
-<p>包含自动辅助分析结果的几个 CSV 文件。它包含有关降维、t-SNE、UMAP、聚类和差分表达的信息。它也通过<code>Web Summary.html</code>文件在ANALYSIS度量中可视化。</p>
-<p><strong>Loupe 文件 (.cloupe)</strong></p>
-<p>Loupe Browser 是一款桌面应用程序，提供与10x Genomics解决方案的数据进行交互式可视化分析的功能。它可以帮助寻找感兴趣的细胞、发现重要基因、识别细胞类型、探索细胞亚结构、研究细胞亚型、集成基因表达和V(D)J分析，并共享结果。</p>
-<p>通过 Loupe Browser 可以查看 Loupe 文件，该文件包含以下信息：</p>
-<ul>
-<li>样本中细胞的基因表达信息。</li>
-<li>细胞的各种基于基因表达的聚类信息，包括t-SNE和UMAP投影以及差异基因表达情况。</li>
-<li>来自转录组参考的基因注释信息。</li>
-</ul></section></section><section id="starsolo" class="level3"><h3 class="anchored" data-anchor-id="starsolo">STARsolo</h3>
-<p>STARsolo（Kaminow，Yunusov和Dobin 2021）是一个专为液滴式单细胞RNA测序数据（例如10X Genomics Chromium系统）设计的分析工具，直接内嵌在STAR代码中。STARsolo的输入是一个FASTQ文件，它可以以与Cell Ranger几乎相同的格式输出基因计数，但速度约快10倍。</p>
-<p>STARsolo 程序输出大量反映 reads 比对过程细节的文件。在这里，我们只讨论其中一些关键文件。</p>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure"><p><img src="https://shixiangwang.github.io/posts/2023-07-13-fundamentals-of-scrnaseq-analysis/https:/holab-hku.github.io/Fundamental-scRNA/figs/starsolo.png" class="img-fluid figure-img"></p>
-<figcaption class="figure-caption">STARsolo Output</figcaption></figure>
-</div>
-<ul>
-<li>BAM文件包含有关比对 reads 的信息，与通过Cell Ranger生成的BAM文件非常相似。</li>
-<li>比对摘要文件Features.stats和Summary.csv包含有关基本比对细节的信息。这可以作为对比对过程进行简单初步质量控制检查的便捷工具。</li>
-<li>特征矩阵文件matrix.mtx包含每个个体细胞中映射的基因计数信息。列名对应于每个个体细胞的条形码，行名对应于所有注释的基因。由于该数据的规模较大，它以稀疏矩阵的形式存储。</li>
-<li>辅助文件 barcodes.tsv 和 features.tsv 提供了下游分析所需的额外元数据。这些文件连同矩阵文件在功能上扮演着与Cell Ranger输出中的 Matrices 部分相同的角色，并且在金标准的 scRNA-seq 数据分析软件 seurat 中进行分析时是必需的。</li>
-</ul></section><section id="doublets" class="level3"><h3 class="anchored" data-anchor-id="doublets">Doublets</h3>
-<p>双细胞是指虽然设计为由一个细胞生成，但却是由两个细胞生成的人工文库。通常这是由于细胞分选或捕获过程中的错误引起的。</p>
-<p>可以使用几种实验策略来去除双细胞：</p>
-<ul>
-<li>基于不同供体个体之间的自然遗传变异（Kang等人，2018）。</li>
-<li>使用与不同寡核苷酸结合的抗体标记一组细胞（例如，来自一个样本的所有细胞）。在混合后，观察到具有不同寡核苷酸的文库被视为双细胞并移除（Bach等人，2017）。</li>
-<li>仅基于表达谱的计算方法（如模拟）推断双细胞并进行去除。</li>
-</ul></section></section><section id="使用-seurat-进行分析" class="level2"><h2 class="anchored" data-anchor-id="使用-seurat-进行分析">使用 Seurat 进行分析</h2>
-<p>本节的内容是根据<a href="https://satijalab.org/seurat/articles/pbmc3k_tutorial.html">Seurat - Guided Clustering Tutorial</a>进行了一些修改和适应。我们使用的数据是从10x Genomics网站获取的10k PBMC数据。</p>
-<p>我们将学习如何读取10X测序数据并将其转换为Seurat对象，进行质控和选择用于进一步分析的细胞，对数据进行归一化处理，识别高可变特征（特征选择），对数据进行缩放，进行线性降维和可视化分析。</p>
-<section id="seurat-对象" class="level3"><h3 class="anchored" data-anchor-id="seurat-对象">Seurat 对象</h3>
-<p>Seurat对象充当一个容器，其中包含单个单细胞数据集的数据（如计数矩阵）和分析（如PCA或聚类结果）。在使用 Seurat 分析scRNA-seq数据之前，我们可以先从<a href="https://github.com/satijalab/seurat/wiki/Seurat#object-information">这里</a>对Seurat对象有一些基本的了解。</p>
-</section><section id="设置seurat对象" class="level3"><h3 class="anchored" data-anchor-id="设置seurat对象">设置Seurat对象</h3>
-<div class="cell">
-<div class="sourceCode" id="cb11" style="background: #f1f3f5;"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-style: inherit;"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">(</span><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;"><a href="https://dplyr.tidyverse.org">dplyr</a></span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">)</span></span>
-<span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-style: inherit;"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">(</span><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;"><a href="https://satijalab.org/seurat">Seurat</a></span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">)</span></span>
-<span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-style: inherit;"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">(</span><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;"><a href="https://patchwork.data-imaginist.com">patchwork</a></span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">)</span></span>
-<span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-style: inherit;"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">(</span><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;"><a href="https://ggplot2.tidyverse.org">ggplot2</a></span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">)</span></span></code></pre></div>
-</div>
-<p>我们从读入数据开始。<code>Read10X_h5</code>从10X CellRanger hdf5文件读取计数矩阵，返回唯一的分子识别（UMI）计数矩阵。该矩阵中的值表示每个特征（即基因；行）在每个细胞（列）中检测到的表达量。它可用于读取scATAC-seq和scRNA-seq矩阵。</p>
-<p>接下来我们使用计数矩阵来创建一个Seurat对象。</p>
-<div class="cell">
-<div class="sourceCode" id="cb12" style="background: #f1f3f5;"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># Load the PBMC dataset</span></span>
-<span><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">pbmc.data</span> <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;"><a href="https://satijalab.org/seurat/reference/Read10X_h5.html">Read10X_h5</a></span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">(</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"/Users/wsx/Library/CloudStorage/OneDrive-shanghaitech.edu.cn/Public/data/10k_PBMC.h5"</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">)</span></span>
-<span><span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># Initialize the Seurat object with the raw (non-normalized data).</span></span>
-<span><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">pbmc</span> <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;"><a href="https://mojaveazure.github.io/seurat-object/reference/CreateSeuratObject.html">CreateSeuratObject</a></span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">(</span>counts <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> <span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">pbmc.data</span>, project <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"pbmc10k"</span>, min.cells <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> <span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">3</span>, min.features <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> <span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">200</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">)</span></span>
-<span><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">pbmc</span></span></code></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>An object of class Seurat 
-22432 features across 10813 samples within 1 assay 
-Active assay: RNA (22432 features, 0 variable features)</code></pre>
-</div>
-</div>
-<p>如果我们想直接使用 cellranger 管道从 10X 读取数据，我们可以使用 <code><a href="https://satijalab.org/seurat/reference/Read10X.html">Read10X()</a></code>。</p>
-</section><section id="标准预处理流程" class="level3"><h3 class="anchored" data-anchor-id="标准预处理流程">标准预处理流程</h3>
-<p>以下步骤包含了 Seurat 中 scRNA-seq 数据的标准预处理工作流程。它们基于我们将从 Cell Ranger 或 STARsolo 输出中获得的 RNA reads 计数矩阵。标准的预处理工作流程代表了基于 QC 指标的细胞选择和过滤，数据归一化和缩放，以及高度可变特征的检测。</p>
-<section id="qc-和细胞过滤" class="level4"><h4 class="anchored" data-anchor-id="qc-和细胞过滤">QC 和细胞过滤</h4>
-<p>Seurat 允许你根据任何用户定义的标准轻松探索 QC 指标和过滤细胞。社区常用的一些质量控制指标（Ilicic et al.&nbsp;2016）包括：</p>
-<ul>
-<li>在每个细胞中检测到的独特基因的数量
-<ul>
-<li>低质量的细胞或空液滴通常只有很少的基因</li>
-<li>细胞双胞胎或多胞胎可能表现出异常高的基因计数</li>
-<li>同样，细胞内检测到的分子总数（与独特的基因密切相关）</li>
-</ul>
-</li>
-<li>reads 占到线粒体基因组的百分比
-<ul>
-<li>低质量/垂死细胞通常表现出广泛的线粒体污染</li>
-<li>我们使用<code><a href="https://satijalab.org/seurat/reference/PercentageFeatureSet.html">PercentageFeatureSet()</a></code>函数计算线粒体 QC 指标，该函数计算源自一组特征的计数百分比</li>
-<li>我们用 MT 开头的所有基因集合作为线粒体基因集合</li>
-</ul>
-</li>
-</ul>
-<div class="cell">
-<div class="sourceCode" id="cb14" style="background: #f1f3f5;"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># The [[ operator can add columns to object metadata. This is a great place to stash QC stats</span></span>
-<span><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">pbmc</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">[[</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"percent.mt"</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">]</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">]</span> <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;"><a href="https://satijalab.org/seurat/reference/PercentageFeatureSet.html">PercentageFeatureSet</a></span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">(</span><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">pbmc</span>, pattern <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"^MT-"</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">)</span></span></code></pre></div>
-</div>
-<p>在 <code><a href="https://mojaveazure.github.io/seurat-object/reference/CreateSeuratObject.html">CreateSeuratObject()</a></code> 过程中自动计算唯一基因和总分子的数量。它们存储在对象元数据中。</p>
-<div class="cell">
-<div class="sourceCode" id="cb15" style="background: #f1f3f5;"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># Show QC metrics for the first 5 cells in the control group</span></span>
-<span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">(</span><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">pbmc</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">@</span><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">meta.data</span>, <span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">5</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">)</span></span></code></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>                   orig.ident nCount_RNA nFeature_RNA percent.mt
-AAACCCAGTATATGGA-1    pbmc10k        860          350 44.1860465
-AAACCCAGTATCGTAC-1    pbmc10k       1548          729  0.4521964
-AAACCCAGTCGGTGAA-1    pbmc10k       6387         1827 10.4117739
-AAACCCAGTTAGAAAC-1    pbmc10k      16664         3744  5.2808449
-AAACCCAGTTATCTTC-1    pbmc10k       3352         1464 13.8424821</code></pre>
-</div>
-</div>
-<p>我们可以可视化 <code>nFeature_RNA</code>, <code>nCount_RNA</code> 和 <code>percent.mt</code> 作为 QC 指标。</p>
-<p>与 Cell Ranger 输出一样，以下结果中的 feature 表示基因。 nFeature_RNA 是每个细胞中检测到的基因数量。 nCount_RNA 是细胞内检测到的分子总数。 下图中的每个点代表一个细胞。</p>
-<div class="cell">
-<div class="sourceCode" id="cb17" style="background: #f1f3f5;"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># Visualize QC metrics as a violin plot</span></span>
-<span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;"><a href="https://satijalab.org/seurat/reference/VlnPlot.html">VlnPlot</a></span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">(</span><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">pbmc</span>, features <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">(</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"nFeature_RNA"</span>, <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"nCount_RNA"</span>, <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"percent.mt"</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">)</span>, </span>
-<span>        ncol <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> <span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">3</span>, pt.size <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> <span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">0.0001</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">)</span></span></code></pre></div>
-<div class="cell-output-display">
-<p><img src="https://shixiangwang.github.io/posts/2023-07-13-fundamentals-of-scrnaseq-analysis/index_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid" width="672"></p>
-</div>
-</div>
-<p>我们接着使用点图来表示 3 者之间的关系。</p>
-<div class="cell">
-<div class="sourceCode" id="cb18" style="background: #f1f3f5;"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># FeatureScatter is typically used to visualize feature-feature relationships, but can be used</span></span>
-<span><span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># for anything calculated by the object, i.e. columns in object metadata, PC scores etc.</span></span>
-<span><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">plot1</span> <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;"><a href="https://satijalab.org/seurat/reference/FeatureScatter.html">FeatureScatter</a></span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">(</span><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">pbmc</span>, feature1 <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"nCount_RNA"</span>, feature2 <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"percent.mt"</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">)</span> <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">+</span> </span>
-<span>  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">(</span>legend.position<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"none"</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">)</span></span>
-<span><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">plot2</span> <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;"><a href="https://satijalab.org/seurat/reference/FeatureScatter.html">FeatureScatter</a></span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">(</span><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">pbmc</span>, feature1 <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"nCount_RNA"</span>, feature2 <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"nFeature_RNA"</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">)</span> <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">+</span> </span>
-<span>  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">(</span>legend.position<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"none"</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">)</span></span>
-<span><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">plot1</span> <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">+</span> <span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">plot2</span></span></code></pre></div>
-<div class="cell-output-display">
-<p><img src="https://shixiangwang.github.io/posts/2023-07-13-fundamentals-of-scrnaseq-analysis/index_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid" width="672"></p>
-</div>
-</div>
-<p>在这里，我们过滤掉具有独特特征计数（基因）超过5000或少于200的细胞。我们也过滤掉线粒体数量大于15%的细胞。</p>
-<div class="cell">
-<div class="sourceCode" id="cb19" style="background: #f1f3f5;"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">pbmc</span> <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;"><a href="https://rdrr.io/r/base/subset.html">subset</a></span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">(</span><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">pbmc</span>, subset <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> <span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">nFeature_RNA</span> <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&gt;</span> <span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">200</span> <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&amp;</span> <span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">nFeature_RNA</span> <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&lt;</span> <span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">5000</span> <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&amp;</span> <span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">percent.mt</span> <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&lt;</span> <span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">15</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">)</span></span></code></pre></div>
-</div>
-<p>然后再一次用提琴图查看过滤后的质量图：</p>
-<div class="cell">
-<div class="sourceCode" id="cb20" style="background: #f1f3f5;"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># Visualize QC metrics as a violin plot</span></span>
-<span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;"><a href="https://satijalab.org/seurat/reference/VlnPlot.html">VlnPlot</a></span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">(</span><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">pbmc</span>, features <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">(</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"nFeature_RNA"</span>, <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"nCount_RNA"</span>, <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"percent.mt"</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">)</span>, </span>
-<span>        ncol <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> <span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">3</span>, pt.size <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> <span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">0.0001</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">)</span></span></code></pre></div>
-<div class="cell-output-display">
-<p><img src="https://shixiangwang.github.io/posts/2023-07-13-fundamentals-of-scrnaseq-analysis/index_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid" width="672"></p>
-</div>
-<div class="sourceCode" id="cb21" style="background: #f1f3f5;"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">plot1</span> <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;"><a href="https://satijalab.org/seurat/reference/FeatureScatter.html">FeatureScatter</a></span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">(</span><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">pbmc</span>, feature1 <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"nCount_RNA"</span>, feature2 <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"percent.mt"</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">)</span> <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">+</span> </span>
-<span>  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">(</span>legend.position<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"none"</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">)</span></span>
-<span><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">plot2</span> <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;"><a href="https://satijalab.org/seurat/reference/FeatureScatter.html">FeatureScatter</a></span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">(</span><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">pbmc</span>, feature1 <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"nCount_RNA"</span>, feature2 <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"nFeature_RNA"</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">)</span> <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">+</span> </span>
-<span>  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">(</span>legend.position<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"none"</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">)</span></span>
-<span><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">plot1</span> <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">+</span> <span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">plot2</span></span></code></pre></div>
-<div class="cell-output-display">
-<p><img src="https://shixiangwang.github.io/posts/2023-07-13-fundamentals-of-scrnaseq-analysis/index_files/figure-html/unnamed-chunk-9-2.png" class="img-fluid" width="672"></p>
-</div>
-</div>
-</section><section id="标准化数据" class="level4"><h4 class="anchored" data-anchor-id="标准化数据">标准化数据</h4>
-<p>从数据集中删除不需要的细胞后，下一步是对数据进行标准化（规范化）。默认情况下，我们使用全局缩放归一化方法“LogNormalize”，该方法通过总表达对每个细胞的特征表达式测量值进行归一化，将其乘以一个比例因子（默认为10,000），并对结果进行对数变换。标准化值存储在<code>pbmc[["RNA"]]@data</code>中。</p>
-<div class="cell">
-<div class="sourceCode" id="cb22" style="background: #f1f3f5;"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">pbmc</span> <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;"><a href="https://satijalab.org/seurat/reference/NormalizeData.html">NormalizeData</a></span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">(</span><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">pbmc</span>, </span>
-<span>          normalization.method <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"LogNormalize"</span>, </span>
-<span>          scale.factor <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> <span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">10000</span>, verbose <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> <span class="cn" style="color: #8f5902;
-background-color: null;
-font-style: inherit;">FALSE</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">)</span></span></code></pre></div>
-</div>
-<p>在这里，我们从基因表达矩阵中采样 10,000 个reads计数，分别可视化标准化前后的基因表达分布（不包括零）。</p>
-<div class="cell">
-<div class="sourceCode" id="cb23" style="background: #f1f3f5;"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># set seed and put two plots in one figure</span></span>
-<span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">(</span><span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">123</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">)</span></span>
-<span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;"><a href="https://rdrr.io/r/graphics/par.html">par</a></span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">(</span>mfrow<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">(</span><span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">1</span>,<span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">2</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">)</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">)</span></span>
-<span><span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># original expression distribution</span></span>
-<span><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">raw_geneExp</span> <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;"><a href="https://rdrr.io/r/base/vector.html">as.vector</a></span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">(</span><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">pbmc</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">[[</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">'RNA'</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">]</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">]</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">@</span><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">counts</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">)</span> <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;"><a href="https://rdrr.io/r/base/sample.html">sample</a></span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">(</span><span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">10000</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">)</span></span></code></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning in .sparse2v(x): sparse-&gt;dense coercion: allocating vector of size 1.6
-GiB</code></pre>
-</div>
-<div class="sourceCode" id="cb25" style="background: #f1f3f5;"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">raw_geneExp</span> <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> <span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">raw_geneExp</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">[</span><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">raw_geneExp</span> <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">!=</span> <span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">0</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">]</span></span>
-<span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;"><a href="https://rdrr.io/r/graphics/hist.html">hist</a></span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">(</span><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">raw_geneExp</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">)</span></span>
-<span><span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># expression distribution after normalization</span></span>
-<span><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">logNorm_geneExp</span> <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;"><a href="https://rdrr.io/r/base/vector.html">as.vector</a></span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">(</span><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">pbmc</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">[[</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">'RNA'</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">]</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">]</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">@</span><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">data</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">)</span> <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;"><a href="https://rdrr.io/r/base/sample.html">sample</a></span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">(</span><span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">10000</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">)</span></span></code></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning in .sparse2v(x): sparse-&gt;dense coercion: allocating vector of size 1.6
-GiB</code></pre>
-</div>
-<div class="sourceCode" id="cb27" style="background: #f1f3f5;"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">logNorm_geneExp</span> <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> <span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">logNorm_geneExp</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">[</span><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">logNorm_geneExp</span> <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">!=</span> <span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">0</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">]</span></span>
-<span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;"><a href="https://rdrr.io/r/graphics/hist.html">hist</a></span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">(</span><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">logNorm_geneExp</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">)</span></span></code></pre></div>
-<div class="cell-output-display">
-<p><img src="https://shixiangwang.github.io/posts/2023-07-13-fundamentals-of-scrnaseq-analysis/index_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid" width="672"></p>
-</div>
-</div>
-</section><section id="识别高度可变的特征特征选择" class="level4"><h4 class="anchored" data-anchor-id="识别高度可变的特征特征选择">识别高度可变的特征（特征选择）</h4>
-<p>接下来，我们计算数据集中表现出高细胞间差异的特征子集（即，它们在一些细胞中高表达，而在其他细胞中低表达）。研究表明(Brennecke et al.&nbsp;2013)在下游分析中关注这些基因有助于突出单细胞数据集中的生物信号。</p>
-<p>Seurat中的过程详细描述在文献 Stuart et al.&nbsp;2019 中，<code><a href="https://satijalab.org/seurat/reference/FindVariableFeatures.html">FindVariableFeatures()</a></code>函数中实现直接建模单细胞数据中固有的均值-方差关系来改进以前的版本。默认情况下，Seurat每个数据集返回2000个特征，这些特征将用于下游分析，如PCA。</p>
-<div class="cell">
-<div class="sourceCode" id="cb28" style="background: #f1f3f5;"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">pbmc</span> <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;"><a href="https://satijalab.org/seurat/reference/FindVariableFeatures.html">FindVariableFeatures</a></span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">(</span><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">pbmc</span>, selection.method <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"vst"</span>, nfeatures <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> <span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">2000</span>, verbose <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> <span class="cn" style="color: #8f5902;
-background-color: null;
-font-style: inherit;">FALSE</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">)</span></span>
-<span></span>
-<span><span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># Identify the 10 most highly variable genes</span></span>
-<span><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">top10</span> <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">(</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;"><a href="https://mojaveazure.github.io/seurat-object/reference/VariableFeatures.html">VariableFeatures</a></span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">(</span><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">pbmc</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">)</span>, <span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">10</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">)</span></span>
-<span></span>
-<span><span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># plot variable features with and without labels</span></span>
-<span><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">plot1</span> <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;"><a href="https://satijalab.org/seurat/reference/VariableFeaturePlot.html">VariableFeaturePlot</a></span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">(</span><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">pbmc</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">)</span> <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">+</span> </span>
-<span>  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">(</span>legend.position<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"top"</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">)</span></span>
-<span><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">plot2</span> <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;"><a href="https://satijalab.org/seurat/reference/LabelPoints.html">LabelPoints</a></span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">(</span>plot <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> <span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">plot1</span>, points <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> <span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">top10</span>, repel <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> <span class="cn" style="color: #8f5902;
-background-color: null;
-font-style: inherit;">TRUE</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">)</span> <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">+</span> </span>
-<span>  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">(</span>legend.position<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"none"</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">)</span></span></code></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>When using repel, set xnudge and ynudge to 0 for optimal results</code></pre>
-</div>
-<div class="sourceCode" id="cb30" style="background: #f1f3f5;"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">plot1</span> <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">+</span> <span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">plot2</span></span></code></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: Transformation introduced infinite values in continuous x-axis
-Transformation introduced infinite values in continuous x-axis</code></pre>
-</div>
-<div class="cell-output-display">
-<p><img src="https://shixiangwang.github.io/posts/2023-07-13-fundamentals-of-scrnaseq-analysis/index_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid" width="672"></p>
-</div>
-</div>
-</section><section id="缩放数据" class="level4"><h4 class="anchored" data-anchor-id="缩放数据">缩放数据</h4>
-<p>接下来，我们应用线性变换(“缩放”)，这是在PCA等降维技术之前的标准预处理步骤。函数<code><a href="https://satijalab.org/seurat/reference/ScaleData.html">ScaleData()</a></code>：</p>
-<ul>
-<li>移动每个基因的表达，使细胞间的平均表达为 0。</li>
-<li>缩放每个基因的表达，使细胞间的方差为 1。这一步在下游分析中具有同等的权重，因此高表达基因不会占主导地位。</li>
-<li>结果存储在 <code>pbmc[["RNA"]]@scale.data</code>。</li>
-</ul>
-<div class="cell">
-<div class="sourceCode" id="cb32" style="background: #f1f3f5;"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">all.genes</span> <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">(</span><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">pbmc</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">)</span></span>
-<span><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">pbmc</span> <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;"><a href="https://satijalab.org/seurat/reference/ScaleData.html">ScaleData</a></span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">(</span><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">pbmc</span>, features <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> <span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">all.genes</span>, verbose <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> <span class="cn" style="color: #8f5902;
-background-color: null;
-font-style: inherit;">FALSE</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">)</span></span></code></pre></div>
-</div>
-<p>在使用上述命令时，我们使用所有基因来缩放数据。缩放是 Seurat 工作流程中的重要步骤，但仅限于将用作 PCA 输入的基因。因此，<code><a href="https://satijalab.org/seurat/reference/ScaleData.html">ScaleData()</a></code>中的默认仅对先前确定的可变特征（默认值为2000）执行缩放。这将使这一步更快。</p>
-<p>在这种情况下，我们的PCA和聚类结果将不受影响。然而，Seurat 热图（用<code><a href="https://satijalab.org/seurat/reference/DoHeatmap.html">DoHeatmap()</a></code>生成，如下图所示）需要对热图中的基因进行缩放，以确保高表达的基因不会在热图中占主导地位。我们在本教程中缩放了所有基因。</p>
-<p><code><a href="https://satijalab.org/seurat/reference/ScaleData.html">ScaleData()</a></code>函数还允许我们从单个单细胞数据集中删除不需要的变异源。例如，我们可以通过回归移除细胞周期阶段或线粒体污染相关的异质性。这个特性可以通过指定<code>vars.to.regress</code>来实现。即：</p>
-<pre><code># skip here
-pbmc &lt;- ScaleData(pbmc, vars.to.regress = "percent.mt")</code></pre>
-<p>但是，特别是对于想要使用此功能的高级用户，Seurat 建议使用他们新的标准化工作流 <code><a href="https://satijalab.org/seurat/reference/SCTransform.html">SCTransform()</a></code>。该方法在 Seurat 论文(Hafemeister and Satija 2019)中进行了描述，并有一个<a href="https://satijalab.org/seurat/articles/sctransform_vignette.html">单独的技术文档</a>。与<code><a href="https://satijalab.org/seurat/reference/ScaleData.html">ScaleData()</a></code> 一样，函数<code><a href="https://satijalab.org/seurat/reference/SCTransform.html">SCTransform()</a></code>也包含一个<code>vars.to.regress</code>参数。</p>
-</section></section><section id="执行线性降维" class="level3"><h3 class="anchored" data-anchor-id="执行线性降维">执行线性降维</h3>
-<p>接下来，我们对缩放后的数据执行 PCA。默认情况下，只使用先前确定的可变特征作为输入，但是如果你希望选择不同的子集，则可以使用 features 参数定义。</p>
-<div class="cell">
-<div class="sourceCode" id="cb34" style="background: #f1f3f5;"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">pbmc</span> <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;"><a href="https://satijalab.org/seurat/reference/RunPCA.html">RunPCA</a></span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">(</span><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">pbmc</span>, features <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;"><a href="https://mojaveazure.github.io/seurat-object/reference/VariableFeatures.html">VariableFeatures</a></span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">(</span>object <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> <span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">pbmc</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">)</span>, verbose <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> <span class="cn" style="color: #8f5902;
-background-color: null;
-font-style: inherit;">FALSE</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">)</span></span></code></pre></div>
-</div>
-<p>Seurat提供了几种有用的方法来可视化定义 PCA 的细胞和特征，包括<code><a href="https://satijalab.org/seurat/reference/VizDimLoadings.html">VizDimLoadings()</a></code>、<code><a href="https://satijalab.org/seurat/reference/DimPlot.html">DimPlot()</a></code> 和 <code><a href="https://satijalab.org/seurat/reference/DimHeatmap.html">DimHeatmap()</a></code>。</p>
-<div class="cell">
-<div class="sourceCode" id="cb35" style="background: #f1f3f5;"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># Examine and visualize PCA results a few different ways</span></span>
-<span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">(</span><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">pbmc</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">[[</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"pca"</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">]</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">]</span>, dims <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> <span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">1</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">:</span><span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">5</span>, nfeatures <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> <span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">5</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">)</span></span></code></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>PC_ 1 
-Positive:  LTB, IL32, TRAC, CD3D, TRBC2 
-Negative:  FCN1, FGL2, CST3, IFI30, TYMP 
-PC_ 2 
-Positive:  MS4A1, CD79A, BANK1, IGHM, NIBAN3 
-Negative:  IL32, GZMM, CD3D, CD7, CD247 
-PC_ 3 
-Positive:  GZMB, CLIC3, NKG7, GNLY, KLRD1 
-Negative:  CCR7, LEF1, TRABD2A, TCF7, LTB 
-PC_ 4 
-Positive:  CD79B, MS4A1, GNLY, CD79A, LINC00926 
-Negative:  LILRA4, CLEC4C, SERPINF1, TPM2, SCT 
-PC_ 5 
-Positive:  CDKN1C, HES4, CTSL, TCF7L2, BATF3 
-Negative:  S100A12, ITGAM, VCAN, CES1, MGST1 </code></pre>
-</div>
-</div>
-<div class="cell">
-<div class="sourceCode" id="cb37" style="background: #f1f3f5;"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;"><a href="https://satijalab.org/seurat/reference/VizDimLoadings.html">VizDimLoadings</a></span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">(</span><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">pbmc</span>, dims <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> <span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">1</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">:</span><span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">2</span>, reduction <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"pca"</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">)</span></span></code></pre></div>
-<div class="cell-output-display">
-<p><img src="https://shixiangwang.github.io/posts/2023-07-13-fundamentals-of-scrnaseq-analysis/index_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid" width="672"></p>
-</div>
-</div>
-<div class="cell">
-<div class="sourceCode" id="cb38" style="background: #f1f3f5;"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;"><a href="https://satijalab.org/seurat/reference/DimPlot.html">DimPlot</a></span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">(</span><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">pbmc</span>, reduction <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"pca"</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">)</span></span></code></pre></div>
-<div class="cell-output-display">
-<p><img src="https://shixiangwang.github.io/posts/2023-07-13-fundamentals-of-scrnaseq-analysis/index_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid" width="672"></p>
-</div>
-</div>
-<p>特别是 `DimHeatmap() 允许轻松地探索数据集中异构的主要来源，并且在试图决定将哪些pc包括在进一步的下游分析中时非常有用。</p>
-<div class="cell">
-<div class="sourceCode" id="cb39" style="background: #f1f3f5;"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;"><a href="https://satijalab.org/seurat/reference/DimHeatmap.html">DimHeatmap</a></span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">(</span><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">pbmc</span>, dims <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> <span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">1</span>, cells <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> <span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">500</span>, balanced <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> <span class="cn" style="color: #8f5902;
-background-color: null;
-font-style: inherit;">TRUE</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">)</span></span></code></pre></div>
-<div class="cell-output-display">
-<p><img src="https://shixiangwang.github.io/posts/2023-07-13-fundamentals-of-scrnaseq-analysis/index_files/figure-html/unnamed-chunk-18-1.png" class="img-fluid" width="672"></p>
-</div>
-</div>
-<div class="cell">
-<div class="sourceCode" id="cb40" style="background: #f1f3f5;"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;"><a href="https://satijalab.org/seurat/reference/DimHeatmap.html">DimHeatmap</a></span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">(</span><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">pbmc</span>, dims <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> <span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">1</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">:</span><span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">9</span>, cells <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> <span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">500</span>, balanced <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> <span class="cn" style="color: #8f5902;
-background-color: null;
-font-style: inherit;">TRUE</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">)</span></span></code></pre></div>
-<div class="cell-output-display">
-<p><img src="https://shixiangwang.github.io/posts/2023-07-13-fundamentals-of-scrnaseq-analysis/index_files/figure-html/unnamed-chunk-19-1.png" class="img-fluid" width="672"></p>
-</div>
-</div>
-<p>为了克服scRNA-seq数据中任何单个特征中广泛的技术噪声，Seurat基于它们的PCA分数对细胞进行聚类，每个 PC 本质上代表一个“元特征”，该元特征结合了相关特征集中的信息。因此，顶部主成分代表了数据集的鲁棒压缩。在这里，我们选择前20 个 PC。</p>
-</section><section id="细胞聚类" class="level3"><h3 class="anchored" data-anchor-id="细胞聚类">细胞聚类</h3>
-<p>Seurat v3采用了基于图的聚类方法，基于(Macosko等人，2015)中的初始策略进行改进。重要的是，驱动聚类分析的距离度量（基于先前确定的主成分）保持不变。然而，Seurat在将细胞距离矩阵划分为聚类的方法有了显著改进。这种方法受到最近一些研究的启发，这些研究将基于图的聚类方法应用于scRNA-seq数据（Xu和Su，2015）和CyTOF数据（Levine等人，2015）。简而言之，这些方法将细胞嵌入到一个图结构中，例如K最近邻（KNN）图，其中类似特征表达模式的细胞之间有边连接，然后尝试将该图划分为高度相互连接的“拟团”或“社区”。</p>
-<p>就像PhenoGraph一样，首先根据PCA空间中的欧氏距离构建了一个K最近邻图，然后根据局部邻域中的重叠情况（Jaccard相似性）调整任意两个细胞之间的边权重。这个步骤是使用<code><a href="https://satijalab.org/seurat/reference/FindNeighbors.html">FindNeighbors()</a></code>函数完成的，它的输入是之前定义的数据集的维度（前20个主成分）。</p>
-<p>为了对细胞进行聚类，接下来我们应用模块度优化技术，如Louvain算法（默认）或SLM（Blondel等人，2008），以迭代地将细胞分组在一起，目标是优化标准的模块度函数。<code><a href="https://satijalab.org/seurat/reference/FindClusters.html">FindClusters()</a></code>函数实现了这个过程，并包含一个分辨率参数，用于设置下游聚类的“粒度”，增大的值会导致更多的聚类。我们发现，在大约3K个细胞的单细胞数据集中，将此参数设置在 0.4-1.2 之间通常会得到良好的结果。对于更大的数据集，通常需要增加最佳分辨率。可以使用<code><a href="https://mojaveazure.github.io/seurat-object/reference/Idents.html">Idents()</a></code>函数找到这些聚类。</p>
-<div class="cell">
-<div class="sourceCode" id="cb41" style="background: #f1f3f5;"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">pbmc</span> <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;"><a href="https://satijalab.org/seurat/reference/FindNeighbors.html">FindNeighbors</a></span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">(</span><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">pbmc</span>, dims <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> <span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">1</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">:</span><span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">20</span>, verbose <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> <span class="cn" style="color: #8f5902;
-background-color: null;
-font-style: inherit;">FALSE</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">)</span></span>
-<span><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">pbmc</span> <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;"><a href="https://satijalab.org/seurat/reference/FindClusters.html">FindClusters</a></span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">(</span><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">pbmc</span>, resolution <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> <span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">0.5</span>, verbose <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> <span class="cn" style="color: #8f5902;
-background-color: null;
-font-style: inherit;">FALSE</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">)</span></span></code></pre></div>
-</div>
-<div class="cell">
-<div class="sourceCode" id="cb42" style="background: #f1f3f5;"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># Look at cluster IDs of the first 5 cells</span></span>
-<span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">(</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;"><a href="https://mojaveazure.github.io/seurat-object/reference/Idents.html">Idents</a></span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">(</span><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">pbmc</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">)</span>, <span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">5</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">)</span></span></code></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>AAACCCAGTATCGTAC-1 AAACCCAGTCGGTGAA-1 AAACCCAGTTAGAAAC-1 AAACCCAGTTATCTTC-1 
-                 2                  4                  2                  8 
-AAACCCAGTTGCCGAC-1 
-                 0 
-Levels: 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15</code></pre>
-</div>
-</div>
-</section><section id="运行非线性降维-umaptsne" class="level3"><h3 class="anchored" data-anchor-id="运行非线性降维-umaptsne">运行非线性降维 UMAP/tSNE</h3>
-<p>Seurat提供多种非线性降维技术，例如tSNE和UMAP，用于可视化和探索这些数据集。这些算法的目标是学习数据的潜在流形，以便将相似的细胞放置在低维空间中的一起。在上述基于图的聚类中确定的细胞应在这些降维图中共同定位。作为UMAP和tSNE的输入，我们建议使用与聚类分析相同的主成分作为输入。</p>
-<div class="cell">
-<div class="sourceCode" id="cb44" style="background: #f1f3f5;"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">pbmc</span> <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;"><a href="https://satijalab.org/seurat/reference/RunUMAP.html">RunUMAP</a></span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">(</span><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">pbmc</span>, dims <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> <span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">1</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">:</span><span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">20</span>, verbose <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> <span class="cn" style="color: #8f5902;
-background-color: null;
-font-style: inherit;">FALSE</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">)</span></span></code></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: The default method for RunUMAP has changed from calling Python UMAP via reticulate to the R-native UWOT using the cosine metric
-To use Python UMAP via reticulate, set umap.method to 'umap-learn' and metric to 'correlation'
-This message will be shown once per session</code></pre>
-</div>
-</div>
-<p>然后得到单细胞聚类结果的UMAP图。</p>
-<div class="cell">
-<div class="sourceCode" id="cb46" style="background: #f1f3f5;"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;"><a href="https://satijalab.org/seurat/reference/DimPlot.html">DimPlot</a></span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">(</span><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">pbmc</span>, reduction <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"umap"</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">)</span></span></code></pre></div>
-<div class="cell-output-display">
-<p><img src="https://shixiangwang.github.io/posts/2023-07-13-fundamentals-of-scrnaseq-analysis/index_files/figure-html/unnamed-chunk-23-1.png" class="img-fluid" width="672"></p>
-</div>
-</div>
-<p>类似地，tSNE。</p>
-<div class="cell">
-<div class="sourceCode" id="cb47" style="background: #f1f3f5;"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">pbmc</span> <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;"><a href="https://satijalab.org/seurat/reference/RunTSNE.html">RunTSNE</a></span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">(</span><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">pbmc</span>, dims <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> <span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">1</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">:</span><span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">20</span>, verbose <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> <span class="cn" style="color: #8f5902;
-background-color: null;
-font-style: inherit;">FALSE</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">)</span></span>
-<span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;"><a href="https://satijalab.org/seurat/reference/DimPlot.html">DimPlot</a></span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">(</span><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">pbmc</span>, reduction <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"tsne"</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">)</span></span></code></pre></div>
-<div class="cell-output-display">
-<p><img src="https://shixiangwang.github.io/posts/2023-07-13-fundamentals-of-scrnaseq-analysis/index_files/figure-html/unnamed-chunk-24-1.png" class="img-fluid" width="672"></p>
-</div>
-</div>
-<p>贴上聚类标签：</p>
-<div class="cell">
-<div class="sourceCode" id="cb48" style="background: #f1f3f5;"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;"><a href="https://satijalab.org/seurat/reference/DimPlot.html">DimPlot</a></span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">(</span><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">pbmc</span>, reduction <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"umap"</span>, label <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> <span class="cn" style="color: #8f5902;
-background-color: null;
-font-style: inherit;">TRUE</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">)</span></span></code></pre></div>
-<div class="cell-output-display">
-<p><img src="https://shixiangwang.github.io/posts/2023-07-13-fundamentals-of-scrnaseq-analysis/index_files/figure-html/unnamed-chunk-25-1.png" class="img-fluid" width="672"></p>
-</div>
-<div class="sourceCode" id="cb49" style="background: #f1f3f5;"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">plot</span> <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;"><a href="https://satijalab.org/seurat/reference/DimPlot.html">DimPlot</a></span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">(</span>object <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> <span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">pbmc</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">)</span></span>
-<span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;"><a href="https://satijalab.org/seurat/reference/LabelClusters.html">LabelClusters</a></span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">(</span>plot <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> <span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">plot</span>, id <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">'ident'</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">)</span></span></code></pre></div>
-<div class="cell-output-display">
-<p><img src="https://shixiangwang.github.io/posts/2023-07-13-fundamentals-of-scrnaseq-analysis/index_files/figure-html/unnamed-chunk-25-2.png" class="img-fluid" width="672"></p>
-</div>
-</div>
-<p>是时候保存我们的分析结果了：</p>
-<div class="cell">
-<div class="sourceCode" id="cb50" style="background: #f1f3f5;"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;"><a href="https://rdrr.io/r/base/readRDS.html">saveRDS</a></span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">(</span><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">pbmc</span>, </span>
-<span>file <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"/Users/wsx/Library/CloudStorage/OneDrive-shanghaitech.edu.cn/Public/data/pbmc_processed.rds"</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">)</span></span></code></pre></div>
-</div>
-
-
-</section></section> ]]></description>
-  <category>note</category>
-  <category>scRNA-seq</category>
-  <category>R</category>
-  <guid>https://shixiangwang.github.io/posts/2023-07-13-fundamentals-of-scrnaseq-analysis/index.html</guid>
-  <pubDate>Wed, 12 Jul 2023 16:00:00 GMT</pubDate>
 </item>
 </channel>
 </rss>
