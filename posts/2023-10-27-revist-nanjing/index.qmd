@@ -1,0 +1,55 @@
+---
+title: 南京行记 两首
+author: Shixiang Wang
+date: 2023-10-27
+categories: [诗]
+draft: false
+description: ''
+
+toc: true
+
+format:
+  html:
+    code-fold: false
+    code-overflow: wrap
+    code-tools: false
+---
+
+<center>
+### 其一 重访南京有感
+</center>
+<br>
+
+<center>
+烟水近，城镇明，高楼须弥作蝼蚁。
+
+夜半独飞落江宁，驰霄横度三千里。
+
+旧都印，故金陵，六朝风流休说起。
+
+夫子庙头看古今，忆往年书生意气。
+</center>
+
+<center>
+![](rv_nj_1.jpg){height="50%" width="50%"}
+</center>
+
+<center>
+### 其二 足踏秦淮有记
+</center>
+<br>
+
+<center>
+行路迟迟眼欲呆，金陵小巷赋文才。
+
+流水车龙听钟鼓，穿街梧桐掩楼牌。
+
+集庆门接迎凤道，长干桥通雨花台。
+
+秦淮酒家今安在，旧里新村说不来。
+
+</center>
+
+<center>
+![](rv_nj_2.jpg){height="50%" width="50%"}
+</center>

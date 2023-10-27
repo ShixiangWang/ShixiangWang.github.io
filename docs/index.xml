@@ -10,7 +10,54 @@
 <atom:link href="https://shixiangwang.github.io/index.xml" rel="self" type="application/rss+xml"/>
 <description>Reasoning is a blog dedicated to exploring the intersection of data science, bioinformatics, and personal insights.</description>
 <generator>quarto-1.3.361</generator>
-<lastBuildDate>Wed, 18 Oct 2023 16:00:00 GMT</lastBuildDate>
+<lastBuildDate>Thu, 26 Oct 2023 16:00:00 GMT</lastBuildDate>
+<item>
+  <title>南京行记 两首</title>
+  <dc:creator>Shixiang Wang</dc:creator>
+  <link>https://shixiangwang.github.io/posts/2023-10-27-revist-nanjing/index.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<center>
+<section id="其一-重访南京有感" class="level3">
+<h3 class="anchored" data-anchor-id="其一-重访南京有感">其一 重访南京有感</h3>
+</section></center>
+<p><br></p>
+<center>
+<p>烟水近，城镇明，高楼须弥作蝼蚁。</p>
+<p>夜半独飞落江宁，驰霄横度三千里。</p>
+<p>旧都印，故金陵，六朝风流休说起。</p>
+夫子庙头看古今，忆往年书生意气。
+</center>
+<center>
+<img src="https://shixiangwang.github.io/posts/2023-10-27-revist-nanjing/rv_nj_1.jpg" style="width:50.0%;height:50.0%">
+</center>
+<center>
+
+<section id="其二-足踏秦淮有记" class="level3">
+<h3 class="anchored" data-anchor-id="其二-足踏秦淮有记">其二 足踏秦淮有记</h3>
+</section></center>
+<p><br></p>
+<center>
+<p>行路迟迟眼欲呆，金陵小巷赋文才。</p>
+<p>流水车龙听钟鼓，穿街梧桐掩楼牌。</p>
+<p>集庆门接迎凤道，长干桥通雨花台。</p>
+<p>秦淮酒家今安在，旧里新村说不来。</p>
+</center>
+<center>
+<img src="https://shixiangwang.github.io/posts/2023-10-27-revist-nanjing/rv_nj_2.jpg" style="width:50.0%;height:50.0%">
+</center>
+
+
+
+
+ ]]></description>
+  <category>诗</category>
+  <guid>https://shixiangwang.github.io/posts/2023-10-27-revist-nanjing/index.html</guid>
+  <pubDate>Thu, 26 Oct 2023 16:00:00 GMT</pubDate>
+</item>
 <item>
   <title>聊聊开源协议：我们可以免费使用开源软件吗？</title>
   <dc:creator>Shixiang Wang</dc:creator>
@@ -5069,29 +5116,6 @@ font-style: inherit;">predicted_Monaco</span></span></code></pre></div>
   <category>academic</category>
   <guid>https://shixiangwang.github.io/posts/2023-07-21-how-do-you-think-bioinformatics-in-science/index.html</guid>
   <pubDate>Thu, 20 Jul 2023 16:00:00 GMT</pubDate>
-</item>
-<item>
-  <title>2023-07-20</title>
-  <dc:creator>Shixiang Wang</dc:creator>
-  <link>https://shixiangwang.github.io/posts/2023-07-20-journal/index.html</link>
-  <description><![CDATA[ 
-
-
-
-
-<p>今天很是犯困😪，很困。</p>
-<p>可能因为要早起找人签字，中午睡得昏昏沉沉。</p>
-<p>可能今天早上下午都有会议，坐久后的麻痹。</p>
-<p>可能今天精神太过紧绷，站中特别资助没上，又一直在编写和测试分析流程。</p>
-<p>总之，今天确实很犯困。一天看是什么都没做，但好歹有了记录，记录今天大体发生过什么。</p>
-<p>😪</p>
-
-
-
- ]]></description>
-  <category>journal</category>
-  <guid>https://shixiangwang.github.io/posts/2023-07-20-journal/index.html</guid>
-  <pubDate>Wed, 19 Jul 2023 16:00:00 GMT</pubDate>
 </item>
 </channel>
 </rss>
