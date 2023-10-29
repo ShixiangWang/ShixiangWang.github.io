@@ -1,0 +1,21 @@
+---
+title: dont forget
+author: Shixiang Wang
+date: 2023-10-29
+categories: [random]
+draft: false
+description: ''
+
+toc: true
+
+format:
+  html:
+    code-fold: false
+    code-overflow: wrap
+    code-tools: false
+---
+
+不要忘记，有一个诺贝尔奖的梦。
+
+不要忘记，最多也就剩下四十余年。
+
