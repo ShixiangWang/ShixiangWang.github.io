@@ -10,7 +10,98 @@
 <atom:link href="https://shixiangwang.github.io/index.xml" rel="self" type="application/rss+xml"/>
 <description>Reasoning is a blog dedicated to exploring the intersection of data science, bioinformatics, and personal insights.</description>
 <generator>quarto-1.3.361</generator>
-<lastBuildDate>Sat, 28 Oct 2023 16:00:00 GMT</lastBuildDate>
+<lastBuildDate>Sun, 12 Nov 2023 16:00:00 GMT</lastBuildDate>
+<item>
+  <title>SRA 测序数据下载和处理三部曲</title>
+  <dc:creator>Shixiang Wang</dc:creator>
+  <link>https://shixiangwang.github.io/posts/2023-11-13-download-and-prepare-sra-data/index.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<p>这里简单记录和备忘下下载和预处理 SRA 数据我常用的三个基本步骤。</p>
+<section id="依赖准备" class="level2">
+<h2 class="anchored" data-anchor-id="依赖准备">依赖准备</h2>
+<div class="sourceCode" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><span class="ex" style="color: null;
+background-color: null;
+font-style: inherit;">conda</span> install <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">-c</span> bioconda <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">-c</span> conda-forge parallel-fastq-dump <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'sra-tools&gt;=3.0.0'</span> fastp</span></code></pre></div>
+</section>
+<section id="步骤" class="level2">
+<h2 class="anchored" data-anchor-id="步骤">步骤</h2>
+<ol type="1">
+<li>下载</li>
+</ol>
+<div class="sourceCode" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><span class="ex" style="color: null;
+background-color: null;
+font-style: inherit;">prefetch</span> <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">-c</span> <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">--max-size</span> 100GB <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">-C</span> yes <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">-r</span> yes <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">-O</span> . <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">-p</span> SRR8670672</span></code></pre></div>
+<ol start="2" type="1">
+<li>转换数据格式为 FASTQ</li>
+</ol>
+<div class="sourceCode" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><span class="ex" style="color: null;
+background-color: null;
+font-style: inherit;">parallel-fastq-dump</span> <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">-t</span> 20 <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">-O</span> fq/ <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">--split-3</span> <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">--gzip</span> <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">-s</span> SRR8670672</span></code></pre></div>
+<ol start="3" type="1">
+<li>预处理 FASTQ 文件</li>
+</ol>
+<div class="sourceCode" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><span class="ex" style="color: null;
+background-color: null;
+font-style: inherit;">fastp</span> <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">-i</span> fq/SRR8670672_1.fastq.gz <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">-I</span> fq/SRR8670672_2.fastq.gz <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">-o</span> output/SRR8670672_1.fastq.gz <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">-O</span> output/SRR8670672_2.fastq.gz <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">-h</span> output/SRR8670672.html <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">-j</span> output/SRR8670672.json <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">--thread</span> 16 <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">--dont_overwrite</span></span></code></pre></div>
+<p>如果多个文件还可以结合 <code>multiqc</code>。</p>
+
+
+</section>
+
+ ]]></description>
+  <category>note</category>
+  <category>bioinformatics</category>
+  <guid>https://shixiangwang.github.io/posts/2023-11-13-download-and-prepare-sra-data/index.html</guid>
+  <pubDate>Sun, 12 Nov 2023 16:00:00 GMT</pubDate>
+</item>
 <item>
   <title>dont forget</title>
   <dc:creator>Shixiang Wang</dc:creator>
@@ -5089,28 +5180,6 @@ font-style: inherit;">predicted_Monaco</span></span></code></pre></div>
   <category>journal</category>
   <guid>https://shixiangwang.github.io/posts/2023-07-25-journal/index.html</guid>
   <pubDate>Mon, 24 Jul 2023 16:00:00 GMT</pubDate>
-</item>
-<item>
-  <title>学术的价值观</title>
-  <dc:creator>Shixiang Wang</dc:creator>
-  <link>https://shixiangwang.github.io/posts/2023-07-21-academic-culture/index.html</link>
-  <description><![CDATA[ 
-
-
-
-
-<p>这篇小文主要是记录、推荐和分享下吴思涵 Lab 的科学价值观条目。</p>
-<p><img src="https://shixiangwang.github.io/posts/2023-07-21-academic-culture/wulab_culture.jpg" class="img-fluid"></p>
-<p>我觉得非常好，也非常佩服吴思涵创建这个条目和对每个进入 Lab 的成员进行宣读。</p>
-<p>有时候，科研工作的环境的喧嚣让人煎熬。在心中悬着一把价值之剑🗡️，我觉得既是告诫，也是指引。 这把剑有离得近和离得远的时候，但如果没有它，我们的心中会缺乏终极目标🎯。 科学的路，是永无止境的，我们一直在寻觅、挣扎、成长，也弯弯曲曲地走向岁月长河的下一步， 但是否在前进、是否在后退，是否能永远前进、是否会永远后退，真的不知道。</p>
-<p>当前，全国进入了“卷”时代，respect science value, keep deep think。</p>
-
-
-
- ]]></description>
-  <category>academic</category>
-  <guid>https://shixiangwang.github.io/posts/2023-07-21-academic-culture/index.html</guid>
-  <pubDate>Thu, 20 Jul 2023 16:00:00 GMT</pubDate>
 </item>
 </channel>
 </rss>

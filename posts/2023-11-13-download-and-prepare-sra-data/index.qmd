@@ -1,0 +1,47 @@
+---
+title: SRA 测序数据下载和处理三部曲
+author: Shixiang Wang
+date: 2023-11-13
+categories: [note,bioinformatics]
+draft: false
+description: ''
+
+toc: true
+
+format:
+  html:
+    code-fold: false
+    code-overflow: wrap
+    code-tools: false
+---
+
+这里简单记录和备忘下下载和预处理 SRA 数据我常用的三个基本步骤。
+
+## 依赖准备
+
+```sh
+conda install -c bioconda -c conda-forge parallel-fastq-dump 'sra-tools>=3.0.0' fastp
+```
+
+## 步骤
+
+1. 下载
+
+```sh
+prefetch -c --max-size 100GB -C yes -r yes -O . -p SRR8670672
+```
+
+2. 转换数据格式为 FASTQ
+
+```sh
+parallel-fastq-dump -t 20 -O fq/ --split-3 --gzip -s SRR8670672
+```
+
+3. 预处理 FASTQ 文件
+
+```sh
+fastp -i fq/SRR8670672_1.fastq.gz -I fq/SRR8670672_2.fastq.gz -o output/SRR8670672_1.fastq.gz -O output/SRR8670672_2.fastq.gz -h output/SRR8670672.html -j output/SRR8670672.json --thread 16 --dont_overwrite
+```
+
+如果多个文件还可以结合 `multiqc`。
+
