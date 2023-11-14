@@ -1,0 +1,18 @@
+---
+title: 随想
+author: Shixiang Wang
+date: 2023-11-14
+categories: [random]
+draft: false
+description: ''
+
+toc: true
+
+format:
+  html:
+    code-fold: false
+    code-overflow: wrap
+    code-tools: false
+---
+
+没有问题只有目标的数据分析，就像人有大脑却缺乏灵魂。
