@@ -10,7 +10,34 @@
 <atom:link href="https://shixiangwang.github.io/index.xml" rel="self" type="application/rss+xml"/>
 <description>Reasoning is a blog dedicated to exploring the intersection of data science, bioinformatics, and personal insights.</description>
 <generator>quarto-1.3.361</generator>
-<lastBuildDate>Mon, 13 Nov 2023 16:00:00 GMT</lastBuildDate>
+<lastBuildDate>Tue, 14 Nov 2023 16:00:00 GMT</lastBuildDate>
+<item>
+  <title>谈谈使用过的编辑器</title>
+  <dc:creator>Shixiang Wang</dc:creator>
+  <link>https://shixiangwang.github.io/posts/2023-11-15-talk-about-ides/index.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<p>最近在使用 JupyterLab 时感觉受挫，想简单总结下自己这些年使用过的代码编辑器（有较长的使用时间）。</p>
+<p>最开始接触的应该是 Sublime text3，简单、轻量、速度响应快，缺点是要自己搞定盗版问题、要自己配置、装插件等。</p>
+<p>后面大量使用 R 和利用 R 开发，所以 RStudio 和 RStudio Server 使用非常多，它可以系统解决利用 R 进行的一系列数据处理和开发工作。缺点是单线程、有时候出问题会卡得很、与其他编程语言几乎很难协同，包括我常用的 Bash 和偶尔用的 Python，这类体验感很不好。</p>
+<p>再后面有用过 Jupyter 笔记本，优点是简约轻便，它对 Python 的支持比较好，其他比较烂，界面和导航不太行，我近期尝试部署 JupyterLab 后发现对插件的支持体验不是很理想，然后插件对 R 的支持比较烂。</p>
+<p>还用过 JetBrains 的一系列编辑器，包括支持 Python、Go等等的不同软件名称，但基本框架是一样的，后面在 IDEA 中都可以进行支持，优点是交互感好、界面专业、插件稳定好用、非常适合开发，缺点是不太适合数据分析探索类工作，也比较笨重。如果是学生/老师用户可以免费使用。</p>
+<p>全部使用过的所有编辑器中综合体验感、性能、特性等比较完美的是 VS Code，不愧是大厂出产的产品，这些年陆续间歇在用，功能演进频繁但不失稳定，目前包括 R、Python、Jupyter的支持都比较好，更不说其他常用编程了。缺点是 R 的专业性没有 RStudio 强（特别是图像预览的方便程度），另外界面有时候个人使用起来不是很喜欢（相比于 JetBrains 产品）。</p>
+<p>当前还有一些新的产品在推动编辑器的发展，包括JB 的 Fleet，我觉得非常有前景。</p>
+<p>当然了，终端上用过 Vim，它基本是命令行的无冕之王，虽然我极少在终端写代码，但用它基本已经满足了。之前还学习过 Vim 和相关配置、包括 Emacs，但实际上个人的使用偏好和职业领域导致这一块的使用极少有所进展，只是满足偶尔的编辑需求。而这部分需求，现状VS Code 都是可以替代的。</p>
+<p>综上看，如果是从事与我类似的数据科学工作和开发的读者朋友，优先选择 VS Code 和 RStudio 是比较好的选择。</p>
+
+
+
+ ]]></description>
+  <category>R</category>
+  <category>bioinformatics</category>
+  <guid>https://shixiangwang.github.io/posts/2023-11-15-talk-about-ides/index.html</guid>
+  <pubDate>Tue, 14 Nov 2023 16:00:00 GMT</pubDate>
+</item>
 <item>
   <title>随想</title>
   <dc:creator>Shixiang Wang</dc:creator>
@@ -5104,76 +5131,6 @@ font-style: inherit;">predicted_Monaco</span></span></code></pre></div>
   <category>R</category>
   <guid>https://shixiangwang.github.io/posts/2023-07-26-clustering-and-cell-type-identification/index.html</guid>
   <pubDate>Tue, 25 Jul 2023 16:00:00 GMT</pubDate>
-</item>
-<item>
-  <title>小记（往昔）</title>
-  <dc:creator>Shixiang Wang</dc:creator>
-  <link>https://shixiangwang.github.io/posts/2023-07-25-small-notes/index.html</link>
-  <description><![CDATA[ 
-
-
-
-
-<p>以时间倒序的形式备份下「小记」中写的部分诗。</p>
-<section id="贺妻小记" class="level3">
-<h3 class="anchored" data-anchor-id="贺妻小记">贺妻小记</h3>
-<p>山水在回响你的生辰，</p>
-<p>我从中窥探生命的印记。</p>
-<p>缘来了——</p>
-<p>我作亭亭夏日的莲，</p>
-<p>你作微风，</p>
-<p>荡开我湖心。</p>
-</section>
-<section id="写于二十九" class="level3">
-<h3 class="anchored" data-anchor-id="写于二十九">写于二十九</h3>
-<p>实岁添九虚添十，</p>
-<p>已望天命瘦肚迟。</p>
-<p>天南地北终须尽，</p>
-<p>人到桥头有诀期。</p>
-</section>
-<section id="无题" class="level3">
-<h3 class="anchored" data-anchor-id="无题">无题</h3>
-<p>翠绿叠墨色，</p>
-<p>烟柳入江波。</p>
-<p>排水碧空尽，</p>
-<p>推云眺山郭。</p>
-</section>
-<section id="无题-1" class="level3">
-<h3 class="anchored" data-anchor-id="无题-1">无题</h3>
-<p>雨骤风萧天易冷，</p>
-<p>寒推漏窗夜捶门。</p>
-<p>鸟叫迟起难行早，</p>
-<p>世事情劫难度成。</p>
-</section>
-<section id="八月十四与妻登白云山" class="level3">
-<h3 class="anchored" data-anchor-id="八月十四与妻登白云山">八月十四与妻登白云山</h3>
-<p>山林日曳金明灭，</p>
-<p>乔木深深松涧叠。</p>
-<p>晚起上白云，</p>
-<p>双双汗水淋。</p>
-<p>来时云遮月，</p>
-<p>去时月动人。</p>
-<p>清风频相送，</p>
-<p>人月了无痕。</p>
-</section>
-<section id="二月" class="level3">
-<h3 class="anchored" data-anchor-id="二月">二月</h3>
-<p>人道江南好颜色，</p>
-<p>冷风吹起亮春泽。</p>
-<p>近观粉花掩半绿，</p>
-<p>远眺乌波驻高楼。</p>
-<p>骑行频闻鸣翠柳，</p>
-<p>游思偶得壮年愁。</p>
-<p>愿此人间多欢乐，</p>
-<p>笑声归处了白头。</p>
-
-
-</section>
-
- ]]></description>
-  <category>诗</category>
-  <guid>https://shixiangwang.github.io/posts/2023-07-25-small-notes/index.html</guid>
-  <pubDate>Mon, 24 Jul 2023 16:00:00 GMT</pubDate>
 </item>
 </channel>
 </rss>
