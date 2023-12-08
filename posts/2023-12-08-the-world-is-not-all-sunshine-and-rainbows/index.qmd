@@ -1,0 +1,66 @@
+---
+title: The world is not all sunshine and rainbows
+author: Shixiang Wang
+date: 2023-12-08
+categories: [random]
+draft: false
+description: ''
+
+toc: true
+
+format:
+  html:
+    code-fold: false
+    code-overflow: wrap
+    code-tools: false
+---
+
+刷短视频的时候看到小孩跟史泰龙激情地对一段电影（洛奇）台词，把它翻找了出来，记录一下。
+
+　　You let people stick a finger in your face and tell you you’re not good.
+
+　　你让别人指着脸说你不好。
+
+　　And when things got hard, you started to looking for something to blame, like a big shadow.
+
+　　当遇到不顺心的事，你开始怪罪其他事，比如说巨大的阴影。
+
+　　Let me tell you something you already know.
+
+　　让我告诉你一些你已经知道的事情。
+
+　　The world is not all sunshine and rainbows.
+
+　　这世界不完全都是阳光和彩虹。
+
+　　It’s a very mean and nasty place, and I don’t care how tough you are.
+
+　　这是一个非常卑鄙险恶的世界，我不在乎你是多么坚强。
+
+　　It will beat you to your knees and keep you there if you let it.
+
+　　如果你屈服，他会把你打得永远趴在地上。
+
+　　You, me or nobody is gonna hit as hard as life.
+
+　　你，我，没有人能比生活更会击打人了。
+
+　　But it’s not about how hard you hit. It’s about how hard you get hit and keep moving forward, how much you can take and keep moving forward.
+
+　　但这不在于你击打的多重，而在于你能被击打的多重，仍保持前进，在于你能怎么承受，然后继续前进。
+
+　　That’s how winning is done.
+
+　　这才是真正的胜利。
+
+　　Now if you know what you’re worth, go and get what you’re worth.
+
+　　现在如果你知道你的价值，你就前进实现你的价值。
+
+　　But you gotta be willing to take the hits, and not pointing fingers saying you aren’t where you wanna be because of him or her or anybody!
+
+　　但你必须乐意承受挨打，而不是没能实现目标时却指着别人说是因为他或她的原因!
+
+　　Cowards do that, and that ain’t you! You’re better than that!
+
+　　懦夫才会那样做!你不是!你远比那个出色!

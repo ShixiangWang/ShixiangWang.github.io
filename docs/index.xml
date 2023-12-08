@@ -10,7 +10,49 @@
 <atom:link href="https://shixiangwang.github.io/index.xml" rel="self" type="application/rss+xml"/>
 <description>Reasoning is a blog dedicated to exploring the intersection of data science, bioinformatics, and personal insights.</description>
 <generator>quarto-1.3.361</generator>
-<lastBuildDate>Wed, 06 Dec 2023 16:00:00 GMT</lastBuildDate>
+<lastBuildDate>Thu, 07 Dec 2023 16:00:00 GMT</lastBuildDate>
+<item>
+  <title>The world is not all sunshine and rainbows</title>
+  <dc:creator>Shixiang Wang</dc:creator>
+  <link>https://shixiangwang.github.io/posts/2023-12-08-the-world-is-not-all-sunshine-and-rainbows/index.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<p>刷短视频的时候看到小孩跟史泰龙激情地对一段电影（洛奇）台词，把它翻找了出来，记录一下。</p>
+<p>　　You let people stick a finger in your face and tell you you’re not good.</p>
+<p>　　你让别人指着脸说你不好。</p>
+<p>　　And when things got hard, you started to looking for something to blame, like a big shadow.</p>
+<p>　　当遇到不顺心的事，你开始怪罪其他事，比如说巨大的阴影。</p>
+<p>　　Let me tell you something you already know.</p>
+<p>　　让我告诉你一些你已经知道的事情。</p>
+<p>　　The world is not all sunshine and rainbows.</p>
+<p>　　这世界不完全都是阳光和彩虹。</p>
+<p>　　It’s a very mean and nasty place, and I don’t care how tough you are.</p>
+<p>　　这是一个非常卑鄙险恶的世界，我不在乎你是多么坚强。</p>
+<p>　　It will beat you to your knees and keep you there if you let it.</p>
+<p>　　如果你屈服，他会把你打得永远趴在地上。</p>
+<p>　　You, me or nobody is gonna hit as hard as life.</p>
+<p>　　你，我，没有人能比生活更会击打人了。</p>
+<p>　　But it’s not about how hard you hit. It’s about how hard you get hit and keep moving forward, how much you can take and keep moving forward.</p>
+<p>　　但这不在于你击打的多重，而在于你能被击打的多重，仍保持前进，在于你能怎么承受，然后继续前进。</p>
+<p>　　That’s how winning is done.</p>
+<p>　　这才是真正的胜利。</p>
+<p>　　Now if you know what you’re worth, go and get what you’re worth.</p>
+<p>　　现在如果你知道你的价值，你就前进实现你的价值。</p>
+<p>　　But you gotta be willing to take the hits, and not pointing fingers saying you aren’t where you wanna be because of him or her or anybody!</p>
+<p>　　但你必须乐意承受挨打，而不是没能实现目标时却指着别人说是因为他或她的原因!</p>
+<p>　　Cowards do that, and that ain’t you! You’re better than that!</p>
+<p>　　懦夫才会那样做!你不是!你远比那个出色!</p>
+
+
+
+ ]]></description>
+  <category>random</category>
+  <guid>https://shixiangwang.github.io/posts/2023-12-08-the-world-is-not-all-sunshine-and-rainbows/index.html</guid>
+  <pubDate>Thu, 07 Dec 2023 16:00:00 GMT</pubDate>
+</item>
 <item>
   <title>E pluribus unum: From Complexity, Universality</title>
   <dc:creator>Shixiang Wang</dc:creator>
@@ -1880,37 +1922,6 @@ font-style: inherit;"># https://caddyserver.com/docs/caddyfile</span></span></co
   <category>Linux</category>
   <guid>https://shixiangwang.github.io/posts/2023-08-11-caddyfile/index.html</guid>
   <pubDate>Thu, 10 Aug 2023 16:00:00 GMT</pubDate>
-</item>
-<item>
-  <title>Duplication Rate 经验值</title>
-  <dc:creator>Shixiang Wang</dc:creator>
-  <link>https://shixiangwang.github.io/posts/2023-08-01-duplication-rate/index.html</link>
-  <description><![CDATA[ 
-
-
-
-
-<p>最近处理 RNA-Seq 的原始数据，用 fastp 发现 duplication rate 很高，有不少 60% 的，比较奇怪。</p>
-<p>搜索了下常见的值，记录一下。</p>
-<section id="duplication-rate经验值" class="level2">
-<h2 class="anchored" data-anchor-id="duplication-rate经验值">Duplication Rate经验值</h2>
-<p>WES：数据量约10G时，Duplication rate在10%左右;</p>
-<p>WGS：数据量约90G时，Duplication rate在10%左右;</p>
-<p>RNA-seq：Duplication rate在40% ~ 50%左右;</p>
-<p>WGBS：&gt;10G, Duplication rate &gt; 10%；</p>
-<p>多重PCR试剂盒和靶向捕获Panel，差异很大，跟需要测序的区域以及测序量有关，通常情况下只要中靶部分数据质量足够好，Duplication rate不是一个重要的考虑指标。</p>
-<blockquote class="blockquote">
-<p>参考文章：https://zhuanlan.zhihu.com/p/635160066</p>
-</blockquote>
-
-
-</section>
-
- ]]></description>
-  <category>note</category>
-  <category>bioinformatics</category>
-  <guid>https://shixiangwang.github.io/posts/2023-08-01-duplication-rate/index.html</guid>
-  <pubDate>Mon, 31 Jul 2023 16:00:00 GMT</pubDate>
 </item>
 </channel>
 </rss>
