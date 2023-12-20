@@ -10,7 +10,32 @@
 <atom:link href="https://shixiangwang.github.io/index.xml" rel="self" type="application/rss+xml"/>
 <description>Reasoning is a blog dedicated to exploring the intersection of data science, bioinformatics, and personal insights.</description>
 <generator>quarto-1.3.361</generator>
-<lastBuildDate>Mon, 11 Dec 2023 16:00:00 GMT</lastBuildDate>
+<lastBuildDate>Tue, 19 Dec 2023 16:00:00 GMT</lastBuildDate>
+<item>
+  <title>随便聊两句，可能不一定有意义</title>
+  <dc:creator>Shixiang Wang</dc:creator>
+  <link>https://shixiangwang.github.io/posts/2023-12-20-random/index.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<p>近两年文章看的少。</p>
+<p>在看一些我自己觉得做的好的文章（并不一定是IF文章）时，总觉得我的工作质量有所不如（这已经谦虚了）。</p>
+<p>细细想来，还是不够细心、耐心、专业。</p>
+<p>在当前社会和周遭的环境里，有时候被潜移默化得比较急躁。很多感官上不重要的细节，成了不被关注的。 甚至有些都从来没有想到需要关注。这就是差距。</p>
+<p>应该反思。现实所压迫的，除了一些无可奈何的事情，其他要勇于反抗，哪怕可能失去潜在的名利。</p>
+<p>雷军最近说的好，如果可能有问题/错误的，就一定有问题/错误（大概是这么个意思）。要真诚地面对问题，解决问题。</p>
+<p>幸运的是，我还比较年轻。很多事情做的不好是难免的，学习也是一直在进行的，重点在于追求精进，不要往后看，而要往前行。</p>
+<p>一生很有限，要用好的工作内容回馈自己付出的时间。生活也应该这样。</p>
+
+
+
+ ]]></description>
+  <category>random</category>
+  <guid>https://shixiangwang.github.io/posts/2023-12-20-random/index.html</guid>
+  <pubDate>Tue, 19 Dec 2023 16:00:00 GMT</pubDate>
+</item>
 <item>
   <title>诗歌存档</title>
   <dc:creator>Shixiang Wang</dc:creator>
@@ -2517,24 +2542,6 @@ font-style: inherit;">./aggr/aggr_dataset.R</span> /path/to/aggr_output /path/to
   <category>bioinformatics</category>
   <guid>https://shixiangwang.github.io/posts/2023-09-03-use-circrna-pipeline/index.html</guid>
   <pubDate>Sat, 02 Sep 2023 16:00:00 GMT</pubDate>
-</item>
-<item>
-  <title>pnas</title>
-  <dc:creator>Shixiang Wang</dc:creator>
-  <link>https://shixiangwang.github.io/posts/2023-08-31-pnas/index.html</link>
-  <description><![CDATA[ 
-
-
-
-
-<p>想发一篇 PNAS，希望 3 年内能达成。</p>
-
-
-
- ]]></description>
-  <category>random</category>
-  <guid>https://shixiangwang.github.io/posts/2023-08-31-pnas/index.html</guid>
-  <pubDate>Wed, 30 Aug 2023 16:00:00 GMT</pubDate>
 </item>
 </channel>
 </rss>
