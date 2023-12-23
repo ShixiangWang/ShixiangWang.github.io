@@ -14,3 +14,8 @@
 # 编辑器备份文件
 **/*.swp
 **/*~
+
+.quarto
+.Rproj*
+.Rhistory
+.DS_Store
