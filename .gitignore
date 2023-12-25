@@ -18,4 +18,4 @@
 .quarto
 .Rproj*
 .Rhistory
-.DS_Store
+**/.DS_Store
