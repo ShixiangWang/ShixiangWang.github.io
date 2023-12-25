@@ -1,0 +1,36 @@
+---
+title: R 针对数据进行惰性加载
+author: Shixiang Wang
+date: 2023-12-25
+categories: [R, shiny]
+draft: false
+description: ''
+
+toc: true
+
+format:
+  html:
+    code-fold: false
+    code-overflow: wrap
+    code-tools: false
+---
+
+在做 Shiny 开发时，有些数据太大，非常影响加载数据，这里提供了一种 lazyloading 策略，可以值得一试。
+
+```r
+
+X = matrix(1, nrow = 1000, ncol = 1000)
+Y = list(X = X)
+e=new.env(parent=emptyenv())
+e$X = X
+e$Y = Y
+
+tools:::makeLazyLoadDB(e, filebase = path.expand("~/Downloads/lazytest"))
+rm(list = ls())
+
+lazyLoad(path.expand("~/Downloads/lazytest"))
+```
+
+- 参考：<https://stackoverflow.com/questions/21583382/r-how-to-lazyload-variables-from-inst-extdata-in-r-package>
+
+关于参考内容中还提到 `delayedAssign` 可以实现类似的结果，但没有尝试。

@@ -245,8 +245,8 @@ Error in evaluate_target_prediction(setting, ligand_target_matrix, ligands_posit
 <p>本文参考 Seurat <a href="https://satijalab.org/seurat/articles/integration_introduction.html">数据整合文档进行分析的输入数据准备</a>，假设你对数据预处理部分已经很熟悉。</p>
 </section><section id="安装包" class="level2"><h2 class="anchored" data-anchor-id="安装包">安装包</h2>
 <p>安装所需要的包。</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/BiocManager/man/install.html">install</a></span><span class="op">(</span><span class="st">"limma"</span><span class="op">)</span></span>
-<span><span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/BiocManager/man/install.html">install</a></span><span class="op">(</span><span class="st">"glmGamPoi"</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://bioconductor.github.io/BiocManager/reference/install.html">install</a></span><span class="op">(</span><span class="st">"limma"</span><span class="op">)</span></span>
+<span><span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://bioconductor.github.io/BiocManager/reference/install.html">install</a></span><span class="op">(</span><span class="st">"glmGamPoi"</span><span class="op">)</span></span>
 <span><span class="co"># install.packages("devtools")</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"https://seurat.nygenome.org/src/contrib/ifnb.SeuratData_3.0.0.tar.gz"</span>, repos <span class="op">=</span> <span class="cn">NULL</span>, type <span class="op">=</span> <span class="st">"source"</span><span class="op">)</span> </span>
 <span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html">install_github</a></span><span class="op">(</span><span class="st">"saeyslab/nichenetr"</span><span class="op">)</span></span>
@@ -840,8 +840,8 @@ A2M-AS1  8.898724e-05 8.243341e-05 7.484018e-05 4.912514e-05 5.120439e-05</code>
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode" id="cb75"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://mojaveazure.github.io/seurat-object/reference/Idents.html">Idents</a></span><span class="op">(</span><span class="va">immune.combined.sct</span><span class="op">)</span> <span class="op">&lt;-</span><span class="va">immune.combined.sct</span><span class="op">$</span><span class="va">seurat_annotations</span></span>
-<span><span class="fu"><a href="https://mojaveazure.github.io/seurat-object/reference/DefaultAssay.html">DefaultAssay</a></span><span class="op">(</span><span class="va">immune.combined.sct</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">"integrated"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb75"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/SeuratObject/man/Idents.html">Idents</a></span><span class="op">(</span><span class="va">immune.combined.sct</span><span class="op">)</span> <span class="op">&lt;-</span><span class="va">immune.combined.sct</span><span class="op">$</span><span class="va">seurat_annotations</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/SeuratObject/man/DefaultAssay.html">DefaultAssay</a></span><span class="op">(</span><span class="va">immune.combined.sct</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">"integrated"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>在本文中，我们依赖于数据提供的筛选细胞注释。 我们将重点放在CD8 T细胞作为接收细胞，并寻找pDC、CD14 Mono、CD16 Mono、NK、B、DC、B Activated群集中的发送器配体。</p>
 <p>我们定义接收细胞和发送器细胞群体。此外，我们还识别在接收细胞中表达的基因，这些基因也是我们知识库的一部分。</p>
@@ -859,7 +859,7 @@ A2M-AS1  8.898724e-05 8.243341e-05 7.484018e-05 4.912514e-05 5.120439e-05</code>
 <p>定义接收细胞中相对于样本处理的差异基因。</p>
 <div class="cell">
 <div class="sourceCode" id="cb77"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">seurat_obj_receiver</span><span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html">subset</a></span><span class="op">(</span><span class="va">immune.combined.sct</span>, idents <span class="op">=</span> <span class="va">receiver</span><span class="op">)</span></span>
-<span><span class="va">seurat_obj_receiver</span> <span class="op">=</span> <span class="fu"><a href="https://mojaveazure.github.io/seurat-object/reference/Idents.html">SetIdent</a></span><span class="op">(</span><span class="va">immune.combined.sct</span>, value <span class="op">=</span> <span class="va">seurat_obj_receiver</span><span class="op">[[</span><span class="st">"orig.ident"</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
+<span><span class="va">seurat_obj_receiver</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/SeuratObject/man/Idents.html">SetIdent</a></span><span class="op">(</span><span class="va">immune.combined.sct</span>, value <span class="op">=</span> <span class="va">seurat_obj_receiver</span><span class="op">[[</span><span class="st">"orig.ident"</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">condition_oi</span> <span class="op">=</span> <span class="st">"IMMUNE_STIM"</span></span>
 <span><span class="va">condition_reference</span> <span class="op">=</span> <span class="st">"IMMUNE_CTRL"</span> </span>
