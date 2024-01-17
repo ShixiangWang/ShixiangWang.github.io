@@ -1,0 +1,46 @@
+---
+title: 解决 GitHub 代码拉取和推送问题
+author: Shixiang Wang
+date: 2024-01-17
+categories: [note, Linux, git]
+draft: false
+description: ''
+
+toc: true
+
+format:
+  html:
+    code-fold: false
+    code-overflow: wrap
+    code-tools: false
+---
+
+国内 Linux 服务器有时候存在 GitHub 仓库无法 push 或 pull 的问题，这里主要记录下修改 hosts 来解决该问题（注意不是 100% 有效）
+
+编辑 `/etc/hosts` 文件：
+
+```sh
+sudo vim /etc/hosts
+```
+
+追加下面的内容：
+
+```sh
+140.82.112.3 github.com
+151.101.1.194 github.global.ssl.fastly.net  
+151.101.65.194 github.global.ssl.fastly.net  
+151.101.129.194 github.global.ssl.fastly.net  
+151.101.193.194 github.global.ssl.fastly.net 
+```
+
+这里的 IP 地址可能会变，如果不行可以通过 <https://sites.ipaddress.com/> 查一下。
+
+重启下网络：
+
+```sh
+sudo /etc/init.d/network restart
+```
+
+>如果是其他平台，操作类似。
+
+- 参考：<https://juejin.cn/post/7135346231593599012>

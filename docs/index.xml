@@ -10,7 +10,58 @@
 <atom:link href="https://shixiangwang.github.io/index.xml" rel="self" type="application/rss+xml"/>
 <description>Reasoning is a blog dedicated to exploring the intersection of data science, bioinformatics, and personal insights.</description>
 <generator>quarto-1.3.361</generator>
-<lastBuildDate>Sun, 24 Dec 2023 16:00:00 GMT</lastBuildDate>
+<lastBuildDate>Tue, 16 Jan 2024 16:00:00 GMT</lastBuildDate>
+<item>
+  <title>解决 GitHub 代码拉取和推送问题</title>
+  <dc:creator>Shixiang Wang</dc:creator>
+  <link>https://shixiangwang.github.io/posts/2024-01-17-github-hosts/index.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<p>国内 Linux 服务器有时候存在 GitHub 仓库无法 push 或 pull 的问题，这里主要记录下修改 hosts 来解决该问题（注意不是 100% 有效）</p>
+<p>编辑 <code>/etc/hosts</code> 文件：</p>
+<div class="sourceCode" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">sudo</span> vim /etc/hosts</span></code></pre></div>
+<p>追加下面的内容：</p>
+<div class="sourceCode" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><span class="ex" style="color: null;
+background-color: null;
+font-style: inherit;">140.82.112.3</span> github.com</span>
+<span id="cb2-2"><span class="ex" style="color: null;
+background-color: null;
+font-style: inherit;">151.101.1.194</span> github.global.ssl.fastly.net  </span>
+<span id="cb2-3"><span class="ex" style="color: null;
+background-color: null;
+font-style: inherit;">151.101.65.194</span> github.global.ssl.fastly.net  </span>
+<span id="cb2-4"><span class="ex" style="color: null;
+background-color: null;
+font-style: inherit;">151.101.129.194</span> github.global.ssl.fastly.net  </span>
+<span id="cb2-5"><span class="ex" style="color: null;
+background-color: null;
+font-style: inherit;">151.101.193.194</span> github.global.ssl.fastly.net </span></code></pre></div>
+<p>这里的 IP 地址可能会变，如果不行可以通过 <a href="https://sites.ipaddress.com/" class="uri">https://sites.ipaddress.com/</a> 查一下。</p>
+<p>重启下网络：</p>
+<div class="sourceCode" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">sudo</span> /etc/init.d/network restart</span></code></pre></div>
+<blockquote class="blockquote">
+<p>如果是其他平台，操作类似。</p>
+</blockquote>
+<ul>
+<li>参考：<a href="https://juejin.cn/post/7135346231593599012" class="uri">https://juejin.cn/post/7135346231593599012</a></li>
+</ul>
+
+
+
+ ]]></description>
+  <category>note</category>
+  <category>Linux</category>
+  <category>git</category>
+  <guid>https://shixiangwang.github.io/posts/2024-01-17-github-hosts/index.html</guid>
+  <pubDate>Tue, 16 Jan 2024 16:00:00 GMT</pubDate>
+</item>
 <item>
   <title>R 针对数据进行惰性加载</title>
   <dc:creator>Shixiang Wang</dc:creator>
@@ -2240,43 +2291,6 @@ font-style: inherit;">}</span></span></code></pre></div>
   <category>bioinformatics</category>
   <guid>https://shixiangwang.github.io/posts/2023-09-12-mapq-and-as/index.html</guid>
   <pubDate>Mon, 11 Sep 2023 16:00:00 GMT</pubDate>
-</item>
-<item>
-  <title>discourse on the method</title>
-  <dc:creator>Shixiang Wang</dc:creator>
-  <link>https://shixiangwang.github.io/posts/2023-09-04-discourse-on-the-method/index.html</link>
-  <description><![CDATA[ 
-
-
-
-
-<p>笛卡尔在《方法论》中揭示了科学研究和发明创造的普适方法，并概括为 4 个步骤：</p>
-<ol type="1">
-<li>不盲从，不接受任何自己不清楚的真理。不管什么权威的结论，只要没有经过自己的研究，都可以怀疑。</li>
-<li>化繁为简、化整为零。</li>
-<li>解决小问题时，按照先易后难的次序，逐步解决。</li>
-<li>解决全部小问题后，综合看是否解决了原来的问题。</li>
-</ol>
-<p>科学发展的规律为：</p>
-<ol type="1">
-<li>提出问题</li>
-<li>进行实验</li>
-<li>从实验中得到结论并解释</li>
-<li>将结论推广并普遍化</li>
-<li>在实践中找出新的问题</li>
-</ol>
-<blockquote class="blockquote">
-<p>来源： 吴军 —— 《全球科技通史》</p>
-</blockquote>
-
-
-
- ]]></description>
-  <category>academic</category>
-  <category>note</category>
-  <category>thought</category>
-  <guid>https://shixiangwang.github.io/posts/2023-09-04-discourse-on-the-method/index.html</guid>
-  <pubDate>Sun, 03 Sep 2023 16:00:00 GMT</pubDate>
 </item>
 </channel>
 </rss>
