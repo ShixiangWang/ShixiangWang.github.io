@@ -1,0 +1,36 @@
+---
+title: 免疫
+author: Shixiang Wang
+date: 2024-01-22
+categories: [note, 免疫]
+draft: false
+description: ''
+
+toc: true
+
+format:
+  html:
+    code-fold: false
+    code-overflow: wrap
+    code-tools: false
+---
+
+## 细胞因子
+
+细胞因子的分类：
+
+- 白细胞介素
+- 干扰素
+- 肿瘤坏死因子
+- 集落刺激因子
+- 生长因子
+- 趋化性细胞因子
+
+生物学活性：
+
+- 介导固有免疫：抗细菌和病毒作用
+- 介导和调节特异性免疫应答
+- 刺激造血
+- 促进血管生成
+- 诱导凋亡
+
