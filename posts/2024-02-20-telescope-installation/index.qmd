@@ -1,0 +1,115 @@
+---
+title: telescope installation
+author: Shixiang Wang
+date: 2024-02-20
+categories: [bioinformatics]
+draft: false
+description: ''
+
+toc: true
+
+format:
+  html:
+    code-fold: false
+    code-overflow: wrap
+    code-tools: false
+---
+
+>注意这个帖子的有效性可能在未来某一天丧失。
+
+简单记录下 `telescope` 的安装，因为 <https://github.com/mlbendall/telescope> 提过的官方说明直接装后测试是有问题的。
+
+一步步安装和debug过程：
+
+```sh
+mamba create -n telescope -c bioconda -c conda-forge telescope python=3.8
+conda activate telescope
+mamba install numpy=1.19
+mamba install -c conda-forge -c bioconda 'pysam<0.17'
+```
+
+>现在回头看可以缩减为一句命令：`mamba create -n telescope -c bioconda -c conda-forge telescope python=3.8 numpy=1.19 pysam<0.17`。
+
+
+测试：
+
+```
+(telescope) zhou2 22:12:47 ~/test 
+$eval $(telescope test)
+2024-02-18 22:13:03 INFO     
+Version:                          1.0.3
+Input Options
+    samfile:                      /home/zhou2/miniconda3/envs/telescope/lib/python3.8/site-packages/telescope/data/alignment.bam
+    gtffile:                      /home/zhou2/miniconda3/envs/telescope/lib/python3.8/site-packages/telescope/data/annotation.gtf
+    attribute:                    locus
+    no_feature_key:               __no_feature
+    ncpu:                         1
+    tempdir:                      None
+Reporting Options
+    quiet:                        False
+    debug:                        False
+    logfile:                      <stderr>
+    outdir:                       .
+    exp_tag:                      telescope
+    updated_sam:                  False
+Run Modes
+    reassign_mode:                exclude
+    conf_prob:                    0.9
+    overlap_mode:                 threshold
+    overlap_threshold:            0.2
+    annotation_class:             intervaltree
+Model Parameters
+    pi_prior:                     0
+    theta_prior:                  200000
+    em_epsilon:                   1e-07
+    max_iter:                     100
+    use_likelihood:               False
+    skip_em:                      False
+ (from run in telescope_assign.py:197)
+[E::idx_find_and_load] Could not retrieve index file for '/home/zhou2/miniconda3/envs/telescope/lib/python3.8/site-packages/telescope/data/alignment.bam'
+2024-02-18 22:13:03 INFO     Loading annotation...                                        (from run in telescope_assign.py:205)
+2024-02-18 22:13:03 INFO     Loaded annotation in 0 minutes and 0 secs                    (from run in telescope_assign.py:208)
+2024-02-18 22:13:03 INFO     Loaded 99 features.                                          (from run in telescope_assign.py:209)
+2024-02-18 22:13:03 INFO     Loading alignments...                                        (from run in telescope_assign.py:214)
+[E::idx_find_and_load] Could not retrieve index file for '/home/zhou2/miniconda3/envs/telescope/lib/python3.8/site-packages/telescope/data/alignment.bam'
+2024-02-18 22:13:05 INFO     Loaded alignment in 0 minutes and 1 secs                     (from run in telescope_assign.py:217)
+2024-02-18 22:13:05 INFO     Alignment Summary:                                           (from print_summary in model.py:519)
+2024-02-18 22:13:05 INFO         1000 total fragments.                                    (from print_summary in model.py:520)
+2024-02-18 22:13:05 INFO             1000 mapped as pairs.                                (from print_summary in model.py:521)
+2024-02-18 22:13:05 INFO             0 mapped as mixed.                                   (from print_summary in model.py:522)
+2024-02-18 22:13:05 INFO             0 mapped single.                                     (from print_summary in model.py:523)
+2024-02-18 22:13:05 INFO             0 failed to map.                                     (from print_summary in model.py:524)
+2024-02-18 22:13:05 INFO     --                                                           (from print_summary in model.py:525)
+2024-02-18 22:13:05 INFO         1000 fragments mapped to reference; of these             (from print_summary in model.py:526)
+2024-02-18 22:13:05 INFO             0 had one unique alignment.                          (from print_summary in model.py:528)
+2024-02-18 22:13:05 INFO             1000 had multiple alignments.                        (from print_summary in model.py:529)
+2024-02-18 22:13:05 INFO     --                                                           (from print_summary in model.py:530)
+2024-02-18 22:13:05 INFO         1000 fragments overlapped annotation; of these           (from print_summary in model.py:531)
+2024-02-18 22:13:05 INFO             0 map to one locus.                                  (from print_summary in model.py:533)
+2024-02-18 22:13:05 INFO             1000 map to multiple loci.                           (from print_summary in model.py:535)
+2024-02-18 22:13:05 INFO     
+                                                            (from print_summary in model.py:537)
+2024-02-18 22:13:05 INFO     Running Expectation-Maximization...                          (from run in telescope_assign.py:250)
+2024-02-18 22:13:05 INFO     Iteration 1, diff=1.3795                                     (from em in model.py:709)
+2024-02-18 22:13:05 INFO     Iteration 2, diff=0.7388                                     (from em in model.py:709)
+2024-02-18 22:13:05 INFO     Iteration 3, diff=0.24275                                    (from em in model.py:709)
+2024-02-18 22:13:05 INFO     Iteration 4, diff=0.065133                                   (from em in model.py:709)
+2024-02-18 22:13:05 INFO     Iteration 5, diff=0.017653                                   (from em in model.py:709)
+2024-02-18 22:13:05 INFO     Iteration 6, diff=0.0050039                                  (from em in model.py:709)
+2024-02-18 22:13:05 INFO     Iteration 7, diff=0.0014807                                  (from em in model.py:709)
+2024-02-18 22:13:05 INFO     Iteration 8, diff=0.00045365                                 (from em in model.py:709)
+2024-02-18 22:13:05 INFO     Iteration 9, diff=0.00014275                                 (from em in model.py:709)
+2024-02-18 22:13:05 INFO     Iteration 10, diff=4.5844e-05                                (from em in model.py:709)
+2024-02-18 22:13:05 INFO     Iteration 11, diff=1.4953e-05                                (from em in model.py:709)
+2024-02-18 22:13:05 INFO     Iteration 12, diff=4.9364e-06                                (from em in model.py:709)
+2024-02-18 22:13:05 INFO     Iteration 13, diff=1.645e-06                                 (from em in model.py:709)
+2024-02-18 22:13:05 INFO     Iteration 14, diff=5.5228e-07                                (from em in model.py:709)
+2024-02-18 22:13:05 INFO     Iteration 15, diff=1.8652e-07                                (from em in model.py:709)
+2024-02-18 22:13:05 INFO     Iteration 16, diff=6.3301e-08                                (from em in model.py:709)
+2024-02-18 22:13:05 INFO     EM converged after 16 iterations.                            (from em in model.py:722)
+2024-02-18 22:13:05 INFO     Final log-likelihood: 95252.596293.                          (from em in model.py:723)
+2024-02-18 22:13:05 INFO     EM completed in 0 minutes and 0 secs                         (from run in telescope_assign.py:253)
+2024-02-18 22:13:05 INFO     Generating Report...                                         (from run in telescope_assign.py:256)
+2024-02-18 22:13:05 INFO     telescope assign complete (0 minutes and 1 secs)             (from run in telescope_assign.py:263)
+
+```

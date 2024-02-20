@@ -2,6 +2,9 @@
   {
     "listing": "/index.html",
     "items": [
+      "/posts/2024-02-20-telescope-installation/index.html",
+      "/posts/2024-02-20-backtogz/index.html",
+      "/posts/2024-02-12-shiny-plot-dpi/index.html",
       "/posts/2024-01-22-immune/index.html",
       "/posts/2024-01-17-github-hosts/index.html",
       "/posts/2023-12-25-lazy-loading-data-in-r/index.html",

@@ -1,0 +1,21 @@
+---
+title: shiny plot dpi
+author: Shixiang Wang
+date: 2024-02-12
+categories: [personal,R]
+draft: false
+description: ''
+
+toc: true
+
+format:
+  html:
+    code-fold: false
+    code-overflow: wrap
+    code-tools: false
+---
+
+96 is recommended.
+
+- https://mastering-shiny.org/basic-ui.html
+- https://github.com/rstudio/shiny/issues/1832

@@ -10,7 +10,181 @@
 <atom:link href="https://shixiangwang.github.io/index.xml" rel="self" type="application/rss+xml"/>
 <description>Reasoning is a blog dedicated to exploring the intersection of data science, bioinformatics, and personal insights.</description>
 <generator>quarto-1.3.361</generator>
-<lastBuildDate>Sun, 21 Jan 2024 16:00:00 GMT</lastBuildDate>
+<lastBuildDate>Mon, 19 Feb 2024 16:00:00 GMT</lastBuildDate>
+<item>
+  <title>telescope installation</title>
+  <dc:creator>Shixiang Wang</dc:creator>
+  <link>https://shixiangwang.github.io/posts/2024-02-20-telescope-installation/index.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<blockquote class="blockquote">
+<p>注意这个帖子的有效性可能在未来某一天丧失。</p>
+</blockquote>
+<p>简单记录下 <code>telescope</code> 的安装，因为 <a href="https://github.com/mlbendall/telescope" class="uri">https://github.com/mlbendall/telescope</a> 提过的官方说明直接装后测试是有问题的。</p>
+<p>一步步安装和debug过程：</p>
+<div class="sourceCode" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><span class="ex" style="color: null;
+background-color: null;
+font-style: inherit;">mamba</span> create <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">-n</span> telescope <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">-c</span> bioconda <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">-c</span> conda-forge telescope python=3.8</span>
+<span id="cb1-2"><span class="ex" style="color: null;
+background-color: null;
+font-style: inherit;">conda</span> activate telescope</span>
+<span id="cb1-3"><span class="ex" style="color: null;
+background-color: null;
+font-style: inherit;">mamba</span> install numpy=1.19</span>
+<span id="cb1-4"><span class="ex" style="color: null;
+background-color: null;
+font-style: inherit;">mamba</span> install <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">-c</span> conda-forge <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">-c</span> bioconda <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'pysam&lt;0.17'</span></span></code></pre></div>
+<blockquote class="blockquote">
+<p>现在回头看可以缩减为一句命令：<code>mamba create -n telescope -c bioconda -c conda-forge telescope python=3.8 numpy=1.19 pysam&lt;0.17</code>。</p>
+</blockquote>
+<p>测试：</p>
+<pre><code>(telescope) zhou2 22:12:47 ~/test 
+$eval $(telescope test)
+2024-02-18 22:13:03 INFO     
+Version:                          1.0.3
+Input Options
+    samfile:                      /home/zhou2/miniconda3/envs/telescope/lib/python3.8/site-packages/telescope/data/alignment.bam
+    gtffile:                      /home/zhou2/miniconda3/envs/telescope/lib/python3.8/site-packages/telescope/data/annotation.gtf
+    attribute:                    locus
+    no_feature_key:               __no_feature
+    ncpu:                         1
+    tempdir:                      None
+Reporting Options
+    quiet:                        False
+    debug:                        False
+    logfile:                      &lt;stderr&gt;
+    outdir:                       .
+    exp_tag:                      telescope
+    updated_sam:                  False
+Run Modes
+    reassign_mode:                exclude
+    conf_prob:                    0.9
+    overlap_mode:                 threshold
+    overlap_threshold:            0.2
+    annotation_class:             intervaltree
+Model Parameters
+    pi_prior:                     0
+    theta_prior:                  200000
+    em_epsilon:                   1e-07
+    max_iter:                     100
+    use_likelihood:               False
+    skip_em:                      False
+ (from run in telescope_assign.py:197)
+[E::idx_find_and_load] Could not retrieve index file for '/home/zhou2/miniconda3/envs/telescope/lib/python3.8/site-packages/telescope/data/alignment.bam'
+2024-02-18 22:13:03 INFO     Loading annotation...                                        (from run in telescope_assign.py:205)
+2024-02-18 22:13:03 INFO     Loaded annotation in 0 minutes and 0 secs                    (from run in telescope_assign.py:208)
+2024-02-18 22:13:03 INFO     Loaded 99 features.                                          (from run in telescope_assign.py:209)
+2024-02-18 22:13:03 INFO     Loading alignments...                                        (from run in telescope_assign.py:214)
+[E::idx_find_and_load] Could not retrieve index file for '/home/zhou2/miniconda3/envs/telescope/lib/python3.8/site-packages/telescope/data/alignment.bam'
+2024-02-18 22:13:05 INFO     Loaded alignment in 0 minutes and 1 secs                     (from run in telescope_assign.py:217)
+2024-02-18 22:13:05 INFO     Alignment Summary:                                           (from print_summary in model.py:519)
+2024-02-18 22:13:05 INFO         1000 total fragments.                                    (from print_summary in model.py:520)
+2024-02-18 22:13:05 INFO             1000 mapped as pairs.                                (from print_summary in model.py:521)
+2024-02-18 22:13:05 INFO             0 mapped as mixed.                                   (from print_summary in model.py:522)
+2024-02-18 22:13:05 INFO             0 mapped single.                                     (from print_summary in model.py:523)
+2024-02-18 22:13:05 INFO             0 failed to map.                                     (from print_summary in model.py:524)
+2024-02-18 22:13:05 INFO     --                                                           (from print_summary in model.py:525)
+2024-02-18 22:13:05 INFO         1000 fragments mapped to reference; of these             (from print_summary in model.py:526)
+2024-02-18 22:13:05 INFO             0 had one unique alignment.                          (from print_summary in model.py:528)
+2024-02-18 22:13:05 INFO             1000 had multiple alignments.                        (from print_summary in model.py:529)
+2024-02-18 22:13:05 INFO     --                                                           (from print_summary in model.py:530)
+2024-02-18 22:13:05 INFO         1000 fragments overlapped annotation; of these           (from print_summary in model.py:531)
+2024-02-18 22:13:05 INFO             0 map to one locus.                                  (from print_summary in model.py:533)
+2024-02-18 22:13:05 INFO             1000 map to multiple loci.                           (from print_summary in model.py:535)
+2024-02-18 22:13:05 INFO     
+                                                            (from print_summary in model.py:537)
+2024-02-18 22:13:05 INFO     Running Expectation-Maximization...                          (from run in telescope_assign.py:250)
+2024-02-18 22:13:05 INFO     Iteration 1, diff=1.3795                                     (from em in model.py:709)
+2024-02-18 22:13:05 INFO     Iteration 2, diff=0.7388                                     (from em in model.py:709)
+2024-02-18 22:13:05 INFO     Iteration 3, diff=0.24275                                    (from em in model.py:709)
+2024-02-18 22:13:05 INFO     Iteration 4, diff=0.065133                                   (from em in model.py:709)
+2024-02-18 22:13:05 INFO     Iteration 5, diff=0.017653                                   (from em in model.py:709)
+2024-02-18 22:13:05 INFO     Iteration 6, diff=0.0050039                                  (from em in model.py:709)
+2024-02-18 22:13:05 INFO     Iteration 7, diff=0.0014807                                  (from em in model.py:709)
+2024-02-18 22:13:05 INFO     Iteration 8, diff=0.00045365                                 (from em in model.py:709)
+2024-02-18 22:13:05 INFO     Iteration 9, diff=0.00014275                                 (from em in model.py:709)
+2024-02-18 22:13:05 INFO     Iteration 10, diff=4.5844e-05                                (from em in model.py:709)
+2024-02-18 22:13:05 INFO     Iteration 11, diff=1.4953e-05                                (from em in model.py:709)
+2024-02-18 22:13:05 INFO     Iteration 12, diff=4.9364e-06                                (from em in model.py:709)
+2024-02-18 22:13:05 INFO     Iteration 13, diff=1.645e-06                                 (from em in model.py:709)
+2024-02-18 22:13:05 INFO     Iteration 14, diff=5.5228e-07                                (from em in model.py:709)
+2024-02-18 22:13:05 INFO     Iteration 15, diff=1.8652e-07                                (from em in model.py:709)
+2024-02-18 22:13:05 INFO     Iteration 16, diff=6.3301e-08                                (from em in model.py:709)
+2024-02-18 22:13:05 INFO     EM converged after 16 iterations.                            (from em in model.py:722)
+2024-02-18 22:13:05 INFO     Final log-likelihood: 95252.596293.                          (from em in model.py:723)
+2024-02-18 22:13:05 INFO     EM completed in 0 minutes and 0 secs                         (from run in telescope_assign.py:253)
+2024-02-18 22:13:05 INFO     Generating Report...                                         (from run in telescope_assign.py:256)
+2024-02-18 22:13:05 INFO     telescope assign complete (0 minutes and 1 secs)             (from run in telescope_assign.py:263)
+</code></pre>
+
+
+
+ ]]></description>
+  <category>bioinformatics</category>
+  <guid>https://shixiangwang.github.io/posts/2024-02-20-telescope-installation/index.html</guid>
+  <pubDate>Mon, 19 Feb 2024 16:00:00 GMT</pubDate>
+</item>
+<item>
+  <title>回广州路上的感想</title>
+  <dc:creator>Shixiang Wang</dc:creator>
+  <link>https://shixiangwang.github.io/posts/2024-02-20-backtogz/index.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<p>年后开车回广州太堵了，打破了国庆离开广州回老家开车的时长。 考虑到不会再在广州待这样的大长假了，应该以后不会再有类似的经历？</p>
+<p>这里记录我感受堵车产生的两个天真想法：</p>
+<ol type="1">
+<li>高速的来回车道是分割的，一边堵一边完全不堵，是否可以在特殊节假日（特殊日期），在不同收费站之间封控对向车流，把对向的车道也给堵车的这条车道使用？</li>
+<li>未来自动驾驶普及后，是否可能在特殊节假日高速道路汽车全部由计算中心总控，把私家车组网拼接为同一个公路网络？堵车的本质原因是车多情况下不同人的不协调导致，这种统一的调度应当可以完全解决这个问题？</li>
+</ol>
+
+
+
+ ]]></description>
+  <category>personal</category>
+  <guid>https://shixiangwang.github.io/posts/2024-02-20-backtogz/index.html</guid>
+  <pubDate>Mon, 19 Feb 2024 16:00:00 GMT</pubDate>
+</item>
+<item>
+  <title>shiny plot dpi</title>
+  <dc:creator>Shixiang Wang</dc:creator>
+  <link>https://shixiangwang.github.io/posts/2024-02-12-shiny-plot-dpi/index.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<p>96 is recommended.</p>
+<ul>
+<li>https://mastering-shiny.org/basic-ui.html</li>
+<li>https://github.com/rstudio/shiny/issues/1832</li>
+</ul>
+
+
+
+ ]]></description>
+  <category>personal</category>
+  <category>R</category>
+  <guid>https://shixiangwang.github.io/posts/2024-02-12-shiny-plot-dpi/index.html</guid>
+  <pubDate>Sun, 11 Feb 2024 16:00:00 GMT</pubDate>
+</item>
 <item>
   <title>免疫</title>
   <dc:creator>Shixiang Wang</dc:creator>
@@ -2099,203 +2273,6 @@ boxplot(x)`,
   <category>personal</category>
   <guid>https://shixiangwang.github.io/posts/2023-10-09-kk-nobel/index.html</guid>
   <pubDate>Sun, 08 Oct 2023 16:00:00 GMT</pubDate>
-</item>
-<item>
-  <title>ShowMeAI 速查表</title>
-  <dc:creator>Shixiang Wang</dc:creator>
-  <link>https://shixiangwang.github.io/posts/2023-10-07-show-me-ai-cheatsheet/index.html</link>
-  <description><![CDATA[ 
-
-
-
-
-<p>#分享# #AI# 今天看到 showmeAI（<a href="https://github.com/ShowMeAI-Hub" class="uri">https://github.com/ShowMeAI-Hub</a>），有一些速查表非常不错，这里整理分享给大家。 <a href="https://www.aliyundrive.com/s/mogzKzDSinf" class="uri">https://www.aliyundrive.com/s/mogzKzDSinf</a> 点击链接保存，或者复制本段内容，打开「阿里云盘」APP ，无需下载极速在线查看，视频原画倍速播放。</p>
-
-
-
- ]]></description>
-  <category>machine-learning</category>
-  <category>Python</category>
-  <category>resource</category>
-  <guid>https://shixiangwang.github.io/posts/2023-10-07-show-me-ai-cheatsheet/index.html</guid>
-  <pubDate>Fri, 06 Oct 2023 16:00:00 GMT</pubDate>
-</item>
-<item>
-  <title>Shiny 开发学习路径</title>
-  <dc:creator>Shixiang Wang</dc:creator>
-  <link>https://shixiangwang.github.io/posts/2023-09-13-shiny-learning-path-for-bioinformatics/index.html</link>
-  <description><![CDATA[ 
-
-
-
-
-<p>生信领域越来越多的数据库/网页工具采用 <a href="https://shiny.posit.co/">Shiny</a> 框架进行搭建，Shiny 的流行度/拓展性在随着时间增加。因此，掌握 Shiny 服务于自己的项目/课题成为生信人的一个新的技能。 在这篇文章中，作为一个有经验的 Shiny 学习者和 Shiny 工具的开发者，我将介绍学习和掌握 Shiny 进行开发的核心路径和相关推荐的（免费）资料。对于每一个关卡（技能点）， 我会给出大致的（<strong>全职学习</strong>）时间估计（以周为单位）。</p>
-<blockquote class="blockquote">
-<p>网络上的资料对于个人来说是无穷尽的，我会尽量选择我认可的最核心读物，方便大家进行相关的学习。当然， 个人的能力有限，欢迎讨论和补充。</p>
-<p>注意，Shiny 现在已经支持了 Python 的实现，但本文只介绍以 R 为基础的学习路径。</p>
-</blockquote>
-<section id="关卡1r-基础2-3-周" class="level2">
-<h2 class="anchored" data-anchor-id="关卡1r-基础2-3-周">关卡1：R 基础（2-3 周）</h2>
-<p>学习 <a href="https://r4ds.had.co.nz/"><em>R for Data Science</em></a>。</p>
-<p><img src="https://shixiangwang.github.io/posts/2023-09-13-shiny-learning-path-for-bioinformatics/https:/d33wubrfki0l68.cloudfront.net/b88ef926a004b0fce72b2526b0b5c4413666a4cb/24a30/cover.png" class="img-fluid"></p>
-<p>要求掌握 1-21 章的全部内容，后续章节初学者以了解为主，根据兴趣和时间进行实践。</p>
-<p>核心要点：</p>
-<ul>
-<li>tidyverse 的数据处理理念</li>
-<li>readr 读取操作</li>
-<li>dplyr 数据处理理念和核心操作</li>
-<li>ggplot2 可视化理念和核心操作</li>
-</ul>
-<p>读者目标自查：可以独自完成从磁盘读取文件、过滤/转换数据、分组处理/聚合数据、生成可视化图表。</p>
-</section>
-<section id="关卡2-网页基础-html5css-0.5-1-周" class="level2">
-<h2 class="anchored" data-anchor-id="关卡2-网页基础-html5css-0.5-1-周">关卡2: 网页基础 HTML5/CSS （0.5-1 周）</h2>
-<p>阅读一遍 <a href="https://www.runoob.com/html/html-tutorial.html">HTML 教程</a> 和 <a href="https://www.runoob.com/css/css-tutorial.html">CSS 教程</a>。</p>
-<p>HTML 教程是重点，建议花多一些时间阅读；CSS 起到辅助和美化的作用，对于初学者，了解其基本语法、如何设定即可。</p>
-<p>核心要点：</p>
-<ul>
-<li>网页结构</li>
-<li>网页标签语法以及条目</li>
-<li>CSS 的设定</li>
-</ul>
-<p>读者目标自查：可以徒手写一个简单的网页，并通过 CSS 引入一些格式化。</p>
-</section>
-<section id="关卡3shiny-学习2-3-周" class="level2">
-<h2 class="anchored" data-anchor-id="关卡3shiny-学习2-3-周">关卡3：Shiny 学习（2-3 周）</h2>
-<p>学习 <a href="https://mastering-shiny.org/"><em>Mastering Shiny</em></a>。</p>
-<p><img src="https://shixiangwang.github.io/posts/2023-09-13-shiny-learning-path-for-bioinformatics/https:/d33wubrfki0l68.cloudfront.net/0c97eee3d8fc820f3a8d670c08b286e8a524257b/e426c/cover.png" class="img-fluid"></p>
-<p>要求认真阅读全部内容，并根据读物的代码进行实践，边学边练。</p>
-<p>核心要点：</p>
-<ul>
-<li>Shiny app 结构</li>
-<li>Shiny 网页布局</li>
-<li>Shiny reactivity</li>
-<li>Shiny module</li>
-</ul>
-<p>读者目标自查：可以在关卡1的基础上，将可视化展示通过 Shiny app 实现，并提供多个选项用于控制图形的输出展示。</p>
-</section>
-<section id="关卡4-学习如何组织-shiny-app-代码1-周以上" class="level2">
-<h2 class="anchored" data-anchor-id="关卡4-学习如何组织-shiny-app-代码1-周以上">关卡4: 学习如何组织 Shiny app 代码（1 周以上）</h2>
-<p>好的代码结构，会极大地方便运维和拓展你写的 Shiny app。 下面有几种推荐的代码组织形式，读者可以根据自己的需求参考设定，也可以根据罗列的资料逐步学习。</p>
-<ul>
-<li>Shiny 默认的代码部署方式
-<ul>
-<li>使用一个 <code>app.R</code> 文件存储全部的前后端代码，适合非常小的应用。</li>
-<li>使用单独的 <code>ui.R</code> 和 <code>server.R</code> 文件放前后端代码，适合稍微复杂一点的小应用。</li>
-<li>在以上两种设定的基础上，将复杂的操作逻辑统统整理为函数，放到单独的 <code>R/</code> 目录下或者一个 <code>functions.R</code> 文件中方便调用和维护。如果更复杂一点，可以整理为一个 R 包，需要通过 <a href="https://r-pkgs.org/"><em>R Packages</em></a> 学习如何开发 R 包。</li>
-</ul></li>
-<li>使用 <a href="https://github.com/ThinkR-open/golem">golem</a> 框架，学习 <a href="https://engineering-shiny.org/index.html"><em>Engineering Production-Grade Shiny Apps</em></a></li>
-<li>使用 <a href="https://github.com/Appsilon/rhino">rhino</a> 框架，通过 <a href="https://appsilon.github.io/rhino/">官方各种文档</a> 学习。</li>
-</ul>
-<p>读者目标自查：理解和熟练掌握 Shiny 默认的代码部署方式。</p>
-</section>
-<section id="关卡5-学习如何部署-shiny-app1-2-周" class="level2">
-<h2 class="anchored" data-anchor-id="关卡5-学习如何部署-shiny-app1-2-周">关卡5: 学习如何部署 Shiny app（1-2 周）</h2>
-<p>当你开发的 app 可用时，接下来就是进行部署，方便自己测试或者他人使用。有以下几种部署的方式：</p>
-<ol type="1">
-<li>通过 Posit 公司提供的 <a href="https://www.shinyapps.io/">shinyapps 服务</a>。推荐初学者尝试和摸索。</li>
-<li>自己在本地的/云服务商的 Linux 服务器上进行部署，需要了解 Linux 系统并掌握 Linux 的基本操作（阅读 <a href="https://seankross.com/the-unix-workbench/">The Unix Workbench</a>）。具体的部署可以参考以下几篇文章：
-<ol type="1">
-<li><a href="https://mp.weixin.qq.com/s/f8QWD8RH6MTfvHSd57t2FQ"><em>在Ubuntu服务器上配置Shiny应用</em></a></li>
-<li><a href="https://www.linode.com/docs/guides/how-to-deploy-rshiny-server-on-ubuntu-and-debian"><em>How to Deploy Interactive R Apps with Shiny Server</em></a></li>
-<li><a href="https://www.digitalocean.com/community/tutorials/how-to-set-up-shiny-server-on-ubuntu-20-04"><em>How To Set Up Shiny Server on Ubuntu 20.04</em></a></li>
-</ol></li>
-</ol>
-<p>读者目标自查：掌握第 1 种应用部署方式；探索第 2 种部署方式并能解决遇到的问题。</p>
-</section>
-<section id="关卡6-学习和重现完整的-shiny-app2周以上" class="level2">
-<h2 class="anchored" data-anchor-id="关卡6-学习和重现完整的-shiny-app2周以上">关卡6: 学习和重现完整的 Shiny app（2周以上）</h2>
-<p>这是最后一道关口，闯关意味着你具备了独立完成 app 开发的能力。大家（特别是初学者）需要谨记，一个好的 app 在于它的代码结构清晰、能够完成任务，不在于漂亮的 UI。 所有的功能实现应当把完成分析/可视化目标为第一位，然后再花时间探索具体的 UI 美化。</p>
-<p>由于各类读者背景和需求不一致，我这里只做一些通用的学习资料推荐，针对读者所在领域的 app 开发，需要读者自行了解和掌握相关知识背景、分析技能，在此基础上寻找一些已经通过 Shiny 实现的数据库/工具的源代码仓库进行学习。</p>
-<ul>
-<li>Shiny examples: <a href="https://github.com/rstudio/shiny-examples" class="uri">https://github.com/rstudio/shiny-examples</a></li>
-<li>Shiny gallery：<a href="https://shiny.posit.co/r/gallery/" class="uri">https://shiny.posit.co/r/gallery/</a>。官方提供了很多功能特性的 app 实现。</li>
-<li>Shiny Data Portal: <a href="https://github.com/SebKrantz/shiny-data-portal" class="uri">https://github.com/SebKrantz/shiny-data-portal</a>。A free Shiny Application to host, filter, aggregate and and download data in various formats.</li>
-<li>machLearn, Machine learning dashboard created with R/shiny: <a href="https://github.com/davesteps/machLearn" class="uri">https://github.com/davesteps/machLearn</a></li>
-<li>Shiny app for customizing Raincloud plots: <a href="https://github.com/gabrifc/raincloud-shiny" class="uri">https://github.com/gabrifc/raincloud-shiny</a></li>
-</ul>
-</section>
-<section id="推荐资料" class="level2">
-<h2 class="anchored" data-anchor-id="推荐资料">推荐资料</h2>
-<p>在本文中，我尽量避免推荐比较多的资料，因为对于初学者过多的资料带来的是混淆与压力。我希望你能够通过上述的关卡真正有效地学习和掌握 Shiny 开发的知识要点，并应用于你感兴趣的项目中去。 作为本文的最后一部分，我将提供一些非常重要的资源地址，希望在你困惑或者想要学习更多内容时找到灵感！</p>
-<ul>
-<li><a href="https://github.com/veeps/shiny_workshop" class="uri">https://github.com/veeps/shiny_workshop</a></li>
-<li><a href="https://github.com/grabear/awesome-rshiny" class="uri">https://github.com/grabear/awesome-rshiny</a></li>
-<li><a href="https://github.com/nanxstats/awesome-shiny-extensions" class="uri">https://github.com/nanxstats/awesome-shiny-extensions</a></li>
-<li><a href="https://github.com/davidruvolo51/shinyAppTutorials" class="uri">https://github.com/davidruvolo51/shinyAppTutorials</a></li>
-<li><a href="https://github.com/daattali/advanced-shiny" class="uri">https://github.com/daattali/advanced-shiny</a></li>
-</ul>
-<p>Enjoy playing with Shiny!</p>
-
-
-</section>
-
- ]]></description>
-  <category>shiny</category>
-  <category>R</category>
-  <category>bioinformatics</category>
-  <guid>https://shixiangwang.github.io/posts/2023-09-13-shiny-learning-path-for-bioinformatics/index.html</guid>
-  <pubDate>Tue, 12 Sep 2023 16:00:00 GMT</pubDate>
-</item>
-<item>
-  <title>检查 CPU 的使用量</title>
-  <dc:creator>Shixiang Wang</dc:creator>
-  <link>https://shixiangwang.github.io/posts/2023-09-13-check-cpu-usage/index.html</link>
-  <description><![CDATA[ 
-
-
-
-
-<p>在 Linux 服务器上有时候需要检查下 CPU 的使用量，现在一般 server 的 CPU 都比较多，而在计算的时候 CPU 也是在动态切换的，像 htop 这种命令输出可以直观的看大体有多少被占用，但没法得到具体的数值。 而传统的指标 cpu load，一般也不太会去看，我们在运算时想的是尽量占用剩余的 CPU，所以如果能够得到比较直观的数字比较好。下面是一个 bash 函数，可以放到 <code>~/.bashrc</code> 中去。 也可以直接在 Shell 中运行。</p>
-<div class="sourceCode" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">cpu()</span> <span class="kw" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">{</span></span>
-<span id="cb1-2">  <span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">top</span> <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">-bn2</span> <span class="kw" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">|</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">grep</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">'%Cpu'</span> <span class="kw" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">|</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">tail</span> <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">-1</span> <span class="kw" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">|</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">grep</span> <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">-P</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">'(....|...) id,'</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">|</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">awk</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">'{print "CPU Usage: " 100-$8 "%"}'</span></span>
-<span id="cb1-3"><span class="kw" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">}</span></span></code></pre></div>
-<p>具体的解释可以看来源文章：https://www.baeldung.com/linux/get-cpu-usage</p>
-
-
-
- ]]></description>
-  <category>Linux</category>
-  <category>bioinformatics</category>
-  <category>note</category>
-  <guid>https://shixiangwang.github.io/posts/2023-09-13-check-cpu-usage/index.html</guid>
-  <pubDate>Tue, 12 Sep 2023 16:00:00 GMT</pubDate>
 </item>
 </channel>
 </rss>
