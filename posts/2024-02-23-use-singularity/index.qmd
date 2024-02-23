@@ -1,0 +1,21 @@
+---
+title: use singularity
+author: Shixiang Wang
+date: 2024-02-23
+categories: [note, container]
+draft: false
+description: ''
+
+toc: true
+
+format:
+  html:
+    code-fold: false
+    code-overflow: wrap
+    code-tools: false
+---
+
+- [Singularity 日常使用](http://www.achelous.org/Container-Tech/Singularity-in-nutshell.html)
+- [文档](https://docs.sylabs.io/guides/latest/user-guide/definition_files.html)
+- https://singularityhub.github.io/
+- https://cloud.sylabs.io/library
