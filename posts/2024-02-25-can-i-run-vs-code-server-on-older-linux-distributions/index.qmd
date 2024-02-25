@@ -1,0 +1,29 @@
+---
+title: Can I run VS Code Server on older Linux distributions
+author: Shixiang Wang
+date: 2024-02-25
+categories: [Linux, note]
+draft: false
+description: ''
+
+toc: true
+
+format:
+  html:
+    code-fold: false
+    code-overflow: wrap
+    code-tools: false
+---
+
+VSCode 的不断更新导致最新版本 Remotes 已经在一些 Linux server 上不再支持，这里记录下官方的解决办法，就是将版本降级到 1.85
+
+- <https://code.visualstudio.com/docs/remote/faq#_can-i-run-vs-code-server-on-older-linux-distributions>
+- <https://code.visualstudio.com/updates/v1_85>
+
+Downloads: Windows: [x64](https://update.code.visualstudio.com/1.85.2/win32-x64-user/stable) [Arm64](https://update.code.visualstudio.com/1.85.2/win32-arm64-user/stable) | Mac: [Universal](https://update.code.visualstudio.com/1.85.2/darwin-universal/stable) [Intel](https://update.code.visualstudio.com/1.85.2/darwin/stable) [silicon](https://update.code.visualstudio.com/1.85.2/darwin-arm64/stable) | Linux: [deb](https://update.code.visualstudio.com/1.85.2/linux-deb-x64/stable) [rpm](https://update.code.visualstudio.com/1.85.2/linux-rpm-x64/stable) [tarball](https://update.code.visualstudio.com/1.85.2/linux-x64/stable) [Arm](https://code.visualstudio.com/docs/supporting/faq#_previous-release-versions) [snap](https://update.code.visualstudio.com/1.85.2/linux-snap-x64/stable)
+
+
+> Depending on your platform, make sure to disable updates to stay on that version. A good recommendation is to have release 1.85 as a separate installation, set up with Portable Mode（就是独立的软件目录）.
+> 
+> Portable mode is supported on the ZIP download for Windows, and the TAR.GZ download for Linux, as well as the regular Application download for macOS. See the Download page to find the correct .zip / .tar.gz file for your platform.
+>

@@ -50,7 +50,7 @@
   </url>
   <url>
     <loc>https://shixiangwang.github.io/index.html</loc>
-    <lastmod>2024-02-23T10:22:53.874Z</lastmod>
+    <lastmod>2024-02-25T09:24:05.379Z</lastmod>
   </url>
   <url>
     <loc>https://shixiangwang.github.io/resource.html</loc>
@@ -271,5 +271,9 @@
   <url>
     <loc>https://shixiangwang.github.io/posts/2024-02-23-use-singularity/index.html</loc>
     <lastmod>2024-02-23T10:23:34.831Z</lastmod>
+  </url>
+  <url>
+    <loc>https://shixiangwang.github.io/posts/2024-02-25-can-i-run-vs-code-server-on-older-linux-distributions/index.html</loc>
+    <lastmod>2024-02-25T09:23:53.380Z</lastmod>
   </url>
 </urlset>
