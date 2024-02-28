@@ -2,6 +2,7 @@
   {
     "listing": "/index.html",
     "items": [
+      "/posts/2024-02-28-snakemake-basics/index.html",
       "/posts/2024-02-25-can-i-run-vs-code-server-on-older-linux-distributions/index.html",
       "/posts/2024-02-23-use-singularity/index.html",
       "/posts/2024-02-20-telescope-installation/index.html",
