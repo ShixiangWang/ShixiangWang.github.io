@@ -12,7 +12,7 @@
 <generator>quarto-1.3.361</generator>
 <lastBuildDate>Tue, 27 Feb 2024 16:00:00 GMT</lastBuildDate>
 <item>
-  <title>snakemake 基础</title>
+  <title>snakemake 教程精要</title>
   <dc:creator>Shixiang Wang</dc:creator>
   <link>https://shixiangwang.github.io/posts/2024-02-28-snakemake-basics/index.html</link>
   <description><![CDATA[ 
@@ -20,7 +20,9 @@
 
 
 
-<p>这里把 <a href="https://snakemake.readthedocs.io/en/stable/tutorial/basics.html" class="uri">https://snakemake.readthedocs.io/en/stable/tutorial/basics.html</a> 的精要记录了下来。</p>
+<p>这里把 <a href="https://snakemake.readthedocs.io/en/stable/tutorial">Snakemake 教程</a> 的精要记录了下来。</p>
+<section id="基础" class="level2">
+<h2 class="anchored" data-anchor-id="基础">基础</h2>
 <p><code>Snakefile</code>:</p>
 <div class="sourceCode" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"></span>
 <span id="cb1-2"><span class="co" style="color: #5E5E5E;
@@ -240,8 +242,622 @@ font-style: inherit;">0</span>])]</span>
 <span id="cb2-13">plt.savefig(snakemake.output[<span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">0</span>])</span></code></pre></div>
+</section>
+<section id="advanced" class="level2">
+<h2 class="anchored" data-anchor-id="advanced">Advanced</h2>
+<p><code>Snakefile</code>:</p>
+<div class="sourceCode" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"></span>
+<span id="cb3-2"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Remember that Snakemake works backwards from requested output, and not from available input.</span></span>
+<span id="cb3-3"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#</span></span>
+<span id="cb3-4"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># snakemake --cores 10 # The maximum cores used</span></span>
+<span id="cb3-5"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#                      # If --cores is given without a number, all available cores are used.</span></span>
+<span id="cb3-6"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#</span></span>
+<span id="cb3-7"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># With the flag --forceall you can enforce a complete re-execution of the workflow</span></span>
+<span id="cb3-8"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#</span></span>
+<span id="cb3-9"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># snakemake -n --forcerun $(snakemake --list-input-changes)</span></span>
+<span id="cb3-10"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># snakemake -n --forcerun bcftools_call</span></span>
+<span id="cb3-11"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># snakemake -np --summary</span></span>
+<span id="cb3-12"></span>
+<span id="cb3-13">configfile: <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"config.yaml"</span></span>
+<span id="cb3-14"></span>
+<span id="cb3-15"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># target rule</span></span>
+<span id="cb3-16">rule <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">all</span>:</span>
+<span id="cb3-17">    <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">input</span>:</span>
+<span id="cb3-18">        <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">"plots/quals.svg"</span></span>
+<span id="cb3-19"></span>
+<span id="cb3-20"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># https://snakemake.readthedocs.io/en/stable/tutorial/advanced.html#step-3-input-functions</span></span>
+<span id="cb3-21"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">def</span> get_bwa_map_input_fastqs(wildcards):</span>
+<span id="cb3-22">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">return</span> config[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"samples"</span>][wildcards.sample]</span>
+<span id="cb3-23"></span>
+<span id="cb3-24">rule bwa_map:</span>
+<span id="cb3-25">    <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">input</span>:</span>
+<span id="cb3-26">        <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">"data/genome.fa"</span>,</span>
+<span id="cb3-27">        get_bwa_map_input_fastqs</span>
+<span id="cb3-28">    output:</span>
+<span id="cb3-29">        <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># mark output files as temporary. </span></span>
+<span id="cb3-30">        <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Snakemake will delete the marked files for you, </span></span>
+<span id="cb3-31">        <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># once all the consuming jobs (that need it as input) have been executed</span></span>
+<span id="cb3-32">        temp(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"mapped_reads/</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{sample}</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">.bam"</span>)</span>
+<span id="cb3-33">    params:</span>
+<span id="cb3-34">        rg<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="vs" style="color: #20794D;
+background-color: null;
+font-style: inherit;">r"@RG\tID:</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{sample}</span><span class="vs" style="color: #20794D;
+background-color: null;
+font-style: inherit;">\tSM:</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{sample}</span><span class="vs" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"</span></span>
+<span id="cb3-35">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># It is best practice to store all log files in a subdirectory logs/, </span></span>
+<span id="cb3-36">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># prefixed by the rule or tool name.</span></span>
+<span id="cb3-37">    log:</span>
+<span id="cb3-38">        <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">"logs/bwa_mem/{sample}.log"</span></span>
+<span id="cb3-39">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Snakemake provides a resources directive that can be used to specify arbitrary resources,</span></span>
+<span id="cb3-40">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># e.g., memory usage or auxiliary computing devices like GPUs. </span></span>
+<span id="cb3-41">    threads: <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">8</span></span>
+<span id="cb3-42">    shell:</span>
+<span id="cb3-43">        <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Since the rule has multiple input files, Snakemake will concatenate them, separated by a whitespace</span></span>
+<span id="cb3-44">        <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># both bwa and samtools and pipe it into the file referred to by {log}</span></span>
+<span id="cb3-45">        <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">"(bwa mem -R '{params.rg}' -t {threads} {input} | "</span></span>
+<span id="cb3-46">        <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">"samtools view -Sb - &gt; {output}) 2&gt; {log}"</span></span>
+<span id="cb3-47"></span>
+<span id="cb3-48">rule samtools_sort:</span>
+<span id="cb3-49">    <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">input</span>:</span>
+<span id="cb3-50">        <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">"mapped_reads/{sample}.bam"</span></span>
+<span id="cb3-51">    output:</span>
+<span id="cb3-52">        <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># protect the final BAM file from accidental deletion or modification</span></span>
+<span id="cb3-53">        protected(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"sorted_reads/</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{sample}</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">.bam"</span>)</span>
+<span id="cb3-54">    shell:</span>
+<span id="cb3-55">        <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">"samtools sort -T sorted_reads/{wildcards.sample} "</span></span>
+<span id="cb3-56">        <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">"-O bam {input} &gt; {output}"</span></span>
+<span id="cb3-57"></span>
+<span id="cb3-58">rule samtools_index:</span>
+<span id="cb3-59">    <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">input</span>:</span>
+<span id="cb3-60">        <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">"sorted_reads/{sample}.bam"</span></span>
+<span id="cb3-61">    output:</span>
+<span id="cb3-62">        <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">"sorted_reads/{sample}.bam.bai"</span></span>
+<span id="cb3-63">    shell:</span>
+<span id="cb3-64">        <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">"samtools index {input}"</span></span>
+<span id="cb3-65"></span>
+<span id="cb3-66">rule bcftools_call:</span>
+<span id="cb3-67">    <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">input</span>:</span>
+<span id="cb3-68">        fa<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"data/genome.fa"</span>,</span>
+<span id="cb3-69">        <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># expand: a helper function for collecting input files</span></span>
+<span id="cb3-70">        <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># 注意这里 SAMPLES 必须要有定义，而这里的 sample 也是提取其元素，与上面</span></span>
+<span id="cb3-71">        <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># rule 中 sample wildcards 不同</span></span>
+<span id="cb3-72">        bam<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>expand(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"sorted_reads/</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{sample}</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">.bam"</span>, sample<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>config[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"samples"</span>]),</span>
+<span id="cb3-73">        bai<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>expand(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"sorted_reads/</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{sample}</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">.bam.bai"</span>, sample<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>config[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"samples"</span>])</span>
+<span id="cb3-74">    output:</span>
+<span id="cb3-75">        <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">"calls/all.vcf"</span></span>
+<span id="cb3-76">    log:</span>
+<span id="cb3-77">        <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">"logs/bcftools_call/all.log"</span></span>
+<span id="cb3-78">    params:</span>
+<span id="cb3-79">        rate<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>config[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"prior_mutation_rate"</span>]</span>
+<span id="cb3-80">    shell:</span>
+<span id="cb3-81">        <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">"(bcftools mpileup -f {input.fa} {input.bam} | "</span></span>
+<span id="cb3-82">        <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">"bcftools call -mv -P {params.rate} - &gt; {output}) 2&gt; {log}"</span></span>
+<span id="cb3-83"></span>
+<span id="cb3-84">rule plot_quals:</span>
+<span id="cb3-85">    <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">input</span>:</span>
+<span id="cb3-86">        <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">"calls/all.vcf"</span></span>
+<span id="cb3-87">    output:</span>
+<span id="cb3-88">        <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">"plots/quals.svg"</span></span>
+<span id="cb3-89">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># It is best practice to use the script directive whenever an inline code block would have more than a few lines of code</span></span>
+<span id="cb3-90">    script:</span>
+<span id="cb3-91">        <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">"scripts/plot-quals.py"</span></span>
+<span id="cb3-92"></span></code></pre></div>
+<p><code>config.yaml</code>:</p>
+<div class="sourceCode" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode yml code-with-copy"><code class="sourceCode yaml"><span id="cb4-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">samples</span><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">:</span></span>
+<span id="cb4-2"><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">    </span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">A</span><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">:</span><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;"> data/samples/A.fastq</span></span>
+<span id="cb4-3"><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">    </span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">B</span><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">:</span><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;"> data/samples/B.fastq</span></span>
+<span id="cb4-4"><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">    </span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">C</span><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">:</span><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;"> data/samples/C.fastq</span></span>
+<span id="cb4-5"></span>
+<span id="cb4-6"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">prior_mutation_rate</span><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">:</span><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;"> </span><span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0.001</span></span></code></pre></div>
+</section>
+<section id="custom" class="level2">
+<h2 class="anchored" data-anchor-id="custom">Custom</h2>
+<p>上面手动设定了要处理的样本列表，能不能通过目录来处理呢？即不管有多少文件，目录下所有符合要求的样本列表都进行处理。</p>
+<p><code>config.yaml</code>:</p>
+<div class="sourceCode" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode yml code-with-copy"><code class="sourceCode yaml"><span id="cb5-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">samples</span><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">:</span><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;"> data/samples</span></span>
+<span id="cb5-2"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">prior_mutation_rate</span><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">:</span><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;"> </span><span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0.001</span></span></code></pre></div>
+<p>在探索后我在之前的基础上给出了以下方案：</p>
+<p>利用 <code>glob</code> 进行文件列表的解析，然后处理相关的 pattern 把样本列表提取出来，并以此 更新涉及到样本列表指定的部分：</p>
+<div class="sourceCode" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1">bam<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>expand(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"sorted_reads/</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{sample}</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">.bam"</span>, sample<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>samples),</span>
+<span id="cb6-2">bai<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>expand(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"sorted_reads/</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{sample}</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">.bam.bai"</span>, sample<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>samples)</span></code></pre></div>
+<p>全部内容如下：</p>
+<div class="sourceCode" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> glob</span>
+<span id="cb7-2"></span>
+<span id="cb7-3">configfile: <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"config.yaml"</span></span>
+<span id="cb7-4"></span>
+<span id="cb7-5">input_path <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> config[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"samples"</span>]</span>
+<span id="cb7-6">input_files <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> glob.glob(input_path <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"/*.fastq"</span>)</span>
+<span id="cb7-7"></span>
+<span id="cb7-8">samples <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">set</span>()</span>
+<span id="cb7-9"><span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">for</span> f <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">in</span> input_files:</span>
+<span id="cb7-10">    name <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> f.split(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'/'</span>)[<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>].split(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'.'</span>)[<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>]</span>
+<span id="cb7-11">    samples.add(name)</span>
+<span id="cb7-12"></span>
+<span id="cb7-13"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#print(samples)</span></span>
+<span id="cb7-14"></span>
+<span id="cb7-15"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># target rule</span></span>
+<span id="cb7-16">rule <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">all</span>:</span>
+<span id="cb7-17">    <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">input</span>:</span>
+<span id="cb7-18">        <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">"plots/quals.svg"</span></span>
+<span id="cb7-19"></span>
+<span id="cb7-20">rule bwa_map:</span>
+<span id="cb7-21">    <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">input</span>:</span>
+<span id="cb7-22">        <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">"data/genome.fa"</span>,</span>
+<span id="cb7-23">        <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">"data/samples/{sample}.fastq"</span></span>
+<span id="cb7-24">    output:</span>
+<span id="cb7-25">        <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># mark output files as temporary. </span></span>
+<span id="cb7-26">        <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Snakemake will delete the marked files for you, </span></span>
+<span id="cb7-27">        <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># once all the consuming jobs (that need it as input) have been executed</span></span>
+<span id="cb7-28">        temp(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"mapped_reads/</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{sample}</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">.bam"</span>)</span>
+<span id="cb7-29">    params:</span>
+<span id="cb7-30">        rg<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="vs" style="color: #20794D;
+background-color: null;
+font-style: inherit;">r"@RG\tID:</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{sample}</span><span class="vs" style="color: #20794D;
+background-color: null;
+font-style: inherit;">\tSM:</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{sample}</span><span class="vs" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"</span></span>
+<span id="cb7-31">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># It is best practice to store all log files in a subdirectory logs/, </span></span>
+<span id="cb7-32">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># prefixed by the rule or tool name.</span></span>
+<span id="cb7-33">    log:</span>
+<span id="cb7-34">        <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">"logs/bwa_mem/{sample}.log"</span></span>
+<span id="cb7-35">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Snakemake provides a resources directive that can be used to specify arbitrary resources,</span></span>
+<span id="cb7-36">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># e.g., memory usage or auxiliary computing devices like GPUs. </span></span>
+<span id="cb7-37">    threads: <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">8</span></span>
+<span id="cb7-38">    shell:</span>
+<span id="cb7-39">        <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Since the rule has multiple input files, Snakemake will concatenate them, separated by a whitespace</span></span>
+<span id="cb7-40">        <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># both bwa and samtools and pipe it into the file referred to by {log}</span></span>
+<span id="cb7-41">        <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">"(bwa mem -R '{params.rg}' -t {threads} {input} | "</span></span>
+<span id="cb7-42">        <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">"samtools view -Sb - &gt; {output}) 2&gt; {log}"</span></span>
+<span id="cb7-43"></span>
+<span id="cb7-44">rule samtools_sort:</span>
+<span id="cb7-45">    <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">input</span>:</span>
+<span id="cb7-46">        <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">"mapped_reads/{sample}.bam"</span></span>
+<span id="cb7-47">    output:</span>
+<span id="cb7-48">        <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># protect the final BAM file from accidental deletion or modification</span></span>
+<span id="cb7-49">        protected(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"sorted_reads/</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{sample}</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">.bam"</span>)</span>
+<span id="cb7-50">    shell:</span>
+<span id="cb7-51">        <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">"samtools sort -T sorted_reads/{wildcards.sample} "</span></span>
+<span id="cb7-52">        <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">"-O bam {input} &gt; {output}"</span></span>
+<span id="cb7-53"></span>
+<span id="cb7-54">rule samtools_index:</span>
+<span id="cb7-55">    <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">input</span>:</span>
+<span id="cb7-56">        <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">"sorted_reads/{sample}.bam"</span></span>
+<span id="cb7-57">    output:</span>
+<span id="cb7-58">        <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">"sorted_reads/{sample}.bam.bai"</span></span>
+<span id="cb7-59">    shell:</span>
+<span id="cb7-60">        <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">"samtools index {input}"</span></span>
+<span id="cb7-61"></span>
+<span id="cb7-62">rule bcftools_call:</span>
+<span id="cb7-63">    <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">input</span>:</span>
+<span id="cb7-64">        fa<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"data/genome.fa"</span>,</span>
+<span id="cb7-65">        <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># expand: a helper function for collecting input files</span></span>
+<span id="cb7-66">        <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># 注意这里 SAMPLES 必须要有定义，而这里的 sample 也是提取其元素，与上面</span></span>
+<span id="cb7-67">        <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># rule 中 sample wildcards 不同</span></span>
+<span id="cb7-68">        bam<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>expand(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"sorted_reads/</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{sample}</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">.bam"</span>, sample<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>samples),</span>
+<span id="cb7-69">        bai<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>expand(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"sorted_reads/</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{sample}</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">.bam.bai"</span>, sample<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>samples)</span>
+<span id="cb7-70">    output:</span>
+<span id="cb7-71">        <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">"calls/all.vcf"</span></span>
+<span id="cb7-72">    log:</span>
+<span id="cb7-73">        <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">"logs/bcftools_call/all.log"</span></span>
+<span id="cb7-74">    params:</span>
+<span id="cb7-75">        rate<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>config[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"prior_mutation_rate"</span>]</span>
+<span id="cb7-76">    shell:</span>
+<span id="cb7-77">        <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">"(bcftools mpileup -f {input.fa} {input.bam} | "</span></span>
+<span id="cb7-78">        <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">"bcftools call -mv -P {params.rate} - &gt; {output}) 2&gt; {log}"</span></span>
+<span id="cb7-79"></span>
+<span id="cb7-80">rule plot_quals:</span>
+<span id="cb7-81">    <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">input</span>:</span>
+<span id="cb7-82">        <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">"calls/all.vcf"</span></span>
+<span id="cb7-83">    output:</span>
+<span id="cb7-84">        <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">"plots/quals.svg"</span></span>
+<span id="cb7-85">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># It is best practice to use the script directive whenever an inline code block would have more than a few lines of code</span></span>
+<span id="cb7-86">    script:</span>
+<span id="cb7-87">        <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">"scripts/plot-quals.py"</span></span>
+<span id="cb7-88"></span></code></pre></div>
 
 
+</section>
 
  ]]></description>
   <category>snakemake</category>

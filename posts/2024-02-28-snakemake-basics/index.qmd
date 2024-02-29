@@ -1,5 +1,5 @@
 ---
-title: snakemake 基础
+title: snakemake 教程精要
 author: Shixiang Wang
 date: 2024-02-28
 categories: [snakemake, note]
@@ -15,7 +15,9 @@ format:
     code-tools: false
 ---
 
-这里把 <https://snakemake.readthedocs.io/en/stable/tutorial/basics.html> 的精要记录了下来。
+这里把 [Snakemake 教程](https://snakemake.readthedocs.io/en/stable/tutorial) 的精要记录了下来。
+
+## 基础
 
 `Snakefile`:
 
@@ -105,4 +107,230 @@ quals = [record.qual for record in VariantFile(snakemake.input[0])]
 plt.hist(quals)
 
 plt.savefig(snakemake.output[0])
+```
+
+## Advanced
+
+`Snakefile`:
+
+```python
+
+# Remember that Snakemake works backwards from requested output, and not from available input.
+#
+# snakemake --cores 10 # The maximum cores used
+#                      # If --cores is given without a number, all available cores are used.
+#
+# With the flag --forceall you can enforce a complete re-execution of the workflow
+#
+# snakemake -n --forcerun $(snakemake --list-input-changes)
+# snakemake -n --forcerun bcftools_call
+# snakemake -np --summary
+
+configfile: "config.yaml"
+
+# target rule
+rule all:
+    input:
+        "plots/quals.svg"
+
+# https://snakemake.readthedocs.io/en/stable/tutorial/advanced.html#step-3-input-functions
+def get_bwa_map_input_fastqs(wildcards):
+    return config["samples"][wildcards.sample]
+
+rule bwa_map:
+    input:
+        "data/genome.fa",
+        get_bwa_map_input_fastqs
+    output:
+        # mark output files as temporary. 
+        # Snakemake will delete the marked files for you, 
+        # once all the consuming jobs (that need it as input) have been executed
+        temp("mapped_reads/{sample}.bam")
+    params:
+        rg=r"@RG\tID:{sample}\tSM:{sample}"
+    # It is best practice to store all log files in a subdirectory logs/, 
+    # prefixed by the rule or tool name.
+    log:
+        "logs/bwa_mem/{sample}.log"
+    # Snakemake provides a resources directive that can be used to specify arbitrary resources,
+    # e.g., memory usage or auxiliary computing devices like GPUs. 
+    threads: 8
+    shell:
+        # Since the rule has multiple input files, Snakemake will concatenate them, separated by a whitespace
+        # both bwa and samtools and pipe it into the file referred to by {log}
+        "(bwa mem -R '{params.rg}' -t {threads} {input} | "
+        "samtools view -Sb - > {output}) 2> {log}"
+
+rule samtools_sort:
+    input:
+        "mapped_reads/{sample}.bam"
+    output:
+        # protect the final BAM file from accidental deletion or modification
+        protected("sorted_reads/{sample}.bam")
+    shell:
+        "samtools sort -T sorted_reads/{wildcards.sample} "
+        "-O bam {input} > {output}"
+
+rule samtools_index:
+    input:
+        "sorted_reads/{sample}.bam"
+    output:
+        "sorted_reads/{sample}.bam.bai"
+    shell:
+        "samtools index {input}"
+
+rule bcftools_call:
+    input:
+        fa="data/genome.fa",
+        # expand: a helper function for collecting input files
+        # 注意这里 SAMPLES 必须要有定义，而这里的 sample 也是提取其元素，与上面
+        # rule 中 sample wildcards 不同
+        bam=expand("sorted_reads/{sample}.bam", sample=config["samples"]),
+        bai=expand("sorted_reads/{sample}.bam.bai", sample=config["samples"])
+    output:
+        "calls/all.vcf"
+    log:
+        "logs/bcftools_call/all.log"
+    params:
+        rate=config["prior_mutation_rate"]
+    shell:
+        "(bcftools mpileup -f {input.fa} {input.bam} | "
+        "bcftools call -mv -P {params.rate} - > {output}) 2> {log}"
+
+rule plot_quals:
+    input:
+        "calls/all.vcf"
+    output:
+        "plots/quals.svg"
+    # It is best practice to use the script directive whenever an inline code block would have more than a few lines of code
+    script:
+        "scripts/plot-quals.py"
+
+
+```
+
+`config.yaml`:
+
+```yml
+samples:
+    A: data/samples/A.fastq
+    B: data/samples/B.fastq
+    C: data/samples/C.fastq
+
+prior_mutation_rate: 0.001
+```
+
+## Custom
+
+上面手动设定了要处理的样本列表，能不能通过目录来处理呢？即不管有多少文件，目录下所有符合要求的样本列表都进行处理。
+
+`config.yaml`:
+
+```yml
+samples: data/samples
+prior_mutation_rate: 0.001
+```
+
+在探索后我在之前的基础上给出了以下方案：
+
+利用 `glob` 进行文件列表的解析，然后处理相关的 pattern 把样本列表提取出来，并以此
+更新涉及到样本列表指定的部分：
+
+```python
+bam=expand("sorted_reads/{sample}.bam", sample=samples),
+bai=expand("sorted_reads/{sample}.bam.bai", sample=samples)
+```
+
+全部内容如下：
+
+```python
+import glob
+
+configfile: "config.yaml"
+
+input_path = config["samples"]
+input_files = glob.glob(input_path + "/*.fastq")
+
+samples = set()
+for f in input_files:
+    name = f.split('/')[-1].split('.')[0]
+    samples.add(name)
+
+#print(samples)
+
+# target rule
+rule all:
+    input:
+        "plots/quals.svg"
+
+rule bwa_map:
+    input:
+        "data/genome.fa",
+        "data/samples/{sample}.fastq"
+    output:
+        # mark output files as temporary. 
+        # Snakemake will delete the marked files for you, 
+        # once all the consuming jobs (that need it as input) have been executed
+        temp("mapped_reads/{sample}.bam")
+    params:
+        rg=r"@RG\tID:{sample}\tSM:{sample}"
+    # It is best practice to store all log files in a subdirectory logs/, 
+    # prefixed by the rule or tool name.
+    log:
+        "logs/bwa_mem/{sample}.log"
+    # Snakemake provides a resources directive that can be used to specify arbitrary resources,
+    # e.g., memory usage or auxiliary computing devices like GPUs. 
+    threads: 8
+    shell:
+        # Since the rule has multiple input files, Snakemake will concatenate them, separated by a whitespace
+        # both bwa and samtools and pipe it into the file referred to by {log}
+        "(bwa mem -R '{params.rg}' -t {threads} {input} | "
+        "samtools view -Sb - > {output}) 2> {log}"
+
+rule samtools_sort:
+    input:
+        "mapped_reads/{sample}.bam"
+    output:
+        # protect the final BAM file from accidental deletion or modification
+        protected("sorted_reads/{sample}.bam")
+    shell:
+        "samtools sort -T sorted_reads/{wildcards.sample} "
+        "-O bam {input} > {output}"
+
+rule samtools_index:
+    input:
+        "sorted_reads/{sample}.bam"
+    output:
+        "sorted_reads/{sample}.bam.bai"
+    shell:
+        "samtools index {input}"
+
+rule bcftools_call:
+    input:
+        fa="data/genome.fa",
+        # expand: a helper function for collecting input files
+        # 注意这里 SAMPLES 必须要有定义，而这里的 sample 也是提取其元素，与上面
+        # rule 中 sample wildcards 不同
+        bam=expand("sorted_reads/{sample}.bam", sample=samples),
+        bai=expand("sorted_reads/{sample}.bam.bai", sample=samples)
+    output:
+        "calls/all.vcf"
+    log:
+        "logs/bcftools_call/all.log"
+    params:
+        rate=config["prior_mutation_rate"]
+    shell:
+        "(bcftools mpileup -f {input.fa} {input.bam} | "
+        "bcftools call -mv -P {params.rate} - > {output}) 2> {log}"
+
+rule plot_quals:
+    input:
+        "calls/all.vcf"
+    output:
+        "plots/quals.svg"
+    # It is best practice to use the script directive whenever an inline code block would have more than a few lines of code
+    script:
+        "scripts/plot-quals.py"
+
+
 ```
