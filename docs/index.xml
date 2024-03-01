@@ -20,7 +20,7 @@
 
 
 
-<p>这里把 <a href="https://snakemake.readthedocs.io/en/stable/tutorial">Snakemake 教程</a> 的精要记录了下来。</p>
+<p>这里把 <a href="https://snakemake.readthedocs.io/en/stable/tutorial/tutorial.html">Snakemake 教程</a> 的精要记录了下来。</p>
 <section id="基础" class="level2">
 <h2 class="anchored" data-anchor-id="基础">基础</h2>
 <p><code>Snakefile</code>:</p>
@@ -855,6 +855,16 @@ font-style: inherit;"># It is best practice to use the script directive whenever
 background-color: null;
 font-style: inherit;">"scripts/plot-quals.py"</span></span>
 <span id="cb7-88"></span></code></pre></div>
+<p>QA 中的 <a href="https://snakemake.readthedocs.io/en/stable/project_info/faq.html#how-do-i-run-my-rule-on-all-files-of-a-certain-directory">How do I run my rule on all files of a certain directory?</a> 提供的下面的办法似乎也能解决该问题：</p>
+<div class="sourceCode" id="cb8" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1">IDS, <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> glob_wildcards(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"thedir/</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{id}</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">.fastq"</span>)</span></code></pre></div>
 
 
 </section>

@@ -15,7 +15,7 @@ format:
     code-tools: false
 ---
 
-这里把 [Snakemake 教程](https://snakemake.readthedocs.io/en/stable/tutorial) 的精要记录了下来。
+这里把 [Snakemake 教程](https://snakemake.readthedocs.io/en/stable/tutorial/tutorial.html) 的精要记录了下来。
 
 ## 基础
 
@@ -334,3 +334,10 @@ rule plot_quals:
 
 
 ```
+
+QA 中的 [How do I run my rule on all files of a certain directory?](https://snakemake.readthedocs.io/en/stable/project_info/faq.html#how-do-i-run-my-rule-on-all-files-of-a-certain-directory) 提供的下面的办法似乎也能解决该问题：
+
+```python
+IDS, = glob_wildcards("thedir/{id}.fastq")
+```
+

@@ -245,7 +245,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 
-<p>这里把 <a href="https://snakemake.readthedocs.io/en/stable/tutorial">Snakemake 教程</a> 的精要记录了下来。</p>
+<p>这里把 <a href="https://snakemake.readthedocs.io/en/stable/tutorial/tutorial.html">Snakemake 教程</a> 的精要记录了下来。</p>
 <section id="基础" class="level2">
 <h2 class="anchored" data-anchor-id="基础">基础</h2>
 <p><code>Snakefile</code>:</p>
@@ -532,6 +532,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb7-86"><a href="#cb7-86" aria-hidden="true" tabindex="-1"></a>    script:</span>
 <span id="cb7-87"><a href="#cb7-87" aria-hidden="true" tabindex="-1"></a>        <span class="co">"scripts/plot-quals.py"</span></span>
 <span id="cb7-88"><a href="#cb7-88" aria-hidden="true" tabindex="-1"></a></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>QA 中的 <a href="https://snakemake.readthedocs.io/en/stable/project_info/faq.html#how-do-i-run-my-rule-on-all-files-of-a-certain-directory">How do I run my rule on all files of a certain directory?</a> 提供的下面的办法似乎也能解决该问题：</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>IDS, <span class="op">=</span> glob_wildcards(<span class="st">"thedir/</span><span class="sc">{id}</span><span class="st">.fastq"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 
 </section>
