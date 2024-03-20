@@ -25,4 +25,6 @@ CXX14=/opt/rh/devtoolset-9/root/usr/bin/g++ -std=c++14 -fPIC
 CXX17=/opt/rh/devtoolset-9/root/usr/bin/g++ -std=c++17 -fPIC
 ```
 
+> 一些情况下会加上 `-fopenmp` 选项。
+
 本文对之前所做记录 [CentOS/Redhat R包使用新的gcc编译【更新】](https://mp.weixin.qq.com/s/BoMEGabgWvjfETnIPPxJVA) 的补全。

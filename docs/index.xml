@@ -64,6 +64,9 @@ background-color: null;
 font-style: inherit;">-std=c++17</span> <span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;">-fPIC</span></span></code></pre></div>
+<blockquote class="blockquote">
+<p>一些情况下会加上 <code>-fPIC -fopenmp</code> 选项。</p>
+</blockquote>
 <p>本文对之前所做记录 <a href="https://mp.weixin.qq.com/s/BoMEGabgWvjfETnIPPxJVA">CentOS/Redhat R包使用新的gcc编译【更新】</a> 的补全。</p>
 
 
