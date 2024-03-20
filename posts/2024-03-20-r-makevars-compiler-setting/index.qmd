@@ -1,0 +1,28 @@
+---
+title: R 设置编译选项
+author: Shixiang Wang
+date: 2024-03-20
+categories: [Linux,R]
+draft: false
+description: ''
+
+toc: true
+
+format:
+  html:
+    code-fold: false
+    code-overflow: wrap
+    code-tools: false
+---
+
+在 R 中，特别是 CentOS Linux 进行包安装和编译时，需要使用比较新的 C/C++ 编译器，在 `~/.R/Makevars` 中作如下设置。
+
+```sh
+CC=/opt/rh/devtoolset-9/root/usr/bin/gcc -fPIC
+CXX=/opt/rh/devtoolset-9/root/usr/bin/g++ -std=c++11 -fPIC
+CXX11=/opt/rh/devtoolset-9/root/usr/bin/g++ -std=c++11 -fPIC
+CXX14=/opt/rh/devtoolset-9/root/usr/bin/g++ -std=c++14 -fPIC
+CXX17=/opt/rh/devtoolset-9/root/usr/bin/g++ -std=c++17 -fPIC
+```
+
+本文对之前所做记录 [CentOS/Redhat R包使用新的gcc编译【更新】](https://mp.weixin.qq.com/s/BoMEGabgWvjfETnIPPxJVA) 的补全。

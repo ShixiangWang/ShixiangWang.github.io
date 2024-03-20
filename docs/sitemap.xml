@@ -50,7 +50,7 @@
   </url>
   <url>
     <loc>https://shixiangwang.github.io/index.html</loc>
-    <lastmod>2024-03-01T08:11:28.170Z</lastmod>
+    <lastmod>2024-03-20T10:40:01.988Z</lastmod>
   </url>
   <url>
     <loc>https://shixiangwang.github.io/resource.html</loc>
@@ -279,5 +279,9 @@
   <url>
     <loc>https://shixiangwang.github.io/posts/2024-02-28-snakemake-basics/index.html</loc>
     <lastmod>2024-03-01T08:11:21.556Z</lastmod>
+  </url>
+  <url>
+    <loc>https://shixiangwang.github.io/posts/2024-03-20-r-makevars-compiler-setting/index.html</loc>
+    <lastmod>2024-03-20T10:39:47.149Z</lastmod>
   </url>
 </urlset>
