@@ -5,4 +5,4 @@ new POST:
 refresh:
     quarto render index.qmd
 render POST:
-    quarto render {{POST}}
+    quarto render {{POST}} && just refresh
