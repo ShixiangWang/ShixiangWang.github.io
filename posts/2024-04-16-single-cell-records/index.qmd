@@ -1,0 +1,97 @@
+---
+title: single cell 处理笔记
+author: Shixiang Wang
+date: 2024-04-16
+categories: [bioinformatics,scRNA-seq,note]
+draft: false
+description: ''
+
+toc: true
+
+format:
+  html:
+    code-fold: false
+    code-overflow: wrap
+    code-tools: false
+---
+
+今天请教了下朝晔单细胞处理的一些细节，这里做个记录。
+
+## 处理流程
+
+首先整个数据质控后分大群，将上皮和非上皮分开处理，
+然后大群下的免疫细胞再拆分单独处理 seurat 流程，分割小群。
+小群分析时先聚类并寻找markers基因，查看top markers基因与已知报道（参考）的一致性和在小群中的
+特异性，进行生物学注释，如cDC1.C14(GPR183)，有比较一致marker基因的小群可以考虑去除，双细胞或异常
+细胞群可以在这个过程中去除。
+
+在分群的时候，分大群或小群，以及小群之间一般怎么设置cluster resolution这个参数呢？
+>有一些软件可以辅助判断一下（ROGUE），但我一般分的时候，小群会设的稍微高一点1-1.5，如果有性质比较一致的亚群就把他们合并在一起就好了，大体来说这个值的设定比较主观
+
+## 预处理 Code 
+
+```r
+# Load packages
+library(Seurat)
+library(magrittr)
+library(stringr)
+library(DoubletFinder)
+library(data.table)
+
+# 1 Function----
+# 1.1 Seurat standard workflow----
+seuratdeal <- function(SeuratObject, resolution){
+  SeuratObject <- NormalizeData(SeuratObject, normalization.method = "LogNormalize", scale.factor = 10000)
+  # Find Variable Features
+  SeuratObject <- FindVariableFeatures(SeuratObject, selection.method = "vst", nfeatures = 2000)
+  SeuratObject <- ScaleData(SeuratObject)
+  SeuratObject <- RunPCA(SeuratObject, verbose = F, dims = 1:30, npcs = 30)
+  SeuratObject <- RunUMAP(SeuratObject, dims=1:16)
+  SeuratObject <- FindNeighbors(SeuratObject, dims = 1:16) %>% FindClusters(resolution = resolution)
+}
+# 1.2 Delete doublet----
+DelDoublet <- function(SeuratObject, DoubletRate){
+  sweep.res.list <- paramSweep_v3(SeuratObject, PCs = 1:16, sct = F)
+  sweep.stats <- summarizeSweep(sweep.res.list, GT = FALSE)  
+  bcmvn <- find.pK(sweep.stats)
+  pK_bcmvn <- bcmvn$pK[which.max(bcmvn$BCmetric)] %>% as.character() %>% as.numeric()
+  homotypic.prop <- modelHomotypic(SeuratObject$seurat_clusters)   # celltype is the best choice
+  nExp_poi <- round(DoubletRate*ncol(SeuratObject)) 
+  nExp_poi.adj <- round(nExp_poi*(1-homotypic.prop))
+  SeuratObject <- doubletFinder_v3(SeuratObject, PCs = 1:16, pN = 0.25, pK = pK_bcmvn, 
+                                   nExp = nExp_poi.adj, reuse.pANN = F, sct = F)
+  return(SeuratObject)
+}
+```
+
+例子：
+
+```r
+countpath <- "/data1/chywang/STAD_Cohort/GSE183904"
+FileID <- list.files(countpath)
+
+combine <- lapply(FileID, function(i){CreateSeuratObject(counts = read.delim(paste0(countpath, "/", i), header = T, row.names = 1, sep = ","),
+                                                         min.cells = 3, 
+                                                         min.features = 800,
+                                                         project = str_split_fixed(i, "_", 2)[ ,2] %>% gsub(".csv", "", .))})
+
+combine <- lapply(combine, function(i){subset(i, subset = `nFeature_RNA` <= 6000)})
+combine <- lapply(combine, function(i){
+  PercentageFeatureSet(i, pattern = "^MT-", col.name = "percent.mt")})
+combine <- lapply(combine, function(i){subset(i, percent.mt < 10)})
+combine <- lapply(combine, function(i){seuratdeal(i, 0.7)})
+
+# Calculate doublet ratio
+doubletratio <- c()
+for (i in 1:length(combine)) {
+  doubletratio[i] <- (combine[[i]]@meta.data %>% nrow()) / 500 * 0.004}
+
+# Run DoubletFinder
+combine <- mapply(DelDoublet, combine, doubletratio)
+
+for (i in 1:length(combine)) {
+  names(combine[[i]]@meta.data)[combine[[i]]@meta.data %>% ncol()] <- "Doubletstate"
+}
+GSE183904 <- Reduce(merge, combine)
+```
+

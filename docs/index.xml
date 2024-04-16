@@ -10,7 +10,476 @@
 <atom:link href="https://shixiangwang.github.io/index.xml" rel="self" type="application/rss+xml"/>
 <description>Reasoning is a blog dedicated to exploring the intersection of data science, bioinformatics, and personal insights.</description>
 <generator>quarto-1.4.553</generator>
-<lastBuildDate>Sun, 14 Apr 2024 16:00:00 GMT</lastBuildDate>
+<lastBuildDate>Mon, 15 Apr 2024 16:00:00 GMT</lastBuildDate>
+<item>
+  <title>single cell 处理笔记</title>
+  <dc:creator>Shixiang Wang</dc:creator>
+  <link>https://shixiangwang.github.io/posts/2024-04-16-single-cell-records/</link>
+  <description><![CDATA[ 
+
+
+
+
+
+<p>今天请教了下朝晔单细胞处理的一些细节，这里做个记录。</p>
+<section id="处理流程" class="level2">
+<h2 class="anchored" data-anchor-id="处理流程">处理流程</h2>
+<p>首先整个数据质控后分大群，将上皮和非上皮分开处理， 然后大群下的免疫细胞再拆分单独处理 seurat 流程，分割小群。 小群分析时先聚类并寻找markers基因，查看top markers基因与已知报道（参考）的一致性和在小群中的 特异性，进行生物学注释，如cDC1.C14(GPR183)，有比较一致marker基因的小群可以考虑去除，双细胞或异常 细胞群可以在这个过程中去除。</p>
+<p>在分群的时候，分大群或小群，以及小群之间一般怎么设置cluster resolution这个参数呢？ &gt;有一些软件可以辅助判断一下（ROGUE），但我一般分的时候，小群会设的稍微高一点1-1.5，如果有性质比较一致的亚群就把他们合并在一起就好了，大体来说这个值的设定比较主观</p>
+</section>
+<section id="预处理-code" class="level2">
+<h2 class="anchored" data-anchor-id="预处理-code">预处理 Code</h2>
+<div class="sourceCode" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Load packages</span></span>
+<span id="cb1-2"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">library</span>(Seurat)</span>
+<span id="cb1-3"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">library</span>(magrittr)</span>
+<span id="cb1-4"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">library</span>(stringr)</span>
+<span id="cb1-5"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">library</span>(DoubletFinder)</span>
+<span id="cb1-6"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">library</span>(data.table)</span>
+<span id="cb1-7"></span>
+<span id="cb1-8"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># 1 Function----</span></span>
+<span id="cb1-9"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># 1.1 Seurat standard workflow----</span></span>
+<span id="cb1-10">seuratdeal <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">function</span>(SeuratObject, resolution){</span>
+<span id="cb1-11">  SeuratObject <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">NormalizeData</span>(SeuratObject, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">normalization.method =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"LogNormalize"</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">scale.factor =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">10000</span>)</span>
+<span id="cb1-12">  <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Find Variable Features</span></span>
+<span id="cb1-13">  SeuratObject <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">FindVariableFeatures</span>(SeuratObject, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">selection.method =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"vst"</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">nfeatures =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2000</span>)</span>
+<span id="cb1-14">  SeuratObject <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">ScaleData</span>(SeuratObject)</span>
+<span id="cb1-15">  SeuratObject <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">RunPCA</span>(SeuratObject, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">verbose =</span> F, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">dims =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">:</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">30</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">npcs =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">30</span>)</span>
+<span id="cb1-16">  SeuratObject <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">RunUMAP</span>(SeuratObject, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">dims=</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">:</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">16</span>)</span>
+<span id="cb1-17">  SeuratObject <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">FindNeighbors</span>(SeuratObject, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">dims =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">:</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">16</span>) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">%&gt;%</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">FindClusters</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">resolution =</span> resolution)</span>
+<span id="cb1-18">}</span>
+<span id="cb1-19"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># 1.2 Delete doublet----</span></span>
+<span id="cb1-20">DelDoublet <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">function</span>(SeuratObject, DoubletRate){</span>
+<span id="cb1-21">  sweep.res.list <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">paramSweep_v3</span>(SeuratObject, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">PCs =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">:</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">16</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">sct =</span> F)</span>
+<span id="cb1-22">  sweep.stats <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">summarizeSweep</span>(sweep.res.list, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">GT =</span> <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">FALSE</span>)  </span>
+<span id="cb1-23">  bcmvn <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">find.pK</span>(sweep.stats)</span>
+<span id="cb1-24">  pK_bcmvn <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> bcmvn<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>pK[<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">which.max</span>(bcmvn<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>BCmetric)] <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">%&gt;%</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">as.character</span>() <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">%&gt;%</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">as.numeric</span>()</span>
+<span id="cb1-25">  homotypic.prop <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">modelHomotypic</span>(SeuratObject<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>seurat_clusters)   <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># celltype is the best choice</span></span>
+<span id="cb1-26">  nExp_poi <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">round</span>(DoubletRate<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">*</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">ncol</span>(SeuratObject)) </span>
+<span id="cb1-27">  nExp_poi.adj <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">round</span>(nExp_poi<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">*</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span>homotypic.prop))</span>
+<span id="cb1-28">  SeuratObject <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">doubletFinder_v3</span>(SeuratObject, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">PCs =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">:</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">16</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">pN =</span> <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0.25</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">pK =</span> pK_bcmvn, </span>
+<span id="cb1-29">                                   <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">nExp =</span> nExp_poi.adj, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">reuse.pANN =</span> F, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">sct =</span> F)</span>
+<span id="cb1-30">  <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">return</span>(SeuratObject)</span>
+<span id="cb1-31">}</span></code></pre></div>
+<p>例子：</p>
+<div class="sourceCode" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1">countpath <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"/data1/chywang/STAD_Cohort/GSE183904"</span></span>
+<span id="cb2-2">FileID <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">list.files</span>(countpath)</span>
+<span id="cb2-3"></span>
+<span id="cb2-4">combine <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">lapply</span>(FileID, <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">function</span>(i){<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">CreateSeuratObject</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">counts =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">read.delim</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">paste0</span>(countpath, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"/"</span>, i), <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">header =</span> T, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">row.names =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">sep =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">","</span>),</span>
+<span id="cb2-5">                                                         <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">min.cells =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">3</span>, </span>
+<span id="cb2-6">                                                         <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">min.features =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">800</span>,</span>
+<span id="cb2-7">                                                         <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">project =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">str_split_fixed</span>(i, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"_"</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>)[ ,<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>] <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">%&gt;%</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">gsub</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">".csv"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">""</span>, .))})</span>
+<span id="cb2-8"></span>
+<span id="cb2-9">combine <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">lapply</span>(combine, <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">function</span>(i){<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">subset</span>(i, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">subset =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">`</span><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">nFeature_RNA</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">`</span> <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&lt;=</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">6000</span>)})</span>
+<span id="cb2-10">combine <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">lapply</span>(combine, <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">function</span>(i){</span>
+<span id="cb2-11">  <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">PercentageFeatureSet</span>(i, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">pattern =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"^MT-"</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">col.name =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"percent.mt"</span>)})</span>
+<span id="cb2-12">combine <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">lapply</span>(combine, <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">function</span>(i){<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">subset</span>(i, percent.mt <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&lt;</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">10</span>)})</span>
+<span id="cb2-13">combine <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">lapply</span>(combine, <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">function</span>(i){<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">seuratdeal</span>(i, <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0.7</span>)})</span>
+<span id="cb2-14"></span>
+<span id="cb2-15"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Calculate doublet ratio</span></span>
+<span id="cb2-16">doubletratio <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>()</span>
+<span id="cb2-17"><span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">for</span> (i <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">in</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">:</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">length</span>(combine)) {</span>
+<span id="cb2-18">  doubletratio[i] <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> (combine[[i]]<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">@</span>meta.data <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">%&gt;%</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">nrow</span>()) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">/</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">500</span> <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">*</span> <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0.004</span>}</span>
+<span id="cb2-19"></span>
+<span id="cb2-20"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Run DoubletFinder</span></span>
+<span id="cb2-21">combine <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">mapply</span>(DelDoublet, combine, doubletratio)</span>
+<span id="cb2-22"></span>
+<span id="cb2-23"><span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">for</span> (i <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">in</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">:</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">length</span>(combine)) {</span>
+<span id="cb2-24">  <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">names</span>(combine[[i]]<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">@</span>meta.data)[combine[[i]]<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">@</span>meta.data <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">%&gt;%</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">ncol</span>()] <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Doubletstate"</span></span>
+<span id="cb2-25">}</span>
+<span id="cb2-26">GSE183904 <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">Reduce</span>(merge, combine)</span></code></pre></div>
+
+
+</section>
+
+ ]]></description>
+  <category>bioinformatics</category>
+  <category>scRNA-seq</category>
+  <category>note</category>
+  <guid>https://shixiangwang.github.io/posts/2024-04-16-single-cell-records/</guid>
+  <pubDate>Mon, 15 Apr 2024 16:00:00 GMT</pubDate>
+</item>
 <item>
   <title>Discordant and clipped reads</title>
   <dc:creator>Shixiang Wang</dc:creator>
@@ -2415,24 +2884,6 @@ font-style: inherit;">"~/Downloads/lazytest"</span>))</span></code></pre></div>
   <category>bioinformatics</category>
   <guid>https://shixiangwang.github.io/posts/2023-11-15-talk-about-ides/</guid>
   <pubDate>Tue, 14 Nov 2023 16:00:00 GMT</pubDate>
-</item>
-<item>
-  <title>随想</title>
-  <dc:creator>Shixiang Wang</dc:creator>
-  <link>https://shixiangwang.github.io/posts/2023-11-14-random-thoughts/</link>
-  <description><![CDATA[ 
-
-
-
-
-<p>没有问题只有目标的数据分析，就像人有大脑却缺乏灵魂。</p>
-
-
-
- ]]></description>
-  <category>random</category>
-  <guid>https://shixiangwang.github.io/posts/2023-11-14-random-thoughts/</guid>
-  <pubDate>Mon, 13 Nov 2023 16:00:00 GMT</pubDate>
 </item>
 </channel>
 </rss>
