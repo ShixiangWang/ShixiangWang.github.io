@@ -1,0 +1,183 @@
+---
+title: sratools networking issue
+author: Shixiang Wang
+date: 2024-04-22
+categories: [bioinformatics]
+draft: false
+description: ''
+
+toc: true
+
+format:
+  html:
+    code-fold: false
+    code-overflow: wrap
+    code-tools: false
+---
+
+在使用 sratools 的 fastq-dump 时出现了成片的问题信息：
+
+```sh
+2024-04-22T01:38:42 fastq-dump.2.9.2 sys: connection failed while opening file within cryptographic module - mbedtls_ssl_handshake returned -9984 ( X509 - Certificate verification failed, e.g. CRL, CA or signature check failed )
+2024-04-22T01:38:42 fastq-dump.2.9.2 sys: mbedtls_ssl_get_verify_result returned 0x4008 (  !! The certificate is not correctly signed by the trusted CA  !! The certificate is signed with an unacceptable hash.  )
+2024-04-22T01:38:42 fastq-dump.2.9.2 sys: connection failed while opening file within cryptographic module - ktls_handshake failed while accessing '130.14.29.110' from '192.168.120.54'
+2024-04-22T01:38:42 fastq-dump.2.9.2 sys: connection failed while opening file within cryptographic module - Failed to create TLS stream for 'www.ncbi.nlm.nih.gov' (130.14.29.110) from '192.168.120.54'
+2024-04-22T01:38:42 fastq-dump.2.9.2 err: item not found while constructing within virtual database module - the path 'ERR5242993' cannot be opened as database or table
+```
+
+问题指向了证书。但谷歌后依然不得其解，一是很久没有动过这个服务器的配置，怎么会出现证书之类的搞不清的问题呢？二是
+按照网络上的方法检查了证书也还是没有找到原因。
+
+后续将问题的研究转向 sratools 本身，发现[这个帖子](https://blog.csdn.net/qq_68453356/article/details/137791450)给了非常有用的提示：fastq-dump的版本和sratools本身的版本不一致。
+
+我检查后发现的确如此：
+
+```sh
+(base) [wsx@xu2 debug]$ prefetch --help
+Usage:
+  prefetch [options] <SRA accession> [...]
+  Download SRA files and their dependencies
+
+  prefetch [options] --cart <kart file>
+  Download cart file
+
+  prefetch [options] <URL> --output-file <FILE>
+  Download URL to FILE
+
+  prefetch [options] <URL> [...] --output-directory <DIRECTORY>
+  Download URL or URL-s to DIRECTORY
+
+  prefetch [options] <SRA file> [...]
+  Check SRA file for missed dependencies and download them
+
+
+Options:
+  -T|--type <value>                Specify file type to download. Default: sra 
+  -t|--transport <http|fasp|both>  Transport: one of: fasp; http; both 
+                                   [default]. (fasp only; http only; first try 
+                                   fasp (ascp), use http if cannot download 
+                                   using fasp). 
+  --location <value>               Location of data. 
+
+  -N|--min-size <size>             Minimum file size to download in KB 
+                                   (inclusive). 
+  -X|--max-size <size>             Maximum file size to download in KB 
+                                   (exclusive). Default: 20G 
+  -f|--force <yes|no|all|ALL>      Force object download: one of: no, yes, 
+                                   all, ALL. no [default]: skip download if the 
+                                   object if found and complete; yes: download 
+                                   it even if it is found and is complete; all: 
+                                   ignore lock files (stale locks or it is 
+                                   being downloaded by another process use 
+                                   at your own risk!); ALL: ignore lock files, 
+                                   restart download from beginning. 
+  -r|--resume <yes|no>             Resume partial downloads: one of: no, yes 
+                                   [default]. 
+  -C|--verify <yes|no>             Verify after download: one of: no, yes 
+                                   [default]. 
+  -p|--progress                    Show progress. 
+  -H|--heartbeat <value>           Time period in minutes to display download 
+                                   progress. (0: no progress), default: 1 
+
+  --eliminate-quals                Don't download QUALITY column. 
+  -c|--check-all                   Double-check all refseqs. 
+  -S|--check-rs <yes|no|smart>     Check for refseqs in downloaded files: one 
+                                   of: no, yes, smart [default]. Smart: skip 
+                                   check for large encrypted non-sra files. 
+  -o|--order <kart|size>           Kart prefetch order when downloading 
+                                   kart: one of: kart, size. (in kart order, by 
+                                   file size: smallest first), default: size. 
+  -R|--rows <rows>                 Kart rows to download (default all). Row 
+                                   list should be ordered. 
+  --perm <PATH>                    PATH to jwt cart file. 
+  --ngc <PATH>                     PATH to ngc file. 
+  --cart <PATH>                    To read kart file. 
+
+  -a|--ascp-path <ascp-binary|private-key-file>  Path to ascp program and 
+                                   private key file (asperaweb_id_dsa.putty) 
+  --ascp-options <value>           Arbitrary options to pass to ascp command 
+                                   line. 
+
+  -o|--output-file <FILE>          Write file to FILE when downloading 
+                                   single file. 
+  -O|--output-directory <DIRECTORY>  Save files to DIRECTORY/ 
+
+  -h|--help                        Output brief explanation for the program. 
+  -V|--version                     Display the version of the program then 
+                                   quit. 
+  -L|--log-level <level>           Logging level as number or enum string. One 
+                                   of (fatal|sys|int|err|warn|info|debug) or 
+                                   (0-6) Current/default is warn 
+  -v|--verbose                     Increase the verbosity of the program 
+                                   status messages. Use multiple times for more 
+                                   verbosity. Negates quiet. 
+  -q|--quiet                       Turn off all status messages for the 
+                                   program. Negated by verbose. 
+  --option-file <file>             Read more options and parameters from the 
+                                   file. 
+
+prefetch : 3.0.2
+
+(base) [wsx@xu2 debug]$ which fast
+fasterq-dump             fasterq-dump-orig.3.0.2  fastq-dump.3.0.2         fastq-load.3             
+fasterq-dump.3           fastq-dump               fastq-dump-orig.3.0.2    fastq-load.3.0.2         
+fasterq-dump.3.0.2       fastq-dump.3             fastq-load               
+(base) [wsx@xu2 debug]$ fastq-dump --version
+
+fastq-dump : 2.9.2
+```
+
+继续查看了 `~/.bashrc` 和环境变量：
+
+```sh
+$ echo $PATH
+/data3/wsx/miniconda3/bin:/usr/local/bin:/data3/wsx/miniconda3/condabin:/data3/wsx/bin:/data3/wsx/soft/sratoolkit/bin:/usr/lib64/qt-3.3/bin:/usr/local/bin:/usr/local/bin:/usr/local/bin:/usr/local/bin:/usr/local/bin:/usr/local/bin:/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/usr/lib/rstudio-server/bin/quarto/bin:/usr/lib/rstudio-server/bin/postback/postback:/usr/lib/rstudio-server/bin/postback/postback:/usr/lib/rstudio-server/bin/postback/postback:/usr/lib/rstudio-server/bin/postback/postback:/usr/lib/rstudio-server/bin/postback/postback:/usr/lib/rstudio-server/bin/postback/postback:/usr/lib/rstudio-server/bin/postback/postback:/usr/bin:/data3/wsx/.local/bin:/data3/wsx/bin
+```
+
+发现环境变量很有问题，在 `~/.bashrc` 的设置逻辑里 `/data3/wsx/soft/sratoolkit/bin` 应该是很靠前的，
+但 conda 的激活将 `/usr/local/bin` 提前了，这就导致了 fastq-dump 使用的是系统的一个版本，从而产生了这种不一致的情况。
+
+```
+[wsx@xu2 share]$ which fastq-dump
+/usr/local/bin/fastq-dump
+```
+
+我的解决办法就是在 dump 数据前，显式地运行 `export PATH=$HOME/soft/sratoolkit/bin:$PATH` 命令将正确的路径前提。
+
+在脚本中的使用情况如下：
+
+```sh
+#!/bin/bash
+cd /data3/wsx/share/gcap_debug
+mkdir -p /data3/wsx/share/gcap_debug/temp
+
+export PATH=$HOME/soft/sratoolkit/bin:$PATH
+
+for i in ERR5242993 ERR5243012
+do
+  echo handling $i
+  parallel-fastq-dump -t 20 --tmpdir temp -O gcap_debug/ --split-3  --gzip -s $i
+done
+
+```
+
+这样去运行就没有这个问题了：
+
+```sh
+$ bash 0-dump-sra.sh 
+handling ERR5242993
+SRR ids: ['ERR5242993']
+extra args: ['--split-3', '--gzip']
+tempdir: temp/pfd_ocitp7xi
+ERR5242993 spots: 31931880
+blocks: [[1, 1596594], [1596595, 3193188], [3193189, 4789782], [4789783, 6386376], [6386377, 7982970], [7982971, 9579564], [9579565, 11176158], [11176159, 12772752], [12772753, 14369346], [14369347, 15965940], [15965941, 17562534], [17562535, 19159128], [19159129, 20755722], [20755723, 22352316], [22352317, 23948910], [23948911, 25545504], [25545505, 27142098], [27142099, 28738692], [28738693, 30335286], [30335287, 31931880]]
+Failed to call external services.
+Read 1596594 spots for ERR5242993
+Written 1596594 spots for ERR5242993
+Read 1596594 spots for ERR5242993
+Written 1596594 spots for ERR5242993
+Read 1596594 spots for ERR5242993
+```
+
+总结下来是：报错信息和错误的根源有时候南辕北辙。除了从问题本身思考，也要从其他可能得角度去探索。
+
