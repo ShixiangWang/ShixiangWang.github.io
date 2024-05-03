@@ -1,0 +1,20 @@
+---
+title: 随想
+author: Shixiang Wang
+date: 2024-05-03
+categories: [random]
+draft: false
+description: ''
+
+toc: true
+
+format:
+  html:
+    code-fold: false
+    code-overflow: wrap
+    code-tools: false
+---
+
+了解的越多，才知道懂的不多。
+
+懂的再多，做的不一定要多。

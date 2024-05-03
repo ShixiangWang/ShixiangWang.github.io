@@ -7,9 +7,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Shixiang Wang">
-<meta name="dcterms.date" content="2024-04-16">
+<meta name="dcterms.date" content="2024-05-03">
 
-<title>Reasoning - single cell 处理笔记</title>
+<title>Reasoning - 随想</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -21,40 +21,6 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
-}
-/* CSS for syntax highlighting */
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-  }
-pre.numberSource { margin-left: 3em;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -104,7 +70,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <!-- Open Graph / Facebook -->
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://shixiangwang.github.io/posts/welcome/">
-<meta property="og:title" content="Reasoning - single cell 处理笔记">
+<meta property="og:title" content="Reasoning - 随想">
 <meta property="og:description" content="">
 <meta property="og:image" content="https://avatars.githubusercontent.com/u/25057508?v=4">
 
@@ -120,7 +86,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 <link rel="stylesheet" href="../../styles.css">
-<meta name="twitter:title" content="Reasoning - single cell 处理笔记">
+<meta name="twitter:title" content="Reasoning - 随想">
 <meta name="twitter:description" content="">
 <meta name="twitter:creator" content="@WangShxiang">
 <meta name="twitter:card" content="summary_large_image">
@@ -196,11 +162,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <header id="title-block-header" class="quarto-title-block default page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-body">
-      <h1 class="title">single cell 处理笔记</h1>
+      <h1 class="title">随想</h1>
                                 <div class="quarto-categories">
-                <div class="quarto-category">bioinformatics</div>
-                <div class="quarto-category">scRNA-seq</div>
-                <div class="quarto-category">note</div>
+                <div class="quarto-category">random</div>
               </div>
                   </div>
   </div>
@@ -218,7 +182,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <div>
       <div class="quarto-title-meta-heading">Published</div>
       <div class="quarto-title-meta-contents">
-        <p class="date">April 16, 2024</p>
+        <p class="date">May 3, 2024</p>
       </div>
     </div>
     
@@ -230,14 +194,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <!-- sidebar -->
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">On this page</h2>
-   
-  <ul>
-  <li><a href="#处理流程" id="toc-处理流程" class="nav-link active" data-scroll-target="#处理流程">处理流程</a></li>
-  <li><a href="#预处理-code" id="toc-预处理-code" class="nav-link" data-scroll-target="#预处理-code">预处理 Code</a></li>
-  </ul>
-</nav>
+        
     </div>
 <!-- main -->
 <main class="content quarto-banner-title-block" id="quarto-document-content">
@@ -245,75 +202,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 
-<p>今天请教了下朝晔单细胞处理的一些细节，这里做个记录。</p>
-<section id="处理流程" class="level2">
-<h2 class="anchored" data-anchor-id="处理流程">处理流程</h2>
-<p>首先整个数据质控后分大群，将上皮和非上皮分开处理， 然后大群下的免疫细胞再拆分单独处理 seurat 流程，分割小群。 小群分析时先聚类并寻找markers基因，查看top markers基因与已知报道（参考）的一致性和在小群中的 特异性，进行生物学注释，如cDC1.C14(GPR183)，有比较一致marker基因的小群可以考虑去除，双细胞或异常 细胞群可以在这个过程中去除。</p>
-<p>在分群的时候，分大群或小群，以及小群之间一般怎么设置cluster resolution这个参数呢？ &gt;有一些软件可以辅助判断一下（ROGUE），但我一般分的时候，小群会设的稍微高一点1-1.5，如果有性质比较一致的亚群就把他们合并在一起就好了，大体来说这个值的设定比较主观</p>
-</section>
-<section id="预处理-code" class="level2">
-<h2 class="anchored" data-anchor-id="预处理-code">预处理 Code</h2>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load packages</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(Seurat)</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(magrittr)</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(stringr)</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(DoubletFinder)</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(data.table)</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="co"># 1 Function----</span></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="co"># 1.1 Seurat standard workflow----</span></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>seuratdeal <span class="ot">&lt;-</span> <span class="cf">function</span>(SeuratObject, resolution){</span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>  SeuratObject <span class="ot">&lt;-</span> <span class="fu">NormalizeData</span>(SeuratObject, <span class="at">normalization.method =</span> <span class="st">"LogNormalize"</span>, <span class="at">scale.factor =</span> <span class="dv">10000</span>)</span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Find Variable Features</span></span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>  SeuratObject <span class="ot">&lt;-</span> <span class="fu">FindVariableFeatures</span>(SeuratObject, <span class="at">selection.method =</span> <span class="st">"vst"</span>, <span class="at">nfeatures =</span> <span class="dv">2000</span>)</span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>  SeuratObject <span class="ot">&lt;-</span> <span class="fu">ScaleData</span>(SeuratObject)</span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>  SeuratObject <span class="ot">&lt;-</span> <span class="fu">RunPCA</span>(SeuratObject, <span class="at">verbose =</span> F, <span class="at">dims =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">30</span>, <span class="at">npcs =</span> <span class="dv">30</span>)</span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>  SeuratObject <span class="ot">&lt;-</span> <span class="fu">RunUMAP</span>(SeuratObject, <span class="at">dims=</span><span class="dv">1</span><span class="sc">:</span><span class="dv">16</span>)</span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>  SeuratObject <span class="ot">&lt;-</span> <span class="fu">FindNeighbors</span>(SeuratObject, <span class="at">dims =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">16</span>) <span class="sc">%&gt;%</span> <span class="fu">FindClusters</span>(<span class="at">resolution =</span> resolution)</span>
-<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="co"># 1.2 Delete doublet----</span></span>
-<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>DelDoublet <span class="ot">&lt;-</span> <span class="cf">function</span>(SeuratObject, DoubletRate){</span>
-<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>  sweep.res.list <span class="ot">&lt;-</span> <span class="fu">paramSweep_v3</span>(SeuratObject, <span class="at">PCs =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">16</span>, <span class="at">sct =</span> F)</span>
-<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>  sweep.stats <span class="ot">&lt;-</span> <span class="fu">summarizeSweep</span>(sweep.res.list, <span class="at">GT =</span> <span class="cn">FALSE</span>)  </span>
-<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>  bcmvn <span class="ot">&lt;-</span> <span class="fu">find.pK</span>(sweep.stats)</span>
-<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>  pK_bcmvn <span class="ot">&lt;-</span> bcmvn<span class="sc">$</span>pK[<span class="fu">which.max</span>(bcmvn<span class="sc">$</span>BCmetric)] <span class="sc">%&gt;%</span> <span class="fu">as.character</span>() <span class="sc">%&gt;%</span> <span class="fu">as.numeric</span>()</span>
-<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>  homotypic.prop <span class="ot">&lt;-</span> <span class="fu">modelHomotypic</span>(SeuratObject<span class="sc">$</span>seurat_clusters)   <span class="co"># celltype is the best choice</span></span>
-<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>  nExp_poi <span class="ot">&lt;-</span> <span class="fu">round</span>(DoubletRate<span class="sc">*</span><span class="fu">ncol</span>(SeuratObject)) </span>
-<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>  nExp_poi.adj <span class="ot">&lt;-</span> <span class="fu">round</span>(nExp_poi<span class="sc">*</span>(<span class="dv">1</span><span class="sc">-</span>homotypic.prop))</span>
-<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>  SeuratObject <span class="ot">&lt;-</span> <span class="fu">doubletFinder_v3</span>(SeuratObject, <span class="at">PCs =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">16</span>, <span class="at">pN =</span> <span class="fl">0.25</span>, <span class="at">pK =</span> pK_bcmvn, </span>
-<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>                                   <span class="at">nExp =</span> nExp_poi.adj, <span class="at">reuse.pANN =</span> F, <span class="at">sct =</span> F)</span>
-<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(SeuratObject)</span>
-<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>例子：</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>countpath <span class="ot">&lt;-</span> <span class="st">"/data1/chywang/STAD_Cohort/GSE183904"</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>FileID <span class="ot">&lt;-</span> <span class="fu">list.files</span>(countpath)</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>combine <span class="ot">&lt;-</span> <span class="fu">lapply</span>(FileID, <span class="cf">function</span>(i){<span class="fu">CreateSeuratObject</span>(<span class="at">counts =</span> <span class="fu">read.delim</span>(<span class="fu">paste0</span>(countpath, <span class="st">"/"</span>, i), <span class="at">header =</span> T, <span class="at">row.names =</span> <span class="dv">1</span>, <span class="at">sep =</span> <span class="st">","</span>),</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>                                                         <span class="at">min.cells =</span> <span class="dv">3</span>, </span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>                                                         <span class="at">min.features =</span> <span class="dv">800</span>,</span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>                                                         <span class="at">project =</span> <span class="fu">str_split_fixed</span>(i, <span class="st">"_"</span>, <span class="dv">2</span>)[ ,<span class="dv">2</span>] <span class="sc">%&gt;%</span> <span class="fu">gsub</span>(<span class="st">".csv"</span>, <span class="st">""</span>, .))})</span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>combine <span class="ot">&lt;-</span> <span class="fu">lapply</span>(combine, <span class="cf">function</span>(i){<span class="fu">subset</span>(i, <span class="at">subset =</span> <span class="st">`</span><span class="at">nFeature_RNA</span><span class="st">`</span> <span class="sc">&lt;=</span> <span class="dv">6000</span>)})</span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>combine <span class="ot">&lt;-</span> <span class="fu">lapply</span>(combine, <span class="cf">function</span>(i){</span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">PercentageFeatureSet</span>(i, <span class="at">pattern =</span> <span class="st">"^MT-"</span>, <span class="at">col.name =</span> <span class="st">"percent.mt"</span>)})</span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>combine <span class="ot">&lt;-</span> <span class="fu">lapply</span>(combine, <span class="cf">function</span>(i){<span class="fu">subset</span>(i, percent.mt <span class="sc">&lt;</span> <span class="dv">10</span>)})</span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>combine <span class="ot">&lt;-</span> <span class="fu">lapply</span>(combine, <span class="cf">function</span>(i){<span class="fu">seuratdeal</span>(i, <span class="fl">0.7</span>)})</span>
-<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate doublet ratio</span></span>
-<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>doubletratio <span class="ot">&lt;-</span> <span class="fu">c</span>()</span>
-<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(combine)) {</span>
-<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>  doubletratio[i] <span class="ot">&lt;-</span> (combine[[i]]<span class="sc">@</span>meta.data <span class="sc">%&gt;%</span> <span class="fu">nrow</span>()) <span class="sc">/</span> <span class="dv">500</span> <span class="sc">*</span> <span class="fl">0.004</span>}</span>
-<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a><span class="co"># Run DoubletFinder</span></span>
-<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>combine <span class="ot">&lt;-</span> <span class="fu">mapply</span>(DelDoublet, combine, doubletratio)</span>
-<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(combine)) {</span>
-<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">names</span>(combine[[i]]<span class="sc">@</span>meta.data)[combine[[i]]<span class="sc">@</span>meta.data <span class="sc">%&gt;%</span> <span class="fu">ncol</span>()] <span class="ot">&lt;-</span> <span class="st">"Doubletstate"</span></span>
-<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a>GSE183904 <span class="ot">&lt;-</span> <span class="fu">Reduce</span>(merge, combine)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>了解的越多，才知道懂的不多。</p>
+<p>懂的再多，做的不一定要多。</p>
 
 
-</section>
 
 </main> <!-- /main -->
 <script type="text/javascript" src="//rf.revolvermaps.com/0/0/7.js?i=5j5b62dhqyd&amp;m=7&amp;c=ff0000&amp;cr1=ffffff&amp;sx=0" async="async"></script>
