@@ -1,3 +1,4 @@
+# https://quarto.org/
 project:
   type: website
   output-dir: docs
@@ -44,7 +45,7 @@ website:
         href: index.xml
 format:
   html:
-    theme: vapor
+    theme: minty
     css: styles.css
     smooth-scroll: true
     citations-hover: true

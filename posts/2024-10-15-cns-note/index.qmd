@@ -1,0 +1,18 @@
+---
+title: 准备CNS阅读简记
+author: Shixiang Wang
+date: 2024-10-15
+categories: [CNS简记]
+draft: false
+description: ''
+
+toc: true
+
+format:
+  html:
+    code-fold: false
+    code-overflow: wrap
+    code-tools: false
+---
+
+准备系统地弄一些文献阅读的计划，增强下自己的内在功底，针对性的写/记录一些笔记。

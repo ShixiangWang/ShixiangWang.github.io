@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.3.361">
+<meta name="generator" content="quarto-1.4.553">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -37,17 +37,23 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="dark">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
   "collapse-after": 3,
   "panel-placement": "end",
   "type": "overlay",
-  "limit": 20,
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
   "language": {
     "search-no-results-text": "No results",
     "search-matching-documents-text": "matching documents",
@@ -56,6 +62,7 @@ ul.task-list li input[type="checkbox"] {
     "search-more-match-text": "more match in this document",
     "search-more-matches-text": "more matches in this document",
     "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
     "search-detached-cancel-button-title": "Cancel",
     "search-submit-button-title": "Submit",
     "search-label": "Search"
@@ -101,7 +108,7 @@ ul.task-list li input[type="checkbox"] {
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://shixiangwang.github.io/posts/welcome/">
 <meta property="og:title" content="Reasoning - Write programs that do one thing and do it well.">
-<meta property="og:description" content="">
+<meta property="og:description" content="Reasoning is a blog dedicated to exploring the intersection of data science, bioinformatics, and personal insights.">
 <meta property="og:image" content="https://avatars.githubusercontent.com/u/25057508?v=4">
 
 <!-- Twitter -->
@@ -117,8 +124,35 @@ ul.task-list li input[type="checkbox"] {
   <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
 <link rel="stylesheet" href="styles.css">
-<link rel="alternate" type="application/rss+xml" title="Reasoning" href="index.xml"><meta name="twitter:title" content="Reasoning - Write programs that do one thing and do it well.">
+<link rel="alternate" type="application/rss+xml" title="Reasoning" href="index.xml" data-external="1"><meta name="twitter:title" content="Reasoning - Write programs that do one thing and do it well.">
 <meta name="twitter:creator" content="@WangShxiang">
 <meta name="twitter:card" content="summary_large_image">
 </head>
@@ -126,10 +160,10 @@ ul.task-list li input[type="checkbox"] {
 <body class="nav-fixed">
 
 <div id="quarto-search-results"></div>
-  <header id="quarto-header" class="headroom fixed-top">
-    <nav class="navbar navbar-expand-lg navbar-dark ">
+  <header id="quarto-header" class="headroom fixed-top quarto-banner">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
-      <div class="navbar-brand-container">
+      <div class="navbar-brand-container mx-auto">
     <a class="navbar-brand" href="./index.html">
     <span class="navbar-title">Reasoning</span>
     </a>
@@ -141,12 +175,12 @@ ul.task-list li input[type="checkbox"] {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item dropdown ">
-    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-resources" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-resources" role="button" data-bs-toggle="dropdown" aria-expanded="false">
  <span class="menu-text">Resources</span>
     </a>
     <ul class="dropdown-menu" aria-labelledby="nav-menu-resources">    
         <li>
-    <a class="dropdown-item" href="./resource.html" rel="" target="">
+    <a class="dropdown-item" href="./resource.html">
  <span class="dropdown-text">Code and Books</span></a>
   </li>  
     </ul>
@@ -154,38 +188,38 @@ ul.task-list li input[type="checkbox"] {
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link" href="https://shixiangwang.github.io/cv-shixiang/" rel="" target="">
- <span class="menu-text">Resume</span></a>
+    <a class="nav-link" href="https://shixiangwang.github.io/cv-shixiang/"> 
+<span class="menu-text">Resume</span></a>
   </li>  
   <li class="nav-item compact">
-    <a class="nav-link" href="https://shixiangwang.github.io/home/logo/qrcode.jpg" rel="" target=""><i class="bi bi-wechat" role="img">
+    <a class="nav-link" href="https://shixiangwang.github.io/home/logo/qrcode.jpg"> <i class="bi bi-wechat" role="img">
 </i> 
- <span class="menu-text"></span></a>
+<span class="menu-text"></span></a>
   </li>  
   <li class="nav-item compact">
-    <a class="nav-link" href="https://www.zhihu.com/people/shixiangwang" rel="" target=""><i class="bi bi-quora" role="img">
+    <a class="nav-link" href="https://www.zhihu.com/people/shixiangwang"> <i class="bi bi-quora" role="img">
 </i> 
- <span class="menu-text"></span></a>
+<span class="menu-text"></span></a>
   </li>  
   <li class="nav-item compact">
-    <a class="nav-link" href="https://github.com/ShixiangWang" rel="" target=""><i class="bi bi-github" role="img">
+    <a class="nav-link" href="https://github.com/ShixiangWang"> <i class="bi bi-github" role="img">
 </i> 
- <span class="menu-text"></span></a>
+<span class="menu-text"></span></a>
   </li>  
   <li class="nav-item compact">
-    <a class="nav-link" href="https://twitter.com/WangShxiang" rel="" target=""><i class="bi bi-twitter" role="img">
+    <a class="nav-link" href="https://twitter.com/WangShxiang"> <i class="bi bi-twitter" role="img">
 </i> 
- <span class="menu-text"></span></a>
+<span class="menu-text"></span></a>
   </li>  
   <li class="nav-item compact">
-    <a class="nav-link" href="./index.xml" rel="" target=""><i class="bi bi-rss" role="img">
+    <a class="nav-link" href="./index.xml"> <i class="bi bi-rss" role="img">
 </i> 
- <span class="menu-text"></span></a>
+<span class="menu-text"></span></a>
   </li>  
 </ul>
-            <div class="quarto-navbar-tools">
-</div>
           </div> <!-- /navcollapse -->
+          <div class="quarto-navbar-tools">
+</div>
       </div> <!-- /container-fluid -->
     </nav>
 </header>
@@ -198,7 +232,7 @@ ul.task-list li input[type="checkbox"] {
   </div>
     
   
-  <div class="quarto-title-meta">
+  <div class="quarto-title-meta column-page-left">
 
       
     
@@ -211,7 +245,7 @@ ul.task-list li input[type="checkbox"] {
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
         
-    <h5 class="quarto-listing-category-title">Categories</h5><div class="quarto-listing-category category-default"><div class="category" data-category="">All <span class="quarto-category-count">(75)</span></div><div class="category" data-category="AI">AI <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Linux">Linux <span class="quarto-category-count">(6)</span></div><div class="category" data-category="Python">Python <span class="quarto-category-count">(1)</span></div><div class="category" data-category="R">R <span class="quarto-category-count">(11)</span></div><div class="category" data-category="Rust">Rust <span class="quarto-category-count">(1)</span></div><div class="category" data-category="academic">academic <span class="quarto-category-count">(5)</span></div><div class="category" data-category="bioinformatics">bioinformatics <span class="quarto-category-count">(15)</span></div><div class="category" data-category="container">container <span class="quarto-category-count">(1)</span></div><div class="category" data-category="debug">debug <span class="quarto-category-count">(1)</span></div><div class="category" data-category="git">git <span class="quarto-category-count">(1)</span></div><div class="category" data-category="journal">journal <span class="quarto-category-count">(12)</span></div><div class="category" data-category="machine-learning">machine-learning <span class="quarto-category-count">(2)</span></div><div class="category" data-category="news">news <span class="quarto-category-count">(2)</span></div><div class="category" data-category="note">note <span class="quarto-category-count">(19)</span></div><div class="category" data-category="personal">personal <span class="quarto-category-count">(5)</span></div><div class="category" data-category="random">random <span class="quarto-category-count">(8)</span></div><div class="category" data-category="resource">resource <span class="quarto-category-count">(1)</span></div><div class="category" data-category="scRNA-seq">scRNA-seq <span class="quarto-category-count">(6)</span></div><div class="category" data-category="shiny">shiny <span class="quarto-category-count">(3)</span></div><div class="category" data-category="snakemake">snakemake <span class="quarto-category-count">(1)</span></div><div class="category" data-category="stats">stats <span class="quarto-category-count">(4)</span></div><div class="category" data-category="thought">thought <span class="quarto-category-count">(6)</span></div><div class="category" data-category="免疫">免疫 <span class="quarto-category-count">(1)</span></div><div class="category" data-category="诗">诗 <span class="quarto-category-count">(4)</span></div></div></div>
+    <h5 class="quarto-listing-category-title">Categories</h5><div class="quarto-listing-category category-default"><div class="category" data-category="">All <span class="quarto-category-count">(76)</span></div><div class="category" data-category="AI">AI <span class="quarto-category-count">(1)</span></div><div class="category" data-category="CNS简记">CNS简记 <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Linux">Linux <span class="quarto-category-count">(6)</span></div><div class="category" data-category="Python">Python <span class="quarto-category-count">(1)</span></div><div class="category" data-category="R">R <span class="quarto-category-count">(11)</span></div><div class="category" data-category="Rust">Rust <span class="quarto-category-count">(1)</span></div><div class="category" data-category="academic">academic <span class="quarto-category-count">(5)</span></div><div class="category" data-category="bioinformatics">bioinformatics <span class="quarto-category-count">(15)</span></div><div class="category" data-category="container">container <span class="quarto-category-count">(1)</span></div><div class="category" data-category="debug">debug <span class="quarto-category-count">(1)</span></div><div class="category" data-category="git">git <span class="quarto-category-count">(1)</span></div><div class="category" data-category="journal">journal <span class="quarto-category-count">(12)</span></div><div class="category" data-category="machine-learning">machine-learning <span class="quarto-category-count">(2)</span></div><div class="category" data-category="news">news <span class="quarto-category-count">(2)</span></div><div class="category" data-category="note">note <span class="quarto-category-count">(19)</span></div><div class="category" data-category="personal">personal <span class="quarto-category-count">(5)</span></div><div class="category" data-category="random">random <span class="quarto-category-count">(8)</span></div><div class="category" data-category="resource">resource <span class="quarto-category-count">(1)</span></div><div class="category" data-category="scRNA-seq">scRNA-seq <span class="quarto-category-count">(6)</span></div><div class="category" data-category="shiny">shiny <span class="quarto-category-count">(3)</span></div><div class="category" data-category="snakemake">snakemake <span class="quarto-category-count">(1)</span></div><div class="category" data-category="stats">stats <span class="quarto-category-count">(4)</span></div><div class="category" data-category="thought">thought <span class="quarto-category-count">(6)</span></div><div class="category" data-category="免疫">免疫 <span class="quarto-category-count">(1)</span></div><div class="category" data-category="诗">诗 <span class="quarto-category-count">(4)</span></div></div></div>
 <!-- main -->
 <main class="content quarto-banner-title-block column-page-left" id="quarto-document-content">
 
@@ -222,34 +256,66 @@ ul.task-list li input[type="checkbox"] {
 
 
 
+
 <div class="quarto-listing quarto-listing-container-default" id="listing-listing">
 <div class="list quarto-listing-default">
-<div class="quarto-post image-right" data-index="0" data-categories="random" data-listing-date-sort="1714665600000" data-listing-file-modified-sort="1714707072993" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1">
+<div class="quarto-post image-right" data-index="0" data-categories="CNS简记" data-listing-date-sort="1728921600000" data-listing-file-modified-sort="1729003858868" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="1">
 <div class="thumbnail">
-<p><a href="./posts/2024-05-03-random/index.html"> <div class="listing-item-img-placeholder card-img-top" >&nbsp;</div> </a></p>
+<p><a href="./posts/2024-10-15-cns-note/index.html" class="no-external"></a></p><a href="./posts/2024-10-15-cns-note/index.html" class="no-external">
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+</a><p><a href="./posts/2024-10-15-cns-note/index.html" class="no-external"></a></p>
 </div>
 <div class="body">
-<a href="./posts/2024-05-03-random/index.html">
 <h3 class="no-anchor listing-title">
-随想
+<a href="./posts/2024-10-15-cns-note/index.html" class="no-external">准备CNS阅读简记</a>
 </h3>
 <div class="listing-subtitle">
-
+<a href="./posts/2024-10-15-cns-note/index.html" class="no-external"></a>
+</div>
+<div class="listing-categories">
+<div class="listing-category" onclick="window.quartoListingCategory('CNS简记'); return false;">
+CNS简记
+</div>
+</div>
+<div class="listing-description">
+<a href="./posts/2024-10-15-cns-note/index.html" class="no-external">准备系统地弄一些文献阅读的计划，增强下自己的内在功底，针对性的写/记录一些笔记。</a>
+</div>
+</div>
+<div class="metadata">
+<a href="./posts/2024-10-15-cns-note/index.html" class="no-external">
+<div class="listing-date">
+Oct 15, 2024
+</div>
+<div class="listing-author">
+Shixiang Wang
 </div>
 </a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="1" data-categories="random" data-listing-date-sort="1714665600000" data-listing-file-modified-sort="1729002838381" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="1">
+<div class="thumbnail">
+<p><a href="./posts/2024-05-03-random/index.html" class="no-external"></a></p><a href="./posts/2024-05-03-random/index.html" class="no-external">
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+</a><p><a href="./posts/2024-05-03-random/index.html" class="no-external"></a></p>
+</div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/2024-05-03-random/index.html" class="no-external">随想</a>
+</h3>
+<div class="listing-subtitle">
+<a href="./posts/2024-05-03-random/index.html" class="no-external"></a>
+</div>
 <div class="listing-categories">
 <div class="listing-category" onclick="window.quartoListingCategory('random'); return false;">
 random
 </div>
 </div>
-<a href="./posts/2024-05-03-random/index.html">
 <div class="listing-description">
-了解的越多，才知道懂的不多。
+<a href="./posts/2024-05-03-random/index.html" class="no-external">了解的越多，才知道懂的不多。</a>
 </div>
-</a>
 </div>
 <div class="metadata">
-<a href="./posts/2024-05-03-random/index.html">
+<a href="./posts/2024-05-03-random/index.html" class="no-external">
 <div class="listing-date">
 May 3, 2024
 </div>
@@ -259,32 +325,30 @@ Shixiang Wang
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="1" data-categories="random" data-listing-date-sort="1714320000000" data-listing-file-modified-sort="1714706966902" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1">
+<div class="quarto-post image-right" data-index="2" data-categories="random" data-listing-date-sort="1714320000000" data-listing-file-modified-sort="1729002838381" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="4">
 <div class="thumbnail">
-<p><a href="./posts/2024-04-29-random/index.html"> <div class="listing-item-img-placeholder card-img-top" >&nbsp;</div> </a></p>
+<p><a href="./posts/2024-04-29-random/index.html" class="no-external"></a></p><a href="./posts/2024-04-29-random/index.html" class="no-external">
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+</a><p><a href="./posts/2024-04-29-random/index.html" class="no-external"></a></p>
 </div>
 <div class="body">
-<a href="./posts/2024-04-29-random/index.html">
 <h3 class="no-anchor listing-title">
-近期摘录
+<a href="./posts/2024-04-29-random/index.html" class="no-external">近期摘录</a>
 </h3>
 <div class="listing-subtitle">
-
+<a href="./posts/2024-04-29-random/index.html" class="no-external"></a>
 </div>
-</a>
 <div class="listing-categories">
 <div class="listing-category" onclick="window.quartoListingCategory('random'); return false;">
 random
 </div>
 </div>
-<a href="./posts/2024-04-29-random/index.html">
 <div class="listing-description">
-当技术变得隐形时才是最强大的。
+<a href="./posts/2024-04-29-random/index.html" class="no-external">当技术变得隐形时才是最强大的。</a>
 </div>
-</a>
 </div>
 <div class="metadata">
-<a href="./posts/2024-04-29-random/index.html">
+<a href="./posts/2024-04-29-random/index.html" class="no-external">
 <div class="listing-date">
 Apr 29, 2024
 </div>
@@ -294,32 +358,30 @@ Shixiang Wang
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="2" data-categories="bioinformatics" data-listing-date-sort="1713715200000" data-listing-file-modified-sort="1714706966900" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="12">
+<div class="quarto-post image-right" data-index="3" data-categories="bioinformatics" data-listing-date-sort="1713715200000" data-listing-file-modified-sort="1729002838380" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="12" data-listing-word-count-sort="2259">
 <div class="thumbnail">
-<p><a href="./posts/2024-04-22-sratools-networking-issue/index.html"> <div class="listing-item-img-placeholder card-img-top" >&nbsp;</div> </a></p>
+<p><a href="./posts/2024-04-22-sratools-networking-issue/index.html" class="no-external"></a></p><a href="./posts/2024-04-22-sratools-networking-issue/index.html" class="no-external">
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+</a><p><a href="./posts/2024-04-22-sratools-networking-issue/index.html" class="no-external"></a></p>
 </div>
 <div class="body">
-<a href="./posts/2024-04-22-sratools-networking-issue/index.html">
 <h3 class="no-anchor listing-title">
-sratools networking issue
+<a href="./posts/2024-04-22-sratools-networking-issue/index.html" class="no-external">sratools networking issue</a>
 </h3>
 <div class="listing-subtitle">
-
+<a href="./posts/2024-04-22-sratools-networking-issue/index.html" class="no-external"></a>
 </div>
-</a>
 <div class="listing-categories">
 <div class="listing-category" onclick="window.quartoListingCategory('bioinformatics'); return false;">
 bioinformatics
 </div>
 </div>
-<a href="./posts/2024-04-22-sratools-networking-issue/index.html">
 <div class="listing-description">
-在使用 sratools 的 fastq-dump 时出现了成片的问题信息：
+<a href="./posts/2024-04-22-sratools-networking-issue/index.html" class="no-external">在使用 sratools 的 fastq-dump 时出现了成片的问题信息：</a>
 </div>
-</a>
 </div>
 <div class="metadata">
-<a href="./posts/2024-04-22-sratools-networking-issue/index.html">
+<a href="./posts/2024-04-22-sratools-networking-issue/index.html" class="no-external">
 <div class="listing-date">
 Apr 22, 2024
 </div>
@@ -329,19 +391,19 @@ Shixiang Wang
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="3" data-categories="bioinformatics,scRNA-seq,note" data-listing-date-sort="1713196800000" data-listing-file-modified-sort="1714706966899" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="3">
+<div class="quarto-post image-right" data-index="4" data-categories="bioinformatics,scRNA-seq,note" data-listing-date-sort="1713196800000" data-listing-file-modified-sort="1729002838380" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="3" data-listing-word-count-sort="466">
 <div class="thumbnail">
-<p><a href="./posts/2024-04-16-single-cell-records/index.html"> <div class="listing-item-img-placeholder card-img-top" >&nbsp;</div> </a></p>
+<p><a href="./posts/2024-04-16-single-cell-records/index.html" class="no-external"></a></p><a href="./posts/2024-04-16-single-cell-records/index.html" class="no-external">
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+</a><p><a href="./posts/2024-04-16-single-cell-records/index.html" class="no-external"></a></p>
 </div>
 <div class="body">
-<a href="./posts/2024-04-16-single-cell-records/index.html">
 <h3 class="no-anchor listing-title">
-single cell 处理笔记
+<a href="./posts/2024-04-16-single-cell-records/index.html" class="no-external">single cell 处理笔记</a>
 </h3>
 <div class="listing-subtitle">
-
+<a href="./posts/2024-04-16-single-cell-records/index.html" class="no-external"></a>
 </div>
-</a>
 <div class="listing-categories">
 <div class="listing-category" onclick="window.quartoListingCategory('bioinformatics'); return false;">
 bioinformatics
@@ -353,14 +415,12 @@ scRNA-seq
 note
 </div>
 </div>
-<a href="./posts/2024-04-16-single-cell-records/index.html">
 <div class="listing-description">
-今天请教了下朝晔单细胞处理的一些细节，这里做个记录。
+<a href="./posts/2024-04-16-single-cell-records/index.html" class="no-external">今天请教了下朝晔单细胞处理的一些细节，这里做个记录。</a>
 </div>
-</a>
 </div>
 <div class="metadata">
-<a href="./posts/2024-04-16-single-cell-records/index.html">
+<a href="./posts/2024-04-16-single-cell-records/index.html" class="no-external">
 <div class="listing-date">
 Apr 16, 2024
 </div>
@@ -370,32 +430,30 @@ Shixiang Wang
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="4" data-categories="bioinformatics" data-listing-date-sort="1713110400000" data-listing-file-modified-sort="1714706966898" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1">
+<div class="quarto-post image-right" data-index="5" data-categories="bioinformatics" data-listing-date-sort="1713110400000" data-listing-file-modified-sort="1729002838380" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="48">
 <div class="thumbnail">
-<p><a href="./posts/2024-04-15-discordant-and-clipped-reads/index.html"> <div class="listing-item-img-placeholder card-img-top" >&nbsp;</div> </a></p>
+<p><a href="./posts/2024-04-15-discordant-and-clipped-reads/index.html" class="no-external"></a></p><a href="./posts/2024-04-15-discordant-and-clipped-reads/index.html" class="no-external">
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+</a><p><a href="./posts/2024-04-15-discordant-and-clipped-reads/index.html" class="no-external"></a></p>
 </div>
 <div class="body">
-<a href="./posts/2024-04-15-discordant-and-clipped-reads/index.html">
 <h3 class="no-anchor listing-title">
-Discordant and clipped reads
+<a href="./posts/2024-04-15-discordant-and-clipped-reads/index.html" class="no-external">Discordant and clipped reads</a>
 </h3>
 <div class="listing-subtitle">
-
+<a href="./posts/2024-04-15-discordant-and-clipped-reads/index.html" class="no-external"></a>
 </div>
-</a>
 <div class="listing-categories">
 <div class="listing-category" onclick="window.quartoListingCategory('bioinformatics'); return false;">
 bioinformatics
 </div>
 </div>
-<a href="./posts/2024-04-15-discordant-and-clipped-reads/index.html">
 <div class="listing-description">
-From Kimi, 可靠性自己判断。
+<a href="./posts/2024-04-15-discordant-and-clipped-reads/index.html" class="no-external">From Kimi, 可靠性自己判断。</a>
 </div>
-</a>
 </div>
 <div class="metadata">
-<a href="./posts/2024-04-15-discordant-and-clipped-reads/index.html">
+<a href="./posts/2024-04-15-discordant-and-clipped-reads/index.html" class="no-external">
 <div class="listing-date">
 Apr 15, 2024
 </div>
@@ -405,32 +463,30 @@ Shixiang Wang
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="5" data-categories="stats" data-listing-date-sort="1712764800000" data-listing-file-modified-sort="1712850069118" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1">
+<div class="quarto-post image-right" data-index="6" data-categories="stats" data-listing-date-sort="1712764800000" data-listing-file-modified-sort="1729002838380" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="10">
 <div class="thumbnail">
-<p><a href="./posts/2024-04-11-type-1-2-errors/index.html"> <div class="listing-item-img-placeholder card-img-top" >&nbsp;</div> </a></p>
+<p><a href="./posts/2024-04-11-type-1-2-errors/index.html" class="no-external"></a></p><a href="./posts/2024-04-11-type-1-2-errors/index.html" class="no-external">
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+</a><p><a href="./posts/2024-04-11-type-1-2-errors/index.html" class="no-external"></a></p>
 </div>
 <div class="body">
-<a href="./posts/2024-04-11-type-1-2-errors/index.html">
 <h3 class="no-anchor listing-title">
-第一/二类型错误
+<a href="./posts/2024-04-11-type-1-2-errors/index.html" class="no-external">第一/二类型错误</a>
 </h3>
 <div class="listing-subtitle">
-
+<a href="./posts/2024-04-11-type-1-2-errors/index.html" class="no-external"></a>
 </div>
-</a>
 <div class="listing-categories">
 <div class="listing-category" onclick="window.quartoListingCategory('stats'); return false;">
 stats
 </div>
 </div>
-<a href="./posts/2024-04-11-type-1-2-errors/index.html">
 <div class="listing-description">
-From Kimi
+<a href="./posts/2024-04-11-type-1-2-errors/index.html" class="no-external">From Kimi</a>
 </div>
-</a>
 </div>
 <div class="metadata">
-<a href="./posts/2024-04-11-type-1-2-errors/index.html">
+<a href="./posts/2024-04-11-type-1-2-errors/index.html" class="no-external">
 <div class="listing-date">
 Apr 11, 2024
 </div>
@@ -440,19 +496,19 @@ Shixiang Wang
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="6" data-categories="Linux,R" data-listing-date-sort="1710864000000" data-listing-file-modified-sort="1710932744706" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1">
+<div class="quarto-post image-right" data-index="7" data-categories="Linux,R" data-listing-date-sort="1710864000000" data-listing-file-modified-sort="1729002838380" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="25">
 <div class="thumbnail">
-<p><a href="./posts/2024-03-20-r-makevars-compiler-setting/index.html"> <div class="listing-item-img-placeholder card-img-top" >&nbsp;</div> </a></p>
+<p><a href="./posts/2024-03-20-r-makevars-compiler-setting/index.html" class="no-external"></a></p><a href="./posts/2024-03-20-r-makevars-compiler-setting/index.html" class="no-external">
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+</a><p><a href="./posts/2024-03-20-r-makevars-compiler-setting/index.html" class="no-external"></a></p>
 </div>
 <div class="body">
-<a href="./posts/2024-03-20-r-makevars-compiler-setting/index.html">
 <h3 class="no-anchor listing-title">
-R 设置编译选项
+<a href="./posts/2024-03-20-r-makevars-compiler-setting/index.html" class="no-external">R 设置编译选项</a>
 </h3>
 <div class="listing-subtitle">
-
+<a href="./posts/2024-03-20-r-makevars-compiler-setting/index.html" class="no-external"></a>
 </div>
-</a>
 <div class="listing-categories">
 <div class="listing-category" onclick="window.quartoListingCategory('Linux'); return false;">
 Linux
@@ -461,14 +517,12 @@ Linux
 R
 </div>
 </div>
-<a href="./posts/2024-03-20-r-makevars-compiler-setting/index.html">
 <div class="listing-description">
-在 R 中，特别是 CentOS Linux 进行包安装和编译时，需要使用比较新的 C/C++ 编译器，在 <code>~/.R/Makevars</code> 中作如下设置。
+<a href="./posts/2024-03-20-r-makevars-compiler-setting/index.html" class="no-external">在 R 中，特别是 CentOS Linux 进行包安装和编译时，需要使用比较新的 C/C++ 编译器，在 <code>~/.R/Makevars</code> 中作如下设置。</a>
 </div>
-</a>
 </div>
 <div class="metadata">
-<a href="./posts/2024-03-20-r-makevars-compiler-setting/index.html">
+<a href="./posts/2024-03-20-r-makevars-compiler-setting/index.html" class="no-external">
 <div class="listing-date">
 Mar 20, 2024
 </div>
@@ -478,19 +532,19 @@ Shixiang Wang
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="7" data-categories="snakemake,note" data-listing-date-sort="1709049600000" data-listing-file-modified-sort="1709280678235" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="9">
+<div class="quarto-post image-right" data-index="8" data-categories="snakemake,note" data-listing-date-sort="1709049600000" data-listing-file-modified-sort="1729002838379" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="9" data-listing-word-count-sort="1780">
 <div class="thumbnail">
-<p><a href="./posts/2024-02-28-snakemake-basics/index.html"> <div class="listing-item-img-placeholder card-img-top" >&nbsp;</div> </a></p>
+<p><a href="./posts/2024-02-28-snakemake-basics/index.html" class="no-external"></a></p><a href="./posts/2024-02-28-snakemake-basics/index.html" class="no-external">
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+</a><p><a href="./posts/2024-02-28-snakemake-basics/index.html" class="no-external"></a></p>
 </div>
 <div class="body">
-<a href="./posts/2024-02-28-snakemake-basics/index.html">
 <h3 class="no-anchor listing-title">
-snakemake 教程精要
+<a href="./posts/2024-02-28-snakemake-basics/index.html" class="no-external">snakemake 教程精要</a>
 </h3>
 <div class="listing-subtitle">
-
+<a href="./posts/2024-02-28-snakemake-basics/index.html" class="no-external"></a>
 </div>
-</a>
 <div class="listing-categories">
 <div class="listing-category" onclick="window.quartoListingCategory('snakemake'); return false;">
 snakemake
@@ -499,14 +553,12 @@ snakemake
 note
 </div>
 </div>
-<a href="./posts/2024-02-28-snakemake-basics/index.html">
 <div class="listing-description">
-这里把 Snakemake 教程 的精要记录了下来。
+<a href="./posts/2024-02-28-snakemake-basics/index.html" class="no-external">这里把 Snakemake 教程 的精要记录了下来。</a>
 </div>
-</a>
 </div>
 <div class="metadata">
-<a href="./posts/2024-02-28-snakemake-basics/index.html">
+<a href="./posts/2024-02-28-snakemake-basics/index.html" class="no-external">
 <div class="listing-date">
 Feb 28, 2024
 </div>
@@ -516,19 +568,19 @@ Shixiang Wang
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="8" data-categories="Linux,note" data-listing-date-sort="1708790400000" data-listing-file-modified-sort="1708853031924" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1">
+<div class="quarto-post image-right" data-index="9" data-categories="Linux,note" data-listing-date-sort="1708790400000" data-listing-file-modified-sort="1729002838379" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="97">
 <div class="thumbnail">
-<p><a href="./posts/2024-02-25-can-i-run-vs-code-server-on-older-linux-distributions/index.html"> <div class="listing-item-img-placeholder card-img-top" >&nbsp;</div> </a></p>
+<p><a href="./posts/2024-02-25-can-i-run-vs-code-server-on-older-linux-distributions/index.html" class="no-external"></a></p><a href="./posts/2024-02-25-can-i-run-vs-code-server-on-older-linux-distributions/index.html" class="no-external">
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+</a><p><a href="./posts/2024-02-25-can-i-run-vs-code-server-on-older-linux-distributions/index.html" class="no-external"></a></p>
 </div>
 <div class="body">
-<a href="./posts/2024-02-25-can-i-run-vs-code-server-on-older-linux-distributions/index.html">
 <h3 class="no-anchor listing-title">
-Can I run VS Code Server on older Linux distributions
+<a href="./posts/2024-02-25-can-i-run-vs-code-server-on-older-linux-distributions/index.html" class="no-external">Can I run VS Code Server on older Linux distributions</a>
 </h3>
 <div class="listing-subtitle">
-
+<a href="./posts/2024-02-25-can-i-run-vs-code-server-on-older-linux-distributions/index.html" class="no-external"></a>
 </div>
-</a>
 <div class="listing-categories">
 <div class="listing-category" onclick="window.quartoListingCategory('Linux'); return false;">
 Linux
@@ -537,14 +589,12 @@ Linux
 note
 </div>
 </div>
-<a href="./posts/2024-02-25-can-i-run-vs-code-server-on-older-linux-distributions/index.html">
 <div class="listing-description">
-VSCode 的不断更新导致最新版本 Remotes 已经在一些 Linux server 上不再支持，这里记录下官方的解决办法，就是将版本降级到 1.85
+<a href="./posts/2024-02-25-can-i-run-vs-code-server-on-older-linux-distributions/index.html" class="no-external">VSCode 的不断更新导致最新版本 Remotes 已经在一些 Linux server 上不再支持，这里记录下官方的解决办法，就是将版本降级到 1.85</a>
 </div>
-</a>
 </div>
 <div class="metadata">
-<a href="./posts/2024-02-25-can-i-run-vs-code-server-on-older-linux-distributions/index.html">
+<a href="./posts/2024-02-25-can-i-run-vs-code-server-on-older-linux-distributions/index.html" class="no-external">
 <div class="listing-date">
 Feb 25, 2024
 </div>
@@ -554,19 +604,19 @@ Shixiang Wang
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="9" data-categories="note,container" data-listing-date-sort="1708617600000" data-listing-file-modified-sort="1708683800296" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1">
+<div class="quarto-post image-right" data-index="10" data-categories="note,container" data-listing-date-sort="1708617600000" data-listing-file-modified-sort="1729002838379" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="6">
 <div class="thumbnail">
-<p><a href="./posts/2024-02-23-use-singularity/index.html"> <div class="listing-item-img-placeholder card-img-top" >&nbsp;</div> </a></p>
+<p><a href="./posts/2024-02-23-use-singularity/index.html" class="no-external"></a></p><a href="./posts/2024-02-23-use-singularity/index.html" class="no-external">
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+</a><p><a href="./posts/2024-02-23-use-singularity/index.html" class="no-external"></a></p>
 </div>
 <div class="body">
-<a href="./posts/2024-02-23-use-singularity/index.html">
 <h3 class="no-anchor listing-title">
-use singularity
+<a href="./posts/2024-02-23-use-singularity/index.html" class="no-external">use singularity</a>
 </h3>
 <div class="listing-subtitle">
-
+<a href="./posts/2024-02-23-use-singularity/index.html" class="no-external"></a>
 </div>
-</a>
 <div class="listing-categories">
 <div class="listing-category" onclick="window.quartoListingCategory('note'); return false;">
 note
@@ -575,14 +625,17 @@ note
 container
 </div>
 </div>
-<a href="./posts/2024-02-23-use-singularity/index.html">
 <div class="listing-description">
-
-</div>
+<a href="./posts/2024-02-23-use-singularity/index.html" class="no-external">
+<li>Singularity 日常使用</li>
+<li>文档</li>
+<li>https://singularityhub.github.io/</li>
+<li>https://cloud.sylabs.io/library</li>
 </a>
 </div>
+</div>
 <div class="metadata">
-<a href="./posts/2024-02-23-use-singularity/index.html">
+<a href="./posts/2024-02-23-use-singularity/index.html" class="no-external">
 <div class="listing-date">
 Feb 23, 2024
 </div>
@@ -592,32 +645,30 @@ Shixiang Wang
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="10" data-categories="bioinformatics" data-listing-date-sort="1708358400000" data-listing-file-modified-sort="1708413709349" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="14">
+<div class="quarto-post image-right" data-index="11" data-categories="bioinformatics" data-listing-date-sort="1708358400000" data-listing-file-modified-sort="1729002838379" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="14" data-listing-word-count-sort="2643">
 <div class="thumbnail">
-<p><a href="./posts/2024-02-20-telescope-installation/index.html"> <div class="listing-item-img-placeholder card-img-top" >&nbsp;</div> </a></p>
+<p><a href="./posts/2024-02-20-telescope-installation/index.html" class="no-external"></a></p><a href="./posts/2024-02-20-telescope-installation/index.html" class="no-external">
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+</a><p><a href="./posts/2024-02-20-telescope-installation/index.html" class="no-external"></a></p>
 </div>
 <div class="body">
-<a href="./posts/2024-02-20-telescope-installation/index.html">
 <h3 class="no-anchor listing-title">
-telescope installation
+<a href="./posts/2024-02-20-telescope-installation/index.html" class="no-external">telescope installation</a>
 </h3>
 <div class="listing-subtitle">
-
+<a href="./posts/2024-02-20-telescope-installation/index.html" class="no-external"></a>
 </div>
-</a>
 <div class="listing-categories">
 <div class="listing-category" onclick="window.quartoListingCategory('bioinformatics'); return false;">
 bioinformatics
 </div>
 </div>
-<a href="./posts/2024-02-20-telescope-installation/index.html">
 <div class="listing-description">
-注意这个帖子的有效性可能在未来某一天丧失。
+<a href="./posts/2024-02-20-telescope-installation/index.html" class="no-external">注意这个帖子的有效性可能在未来某一天丧失。</a>
 </div>
-</a>
 </div>
 <div class="metadata">
-<a href="./posts/2024-02-20-telescope-installation/index.html">
+<a href="./posts/2024-02-20-telescope-installation/index.html" class="no-external">
 <div class="listing-date">
 Feb 20, 2024
 </div>
@@ -627,32 +678,30 @@ Shixiang Wang
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="11" data-categories="personal" data-listing-date-sort="1708358400000" data-listing-file-modified-sort="1708415574624" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1">
+<div class="quarto-post image-right" data-index="12" data-categories="personal" data-listing-date-sort="1708358400000" data-listing-file-modified-sort="1729002838379" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="3">
 <div class="thumbnail">
-<p><a href="./posts/2024-02-20-backtogz/index.html"> <div class="listing-item-img-placeholder card-img-top" >&nbsp;</div> </a></p>
+<p><a href="./posts/2024-02-20-backtogz/index.html" class="no-external"></a></p><a href="./posts/2024-02-20-backtogz/index.html" class="no-external">
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+</a><p><a href="./posts/2024-02-20-backtogz/index.html" class="no-external"></a></p>
 </div>
 <div class="body">
-<a href="./posts/2024-02-20-backtogz/index.html">
 <h3 class="no-anchor listing-title">
-回广州路上的感想
+<a href="./posts/2024-02-20-backtogz/index.html" class="no-external">回广州路上的感想</a>
 </h3>
 <div class="listing-subtitle">
-
+<a href="./posts/2024-02-20-backtogz/index.html" class="no-external"></a>
 </div>
-</a>
 <div class="listing-categories">
 <div class="listing-category" onclick="window.quartoListingCategory('personal'); return false;">
 personal
 </div>
 </div>
-<a href="./posts/2024-02-20-backtogz/index.html">
 <div class="listing-description">
-年后开车回广州太堵了，打破了国庆离开广州回老家开车的时长。 考虑到不会再在广州待这样的大长假了，应该以后不会再有类似的经历？
+<a href="./posts/2024-02-20-backtogz/index.html" class="no-external">年后开车回广州太堵了，打破了国庆离开广州回老家开车的时长。 考虑到不会再在广州待这样的大长假了，应该以后不会再有类似的经历？</a>
 </div>
-</a>
 </div>
 <div class="metadata">
-<a href="./posts/2024-02-20-backtogz/index.html">
+<a href="./posts/2024-02-20-backtogz/index.html" class="no-external">
 <div class="listing-date">
 Feb 20, 2024
 </div>
@@ -662,19 +711,19 @@ Shixiang Wang
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="12" data-categories="personal,R" data-listing-date-sort="1707667200000" data-listing-file-modified-sort="1707668197566" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1">
+<div class="quarto-post image-right" data-index="13" data-categories="personal,R" data-listing-date-sort="1707667200000" data-listing-file-modified-sort="1729002838379" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="5">
 <div class="thumbnail">
-<p><a href="./posts/2024-02-12-shiny-plot-dpi/index.html"> <div class="listing-item-img-placeholder card-img-top" >&nbsp;</div> </a></p>
+<p><a href="./posts/2024-02-12-shiny-plot-dpi/index.html" class="no-external"></a></p><a href="./posts/2024-02-12-shiny-plot-dpi/index.html" class="no-external">
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+</a><p><a href="./posts/2024-02-12-shiny-plot-dpi/index.html" class="no-external"></a></p>
 </div>
 <div class="body">
-<a href="./posts/2024-02-12-shiny-plot-dpi/index.html">
 <h3 class="no-anchor listing-title">
-shiny plot dpi
+<a href="./posts/2024-02-12-shiny-plot-dpi/index.html" class="no-external">shiny plot dpi</a>
 </h3>
 <div class="listing-subtitle">
-
+<a href="./posts/2024-02-12-shiny-plot-dpi/index.html" class="no-external"></a>
 </div>
-</a>
 <div class="listing-categories">
 <div class="listing-category" onclick="window.quartoListingCategory('personal'); return false;">
 personal
@@ -683,14 +732,12 @@ personal
 R
 </div>
 </div>
-<a href="./posts/2024-02-12-shiny-plot-dpi/index.html">
 <div class="listing-description">
-96 is recommended.
+<a href="./posts/2024-02-12-shiny-plot-dpi/index.html" class="no-external">96 is recommended.</a>
 </div>
-</a>
 </div>
 <div class="metadata">
-<a href="./posts/2024-02-12-shiny-plot-dpi/index.html">
+<a href="./posts/2024-02-12-shiny-plot-dpi/index.html" class="no-external">
 <div class="listing-date">
 Feb 12, 2024
 </div>
@@ -700,19 +747,19 @@ Shixiang Wang
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="13" data-categories="note,免疫" data-listing-date-sort="1705852800000" data-listing-file-modified-sort="1705908616154" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1">
+<div class="quarto-post image-right" data-index="14" data-categories="note,免疫" data-listing-date-sort="1705852800000" data-listing-file-modified-sort="1729002838379" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="12">
 <div class="thumbnail">
-<p><a href="./posts/2024-01-22-immune/index.html"> <div class="listing-item-img-placeholder card-img-top" >&nbsp;</div> </a></p>
+<p><a href="./posts/2024-01-22-immune/index.html" class="no-external"></a></p><a href="./posts/2024-01-22-immune/index.html" class="no-external">
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+</a><p><a href="./posts/2024-01-22-immune/index.html" class="no-external"></a></p>
 </div>
 <div class="body">
-<a href="./posts/2024-01-22-immune/index.html">
 <h3 class="no-anchor listing-title">
-免疫
+<a href="./posts/2024-01-22-immune/index.html" class="no-external">免疫</a>
 </h3>
 <div class="listing-subtitle">
-
+<a href="./posts/2024-01-22-immune/index.html" class="no-external"></a>
 </div>
-</a>
 <div class="listing-categories">
 <div class="listing-category" onclick="window.quartoListingCategory('note'); return false;">
 note
@@ -721,14 +768,12 @@ note
 免疫
 </div>
 </div>
-<a href="./posts/2024-01-22-immune/index.html">
 <div class="listing-description">
-细胞因子的分类：
+<a href="./posts/2024-01-22-immune/index.html" class="no-external">细胞因子的分类：</a>
 </div>
-</a>
 </div>
 <div class="metadata">
-<a href="./posts/2024-01-22-immune/index.html">
+<a href="./posts/2024-01-22-immune/index.html" class="no-external">
 <div class="listing-date">
 Jan 22, 2024
 </div>
@@ -738,19 +783,19 @@ Shixiang Wang
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="14" data-categories="note,Linux,git" data-listing-date-sort="1705420800000" data-listing-file-modified-sort="1705480392567" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1">
+<div class="quarto-post image-right" data-index="15" data-categories="note,Linux,git" data-listing-date-sort="1705420800000" data-listing-file-modified-sort="1729002838378" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="36">
 <div class="thumbnail">
-<p><a href="./posts/2024-01-17-github-hosts/index.html"> <div class="listing-item-img-placeholder card-img-top" >&nbsp;</div> </a></p>
+<p><a href="./posts/2024-01-17-github-hosts/index.html" class="no-external"></a></p><a href="./posts/2024-01-17-github-hosts/index.html" class="no-external">
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+</a><p><a href="./posts/2024-01-17-github-hosts/index.html" class="no-external"></a></p>
 </div>
 <div class="body">
-<a href="./posts/2024-01-17-github-hosts/index.html">
 <h3 class="no-anchor listing-title">
-解决 GitHub 代码拉取和推送问题
+<a href="./posts/2024-01-17-github-hosts/index.html" class="no-external">解决 GitHub 代码拉取和推送问题</a>
 </h3>
 <div class="listing-subtitle">
-
+<a href="./posts/2024-01-17-github-hosts/index.html" class="no-external"></a>
 </div>
-</a>
 <div class="listing-categories">
 <div class="listing-category" onclick="window.quartoListingCategory('note'); return false;">
 note
@@ -762,14 +807,12 @@ Linux
 git
 </div>
 </div>
-<a href="./posts/2024-01-17-github-hosts/index.html">
 <div class="listing-description">
-国内 Linux 服务器有时候存在 GitHub 仓库无法 push 或 pull 的问题，这里主要记录下修改 hosts 来解决该问题（注意不是 100% 有效）
+<a href="./posts/2024-01-17-github-hosts/index.html" class="no-external">国内 Linux 服务器有时候存在 GitHub 仓库无法 push 或 pull 的问题，这里主要记录下修改 hosts 来解决该问题（注意不是 100% 有效）</a>
 </div>
-</a>
 </div>
 <div class="metadata">
-<a href="./posts/2024-01-17-github-hosts/index.html">
+<a href="./posts/2024-01-17-github-hosts/index.html" class="no-external">
 <div class="listing-date">
 Jan 17, 2024
 </div>
@@ -779,19 +822,19 @@ Shixiang Wang
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="15" data-categories="R,shiny" data-listing-date-sort="1703433600000" data-listing-file-modified-sort="1705479886428" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1">
+<div class="quarto-post image-right" data-index="16" data-categories="R,shiny" data-listing-date-sort="1703433600000" data-listing-file-modified-sort="1729002838378" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="29">
 <div class="thumbnail">
-<p><a href="./posts/2023-12-25-lazy-loading-data-in-r/index.html"> <div class="listing-item-img-placeholder card-img-top" >&nbsp;</div> </a></p>
+<p><a href="./posts/2023-12-25-lazy-loading-data-in-r/index.html" class="no-external"></a></p><a href="./posts/2023-12-25-lazy-loading-data-in-r/index.html" class="no-external">
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+</a><p><a href="./posts/2023-12-25-lazy-loading-data-in-r/index.html" class="no-external"></a></p>
 </div>
 <div class="body">
-<a href="./posts/2023-12-25-lazy-loading-data-in-r/index.html">
 <h3 class="no-anchor listing-title">
-R 针对数据进行惰性加载
+<a href="./posts/2023-12-25-lazy-loading-data-in-r/index.html" class="no-external">R 针对数据进行惰性加载</a>
 </h3>
 <div class="listing-subtitle">
-
+<a href="./posts/2023-12-25-lazy-loading-data-in-r/index.html" class="no-external"></a>
 </div>
-</a>
 <div class="listing-categories">
 <div class="listing-category" onclick="window.quartoListingCategory('R'); return false;">
 R
@@ -800,14 +843,12 @@ R
 shiny
 </div>
 </div>
-<a href="./posts/2023-12-25-lazy-loading-data-in-r/index.html">
 <div class="listing-description">
-在做 Shiny 开发时，有些数据太大，非常影响加载数据，这里提供了一种 lazyloading 策略，可以值得一试。
+<a href="./posts/2023-12-25-lazy-loading-data-in-r/index.html" class="no-external">在做 Shiny 开发时，有些数据太大，非常影响加载数据，这里提供了一种 lazyloading 策略，可以值得一试。</a>
 </div>
-</a>
 </div>
 <div class="metadata">
-<a href="./posts/2023-12-25-lazy-loading-data-in-r/index.html">
+<a href="./posts/2023-12-25-lazy-loading-data-in-r/index.html" class="no-external">
 <div class="listing-date">
 Dec 25, 2023
 </div>
@@ -817,32 +858,30 @@ Shixiang Wang
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="16" data-categories="random" data-listing-date-sort="1703001600000" data-listing-file-modified-sort="1705479886426" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1">
+<div class="quarto-post image-right" data-index="17" data-categories="random" data-listing-date-sort="1703001600000" data-listing-file-modified-sort="1729002838378" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="1">
 <div class="thumbnail">
-<p><a href="./posts/2023-12-20-random/index.html"> <div class="listing-item-img-placeholder card-img-top" >&nbsp;</div> </a></p>
+<p><a href="./posts/2023-12-20-random/index.html" class="no-external"></a></p><a href="./posts/2023-12-20-random/index.html" class="no-external">
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+</a><p><a href="./posts/2023-12-20-random/index.html" class="no-external"></a></p>
 </div>
 <div class="body">
-<a href="./posts/2023-12-20-random/index.html">
 <h3 class="no-anchor listing-title">
-随便聊两句，可能不一定有意义
+<a href="./posts/2023-12-20-random/index.html" class="no-external">随便聊两句，可能不一定有意义</a>
 </h3>
 <div class="listing-subtitle">
-
+<a href="./posts/2023-12-20-random/index.html" class="no-external"></a>
 </div>
-</a>
 <div class="listing-categories">
 <div class="listing-category" onclick="window.quartoListingCategory('random'); return false;">
 random
 </div>
 </div>
-<a href="./posts/2023-12-20-random/index.html">
 <div class="listing-description">
-近两年文章看的少。
+<a href="./posts/2023-12-20-random/index.html" class="no-external">近两年文章看的少。</a>
 </div>
-</a>
 </div>
 <div class="metadata">
-<a href="./posts/2023-12-20-random/index.html">
+<a href="./posts/2023-12-20-random/index.html" class="no-external">
 <div class="listing-date">
 Dec 20, 2023
 </div>
@@ -852,32 +891,30 @@ Shixiang Wang
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="17" data-categories="诗" data-listing-date-sort="1702310400000" data-listing-file-modified-sort="1705479886416" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1">
+<div class="quarto-post image-right" data-index="18" data-categories="诗" data-listing-date-sort="1702310400000" data-listing-file-modified-sort="1729002838375" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="55">
 <div class="thumbnail">
-<p><a href="./posts/2023-12-12-the-archive-of-poem/index.html"> <div class="listing-item-img-placeholder card-img-top" >&nbsp;</div> </a></p>
+<p><a href="./posts/2023-12-12-the-archive-of-poem/index.html" class="no-external"></a></p><a href="./posts/2023-12-12-the-archive-of-poem/index.html" class="no-external">
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+</a><p><a href="./posts/2023-12-12-the-archive-of-poem/index.html" class="no-external"></a></p>
 </div>
 <div class="body">
-<a href="./posts/2023-12-12-the-archive-of-poem/index.html">
 <h3 class="no-anchor listing-title">
-诗歌存档
+<a href="./posts/2023-12-12-the-archive-of-poem/index.html" class="no-external">诗歌存档</a>
 </h3>
 <div class="listing-subtitle">
-
+<a href="./posts/2023-12-12-the-archive-of-poem/index.html" class="no-external"></a>
 </div>
-</a>
 <div class="listing-categories">
 <div class="listing-category" onclick="window.quartoListingCategory('诗'); return false;">
 诗
 </div>
 </div>
-<a href="./posts/2023-12-12-the-archive-of-poem/index.html">
 <div class="listing-description">
-存档下研究生期间写的一些诗，主要从简书搬运过来。大抵作于16年底到19年初。
+<a href="./posts/2023-12-12-the-archive-of-poem/index.html" class="no-external">存档下研究生期间写的一些诗，主要从简书搬运过来。大抵作于16年底到19年初。</a>
 </div>
-</a>
 </div>
 <div class="metadata">
-<a href="./posts/2023-12-12-the-archive-of-poem/index.html">
+<a href="./posts/2023-12-12-the-archive-of-poem/index.html" class="no-external">
 <div class="listing-date">
 Dec 12, 2023
 </div>
@@ -887,32 +924,30 @@ Shixiang Wang
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="18" data-categories="诗" data-listing-date-sort="1702310400000" data-listing-file-modified-sort="1705479886417" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1">
+<div class="quarto-post image-right" data-index="19" data-categories="诗" data-listing-date-sort="1702310400000" data-listing-file-modified-sort="1729002838375" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="2">
 <div class="thumbnail">
-<p><a href="./posts/2023-12-12-the-poem-of-youth/index.html"> <div class="listing-item-img-placeholder card-img-top" >&nbsp;</div> </a></p>
+<p><a href="./posts/2023-12-12-the-poem-of-youth/index.html" class="no-external"></a></p><a href="./posts/2023-12-12-the-poem-of-youth/index.html" class="no-external">
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+</a><p><a href="./posts/2023-12-12-the-poem-of-youth/index.html" class="no-external"></a></p>
 </div>
 <div class="body">
-<a href="./posts/2023-12-12-the-poem-of-youth/index.html">
 <h3 class="no-anchor listing-title">
-少年时
+<a href="./posts/2023-12-12-the-poem-of-youth/index.html" class="no-external">少年时</a>
 </h3>
 <div class="listing-subtitle">
-
+<a href="./posts/2023-12-12-the-poem-of-youth/index.html" class="no-external"></a>
 </div>
-</a>
 <div class="listing-categories">
 <div class="listing-category" onclick="window.quartoListingCategory('诗'); return false;">
 诗
 </div>
 </div>
-<a href="./posts/2023-12-12-the-poem-of-youth/index.html">
 <div class="listing-description">
-这里主要存储下大学期间随笔写作经整理的诗篇。
+<a href="./posts/2023-12-12-the-poem-of-youth/index.html" class="no-external">这里主要存储下大学期间随笔写作经整理的诗篇。</a>
 </div>
-</a>
 </div>
 <div class="metadata">
-<a href="./posts/2023-12-12-the-poem-of-youth/index.html">
+<a href="./posts/2023-12-12-the-poem-of-youth/index.html" class="no-external">
 <div class="listing-date">
 Dec 12, 2023
 </div>
@@ -922,32 +957,30 @@ Shixiang Wang
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="19" data-categories="random" data-listing-date-sort="1701964800000" data-listing-file-modified-sort="1705479886415" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1">
+<div class="quarto-post image-right" data-index="20" data-categories="random" data-listing-date-sort="1701964800000" data-listing-file-modified-sort="1729002838375" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="162">
 <div class="thumbnail">
-<p><a href="./posts/2023-12-08-the-world-is-not-all-sunshine-and-rainbows/index.html"> <div class="listing-item-img-placeholder card-img-top" >&nbsp;</div> </a></p>
+<p><a href="./posts/2023-12-08-the-world-is-not-all-sunshine-and-rainbows/index.html" class="no-external"></a></p><a href="./posts/2023-12-08-the-world-is-not-all-sunshine-and-rainbows/index.html" class="no-external">
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+</a><p><a href="./posts/2023-12-08-the-world-is-not-all-sunshine-and-rainbows/index.html" class="no-external"></a></p>
 </div>
 <div class="body">
-<a href="./posts/2023-12-08-the-world-is-not-all-sunshine-and-rainbows/index.html">
 <h3 class="no-anchor listing-title">
-The world is not all sunshine and rainbows
+<a href="./posts/2023-12-08-the-world-is-not-all-sunshine-and-rainbows/index.html" class="no-external">The world is not all sunshine and rainbows</a>
 </h3>
 <div class="listing-subtitle">
-
+<a href="./posts/2023-12-08-the-world-is-not-all-sunshine-and-rainbows/index.html" class="no-external"></a>
 </div>
-</a>
 <div class="listing-categories">
 <div class="listing-category" onclick="window.quartoListingCategory('random'); return false;">
 random
 </div>
 </div>
-<a href="./posts/2023-12-08-the-world-is-not-all-sunshine-and-rainbows/index.html">
 <div class="listing-description">
-刷短视频的时候看到小孩跟史泰龙激情地对一段电影（洛奇）台词，把它翻找了出来，记录一下。
+<a href="./posts/2023-12-08-the-world-is-not-all-sunshine-and-rainbows/index.html" class="no-external">刷短视频的时候看到小孩跟史泰龙激情地对一段电影（洛奇）台词，把它翻找了出来，记录一下。</a>
 </div>
-</a>
 </div>
 <div class="metadata">
-<a href="./posts/2023-12-08-the-world-is-not-all-sunshine-and-rainbows/index.html">
+<a href="./posts/2023-12-08-the-world-is-not-all-sunshine-and-rainbows/index.html" class="no-external">
 <div class="listing-date">
 Dec 8, 2023
 </div>
@@ -957,32 +990,30 @@ Shixiang Wang
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="20" data-categories="random" data-listing-date-sort="1701878400000" data-listing-file-modified-sort="1705479886414" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1">
+<div class="quarto-post image-right" data-index="21" data-categories="random" data-listing-date-sort="1701878400000" data-listing-file-modified-sort="1729002838375" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="39">
 <div class="thumbnail">
-<p><a href="./posts/2023-12-07-e-pluribus-unum/index.html"> <div class="listing-item-img-placeholder card-img-top" >&nbsp;</div> </a></p>
+<p><a href="./posts/2023-12-07-e-pluribus-unum/index.html" class="no-external"></a></p><a href="./posts/2023-12-07-e-pluribus-unum/index.html" class="no-external">
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+</a><p><a href="./posts/2023-12-07-e-pluribus-unum/index.html" class="no-external"></a></p>
 </div>
 <div class="body">
-<a href="./posts/2023-12-07-e-pluribus-unum/index.html">
 <h3 class="no-anchor listing-title">
-E pluribus unum: From Complexity, Universality
+<a href="./posts/2023-12-07-e-pluribus-unum/index.html" class="no-external">E pluribus unum: From Complexity, Universality</a>
 </h3>
 <div class="listing-subtitle">
-
+<a href="./posts/2023-12-07-e-pluribus-unum/index.html" class="no-external"></a>
 </div>
-</a>
 <div class="listing-categories">
 <div class="listing-category" onclick="window.quartoListingCategory('random'); return false;">
 random
 </div>
 </div>
-<a href="./posts/2023-12-07-e-pluribus-unum/index.html">
 <div class="listing-description">
-标题是陶哲轩于 2012 年发表的一篇论文题目，表达了从多样性、复杂性中产生统一、普遍性的意念。这可以涉及到社会、科学、文化或其他领域，强调在多样性和复杂性中寻找普遍性原则或价值观。
+<a href="./posts/2023-12-07-e-pluribus-unum/index.html" class="no-external">标题是陶哲轩于 2012 年发表的一篇论文题目，表达了从多样性、复杂性中产生统一、普遍性的意念。这可以涉及到社会、科学、文化或其他领域，强调在多样性和复杂性中寻找普遍性原则或价值观。</a>
 </div>
-</a>
 </div>
 <div class="metadata">
-<a href="./posts/2023-12-07-e-pluribus-unum/index.html">
+<a href="./posts/2023-12-07-e-pluribus-unum/index.html" class="no-external">
 <div class="listing-date">
 Dec 7, 2023
 </div>
@@ -992,32 +1023,30 @@ Shixiang Wang
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="21" data-categories="thought" data-listing-date-sort="1700496000000" data-listing-file-modified-sort="1705479886413" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1">
+<div class="quarto-post image-right" data-index="22" data-categories="thought" data-listing-date-sort="1700496000000" data-listing-file-modified-sort="1729002838375" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="11">
 <div class="thumbnail">
-<p><a href="./posts/2023-11-21-talking-from-faker/index.html"> <div class="listing-item-img-placeholder card-img-top" >&nbsp;</div> </a></p>
+<p><a href="./posts/2023-11-21-talking-from-faker/index.html" class="no-external"></a></p><a href="./posts/2023-11-21-talking-from-faker/index.html" class="no-external">
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+</a><p><a href="./posts/2023-11-21-talking-from-faker/index.html" class="no-external"></a></p>
 </div>
 <div class="body">
-<a href="./posts/2023-11-21-talking-from-faker/index.html">
 <h3 class="no-anchor listing-title">
-从 Faker 夺冠讨论竞争与热爱
+<a href="./posts/2023-11-21-talking-from-faker/index.html" class="no-external">从 Faker 夺冠讨论竞争与热爱</a>
 </h3>
 <div class="listing-subtitle">
-
+<a href="./posts/2023-11-21-talking-from-faker/index.html" class="no-external"></a>
 </div>
-</a>
 <div class="listing-categories">
 <div class="listing-category" onclick="window.quartoListingCategory('thought'); return false;">
 thought
 </div>
 </div>
-<a href="./posts/2023-11-21-talking-from-faker/index.html">
 <div class="listing-description">
-好的想法需要记录，在这里动笔前，昨天睡前的好想法差点从指缝中溜走。
+<a href="./posts/2023-11-21-talking-from-faker/index.html" class="no-external">好的想法需要记录，在这里动笔前，昨天睡前的好想法差点从指缝中溜走。</a>
 </div>
-</a>
 </div>
 <div class="metadata">
-<a href="./posts/2023-11-21-talking-from-faker/index.html">
+<a href="./posts/2023-11-21-talking-from-faker/index.html" class="no-external">
 <div class="listing-date">
 Nov 21, 2023
 </div>
@@ -1027,19 +1056,19 @@ Shixiang Wang
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="22" data-categories="R,bioinformatics" data-listing-date-sort="1699977600000" data-listing-file-modified-sort="1705479886412" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1">
+<div class="quarto-post image-right" data-index="23" data-categories="R,bioinformatics" data-listing-date-sort="1699977600000" data-listing-file-modified-sort="1729002838374" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="57">
 <div class="thumbnail">
-<p><a href="./posts/2023-11-15-talk-about-ides/index.html"> <div class="listing-item-img-placeholder card-img-top" >&nbsp;</div> </a></p>
+<p><a href="./posts/2023-11-15-talk-about-ides/index.html" class="no-external"></a></p><a href="./posts/2023-11-15-talk-about-ides/index.html" class="no-external">
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+</a><p><a href="./posts/2023-11-15-talk-about-ides/index.html" class="no-external"></a></p>
 </div>
 <div class="body">
-<a href="./posts/2023-11-15-talk-about-ides/index.html">
 <h3 class="no-anchor listing-title">
-谈谈使用过的代码编辑器
+<a href="./posts/2023-11-15-talk-about-ides/index.html" class="no-external">谈谈使用过的代码编辑器</a>
 </h3>
 <div class="listing-subtitle">
-
+<a href="./posts/2023-11-15-talk-about-ides/index.html" class="no-external"></a>
 </div>
-</a>
 <div class="listing-categories">
 <div class="listing-category" onclick="window.quartoListingCategory('R'); return false;">
 R
@@ -1048,14 +1077,12 @@ R
 bioinformatics
 </div>
 </div>
-<a href="./posts/2023-11-15-talk-about-ides/index.html">
 <div class="listing-description">
-最近在使用 JupyterLab 时感觉受挫，想简单总结下自己这些年使用过的代码编辑器（有较长的使用时间）。
+<a href="./posts/2023-11-15-talk-about-ides/index.html" class="no-external">最近在使用 JupyterLab 时感觉受挫，想简单总结下自己这些年使用过的代码编辑器（有较长的使用时间）。</a>
 </div>
-</a>
 </div>
 <div class="metadata">
-<a href="./posts/2023-11-15-talk-about-ides/index.html">
+<a href="./posts/2023-11-15-talk-about-ides/index.html" class="no-external">
 <div class="listing-date">
 Nov 15, 2023
 </div>
@@ -1065,32 +1092,30 @@ Shixiang Wang
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="23" data-categories="random" data-listing-date-sort="1699891200000" data-listing-file-modified-sort="1705479886411" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1">
+<div class="quarto-post image-right" data-index="24" data-categories="random" data-listing-date-sort="1699891200000" data-listing-file-modified-sort="1729002838374" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="1">
 <div class="thumbnail">
-<p><a href="./posts/2023-11-14-random-thoughts/index.html"> <div class="listing-item-img-placeholder card-img-top" >&nbsp;</div> </a></p>
+<p><a href="./posts/2023-11-14-random-thoughts/index.html" class="no-external"></a></p><a href="./posts/2023-11-14-random-thoughts/index.html" class="no-external">
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+</a><p><a href="./posts/2023-11-14-random-thoughts/index.html" class="no-external"></a></p>
 </div>
 <div class="body">
-<a href="./posts/2023-11-14-random-thoughts/index.html">
 <h3 class="no-anchor listing-title">
-随想
+<a href="./posts/2023-11-14-random-thoughts/index.html" class="no-external">随想</a>
 </h3>
 <div class="listing-subtitle">
-
+<a href="./posts/2023-11-14-random-thoughts/index.html" class="no-external"></a>
 </div>
-</a>
 <div class="listing-categories">
 <div class="listing-category" onclick="window.quartoListingCategory('random'); return false;">
 random
 </div>
 </div>
-<a href="./posts/2023-11-14-random-thoughts/index.html">
 <div class="listing-description">
-没有问题只有目标的数据分析，就像人有大脑却缺乏灵魂。
+<a href="./posts/2023-11-14-random-thoughts/index.html" class="no-external">没有问题只有目标的数据分析，就像人有大脑却缺乏灵魂。</a>
 </div>
-</a>
 </div>
 <div class="metadata">
-<a href="./posts/2023-11-14-random-thoughts/index.html">
+<a href="./posts/2023-11-14-random-thoughts/index.html" class="no-external">
 <div class="listing-date">
 Nov 14, 2023
 </div>
@@ -1100,19 +1125,19 @@ Shixiang Wang
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="24" data-categories="note,bioinformatics" data-listing-date-sort="1699804800000" data-listing-file-modified-sort="1705479886410" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1">
+<div class="quarto-post image-right" data-index="25" data-categories="note,bioinformatics" data-listing-date-sort="1699804800000" data-listing-file-modified-sort="1729002838374" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="53">
 <div class="thumbnail">
-<p><a href="./posts/2023-11-13-download-and-prepare-sra-data/index.html"> <div class="listing-item-img-placeholder card-img-top" >&nbsp;</div> </a></p>
+<p><a href="./posts/2023-11-13-download-and-prepare-sra-data/index.html" class="no-external"></a></p><a href="./posts/2023-11-13-download-and-prepare-sra-data/index.html" class="no-external">
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+</a><p><a href="./posts/2023-11-13-download-and-prepare-sra-data/index.html" class="no-external"></a></p>
 </div>
 <div class="body">
-<a href="./posts/2023-11-13-download-and-prepare-sra-data/index.html">
 <h3 class="no-anchor listing-title">
-SRA 测序数据下载和处理三部曲
+<a href="./posts/2023-11-13-download-and-prepare-sra-data/index.html" class="no-external">SRA 测序数据下载和处理三部曲</a>
 </h3>
 <div class="listing-subtitle">
-
+<a href="./posts/2023-11-13-download-and-prepare-sra-data/index.html" class="no-external"></a>
 </div>
-</a>
 <div class="listing-categories">
 <div class="listing-category" onclick="window.quartoListingCategory('note'); return false;">
 note
@@ -1121,14 +1146,12 @@ note
 bioinformatics
 </div>
 </div>
-<a href="./posts/2023-11-13-download-and-prepare-sra-data/index.html">
 <div class="listing-description">
-这里简单记录和备忘下下载和预处理 SRA 数据我常用的三个基本步骤。
+<a href="./posts/2023-11-13-download-and-prepare-sra-data/index.html" class="no-external">这里简单记录和备忘下下载和预处理 SRA 数据我常用的三个基本步骤。</a>
 </div>
-</a>
 </div>
 <div class="metadata">
-<a href="./posts/2023-11-13-download-and-prepare-sra-data/index.html">
+<a href="./posts/2023-11-13-download-and-prepare-sra-data/index.html" class="no-external">
 <div class="listing-date">
 Nov 13, 2023
 </div>
@@ -1138,32 +1161,30 @@ Shixiang Wang
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="25" data-categories="random" data-listing-date-sort="1698508800000" data-listing-file-modified-sort="1705479886409" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1">
+<div class="quarto-post image-right" data-index="26" data-categories="random" data-listing-date-sort="1698508800000" data-listing-file-modified-sort="1729002838374" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="1">
 <div class="thumbnail">
-<p><a href="./posts/2023-10-29-dont-forget/index.html"> <div class="listing-item-img-placeholder card-img-top" >&nbsp;</div> </a></p>
+<p><a href="./posts/2023-10-29-dont-forget/index.html" class="no-external"></a></p><a href="./posts/2023-10-29-dont-forget/index.html" class="no-external">
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+</a><p><a href="./posts/2023-10-29-dont-forget/index.html" class="no-external"></a></p>
 </div>
 <div class="body">
-<a href="./posts/2023-10-29-dont-forget/index.html">
 <h3 class="no-anchor listing-title">
-dont forget
+<a href="./posts/2023-10-29-dont-forget/index.html" class="no-external">dont forget</a>
 </h3>
 <div class="listing-subtitle">
-
+<a href="./posts/2023-10-29-dont-forget/index.html" class="no-external"></a>
 </div>
-</a>
 <div class="listing-categories">
 <div class="listing-category" onclick="window.quartoListingCategory('random'); return false;">
 random
 </div>
 </div>
-<a href="./posts/2023-10-29-dont-forget/index.html">
 <div class="listing-description">
-不要忘记，有一个诺贝尔奖的梦。
+<a href="./posts/2023-10-29-dont-forget/index.html" class="no-external">不要忘记，有一个诺贝尔奖的梦。</a>
 </div>
-</a>
 </div>
 <div class="metadata">
-<a href="./posts/2023-10-29-dont-forget/index.html">
+<a href="./posts/2023-10-29-dont-forget/index.html" class="no-external">
 <div class="listing-date">
 Oct 29, 2023
 </div>
@@ -1173,32 +1194,30 @@ Shixiang Wang
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="26" data-categories="诗" data-listing-date-sort="1698336000000" data-listing-file-modified-sort="1705479886405" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1">
+<div class="quarto-post image-right" data-index="27" data-categories="诗" data-listing-date-sort="1698336000000" data-listing-file-modified-sort="1729002838373" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="5">
 <div class="thumbnail">
-<p><a href="./posts/2023-10-27-revist-nanjing/index.html"> <p class="card-img-top"><img data-src="posts/2023-10-27-revist-nanjing/rv_nj_1.jpg"  class="thumbnail-image card-img"/></p> </a></p>
+<p><a href="./posts/2023-10-27-revist-nanjing/index.html" class="no-external"></a></p><a href="./posts/2023-10-27-revist-nanjing/index.html" class="no-external">
+<p class="card-img-top"><img data-src="posts/2023-10-27-revist-nanjing/rv_nj_1.jpg"  class="thumbnail-image card-img"/></p>
+</a><p><a href="./posts/2023-10-27-revist-nanjing/index.html" class="no-external"></a></p>
 </div>
 <div class="body">
-<a href="./posts/2023-10-27-revist-nanjing/index.html">
 <h3 class="no-anchor listing-title">
-南京行记 两首
+<a href="./posts/2023-10-27-revist-nanjing/index.html" class="no-external">南京行记 两首</a>
 </h3>
 <div class="listing-subtitle">
-
+<a href="./posts/2023-10-27-revist-nanjing/index.html" class="no-external"></a>
 </div>
-</a>
 <div class="listing-categories">
 <div class="listing-category" onclick="window.quartoListingCategory('诗'); return false;">
 诗
 </div>
 </div>
-<a href="./posts/2023-10-27-revist-nanjing/index.html">
 <div class="listing-description">
-<br>
+<a href="./posts/2023-10-27-revist-nanjing/index.html" class="no-external"><br></a>
 </div>
-</a>
 </div>
 <div class="metadata">
-<a href="./posts/2023-10-27-revist-nanjing/index.html">
+<a href="./posts/2023-10-27-revist-nanjing/index.html" class="no-external">
 <div class="listing-date">
 Oct 27, 2023
 </div>
@@ -1208,32 +1227,30 @@ Shixiang Wang
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="27" data-categories="thought" data-listing-date-sort="1697644800000" data-listing-file-modified-sort="1705479886405" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1">
+<div class="quarto-post image-right" data-index="28" data-categories="thought" data-listing-date-sort="1697644800000" data-listing-file-modified-sort="1729002838372" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="7">
 <div class="thumbnail">
-<p><a href="./posts/2023-10-19-can-i-use-open-source-tools-for-free/index.html"> <p class="card-img-top"><img data-src="https://www.ruanyifeng.com/blogimg/asset/201105/free_software_licenses.png"  class="thumbnail-image card-img"/></p> </a></p>
+<p><a href="./posts/2023-10-19-can-i-use-open-source-tools-for-free/index.html" class="no-external"></a></p><a href="./posts/2023-10-19-can-i-use-open-source-tools-for-free/index.html" class="no-external">
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+</a><p><a href="./posts/2023-10-19-can-i-use-open-source-tools-for-free/index.html" class="no-external"></a></p>
 </div>
 <div class="body">
-<a href="./posts/2023-10-19-can-i-use-open-source-tools-for-free/index.html">
 <h3 class="no-anchor listing-title">
-聊聊开源协议：我们可以免费使用开源软件吗？
+<a href="./posts/2023-10-19-can-i-use-open-source-tools-for-free/index.html" class="no-external">聊聊开源协议：我们可以免费使用开源软件吗？</a>
 </h3>
 <div class="listing-subtitle">
-
+<a href="./posts/2023-10-19-can-i-use-open-source-tools-for-free/index.html" class="no-external"></a>
 </div>
-</a>
 <div class="listing-categories">
 <div class="listing-category" onclick="window.quartoListingCategory('thought'); return false;">
 thought
 </div>
 </div>
-<a href="./posts/2023-10-19-can-i-use-open-source-tools-for-free/index.html">
 <div class="listing-description">
-答案是 YES!!!
+<a href="./posts/2023-10-19-can-i-use-open-source-tools-for-free/index.html" class="no-external">答案是 YES!!!</a>
 </div>
-</a>
 </div>
 <div class="metadata">
-<a href="./posts/2023-10-19-can-i-use-open-source-tools-for-free/index.html">
+<a href="./posts/2023-10-19-can-i-use-open-source-tools-for-free/index.html" class="no-external">
 <div class="listing-date">
 Oct 19, 2023
 </div>
@@ -1243,32 +1260,30 @@ Shixiang Wang
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="28" data-categories="R" data-listing-date-sort="1696780800000" data-listing-file-modified-sort="1705479886403" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1">
+<div class="quarto-post image-right" data-index="29" data-categories="R" data-listing-date-sort="1696780800000" data-listing-file-modified-sort="1729002838372" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="26">
 <div class="thumbnail">
-<p><a href="./posts/2023-10-09-webr-in-quarto/index.html"> <div class="listing-item-img-placeholder card-img-top" >&nbsp;</div> </a></p>
+<p><a href="./posts/2023-10-09-webr-in-quarto/index.html" class="no-external"></a></p><a href="./posts/2023-10-09-webr-in-quarto/index.html" class="no-external">
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+</a><p><a href="./posts/2023-10-09-webr-in-quarto/index.html" class="no-external"></a></p>
 </div>
 <div class="body">
-<a href="./posts/2023-10-09-webr-in-quarto/index.html">
 <h3 class="no-anchor listing-title">
-结合 quarto 出版系统和 webr 技术
+<a href="./posts/2023-10-09-webr-in-quarto/index.html" class="no-external">结合 quarto 出版系统和 webr 技术</a>
 </h3>
 <div class="listing-subtitle">
-
+<a href="./posts/2023-10-09-webr-in-quarto/index.html" class="no-external"></a>
 </div>
-</a>
 <div class="listing-categories">
 <div class="listing-category" onclick="window.quartoListingCategory('R'); return false;">
 R
 </div>
 </div>
-<a href="./posts/2023-10-09-webr-in-quarto/index.html">
 <div class="listing-description">
-这是一个简单的例子，直接通过浏览器运行 webr 技术来实时运行 R 代码。你还可以实时修改代码进行交互式探索！
+<a href="./posts/2023-10-09-webr-in-quarto/index.html" class="no-external">这是一个简单的例子，直接通过浏览器运行 webr 技术来实时运行 R 代码。你还可以实时修改代码进行交互式探索！</a>
 </div>
-</a>
 </div>
 <div class="metadata">
-<a href="./posts/2023-10-09-webr-in-quarto/index.html">
+<a href="./posts/2023-10-09-webr-in-quarto/index.html" class="no-external">
 <div class="listing-date">
 Oct 9, 2023
 </div>
@@ -1278,19 +1293,19 @@ Shixiang Wang
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="29" data-categories="academic,news,personal" data-listing-date-sort="1696780800000" data-listing-file-modified-sort="1705479886401" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1">
+<div class="quarto-post image-right" data-index="30" data-categories="academic,news,personal" data-listing-date-sort="1696780800000" data-listing-file-modified-sort="1729002838372" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="10">
 <div class="thumbnail">
-<p><a href="./posts/2023-10-09-kk-nobel/index.html"> <div class="listing-item-img-placeholder card-img-top" >&nbsp;</div> </a></p>
+<p><a href="./posts/2023-10-09-kk-nobel/index.html" class="no-external"></a></p><a href="./posts/2023-10-09-kk-nobel/index.html" class="no-external">
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+</a><p><a href="./posts/2023-10-09-kk-nobel/index.html" class="no-external"></a></p>
 </div>
 <div class="body">
-<a href="./posts/2023-10-09-kk-nobel/index.html">
 <h3 class="no-anchor listing-title">
-2023 年诺贝尔生理或医学奖授予 KK
+<a href="./posts/2023-10-09-kk-nobel/index.html" class="no-external">2023 年诺贝尔生理或医学奖授予 KK</a>
 </h3>
 <div class="listing-subtitle">
-
+<a href="./posts/2023-10-09-kk-nobel/index.html" class="no-external"></a>
 </div>
-</a>
 <div class="listing-categories">
 <div class="listing-category" onclick="window.quartoListingCategory('academic'); return false;">
 academic
@@ -1302,14 +1317,12 @@ news
 personal
 </div>
 </div>
-<a href="./posts/2023-10-09-kk-nobel/index.html">
 <div class="listing-description">
-匈牙利科学家Katalin Karikó和美国科学家Drew Weissman获得了2023年诺贝尔生理学奖或医学奖，因为他们在核苷酸碱基修饰方面的发现，使得开发出针对COVID-19的有效mRNA疫苗成为可能。
+<a href="./posts/2023-10-09-kk-nobel/index.html" class="no-external">匈牙利科学家Katalin Karikó和美国科学家Drew Weissman获得了2023年诺贝尔生理学奖或医学奖，因为他们在核苷酸碱基修饰方面的发现，使得开发出针对COVID-19的有效mRNA疫苗成为可能。</a>
 </div>
-</a>
 </div>
 <div class="metadata">
-<a href="./posts/2023-10-09-kk-nobel/index.html">
+<a href="./posts/2023-10-09-kk-nobel/index.html" class="no-external">
 <div class="listing-date">
 Oct 9, 2023
 </div>
@@ -1319,19 +1332,19 @@ Shixiang Wang
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="30" data-categories="machine-learning,Python,resource" data-listing-date-sort="1696608000000" data-listing-file-modified-sort="1705479886399" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1">
+<div class="quarto-post image-right" data-index="31" data-categories="machine-learning,Python,resource" data-listing-date-sort="1696608000000" data-listing-file-modified-sort="1729002838372" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="5">
 <div class="thumbnail">
-<p><a href="./posts/2023-10-07-show-me-ai-cheatsheet/index.html"> <div class="listing-item-img-placeholder card-img-top" >&nbsp;</div> </a></p>
+<p><a href="./posts/2023-10-07-show-me-ai-cheatsheet/index.html" class="no-external"></a></p><a href="./posts/2023-10-07-show-me-ai-cheatsheet/index.html" class="no-external">
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+</a><p><a href="./posts/2023-10-07-show-me-ai-cheatsheet/index.html" class="no-external"></a></p>
 </div>
 <div class="body">
-<a href="./posts/2023-10-07-show-me-ai-cheatsheet/index.html">
 <h3 class="no-anchor listing-title">
-ShowMeAI 速查表
+<a href="./posts/2023-10-07-show-me-ai-cheatsheet/index.html" class="no-external">ShowMeAI 速查表</a>
 </h3>
 <div class="listing-subtitle">
-
+<a href="./posts/2023-10-07-show-me-ai-cheatsheet/index.html" class="no-external"></a>
 </div>
-</a>
 <div class="listing-categories">
 <div class="listing-category" onclick="window.quartoListingCategory('machine-learning'); return false;">
 machine-learning
@@ -1343,14 +1356,12 @@ Python
 resource
 </div>
 </div>
-<a href="./posts/2023-10-07-show-me-ai-cheatsheet/index.html">
 <div class="listing-description">
-#分享# #AI# 今天看到 showmeAI（https://github.com/ShowMeAI-Hub），有一些速查表非常不错，这里整理分享给大家。 https://www.aliyundrive.com/s/mogzKzDSinf 点击链接保存，或者复制本段内容，打开「阿里云盘」APP ，无需下载极速在线查看，视频原画倍速播放。
+<a href="./posts/2023-10-07-show-me-ai-cheatsheet/index.html" class="no-external">#分享# #AI# 今天看到 showmeAI（https://github.com/ShowMeAI-Hub），有一些速查表非常不错，这里整理分享给大家。 https://www.aliyundrive.com/s/mogzKzDSinf 点击链接保存，或者复制本段内容，打开「阿里云盘」APP ，无需下载极速在线查看，视频原画倍速播放。</a>
 </div>
-</a>
 </div>
 <div class="metadata">
-<a href="./posts/2023-10-07-show-me-ai-cheatsheet/index.html">
+<a href="./posts/2023-10-07-show-me-ai-cheatsheet/index.html" class="no-external">
 <div class="listing-date">
 Oct 7, 2023
 </div>
@@ -1360,19 +1371,19 @@ Shixiang Wang
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="31" data-categories="shiny,R,bioinformatics" data-listing-date-sort="1694534400000" data-listing-file-modified-sort="1705479886398" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="2">
+<div class="quarto-post image-right" data-index="32" data-categories="shiny,R,bioinformatics" data-listing-date-sort="1694534400000" data-listing-file-modified-sort="1729002838371" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="2" data-listing-word-count-sort="239">
 <div class="thumbnail">
-<p><a href="./posts/2023-09-13-shiny-learning-path-for-bioinformatics/index.html"> <p class="card-img-top"><img data-src="https://d33wubrfki0l68.cloudfront.net/b88ef926a004b0fce72b2526b0b5c4413666a4cb/24a30/cover.png"  class="thumbnail-image card-img"/></p> </a></p>
+<p><a href="./posts/2023-09-13-shiny-learning-path-for-bioinformatics/index.html" class="no-external"></a></p><a href="./posts/2023-09-13-shiny-learning-path-for-bioinformatics/index.html" class="no-external">
+<p class="card-img-top"><img data-src="https://d33wubrfki0l68.cloudfront.net/b88ef926a004b0fce72b2526b0b5c4413666a4cb/24a30/cover.png"  class="thumbnail-image card-img"/></p>
+</a><p><a href="./posts/2023-09-13-shiny-learning-path-for-bioinformatics/index.html" class="no-external"></a></p>
 </div>
 <div class="body">
-<a href="./posts/2023-09-13-shiny-learning-path-for-bioinformatics/index.html">
 <h3 class="no-anchor listing-title">
-Shiny 开发学习路径
+<a href="./posts/2023-09-13-shiny-learning-path-for-bioinformatics/index.html" class="no-external">Shiny 开发学习路径</a>
 </h3>
 <div class="listing-subtitle">
-
+<a href="./posts/2023-09-13-shiny-learning-path-for-bioinformatics/index.html" class="no-external"></a>
 </div>
-</a>
 <div class="listing-categories">
 <div class="listing-category" onclick="window.quartoListingCategory('shiny'); return false;">
 shiny
@@ -1384,14 +1395,12 @@ R
 bioinformatics
 </div>
 </div>
-<a href="./posts/2023-09-13-shiny-learning-path-for-bioinformatics/index.html">
 <div class="listing-description">
-生信领域越来越多的数据库/网页工具采用 Shiny 框架进行搭建，Shiny…<strong></strong>
+<a href="./posts/2023-09-13-shiny-learning-path-for-bioinformatics/index.html" class="no-external">生信领域越来越多的数据库/网页工具采用 Shiny 框架进行搭建，Shiny 的流行度/拓展性在随着时间增加。因此，掌握 Shiny 服务于自己的项目/课题成为生信人的一个新的技能。 在这篇文章中，作为一个有经验的 Shiny 学习者和 Shiny 工具的开发者，我将介绍学习和掌握 Shiny…<strong></strong></a>
 </div>
-</a>
 </div>
 <div class="metadata">
-<a href="./posts/2023-09-13-shiny-learning-path-for-bioinformatics/index.html">
+<a href="./posts/2023-09-13-shiny-learning-path-for-bioinformatics/index.html" class="no-external">
 <div class="listing-date">
 Sep 13, 2023
 </div>
@@ -1401,19 +1410,19 @@ Shixiang Wang
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="32" data-categories="Linux,bioinformatics,note" data-listing-date-sort="1694534400000" data-listing-file-modified-sort="1705479886397" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1">
+<div class="quarto-post image-right" data-index="33" data-categories="Linux,bioinformatics,note" data-listing-date-sort="1694534400000" data-listing-file-modified-sort="1729002838371" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="43">
 <div class="thumbnail">
-<p><a href="./posts/2023-09-13-check-cpu-usage/index.html"> <div class="listing-item-img-placeholder card-img-top" >&nbsp;</div> </a></p>
+<p><a href="./posts/2023-09-13-check-cpu-usage/index.html" class="no-external"></a></p><a href="./posts/2023-09-13-check-cpu-usage/index.html" class="no-external">
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+</a><p><a href="./posts/2023-09-13-check-cpu-usage/index.html" class="no-external"></a></p>
 </div>
 <div class="body">
-<a href="./posts/2023-09-13-check-cpu-usage/index.html">
 <h3 class="no-anchor listing-title">
-检查 CPU 的使用量
+<a href="./posts/2023-09-13-check-cpu-usage/index.html" class="no-external">检查 CPU 的使用量</a>
 </h3>
 <div class="listing-subtitle">
-
+<a href="./posts/2023-09-13-check-cpu-usage/index.html" class="no-external"></a>
 </div>
-</a>
 <div class="listing-categories">
 <div class="listing-category" onclick="window.quartoListingCategory('Linux'); return false;">
 Linux
@@ -1425,14 +1434,12 @@ bioinformatics
 note
 </div>
 </div>
-<a href="./posts/2023-09-13-check-cpu-usage/index.html">
 <div class="listing-description">
-在 Linux 服务器上有时候需要检查下…<code></code>
+<a href="./posts/2023-09-13-check-cpu-usage/index.html" class="no-external">在 Linux 服务器上有时候需要检查下 CPU 的使用量，现在一般 server 的 CPU 都比较多，而在计算的时候 CPU 也是在动态切换的，像 htop 这种命令输出可以直观的看大体有多少被占用，但没法得到具体的数值。 而传统的指标 cpu load，一般也不太会去看，我们在运算时想的是尽量占用剩余的…<code></code></a>
 </div>
-</a>
 </div>
 <div class="metadata">
-<a href="./posts/2023-09-13-check-cpu-usage/index.html">
+<a href="./posts/2023-09-13-check-cpu-usage/index.html" class="no-external">
 <div class="listing-date">
 Sep 13, 2023
 </div>
@@ -1442,32 +1449,30 @@ Shixiang Wang
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="33" data-categories="bioinformatics" data-listing-date-sort="1694448000000" data-listing-file-modified-sort="1705479886396" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1">
+<div class="quarto-post image-right" data-index="34" data-categories="bioinformatics" data-listing-date-sort="1694448000000" data-listing-file-modified-sort="1729002838371" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="51">
 <div class="thumbnail">
-<p><a href="./posts/2023-09-12-mapq-and-as/index.html"> <div class="listing-item-img-placeholder card-img-top" >&nbsp;</div> </a></p>
+<p><a href="./posts/2023-09-12-mapq-and-as/index.html" class="no-external"></a></p><a href="./posts/2023-09-12-mapq-and-as/index.html" class="no-external">
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+</a><p><a href="./posts/2023-09-12-mapq-and-as/index.html" class="no-external"></a></p>
 </div>
 <div class="body">
-<a href="./posts/2023-09-12-mapq-and-as/index.html">
 <h3 class="no-anchor listing-title">
-MAPQ（映射质量）与-AS（比对得分）
+<a href="./posts/2023-09-12-mapq-and-as/index.html" class="no-external">MAPQ（映射质量）与-AS（比对得分）</a>
 </h3>
 <div class="listing-subtitle">
-
+<a href="./posts/2023-09-12-mapq-and-as/index.html" class="no-external"></a>
 </div>
-</a>
 <div class="listing-categories">
 <div class="listing-category" onclick="window.quartoListingCategory('bioinformatics'); return false;">
 bioinformatics
 </div>
 </div>
-<a href="./posts/2023-09-12-mapq-and-as/index.html">
 <div class="listing-description">
-今天看 bwa mem 的 <code>-q</code> 选项，非常困…
+<a href="./posts/2023-09-12-mapq-and-as/index.html" class="no-external">今天看 bwa mem 的 <code>-q</code> 选项，非常困惑：“-q, Don’t reduce the mapping quality of split alignment of lower alignment score”。 与我原来想象中 mapping quality 和 alignment score…</a>
 </div>
-</a>
 </div>
 <div class="metadata">
-<a href="./posts/2023-09-12-mapq-and-as/index.html">
+<a href="./posts/2023-09-12-mapq-and-as/index.html" class="no-external">
 <div class="listing-date">
 Sep 12, 2023
 </div>
@@ -1477,19 +1482,19 @@ Shixiang Wang
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="34" data-categories="academic,note,thought" data-listing-date-sort="1693756800000" data-listing-file-modified-sort="1705479886395" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1">
+<div class="quarto-post image-right" data-index="35" data-categories="academic,note,thought" data-listing-date-sort="1693756800000" data-listing-file-modified-sort="1729002838371" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="16">
 <div class="thumbnail">
-<p><a href="./posts/2023-09-04-discourse-on-the-method/index.html"> <div class="listing-item-img-placeholder card-img-top" >&nbsp;</div> </a></p>
+<p><a href="./posts/2023-09-04-discourse-on-the-method/index.html" class="no-external"></a></p><a href="./posts/2023-09-04-discourse-on-the-method/index.html" class="no-external">
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+</a><p><a href="./posts/2023-09-04-discourse-on-the-method/index.html" class="no-external"></a></p>
 </div>
 <div class="body">
-<a href="./posts/2023-09-04-discourse-on-the-method/index.html">
 <h3 class="no-anchor listing-title">
-discourse on the method
+<a href="./posts/2023-09-04-discourse-on-the-method/index.html" class="no-external">discourse on the method</a>
 </h3>
 <div class="listing-subtitle">
-
+<a href="./posts/2023-09-04-discourse-on-the-method/index.html" class="no-external"></a>
 </div>
-</a>
 <div class="listing-categories">
 <div class="listing-category" onclick="window.quartoListingCategory('academic'); return false;">
 academic
@@ -1501,14 +1506,12 @@ note
 thought
 </div>
 </div>
-<a href="./posts/2023-09-04-discourse-on-the-method/index.html">
 <div class="listing-description">
-笛卡尔在《方法论》中揭示了科学研究和发明创造的普适方法，并概括为 4 个步骤：
+<a href="./posts/2023-09-04-discourse-on-the-method/index.html" class="no-external">笛卡尔在《方法论》中揭示了科学研究和发明创造的普适方法，并概括为 4 个步骤：</a>
 </div>
-</a>
 </div>
 <div class="metadata">
-<a href="./posts/2023-09-04-discourse-on-the-method/index.html">
+<a href="./posts/2023-09-04-discourse-on-the-method/index.html" class="no-external">
 <div class="listing-date">
 Sep 4, 2023
 </div>
@@ -1518,32 +1521,30 @@ Shixiang Wang
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="35" data-categories="bioinformatics" data-listing-date-sort="1693670400000" data-listing-file-modified-sort="1705479886394" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="2">
+<div class="quarto-post image-right" data-index="36" data-categories="bioinformatics" data-listing-date-sort="1693670400000" data-listing-file-modified-sort="1729002838371" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="2" data-listing-word-count-sort="277">
 <div class="thumbnail">
-<p><a href="./posts/2023-09-03-use-circrna-pipeline/index.html"> <p class="card-img-top"><img data-src="https://cdn.jsdelivr.net/gh/shixiangwang/cdn/img/image-20230903160124763.png"  class="thumbnail-image card-img"/></p> </a></p>
+<p><a href="./posts/2023-09-03-use-circrna-pipeline/index.html" class="no-external"></a></p><a href="./posts/2023-09-03-use-circrna-pipeline/index.html" class="no-external">
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+</a><p><a href="./posts/2023-09-03-use-circrna-pipeline/index.html" class="no-external"></a></p>
 </div>
 <div class="body">
-<a href="./posts/2023-09-03-use-circrna-pipeline/index.html">
 <h3 class="no-anchor listing-title">
-circRNA鉴定流程-使用手册
+<a href="./posts/2023-09-03-use-circrna-pipeline/index.html" class="no-external">circRNA鉴定流程-使用手册</a>
 </h3>
 <div class="listing-subtitle">
-
+<a href="./posts/2023-09-03-use-circrna-pipeline/index.html" class="no-external"></a>
 </div>
-</a>
 <div class="listing-categories">
 <div class="listing-category" onclick="window.quartoListingCategory('bioinformatics'); return false;">
 bioinformatics
 </div>
 </div>
-<a href="./posts/2023-09-03-use-circrna-pipeline/index.html">
 <div class="listing-description">
-本系统提供了一个使用四种方法（CIRIquant、Circexplorer2、find_circ和circRNA_finder）从转录组双端测序的FASTQ文件中轻松且可重复地检测环状RNA（circRNA）的计算流程。
+<a href="./posts/2023-09-03-use-circrna-pipeline/index.html" class="no-external">本系统提供了一个使用四种方法（CIRIquant、Circexplorer2、find_circ和circRNA_finder）从转录组双端测序的FASTQ文件中轻松且可重复地检测环状RNA（circRNA）的计算流程。</a>
 </div>
-</a>
 </div>
 <div class="metadata">
-<a href="./posts/2023-09-03-use-circrna-pipeline/index.html">
+<a href="./posts/2023-09-03-use-circrna-pipeline/index.html" class="no-external">
 <div class="listing-date">
 Sep 3, 2023
 </div>
@@ -1553,32 +1554,30 @@ Shixiang Wang
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="36" data-categories="random" data-listing-date-sort="1693411200000" data-listing-file-modified-sort="1705479886392" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1">
+<div class="quarto-post image-right" data-index="37" data-categories="random" data-listing-date-sort="1693411200000" data-listing-file-modified-sort="1729002838371" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="4">
 <div class="thumbnail">
-<p><a href="./posts/2023-08-31-pnas/index.html"> <div class="listing-item-img-placeholder card-img-top" >&nbsp;</div> </a></p>
+<p><a href="./posts/2023-08-31-pnas/index.html" class="no-external"></a></p><a href="./posts/2023-08-31-pnas/index.html" class="no-external">
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+</a><p><a href="./posts/2023-08-31-pnas/index.html" class="no-external"></a></p>
 </div>
 <div class="body">
-<a href="./posts/2023-08-31-pnas/index.html">
 <h3 class="no-anchor listing-title">
-pnas
+<a href="./posts/2023-08-31-pnas/index.html" class="no-external">pnas</a>
 </h3>
 <div class="listing-subtitle">
-
+<a href="./posts/2023-08-31-pnas/index.html" class="no-external"></a>
 </div>
-</a>
 <div class="listing-categories">
 <div class="listing-category" onclick="window.quartoListingCategory('random'); return false;">
 random
 </div>
 </div>
-<a href="./posts/2023-08-31-pnas/index.html">
 <div class="listing-description">
-想发一篇 PNAS，希望 3 年内能达成。
+<a href="./posts/2023-08-31-pnas/index.html" class="no-external">想发一篇 PNAS，希望 3 年内能达成。</a>
 </div>
-</a>
 </div>
 <div class="metadata">
-<a href="./posts/2023-08-31-pnas/index.html">
+<a href="./posts/2023-08-31-pnas/index.html" class="no-external">
 <div class="listing-date">
 Aug 31, 2023
 </div>
@@ -1588,19 +1587,19 @@ Shixiang Wang
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="37" data-categories="note,stats" data-listing-date-sort="1692201600000" data-listing-file-modified-sort="1705479886391" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1">
+<div class="quarto-post image-right" data-index="38" data-categories="note,stats" data-listing-date-sort="1692201600000" data-listing-file-modified-sort="1729002838370" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="118">
 <div class="thumbnail">
-<p><a href="./posts/2023-08-17-normalize-and-scale-data/index.html"> <div class="listing-item-img-placeholder card-img-top" >&nbsp;</div> </a></p>
+<p><a href="./posts/2023-08-17-normalize-and-scale-data/index.html" class="no-external"></a></p><a href="./posts/2023-08-17-normalize-and-scale-data/index.html" class="no-external">
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+</a><p><a href="./posts/2023-08-17-normalize-and-scale-data/index.html" class="no-external"></a></p>
 </div>
 <div class="body">
-<a href="./posts/2023-08-17-normalize-and-scale-data/index.html">
 <h3 class="no-anchor listing-title">
-normalize data 和 scale data 的差异
+<a href="./posts/2023-08-17-normalize-and-scale-data/index.html" class="no-external">normalize data 和 scale data 的差异</a>
 </h3>
 <div class="listing-subtitle">
-
+<a href="./posts/2023-08-17-normalize-and-scale-data/index.html" class="no-external"></a>
 </div>
-</a>
 <div class="listing-categories">
 <div class="listing-category" onclick="window.quartoListingCategory('note'); return false;">
 note
@@ -1609,14 +1608,12 @@ note
 stats
 </div>
 </div>
-<a href="./posts/2023-08-17-normalize-and-scale-data/index.html">
 <div class="listing-description">
-“Normalize data” 和 “scale data” 都是数据预处理的步骤，但它们在具体操作和效果上有所不同。
+<a href="./posts/2023-08-17-normalize-and-scale-data/index.html" class="no-external">“Normalize data” 和 “scale data” 都是数据预处理的步骤，但它们在具体操作和效果上有所不同。</a>
 </div>
-</a>
 </div>
 <div class="metadata">
-<a href="./posts/2023-08-17-normalize-and-scale-data/index.html">
+<a href="./posts/2023-08-17-normalize-and-scale-data/index.html" class="no-external">
 <div class="listing-date">
 Aug 17, 2023
 </div>
@@ -1626,19 +1623,19 @@ Shixiang Wang
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="38" data-categories="note,Linux" data-listing-date-sort="1691683200000" data-listing-file-modified-sort="1705479886390" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1">
+<div class="quarto-post image-right" data-index="39" data-categories="note,Linux" data-listing-date-sort="1691683200000" data-listing-file-modified-sort="1729002838370" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="159">
 <div class="thumbnail">
-<p><a href="./posts/2023-08-11-caddyfile/index.html"> <div class="listing-item-img-placeholder card-img-top" >&nbsp;</div> </a></p>
+<p><a href="./posts/2023-08-11-caddyfile/index.html" class="no-external"></a></p><a href="./posts/2023-08-11-caddyfile/index.html" class="no-external">
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+</a><p><a href="./posts/2023-08-11-caddyfile/index.html" class="no-external"></a></p>
 </div>
 <div class="body">
-<a href="./posts/2023-08-11-caddyfile/index.html">
 <h3 class="no-anchor listing-title">
-caddyfile
+<a href="./posts/2023-08-11-caddyfile/index.html" class="no-external">caddyfile</a>
 </h3>
 <div class="listing-subtitle">
-
+<a href="./posts/2023-08-11-caddyfile/index.html" class="no-external"></a>
 </div>
-</a>
 <div class="listing-categories">
 <div class="listing-category" onclick="window.quartoListingCategory('note'); return false;">
 note
@@ -1647,14 +1644,12 @@ note
 Linux
 </div>
 </div>
-<a href="./posts/2023-08-11-caddyfile/index.html">
 <div class="listing-description">
-Caddy 是一个反向代理工具，自动支持 https。 这里我记录下之前弄的代理配置，免得服务器到期了这段经验被遗忘掉了。
+<a href="./posts/2023-08-11-caddyfile/index.html" class="no-external">Caddy 是一个反向代理工具，自动支持 https。 这里我记录下之前弄的代理配置，免得服务器到期了这段经验被遗忘掉了。</a>
 </div>
-</a>
 </div>
 <div class="metadata">
-<a href="./posts/2023-08-11-caddyfile/index.html">
+<a href="./posts/2023-08-11-caddyfile/index.html" class="no-external">
 <div class="listing-date">
 Aug 11, 2023
 </div>
@@ -1664,19 +1659,19 @@ Shixiang Wang
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="39" data-categories="note,bioinformatics" data-listing-date-sort="1690819200000" data-listing-file-modified-sort="1705479886379" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1">
+<div class="quarto-post image-right" data-index="40" data-categories="note,bioinformatics" data-listing-date-sort="1690819200000" data-listing-file-modified-sort="1729002838370" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="21">
 <div class="thumbnail">
-<p><a href="./posts/2023-08-01-duplication-rate/index.html"> <div class="listing-item-img-placeholder card-img-top" >&nbsp;</div> </a></p>
+<p><a href="./posts/2023-08-01-duplication-rate/index.html" class="no-external"></a></p><a href="./posts/2023-08-01-duplication-rate/index.html" class="no-external">
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+</a><p><a href="./posts/2023-08-01-duplication-rate/index.html" class="no-external"></a></p>
 </div>
 <div class="body">
-<a href="./posts/2023-08-01-duplication-rate/index.html">
 <h3 class="no-anchor listing-title">
-Duplication Rate 经验值
+<a href="./posts/2023-08-01-duplication-rate/index.html" class="no-external">Duplication Rate 经验值</a>
 </h3>
 <div class="listing-subtitle">
-
+<a href="./posts/2023-08-01-duplication-rate/index.html" class="no-external"></a>
 </div>
-</a>
 <div class="listing-categories">
 <div class="listing-category" onclick="window.quartoListingCategory('note'); return false;">
 note
@@ -1685,14 +1680,12 @@ note
 bioinformatics
 </div>
 </div>
-<a href="./posts/2023-08-01-duplication-rate/index.html">
 <div class="listing-description">
-最近处理 RNA-Seq 的原始数据，用 fastp 发现 duplication rate 很高，有不少 60% 的，比较奇怪。
+<a href="./posts/2023-08-01-duplication-rate/index.html" class="no-external">最近处理 RNA-Seq 的原始数据，用 fastp 发现 duplication rate 很高，有不少 60% 的，比较奇怪。</a>
 </div>
-</a>
 </div>
 <div class="metadata">
-<a href="./posts/2023-08-01-duplication-rate/index.html">
+<a href="./posts/2023-08-01-duplication-rate/index.html" class="no-external">
 <div class="listing-date">
 Aug 1, 2023
 </div>
@@ -1702,19 +1695,19 @@ Shixiang Wang
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="40" data-categories="note,scRNA-seq,R" data-listing-date-sort="1690732800000" data-listing-file-modified-sort="1705479886378" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="2">
+<div class="quarto-post image-right" data-index="41" data-categories="note,scRNA-seq,R" data-listing-date-sort="1690732800000" data-listing-file-modified-sort="1729002838370" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="2" data-listing-word-count-sort="393">
 <div class="thumbnail">
-<p><a href="./posts/2023-07-31-cell-interaction-analysis/index.html"> <p class="card-img-top"><img data-src="posts/2023-07-31-cell-interaction-analysis/index_files/figure-html/unnamed-chunk-5-1.png"  class="thumbnail-image card-img"/></p> </a></p>
+<p><a href="./posts/2023-07-31-cell-interaction-analysis/index.html" class="no-external"></a></p><a href="./posts/2023-07-31-cell-interaction-analysis/index.html" class="no-external">
+<p class="card-img-top"><img data-src="posts/2023-07-31-cell-interaction-analysis/index_files/figure-html/unnamed-chunk-5-1.png"  class="thumbnail-image card-img"/></p>
+</a><p><a href="./posts/2023-07-31-cell-interaction-analysis/index.html" class="no-external"></a></p>
 </div>
 <div class="body">
-<a href="./posts/2023-07-31-cell-interaction-analysis/index.html">
 <h3 class="no-anchor listing-title">
-Single-cell Workshop 2021 - 03 - 细胞相互作用分析
+<a href="./posts/2023-07-31-cell-interaction-analysis/index.html" class="no-external">Single-cell Workshop 2021 - 03 - 细胞相互作用分析</a>
 </h3>
 <div class="listing-subtitle">
-
+<a href="./posts/2023-07-31-cell-interaction-analysis/index.html" class="no-external"></a>
 </div>
-</a>
 <div class="listing-categories">
 <div class="listing-category" onclick="window.quartoListingCategory('note'); return false;">
 note
@@ -1726,14 +1719,12 @@ scRNA-seq
 R
 </div>
 </div>
-<a href="./posts/2023-07-31-cell-interaction-analysis/index.html">
 <div class="listing-description">
-学习资料：GitHub 地址
+<a href="./posts/2023-07-31-cell-interaction-analysis/index.html" class="no-external">学习资料：GitHub 地址</a>
 </div>
-</a>
 </div>
 <div class="metadata">
-<a href="./posts/2023-07-31-cell-interaction-analysis/index.html">
+<a href="./posts/2023-07-31-cell-interaction-analysis/index.html" class="no-external">
 <div class="listing-date">
 Jul 31, 2023
 </div>
@@ -1743,19 +1734,19 @@ Shixiang Wang
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="41" data-categories="note,scRNA-seq,R" data-listing-date-sort="1690300800000" data-listing-file-modified-sort="1705479886377" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="2">
+<div class="quarto-post image-right" data-index="42" data-categories="note,scRNA-seq,R" data-listing-date-sort="1690300800000" data-listing-file-modified-sort="1729002838369" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="2" data-listing-word-count-sort="331">
 <div class="thumbnail">
-<p><a href="./posts/2023-07-26-clustering-and-cell-type-identification/index.html"> <p class="card-img-top"><img data-src="posts/2023-07-26-clustering-and-cell-type-identification/index_files/figure-html/unnamed-chunk-5-1.png"  class="thumbnail-image card-img"/></p> </a></p>
+<p><a href="./posts/2023-07-26-clustering-and-cell-type-identification/index.html" class="no-external"></a></p><a href="./posts/2023-07-26-clustering-and-cell-type-identification/index.html" class="no-external">
+<p class="card-img-top"><img data-src="posts/2023-07-26-clustering-and-cell-type-identification/index_files/figure-html/unnamed-chunk-5-1.png"  class="thumbnail-image card-img"/></p>
+</a><p><a href="./posts/2023-07-26-clustering-and-cell-type-identification/index.html" class="no-external"></a></p>
 </div>
 <div class="body">
-<a href="./posts/2023-07-26-clustering-and-cell-type-identification/index.html">
 <h3 class="no-anchor listing-title">
-Single-cell Workshop 2021 - 02 - 聚类和细胞类型鉴定
+<a href="./posts/2023-07-26-clustering-and-cell-type-identification/index.html" class="no-external">Single-cell Workshop 2021 - 02 - 聚类和细胞类型鉴定</a>
 </h3>
 <div class="listing-subtitle">
-
+<a href="./posts/2023-07-26-clustering-and-cell-type-identification/index.html" class="no-external"></a>
 </div>
-</a>
 <div class="listing-categories">
 <div class="listing-category" onclick="window.quartoListingCategory('note'); return false;">
 note
@@ -1767,14 +1758,12 @@ scRNA-seq
 R
 </div>
 </div>
-<a href="./posts/2023-07-26-clustering-and-cell-type-identification/index.html">
 <div class="listing-description">
-学习资料：GitHub 地址
+<a href="./posts/2023-07-26-clustering-and-cell-type-identification/index.html" class="no-external">学习资料：GitHub 地址</a>
 </div>
-</a>
 </div>
 <div class="metadata">
-<a href="./posts/2023-07-26-clustering-and-cell-type-identification/index.html">
+<a href="./posts/2023-07-26-clustering-and-cell-type-identification/index.html" class="no-external">
 <div class="listing-date">
 Jul 26, 2023
 </div>
@@ -1784,32 +1773,30 @@ Shixiang Wang
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="42" data-categories="诗" data-listing-date-sort="1690214400000" data-listing-file-modified-sort="1705479886376" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1">
+<div class="quarto-post image-right" data-index="43" data-categories="诗" data-listing-date-sort="1690214400000" data-listing-file-modified-sort="1729002838369" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="6">
 <div class="thumbnail">
-<p><a href="./posts/2023-07-25-small-notes/index.html"> <div class="listing-item-img-placeholder card-img-top" >&nbsp;</div> </a></p>
+<p><a href="./posts/2023-07-25-small-notes/index.html" class="no-external"></a></p><a href="./posts/2023-07-25-small-notes/index.html" class="no-external">
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+</a><p><a href="./posts/2023-07-25-small-notes/index.html" class="no-external"></a></p>
 </div>
 <div class="body">
-<a href="./posts/2023-07-25-small-notes/index.html">
 <h3 class="no-anchor listing-title">
-小记（往昔）
+<a href="./posts/2023-07-25-small-notes/index.html" class="no-external">小记（往昔）</a>
 </h3>
 <div class="listing-subtitle">
-
+<a href="./posts/2023-07-25-small-notes/index.html" class="no-external"></a>
 </div>
-</a>
 <div class="listing-categories">
 <div class="listing-category" onclick="window.quartoListingCategory('诗'); return false;">
 诗
 </div>
 </div>
-<a href="./posts/2023-07-25-small-notes/index.html">
 <div class="listing-description">
-以时间倒序的形式备份下「小记」中写的部分诗。
+<a href="./posts/2023-07-25-small-notes/index.html" class="no-external">以时间倒序的形式备份下「小记」中写的部分诗。</a>
 </div>
-</a>
 </div>
 <div class="metadata">
-<a href="./posts/2023-07-25-small-notes/index.html">
+<a href="./posts/2023-07-25-small-notes/index.html" class="no-external">
 <div class="listing-date">
 Jul 25, 2023
 </div>
@@ -1819,32 +1806,30 @@ Shixiang Wang
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="43" data-categories="journal" data-listing-date-sort="1690214400000" data-listing-file-modified-sort="1705479886375" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1">
+<div class="quarto-post image-right" data-index="44" data-categories="journal" data-listing-date-sort="1690214400000" data-listing-file-modified-sort="1729002838369" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="1">
 <div class="thumbnail">
-<p><a href="./posts/2023-07-25-journal/index.html"> <div class="listing-item-img-placeholder card-img-top" >&nbsp;</div> </a></p>
+<p><a href="./posts/2023-07-25-journal/index.html" class="no-external"></a></p><a href="./posts/2023-07-25-journal/index.html" class="no-external">
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+</a><p><a href="./posts/2023-07-25-journal/index.html" class="no-external"></a></p>
 </div>
 <div class="body">
-<a href="./posts/2023-07-25-journal/index.html">
 <h3 class="no-anchor listing-title">
-2023-07-25
+<a href="./posts/2023-07-25-journal/index.html" class="no-external">2023-07-25</a>
 </h3>
 <div class="listing-subtitle">
-
+<a href="./posts/2023-07-25-journal/index.html" class="no-external"></a>
 </div>
-</a>
 <div class="listing-categories">
 <div class="listing-category" onclick="window.quartoListingCategory('journal'); return false;">
 journal
 </div>
 </div>
-<a href="./posts/2023-07-25-journal/index.html">
 <div class="listing-description">
-为什么事情容易堆积在一起发生？
+<a href="./posts/2023-07-25-journal/index.html" class="no-external">为什么事情容易堆积在一起发生？</a>
 </div>
-</a>
 </div>
 <div class="metadata">
-<a href="./posts/2023-07-25-journal/index.html">
+<a href="./posts/2023-07-25-journal/index.html" class="no-external">
 <div class="listing-date">
 Jul 25, 2023
 </div>
@@ -1854,32 +1839,30 @@ Shixiang Wang
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="44" data-categories="academic" data-listing-date-sort="1689868800000" data-listing-file-modified-sort="1705479886365" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1">
+<div class="quarto-post image-right" data-index="45" data-categories="academic" data-listing-date-sort="1689868800000" data-listing-file-modified-sort="1729002838367" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="10">
 <div class="thumbnail">
-<p><a href="./posts/2023-07-21-academic-culture/index.html"> <p class="card-img-top"><img data-src="posts/2023-07-21-academic-culture/wulab_culture.jpg"  class="thumbnail-image card-img"/></p> </a></p>
+<p><a href="./posts/2023-07-21-academic-culture/index.html" class="no-external"></a></p><a href="./posts/2023-07-21-academic-culture/index.html" class="no-external">
+<p class="card-img-top"><img data-src="posts/2023-07-21-academic-culture/wulab_culture.jpg"  class="thumbnail-image card-img"/></p>
+</a><p><a href="./posts/2023-07-21-academic-culture/index.html" class="no-external"></a></p>
 </div>
 <div class="body">
-<a href="./posts/2023-07-21-academic-culture/index.html">
 <h3 class="no-anchor listing-title">
-学术的价值观
+<a href="./posts/2023-07-21-academic-culture/index.html" class="no-external">学术的价值观</a>
 </h3>
 <div class="listing-subtitle">
-
+<a href="./posts/2023-07-21-academic-culture/index.html" class="no-external"></a>
 </div>
-</a>
 <div class="listing-categories">
 <div class="listing-category" onclick="window.quartoListingCategory('academic'); return false;">
 academic
 </div>
 </div>
-<a href="./posts/2023-07-21-academic-culture/index.html">
 <div class="listing-description">
-这篇小文主要是记录、推荐和分享下吴思涵 Lab 的科学价值观条目。
+<a href="./posts/2023-07-21-academic-culture/index.html" class="no-external">这篇小文主要是记录、推荐和分享下吴思涵 Lab 的科学价值观条目。</a>
 </div>
-</a>
 </div>
 <div class="metadata">
-<a href="./posts/2023-07-21-academic-culture/index.html">
+<a href="./posts/2023-07-21-academic-culture/index.html" class="no-external">
 <div class="listing-date">
 Jul 21, 2023
 </div>
@@ -1889,19 +1872,19 @@ Shixiang Wang
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="45" data-categories="thought,academic" data-listing-date-sort="1689868800000" data-listing-file-modified-sort="1705479886373" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1">
+<div class="quarto-post image-right" data-index="46" data-categories="thought,academic" data-listing-date-sort="1689868800000" data-listing-file-modified-sort="1729002838368" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="4">
 <div class="thumbnail">
-<p><a href="./posts/2023-07-21-how-do-you-think-bioinformatics-in-science/index.html"> <p class="card-img-top"><img data-src="posts/2023-07-21-how-do-you-think-bioinformatics-in-science/snapshot_of_gu_twitter.jpg"  class="thumbnail-image card-img"/></p> </a></p>
+<p><a href="./posts/2023-07-21-how-do-you-think-bioinformatics-in-science/index.html" class="no-external"></a></p><a href="./posts/2023-07-21-how-do-you-think-bioinformatics-in-science/index.html" class="no-external">
+<p class="card-img-top"><img data-src="posts/2023-07-21-how-do-you-think-bioinformatics-in-science/snapshot_of_gu_twitter.jpg"  class="thumbnail-image card-img"/></p>
+</a><p><a href="./posts/2023-07-21-how-do-you-think-bioinformatics-in-science/index.html" class="no-external"></a></p>
 </div>
 <div class="body">
-<a href="./posts/2023-07-21-how-do-you-think-bioinformatics-in-science/index.html">
 <h3 class="no-anchor listing-title">
-你认同生物信息学不属于科学吗？
+<a href="./posts/2023-07-21-how-do-you-think-bioinformatics-in-science/index.html" class="no-external">你认同生物信息学不属于科学吗？</a>
 </h3>
 <div class="listing-subtitle">
-
+<a href="./posts/2023-07-21-how-do-you-think-bioinformatics-in-science/index.html" class="no-external"></a>
 </div>
-</a>
 <div class="listing-categories">
 <div class="listing-category" onclick="window.quartoListingCategory('thought'); return false;">
 thought
@@ -1910,14 +1893,12 @@ thought
 academic
 </div>
 </div>
-<a href="./posts/2023-07-21-how-do-you-think-bioinformatics-in-science/index.html">
 <div class="listing-description">
-刚看到 Zuguang Gu 发的推文，唔，国内生物学术界有这种看法我是生气的，并认为可耻。 因为这里的某个研究机构在收到求职信时，都没有了解过这个领域和它的贡献就妄下评判。 这体现一种自傲与无知。就没有想过世界存在即有理由吗？评估学术求职者考虑的不应该是 学科建设的契合度，求职人的科研态度、经历、成果吗？
+<a href="./posts/2023-07-21-how-do-you-think-bioinformatics-in-science/index.html" class="no-external">刚看到 Zuguang Gu 发的推文，唔，国内生物学术界有这种看法我是生气的，并认为可耻。 因为这里的某个研究机构在收到求职信时，都没有了解过这个领域和它的贡献就妄下评判。 这体现一种自傲与无知。就没有想过世界存在即有理由吗？评估学术求职者考虑的不应该是 学科建设的契合度，求职人的科研态度、经历、成果吗？</a>
 </div>
-</a>
 </div>
 <div class="metadata">
-<a href="./posts/2023-07-21-how-do-you-think-bioinformatics-in-science/index.html">
+<a href="./posts/2023-07-21-how-do-you-think-bioinformatics-in-science/index.html" class="no-external">
 <div class="listing-date">
 Jul 21, 2023
 </div>
@@ -1927,32 +1908,30 @@ Shixiang Wang
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="46" data-categories="journal" data-listing-date-sort="1689782400000" data-listing-file-modified-sort="1705479886364" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1">
+<div class="quarto-post image-right" data-index="47" data-categories="journal" data-listing-date-sort="1689782400000" data-listing-file-modified-sort="1729002838367" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="1">
 <div class="thumbnail">
-<p><a href="./posts/2023-07-20-journal/index.html"> <div class="listing-item-img-placeholder card-img-top" >&nbsp;</div> </a></p>
+<p><a href="./posts/2023-07-20-journal/index.html" class="no-external"></a></p><a href="./posts/2023-07-20-journal/index.html" class="no-external">
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+</a><p><a href="./posts/2023-07-20-journal/index.html" class="no-external"></a></p>
 </div>
 <div class="body">
-<a href="./posts/2023-07-20-journal/index.html">
 <h3 class="no-anchor listing-title">
-2023-07-20
+<a href="./posts/2023-07-20-journal/index.html" class="no-external">2023-07-20</a>
 </h3>
 <div class="listing-subtitle">
-
+<a href="./posts/2023-07-20-journal/index.html" class="no-external"></a>
 </div>
-</a>
 <div class="listing-categories">
 <div class="listing-category" onclick="window.quartoListingCategory('journal'); return false;">
 journal
 </div>
 </div>
-<a href="./posts/2023-07-20-journal/index.html">
 <div class="listing-description">
-今天很是犯困😪，很困。
+<a href="./posts/2023-07-20-journal/index.html" class="no-external">今天很是犯困😪，很困。</a>
 </div>
-</a>
 </div>
 <div class="metadata">
-<a href="./posts/2023-07-20-journal/index.html">
+<a href="./posts/2023-07-20-journal/index.html" class="no-external">
 <div class="listing-date">
 Jul 20, 2023
 </div>
@@ -1962,32 +1941,30 @@ Shixiang Wang
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="47" data-categories="journal" data-listing-date-sort="1689609600000" data-listing-file-modified-sort="1705479886363" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1">
+<div class="quarto-post image-right" data-index="48" data-categories="journal" data-listing-date-sort="1689609600000" data-listing-file-modified-sort="1729002838367" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="7">
 <div class="thumbnail">
-<p><a href="./posts/2023-07-18-journal/index.html"> <div class="listing-item-img-placeholder card-img-top" >&nbsp;</div> </a></p>
+<p><a href="./posts/2023-07-18-journal/index.html" class="no-external"></a></p><a href="./posts/2023-07-18-journal/index.html" class="no-external">
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+</a><p><a href="./posts/2023-07-18-journal/index.html" class="no-external"></a></p>
 </div>
 <div class="body">
-<a href="./posts/2023-07-18-journal/index.html">
 <h3 class="no-anchor listing-title">
-2023-07-18
+<a href="./posts/2023-07-18-journal/index.html" class="no-external">2023-07-18</a>
 </h3>
 <div class="listing-subtitle">
-
+<a href="./posts/2023-07-18-journal/index.html" class="no-external"></a>
 </div>
-</a>
 <div class="listing-categories">
 <div class="listing-category" onclick="window.quartoListingCategory('journal'); return false;">
 journal
 </div>
 </div>
-<a href="./posts/2023-07-18-journal/index.html">
 <div class="listing-description">
-Without hard work, nothing grows but weeds.
+<a href="./posts/2023-07-18-journal/index.html" class="no-external">Without hard work, nothing grows but weeds.</a>
 </div>
-</a>
 </div>
 <div class="metadata">
-<a href="./posts/2023-07-18-journal/index.html">
+<a href="./posts/2023-07-18-journal/index.html" class="no-external">
 <div class="listing-date">
 Jul 18, 2023
 </div>
@@ -1997,19 +1974,19 @@ Shixiang Wang
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="48" data-categories="note,scRNA-seq,R" data-listing-date-sort="1689177600000" data-listing-file-modified-sort="1705479886360" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="12">
+<div class="quarto-post image-right" data-index="49" data-categories="note,scRNA-seq,R" data-listing-date-sort="1689177600000" data-listing-file-modified-sort="1729002838367" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="12" data-listing-word-count-sort="2212">
 <div class="thumbnail">
-<p><a href="./posts/2023-07-13-fundamentals-of-scrnaseq-analysis/index.html"> <p class="card-img-top"><img data-src="https://encyclopedia.pub/media/item_content/202206/62bc1112b6b12biosensors-12-00450-g001.png"  class="thumbnail-image card-img"/></p> </a></p>
+<p><a href="./posts/2023-07-13-fundamentals-of-scrnaseq-analysis/index.html" class="no-external"></a></p><a href="./posts/2023-07-13-fundamentals-of-scrnaseq-analysis/index.html" class="no-external">
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+</a><p><a href="./posts/2023-07-13-fundamentals-of-scrnaseq-analysis/index.html" class="no-external"></a></p>
 </div>
 <div class="body">
-<a href="./posts/2023-07-13-fundamentals-of-scrnaseq-analysis/index.html">
 <h3 class="no-anchor listing-title">
-Single-cell Workshop 2021 - 01 - scRNASeq 分析基础
+<a href="./posts/2023-07-13-fundamentals-of-scrnaseq-analysis/index.html" class="no-external">Single-cell Workshop 2021 - 01 - scRNASeq 分析基础</a>
 </h3>
 <div class="listing-subtitle">
-
+<a href="./posts/2023-07-13-fundamentals-of-scrnaseq-analysis/index.html" class="no-external"></a>
 </div>
-</a>
 <div class="listing-categories">
 <div class="listing-category" onclick="window.quartoListingCategory('note'); return false;">
 note
@@ -2021,14 +1998,12 @@ scRNA-seq
 R
 </div>
 </div>
-<a href="./posts/2023-07-13-fundamentals-of-scrnaseq-analysis/index.html">
 <div class="listing-description">
-学习资料：https://holab-hku.github.io/Fundamental-scRNA/
+<a href="./posts/2023-07-13-fundamentals-of-scrnaseq-analysis/index.html" class="no-external">学习资料：https://holab-hku.github.io/Fundamental-scRNA/</a>
 </div>
-</a>
 </div>
 <div class="metadata">
-<a href="./posts/2023-07-13-fundamentals-of-scrnaseq-analysis/index.html">
+<a href="./posts/2023-07-13-fundamentals-of-scrnaseq-analysis/index.html" class="no-external">
 <div class="listing-date">
 Jul 13, 2023
 </div>
@@ -2038,32 +2013,30 @@ Shixiang Wang
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="49" data-categories="journal" data-listing-date-sort="1689177600000" data-listing-file-modified-sort="1705479886361" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1">
+<div class="quarto-post image-right" data-index="50" data-categories="journal" data-listing-date-sort="1689177600000" data-listing-file-modified-sort="1729002838367" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="6">
 <div class="thumbnail">
-<p><a href="./posts/2023-07-13-journal/index.html"> <div class="listing-item-img-placeholder card-img-top" >&nbsp;</div> </a></p>
+<p><a href="./posts/2023-07-13-journal/index.html" class="no-external"></a></p><a href="./posts/2023-07-13-journal/index.html" class="no-external">
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+</a><p><a href="./posts/2023-07-13-journal/index.html" class="no-external"></a></p>
 </div>
 <div class="body">
-<a href="./posts/2023-07-13-journal/index.html">
 <h3 class="no-anchor listing-title">
-2023-07-13
+<a href="./posts/2023-07-13-journal/index.html" class="no-external">2023-07-13</a>
 </h3>
 <div class="listing-subtitle">
-
+<a href="./posts/2023-07-13-journal/index.html" class="no-external"></a>
 </div>
-</a>
 <div class="listing-categories">
 <div class="listing-category" onclick="window.quartoListingCategory('journal'); return false;">
 journal
 </div>
 </div>
-<a href="./posts/2023-07-13-journal/index.html">
 <div class="listing-description">
-今天还是摘要书中看到的话。
+<a href="./posts/2023-07-13-journal/index.html" class="no-external">今天还是摘要书中看到的话。</a>
 </div>
-</a>
 </div>
 <div class="metadata">
-<a href="./posts/2023-07-13-journal/index.html">
+<a href="./posts/2023-07-13-journal/index.html" class="no-external">
 <div class="listing-date">
 Jul 13, 2023
 </div>
@@ -2073,19 +2046,19 @@ Shixiang Wang
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="50" data-categories="journal,machine-learning" data-listing-date-sort="1689091200000" data-listing-file-modified-sort="1705479886359" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1">
+<div class="quarto-post image-right" data-index="51" data-categories="journal,machine-learning" data-listing-date-sort="1689091200000" data-listing-file-modified-sort="1729002838366" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="4">
 <div class="thumbnail">
-<p><a href="./posts/2023-07-12-journal/index.html"> <div class="listing-item-img-placeholder card-img-top" >&nbsp;</div> </a></p>
+<p><a href="./posts/2023-07-12-journal/index.html" class="no-external"></a></p><a href="./posts/2023-07-12-journal/index.html" class="no-external">
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+</a><p><a href="./posts/2023-07-12-journal/index.html" class="no-external"></a></p>
 </div>
 <div class="body">
-<a href="./posts/2023-07-12-journal/index.html">
 <h3 class="no-anchor listing-title">
-2023-07-12
+<a href="./posts/2023-07-12-journal/index.html" class="no-external">2023-07-12</a>
 </h3>
 <div class="listing-subtitle">
-
+<a href="./posts/2023-07-12-journal/index.html" class="no-external"></a>
 </div>
-</a>
 <div class="listing-categories">
 <div class="listing-category" onclick="window.quartoListingCategory('journal'); return false;">
 journal
@@ -2094,14 +2067,12 @@ journal
 machine-learning
 </div>
 </div>
-<a href="./posts/2023-07-12-journal/index.html">
 <div class="listing-description">
-在看文献的时候发现一个自监督学习，我看英文有个 supervise，以为这是带标签的学习，了解后发现原来并非如此。这里记录下 ChatGPT 关于自监督学习和监督学习的回答。以后有机会实践深入了解下。
+<a href="./posts/2023-07-12-journal/index.html" class="no-external">在看文献的时候发现一个自监督学习，我看英文有个 supervise，以为这是带标签的学习，了解后发现原来并非如此。这里记录下 ChatGPT 关于自监督学习和监督学习的回答。以后有机会实践深入了解下。</a>
 </div>
-</a>
 </div>
 <div class="metadata">
-<a href="./posts/2023-07-12-journal/index.html">
+<a href="./posts/2023-07-12-journal/index.html" class="no-external">
 <div class="listing-date">
 Jul 12, 2023
 </div>
@@ -2111,19 +2082,19 @@ Shixiang Wang
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="51" data-categories="note,scRNA-seq" data-listing-date-sort="1688918400000" data-listing-file-modified-sort="1705479886357" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="8">
+<div class="quarto-post image-right" data-index="52" data-categories="note,scRNA-seq" data-listing-date-sort="1688918400000" data-listing-file-modified-sort="1729002838366" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="8" data-listing-word-count-sort="1405">
 <div class="thumbnail">
-<p><a href="./posts/2023-07-10-scrna-recom/index.html"> <p class="card-img-top"><img data-src="https://raw.githubusercontent.com/WXlab-NJMU/scrna-recom/main/img/workflow.png"  class="thumbnail-image card-img"/></p> </a></p>
+<p><a href="./posts/2023-07-10-scrna-recom/index.html" class="no-external"></a></p><a href="./posts/2023-07-10-scrna-recom/index.html" class="no-external">
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+</a><p><a href="./posts/2023-07-10-scrna-recom/index.html" class="no-external"></a></p>
 </div>
 <div class="body">
-<a href="./posts/2023-07-10-scrna-recom/index.html">
 <h3 class="no-anchor listing-title">
-scrna 核心工具
+<a href="./posts/2023-07-10-scrna-recom/index.html" class="no-external">scrna 核心工具</a>
 </h3>
 <div class="listing-subtitle">
-
+<a href="./posts/2023-07-10-scrna-recom/index.html" class="no-external"></a>
 </div>
-</a>
 <div class="listing-categories">
 <div class="listing-category" onclick="window.quartoListingCategory('note'); return false;">
 note
@@ -2132,14 +2103,12 @@ note
 scRNA-seq
 </div>
 </div>
-<a href="./posts/2023-07-10-scrna-recom/index.html">
 <div class="listing-description">
-Repo {scrna-recom} 单细胞综述文章关于单细胞转录组分析的流程、软件、安装等的一些说明。这里我主要是拷贝下其中关于核心工具的整理，防止迷失。
+<a href="./posts/2023-07-10-scrna-recom/index.html" class="no-external">Repo {scrna-recom} 单细胞综述文章关于单细胞转录组分析的流程、软件、安装等的一些说明。这里我主要是拷贝下其中关于核心工具的整理，防止迷失。</a>
 </div>
-</a>
 </div>
 <div class="metadata">
-<a href="./posts/2023-07-10-scrna-recom/index.html">
+<a href="./posts/2023-07-10-scrna-recom/index.html" class="no-external">
 <div class="listing-date">
 Jul 10, 2023
 </div>
@@ -2149,32 +2118,30 @@ Shixiang Wang
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="52" data-categories="journal" data-listing-date-sort="1688918400000" data-listing-file-modified-sort="1705479886347" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1">
+<div class="quarto-post image-right" data-index="53" data-categories="journal" data-listing-date-sort="1688918400000" data-listing-file-modified-sort="1729002838366" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="5">
 <div class="thumbnail">
-<p><a href="./posts/2023-07-10-journal/index.html"> <div class="listing-item-img-placeholder card-img-top" >&nbsp;</div> </a></p>
+<p><a href="./posts/2023-07-10-journal/index.html" class="no-external"></a></p><a href="./posts/2023-07-10-journal/index.html" class="no-external">
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+</a><p><a href="./posts/2023-07-10-journal/index.html" class="no-external"></a></p>
 </div>
 <div class="body">
-<a href="./posts/2023-07-10-journal/index.html">
 <h3 class="no-anchor listing-title">
-2023-07-10
+<a href="./posts/2023-07-10-journal/index.html" class="no-external">2023-07-10</a>
 </h3>
 <div class="listing-subtitle">
-
+<a href="./posts/2023-07-10-journal/index.html" class="no-external"></a>
 </div>
-</a>
 <div class="listing-categories">
 <div class="listing-category" onclick="window.quartoListingCategory('journal'); return false;">
 journal
 </div>
 </div>
-<a href="./posts/2023-07-10-journal/index.html">
 <div class="listing-description">
-今天终于看完了《癌生物学》，具体而言，是「珠江肿瘤」公众号整理的中文版《癌生物学》的内容。
+<a href="./posts/2023-07-10-journal/index.html" class="no-external">今天终于看完了《癌生物学》，具体而言，是「珠江肿瘤」公众号整理的中文版《癌生物学》的内容。</a>
 </div>
-</a>
 </div>
 <div class="metadata">
-<a href="./posts/2023-07-10-journal/index.html">
+<a href="./posts/2023-07-10-journal/index.html" class="no-external">
 <div class="listing-date">
 Jul 10, 2023
 </div>
@@ -2184,32 +2151,30 @@ Shixiang Wang
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="53" data-categories="note" data-listing-date-sort="1688918400000" data-listing-file-modified-sort="1705479886354" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1">
+<div class="quarto-post image-right" data-index="54" data-categories="note" data-listing-date-sort="1688918400000" data-listing-file-modified-sort="1729002838366" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="1">
 <div class="thumbnail">
-<p><a href="./posts/2023-07-10-might-and-right/index.html"> <div class="listing-item-img-placeholder card-img-top" >&nbsp;</div> </a></p>
+<p><a href="./posts/2023-07-10-might-and-right/index.html" class="no-external"></a></p><a href="./posts/2023-07-10-might-and-right/index.html" class="no-external">
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+</a><p><a href="./posts/2023-07-10-might-and-right/index.html" class="no-external"></a></p>
 </div>
 <div class="body">
-<a href="./posts/2023-07-10-might-and-right/index.html">
 <h3 class="no-anchor listing-title">
-might &amp; right
+<a href="./posts/2023-07-10-might-and-right/index.html" class="no-external">might &amp; right</a>
 </h3>
 <div class="listing-subtitle">
-
+<a href="./posts/2023-07-10-might-and-right/index.html" class="no-external"></a>
 </div>
-</a>
 <div class="listing-categories">
 <div class="listing-category" onclick="window.quartoListingCategory('note'); return false;">
 note
 </div>
 </div>
-<a href="./posts/2023-07-10-might-and-right/index.html">
 <div class="listing-description">
-摘录一句话。
+<a href="./posts/2023-07-10-might-and-right/index.html" class="no-external">摘录一句话。</a>
 </div>
-</a>
 </div>
 <div class="metadata">
-<a href="./posts/2023-07-10-might-and-right/index.html">
+<a href="./posts/2023-07-10-might-and-right/index.html" class="no-external">
 <div class="listing-date">
 Jul 10, 2023
 </div>
@@ -2219,32 +2184,30 @@ Shixiang Wang
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="54" data-categories="journal" data-listing-date-sort="1688572800000" data-listing-file-modified-sort="1705479886345" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1">
+<div class="quarto-post image-right" data-index="55" data-categories="journal" data-listing-date-sort="1688572800000" data-listing-file-modified-sort="1729002838366" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="5">
 <div class="thumbnail">
-<p><a href="./posts/2023-07-06-journal/index.html"> <div class="listing-item-img-placeholder card-img-top" >&nbsp;</div> </a></p>
+<p><a href="./posts/2023-07-06-journal/index.html" class="no-external"></a></p><a href="./posts/2023-07-06-journal/index.html" class="no-external">
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+</a><p><a href="./posts/2023-07-06-journal/index.html" class="no-external"></a></p>
 </div>
 <div class="body">
-<a href="./posts/2023-07-06-journal/index.html">
 <h3 class="no-anchor listing-title">
-2023-07-06
+<a href="./posts/2023-07-06-journal/index.html" class="no-external">2023-07-06</a>
 </h3>
 <div class="listing-subtitle">
-
+<a href="./posts/2023-07-06-journal/index.html" class="no-external"></a>
 </div>
-</a>
 <div class="listing-categories">
 <div class="listing-category" onclick="window.quartoListingCategory('journal'); return false;">
 journal
 </div>
 </div>
-<a href="./posts/2023-07-06-journal/index.html">
 <div class="listing-description">
-顾神昨天公众号吐槽他的海外优青没有上会，我深表遗憾。
+<a href="./posts/2023-07-06-journal/index.html" class="no-external">顾神昨天公众号吐槽他的海外优青没有上会，我深表遗憾。</a>
 </div>
-</a>
 </div>
 <div class="metadata">
-<a href="./posts/2023-07-06-journal/index.html">
+<a href="./posts/2023-07-06-journal/index.html" class="no-external">
 <div class="listing-date">
 Jul 6, 2023
 </div>
@@ -2254,32 +2217,30 @@ Shixiang Wang
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="55" data-categories="thought" data-listing-date-sort="1688572800000" data-listing-file-modified-sort="1705479886342" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1">
+<div class="quarto-post image-right" data-index="56" data-categories="thought" data-listing-date-sort="1688572800000" data-listing-file-modified-sort="1729002838366" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="2">
 <div class="thumbnail">
-<p><a href="./posts/2023-07-06-can-biology-live-without-bioinformatics/index.html"> <div class="listing-item-img-placeholder card-img-top" >&nbsp;</div> </a></p>
+<p><a href="./posts/2023-07-06-can-biology-live-without-bioinformatics/index.html" class="no-external"></a></p><a href="./posts/2023-07-06-can-biology-live-without-bioinformatics/index.html" class="no-external">
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+</a><p><a href="./posts/2023-07-06-can-biology-live-without-bioinformatics/index.html" class="no-external"></a></p>
 </div>
 <div class="body">
-<a href="./posts/2023-07-06-can-biology-live-without-bioinformatics/index.html">
 <h3 class="no-anchor listing-title">
-生物医学能离开生物信息学吗？
+<a href="./posts/2023-07-06-can-biology-live-without-bioinformatics/index.html" class="no-external">生物医学能离开生物信息学吗？</a>
 </h3>
 <div class="listing-subtitle">
-
+<a href="./posts/2023-07-06-can-biology-live-without-bioinformatics/index.html" class="no-external"></a>
 </div>
-</a>
 <div class="listing-categories">
 <div class="listing-category" onclick="window.quartoListingCategory('thought'); return false;">
 thought
 </div>
 </div>
-<a href="./posts/2023-07-06-can-biology-live-without-bioinformatics/index.html">
 <div class="listing-description">
-不能。
+<a href="./posts/2023-07-06-can-biology-live-without-bioinformatics/index.html" class="no-external">不能。</a>
 </div>
-</a>
 </div>
 <div class="metadata">
-<a href="./posts/2023-07-06-can-biology-live-without-bioinformatics/index.html">
+<a href="./posts/2023-07-06-can-biology-live-without-bioinformatics/index.html" class="no-external">
 <div class="listing-date">
 Jul 6, 2023
 </div>
@@ -2289,32 +2250,30 @@ Shixiang Wang
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="56" data-categories="note" data-listing-date-sort="1688227200000" data-listing-file-modified-sort="1705479885977" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1">
+<div class="quarto-post image-right" data-index="57" data-categories="note" data-listing-date-sort="1688227200000" data-listing-file-modified-sort="1729002838312" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="6">
 <div class="thumbnail">
-<p><a href="./posts/2023-07-02-links/index.html"> <div class="listing-item-img-placeholder card-img-top" >&nbsp;</div> </a></p>
+<p><a href="./posts/2023-07-02-links/index.html" class="no-external"></a></p><a href="./posts/2023-07-02-links/index.html" class="no-external">
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+</a><p><a href="./posts/2023-07-02-links/index.html" class="no-external"></a></p>
 </div>
 <div class="body">
-<a href="./posts/2023-07-02-links/index.html">
 <h3 class="no-anchor listing-title">
-博客 links
+<a href="./posts/2023-07-02-links/index.html" class="no-external">博客 links</a>
 </h3>
 <div class="listing-subtitle">
-
+<a href="./posts/2023-07-02-links/index.html" class="no-external"></a>
 </div>
-</a>
 <div class="listing-categories">
 <div class="listing-category" onclick="window.quartoListingCategory('note'); return false;">
 note
 </div>
 </div>
-<a href="./posts/2023-07-02-links/index.html">
 <div class="listing-description">
-之前在构建个人域名网站 &lt;shixiangwang.work&gt; 时，把浏览器书签的所有博客链接都进行了整理。
+<a href="./posts/2023-07-02-links/index.html" class="no-external">之前在构建个人域名网站 &lt;shixiangwang.work&gt; 时，把浏览器书签的所有博客链接都进行了整理。</a>
 </div>
-</a>
 </div>
 <div class="metadata">
-<a href="./posts/2023-07-02-links/index.html">
+<a href="./posts/2023-07-02-links/index.html" class="no-external">
 <div class="listing-date">
 Jul 2, 2023
 </div>
@@ -2324,32 +2283,30 @@ Shixiang Wang
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="57" data-categories="journal" data-listing-date-sort="1688227200000" data-listing-file-modified-sort="1705479885975" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1">
+<div class="quarto-post image-right" data-index="58" data-categories="journal" data-listing-date-sort="1688227200000" data-listing-file-modified-sort="1729002838312" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="3">
 <div class="thumbnail">
-<p><a href="./posts/2023-07-02-journal/index.html"> <div class="listing-item-img-placeholder card-img-top" >&nbsp;</div> </a></p>
+<p><a href="./posts/2023-07-02-journal/index.html" class="no-external"></a></p><a href="./posts/2023-07-02-journal/index.html" class="no-external">
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+</a><p><a href="./posts/2023-07-02-journal/index.html" class="no-external"></a></p>
 </div>
 <div class="body">
-<a href="./posts/2023-07-02-journal/index.html">
 <h3 class="no-anchor listing-title">
-2023-07-02
+<a href="./posts/2023-07-02-journal/index.html" class="no-external">2023-07-02</a>
 </h3>
 <div class="listing-subtitle">
-
+<a href="./posts/2023-07-02-journal/index.html" class="no-external"></a>
 </div>
-</a>
 <div class="listing-categories">
 <div class="listing-category" onclick="window.quartoListingCategory('journal'); return false;">
 journal
 </div>
 </div>
-<a href="./posts/2023-07-02-journal/index.html">
 <div class="listing-description">
-今天摘录从书中看到的一句话。
+<a href="./posts/2023-07-02-journal/index.html" class="no-external">今天摘录从书中看到的一句话。</a>
 </div>
-</a>
 </div>
 <div class="metadata">
-<a href="./posts/2023-07-02-journal/index.html">
+<a href="./posts/2023-07-02-journal/index.html" class="no-external">
 <div class="listing-date">
 Jul 2, 2023
 </div>
@@ -2359,32 +2316,30 @@ Shixiang Wang
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="58" data-categories="journal" data-listing-date-sort="1687881600000" data-listing-file-modified-sort="1705479885973" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1">
+<div class="quarto-post image-right" data-index="59" data-categories="journal" data-listing-date-sort="1687881600000" data-listing-file-modified-sort="1729002838312" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="3">
 <div class="thumbnail">
-<p><a href="./posts/2023-06-28-journal/index.html"> <div class="listing-item-img-placeholder card-img-top" >&nbsp;</div> </a></p>
+<p><a href="./posts/2023-06-28-journal/index.html" class="no-external"></a></p><a href="./posts/2023-06-28-journal/index.html" class="no-external">
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+</a><p><a href="./posts/2023-06-28-journal/index.html" class="no-external"></a></p>
 </div>
 <div class="body">
-<a href="./posts/2023-06-28-journal/index.html">
 <h3 class="no-anchor listing-title">
-2023-06-28
+<a href="./posts/2023-06-28-journal/index.html" class="no-external">2023-06-28</a>
 </h3>
 <div class="listing-subtitle">
-
+<a href="./posts/2023-06-28-journal/index.html" class="no-external"></a>
 </div>
-</a>
 <div class="listing-categories">
 <div class="listing-category" onclick="window.quartoListingCategory('journal'); return false;">
 journal
 </div>
 </div>
-<a href="./posts/2023-06-28-journal/index.html">
 <div class="listing-description">
-坚持学习，坚持同一种内容的学习。
+<a href="./posts/2023-06-28-journal/index.html" class="no-external">坚持学习，坚持同一种内容的学习。</a>
 </div>
-</a>
 </div>
 <div class="metadata">
-<a href="./posts/2023-06-28-journal/index.html">
+<a href="./posts/2023-06-28-journal/index.html" class="no-external">
 <div class="listing-date">
 Jun 28, 2023
 </div>
@@ -2394,32 +2349,30 @@ Shixiang Wang
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="59" data-categories="journal" data-listing-date-sort="1687795200000" data-listing-file-modified-sort="1705479885973" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1">
+<div class="quarto-post image-right" data-index="60" data-categories="journal" data-listing-date-sort="1687795200000" data-listing-file-modified-sort="1729002838312" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="2">
 <div class="thumbnail">
-<p><a href="./posts/2023-06-27-journal/index.html"> <div class="listing-item-img-placeholder card-img-top" >&nbsp;</div> </a></p>
+<p><a href="./posts/2023-06-27-journal/index.html" class="no-external"></a></p><a href="./posts/2023-06-27-journal/index.html" class="no-external">
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+</a><p><a href="./posts/2023-06-27-journal/index.html" class="no-external"></a></p>
 </div>
 <div class="body">
-<a href="./posts/2023-06-27-journal/index.html">
 <h3 class="no-anchor listing-title">
-2023-06-27
+<a href="./posts/2023-06-27-journal/index.html" class="no-external">2023-06-27</a>
 </h3>
 <div class="listing-subtitle">
-
+<a href="./posts/2023-06-27-journal/index.html" class="no-external"></a>
 </div>
-</a>
 <div class="listing-categories">
 <div class="listing-category" onclick="window.quartoListingCategory('journal'); return false;">
 journal
 </div>
 </div>
-<a href="./posts/2023-06-27-journal/index.html">
 <div class="listing-description">
-今天记录在《经济学讲义》中看到的一句话：
+<a href="./posts/2023-06-27-journal/index.html" class="no-external">今天记录在《经济学讲义》中看到的一句话：</a>
 </div>
-</a>
 </div>
 <div class="metadata">
-<a href="./posts/2023-06-27-journal/index.html">
+<a href="./posts/2023-06-27-journal/index.html" class="no-external">
 <div class="listing-date">
 Jun 27, 2023
 </div>
@@ -2429,32 +2382,30 @@ Shixiang Wang
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="60" data-categories="journal" data-listing-date-sort="1687708800000" data-listing-file-modified-sort="1705479885971" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1">
+<div class="quarto-post image-right" data-index="61" data-categories="journal" data-listing-date-sort="1687708800000" data-listing-file-modified-sort="1729002838312" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="1">
 <div class="thumbnail">
-<p><a href="./posts/2023-06-26-journal/index.html"> <div class="listing-item-img-placeholder card-img-top" >&nbsp;</div> </a></p>
+<p><a href="./posts/2023-06-26-journal/index.html" class="no-external"></a></p><a href="./posts/2023-06-26-journal/index.html" class="no-external">
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+</a><p><a href="./posts/2023-06-26-journal/index.html" class="no-external"></a></p>
 </div>
 <div class="body">
-<a href="./posts/2023-06-26-journal/index.html">
 <h3 class="no-anchor listing-title">
-2023-06-26
+<a href="./posts/2023-06-26-journal/index.html" class="no-external">2023-06-26</a>
 </h3>
 <div class="listing-subtitle">
-
+<a href="./posts/2023-06-26-journal/index.html" class="no-external"></a>
 </div>
-</a>
 <div class="listing-categories">
 <div class="listing-category" onclick="window.quartoListingCategory('journal'); return false;">
 journal
 </div>
 </div>
-<a href="./posts/2023-06-26-journal/index.html">
 <div class="listing-description">
-疫情之后抗感冒能力确实变得更加糟糕了，上一次二阳（本以为是重感冒）十多天之后在端午之前终于感觉到差不多好了，端午去了趟深圳回家又感觉不好了，特别是前天晚上睡觉时突然感觉喉咙很痒，频繁咳嗽，把自己咳起来去喝水。
+<a href="./posts/2023-06-26-journal/index.html" class="no-external">疫情之后抗感冒能力确实变得更加糟糕了，上一次二阳（本以为是重感冒）十多天之后在端午之前终于感觉到差不多好了，端午去了趟深圳回家又感觉不好了，特别是前天晚上睡觉时突然感觉喉咙很痒，频繁咳嗽，把自己咳起来去喝水。</a>
 </div>
-</a>
 </div>
 <div class="metadata">
-<a href="./posts/2023-06-26-journal/index.html">
+<a href="./posts/2023-06-26-journal/index.html" class="no-external">
 <div class="listing-date">
 Jun 26, 2023
 </div>
@@ -2464,19 +2415,19 @@ Shixiang Wang
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="61" data-categories="stats,R" data-listing-date-sort="1687708800000" data-listing-file-modified-sort="1705479885972" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1">
+<div class="quarto-post image-right" data-index="62" data-categories="stats,R" data-listing-date-sort="1687708800000" data-listing-file-modified-sort="1729002838312" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="93">
 <div class="thumbnail">
-<p><a href="./posts/2023-06-26-lmtest-lrt/index.html"> <div class="listing-item-img-placeholder card-img-top" >&nbsp;</div> </a></p>
+<p><a href="./posts/2023-06-26-lmtest-lrt/index.html" class="no-external"></a></p><a href="./posts/2023-06-26-lmtest-lrt/index.html" class="no-external">
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+</a><p><a href="./posts/2023-06-26-lmtest-lrt/index.html" class="no-external"></a></p>
 </div>
 <div class="body">
-<a href="./posts/2023-06-26-lmtest-lrt/index.html">
 <h3 class="no-anchor listing-title">
-lmtest 似然比检验Likelihood Ratio Test 比较两个线性模型
+<a href="./posts/2023-06-26-lmtest-lrt/index.html" class="no-external">lmtest 似然比检验Likelihood Ratio Test 比较两个线性模型</a>
 </h3>
 <div class="listing-subtitle">
-
+<a href="./posts/2023-06-26-lmtest-lrt/index.html" class="no-external"></a>
 </div>
-</a>
 <div class="listing-categories">
 <div class="listing-category" onclick="window.quartoListingCategory('stats'); return false;">
 stats
@@ -2485,14 +2436,12 @@ stats
 R
 </div>
 </div>
-<a href="./posts/2023-06-26-lmtest-lrt/index.html">
 <div class="listing-description">
-Survival 模型交互项：
+<a href="./posts/2023-06-26-lmtest-lrt/index.html" class="no-external">Survival 模型交互项：</a>
 </div>
-</a>
 </div>
 <div class="metadata">
-<a href="./posts/2023-06-26-lmtest-lrt/index.html">
+<a href="./posts/2023-06-26-lmtest-lrt/index.html" class="no-external">
 <div class="listing-date">
 Jun 26, 2023
 </div>
@@ -2502,32 +2451,30 @@ Shixiang Wang
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="62" data-categories="Linux" data-listing-date-sort="1686672000000" data-listing-file-modified-sort="1705479885965" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1">
+<div class="quarto-post image-right" data-index="63" data-categories="Linux" data-listing-date-sort="1686672000000" data-listing-file-modified-sort="1729002838311" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="11">
 <div class="thumbnail">
-<p><a href="./posts/2023-06-14-use-just/index.html"> <p class="card-img-top"><img data-src="https://raw.githubusercontent.com/casey/just/master/screenshot.png"  class="thumbnail-image card-img"/></p> </a></p>
+<p><a href="./posts/2023-06-14-use-just/index.html" class="no-external"></a></p><a href="./posts/2023-06-14-use-just/index.html" class="no-external">
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+</a><p><a href="./posts/2023-06-14-use-just/index.html" class="no-external"></a></p>
 </div>
 <div class="body">
-<a href="./posts/2023-06-14-use-just/index.html">
 <h3 class="no-anchor listing-title">
-使用 Just 重复构建
+<a href="./posts/2023-06-14-use-just/index.html" class="no-external">使用 Just 重复构建</a>
 </h3>
 <div class="listing-subtitle">
-
+<a href="./posts/2023-06-14-use-just/index.html" class="no-external"></a>
 </div>
-</a>
 <div class="listing-categories">
 <div class="listing-category" onclick="window.quartoListingCategory('Linux'); return false;">
 Linux
 </div>
 </div>
-<a href="./posts/2023-06-14-use-just/index.html">
 <div class="listing-description">
-Just（https://just.systems/）是一个命令行运行容器，它只是简单的运行你输入的命令，以方便重复构建。
+<a href="./posts/2023-06-14-use-just/index.html" class="no-external">Just（https://just.systems/）是一个命令行运行容器，它只是简单的运行你输入的命令，以方便重复构建。</a>
 </div>
-</a>
 </div>
 <div class="metadata">
-<a href="./posts/2023-06-14-use-just/index.html">
+<a href="./posts/2023-06-14-use-just/index.html" class="no-external">
 <div class="listing-date">
 Jun 14, 2023
 </div>
@@ -2537,32 +2484,30 @@ Shixiang Wang
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="63" data-categories="journal" data-listing-date-sort="1686672000000" data-listing-file-modified-sort="1705479885970" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1">
+<div class="quarto-post image-right" data-index="64" data-categories="journal" data-listing-date-sort="1686672000000" data-listing-file-modified-sort="1729002838311" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="1">
 <div class="thumbnail">
-<p><a href="./posts/2023-06-14-write-journal/index.html"> <div class="listing-item-img-placeholder card-img-top" >&nbsp;</div> </a></p>
+<p><a href="./posts/2023-06-14-write-journal/index.html" class="no-external"></a></p><a href="./posts/2023-06-14-write-journal/index.html" class="no-external">
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+</a><p><a href="./posts/2023-06-14-write-journal/index.html" class="no-external"></a></p>
 </div>
 <div class="body">
-<a href="./posts/2023-06-14-write-journal/index.html">
 <h3 class="no-anchor listing-title">
-应该写写日记
+<a href="./posts/2023-06-14-write-journal/index.html" class="no-external">应该写写日记</a>
 </h3>
 <div class="listing-subtitle">
-
+<a href="./posts/2023-06-14-write-journal/index.html" class="no-external"></a>
 </div>
-</a>
 <div class="listing-categories">
 <div class="listing-category" onclick="window.quartoListingCategory('journal'); return false;">
 journal
 </div>
 </div>
-<a href="./posts/2023-06-14-write-journal/index.html">
 <div class="listing-description">
-吴军在《阅读与写作讲义》中写道工作日记、读书心得以及对特殊经历的记录值得人写下来。
+<a href="./posts/2023-06-14-write-journal/index.html" class="no-external">吴军在《阅读与写作讲义》中写道工作日记、读书心得以及对特殊经历的记录值得人写下来。</a>
 </div>
-</a>
 </div>
 <div class="metadata">
-<a href="./posts/2023-06-14-write-journal/index.html">
+<a href="./posts/2023-06-14-write-journal/index.html" class="no-external">
 <div class="listing-date">
 Jun 14, 2023
 </div>
@@ -2572,19 +2517,19 @@ Shixiang Wang
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="64" data-categories="bioinformatics,thought" data-listing-date-sort="1686499200000" data-listing-file-modified-sort="1705479885964" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1">
+<div class="quarto-post image-right" data-index="65" data-categories="bioinformatics,thought" data-listing-date-sort="1686499200000" data-listing-file-modified-sort="1729002838311" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="3">
 <div class="thumbnail">
-<p><a href="./posts/2023-06-12-prepare-for-validation/index.html"> <div class="listing-item-img-placeholder card-img-top" >&nbsp;</div> </a></p>
+<p><a href="./posts/2023-06-12-prepare-for-validation/index.html" class="no-external"></a></p><a href="./posts/2023-06-12-prepare-for-validation/index.html" class="no-external">
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+</a><p><a href="./posts/2023-06-12-prepare-for-validation/index.html" class="no-external"></a></p>
 </div>
 <div class="body">
-<a href="./posts/2023-06-12-prepare-for-validation/index.html">
 <h3 class="no-anchor listing-title">
-准备好应对验证
+<a href="./posts/2023-06-12-prepare-for-validation/index.html" class="no-external">准备好应对验证</a>
 </h3>
 <div class="listing-subtitle">
-
+<a href="./posts/2023-06-12-prepare-for-validation/index.html" class="no-external"></a>
 </div>
-</a>
 <div class="listing-categories">
 <div class="listing-category" onclick="window.quartoListingCategory('bioinformatics'); return false;">
 bioinformatics
@@ -2593,14 +2538,12 @@ bioinformatics
 thought
 </div>
 </div>
-<a href="./posts/2023-06-12-prepare-for-validation/index.html">
 <div class="listing-description">
-个人感觉有效地验证的必要的，但过度的验证是次要的。但作为一个生信从业者，当文章投出去之后，总会遇到认为全世界的数据（包括原始数据）都供你可用的，任意挥霍的评审人。我并不认为这是真正的专家，因为它把一个次要的问题当作major concern，由此来否决你整个方法研究的科学性。
+<a href="./posts/2023-06-12-prepare-for-validation/index.html" class="no-external">个人感觉有效地验证的必要的，但过度的验证是次要的。但作为一个生信从业者，当文章投出去之后，总会遇到认为全世界的数据（包括原始数据）都供你可用的，任意挥霍的评审人。我并不认为这是真正的专家，因为它把一个次要的问题当作major concern，由此来否决你整个方法研究的科学性。</a>
 </div>
-</a>
 </div>
 <div class="metadata">
-<a href="./posts/2023-06-12-prepare-for-validation/index.html">
+<a href="./posts/2023-06-12-prepare-for-validation/index.html" class="no-external">
 <div class="listing-date">
 Jun 12, 2023
 </div>
@@ -2610,32 +2553,30 @@ Shixiang Wang
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="65" data-categories="stats" data-listing-date-sort="1685548800000" data-listing-file-modified-sort="1705479885963" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1">
+<div class="quarto-post image-right" data-index="66" data-categories="stats" data-listing-date-sort="1685548800000" data-listing-file-modified-sort="1729002838311" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="6">
 <div class="thumbnail">
-<p><a href="./posts/2023-06-01-likelihood/index.html"> <div class="listing-item-img-placeholder card-img-top" >&nbsp;</div> </a></p>
+<p><a href="./posts/2023-06-01-likelihood/index.html" class="no-external"></a></p><a href="./posts/2023-06-01-likelihood/index.html" class="no-external">
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+</a><p><a href="./posts/2023-06-01-likelihood/index.html" class="no-external"></a></p>
 </div>
 <div class="body">
-<a href="./posts/2023-06-01-likelihood/index.html">
 <h3 class="no-anchor listing-title">
-概率与似然——摘要
+<a href="./posts/2023-06-01-likelihood/index.html" class="no-external">概率与似然——摘要</a>
 </h3>
 <div class="listing-subtitle">
-
+<a href="./posts/2023-06-01-likelihood/index.html" class="no-external"></a>
 </div>
-</a>
 <div class="listing-categories">
 <div class="listing-category" onclick="window.quartoListingCategory('stats'); return false;">
 stats
 </div>
 </div>
-<a href="./posts/2023-06-01-likelihood/index.html">
 <div class="listing-description">
-概率(probability)和似然(Likelihood)是两个经常被混淆使用的概念。
+<a href="./posts/2023-06-01-likelihood/index.html" class="no-external">概率(probability)和似然(Likelihood)是两个经常被混淆使用的概念。</a>
 </div>
-</a>
 </div>
 <div class="metadata">
-<a href="./posts/2023-06-01-likelihood/index.html">
+<a href="./posts/2023-06-01-likelihood/index.html" class="no-external">
 <div class="listing-date">
 Jun 1, 2023
 </div>
@@ -2645,19 +2586,19 @@ Shixiang Wang
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="66" data-categories="bioinformatics,scRNA-seq" data-listing-date-sort="1685462400000" data-listing-file-modified-sort="1705479885962" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1">
+<div class="quarto-post image-right" data-index="67" data-categories="bioinformatics,scRNA-seq" data-listing-date-sort="1685462400000" data-listing-file-modified-sort="1729002838311" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="28">
 <div class="thumbnail">
-<p><a href="./posts/2023-05-31-scrna-seq_online-00/index.html"> <div class="listing-item-img-placeholder card-img-top" >&nbsp;</div> </a></p>
+<p><a href="./posts/2023-05-31-scrna-seq_online-00/index.html" class="no-external"></a></p><a href="./posts/2023-05-31-scrna-seq_online-00/index.html" class="no-external">
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+</a><p><a href="./posts/2023-05-31-scrna-seq_online-00/index.html" class="no-external"></a></p>
 </div>
 <div class="body">
-<a href="./posts/2023-05-31-scrna-seq_online-00/index.html">
 <h3 class="no-anchor listing-title">
-scRNA-seq_online 00：包准备
+<a href="./posts/2023-05-31-scrna-seq_online-00/index.html" class="no-external">scRNA-seq_online 00：包准备</a>
 </h3>
 <div class="listing-subtitle">
-
+<a href="./posts/2023-05-31-scrna-seq_online-00/index.html" class="no-external"></a>
 </div>
-</a>
 <div class="listing-categories">
 <div class="listing-category" onclick="window.quartoListingCategory('bioinformatics'); return false;">
 bioinformatics
@@ -2666,14 +2607,12 @@ bioinformatics
 scRNA-seq
 </div>
 </div>
-<a href="./posts/2023-05-31-scrna-seq_online-00/index.html">
 <div class="listing-description">
-参考资料：https://hbctraining.github.io/scRNA-seq_online/
+<a href="./posts/2023-05-31-scrna-seq_online-00/index.html" class="no-external">参考资料：https://hbctraining.github.io/scRNA-seq_online/</a>
 </div>
-</a>
 </div>
 <div class="metadata">
-<a href="./posts/2023-05-31-scrna-seq_online-00/index.html">
+<a href="./posts/2023-05-31-scrna-seq_online-00/index.html" class="no-external">
 <div class="listing-date">
 May 31, 2023
 </div>
@@ -2683,19 +2622,19 @@ Shixiang Wang
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="67" data-categories="bioinformatics,shiny" data-listing-date-sort="1685289600000" data-listing-file-modified-sort="1705479885961" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1">
+<div class="quarto-post image-right" data-index="68" data-categories="bioinformatics,shiny" data-listing-date-sort="1685289600000" data-listing-file-modified-sort="1729002838311" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="12">
 <div class="thumbnail">
-<p><a href="./posts/2023-05-29-tccia/index.html"> <p class="card-img-top"><img data-src="https://files.mdnice.com/user/4331/1ad12065-d1c6-4296-8e26-1365cc53643e.png"  class="thumbnail-image card-img"/></p> </a></p>
+<p><a href="./posts/2023-05-29-tccia/index.html" class="no-external"></a></p><a href="./posts/2023-05-29-tccia/index.html" class="no-external">
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+</a><p><a href="./posts/2023-05-29-tccia/index.html" class="no-external"></a></p>
 </div>
 <div class="body">
-<a href="./posts/2023-05-29-tccia/index.html">
 <h3 class="no-anchor listing-title">
-TCCIA：第一个连接CircRNA和免疫治疗的数据库
+<a href="./posts/2023-05-29-tccia/index.html" class="no-external">TCCIA：第一个连接CircRNA和免疫治疗的数据库</a>
 </h3>
 <div class="listing-subtitle">
-
+<a href="./posts/2023-05-29-tccia/index.html" class="no-external"></a>
 </div>
-</a>
 <div class="listing-categories">
 <div class="listing-category" onclick="window.quartoListingCategory('bioinformatics'); return false;">
 bioinformatics
@@ -2704,14 +2643,12 @@ bioinformatics
 shiny
 </div>
 </div>
-<a href="./posts/2023-05-29-tccia/index.html">
 <div class="listing-description">
-CircRNA是一种形成闭环结构的RNA类型，已被证明在调节基因表达方面发挥重要作用。 然而，CircRNA在免疫治疗中的作用和标志物潜能仍未被充分研究。我们很高兴地向大家介绍TCCIA（The Cancer CircRNA Immunome…
+<a href="./posts/2023-05-29-tccia/index.html" class="no-external">CircRNA是一种形成闭环结构的RNA类型，已被证明在调节基因表达方面发挥重要作用。 然而，CircRNA在免疫治疗中的作用和标志物潜能仍未被充分研究。我们很高兴地向大家介绍TCCIA（The Cancer CircRNA Immunome…</a>
 </div>
-</a>
 </div>
 <div class="metadata">
-<a href="./posts/2023-05-29-tccia/index.html">
+<a href="./posts/2023-05-29-tccia/index.html" class="no-external">
 <div class="listing-date">
 May 29, 2023
 </div>
@@ -2721,32 +2658,30 @@ Shixiang Wang
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="68" data-categories="debug" data-listing-date-sort="1684771200000" data-listing-file-modified-sort="1705479885960" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="2">
+<div class="quarto-post image-right" data-index="69" data-categories="debug" data-listing-date-sort="1684771200000" data-listing-file-modified-sort="1729002838311" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="2" data-listing-word-count-sort="328">
 <div class="thumbnail">
-<p><a href="./posts/2023-05-23-nextflow-singularity-no-space-left/index.html"> <div class="listing-item-img-placeholder card-img-top" >&nbsp;</div> </a></p>
+<p><a href="./posts/2023-05-23-nextflow-singularity-no-space-left/index.html" class="no-external"></a></p><a href="./posts/2023-05-23-nextflow-singularity-no-space-left/index.html" class="no-external">
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+</a><p><a href="./posts/2023-05-23-nextflow-singularity-no-space-left/index.html" class="no-external"></a></p>
 </div>
 <div class="body">
-<a href="./posts/2023-05-23-nextflow-singularity-no-space-left/index.html">
 <h3 class="no-anchor listing-title">
-nextflow 运行 singularity no space left
+<a href="./posts/2023-05-23-nextflow-singularity-no-space-left/index.html" class="no-external">nextflow 运行 singularity no space left</a>
 </h3>
 <div class="listing-subtitle">
-
+<a href="./posts/2023-05-23-nextflow-singularity-no-space-left/index.html" class="no-external"></a>
 </div>
-</a>
 <div class="listing-categories">
 <div class="listing-category" onclick="window.quartoListingCategory('debug'); return false;">
 debug
 </div>
 </div>
-<a href="./posts/2023-05-23-nextflow-singularity-no-space-left/index.html">
 <div class="listing-description">
-运行 nextflow 时报错没有空间：
+<a href="./posts/2023-05-23-nextflow-singularity-no-space-left/index.html" class="no-external">运行 nextflow 时报错没有空间：</a>
 </div>
-</a>
 </div>
 <div class="metadata">
-<a href="./posts/2023-05-23-nextflow-singularity-no-space-left/index.html">
+<a href="./posts/2023-05-23-nextflow-singularity-no-space-left/index.html" class="no-external">
 <div class="listing-date">
 May 23, 2023
 </div>
@@ -2756,32 +2691,30 @@ Shixiang Wang
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="69" data-categories="academic" data-listing-date-sort="1683820800000" data-listing-file-modified-sort="1705479885959" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1">
+<div class="quarto-post image-right" data-index="70" data-categories="academic" data-listing-date-sort="1683820800000" data-listing-file-modified-sort="1729002838310" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="65">
 <div class="thumbnail">
-<p><a href="./posts/2023-05-12-start-a-new-research-direction/index.html"> <div class="listing-item-img-placeholder card-img-top" >&nbsp;</div> </a></p>
+<p><a href="./posts/2023-05-12-start-a-new-research-direction/index.html" class="no-external"></a></p><a href="./posts/2023-05-12-start-a-new-research-direction/index.html" class="no-external">
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+</a><p><a href="./posts/2023-05-12-start-a-new-research-direction/index.html" class="no-external"></a></p>
 </div>
 <div class="body">
-<a href="./posts/2023-05-12-start-a-new-research-direction/index.html">
 <h3 class="no-anchor listing-title">
-Start a new research direction
+<a href="./posts/2023-05-12-start-a-new-research-direction/index.html" class="no-external">Start a new research direction</a>
 </h3>
 <div class="listing-subtitle">
-
+<a href="./posts/2023-05-12-start-a-new-research-direction/index.html" class="no-external"></a>
 </div>
-</a>
 <div class="listing-categories">
 <div class="listing-category" onclick="window.quartoListingCategory('academic'); return false;">
 academic
 </div>
 </div>
-<a href="./posts/2023-05-12-start-a-new-research-direction/index.html">
 <div class="listing-description">
-Copied from a slide (Liulab?).
+<a href="./posts/2023-05-12-start-a-new-research-direction/index.html" class="no-external">Copied from a slide (Liulab?).</a>
 </div>
-</a>
 </div>
 <div class="metadata">
-<a href="./posts/2023-05-12-start-a-new-research-direction/index.html">
+<a href="./posts/2023-05-12-start-a-new-research-direction/index.html" class="no-external">
 <div class="listing-date">
 May 12, 2023
 </div>
@@ -2791,19 +2724,19 @@ Shixiang Wang
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="70" data-categories="bioinformatics,note" data-listing-date-sort="1683820800000" data-listing-file-modified-sort="1705479885958" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1">
+<div class="quarto-post image-right" data-index="71" data-categories="bioinformatics,note" data-listing-date-sort="1683820800000" data-listing-file-modified-sort="1729002838310" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="83">
 <div class="thumbnail">
-<p><a href="./posts/2023-05-12-single-cell-sequencing-protocols/index.html"> <div class="listing-item-img-placeholder card-img-top" >&nbsp;</div> </a></p>
+<p><a href="./posts/2023-05-12-single-cell-sequencing-protocols/index.html" class="no-external"></a></p><a href="./posts/2023-05-12-single-cell-sequencing-protocols/index.html" class="no-external">
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+</a><p><a href="./posts/2023-05-12-single-cell-sequencing-protocols/index.html" class="no-external"></a></p>
 </div>
 <div class="body">
-<a href="./posts/2023-05-12-single-cell-sequencing-protocols/index.html">
 <h3 class="no-anchor listing-title">
-Single-cell sequencing protocols
+<a href="./posts/2023-05-12-single-cell-sequencing-protocols/index.html" class="no-external">Single-cell sequencing protocols</a>
 </h3>
 <div class="listing-subtitle">
-
+<a href="./posts/2023-05-12-single-cell-sequencing-protocols/index.html" class="no-external"></a>
 </div>
-</a>
 <div class="listing-categories">
 <div class="listing-category" onclick="window.quartoListingCategory('bioinformatics'); return false;">
 bioinformatics
@@ -2812,14 +2745,12 @@ bioinformatics
 note
 </div>
 </div>
-<a href="./posts/2023-05-12-single-cell-sequencing-protocols/index.html">
 <div class="listing-description">
-From https://www.sc-best-practices.org/introduction/scrna_seq.html
+<a href="./posts/2023-05-12-single-cell-sequencing-protocols/index.html" class="no-external">From https://www.sc-best-practices.org/introduction/scrna_seq.html</a>
 </div>
-</a>
 </div>
 <div class="metadata">
-<a href="./posts/2023-05-12-single-cell-sequencing-protocols/index.html">
+<a href="./posts/2023-05-12-single-cell-sequencing-protocols/index.html" class="no-external">
 <div class="listing-date">
 May 12, 2023
 </div>
@@ -2829,19 +2760,19 @@ Shixiang Wang
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="71" data-categories="personal,R" data-listing-date-sort="1680883200000" data-listing-file-modified-sort="1705479885955" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1">
+<div class="quarto-post image-right" data-index="72" data-categories="personal,R" data-listing-date-sort="1680883200000" data-listing-file-modified-sort="1729002838310" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="2">
 <div class="thumbnail">
-<p><a href="./posts/2023-04-08-yiyi-with-book-by-y/index.html"> <p class="card-img-top"><img data-src="posts/2023-04-08-yiyi-with-book-by-y/IMG_6364.JPG"  class="thumbnail-image card-img"/></p> </a></p>
+<p><a href="./posts/2023-04-08-yiyi-with-book-by-y/index.html" class="no-external"></a></p><a href="./posts/2023-04-08-yiyi-with-book-by-y/index.html" class="no-external">
+<p class="card-img-top"><img data-src="posts/2023-04-08-yiyi-with-book-by-y/IMG_6364.JPG"  class="thumbnail-image card-img"/></p>
+</a><p><a href="./posts/2023-04-08-yiyi-with-book-by-y/index.html" class="no-external"></a></p>
 </div>
 <div class="body">
-<a href="./posts/2023-04-08-yiyi-with-book-by-y/index.html">
 <h3 class="no-anchor listing-title">
-晒晒娃和Y叔R书的合照
+<a href="./posts/2023-04-08-yiyi-with-book-by-y/index.html" class="no-external">晒晒娃和Y叔R书的合照</a>
 </h3>
 <div class="listing-subtitle">
-
+<a href="./posts/2023-04-08-yiyi-with-book-by-y/index.html" class="no-external"></a>
 </div>
-</a>
 <div class="listing-categories">
 <div class="listing-category" onclick="window.quartoListingCategory('personal'); return false;">
 personal
@@ -2850,14 +2781,12 @@ personal
 R
 </div>
 </div>
-<a href="./posts/2023-04-08-yiyi-with-book-by-y/index.html">
 <div class="listing-description">
-买了一本Y叔最新出的新书，出版社的张编辑又送了一本，这里晒一下崽崽和图书的照片。
+<a href="./posts/2023-04-08-yiyi-with-book-by-y/index.html" class="no-external">买了一本Y叔最新出的新书，出版社的张编辑又送了一本，这里晒一下崽崽和图书的照片。</a>
 </div>
-</a>
 </div>
 <div class="metadata">
-<a href="./posts/2023-04-08-yiyi-with-book-by-y/index.html">
+<a href="./posts/2023-04-08-yiyi-with-book-by-y/index.html" class="no-external">
 <div class="listing-date">
 Apr 8, 2023
 </div>
@@ -2867,32 +2796,30 @@ Shixiang Wang
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="72" data-categories="personal" data-listing-date-sort="1680883200000" data-listing-file-modified-sort="1705479885957" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1">
+<div class="quarto-post image-right" data-index="73" data-categories="personal" data-listing-date-sort="1680883200000" data-listing-file-modified-sort="1729002838310" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="1">
 <div class="thumbnail">
-<p><a href="./posts/2023-05-02-random/index.html"> <div class="listing-item-img-placeholder card-img-top" >&nbsp;</div> </a></p>
+<p><a href="./posts/2023-05-02-random/index.html" class="no-external"></a></p><a href="./posts/2023-05-02-random/index.html" class="no-external">
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+</a><p><a href="./posts/2023-05-02-random/index.html" class="no-external"></a></p>
 </div>
 <div class="body">
-<a href="./posts/2023-05-02-random/index.html">
 <h3 class="no-anchor listing-title">
-随想
+<a href="./posts/2023-05-02-random/index.html" class="no-external">随想</a>
 </h3>
 <div class="listing-subtitle">
-
+<a href="./posts/2023-05-02-random/index.html" class="no-external"></a>
 </div>
-</a>
 <div class="listing-categories">
 <div class="listing-category" onclick="window.quartoListingCategory('personal'); return false;">
 personal
 </div>
 </div>
-<a href="./posts/2023-05-02-random/index.html">
 <div class="listing-description">
-越长大，突然明白这个世界都是在玩一场资源分配的游戏。
+<a href="./posts/2023-05-02-random/index.html" class="no-external">越长大，突然明白这个世界都是在玩一场资源分配的游戏。</a>
 </div>
-</a>
 </div>
 <div class="metadata">
-<a href="./posts/2023-05-02-random/index.html">
+<a href="./posts/2023-05-02-random/index.html" class="no-external">
 <div class="listing-date">
 Apr 8, 2023
 </div>
@@ -2902,19 +2829,19 @@ Shixiang Wang
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="73" data-categories="Rust,AI" data-listing-date-sort="1680019200000" data-listing-file-modified-sort="1705479885949" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1">
+<div class="quarto-post image-right" data-index="74" data-categories="Rust,AI" data-listing-date-sort="1680019200000" data-listing-file-modified-sort="1729002838309" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="102">
 <div class="thumbnail">
-<p><a href="./posts/2023-03-29-chatgpt-help-me-understand-rust-ownership/index.html"> <p class="card-img-top"><img data-src="https://kaisery.github.io/trpl-zh-cn/img/trpl04-04.svg"  class="thumbnail-image card-img"/></p> </a></p>
+<p><a href="./posts/2023-03-29-chatgpt-help-me-understand-rust-ownership/index.html" class="no-external"></a></p><a href="./posts/2023-03-29-chatgpt-help-me-understand-rust-ownership/index.html" class="no-external">
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+</a><p><a href="./posts/2023-03-29-chatgpt-help-me-understand-rust-ownership/index.html" class="no-external"></a></p>
 </div>
 <div class="body">
-<a href="./posts/2023-03-29-chatgpt-help-me-understand-rust-ownership/index.html">
 <h3 class="no-anchor listing-title">
-ChatGPT 帮助我理解 Rust 的所有权
+<a href="./posts/2023-03-29-chatgpt-help-me-understand-rust-ownership/index.html" class="no-external">ChatGPT 帮助我理解 Rust 的所有权</a>
 </h3>
 <div class="listing-subtitle">
-
+<a href="./posts/2023-03-29-chatgpt-help-me-understand-rust-ownership/index.html" class="no-external"></a>
 </div>
-</a>
 <div class="listing-categories">
 <div class="listing-category" onclick="window.quartoListingCategory('Rust'); return false;">
 Rust
@@ -2923,14 +2850,12 @@ Rust
 AI
 </div>
 </div>
-<a href="./posts/2023-03-29-chatgpt-help-me-understand-rust-ownership/index.html">
 <div class="listing-description">
-这篇文章以我和 ChatGPT 的问答进行。
+<a href="./posts/2023-03-29-chatgpt-help-me-understand-rust-ownership/index.html" class="no-external">这篇文章以我和 ChatGPT 的问答进行。</a>
 </div>
-</a>
 </div>
 <div class="metadata">
-<a href="./posts/2023-03-29-chatgpt-help-me-understand-rust-ownership/index.html">
+<a href="./posts/2023-03-29-chatgpt-help-me-understand-rust-ownership/index.html" class="no-external">
 <div class="listing-date">
 Mar 29, 2023
 </div>
@@ -2940,32 +2865,30 @@ Shixiang Wang
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="74" data-categories="news" data-listing-date-sort="1679932800000" data-listing-file-modified-sort="1705479886429" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1">
+<div class="quarto-post image-right" data-index="75" data-categories="news" data-listing-date-sort="1679932800000" data-listing-file-modified-sort="1729002838381" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="10">
 <div class="thumbnail">
-<p><a href="./posts/welcome/index.html"> <p class="card-img-top"><img data-src="posts/welcome/thumbnail.jpg"  class="thumbnail-image card-img"/></p> </a></p>
+<p><a href="./posts/welcome/index.html" class="no-external"></a></p><a href="./posts/welcome/index.html" class="no-external">
+<p class="card-img-top"><img data-src="posts/welcome/thumbnail.jpg"  class="thumbnail-image card-img"/></p>
+</a><p><a href="./posts/welcome/index.html" class="no-external"></a></p>
 </div>
 <div class="body">
-<a href="./posts/welcome/index.html">
 <h3 class="no-anchor listing-title">
-Welcome To My Blog
+<a href="./posts/welcome/index.html" class="no-external">Welcome To My Blog</a>
 </h3>
 <div class="listing-subtitle">
-
+<a href="./posts/welcome/index.html" class="no-external"></a>
 </div>
-</a>
 <div class="listing-categories">
 <div class="listing-category" onclick="window.quartoListingCategory('news'); return false;">
 news
 </div>
 </div>
-<a href="./posts/welcome/index.html">
 <div class="listing-description">
-This is the first post in a Quarto blog. Welcome!
+<a href="./posts/welcome/index.html" class="no-external">This is the first post in a Quarto blog. Welcome!</a>
 </div>
-</a>
 </div>
 <div class="metadata">
-<a href="./posts/welcome/index.html">
+<a href="./posts/welcome/index.html" class="no-external">
 <div class="listing-date">
 Mar 28, 2023
 </div>
@@ -3065,10 +2988,27 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     // clear code selection
     e.clearSelection();
   });
-  function tippyHover(el, contentFn) {
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp("https:\/\/shixiangwang\.github\.io");
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
     const config = {
       allowHTML: true,
-      content: contentFn,
       maxWidth: 500,
       delay: 100,
       arrow: false,
@@ -3078,8 +3018,17 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       interactive: true,
       interactiveBorder: 10,
       theme: 'quarto',
-      placement: 'bottom-start'
+      placement: 'bottom-start',
     };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
     window.tippy(el, config); 
   }
   const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
@@ -3091,7 +3040,130 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       try { href = new URL(href).hash; } catch {}
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);
-      return note.innerHTML;
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
     });
   }
       let selectedAnnoteEl;
@@ -3135,6 +3207,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
             }
             div.style.top = top - 2 + "px";
             div.style.height = height + 4 + "px";
+            div.style.left = 0;
             let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
             if (gutterDiv === null) {
               gutterDiv = window.document.createElement("div");
@@ -3160,6 +3233,32 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
         });
         selectedAnnoteEl = undefined;
       };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
       // Attach click handler to the DT
       const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
       for (const annoteDlNode of annoteDls) {
@@ -3221,10 +3320,14 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <script src="https://giscus.app/client.js" data-repo="shixiangwang/shixiangwang.github.io" data-repo-id="MDEwOlJlcG9zaXRvcnkzNDgxODQ1MTY=" data-category="General" data-category-id="DIC_kwDOFMDfxM4CVXEf" data-mapping="title" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="top" data-theme="light" data-lang="en" crossorigin="anonymous" async="">
 </script>
+<input type="hidden" id="giscus-base-theme" value="light">
+<input type="hidden" id="giscus-alt-theme" value="dark">
 </div> <!-- /content -->
 <footer class="footer">
   <div class="nav-footer">
-    <div class="nav-footer-left">Blog made with 💜 and <a href="https://quarto.org/">Quarto</a>, by Shixiang Wang. License: <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC BY-SA 2.0</a>.</div>   
+    <div class="nav-footer-left">
+<p>Blog made with 💜 and <a href="https://quarto.org/">Quarto</a>, by Shixiang Wang. License: <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC BY-SA 2.0</a>.</p>
+</div>   
     <div class="nav-footer-center">
       &nbsp;
     </div>
@@ -3258,6 +3361,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     </div>
   </div>
 </footer>
+
 
 
 

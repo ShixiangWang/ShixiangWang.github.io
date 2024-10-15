@@ -6,16 +6,36 @@
       version="2.0">
 <channel>
 <title>Reasoning</title>
-<link>https://shixiangwang.github.io/index.html</link>
+<link>https://shixiangwang.github.io/</link>
 <atom:link href="https://shixiangwang.github.io/index.xml" rel="self" type="application/rss+xml"/>
 <description>Reasoning is a blog dedicated to exploring the intersection of data science, bioinformatics, and personal insights.</description>
-<generator>quarto-1.3.361</generator>
-<lastBuildDate>Thu, 02 May 2024 16:00:00 GMT</lastBuildDate>
+<generator>quarto-1.4.553</generator>
+<lastBuildDate>Mon, 14 Oct 2024 16:00:00 GMT</lastBuildDate>
+<item>
+  <title>准备CNS阅读简记</title>
+  <dc:creator>Shixiang Wang</dc:creator>
+  <link>https://shixiangwang.github.io/posts/2024-10-15-cns-note/</link>
+  <description><![CDATA[ 
+
+
+
+
+
+<p>准备系统地弄一些文献阅读的计划，增强下自己的内在功底，针对性的写/记录一些笔记。</p>
+
+
+
+ ]]></description>
+  <category>CNS简记</category>
+  <guid>https://shixiangwang.github.io/posts/2024-10-15-cns-note/</guid>
+  <pubDate>Mon, 14 Oct 2024 16:00:00 GMT</pubDate>
+</item>
 <item>
   <title>随想</title>
   <dc:creator>Shixiang Wang</dc:creator>
-  <link>https://shixiangwang.github.io/posts/2024-05-03-random/index.html</link>
+  <link>https://shixiangwang.github.io/posts/2024-05-03-random/</link>
   <description><![CDATA[ 
+
 
 
 
@@ -27,14 +47,15 @@
 
  ]]></description>
   <category>random</category>
-  <guid>https://shixiangwang.github.io/posts/2024-05-03-random/index.html</guid>
+  <guid>https://shixiangwang.github.io/posts/2024-05-03-random/</guid>
   <pubDate>Thu, 02 May 2024 16:00:00 GMT</pubDate>
 </item>
 <item>
   <title>近期摘录</title>
   <dc:creator>Shixiang Wang</dc:creator>
-  <link>https://shixiangwang.github.io/posts/2024-04-29-random/index.html</link>
+  <link>https://shixiangwang.github.io/posts/2024-04-29-random/</link>
   <description><![CDATA[ 
+
 
 
 
@@ -56,14 +77,15 @@
 
  ]]></description>
   <category>random</category>
-  <guid>https://shixiangwang.github.io/posts/2024-04-29-random/index.html</guid>
+  <guid>https://shixiangwang.github.io/posts/2024-04-29-random/</guid>
   <pubDate>Sun, 28 Apr 2024 16:00:00 GMT</pubDate>
 </item>
 <item>
   <title>sratools networking issue</title>
   <dc:creator>Shixiang Wang</dc:creator>
-  <link>https://shixiangwang.github.io/posts/2024-04-22-sratools-networking-issue/index.html</link>
+  <link>https://shixiangwang.github.io/posts/2024-04-22-sratools-networking-issue/</link>
   <description><![CDATA[ 
+
 
 
 
@@ -768,14 +790,15 @@ font-style: inherit;">Read</span> 1596594 spots for ERR5242993</span></code></pr
 
  ]]></description>
   <category>bioinformatics</category>
-  <guid>https://shixiangwang.github.io/posts/2024-04-22-sratools-networking-issue/index.html</guid>
+  <guid>https://shixiangwang.github.io/posts/2024-04-22-sratools-networking-issue/</guid>
   <pubDate>Sun, 21 Apr 2024 16:00:00 GMT</pubDate>
 </item>
 <item>
   <title>single cell 处理笔记</title>
   <dc:creator>Shixiang Wang</dc:creator>
-  <link>https://shixiangwang.github.io/posts/2024-04-16-single-cell-records/index.html</link>
+  <link>https://shixiangwang.github.io/posts/2024-04-16-single-cell-records/</link>
   <description><![CDATA[ 
+
 
 
 
@@ -1236,14 +1259,15 @@ font-style: inherit;">Reduce</span>(merge, combine)</span></code></pre></div>
   <category>bioinformatics</category>
   <category>scRNA-seq</category>
   <category>note</category>
-  <guid>https://shixiangwang.github.io/posts/2024-04-16-single-cell-records/index.html</guid>
+  <guid>https://shixiangwang.github.io/posts/2024-04-16-single-cell-records/</guid>
   <pubDate>Mon, 15 Apr 2024 16:00:00 GMT</pubDate>
 </item>
 <item>
   <title>Discordant and clipped reads</title>
   <dc:creator>Shixiang Wang</dc:creator>
-  <link>https://shixiangwang.github.io/posts/2024-04-15-discordant-and-clipped-reads/index.html</link>
+  <link>https://shixiangwang.github.io/posts/2024-04-15-discordant-and-clipped-reads/</link>
   <description><![CDATA[ 
+
 
 
 
@@ -1269,14 +1293,15 @@ font-style: inherit;">Reduce</span>(merge, combine)</span></code></pre></div>
 
  ]]></description>
   <category>bioinformatics</category>
-  <guid>https://shixiangwang.github.io/posts/2024-04-15-discordant-and-clipped-reads/index.html</guid>
+  <guid>https://shixiangwang.github.io/posts/2024-04-15-discordant-and-clipped-reads/</guid>
   <pubDate>Sun, 14 Apr 2024 16:00:00 GMT</pubDate>
 </item>
 <item>
   <title>第一/二类型错误</title>
   <dc:creator>Shixiang Wang</dc:creator>
-  <link>https://shixiangwang.github.io/posts/2024-04-11-type-1-2-errors/index.html</link>
+  <link>https://shixiangwang.github.io/posts/2024-04-11-type-1-2-errors/</link>
   <description><![CDATA[ 
+
 
 
 
@@ -1313,14 +1338,15 @@ font-style: inherit;">Reduce</span>(merge, combine)</span></code></pre></div>
 
  ]]></description>
   <category>stats</category>
-  <guid>https://shixiangwang.github.io/posts/2024-04-11-type-1-2-errors/index.html</guid>
+  <guid>https://shixiangwang.github.io/posts/2024-04-11-type-1-2-errors/</guid>
   <pubDate>Wed, 10 Apr 2024 16:00:00 GMT</pubDate>
 </item>
 <item>
   <title>R 设置编译选项</title>
   <dc:creator>Shixiang Wang</dc:creator>
-  <link>https://shixiangwang.github.io/posts/2024-03-20-r-makevars-compiler-setting/index.html</link>
+  <link>https://shixiangwang.github.io/posts/2024-03-20-r-makevars-compiler-setting/</link>
   <description><![CDATA[ 
+
 
 
 
@@ -1379,14 +1405,15 @@ font-style: inherit;">-fPIC</span></span></code></pre></div>
  ]]></description>
   <category>Linux</category>
   <category>R</category>
-  <guid>https://shixiangwang.github.io/posts/2024-03-20-r-makevars-compiler-setting/index.html</guid>
+  <guid>https://shixiangwang.github.io/posts/2024-03-20-r-makevars-compiler-setting/</guid>
   <pubDate>Tue, 19 Mar 2024 16:00:00 GMT</pubDate>
 </item>
 <item>
   <title>snakemake 教程精要</title>
   <dc:creator>Shixiang Wang</dc:creator>
-  <link>https://shixiangwang.github.io/posts/2024-02-28-snakemake-basics/index.html</link>
+  <link>https://shixiangwang.github.io/posts/2024-02-28-snakemake-basics/</link>
   <description><![CDATA[ 
+
 
 
 
@@ -2243,14 +2270,15 @@ font-style: inherit;">.fastq"</span>)</span></code></pre></div>
  ]]></description>
   <category>snakemake</category>
   <category>note</category>
-  <guid>https://shixiangwang.github.io/posts/2024-02-28-snakemake-basics/index.html</guid>
+  <guid>https://shixiangwang.github.io/posts/2024-02-28-snakemake-basics/</guid>
   <pubDate>Tue, 27 Feb 2024 16:00:00 GMT</pubDate>
 </item>
 <item>
   <title>Can I run VS Code Server on older Linux distributions</title>
   <dc:creator>Shixiang Wang</dc:creator>
-  <link>https://shixiangwang.github.io/posts/2024-02-25-can-i-run-vs-code-server-on-older-linux-distributions/index.html</link>
+  <link>https://shixiangwang.github.io/posts/2024-02-25-can-i-run-vs-code-server-on-older-linux-distributions/</link>
   <description><![CDATA[ 
+
 
 
 
@@ -2271,14 +2299,15 @@ font-style: inherit;">.fastq"</span>)</span></code></pre></div>
  ]]></description>
   <category>Linux</category>
   <category>note</category>
-  <guid>https://shixiangwang.github.io/posts/2024-02-25-can-i-run-vs-code-server-on-older-linux-distributions/index.html</guid>
+  <guid>https://shixiangwang.github.io/posts/2024-02-25-can-i-run-vs-code-server-on-older-linux-distributions/</guid>
   <pubDate>Sat, 24 Feb 2024 16:00:00 GMT</pubDate>
 </item>
 <item>
   <title>use singularity</title>
   <dc:creator>Shixiang Wang</dc:creator>
-  <link>https://shixiangwang.github.io/posts/2024-02-23-use-singularity/index.html</link>
+  <link>https://shixiangwang.github.io/posts/2024-02-23-use-singularity/</link>
   <description><![CDATA[ 
+
 
 
 
@@ -2295,14 +2324,15 @@ font-style: inherit;">.fastq"</span>)</span></code></pre></div>
  ]]></description>
   <category>note</category>
   <category>container</category>
-  <guid>https://shixiangwang.github.io/posts/2024-02-23-use-singularity/index.html</guid>
+  <guid>https://shixiangwang.github.io/posts/2024-02-23-use-singularity/</guid>
   <pubDate>Thu, 22 Feb 2024 16:00:00 GMT</pubDate>
 </item>
 <item>
   <title>telescope installation</title>
   <dc:creator>Shixiang Wang</dc:creator>
-  <link>https://shixiangwang.github.io/posts/2024-02-20-telescope-installation/index.html</link>
+  <link>https://shixiangwang.github.io/posts/2024-02-20-telescope-installation/</link>
   <description><![CDATA[ 
+
 
 
 
@@ -2423,14 +2453,15 @@ Model Parameters
 
  ]]></description>
   <category>bioinformatics</category>
-  <guid>https://shixiangwang.github.io/posts/2024-02-20-telescope-installation/index.html</guid>
+  <guid>https://shixiangwang.github.io/posts/2024-02-20-telescope-installation/</guid>
   <pubDate>Mon, 19 Feb 2024 16:00:00 GMT</pubDate>
 </item>
 <item>
   <title>回广州路上的感想</title>
   <dc:creator>Shixiang Wang</dc:creator>
-  <link>https://shixiangwang.github.io/posts/2024-02-20-backtogz/index.html</link>
+  <link>https://shixiangwang.github.io/posts/2024-02-20-backtogz/</link>
   <description><![CDATA[ 
+
 
 
 
@@ -2446,14 +2477,15 @@ Model Parameters
 
  ]]></description>
   <category>personal</category>
-  <guid>https://shixiangwang.github.io/posts/2024-02-20-backtogz/index.html</guid>
+  <guid>https://shixiangwang.github.io/posts/2024-02-20-backtogz/</guid>
   <pubDate>Mon, 19 Feb 2024 16:00:00 GMT</pubDate>
 </item>
 <item>
   <title>shiny plot dpi</title>
   <dc:creator>Shixiang Wang</dc:creator>
-  <link>https://shixiangwang.github.io/posts/2024-02-12-shiny-plot-dpi/index.html</link>
+  <link>https://shixiangwang.github.io/posts/2024-02-12-shiny-plot-dpi/</link>
   <description><![CDATA[ 
+
 
 
 
@@ -2469,14 +2501,15 @@ Model Parameters
  ]]></description>
   <category>personal</category>
   <category>R</category>
-  <guid>https://shixiangwang.github.io/posts/2024-02-12-shiny-plot-dpi/index.html</guid>
+  <guid>https://shixiangwang.github.io/posts/2024-02-12-shiny-plot-dpi/</guid>
   <pubDate>Sun, 11 Feb 2024 16:00:00 GMT</pubDate>
 </item>
 <item>
   <title>免疫</title>
   <dc:creator>Shixiang Wang</dc:creator>
-  <link>https://shixiangwang.github.io/posts/2024-01-22-immune/index.html</link>
+  <link>https://shixiangwang.github.io/posts/2024-01-22-immune/</link>
   <description><![CDATA[ 
+
 
 
 
@@ -2507,14 +2540,15 @@ Model Parameters
  ]]></description>
   <category>note</category>
   <category>免疫</category>
-  <guid>https://shixiangwang.github.io/posts/2024-01-22-immune/index.html</guid>
+  <guid>https://shixiangwang.github.io/posts/2024-01-22-immune/</guid>
   <pubDate>Sun, 21 Jan 2024 16:00:00 GMT</pubDate>
 </item>
 <item>
   <title>解决 GitHub 代码拉取和推送问题</title>
   <dc:creator>Shixiang Wang</dc:creator>
-  <link>https://shixiangwang.github.io/posts/2024-01-17-github-hosts/index.html</link>
+  <link>https://shixiangwang.github.io/posts/2024-01-17-github-hosts/</link>
   <description><![CDATA[ 
+
 
 
 
@@ -2558,14 +2592,15 @@ font-style: inherit;">sudo</span> /etc/init.d/network restart</span></code></pre
   <category>note</category>
   <category>Linux</category>
   <category>git</category>
-  <guid>https://shixiangwang.github.io/posts/2024-01-17-github-hosts/index.html</guid>
+  <guid>https://shixiangwang.github.io/posts/2024-01-17-github-hosts/</guid>
   <pubDate>Tue, 16 Jan 2024 16:00:00 GMT</pubDate>
 </item>
 <item>
   <title>R 针对数据进行惰性加载</title>
   <dc:creator>Shixiang Wang</dc:creator>
-  <link>https://shixiangwang.github.io/posts/2023-12-25-lazy-loading-data-in-r/index.html</link>
+  <link>https://shixiangwang.github.io/posts/2023-12-25-lazy-loading-data-in-r/</link>
   <description><![CDATA[ 
+
 
 
 
@@ -2650,14 +2685,15 @@ font-style: inherit;">"~/Downloads/lazytest"</span>))</span></code></pre></div>
  ]]></description>
   <category>R</category>
   <category>shiny</category>
-  <guid>https://shixiangwang.github.io/posts/2023-12-25-lazy-loading-data-in-r/index.html</guid>
+  <guid>https://shixiangwang.github.io/posts/2023-12-25-lazy-loading-data-in-r/</guid>
   <pubDate>Sun, 24 Dec 2023 16:00:00 GMT</pubDate>
 </item>
 <item>
   <title>随便聊两句，可能不一定有意义</title>
   <dc:creator>Shixiang Wang</dc:creator>
-  <link>https://shixiangwang.github.io/posts/2023-12-20-random/index.html</link>
+  <link>https://shixiangwang.github.io/posts/2023-12-20-random/</link>
   <description><![CDATA[ 
+
 
 
 
@@ -2675,14 +2711,15 @@ font-style: inherit;">"~/Downloads/lazytest"</span>))</span></code></pre></div>
 
  ]]></description>
   <category>random</category>
-  <guid>https://shixiangwang.github.io/posts/2023-12-20-random/index.html</guid>
+  <guid>https://shixiangwang.github.io/posts/2023-12-20-random/</guid>
   <pubDate>Tue, 19 Dec 2023 16:00:00 GMT</pubDate>
 </item>
 <item>
   <title>诗歌存档</title>
   <dc:creator>Shixiang Wang</dc:creator>
-  <link>https://shixiangwang.github.io/posts/2023-12-12-the-archive-of-poem/index.html</link>
+  <link>https://shixiangwang.github.io/posts/2023-12-12-the-archive-of-poem/</link>
   <description><![CDATA[ 
+
 
 
 
@@ -3452,14 +3489,15 @@ font-style: inherit;">"~/Downloads/lazytest"</span>))</span></code></pre></div>
 
  ]]></description>
   <category>诗</category>
-  <guid>https://shixiangwang.github.io/posts/2023-12-12-the-archive-of-poem/index.html</guid>
+  <guid>https://shixiangwang.github.io/posts/2023-12-12-the-archive-of-poem/</guid>
   <pubDate>Mon, 11 Dec 2023 16:00:00 GMT</pubDate>
 </item>
 <item>
   <title>少年时</title>
   <dc:creator>Shixiang Wang</dc:creator>
-  <link>https://shixiangwang.github.io/posts/2023-12-12-the-poem-of-youth/index.html</link>
+  <link>https://shixiangwang.github.io/posts/2023-12-12-the-poem-of-youth/</link>
   <description><![CDATA[ 
+
 
 
 
@@ -3505,50 +3543,8 @@ font-style: inherit;">"~/Downloads/lazytest"</span>))</span></code></pre></div>
 
  ]]></description>
   <category>诗</category>
-  <guid>https://shixiangwang.github.io/posts/2023-12-12-the-poem-of-youth/index.html</guid>
+  <guid>https://shixiangwang.github.io/posts/2023-12-12-the-poem-of-youth/</guid>
   <pubDate>Mon, 11 Dec 2023 16:00:00 GMT</pubDate>
-</item>
-<item>
-  <title>The world is not all sunshine and rainbows</title>
-  <dc:creator>Shixiang Wang</dc:creator>
-  <link>https://shixiangwang.github.io/posts/2023-12-08-the-world-is-not-all-sunshine-and-rainbows/index.html</link>
-  <description><![CDATA[ 
-
-
-
-
-<p>刷短视频的时候看到小孩跟史泰龙激情地对一段电影（洛奇）台词，把它翻找了出来，记录一下。</p>
-<p>　　You let people stick a finger in your face and tell you you’re not good.</p>
-<p>　　你让别人指着脸说你不好。</p>
-<p>　　And when things got hard, you started to looking for something to blame, like a big shadow.</p>
-<p>　　当遇到不顺心的事，你开始怪罪其他事，比如说巨大的阴影。</p>
-<p>　　Let me tell you something you already know.</p>
-<p>　　让我告诉你一些你已经知道的事情。</p>
-<p>　　The world is not all sunshine and rainbows.</p>
-<p>　　这世界不完全都是阳光和彩虹。</p>
-<p>　　It’s a very mean and nasty place, and I don’t care how tough you are.</p>
-<p>　　这是一个非常卑鄙险恶的世界，我不在乎你是多么坚强。</p>
-<p>　　It will beat you to your knees and keep you there if you let it.</p>
-<p>　　如果你屈服，他会把你打得永远趴在地上。</p>
-<p>　　You, me or nobody is gonna hit as hard as life.</p>
-<p>　　你，我，没有人能比生活更会击打人了。</p>
-<p>　　But it’s not about how hard you hit. It’s about how hard you get hit and keep moving forward, how much you can take and keep moving forward.</p>
-<p>　　但这不在于你击打的多重，而在于你能被击打的多重，仍保持前进，在于你能怎么承受，然后继续前进。</p>
-<p>　　That’s how winning is done.</p>
-<p>　　这才是真正的胜利。</p>
-<p>　　Now if you know what you’re worth, go and get what you’re worth.</p>
-<p>　　现在如果你知道你的价值，你就前进实现你的价值。</p>
-<p>　　But you gotta be willing to take the hits, and not pointing fingers saying you aren’t where you wanna be because of him or her or anybody!</p>
-<p>　　但你必须乐意承受挨打，而不是没能实现目标时却指着别人说是因为他或她的原因!</p>
-<p>　　Cowards do that, and that ain’t you! You’re better than that!</p>
-<p>　　懦夫才会那样做!你不是!你远比那个出色!</p>
-
-
-
- ]]></description>
-  <category>random</category>
-  <guid>https://shixiangwang.github.io/posts/2023-12-08-the-world-is-not-all-sunshine-and-rainbows/index.html</guid>
-  <pubDate>Thu, 07 Dec 2023 16:00:00 GMT</pubDate>
 </item>
 </channel>
 </rss>
