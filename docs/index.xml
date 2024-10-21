@@ -10,7 +10,215 @@
 <atom:link href="https://shixiangwang.github.io/index.xml" rel="self" type="application/rss+xml"/>
 <description>Reasoning is a blog dedicated to exploring the intersection of data science, bioinformatics, and personal insights.</description>
 <generator>quarto-1.4.553</generator>
-<lastBuildDate>Mon, 14 Oct 2024 16:00:00 GMT</lastBuildDate>
+<lastBuildDate>Sun, 20 Oct 2024 16:00:00 GMT</lastBuildDate>
+<item>
+  <title>sigmoid 的数学与计算实现</title>
+  <dc:creator>Shixiang Wang</dc:creator>
+  <link>https://shixiangwang.github.io/posts/2024-10-21-sigmoid_2ways/</link>
+  <description><![CDATA[ 
+
+
+
+
+
+<p>深度学习中的 Sigmoid 激活函数的定义公式为：</p>
+<p><img src="https://latex.codecogs.com/png.latex?%0Ay_k%20=%20%5Cfrac%7Bexp(a_k)%7D%7B%5Csum_%7Bi=1%7D%5E%7Bn%7Dexp(a_i)%7D%0A"></p>
+<p>在计算实现上优化后的公式为：</p>
+<p><img src="https://latex.codecogs.com/png.latex?%0Ay_k%20=%20%5Cfrac%7Bexp(a_k%20+%20C)%7D%7B%5Csum_%7Bi=1%7D%5E%7Bn%7Dexp(a_i%20+%20C)%7D%0A"></p>
+<p>将 C 设定为 <img src="https://latex.codecogs.com/png.latex?exp(a_i)"> 的最大值，就可以规避计算机计算溢出问题。</p>
+<div class="sourceCode" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> numpy <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">as</span> np</span>
+<span id="cb1-2"></span>
+<span id="cb1-3"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">def</span> softmax(a):</span>
+<span id="cb1-4">    exp_a <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> np.exp(a)</span>
+<span id="cb1-5">    sum_exp_a <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> np.<span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">sum</span>(exp_a)</span>
+<span id="cb1-6">    y <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> exp_a <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">/</span> sum_exp_a</span>
+<span id="cb1-7"></span>
+<span id="cb1-8">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">return</span> y</span>
+<span id="cb1-9"></span>
+<span id="cb1-10"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">def</span> softmax2(a):</span>
+<span id="cb1-11">    c <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> np.<span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">max</span>(a)</span>
+<span id="cb1-12">    exp_a <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> np.exp(a <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span> c)  <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># 溢出对策</span></span>
+<span id="cb1-13">    sum_exp_a <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> np.<span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">sum</span>(exp_a)</span>
+<span id="cb1-14">    y <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> exp_a <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">/</span> sum_exp_a</span>
+<span id="cb1-15"></span>
+<span id="cb1-16">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">return</span> y</span>
+<span id="cb1-17"></span>
+<span id="cb1-18"><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">print</span>(<span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">f"softmax(10) = </span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span>softmax(np.array([<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">10</span>]))<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">}</span><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"</span>)</span>
+<span id="cb1-19"><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">print</span>(<span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">f"softmax(1000) = </span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span>softmax(np.array([<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1000</span>]))<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">}</span><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"</span>)</span>
+<span id="cb1-20"></span>
+<span id="cb1-21"><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">print</span>(<span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">f"softmax2(10) = </span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span>softmax2(np.array([<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">10</span>]))<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">}</span><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"</span>)</span>
+<span id="cb1-22"><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">print</span>(<span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">f"softmax2(1000) = </span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span>softmax2(np.array([<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1000</span>]))<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">}</span><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"</span>)</span></code></pre></div>
+<p>结果：</p>
+<div class="sourceCode" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><span class="ex" style="color: null;
+background-color: null;
+font-style: inherit;">❯</span> python sigmoid_2ways.py</span>
+<span id="cb2-2"><span class="ex" style="color: null;
+background-color: null;
+font-style: inherit;">softmax</span><span class="er" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">(</span><span class="ex" style="color: null;
+background-color: null;
+font-style: inherit;">10</span><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">)</span> <span class="ex" style="color: null;
+background-color: null;
+font-style: inherit;">=</span> [1.23394576e-04 9.99876605e-01]</span>
+<span id="cb2-3"><span class="ex" style="color: null;
+background-color: null;
+font-style: inherit;">/Users/family/Library/CloudStorage/OneDrive-shanghaitech.edu.cn/Learn/deeplearning/deep_learning_demo/ch03/sigmoid_2ways.py:4:</span> RuntimeWarning: overflow encountered in exp</span>
+<span id="cb2-4">  <span class="ex" style="color: null;
+background-color: null;
+font-style: inherit;">exp_a</span> = np.exp<span class="er" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">(</span><span class="ex" style="color: null;
+background-color: null;
+font-style: inherit;">a</span><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">)</span></span>
+<span id="cb2-5"><span class="ex" style="color: null;
+background-color: null;
+font-style: inherit;">/Users/family/Library/CloudStorage/OneDrive-shanghaitech.edu.cn/Learn/deeplearning/deep_learning_demo/ch03/sigmoid_2ways.py:6:</span> RuntimeWarning: invalid value encountered in divide</span>
+<span id="cb2-6">  <span class="ex" style="color: null;
+background-color: null;
+font-style: inherit;">y</span> = exp_a / sum_exp_a</span>
+<span id="cb2-7"><span class="ex" style="color: null;
+background-color: null;
+font-style: inherit;">softmax</span><span class="er" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">(</span><span class="ex" style="color: null;
+background-color: null;
+font-style: inherit;">1000</span><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">)</span> <span class="ex" style="color: null;
+background-color: null;
+font-style: inherit;">=</span> [ 0. nan]</span>
+<span id="cb2-8"><span class="ex" style="color: null;
+background-color: null;
+font-style: inherit;">softmax2</span><span class="er" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">(</span><span class="ex" style="color: null;
+background-color: null;
+font-style: inherit;">10</span><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">)</span> <span class="ex" style="color: null;
+background-color: null;
+font-style: inherit;">=</span> [1.23394576e-04 9.99876605e-01]</span>
+<span id="cb2-9"><span class="ex" style="color: null;
+background-color: null;
+font-style: inherit;">softmax2</span><span class="er" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">(</span><span class="ex" style="color: null;
+background-color: null;
+font-style: inherit;">1000</span><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">)</span> <span class="ex" style="color: null;
+background-color: null;
+font-style: inherit;">=</span> [0. 1.]</span></code></pre></div>
+
+
+
+ ]]></description>
+  <category>python</category>
+  <category>machine-learning</category>
+  <guid>https://shixiangwang.github.io/posts/2024-10-21-sigmoid_2ways/</guid>
+  <pubDate>Sun, 20 Oct 2024 16:00:00 GMT</pubDate>
+</item>
 <item>
   <title>准备CNS阅读简记</title>
   <dc:creator>Shixiang Wang</dc:creator>
@@ -3490,60 +3698,6 @@ font-style: inherit;">"~/Downloads/lazytest"</span>))</span></code></pre></div>
  ]]></description>
   <category>诗</category>
   <guid>https://shixiangwang.github.io/posts/2023-12-12-the-archive-of-poem/</guid>
-  <pubDate>Mon, 11 Dec 2023 16:00:00 GMT</pubDate>
-</item>
-<item>
-  <title>少年时</title>
-  <dc:creator>Shixiang Wang</dc:creator>
-  <link>https://shixiangwang.github.io/posts/2023-12-12-the-poem-of-youth/</link>
-  <description><![CDATA[ 
-
-
-
-
-
-<p>这里主要存储下大学期间随笔写作经整理的诗篇。</p>
-<p>网页放一首。</p>
-<center>
-<p><strong>镜照</strong> <br></p>
-<p>听夜风沉沉</p>
-<p>弹奏在其中的吉他一声声</p>
-<p>寂静的黑里</p>
-<p>见不到家乡的月与星辰</p>
-<p>远方，谁在等 <br></p>
-<p>看秋叶层层</p>
-<p>潜藏于体表的圆圈一轮轮</p>
-<p>微冷的雨中</p>
-<p>何处疗梦里的痴与伤痕</p>
-<p>近处，我轻问 <br></p>
-<p>山一程，水一程</p>
-<p>一路千里的风尘</p>
-<p>生命的刻度勾勒距离的尺度</p>
-<p>我越走越浑</p>
-<p>瞧，镜子里的身影</p>
-<p>白皙的脸上斑点纵横</p>
-<p>总被迷惑在模糊的清晰</p>
-<p>而一走近</p>
-<p>现实的自己</p>
-<p>呈现得一滴不剩</p>
-<p>这岁月的梦魇</p>
-<p>该死的真诚 <br></p>
-<p>逃不掉，如何跑</p>
-<p>问问问，一声一声接一声</p>
-<p>我对着我自己</p>
-<p>里头是静止的灵魂</p>
-外面是活着的人生 <br>
-</center>
-<p>全文见<a href="少年时.pdf">《少年时》</a></p>
-<blockquote class="blockquote">
-<p>感谢梦婷几年前的整理。</p>
-</blockquote>
-
-
-
- ]]></description>
-  <category>诗</category>
-  <guid>https://shixiangwang.github.io/posts/2023-12-12-the-poem-of-youth/</guid>
   <pubDate>Mon, 11 Dec 2023 16:00:00 GMT</pubDate>
 </item>
 </channel>
