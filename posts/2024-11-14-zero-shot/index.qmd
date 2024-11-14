@@ -1,0 +1,21 @@
+---
+title: Zero Shot, One Shot 和 Few Shot
+author: Shixiang Wang
+date: 2024-11-14
+categories: [AI]
+draft: false
+description: ''
+
+toc: true
+
+format:
+  html:
+    code-fold: false
+    code-overflow: wrap
+    code-tools: false
+---
+
+在大语言模型中有这几个相似的概念，区别在于，传统的模型需要通过梯度下降等方式来更新和预测新的任务，而针对大语言模型，更针对的说是预训练模型，我们在实际使用时给出一些例子，会让结果更好。
+
+Zero shot 就是完全不提供任何例子，直接给出任务以及数据，如中英文翻译，然后给出想要翻译的词。One shot即先给出一个实例，再给出想要翻译的词。Few shot即给出多个实例，一般3-10个。
+
