@@ -10,7 +10,28 @@
 <atom:link href="https://shixiangwang.github.io/index.xml" rel="self" type="application/rss+xml"/>
 <description>Reasoning is a blog dedicated to exploring the intersection of data science, bioinformatics, and personal insights.</description>
 <generator>quarto-1.5.57</generator>
-<lastBuildDate>Wed, 13 Nov 2024 16:00:00 GMT</lastBuildDate>
+<lastBuildDate>Sat, 16 Nov 2024 16:00:00 GMT</lastBuildDate>
+<item>
+  <title>既不喜欢，也不讨厌</title>
+  <dc:creator>Shixiang Wang</dc:creator>
+  <link>https://shixiangwang.github.io/posts/2024-11-17-random/</link>
+  <description><![CDATA[ 
+
+
+
+
+
+<p>今天在同妹妹的闲聊中得到她对于当前大学所学习专业的感受，“既不喜欢，也不讨厌”，我恍然中回到了我自己的大一的时候（12年前了），也是这般的感受，不仅仅是我自己，周围听到的也大多数是这种声音。我突然间有了一些个人感慨和领悟，当然可能是片面的，那就是：如果我们国家的高等教育能够显著地（不一定都改变了，而是发生了显著地增加）将这种“既不喜欢，也不讨厌”的感受改变成“这就是我喜欢的”或者“这就是我想要尝试的”，我们国内的高等教育可能才发生了真正重大的进步。</p>
+
+
+
+ ]]></description>
+  <category>random</category>
+  <category>thought</category>
+  <category>教育</category>
+  <guid>https://shixiangwang.github.io/posts/2024-11-17-random/</guid>
+  <pubDate>Sat, 16 Nov 2024 16:00:00 GMT</pubDate>
+</item>
 <item>
   <title>Zero Shot, One Shot 和 Few Shot</title>
   <dc:creator>Shixiang Wang</dc:creator>
@@ -2971,99 +2992,6 @@ font-style: inherit;">sudo</span> /etc/init.d/network restart</span></code></pre
   <category>git</category>
   <guid>https://shixiangwang.github.io/posts/2024-01-17-github-hosts/</guid>
   <pubDate>Tue, 16 Jan 2024 16:00:00 GMT</pubDate>
-</item>
-<item>
-  <title>R 针对数据进行惰性加载</title>
-  <dc:creator>Shixiang Wang</dc:creator>
-  <link>https://shixiangwang.github.io/posts/2023-12-25-lazy-loading-data-in-r/</link>
-  <description><![CDATA[ 
-
-
-
-
-
-<p>在做 Shiny 开发时，有些数据太大，非常影响加载数据，这里提供了一种 lazyloading 策略，可以值得一试。</p>
-<div class="sourceCode" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"></span>
-<span id="cb1-2">X <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">=</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">matrix</span>(<span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">1</span>, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">nrow =</span> <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">1000</span>, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">ncol =</span> <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">1000</span>)</span>
-<span id="cb1-3">Y <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">=</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">list</span>(<span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">X =</span> X)</span>
-<span id="cb1-4">e<span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">=</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">new.env</span>(<span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">parent=</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">emptyenv</span>())</span>
-<span id="cb1-5">e<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">$</span>X <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">=</span> X</span>
-<span id="cb1-6">e<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">$</span>Y <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">=</span> Y</span>
-<span id="cb1-7"></span>
-<span id="cb1-8">tools<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">:::</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">makeLazyLoadDB</span>(e, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">filebase =</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">path.expand</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"~/Downloads/lazytest"</span>))</span>
-<span id="cb1-9"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">rm</span>(<span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">list =</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">ls</span>())</span>
-<span id="cb1-10"></span>
-<span id="cb1-11"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">lazyLoad</span>(<span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">path.expand</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"~/Downloads/lazytest"</span>))</span></code></pre></div>
-<ul>
-<li>参考：<a href="https://stackoverflow.com/questions/21583382/r-how-to-lazyload-variables-from-inst-extdata-in-r-package" class="uri">https://stackoverflow.com/questions/21583382/r-how-to-lazyload-variables-from-inst-extdata-in-r-package</a></li>
-</ul>
-<p>关于参考内容中还提到 <code>delayedAssign</code> 可以实现类似的结果，但没有尝试。</p>
-
-
-
- ]]></description>
-  <category>R</category>
-  <category>shiny</category>
-  <guid>https://shixiangwang.github.io/posts/2023-12-25-lazy-loading-data-in-r/</guid>
-  <pubDate>Sun, 24 Dec 2023 16:00:00 GMT</pubDate>
 </item>
 </channel>
 </rss>
