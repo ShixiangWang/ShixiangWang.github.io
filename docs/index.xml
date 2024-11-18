@@ -10,7 +10,32 @@
 <atom:link href="https://shixiangwang.github.io/index.xml" rel="self" type="application/rss+xml"/>
 <description>Reasoning is a blog dedicated to exploring the intersection of data science, bioinformatics, and personal insights.</description>
 <generator>quarto-1.5.57</generator>
-<lastBuildDate>Sat, 16 Nov 2024 16:00:00 GMT</lastBuildDate>
+<lastBuildDate>Sun, 17 Nov 2024 16:00:00 GMT</lastBuildDate>
+<item>
+  <title>random - 书摘</title>
+  <dc:creator>Shixiang Wang</dc:creator>
+  <link>https://shixiangwang.github.io/posts/2024-11-18-random/</link>
+  <description><![CDATA[ 
+
+
+
+
+
+<p>道可顿悟，事须渐修。</p>
+<hr>
+<ul>
+<li>复杂的事情复杂说，是<strong>压力</strong>。</li>
+<li>复杂的事情简单说，是<strong>能力</strong>。</li>
+<li>复杂的事情有趣说，是<strong>魅力</strong>。</li>
+</ul>
+
+
+
+ ]]></description>
+  <category>random</category>
+  <guid>https://shixiangwang.github.io/posts/2024-11-18-random/</guid>
+  <pubDate>Sun, 17 Nov 2024 16:00:00 GMT</pubDate>
+</item>
 <item>
   <title>既不喜欢，也不讨厌</title>
   <dc:creator>Shixiang Wang</dc:creator>
@@ -2940,58 +2965,6 @@ Model Parameters
   <category>免疫</category>
   <guid>https://shixiangwang.github.io/posts/2024-01-22-immune/</guid>
   <pubDate>Sun, 21 Jan 2024 16:00:00 GMT</pubDate>
-</item>
-<item>
-  <title>解决 GitHub 代码拉取和推送问题</title>
-  <dc:creator>Shixiang Wang</dc:creator>
-  <link>https://shixiangwang.github.io/posts/2024-01-17-github-hosts/</link>
-  <description><![CDATA[ 
-
-
-
-
-
-<p>国内 Linux 服务器有时候存在 GitHub 仓库无法 push 或 pull 的问题，这里主要记录下修改 hosts 来解决该问题（注意不是 100% 有效）</p>
-<p>编辑 <code>/etc/hosts</code> 文件：</p>
-<div class="sourceCode" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">sudo</span> vim /etc/hosts</span></code></pre></div>
-<p>追加下面的内容：</p>
-<div class="sourceCode" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">140.82.112.3</span> github.com</span>
-<span id="cb2-2"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">151.101.1.194</span> github.global.ssl.fastly.net  </span>
-<span id="cb2-3"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">151.101.65.194</span> github.global.ssl.fastly.net  </span>
-<span id="cb2-4"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">151.101.129.194</span> github.global.ssl.fastly.net  </span>
-<span id="cb2-5"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">151.101.193.194</span> github.global.ssl.fastly.net </span></code></pre></div>
-<p>这里的 IP 地址可能会变，如果不行可以通过 <a href="https://sites.ipaddress.com/" class="uri">https://sites.ipaddress.com/</a> 查一下。</p>
-<p>重启下网络：</p>
-<div class="sourceCode" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">sudo</span> /etc/init.d/network restart</span></code></pre></div>
-<blockquote class="blockquote">
-<p>如果是其他平台，操作类似。</p>
-</blockquote>
-<ul>
-<li>参考：<a href="https://juejin.cn/post/7135346231593599012" class="uri">https://juejin.cn/post/7135346231593599012</a></li>
-</ul>
-
-
-
- ]]></description>
-  <category>note</category>
-  <category>Linux</category>
-  <category>git</category>
-  <guid>https://shixiangwang.github.io/posts/2024-01-17-github-hosts/</guid>
-  <pubDate>Tue, 16 Jan 2024 16:00:00 GMT</pubDate>
 </item>
 </channel>
 </rss>

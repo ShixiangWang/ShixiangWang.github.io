@@ -1,0 +1,24 @@
+---
+title: random - 书摘
+author: Shixiang Wang
+date: 2024-11-18
+categories: [random]
+draft: false
+description: ''
+
+toc: true
+
+format:
+  html:
+    code-fold: false
+    code-overflow: wrap
+    code-tools: false
+---
+
+道可顿悟，事须渐修。
+
+***
+
+- 复杂的事情复杂说，是**压力**。
+- 复杂的事情简单说，是**能力**。
+- 复杂的事情有趣说，是**魅力**。
