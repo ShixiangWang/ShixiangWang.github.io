@@ -10,7 +10,36 @@
 <atom:link href="https://shixiangwang.github.io/index.xml" rel="self" type="application/rss+xml"/>
 <description>Reasoning is a blog dedicated to exploring the intersection of data science, bioinformatics, and personal insights.</description>
 <generator>quarto-1.5.57</generator>
-<lastBuildDate>Sun, 17 Nov 2024 16:00:00 GMT</lastBuildDate>
+<lastBuildDate>Tue, 19 Nov 2024 16:00:00 GMT</lastBuildDate>
+<item>
+  <title>Learn English by Chunk</title>
+  <dc:creator>Shixiang Wang</dc:creator>
+  <link>https://shixiangwang.github.io/posts/2024-11-20-learn-english-by-chunk/</link>
+  <description><![CDATA[ 
+
+
+
+
+
+<p>在接触英文的学习中，不应该不断重复地单独去学习单个单词，而是以词组（块）的形式去学习、阅读、理解英文。从发音来说，也就是要学习连读发音。</p>
+<p>记忆是最低级的学习，要在实际中通过分析、应用、评估和创造等高级的学习方式学习，高级的学习方式完全可以同时完成低级的学习。</p>
+<p>通过英文块的学习构建自己的单词库。</p>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/b4vbS4mJfRY?si=QIFA-VDN0roZXtU7" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen="">
+</iframe>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/921Oi8wT-wI?si=xQWhcE5hPrkC8yTD" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen="">
+</iframe>
+<hr>
+<p>在了解的过程中，我总结到除了语言学习，知识的学习也遵循类似的规律。在学习的最低级阶段，学习基本的概念、定义有其必要性，但一定不能花过多的时间纠结于此， 而是尽快越过低级的学习方式，进入高级的学习方式去探索和应用知识，从科研看，许多知识的定义并不总是对的或者准确的，应该在应用过程中形成自我的认知。</p>
+
+
+
+ ]]></description>
+  <category>thought</category>
+  <category>edu</category>
+  <category>note</category>
+  <guid>https://shixiangwang.github.io/posts/2024-11-20-learn-english-by-chunk/</guid>
+  <pubDate>Tue, 19 Nov 2024 16:00:00 GMT</pubDate>
+</item>
 <item>
   <title>random - 书摘</title>
   <dc:creator>Shixiang Wang</dc:creator>
@@ -32,7 +61,7 @@
 
 
  ]]></description>
-  <category>random</category>
+  <category>journal</category>
   <guid>https://shixiangwang.github.io/posts/2024-11-18-random/</guid>
   <pubDate>Sun, 17 Nov 2024 16:00:00 GMT</pubDate>
 </item>
@@ -51,9 +80,9 @@
 
 
  ]]></description>
-  <category>random</category>
+  <category>journal</category>
   <category>thought</category>
-  <category>教育</category>
+  <category>edu</category>
   <guid>https://shixiangwang.github.io/posts/2024-11-17-random/</guid>
   <pubDate>Sat, 16 Nov 2024 16:00:00 GMT</pubDate>
 </item>
@@ -150,7 +179,7 @@
 
 
  ]]></description>
-  <category>random</category>
+  <category>journal</category>
   <guid>https://shixiangwang.github.io/posts/2024-11-11-random/</guid>
   <pubDate>Sun, 10 Nov 2024 16:00:00 GMT</pubDate>
 </item>
@@ -366,7 +395,7 @@ font-style: inherit;">=</span> [0. 1.]</span></code></pre></div>
 
 
  ]]></description>
-  <category>python</category>
+  <category>Python</category>
   <category>machine-learning</category>
   <guid>https://shixiangwang.github.io/posts/2024-10-21-sigmoid_2ways/</guid>
   <pubDate>Sun, 20 Oct 2024 16:00:00 GMT</pubDate>
@@ -386,7 +415,7 @@ font-style: inherit;">=</span> [0. 1.]</span></code></pre></div>
 
 
  ]]></description>
-  <category>CNS简记</category>
+  <category>CNS-note</category>
   <guid>https://shixiangwang.github.io/posts/2024-10-15-cns-note/</guid>
   <pubDate>Mon, 14 Oct 2024 16:00:00 GMT</pubDate>
 </item>
@@ -406,7 +435,7 @@ font-style: inherit;">=</span> [0. 1.]</span></code></pre></div>
 
 
  ]]></description>
-  <category>random</category>
+  <category>journal</category>
   <guid>https://shixiangwang.github.io/posts/2024-05-03-random/</guid>
   <pubDate>Thu, 02 May 2024 16:00:00 GMT</pubDate>
 </item>
@@ -436,7 +465,7 @@ font-style: inherit;">=</span> [0. 1.]</span></code></pre></div>
 
 
  ]]></description>
-  <category>random</category>
+  <category>journal</category>
   <guid>https://shixiangwang.github.io/posts/2024-04-29-random/</guid>
   <pubDate>Sun, 28 Apr 2024 16:00:00 GMT</pubDate>
 </item>
@@ -2899,7 +2928,7 @@ Model Parameters
 
 
  ]]></description>
-  <category>personal</category>
+  <category>journal</category>
   <guid>https://shixiangwang.github.io/posts/2024-02-20-backtogz/</guid>
   <pubDate>Mon, 19 Feb 2024 16:00:00 GMT</pubDate>
 </item>
@@ -2922,49 +2951,11 @@ Model Parameters
 
 
  ]]></description>
-  <category>personal</category>
+  <category>note</category>
   <category>R</category>
+  <category>shiny</category>
   <guid>https://shixiangwang.github.io/posts/2024-02-12-shiny-plot-dpi/</guid>
   <pubDate>Sun, 11 Feb 2024 16:00:00 GMT</pubDate>
-</item>
-<item>
-  <title>免疫</title>
-  <dc:creator>Shixiang Wang</dc:creator>
-  <link>https://shixiangwang.github.io/posts/2024-01-22-immune/</link>
-  <description><![CDATA[ 
-
-
-
-
-
-<section id="细胞因子" class="level2">
-<h2 class="anchored" data-anchor-id="细胞因子">细胞因子</h2>
-<p>细胞因子的分类：</p>
-<ul>
-<li>白细胞介素</li>
-<li>干扰素</li>
-<li>肿瘤坏死因子</li>
-<li>集落刺激因子</li>
-<li>生长因子</li>
-<li>趋化性细胞因子</li>
-</ul>
-<p>生物学活性：</p>
-<ul>
-<li>介导固有免疫：抗细菌和病毒作用</li>
-<li>介导和调节特异性免疫应答</li>
-<li>刺激造血</li>
-<li>促进血管生成</li>
-<li>诱导凋亡</li>
-</ul>
-
-
-</section>
-
- ]]></description>
-  <category>note</category>
-  <category>免疫</category>
-  <guid>https://shixiangwang.github.io/posts/2024-01-22-immune/</guid>
-  <pubDate>Sun, 21 Jan 2024 16:00:00 GMT</pubDate>
 </item>
 </channel>
 </rss>

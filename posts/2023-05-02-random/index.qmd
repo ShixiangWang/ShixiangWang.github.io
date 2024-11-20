@@ -2,7 +2,7 @@
 title: 随想
 author: Shixiang Wang
 date: 2023-04-08
-categories: [personal]
+categories: [journal]
 draft: false
 description: ''
 

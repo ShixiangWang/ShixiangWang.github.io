@@ -24,7 +24,7 @@
 title: %s
 author: Shixiang Wang
 date: %s
-categories: [personal,R]
+categories: [journal]
 draft: false
 description: ''
 

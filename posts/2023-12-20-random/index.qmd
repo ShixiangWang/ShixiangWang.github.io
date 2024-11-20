@@ -2,7 +2,7 @@
 title: 随便聊两句，可能不一定有意义
 author: Shixiang Wang
 date: 2023-12-20
-categories: [random]
+categories: [journal]
 draft: false
 description: ''
 

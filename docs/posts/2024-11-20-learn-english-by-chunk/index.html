@@ -7,9 +7,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Shixiang Wang">
-<meta name="dcterms.date" content="2024-10-21">
+<meta name="dcterms.date" content="2024-11-20">
 
-<title>sigmoid 的数学与计算实现 – Reasoning</title>
+<title>Learn English by Chunk – Reasoning</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -21,40 +21,6 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
-}
-/* CSS for syntax highlighting */
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-  }
-pre.numberSource { margin-left: 3em;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -111,7 +77,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <!-- Open Graph / Facebook -->
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://shixiangwang.github.io/posts/welcome/">
-<meta property="og:title" content="sigmoid 的数学与计算实现 – Reasoning">
+<meta property="og:title" content="Learn English by Chunk – Reasoning">
 <meta property="og:description" content="Reasoning is a blog dedicated to exploring the intersection of data science, bioinformatics, and personal insights.">
 <meta property="og:image" content="https://avatars.githubusercontent.com/u/25057508?v=4">
 
@@ -125,38 +91,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <meta name="referrer" content="no-referrer">
 
-  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
-
-<script type="text/javascript">
-const typesetMath = (el) => {
-  if (window.MathJax) {
-    // MathJax Typeset
-    window.MathJax.typeset([el]);
-  } else if (window.katex) {
-    // KaTeX Render
-    var mathElements = el.getElementsByClassName("math");
-    var macros = [];
-    for (var i = 0; i < mathElements.length; i++) {
-      var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN") {
-        window.katex.render(texText.data, mathElements[i], {
-          displayMode: mathElements[i].classList.contains('display'),
-          throwOnError: false,
-          macros: macros,
-          fleqn: false
-        });
-      }
-    }
-  }
-}
-window.Quarto = {
-  typesetMath
-};
-</script>
 
 <link rel="stylesheet" href="../../styles.css">
-<meta name="twitter:title" content="sigmoid 的数学与计算实现 – Reasoning">
+<meta name="twitter:title" content="Learn English by Chunk – Reasoning">
 <meta name="twitter:description" content="Reasoning is a blog dedicated to exploring the intersection of data science, bioinformatics, and personal insights.">
 <meta name="twitter:creator" content="@WangShxiang">
 <meta name="twitter:card" content="summary_large_image">
@@ -232,10 +169,11 @@ window.Quarto = {
 <header id="title-block-header" class="quarto-title-block default page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-body">
-      <h1 class="title">sigmoid 的数学与计算实现</h1>
+      <h1 class="title">Learn English by Chunk</h1>
                                 <div class="quarto-categories">
-                <div class="quarto-category">Python</div>
-                <div class="quarto-category">machine-learning</div>
+                <div class="quarto-category">thought</div>
+                <div class="quarto-category">edu</div>
+                <div class="quarto-category">note</div>
               </div>
                   </div>
   </div>
@@ -253,7 +191,7 @@ window.Quarto = {
       <div>
       <div class="quarto-title-meta-heading">Published</div>
       <div class="quarto-title-meta-contents">
-        <p class="date">October 21, 2024</p>
+        <p class="date">November 20, 2024</p>
       </div>
     </div>
     
@@ -274,47 +212,15 @@ window.Quarto = {
 
 
 
-<p>深度学习中的 Sigmoid 激活函数的定义公式为：</p>
-<p><span class="math display">\[
-y_k = \frac{exp(a_k)}{\sum_{i=1}^{n}exp(a_i)}
-\]</span></p>
-<p>在计算实现上优化后的公式为：</p>
-<p><span class="math display">\[
-y_k = \frac{exp(a_k + C)}{\sum_{i=1}^{n}exp(a_i + C)}
-\]</span></p>
-<p>将 C 设定为 <span class="math inline">\(exp(a_i)\)</span> 的最大值，就可以规避计算机计算溢出问题。</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> softmax(a):</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    exp_a <span class="op">=</span> np.exp(a)</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    sum_exp_a <span class="op">=</span> np.<span class="bu">sum</span>(exp_a)</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    y <span class="op">=</span> exp_a <span class="op">/</span> sum_exp_a</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> y</span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> softmax2(a):</span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    c <span class="op">=</span> np.<span class="bu">max</span>(a)</span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    exp_a <span class="op">=</span> np.exp(a <span class="op">-</span> c)  <span class="co"># 溢出对策</span></span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    sum_exp_a <span class="op">=</span> np.<span class="bu">sum</span>(exp_a)</span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>    y <span class="op">=</span> exp_a <span class="op">/</span> sum_exp_a</span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> y</span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"softmax(10) = </span><span class="sc">{</span>softmax(np.array([<span class="dv">1</span>, <span class="dv">10</span>]))<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"softmax(1000) = </span><span class="sc">{</span>softmax(np.array([<span class="dv">1</span>, <span class="dv">1000</span>]))<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"softmax2(10) = </span><span class="sc">{</span>softmax2(np.array([<span class="dv">1</span>, <span class="dv">10</span>]))<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"softmax2(1000) = </span><span class="sc">{</span>softmax2(np.array([<span class="dv">1</span>, <span class="dv">1000</span>]))<span class="sc">}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>结果：</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">❯</span> python sigmoid_2ways.py</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="ex">softmax</span><span class="er">(</span><span class="ex">10</span><span class="kw">)</span> <span class="ex">=</span> [1.23394576e-04 9.99876605e-01]</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="ex">/Users/family/Library/CloudStorage/OneDrive-shanghaitech.edu.cn/Learn/deeplearning/deep_learning_demo/ch03/sigmoid_2ways.py:4:</span> RuntimeWarning: overflow encountered in exp</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="ex">exp_a</span> = np.exp<span class="er">(</span><span class="ex">a</span><span class="kw">)</span></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="ex">/Users/family/Library/CloudStorage/OneDrive-shanghaitech.edu.cn/Learn/deeplearning/deep_learning_demo/ch03/sigmoid_2ways.py:6:</span> RuntimeWarning: invalid value encountered in divide</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  <span class="ex">y</span> = exp_a / sum_exp_a</span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="ex">softmax</span><span class="er">(</span><span class="ex">1000</span><span class="kw">)</span> <span class="ex">=</span> [ 0. nan]</span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="ex">softmax2</span><span class="er">(</span><span class="ex">10</span><span class="kw">)</span> <span class="ex">=</span> [1.23394576e-04 9.99876605e-01]</span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="ex">softmax2</span><span class="er">(</span><span class="ex">1000</span><span class="kw">)</span> <span class="ex">=</span> [0. 1.]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>在接触英文的学习中，不应该不断重复地单独去学习单个单词，而是以词组（块）的形式去学习、阅读、理解英文。从发音来说，也就是要学习连读发音。</p>
+<p>记忆是最低级的学习，要在实际中通过分析、应用、评估和创造等高级的学习方式学习，高级的学习方式完全可以同时完成低级的学习。</p>
+<p>通过英文块的学习构建自己的单词库。</p>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/b4vbS4mJfRY?si=QIFA-VDN0roZXtU7" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen="">
+</iframe>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/921Oi8wT-wI?si=xQWhcE5hPrkC8yTD" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen="">
+</iframe>
+<hr>
+<p>在了解的过程中，我总结到除了语言学习，知识的学习也遵循类似的规律。在学习的最低级阶段，学习基本的概念、定义有其必要性，但一定不能花过多的时间纠结于此， 而是尽快越过低级的学习方式，进入高级的学习方式去探索和应用知识，从科研看，许多知识的定义并不总是对的或者准确的，应该在应用过程中形成自我的认知。</p>
 
 
 

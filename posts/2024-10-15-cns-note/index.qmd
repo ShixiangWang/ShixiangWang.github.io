@@ -2,7 +2,7 @@
 title: 准备CNS阅读简记
 author: Shixiang Wang
 date: 2024-10-15
-categories: [CNS简记]
+categories: [CNS-note]
 draft: false
 description: ''
 

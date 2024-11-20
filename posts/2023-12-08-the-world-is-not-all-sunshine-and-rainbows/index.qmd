@@ -2,7 +2,7 @@
 title: The world is not all sunshine and rainbows
 author: Shixiang Wang
 date: 2023-12-08
-categories: [random]
+categories: [journal]
 draft: false
 description: ''
 

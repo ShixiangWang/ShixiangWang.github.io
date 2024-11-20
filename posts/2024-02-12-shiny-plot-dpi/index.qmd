@@ -2,7 +2,7 @@
 title: shiny plot dpi
 author: Shixiang Wang
 date: 2024-02-12
-categories: [personal,R]
+categories: [note, R, shiny]
 draft: false
 description: ''
 

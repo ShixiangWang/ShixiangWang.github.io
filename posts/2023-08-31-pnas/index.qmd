@@ -2,7 +2,7 @@
 title: pnas
 author: Shixiang Wang
 date: 2023-08-31
-categories: [random]
+categories: [journal]
 draft: false
 description: ''
 

@@ -2,7 +2,7 @@
 title: 既不喜欢，也不讨厌
 author: Shixiang Wang
 date: 2024-11-17
-categories: [random, thought, 教育]
+categories: [journal,thought, edu]
 draft: false
 description: ''
 

@@ -2,7 +2,7 @@
 title: 回广州路上的感想
 author: Shixiang Wang
 date: 2024-02-20
-categories: [personal]
+categories: [journal]
 draft: false
 description: ''
 

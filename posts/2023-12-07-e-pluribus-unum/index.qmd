@@ -2,7 +2,7 @@
 title: "E pluribus unum: From Complexity, Universality" 
 author: Shixiang Wang
 date: 2023-12-07
-categories: [random]
+categories: [journal]
 draft: false
 description: ''
 

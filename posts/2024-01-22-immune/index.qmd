@@ -2,7 +2,7 @@
 title: 免疫
 author: Shixiang Wang
 date: 2024-01-22
-categories: [note, 免疫]
+categories: [note, TME]
 draft: false
 description: ''
 

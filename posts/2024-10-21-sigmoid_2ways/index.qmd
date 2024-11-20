@@ -2,7 +2,7 @@
 title: sigmoid 的数学与计算实现
 author: Shixiang Wang
 date: 2024-10-21
-categories: [python,machine-learning]
+categories: [Python,machine-learning]
 draft: false
 description: ''
 

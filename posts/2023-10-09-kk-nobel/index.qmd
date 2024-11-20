@@ -2,7 +2,7 @@
 title: 2023 年诺贝尔生理或医学奖授予 KK
 author: Shixiang Wang
 date: 2023-10-09
-categories: [academic,news,personal]
+categories: [academic,news]
 draft: false
 description: ''
 

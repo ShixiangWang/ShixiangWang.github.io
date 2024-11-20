@@ -2,7 +2,7 @@
 title: 南京行记 两首
 author: Shixiang Wang
 date: 2023-10-27
-categories: [诗]
+categories: [poem]
 draft: false
 description: ''
 

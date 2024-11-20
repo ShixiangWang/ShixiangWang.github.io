@@ -2,7 +2,7 @@
 title: 我记得
 author: Shixiang Wang
 date: 2024-11-11
-categories: [random]
+categories: [journal]
 draft: false
 description: ''
 

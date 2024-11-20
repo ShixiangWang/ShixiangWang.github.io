@@ -1,0 +1,31 @@
+---
+title: Learn English by Chunk
+author: Shixiang Wang
+date: 2024-11-20
+categories: [thought, edu, note]
+draft: false
+description: ''
+
+toc: true
+
+format:
+  html:
+    code-fold: false
+    code-overflow: wrap
+    code-tools: false
+---
+
+在接触英文的学习中，不应该不断重复地单独去学习单个单词，而是以词组（块）的形式去学习、阅读、理解英文。从发音来说，也就是要学习连读发音。
+
+记忆是最低级的学习，要在实际中通过分析、应用、评估和创造等高级的学习方式学习，高级的学习方式完全可以同时完成低级的学习。
+
+通过英文块的学习构建自己的单词库。
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/b4vbS4mJfRY?si=QIFA-VDN0roZXtU7" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/921Oi8wT-wI?si=xQWhcE5hPrkC8yTD" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
+***
+
+在了解的过程中，我总结到除了语言学习，知识的学习也遵循类似的规律。在学习的最低级阶段，学习基本的概念、定义有其必要性，但一定不能花过多的时间纠结于此，
+而是尽快越过低级的学习方式，进入高级的学习方式去探索和应用知识，从科研看，许多知识的定义并不总是对的或者准确的，应该在应用过程中形成自我的认知。

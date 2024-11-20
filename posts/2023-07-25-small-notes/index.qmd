@@ -2,7 +2,7 @@
 title: 小记（往昔）
 author: Shixiang Wang
 date: 2023-07-25
-categories: [诗]
+categories: [poem]
 draft: false
 description: ''
 

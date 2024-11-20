@@ -2,7 +2,7 @@
 title: 近期摘录
 author: Shixiang Wang
 date: 2024-04-29
-categories: [random]
+categories: [journal]
 draft: false
 description: ''
 

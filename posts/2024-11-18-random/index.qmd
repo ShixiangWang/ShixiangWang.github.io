@@ -2,7 +2,7 @@
 title: random - 书摘
 author: Shixiang Wang
 date: 2024-11-18
-categories: [random]
+categories: [journal]
 draft: false
 description: ''
 
