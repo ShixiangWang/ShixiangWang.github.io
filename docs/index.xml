@@ -10,7 +10,36 @@
 <atom:link href="https://shixiangwang.github.io/index.xml" rel="self" type="application/rss+xml"/>
 <description>Reasoning is a blog dedicated to exploring the intersection of data science, bioinformatics, and personal insights.</description>
 <generator>quarto-1.5.57</generator>
-<lastBuildDate>Thu, 21 Nov 2024 16:00:00 GMT</lastBuildDate>
+<lastBuildDate>Tue, 26 Nov 2024 16:00:00 GMT</lastBuildDate>
+<item>
+  <title>读《自我突围》</title>
+  <dc:creator>Shixiang Wang</dc:creator>
+  <link>https://shixiangwang.github.io/posts/2024-11-27-ziwotuwei/</link>
+  <description><![CDATA[ 
+
+
+
+
+
+<p>最近在读施一公院士的首部作品《自我突围》，这本书介绍了他的人生经历、所思所想、建言献策等，是一部了解他人生观，以及相关人物的不错作品。通过这本图书，我也是首次走进了施一公先生的人生图景，旁观了他对于三观的体验与感悟。</p>
+<p>整体阅读下来，收获还是颇多的，特别是对于我这种职业真正意义上刚起步的人来说，有莫大的调解与安慰效果，也从中学习到了很多实际的经验。当然了，施一公先生关于人才的表述我觉得很有必要记录一下：当前我国是人才大国，但不是人才强国，我们国家的应试教育培养出来的人才“均值高”但“方差小”，所以实际上当前完全不缺处理某个专业事务的“项目人才”，而是缺乏“高层次”、“领军”人才推动领域和国家的发展。反思自身，虽然我还处于青椒的播种期，做的和想的还比较low、比较局限，但思想上一定要跳脱出当前“唯人才”、“唯项目”等等焦躁的社会文化环境，脚踏实地仰望星空，一步一个脚印地往前走，做科研，面对不确定是常态，也是应当学会的能力，心中有大局，做好自己能做的，在有能力的时候再进行发挥。如果确实走不下去，那也是精精彩彩地体验过了。</p>
+<p>最后记录下对于教研（无论是老师还是学生）直接有益的几篇文章，方便备查和阅读：</p>
+<ol type="1">
+<li><a href="https://mp.weixin.qq.com/s/O_8hc3U_aLUhA4eFCFG4vw">做诚实的学问，做正直的人</a> | <a href="https://mp.weixin.qq.com/s/_xSP2XdK5WCs3CKxXwTWFg">视频</a></li>
+<li><a href="https://mp.weixin.qq.com/s/qK3KFQFHxOuhfzdl6jvs9w">学生如何提高专业英文阅读能力？</a></li>
+<li><a href="https://mp.weixin.qq.com/s/pm0Rny5AQTqna5HN61RnSA">如何提高英文的科研写作能力?</a></li>
+</ol>
+<p>最后感谢有思想、理想的现实主义者、科学大家施一公先生。</p>
+
+
+
+ ]]></description>
+  <category>note</category>
+  <category>academic</category>
+  <category>edu</category>
+  <guid>https://shixiangwang.github.io/posts/2024-11-27-ziwotuwei/</guid>
+  <pubDate>Tue, 26 Nov 2024 16:00:00 GMT</pubDate>
+</item>
 <item>
   <title>冷门的追求 - 书摘</title>
   <dc:creator>Shixiang Wang</dc:creator>
@@ -2925,135 +2954,6 @@ font-style: inherit;">.fastq"</span>)</span></code></pre></div>
   <category>container</category>
   <guid>https://shixiangwang.github.io/posts/2024-02-23-use-singularity/</guid>
   <pubDate>Thu, 22 Feb 2024 16:00:00 GMT</pubDate>
-</item>
-<item>
-  <title>telescope installation</title>
-  <dc:creator>Shixiang Wang</dc:creator>
-  <link>https://shixiangwang.github.io/posts/2024-02-20-telescope-installation/</link>
-  <description><![CDATA[ 
-
-
-
-
-
-<blockquote class="blockquote">
-<p>注意这个帖子的有效性可能在未来某一天丧失。</p>
-</blockquote>
-<p>简单记录下 <code>telescope</code> 的安装，因为 <a href="https://github.com/mlbendall/telescope" class="uri">https://github.com/mlbendall/telescope</a> 提过的官方说明直接装后测试是有问题的。</p>
-<p>一步步安装和debug过程：</p>
-<div class="sourceCode" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">mamba</span> create <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">-n</span> telescope <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">-c</span> bioconda <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">-c</span> conda-forge telescope python=3.8</span>
-<span id="cb1-2"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">conda</span> activate telescope</span>
-<span id="cb1-3"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">mamba</span> install numpy=1.19</span>
-<span id="cb1-4"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">mamba</span> install <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">-c</span> conda-forge <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">-c</span> bioconda <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">'pysam&lt;0.17'</span></span></code></pre></div>
-<blockquote class="blockquote">
-<p>现在回头看可以缩减为一句命令：<code>mamba create -n telescope -c bioconda -c conda-forge telescope python=3.8 numpy=1.19 pysam&lt;0.17</code>。</p>
-</blockquote>
-<p>测试：</p>
-<pre><code>(telescope) zhou2 22:12:47 ~/test 
-$eval $(telescope test)
-2024-02-18 22:13:03 INFO     
-Version:                          1.0.3
-Input Options
-    samfile:                      /home/zhou2/miniconda3/envs/telescope/lib/python3.8/site-packages/telescope/data/alignment.bam
-    gtffile:                      /home/zhou2/miniconda3/envs/telescope/lib/python3.8/site-packages/telescope/data/annotation.gtf
-    attribute:                    locus
-    no_feature_key:               __no_feature
-    ncpu:                         1
-    tempdir:                      None
-Reporting Options
-    quiet:                        False
-    debug:                        False
-    logfile:                      &lt;stderr&gt;
-    outdir:                       .
-    exp_tag:                      telescope
-    updated_sam:                  False
-Run Modes
-    reassign_mode:                exclude
-    conf_prob:                    0.9
-    overlap_mode:                 threshold
-    overlap_threshold:            0.2
-    annotation_class:             intervaltree
-Model Parameters
-    pi_prior:                     0
-    theta_prior:                  200000
-    em_epsilon:                   1e-07
-    max_iter:                     100
-    use_likelihood:               False
-    skip_em:                      False
- (from run in telescope_assign.py:197)
-[E::idx_find_and_load] Could not retrieve index file for '/home/zhou2/miniconda3/envs/telescope/lib/python3.8/site-packages/telescope/data/alignment.bam'
-2024-02-18 22:13:03 INFO     Loading annotation...                                        (from run in telescope_assign.py:205)
-2024-02-18 22:13:03 INFO     Loaded annotation in 0 minutes and 0 secs                    (from run in telescope_assign.py:208)
-2024-02-18 22:13:03 INFO     Loaded 99 features.                                          (from run in telescope_assign.py:209)
-2024-02-18 22:13:03 INFO     Loading alignments...                                        (from run in telescope_assign.py:214)
-[E::idx_find_and_load] Could not retrieve index file for '/home/zhou2/miniconda3/envs/telescope/lib/python3.8/site-packages/telescope/data/alignment.bam'
-2024-02-18 22:13:05 INFO     Loaded alignment in 0 minutes and 1 secs                     (from run in telescope_assign.py:217)
-2024-02-18 22:13:05 INFO     Alignment Summary:                                           (from print_summary in model.py:519)
-2024-02-18 22:13:05 INFO         1000 total fragments.                                    (from print_summary in model.py:520)
-2024-02-18 22:13:05 INFO             1000 mapped as pairs.                                (from print_summary in model.py:521)
-2024-02-18 22:13:05 INFO             0 mapped as mixed.                                   (from print_summary in model.py:522)
-2024-02-18 22:13:05 INFO             0 mapped single.                                     (from print_summary in model.py:523)
-2024-02-18 22:13:05 INFO             0 failed to map.                                     (from print_summary in model.py:524)
-2024-02-18 22:13:05 INFO     --                                                           (from print_summary in model.py:525)
-2024-02-18 22:13:05 INFO         1000 fragments mapped to reference; of these             (from print_summary in model.py:526)
-2024-02-18 22:13:05 INFO             0 had one unique alignment.                          (from print_summary in model.py:528)
-2024-02-18 22:13:05 INFO             1000 had multiple alignments.                        (from print_summary in model.py:529)
-2024-02-18 22:13:05 INFO     --                                                           (from print_summary in model.py:530)
-2024-02-18 22:13:05 INFO         1000 fragments overlapped annotation; of these           (from print_summary in model.py:531)
-2024-02-18 22:13:05 INFO             0 map to one locus.                                  (from print_summary in model.py:533)
-2024-02-18 22:13:05 INFO             1000 map to multiple loci.                           (from print_summary in model.py:535)
-2024-02-18 22:13:05 INFO     
-                                                            (from print_summary in model.py:537)
-2024-02-18 22:13:05 INFO     Running Expectation-Maximization...                          (from run in telescope_assign.py:250)
-2024-02-18 22:13:05 INFO     Iteration 1, diff=1.3795                                     (from em in model.py:709)
-2024-02-18 22:13:05 INFO     Iteration 2, diff=0.7388                                     (from em in model.py:709)
-2024-02-18 22:13:05 INFO     Iteration 3, diff=0.24275                                    (from em in model.py:709)
-2024-02-18 22:13:05 INFO     Iteration 4, diff=0.065133                                   (from em in model.py:709)
-2024-02-18 22:13:05 INFO     Iteration 5, diff=0.017653                                   (from em in model.py:709)
-2024-02-18 22:13:05 INFO     Iteration 6, diff=0.0050039                                  (from em in model.py:709)
-2024-02-18 22:13:05 INFO     Iteration 7, diff=0.0014807                                  (from em in model.py:709)
-2024-02-18 22:13:05 INFO     Iteration 8, diff=0.00045365                                 (from em in model.py:709)
-2024-02-18 22:13:05 INFO     Iteration 9, diff=0.00014275                                 (from em in model.py:709)
-2024-02-18 22:13:05 INFO     Iteration 10, diff=4.5844e-05                                (from em in model.py:709)
-2024-02-18 22:13:05 INFO     Iteration 11, diff=1.4953e-05                                (from em in model.py:709)
-2024-02-18 22:13:05 INFO     Iteration 12, diff=4.9364e-06                                (from em in model.py:709)
-2024-02-18 22:13:05 INFO     Iteration 13, diff=1.645e-06                                 (from em in model.py:709)
-2024-02-18 22:13:05 INFO     Iteration 14, diff=5.5228e-07                                (from em in model.py:709)
-2024-02-18 22:13:05 INFO     Iteration 15, diff=1.8652e-07                                (from em in model.py:709)
-2024-02-18 22:13:05 INFO     Iteration 16, diff=6.3301e-08                                (from em in model.py:709)
-2024-02-18 22:13:05 INFO     EM converged after 16 iterations.                            (from em in model.py:722)
-2024-02-18 22:13:05 INFO     Final log-likelihood: 95252.596293.                          (from em in model.py:723)
-2024-02-18 22:13:05 INFO     EM completed in 0 minutes and 0 secs                         (from run in telescope_assign.py:253)
-2024-02-18 22:13:05 INFO     Generating Report...                                         (from run in telescope_assign.py:256)
-2024-02-18 22:13:05 INFO     telescope assign complete (0 minutes and 1 secs)             (from run in telescope_assign.py:263)
-</code></pre>
-
-
-
- ]]></description>
-  <category>bioinformatics</category>
-  <guid>https://shixiangwang.github.io/posts/2024-02-20-telescope-installation/</guid>
-  <pubDate>Mon, 19 Feb 2024 16:00:00 GMT</pubDate>
 </item>
 </channel>
 </rss>
