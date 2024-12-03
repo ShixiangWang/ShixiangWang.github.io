@@ -1,0 +1,1531 @@
+---
+title: rhino 和 shiny 开发笔记
+author: Shixiang Wang
+date: 2024-12-03
+categories: [R, note, shiny, Web-dev]
+draft: false
+description: '学习和记录rhino 和 shiny 教程的笔记'
+
+toc: true
+toc-depth: 5
+toc-expand: 2
+
+format:
+  html:
+    code-fold: true
+    code-overflow: wrap
+    code-tools: false
+    code-link: true
+---
+
+重新系统学习和记录下开发需要用的几个关键包的重要资料，非常基础的不做赘述。
+
+Key packages:
+
+* [shiny](https://shiny.posit.co/)
+* [box](https://klmr.me/box/)
+* [rhino](https://appsilon.github.io/rhino)
+* [bslib](https://rstudio.github.io/bslib/) | [bsicons](https://icons.getbootstrap.com/) | [themer demo for reference](https://github.com/rstudio/bslib/tree/main/inst/themer-demo)
+* [shinyWidgets](https://dreamrs.github.io/shinyWidgets/) | [widgets](https://dreamrs.github.io/shinyWidgets/reference/index.html)
+* [shiny.router](https://appsilon.github.io/shiny.router/index.html)
+* [reactable & reactable.extras](https://appsilon.github.io/reactable.extras/index.html)
+
+## [rhino](https://appsilon.github.io/rhino/index.html)
+
+### Use js
+
+```r
+box::use(
+  htmlwidgets[JS],
+)
+
+#' @export
+label_formatter <- JS("(value, index) => value")
+```
+
+### Use css, add feature with scss
+
+scss:
+
+```css
+// app/styles/main.scss
+
+.components-container {
+  display: inline-grid;
+  grid-template-columns: 1fr 1fr;
+  width: 100%;
+
+  .component-box {
+    padding: 10px;
+    margin: 10px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  }
+}
+```
+
+In R:
+
+```r
+div(
+      class = "components-container",
+      table$ui(ns("table")),
+      chart$ui(ns("chart"))
+    )
+
+# 在嵌套模块中
+div(
+    class = "component-box",
+    echarts4r$echarts4rOutput(ns("chart"))
+  )
+```
+
+使用 `rhino::build_sass()` 将 sass 转换为 css，在
+shiny 中不需要手动引入该 css 文件，rhino 自动处理。
+
+### Use js file
+
+You can still use JavaScript code like in a regular Shiny application, but instead of using www directory, you should add your files to static/js and call them using full path, e.g. `tags$script(src = "static/js/app.min.js")`.
+
+An example of help button.
+
+In R:
+
+```r
+tags$button(
+      id = "help-button",
+      icon("question"),
+      onclick = "App.showHelp()"  # Starts with App.
+    )
+```
+
+In scss:
+
+```css
+// app/styles/main.scss
+
+#help-button {
+  position: fixed;
+  top: 0;
+  right: 0;
+  margin: 10px;
+}
+```
+
+In js:
+
+```js
+// app/js/index.js
+// keyword export added before the function name. In Rhino, only functions marked like that will be available for Shiny to use.
+
+export function showHelp() {
+  alert('Learn more about Rhino: https://appsilon.github.io/rhino/');
+}
+```
+
+Remember:
+
+```r
+# in R console
+rhino::build_js()
+```
+
+### 使用 Cypress 进行测试
+
+这是一个有意思也有用的话题（非常体现编程技术的专业性），但对于复杂的开发而言，当前个人web技术以及团队编程技术水平较低去做这个会本末倒置，可以在项目基本完成后添加必要的功能测试。
+
+* <https://appsilon.github.io/rhino/articles/tutorial/write-end-to-end-tests-with-cypress.html>
+
+### [Use bslib](https://appsilon.github.io/rhino/articles/how-to/use-bslib.html)
+
+> If you don’t want to write any custom Sass, you can use bslib as you would normally without any additional setup. 也就是如果结合使用需要进行配置和学习。
+
+### [How-to: Communicate between modules](https://appsilon.github.io/rhino/articles/how-to/communicate-between-modules.html)
+
+> 这是专业的模块化编程一个重要的知识和技能点。
+
+随着应用程序规模的扩大和复杂性的增加，发现越来越多的Shiny模块分布在各个深度的层级中是很常见的。这导致有必要在这些不同的Shiny模块之间共享信息，尤其是应用程序的状态。
+
+* [Example 1 - Communicating between a parent module and its children modules](https://appsilon.github.io/rhino/articles/how-to/communicate-between-modules.html#example-1---communicating-between-a-parent-module-and-its-children-modules)
+
+![](https://appsilon.github.io/rhino/articles/how-to/images%2Fcommunicate_between_modules_1.png)
+
+> 对非关键代码进行了省略。
+
+父模块：
+
+```r
+# ui -----
+table_module$ui(ns("table_module"))
+
+# server -----
+# Define a reactive to pass down the table module
+processed_data <- reactive({
+  process_data(input_data, input$filters)
+})
+
+# Initialize the table module server function
+table_module$server(id = "table_module", table_data = processed_data)
+```
+
+子模块：
+
+> 注意 table\_data 作为参数和调用的写法差异，另外进行了参数注释
+
+```r
+#' @params id The Id of this shiny module
+#' @params table_data A reactive that contains that the data that will be
+#' displayed in the table.
+#' @export
+server <- function(id, table_data) {
+  moduleServer(id, function(input, output, session) {
+    
+    output$table <- renderTable({
+      req(table_data())
+      table_data()
+    })
+
+  })
+}
+```
+
+* [Example 2 - Communicating between two sibling modules](https://appsilon.github.io/rhino/articles/how-to/communicate-between-modules.html#example-2---communicating-between-two-sibling-modules)
+
+![](https://appsilon.github.io/rhino/articles/how-to/images%2Fcommunicate_between_modules_2.png)
+
+这个例子的逻辑思路和代码都值得深入研读下。
+
+核心在于流程连接的 A B 模块，A 模块的 server 端输出一个 reactive 结果。
+
+```r
+# data_module 模块
+
+#' @export
+server <- function(id) {
+  moduleServer(id, function(input, output, session) {
+    example_data <- utils$read_data_from_database()
+
+    reactive({
+      utils$process_data(example_data, input$parameter)
+    })
+  })
+}
+```
+
+然后 B 模块作为调用参数进行接入。
+
+```r
+data_to_display <- data_module$server("data_module")
+# Passing `data_to_display` to the sibling module
+plot_module$server("plot_module", data_to_display)
+```
+
+## [bslib | a modern UI toolkit for Shiny and R Markdown based on Bootstrap](https://rstudio.github.io/bslib/index.html)
+
+> 目前的个人经验来看，日常的 Shiny 开发都可以利用它做 UI 的设计和实现。
+
+* [comprehensive reference list](https://rstudio.github.io/bslib/reference/index.html)
+* [实践 Dashboards 构建](https://rstudio.github.io/bslib/articles/dashboards/index.html)
+* [Bootstrap 5 Sass variables](https://rstudio.github.io/bslib/articles/bs5-variables/index.html)
+* [一些有用的 css 类](https://rstudio.github.io/bslib/articles/utility-classes/index.html)
+* [自定义组件](https://rstudio.github.io/bslib/articles/custom-components/index.html)
+
+### 主题
+
+```r
+# 如蓝色使用 cosmo 主题
+bs_theme_preview()
+```
+
+> 这个预览网站的[源代码](https://github.com/rstudio/bslib/blob/main/inst/themer-demo/app.R)本身就很值得学习。
+
+### Layouts
+
+#### Column-based layout
+
+将UI元素组织到Bootstrap的12列CSS网格中，使用[layout\_columns()](https://rstudio.github.io/bslib/reference/layout_columns.html)函数。或者使用layout\_column\_wrap()函数将元素组织成等宽列的网格。这两个函数都可以布局任意数量的元素，无需指定列数，但layout\_columns()可以用来创建更复杂的布局，而layout\_column\_wrap()则创建等宽列和行的网格。
+
+> 也就是 layout\_column\_wrap 会更简单和通用。
+
+默认 layout\_column\_wrap 提供统一的宽高，宽度会自动处理，用正数或者负数（表示间隔）表示宽度（容器宽12），正常情况下设计一行放置n个card控件就设置 width = 1/n。
+
+```r
+library(bslib)
+
+card1 <- card(
+  card_header("Scrolling content"),
+  lapply(
+    lorem::ipsum(paragraphs = 3, sentences = c(5, 5, 5)),
+    tags$p
+  )
+)
+card2 <- card(
+  card_header("Nothing much here"),
+  "This is it."
+)
+card3 <- card(
+  full_screen = TRUE,  # 支持全屏
+  card_header("Filling content"),
+  card_body(
+    class = "p-0",
+    shiny::plotOutput("p")
+  )
+)
+
+layout_column_wrap(
+  width = 1/2, height = 300,
+  card1, card2, card3
+)
+```
+
+响应式列数，固定一个宽度，浏览器不够时会自动排到下一行：
+
+```r
+layout_column_wrap(
+  width = "200px", height = 300,
+  card1, card2, card3
+)
+```
+
+固定列宽：
+
+```r
+layout_column_wrap(
+  width = "200px", height = 300,
+  fixed_width = TRUE,
+  card1, card2, card3
+)
+```
+
+可变高度：
+
+```r
+# By row
+layout_column_wrap(
+  width = 1/2,
+  heights_equal = "row",
+  card1, card3, card2
+)
+```
+
+```r
+# By cell
+layout_column_wrap(
+  width = "200px",
+  card1, card3, 
+  card(fill = FALSE,
+    card_header("Nothing much here"),
+    "This is it."
+  )
+)
+```
+
+可变宽：
+
+```r
+# Set width to NULL and provide a custom grid-template-columns property (and possibly other CSS grid properties) 
+# https://developer.mozilla.org/en-US/docs/Web/CSS/grid-template-columns
+# https://css-tricks.com/snippets/css/complete-guide-grid/
+layout_column_wrap(
+  width = NULL, height = 300, fill = FALSE,
+  style = css(grid_template_columns = "2fr 1fr 2fr"),
+  card1, card2, card3
+)
+```
+
+嵌套布局：
+
+```r
+layout_column_wrap(
+  width = 1/2,
+  height = 300,
+  card1,
+  layout_column_wrap(
+    width = 1,
+    heights_equal = "row",
+    card2, card3
+  )
+)
+```
+
+* https://rstudio.github.io/shinyuieditor/ 可以 GUI 手动设计布局
+* [Appendix](https://rstudio.github.io/bslib/articles/column-layout/index.html#appendix) 提供的效果代码非常惊艳，web 开发需要真正深入掌握相关技术。
+
+#### [Navigation containers](https://rstudio.github.io/bslib/reference/navset.html#details)
+
+这个在同一个区域组织不同的控件切换和相关功能非常有用。
+
+```r
+navset_tab(..., id = NULL, selected = NULL, header = NULL, footer = NULL)
+
+navset_pill(..., id = NULL, selected = NULL, header = NULL, footer = NULL)
+
+navset_underline(..., id = NULL, selected = NULL, header = NULL, footer = NULL)
+
+navset_pill_list(
+  ...,
+  id = NULL,
+  selected = NULL,
+  header = NULL,
+  footer = NULL,
+  well = TRUE,
+  fluid = TRUE,
+  widths = c(4, 8)
+)
+
+navset_hidden(..., id = NULL, selected = NULL, header = NULL, footer = NULL)
+
+navset_bar(
+  ...,
+  title = NULL,
+  id = NULL,
+  selected = NULL,
+  sidebar = NULL,
+  fillable = TRUE,
+  gap = NULL,
+  padding = NULL,
+  position = c("static-top", "fixed-top", "fixed-bottom"),
+  header = NULL,
+  footer = NULL,
+  bg = NULL,
+  inverse = "auto",
+  collapsible = TRUE,
+  fluid = TRUE
+)
+
+navset_card_tab(
+  ...,
+  id = NULL,
+  selected = NULL,
+  title = NULL,
+  sidebar = NULL,
+  header = NULL,
+  footer = NULL,
+  height = NULL,
+  full_screen = FALSE,
+  wrapper = card_body
+)
+
+navset_card_pill(
+  ...,
+  id = NULL,
+  selected = NULL,
+  title = NULL,
+  sidebar = NULL,
+  header = NULL,
+  footer = NULL,
+  height = NULL,
+  placement = c("above", "below"),
+  full_screen = FALSE,
+  wrapper = card_body
+)
+
+navset_card_underline(
+  ...,
+  id = NULL,
+  selected = NULL,
+  title = NULL,
+  sidebar = NULL,
+  header = NULL,
+  footer = NULL,
+  height = NULL,
+  full_screen = FALSE,
+  wrapper = card_body
+)
+```
+
+#### [Filling layouts](https://rstudio.github.io/bslib/articles/filling/index.html)
+
+就像任何其他HTML容器一样，可填充容器的默认高度取决于其子元素的高度。例如，如果有一个高度定义为400px（大多数Shiny输出的默认值）的单个填充项，则可填充容器的高度也是400px（加上任何填充、边框等）。
+
+### Components
+
+#### [Cards](https://rstudio.github.io/bslib/articles/cards/index.html)
+
+Hello card:
+
+```r
+card(
+  card_header(
+    class = "bg-dark",
+    "A header"
+  ),
+  card_body(
+    markdown("Some text with a [link](https://github.com)")
+  )
+)
+```
+
+> 如果无需修改参数，card\_body() 的调用可省略
+
+设置高度：
+
+```r
+card(
+  max_height = 250,
+  full_screen = TRUE,
+  card_header(
+    "A long, scrolling, description"
+  ),
+  lorem::ipsum(paragraphs = 3, sentences = 5)
+)
+```
+
+如果排布多个 card，使用 layout\_column\_wrap() 进行布局最推荐。
+
+图形会自动填充，非常好
+
+```r
+card(
+  height = 250,
+  full_screen = TRUE,
+  card_header("A filling plot"),
+  card_body(plotly_widget)
+)
+```
+
+有时候移除 card body 的间隔和添加 footer 是有益的。
+
+```r
+card(
+  height = 275,
+  full_screen = TRUE,
+  card_header("A filling map"),
+  card_body(
+    class = "p-0",
+    leaflet_widget
+  ),
+  card_footer(
+    class = "fs-6",
+    "Copyright 2023 RStudio, PBC"
+  )
+)
+```
+
+> [more config...](https://rstudio.github.io/bslib/articles/utility-classes/#add-padding-borders-and-alignment)
+
+有时候卡片太小会有问题，设置最小高度会有用：
+
+```r
+card(
+  height = 300,
+  style = "resize:vertical;",
+  card_header("Plots that grow but don't shrink"),
+  card_body(
+    min_height = 250,
+    plotly_widget,
+    plotly_widget
+  )
+)
+```
+
+##### 多个 card body
+
+多个 card body，文字较多时：
+
+```r
+card(
+  height = 375,
+  full_screen = TRUE,
+  card_header(
+    "Filling plot, scrolling description"
+  ),
+  card_body(
+    min_height = 200,
+    plotly_widget
+  ),
+  card_body(
+    class = "lead container",
+    lorem::ipsum(paragraphs = 10, sentences = 5)
+  )
+)
+```
+
+文字较少时：
+
+```r
+card(
+  height = 350,
+  full_screen = TRUE,
+  card_header(
+    "Filling plot, short description"
+  ),
+  plotly_widget,
+  card_body(
+    fill = FALSE, gap = 0,
+    card_title("A subtitle"),
+    p(class = "text-muted", "And a caption")
+  )
+)
+```
+
+##### 多列
+
+搭配 layout\_column\_wrap
+
+```r
+card(
+  height = 350,
+  full_screen = TRUE,
+  card_header("A multi-column filling layout"),
+  card_body(
+    min_height = 200,
+    layout_column_wrap(
+      width = 1/2,
+      plotOutput("p1"),
+      plotOutput("p2")
+    )
+  ),
+  lorem::ipsum(paragraphs = 3, sentences = 5)
+)
+```
+
+##### 多卡
+
+搭配 layout\_column\_wrap
+
+```r
+layout_column_wrap(
+  width = 1/2,
+  height = 300,
+  card(full_screen = TRUE, card_header("A filling plot"), plotly_widget),
+  card(full_screen = TRUE, card_header("A filling map"), card_body(class = "p-0", leaflet_widget))
+)
+```
+
+##### 多标签
+
+```r
+library(leaflet)
+navset_card_tab(
+  height = 450,
+  full_screen = TRUE,
+  title = "HTML Widgets",
+  nav_panel(
+    "Plotly",
+    card_title("A plotly plot"),
+    plotly_widget
+  ),
+  nav_panel(
+    "Leaflet",
+    card_title("A leaflet plot"),
+    leaflet_widget
+  ),
+  nav_panel(
+    shiny::icon("circle-info"),
+    markdown("Learn more about [htmlwidgets](http://www.htmlwidgets.org/)")
+  )
+)
+```
+
+#### 边栏
+
+```r
+card(
+  height = 300,
+  full_screen = TRUE,
+  card_header("A sidebar layout inside a card"),
+  layout_sidebar(
+    fillable = TRUE,
+    sidebar = sidebar(
+      actionButton("btn", "A button")
+    ),
+    plotly_widget
+  )
+)
+```
+
+##### 图像
+
+```r
+card(
+  height = 300,
+  full_screen = TRUE,
+  card_image(
+    file = "shiny-hex.svg",
+    alt = "Shiny's hex sticker",
+    href = "https://github.com/rstudio/shiny"
+  ),
+  card_body(
+    fill = FALSE,
+    card_title("Shiny for R"),
+    p(
+      class = "fw-light text-muted",
+      "Brought to you by RStudio."
+    )
+  )
+)
+```
+
+##### Flexbox
+
+行内元素的渲染差异：
+
+```r
+card(
+  card_body(
+    fillable = TRUE,
+    "Here's some", tags$i("inline"), "text",
+    actionButton("btn1", "A button")
+  ),
+  card_body(
+    fillable = FALSE,
+    "Here's some", tags$i("inline"), "text",
+    actionButton("btn2", "A button")
+  )
+)
+```
+
+利用 flexbox 属性增强 ui 的美观：
+
+```r
+card(
+  height = 325, full_screen = TRUE,
+  card_header("A plot with an action links"),
+  card_body(
+    class = "gap-2 container",
+    plotly_widget,
+    actionButton(
+      "go_btn", "Action button",
+      class = "btn-primary rounded-0"
+    ),
+    markdown("Here's a _simple_ [hyperlink](https://www.google.com/).")
+  )
+)
+
+# header 和 body 优化布局
+card(
+  height = 300, full_screen = TRUE,
+  card_header(
+    class = "d-flex justify-content-between",
+    "Centered plot",
+    checkboxInput("check", " Check me", TRUE)
+  ),
+  card_body(
+    class = "align-items-center",
+    plotOutput("id", width = "75%")
+  )
+)
+```
+
+##### 不同高度下的 ui 切换
+
+```r
+# UI logic
+ui <- page_fluid(
+  card(
+    max_height = 200,
+    full_screen = TRUE,
+    card_header("A dynamically rendered plot"),
+    plotOutput("plot_id")
+  )
+)
+
+# Server logic
+server <- function(input, output, session) {
+  output$plot_id <- renderPlot({
+    info <- getCurrentOutputInfo()
+    if (info$height() > 600) {
+      # code for "large" plot
+    } else {
+      # code for "small" plot
+    }
+  })
+}
+
+shinyApp(ui, server)
+```
+
+#### [Sidebars](https://rstudio.github.io/bslib/articles/sidebars/index.html)
+
+有三种主要的侧边栏布局类型：浮动、填充和多页/标签。本身函数的使用没有变化，主要是看结合什么其他页面布局控件使用。
+
+* Floating layout
+
+```r
+layout_sidebar(
+  sidebar = sidebar("Sidebar"),
+  "Main contents"
+)
+
+card(
+  full_screen = TRUE,
+  card_header("Title"),
+  layout_sidebar(
+    sidebar = sidebar("Sidebar"),
+    "Main contents"
+  )
+)
+```
+
+* Filling layout
+
+```r
+page_fillable(
+  layout_sidebar(
+    sidebar = sidebar("Sidebar area"),
+    "Main area"
+  )
+)
+```
+
+* Multi-page layout
+
+```r
+page_navbar(
+  sidebar = sidebar("Sidebar"),
+  nav_panel("Page 1", "Page 1 content"),
+  nav_panel("Page 2", "Page 2 content")
+)
+
+navset_card_tab(
+  sidebar = sidebar("Sidebar"),
+  nav_panel("Tab 1", "Tab 1 content"),
+  nav_panel("Tab 2", "Tab 2 content")
+)
+```
+
+> 如果确实希望在每一页都显示相同的侧边栏，通常可以通过 conditionalPanel() 函数在某些页面上隐藏/显示侧边栏内容来帮助实现。
+
+##### layout\_sidebar()
+
+```r
+sidebar_diamonds <- layout_sidebar(
+  sidebar = filters[[1]],
+  plots[[1]]
+)
+
+sidebar_quakes <- layout_sidebar(
+  sidebar = map_filter,
+  map_quakes
+)
+
+page_fillable(
+  sidebar_diamonds,
+  card(
+    card_header("Earthquakes"),
+    sidebar_quakes
+  )
+)
+```
+
+##### Multi-page varied layout
+
+```r
+page_navbar(
+  title = "Sidebar demo",
+  fillable = "Earthquakes",
+  nav_panel("Earthquakes", sidebar_quakes),
+  nav_panel(
+    "Diamonds",
+    Map(
+      function(filter, plot) {
+        card(
+          full_screen = TRUE,
+          layout_sidebar(sidebar = filter, plot)
+        )
+      },
+      filters, plots
+    )
+  )
+)
+```
+
+> 如果有大量侧边栏/主内容，请考虑通过card()指定高度或max\_height（以及设置full\_screen = TRUE以减少滚动需求）。
+
+##### Conditional contents
+
+有时在多页/标签设置中，在每个页/标签上有一个侧边栏很有用，但其内容会根据哪个页/标签是活动状态而变化。多亏了conditionalPanel()，在Shiny应用中使用page\_navbar()（或在navset\_card\_tab()/navset\_tab\_pill()）可以相当容易地实现这一点。诀窍是向page\_navbar()提供一个id，然后在conditionalPanel()中引用该id。
+
+```r
+shinyApp(
+  page_navbar(
+    title = "Conditional sidebar",
+    id = "nav",
+    sidebar = sidebar(
+      conditionalPanel(
+        "input.nav === 'Page 1'",
+        "Page 1 sidebar"
+      ),
+      conditionalPanel(
+        "input.nav === 'Page 2'",
+        "Page 2 sidebar"
+      )
+    ),
+    nav_panel("Page 1", "Page 1 contents"),
+    nav_panel("Page 2", "Page 2 contents")
+  ),
+  server = function(...) {
+    # no server logic required
+  }
+)
+```
+
+为了以编程方式更新（和/或主动读取）sidebar()的打开/关闭状态，请提供一个ID并在服务代码中引用该ID。在这里，我们使用该ID以编程方式在第二页打开sidebar。
+
+```r
+library(shiny)
+
+ui <- page_navbar(
+  title = "Sidebar updates",
+  id = "nav",
+  sidebar = sidebar(
+    id = "sidebar",
+    open = FALSE,
+    "Sidebar"
+  ),
+  nav_panel("Page 1", "Sidebar closed. Go to Page 2 to open."),
+  nav_panel("Page 2", "Sidebar open. Go to Page 1 to close.")
+)
+
+server <- function(input, output) {
+  observe({
+    sidebar_toggle(
+      id = "sidebar",
+      open = input$nav == "Page 2"
+    )
+  })
+}
+
+shinyApp(ui, server)
+```
+
+##### Accordions
+
+所有侧边栏对可折叠面板有特殊处理。当一个可折叠面板accordion()直接出现在侧边栏内（作为侧边栏的直接子元素）时，可折叠面板将平齐于侧边栏渲染，提供了一种方便的方式将多个相关输入控件分组在可折叠部分下。
+
+```r
+accordion_filters <- accordion(
+  accordion_panel(
+    "Dropdowns", icon = bsicons::bs_icon("menu-app"),
+    !!!filters
+  ),
+  accordion_panel(
+    "Numerical", icon = bsicons::bs_icon("sliders"),
+    filter_slider("depth", "Depth", dat, ~depth),
+    filter_slider("table", "Table", dat, ~table)
+  )
+)
+
+card(
+  card_header("Groups of diamond filters"),
+  layout_sidebar(
+    sidebar = accordion_filters,
+    plots[[1]]
+  )
+)
+```
+
+##### Nested sidebars
+
+可以嵌套侧边栏布局，这意味着可以在给定布局中有效地拥有任意数量的左侧和/或右侧边栏。在这样做的时候，我们希望每个包含 layout\_sidebar() 的 layout\_sidebar() 的主要内容区域是可填充的，并且没有内边距（class = "p-0"）。
+
+```r
+page_fillable(
+  h1("Left and right sidebar", class = "px-3 my-3"),
+  layout_sidebar(
+    sidebar = sidebar("Left sidebar"),
+    layout_sidebar(
+        sidebar = sidebar("Right sidebar", position = "right", open = FALSE),
+        "Main contents",
+        border = FALSE
+    ),
+    border_radius = FALSE,
+    fillable = TRUE,
+    class = "p-0"
+  )
+)
+```
+
+#### [Value Boxes](https://rstudio.github.io/bslib/articles/value-boxes/index.html)
+
+> value box 是通过 card 实现的。
+
+* 可以利用 [Box App](https://bslib.shinyapps.io/build-a-box/) 探索创建 value box 界面代码。
+
+##### Hello value\_box()
+
+与  bsicons 配合使用。也能使用 fontawesome 或 icons 包。
+
+```r
+value_box(
+  title = "I got",
+  value = "99 problems",
+  showcase = bs_icon("music-note-beamed"),
+  p("bslib ain't one", bs_icon("emoji-smile")),
+  p("hit me", bs_icon("suit-spade"))
+)
+
+value_box(
+  title = "I got",
+  value = "99 problems",
+  showcase = bs_icon("music-note-beamed"),
+  showcase_layout = "top right",
+  theme = "secondary",
+  p("bslib ain't one", bs_icon("emoji-smile")),
+  p("hit me", bs_icon("suit-spade"))
+)
+```
+
+#### 动态生成显示内容
+
+```r
+ui <- page_fixed(
+  value_box(
+    title = "The current time",
+    value = textOutput("time"),
+    showcase = bs_icon("clock")
+  )
+)
+
+server <- function(input, output) {
+  output$time <- renderText({
+    invalidateLater(1000)
+    format(Sys.time())
+  })
+}
+
+shinyApp(ui, server)
+```
+
+##### 多个 value box
+
+与 layout\_column\_wrap() 或者 layout\_columns() 搭配使用。
+
+```r
+vbs <- list(
+  value_box(
+    title = "1st value",
+    value = "123",
+    showcase = bs_icon("bar-chart"),
+    theme = "purple",
+    p("The 1st detail")
+  ),
+  value_box(
+    title = "2nd value",
+    value = "456",
+    showcase = bs_icon("graph-up"),
+    theme = "teal",
+    p("The 2nd detail"),
+    p("The 3rd detail")
+  ),
+  value_box(
+    title = "3rd value",
+    value = "789",
+    showcase = bs_icon("pie-chart"),
+    theme = "pink",
+    p("The 4th detail"),
+    p("The 5th detail"),
+    p("The 6th detail")
+  )
+)
+
+layout_column_wrap(
+  width = "250px",
+  !!!vbs
+)
+```
+
+与图形组合显示：
+
+```r
+page_fillable(
+  layout_column_wrap(
+    width = "250px",
+    fill = FALSE,
+    vbs[[1]], vbs[[2]]
+  ),
+  card(
+    min_height = 200,
+    plotly::plot_ly(x = rnorm(100))
+  )
+)
+```
+
+##### Expandable sparklines
+
+```r
+library(plotly)
+
+sparkline <- plot_ly(economics) %>%
+  add_lines(
+    x = ~date, y = ~psavert,
+    color = I("white"), span = I(1),
+    fill = 'tozeroy', alpha = 0.2
+  ) %>%
+  layout(
+    xaxis = list(visible = F, showgrid = F, title = ""),
+    yaxis = list(visible = F, showgrid = F, title = ""),
+    hovermode = "x",
+    margin = list(t = 0, r = 0, l = 0, b = 0),
+    font = list(color = "white"),
+    paper_bgcolor = "transparent",
+    plot_bgcolor = "transparent"
+  ) %>%
+  config(displayModeBar = F) %>%
+  htmlwidgets::onRender(
+    "function(el) {
+      el.closest('.bslib-value-box')
+        .addEventListener('bslib.card', function(ev) {
+          Plotly.relayout(el, {'xaxis.visible': ev.detail.fullScreen});
+        })
+    }"
+  )
+
+
+value_box(
+  title = "Personal Savings Rate",
+  value = "7.6%",
+  p("Started at 12.6%"),
+  p("Averaged 8.6% over that period"),
+  p("Peaked 17.3% in May 1975"),
+  showcase = sparkline,
+  full_screen = TRUE,
+  theme = "success"
+)
+```
+
+> 请注意，由于此示例是静态渲染的（在Shiny之外），我们使用htmlwidgets::onRender()来添加一些JavaScript，其有效地说：“当图表高度超过200像素时显示x轴；否则，隐藏它”。
+>
+> 那些不想编写JavaScript的你们可以通过shiny::getCurrentOutputInfo()实现类似的行为（即根据大小显示不同的图表），如文章在卡片部分所述。实际上，这里是一个Shiny应用的源代码，它有效地做了同样的事情，没有任何JavaScript（注意它如何利用其他getCurrentOutputInfo()值来避免将“白色”硬编码到Sparklines的颜色中）。
+
+#### [Tooltips & Popovers](https://rstudio.github.io/bslib/articles/tooltips-popovers/index.html)
+
+工具提示和弹出框是一种有用的方式，既可以以非干扰性的方式显示（工具提示）额外信息，也可以与之交互（弹出框）。以下激励示例将这些组件应用于实现一些有用的模式：
+
+1. 将tooltip()附加到卡片头部(card\_header())中的“提示”图标上，使用户能够了解正在可视化的数据。
+2. 将popover()附加到卡片头部(card\_header())中的“设置”图标上，使用户能够控制可视化的参数。
+3. 将popover()附加到卡片底部(card\_footer())中的链接上，这不仅便于显示更多信息，还允许用户与该信息进行更多交互（例如，超链接）。
+
+##### 基础
+
+tooltip:
+
+```r
+actionButton(
+  "btn_tip",
+  "Focus/hover here for tooltip"
+) |>
+  tooltip("Tooltip message")
+```
+
+popover:
+
+```r
+actionButton(
+  "btn_pop", 
+  "Click here for popover"
+) |>
+  popover(
+    "Popover message",
+    title = "Popover title"
+  )
+```
+
+最常用的方式，结合图标：
+
+```r
+# 文字和图标触发
+tooltip(
+  span(
+    "This text does trigger",
+    bs_icon("info-circle")
+  ),
+  "Tooltip message",
+  placement = "bottom"
+)
+
+
+# 图标触发
+span(
+  "This text doesn't trigger",
+  tooltip(
+    bs_icon("info-circle"),
+    "Tooltip message",
+    placement = "bottom"
+  )
+)
+```
+
+结合输入控件的 label：
+
+```r
+textInput(
+  "txt",
+  label = tooltip(
+    trigger = list(
+      "Input label",
+      bs_icon("info-circle")
+    ),
+    "Tooltip message"
+  )
+)
+```
+
+##### 在 card 中使用
+
+结合 card：
+
+```r
+card(
+  card_header(
+    "Card header",
+    tooltip(
+      bs_icon("info-circle"),
+      "Tooltip message"
+    )
+  ),
+  "Card body..."
+)
+```
+
+结合 card 和输入控件（很常用）：
+
+```r
+gear <- popover(
+  bs_icon("gear"),
+  textInput("txt", NULL, "Enter input"),
+  title = "Input controls"
+)
+
+card(
+  card_header(
+    "Card header", gear,
+    class = "d-flex justify-content-between"
+  ),
+  "Card body..."
+)
+```
+
+引入超链接：
+
+```r
+foot <- popover(
+  actionLink("link", "Card footer"),
+  "Here's a ",
+  a("hyperlink", href = "https://google.com")
+)
+
+card(
+  card_header("Card header"),
+  "Card body...",
+  card_footer(foot)
+)
+```
+
+##### 可编辑 card header
+
+```r
+ui <- page_fixed(
+  card(
+    card_header(
+      popover(
+        uiOutput("card_title", inline = TRUE),
+        title = "Provide a new title",
+        textInput("card_title", NULL, "An editable title")
+      )
+    ), 
+    "The card body..."
+  )
+)
+
+server <- function(input, output) {
+  output$card_title <- renderUI({
+    list(
+      input$card_title, 
+      bsicons::bs_icon("pencil-square")
+    )
+  })
+}
+
+shinyApp(ui, server)
+```
+
+##### 可编程控制显示
+
+```r
+library(shiny)
+
+ui <- page_fixed(
+  "Here's a tooltip:",
+  tooltip(
+    bsicons::bs_icon("info-circle"),
+    "Tooltip message", 
+    id = "tooltip"
+  ),
+  actionButton("show_tooltip", "Show tooltip"),
+  actionButton("hide_tooltip", "Hide tooltip")
+)
+
+server <- function(input, output) {
+  observeEvent(input$show_tooltip, {
+    toggle_tooltip("tooltip", show = TRUE)
+  })
+
+  observeEvent(input$hide_tooltip, {
+    toggle_tooltip("tooltip", show = FALSE)
+  })
+}
+
+shinyApp(ui, server)
+```
+
+更新内容：
+
+```r
+library(shiny)
+
+ui <- page_fixed(
+  "Here's a tooltip:",
+  tooltip(
+    bsicons::bs_icon("info-circle"),
+    "Tooltip message",
+    id = "tooltip"
+  ),
+  textInput("tooltip_msg", NULL, "Tooltip message")
+)
+
+server <- function(input, output) {
+  observeEvent(input$tooltip_msg, {
+    update_tooltip("tooltip", input$tooltip_msg)
+  })
+}
+
+shinyApp(ui, server)
+```
+
+##### Popovers vs modals
+
+那些已经熟悉Shiny的modalDialog()/showModal()的人可能会想知道何时使用popover()更合适。一般来说，modalDialog()更适合“阻塞”交互（即，用户在与其他任何内容交互之前必须或应该与模态框交互）。相比之下，popover()更适合“非阻塞”交互（即，用户可以同时与popover和其他UI元素交互）。话虽如此，popover并不总是很好地扩展到更大的消息/菜单。在这些情况下，可以考虑使用[offcanvas菜单](https://getbootstrap.com/docs/5.3/components/offcanvas/)（bslib目前不支持offcanvas菜单，但它已在开发路线图上）。
+
+## [shiny.router | A minimalistic router for your Shiny apps](https://appsilon.github.io/shiny.router/index.html)
+
+```r
+library(shiny)
+library(shiny.router)
+
+root_page <- div(h2("Root page"))
+other_page <- div(h3("Other page"))
+
+ui <- fluidPage(
+  title = "Router demo",
+  router_ui(
+    route("/", root_page),
+    route("other", other_page)
+  )
+)
+
+server <- function(input, output, session) {
+  router_server()
+}
+
+shinyApp(ui, server)
+```
+
+> 目前的经验是一定会先跳到主页面，然后弹到对应的标签，有点页面标签的感觉（可能跟 shiny 框架也有关系？）。
+> 因此在跳转上有性能开销
+
+### Basics
+
+* [examples](https://github.com/Appsilon/shiny.router/tree/master/examples)
+
+Use `get_query_param` to catch parameters from URL.
+
+```r
+server <- function(input, output, session) {
+  router_server()
+
+  component <- reactive({
+    if (is.null(get_query_param()$add)) {
+      return(0)
+    }
+    as.numeric(get_query_param()$add)
+  })
+
+  output$power_of_input <- renderUI({
+    HTML(paste(
+      "I display input increased by <code>add</code> GET parameter from app url and pass result to <code>output$power_of_input</code>: ",
+      as.numeric(input$int) + component()))
+  })
+}
+```
+
+### Use in Rhino
+
+1. Import shiny.router functions:
+
+```r
+# app/main.R
+
+box::use(
+  shiny[bootstrapPage, moduleServer, NS],
+  shiny.router[router_ui, router_server, route]
+)
+
+...
+```
+
+2. Wrap UI modules in router\_ui:
+
+3. Add router\_server to the server part of the main module:
+
+```r
+# app/main.R
+
+box::use(
+  shiny[bootstrapPage, moduleServer, NS],
+  shiny.router[router_ui, router_server, route]
+)
+
+box::use(
+  app/view/chart,
+  app/view/table,
+)
+
+#' @export
+ui <- function(id) {
+  ns <- NS(id)
+
+  bootstrapPage(
+    router_ui(
+      route("table", table$ui(ns("table"))),
+      route("chart", chart$ui(ns("chart")))
+    )
+  )
+}
+
+#' @export
+server <- function(id) {
+  moduleServer(id, function(input, output, session) {
+    router_server("table")
+
+    data <- rhino::rhinos
+
+    table$server("table", data = data)
+    chart$server("chart", data = data)
+  })
+}
+```
+
+Each module needs to be called inside the route function.
+We had to provide the default route (“table”) that will be displayed once someone opens the application.
+
+4. Change pages from UI (navigation)
+
+> Use `route_link()` & navbar
+
+```r
+# app/main.R
+
+box::use(
+  shiny[a, bootstrapPage, moduleServer, tags, NS],
+  shiny.router[router_ui, router_server, route, route_link],
+)
+
+box::use(
+  app/view/chart,
+  app/view/table,
+)
+
+#' @export
+ui <- function(id) {
+  ns <- NS(id)
+
+  bootstrapPage(
+    tags$nav(
+      class = "navbar",
+      tags$ul(
+        class = "nav navbar-nav",
+        tags$li(
+          a("Table", href = route_link("table"))
+        ),
+        tags$li(
+          a("Chart", href = route_link("chart"))
+        )
+      )
+    ),
+    router_ui(
+      route("table", table$ui(ns("table"))),
+      route("chart", chart$ui(ns("chart")))
+    )
+  )
+}
+
+...
+```
+
+5. [Change pages from the server, by `change_page()`](https://appsilon.github.io/shiny.router/articles/rhino.html#change-pages-from-the-server)
+
+6. [Read or update query parameters](https://appsilon.github.io/shiny.router/articles/rhino.html#query-parameters)
+
+7. [404 page](https://appsilon.github.io/shiny.router/articles/rhino.html#page)
+
+```r
+router_ui(
+      route("/", intro$ui(ns("intro"))),
+      route("table", table$ui(ns("table"))),
+      route("chart", chart$ui(ns("chart"))),
+      page_404 = page_404$ui(ns("page_404"))
+    )
+```
+
+## [reactable.extras](https://appsilon.github.io/reactable.extras/index.html)
+
+之前在 shiny 开发使用过 [reactable](https://glin.github.io/reactable/index.html)，有非常多很棒的特性。在查阅时，发现了[reactable.extras](https://appsilon.github.io/reactable.extras/index.html)，组合两者将能实现更丰富的特性，特别是 [Server-Side Processing](https://appsilon.github.io/reactable.extras/articles/tutorial/server-side-processing.html)，**我会着重探索和学习下相关的经验**。
+
+## [data.validator](https://appsilon.github.io/data.validator/) - 使用数据前进行校验
+
+这种比较应该适合来自数据库（或者类似数据操作结果）的流数据。
+
+![](https://appsilon.github.io/data.validator/reference/figures/workflow.png)
+
+## [shiny.react](https://appsilon.github.io/shiny.react/index.html)
+
+> shiny.fluent, shiny.blueprint 基于它构建，可以用类似的特性。
+
+There are three steps to add a React component to your Rhino application:
+
+1. Define the component using [JSX](https://react.dev/learn/writing-markup-with-jsx).
+2. Declare the component in R.
+3. Use the component in your application.
+
+[Example: add a simple Reveal component](https://appsilon.github.io/rhino/articles/tutorial/use-react-in-rhino.html#defining-the-component).
+
+## [Tapyr - Shiny for Python Application Template](https://appsilon.github.io/tapyr-docs/)
+
+看着像是 rhino 的 Python 类似物，如果需要可以推荐探索下使用。
+
+## [shiny.i18n](https://appsilon.github.io/shiny.i18n/) - 国际化翻译
+
+## [shiny.semantic](https://appsilon.github.io/shiny.semantic/index.html)
+
+诸多控件的新语义化实现，看起来非常值得尝试，通过 reference 和 [components](https://connect.appsilon.com/shiny-semantic-components/) 可以检索和了解使用。
+
+```r
+library(shiny.semantic)
+ui <- semanticPage(
+  div(class = "ui raised segment",
+    div(
+      a(class="ui green ribbon label", "Link"),
+      p("Lorem ipsum, lorem ipsum, lorem ipsum"),
+      actionButton("button", "Click")
+    )
+  )
+)
+```
+
+* [Fomantic UI documentation](https://fomantic-ui.com/introduction/getting-started.html)
+* 注意这是一套完全与 bootstrap 的 UI 系统，所以不推荐组合使用（默认 bootstrap 关闭），因而尝试它就得要有取舍了。
+
+## [shiny.gosling | R Shiny wrapper for Gosling.js - Grammar-based Toolkit for Scalable and Interactive Genomics Data Visualization](https://appsilon.github.io/shiny.gosling/)
+
+Gosling.js 是一个很强大的交互式可视化基因组数据的工具，[这里](https://gosling-lang.org/examples/)提供了很多示例，非常惊艳，如果想结合 web 和基因组数据做一些工作，是非常值得尝试和深入学习的。
+
+* [shiny.gosling 示例](https://github.com/Appsilon/shiny.gosling/tree/main/inst/examples)
+
+## [shiny.fluent | Microsoft Fluent UI for Shiny Apps](https://appsilon.github.io/shiny.fluent/)
+
+> You should expect using shiny.fluent to be somewhat more complex than vanilla Shiny or shiny.semantic (at some point you will likely want to browse the original Fluent UI documentation), but you get more power, flexibility and better UI in return.
+
+Use `shiny.fluent::runExample()` to list all available examples.
+
+* [Build a Rhino application using shiny.fluent](https://appsilon.github.io/shiny.fluent/articles/st-shiny-fluent-and-rhino.html)
