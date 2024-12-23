@@ -1,0 +1,73 @@
+---
+title: Ubuntu 限制服务器用户计算资源
+author: Shixiang Wang
+date: 2024-12-23
+categories: [Linux]
+draft: false
+description: ''
+
+toc: true
+
+format:
+  html:
+    code-fold: false
+    code-overflow: wrap
+    code-tools: false
+---
+
+服务器是公共计算资源，在管理自己的服务器时发现学生可能会使用过多资源，从而影响其他人，这不太好。因此，检索了网络上当前在这一块怎么进行配置的情况，我使用的是 Ubuntu，实际测试后发现很多设计cgroup的教程都没起到作用（搞不清为啥），最后在一篇博文找到了合适的配置方式，这里记录下。
+
+
+首先创建所谓的用户 slice 配置目录：
+
+```sh
+mkdir -p /etc/systemd/system/user-.slice.d
+```
+
+然后创建文件 `/etc/systemd/system/user-.slice.d/50-memory.conf`（`50-memory`是自定义的），输入以下内容：
+
+```sh
+[Slice]
+MemoryMax=512G
+CPUQuota=10000%
+```
+
+::: {.callout-note}
+这里根据自己的需求进行配置，CPU是按`100%`进行设置的，这里`10000%`就是100线程了。
+:::
+
+重载守护进程：
+
+```sh
+systemctl daemon-reload
+```
+
+可以检查配置的生效，如：
+
+```sh
+cat /sys/fs/cgroup/user.slice/user-1006.slice/memory.max
+cat /sys/fs/cgroup/user.slice/user-1006.slice/cpu.max
+cat /etc/systemd/system/user-.slice.d/50-memory.conf
+```
+
+我还用 AI 生成了一段测试代码 `test_limit.sh`：
+
+```sh
+#!/bin/bash
+
+function cpu_load {
+    end=$((SECONDS+60))
+    while [ $SECONDS -lt $end ]; do
+        : # Do nothing and burn up CPU by going around the loop as fast as possible
+    done &
+}
+
+for i in {1..180}; do
+    cpu_load
+done
+
+wait
+```
+
+- 参考：<https://pavlokhmel.com/cgroup-v2-limit-memory-and-cpu-usage-for-all-users-on-linux.html>
+

@@ -10,7 +10,174 @@
 <atom:link href="https://shixiangwang.github.io/index.xml" rel="self" type="application/rss+xml"/>
 <description>Reasoning is a blog dedicated to exploring the intersection of data science, bioinformatics, and personal insights.</description>
 <generator>quarto-1.5.57</generator>
-<lastBuildDate>Mon, 02 Dec 2024 16:00:00 GMT</lastBuildDate>
+<lastBuildDate>Sun, 22 Dec 2024 16:00:00 GMT</lastBuildDate>
+<item>
+  <title>Ubuntu 限制服务器用户计算资源</title>
+  <dc:creator>Shixiang Wang</dc:creator>
+  <link>https://shixiangwang.github.io/posts/2024-12-23-limit-resource-of-user-in-ubuntu/</link>
+  <description><![CDATA[ 
+
+
+
+
+
+<p>服务器是公共计算资源，在管理自己的服务器时发现学生可能会使用过多资源，从而影响其他人，这不太好。因此，检索了网络上当前在这一块怎么进行配置的情况，我使用的是 Ubuntu，实际测试后发现很多设计cgroup的教程都没起到作用（搞不清为啥），最后在一篇博文找到了合适的配置方式，这里记录下。</p>
+<p>首先创建所谓的用户 slice 配置目录：</p>
+<div class="sourceCode" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">mkdir</span> <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">-p</span> /etc/systemd/system/user-.slice.d</span></code></pre></div>
+<p>然后创建文件 <code>/etc/systemd/system/user-.slice.d/50-memory.conf</code>（<code>50-memory</code>是自定义的），输入以下内容：</p>
+<div class="sourceCode" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><span class="ex" style="color: null;
+background-color: null;
+font-style: inherit;">[Slice]</span></span>
+<span id="cb2-2"><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">MemoryMax</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>512G</span>
+<span id="cb2-3"><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">CPUQuota</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>10000%</span></code></pre></div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>这里根据自己的需求进行配置，CPU是按<code>100%</code>进行设置的，这里<code>10000%</code>就是100线程了。</p>
+</div>
+</div>
+<p>重载守护进程：</p>
+<div class="sourceCode" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><span class="ex" style="color: null;
+background-color: null;
+font-style: inherit;">systemctl</span> daemon-reload</span></code></pre></div>
+<p>可以检查配置的生效，如：</p>
+<div class="sourceCode" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">cat</span> /sys/fs/cgroup/user.slice/user-1006.slice/memory.max</span>
+<span id="cb4-2"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">cat</span> /sys/fs/cgroup/user.slice/user-1006.slice/cpu.max</span>
+<span id="cb4-3"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">cat</span> /etc/systemd/system/user-.slice.d/50-memory.conf</span></code></pre></div>
+<p>我还用 AI 生成了一段测试代码 <code>test_limit.sh</code>：</p>
+<div class="sourceCode" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#!/bin/bash</span></span>
+<span id="cb5-2"></span>
+<span id="cb5-3"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">function</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;"> cpu_load</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">{</span></span>
+<span id="cb5-4">    <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">end</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">$((SECONDS</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">60</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">))</span></span>
+<span id="cb5-5">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">while</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">[</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">$SECONDS</span> <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">-lt</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">$end</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">]</span><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">;</span> <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">do</span></span>
+<span id="cb5-6">        <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">:</span> <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Do nothing and burn up CPU by going around the loop as fast as possible</span></span>
+<span id="cb5-7">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">done</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">&amp;</span></span>
+<span id="cb5-8"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">}</span></span>
+<span id="cb5-9"></span>
+<span id="cb5-10"><span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">for</span> i <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">in</span> <span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">{</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span><span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">..</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">180</span><span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">}</span><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">;</span> <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">do</span></span>
+<span id="cb5-11">    <span class="ex" style="color: null;
+background-color: null;
+font-style: inherit;">cpu_load</span></span>
+<span id="cb5-12"><span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">done</span></span>
+<span id="cb5-13"></span>
+<span id="cb5-14"><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">wait</span></span></code></pre></div>
+<ul>
+<li>参考：<a href="https://pavlokhmel.com/cgroup-v2-limit-memory-and-cpu-usage-for-all-users-on-linux.html" class="uri">https://pavlokhmel.com/cgroup-v2-limit-memory-and-cpu-usage-for-all-users-on-linux.html</a></li>
+</ul>
+
+
+
+ ]]></description>
+  <category>Linux</category>
+  <guid>https://shixiangwang.github.io/posts/2024-12-23-limit-resource-of-user-in-ubuntu/</guid>
+  <pubDate>Sun, 22 Dec 2024 16:00:00 GMT</pubDate>
+</item>
 <item>
   <title>rhino 和 shiny 开发笔记</title>
   <dc:creator>Shixiang Wang</dc:creator>
@@ -7142,35 +7309,6 @@ font-style: inherit;">.fastq"</span>)</span></code></pre></div>
   <category>note</category>
   <guid>https://shixiangwang.github.io/posts/2024-02-28-snakemake-basics/</guid>
   <pubDate>Tue, 27 Feb 2024 16:00:00 GMT</pubDate>
-</item>
-<item>
-  <title>Can I run VS Code Server on older Linux distributions</title>
-  <dc:creator>Shixiang Wang</dc:creator>
-  <link>https://shixiangwang.github.io/posts/2024-02-25-can-i-run-vs-code-server-on-older-linux-distributions/</link>
-  <description><![CDATA[ 
-
-
-
-
-
-<p>VSCode 的不断更新导致最新版本 Remotes 已经在一些 Linux server 上不再支持，这里记录下官方的解决办法，就是将版本降级到 1.85</p>
-<ul>
-<li><a href="https://code.visualstudio.com/docs/remote/faq#_can-i-run-vs-code-server-on-older-linux-distributions" class="uri">https://code.visualstudio.com/docs/remote/faq#_can-i-run-vs-code-server-on-older-linux-distributions</a></li>
-<li><a href="https://code.visualstudio.com/updates/v1_85" class="uri">https://code.visualstudio.com/updates/v1_85</a></li>
-</ul>
-<p>Downloads: Windows: <a href="https://update.code.visualstudio.com/1.85.2/win32-x64-user/stable">x64</a> <a href="https://update.code.visualstudio.com/1.85.2/win32-arm64-user/stable">Arm64</a> | Mac: <a href="https://update.code.visualstudio.com/1.85.2/darwin-universal/stable">Universal</a> <a href="https://update.code.visualstudio.com/1.85.2/darwin/stable">Intel</a> <a href="https://update.code.visualstudio.com/1.85.2/darwin-arm64/stable">silicon</a> | Linux: <a href="https://update.code.visualstudio.com/1.85.2/linux-deb-x64/stable">deb</a> <a href="https://update.code.visualstudio.com/1.85.2/linux-rpm-x64/stable">rpm</a> <a href="https://update.code.visualstudio.com/1.85.2/linux-x64/stable">tarball</a> <a href="https://code.visualstudio.com/docs/supporting/faq#_previous-release-versions">Arm</a> <a href="https://update.code.visualstudio.com/1.85.2/linux-snap-x64/stable">snap</a></p>
-<blockquote class="blockquote">
-<p>Depending on your platform, make sure to disable updates to stay on that version. A good recommendation is to have release 1.85 as a separate installation, set up with Portable Mode（就是独立的软件目录）.</p>
-<p>Portable mode is supported on the ZIP download for Windows, and the TAR.GZ download for Linux, as well as the regular Application download for macOS. See the Download page to find the correct .zip / .tar.gz file for your platform.</p>
-</blockquote>
-
-
-
- ]]></description>
-  <category>Linux</category>
-  <category>note</category>
-  <guid>https://shixiangwang.github.io/posts/2024-02-25-can-i-run-vs-code-server-on-older-linux-distributions/</guid>
-  <pubDate>Sat, 24 Feb 2024 16:00:00 GMT</pubDate>
 </item>
 </channel>
 </rss>
