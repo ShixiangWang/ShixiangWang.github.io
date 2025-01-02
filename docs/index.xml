@@ -12,6 +12,28 @@
 <generator>quarto-1.5.57</generator>
 <lastBuildDate>Wed, 01 Jan 2025 16:00:00 GMT</lastBuildDate>
 <item>
+  <title>2025 Flag</title>
+  <dc:creator>Shixiang Wang</dc:creator>
+  <link>https://shixiangwang.github.io/posts/2025-01-02-flags-of-2025/</link>
+  <description><![CDATA[ 
+
+
+
+
+
+<p>一元复始，万象归一。</p>
+<p>一年之初，又是立 flag 的好时候。最近接近年关，不知怎的，身心最近总有种疲惫感。懒惰，不想动，腰和眼睛都不舒服，脑子也容易疲惫。 早上签一个文件时，突然发现自己也写 2025 年了，不知不觉来到中南已经有半年了，现在回想有一种迷茫感。</p>
+<p>暂且给工作立一个 flag 吧，把自己支棱起来，人还是要有目标的：希望新的一年里能够以主要作者发表5篇左右的论文，以学校为单位申请一项软著。合同里许多写下的条件还是得慢慢搞起来啊，哪怕条件比预想的要困难许多。人需要天真，但经历事情又不能太天真，学校是一个不错的地方，不管怎样都要好好干着。</p>
+<p>GO!!!争取扎根和自我创造。</p>
+
+
+
+ ]]></description>
+  <category>journal</category>
+  <guid>https://shixiangwang.github.io/posts/2025-01-02-flags-of-2025/</guid>
+  <pubDate>Wed, 01 Jan 2025 16:00:00 GMT</pubDate>
+</item>
+<item>
   <title>关于国自然进展报告的吐槽</title>
   <dc:creator>Shixiang Wang</dc:creator>
   <link>https://shixiangwang.github.io/posts/2025-01-02-nsf-progress-issue/</link>
@@ -6388,73 +6410,6 @@ font-style: inherit;">Reduce</span>(merge, combine)</span></code></pre></div>
   <category>stats</category>
   <guid>https://shixiangwang.github.io/posts/2024-04-11-type-1-2-errors/</guid>
   <pubDate>Wed, 10 Apr 2024 16:00:00 GMT</pubDate>
-</item>
-<item>
-  <title>R 设置编译选项</title>
-  <dc:creator>Shixiang Wang</dc:creator>
-  <link>https://shixiangwang.github.io/posts/2024-03-20-r-makevars-compiler-setting/</link>
-  <description><![CDATA[ 
-
-
-
-
-
-<p>在 R 中，特别是 CentOS Linux 进行包安装和编译时，需要使用比较新的 C/C++ 编译器，在 <code>~/.R/Makevars</code> 中作如下设置。</p>
-<div class="sourceCode" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">CC</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span>/opt/rh/devtoolset-9/root/usr/bin/gcc <span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">-fPIC</span></span>
-<span id="cb1-2"><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">CXX</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span>/opt/rh/devtoolset-9/root/usr/bin/g++ <span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">-std=c++11</span> <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">-fPIC</span></span>
-<span id="cb1-3"><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">CXX11</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span>/opt/rh/devtoolset-9/root/usr/bin/g++ <span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">-std=c++11</span> <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">-fPIC</span></span>
-<span id="cb1-4"><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">CXX14</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span>/opt/rh/devtoolset-9/root/usr/bin/g++ <span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">-std=c++14</span> <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">-fPIC</span></span>
-<span id="cb1-5"><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">CXX17</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span>/opt/rh/devtoolset-9/root/usr/bin/g++ <span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">-std=c++17</span> <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">-fPIC</span></span></code></pre></div>
-<blockquote class="blockquote">
-<p>一些情况下会加上 <code>-fopenmp</code> 选项。</p>
-</blockquote>
-<p>本文对之前所做记录 <a href="https://mp.weixin.qq.com/s/BoMEGabgWvjfETnIPPxJVA">CentOS/Redhat R包使用新的gcc编译【更新】</a> 的补全。</p>
-
-
-
- ]]></description>
-  <category>Linux</category>
-  <category>R</category>
-  <guid>https://shixiangwang.github.io/posts/2024-03-20-r-makevars-compiler-setting/</guid>
-  <pubDate>Tue, 19 Mar 2024 16:00:00 GMT</pubDate>
 </item>
 </channel>
 </rss>
