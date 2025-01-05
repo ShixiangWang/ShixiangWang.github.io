@@ -1,0 +1,20 @@
+---
+title: 随笔
+author: Shixiang Wang
+date: 2025-01-05
+categories: [journal]
+draft: false
+description: ''
+
+toc: true
+
+format:
+  html:
+    code-fold: false
+    code-overflow: wrap
+    code-tools: false
+---
+
+人不是逻辑的机器，而是情感的奴隶。
+
+

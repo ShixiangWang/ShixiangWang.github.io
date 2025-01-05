@@ -10,7 +10,26 @@
 <atom:link href="https://shixiangwang.github.io/index.xml" rel="self" type="application/rss+xml"/>
 <description>Reasoning is a blog dedicated to exploring the intersection of data science, bioinformatics, and personal insights.</description>
 <generator>quarto-1.5.57</generator>
-<lastBuildDate>Wed, 01 Jan 2025 16:00:00 GMT</lastBuildDate>
+<lastBuildDate>Sat, 04 Jan 2025 16:00:00 GMT</lastBuildDate>
+<item>
+  <title>随笔</title>
+  <dc:creator>Shixiang Wang</dc:creator>
+  <link>https://shixiangwang.github.io/posts/2025-01-05-random/</link>
+  <description><![CDATA[ 
+
+
+
+
+
+<p>人不是逻辑的机器，而是情感的奴隶。</p>
+
+
+
+ ]]></description>
+  <category>journal</category>
+  <guid>https://shixiangwang.github.io/posts/2025-01-05-random/</guid>
+  <pubDate>Sat, 04 Jan 2025 16:00:00 GMT</pubDate>
+</item>
 <item>
   <title>2025 Flag</title>
   <dc:creator>Shixiang Wang</dc:creator>
@@ -6365,51 +6384,6 @@ font-style: inherit;">Reduce</span>(merge, combine)</span></code></pre></div>
   <category>bioinformatics</category>
   <guid>https://shixiangwang.github.io/posts/2024-04-15-discordant-and-clipped-reads/</guid>
   <pubDate>Sun, 14 Apr 2024 16:00:00 GMT</pubDate>
-</item>
-<item>
-  <title>第一/二类型错误</title>
-  <dc:creator>Shixiang Wang</dc:creator>
-  <link>https://shixiangwang.github.io/posts/2024-04-11-type-1-2-errors/</link>
-  <description><![CDATA[ 
-
-
-
-
-
-<blockquote class="blockquote">
-<p>From Kimi</p>
-</blockquote>
-<p>在统计假设检验中，第一类错误和第二类错误是两种常见的错误类型，它们描述了在决策过程中可能出现的不同类型的错误。</p>
-<section id="第一类错误type-i-error" class="level3">
-<h3 class="anchored" data-anchor-id="第一类错误type-i-error">第一类错误（Type I Error）</h3>
-<p>第一类错误，也称为α错误，发生在我们错误地拒绝了一个真实的零假设（H0）。换句话说，当实际上零假设为真时，我们却得出结论认为它为假。这种情况下，我们认为观察到的效应是显著的，但实际上这种效应并不存在。</p>
-<p>例如，在药物测试中，如果一个新药物实际上没有疗效，但研究结果却错误地表明它有效，这就是犯了第一类错误。这种错误的风险通常与研究的显著性水平（α水平）相关，α水平是研究者事先设定的，用于决定何时拒绝零假设的概率阈值。</p>
-</section>
-<section id="第二类错误type-ii-error" class="level3">
-<h3 class="anchored" data-anchor-id="第二类错误type-ii-error">第二类错误（Type II Error）</h3>
-<p>第二类错误，也称为β错误，发生在我们错误地接受了零假设，即当实际上零假设为假时，我们却未能拒绝它。这意味着我们错过了发现真实效应的机会，得出结论认为没有效应，而实际上效应是存在的。</p>
-<p>继续上面药物测试的例子，如果一个新药物实际上是有效的，但研究结果未能显示出其疗效，从而得出结论认为它无效，这就是犯了第二类错误。这种错误的风险与研究的统计效力（power）有关，统计效力是指正确检测到真实效应的概率。</p>
-</section>
-<section id="错误类型的关系" class="level3">
-<h3 class="anchored" data-anchor-id="错误类型的关系">错误类型的关系</h3>
-<p>第一类错误和第二类错误之间存在权衡关系。降低第一类错误的风险（降低α水平）可能会增加第二类错误的风险（降低统计效力），反之亦然。研究者需要在设计研究时平衡这两种错误的风险，以确保研究结果的准确性和可靠性。</p>
-</section>
-<section id="其他错误类型" class="level3">
-<h3 class="anchored" data-anchor-id="其他错误类型">其他错误类型</h3>
-<p>除了第一类和第二类错误外，还有其他类型的错误，如：</p>
-<ul>
-<li>第三类错误：当研究者未能正确地识别和解释数据中的模式时发生的错误。</li>
-<li>第四类错误：在元分析或综合分析中，当研究者错误地将不同研究的结果合并时发生的错误。</li>
-</ul>
-<p>在进行统计分析和解释结果时，了解这些错误类型对于避免错误的结论和提高研究质量至关重要。</p>
-
-
-</section>
-
- ]]></description>
-  <category>stats</category>
-  <guid>https://shixiangwang.github.io/posts/2024-04-11-type-1-2-errors/</guid>
-  <pubDate>Wed, 10 Apr 2024 16:00:00 GMT</pubDate>
 </item>
 </channel>
 </rss>
