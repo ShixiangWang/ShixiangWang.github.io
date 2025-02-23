@@ -10,7 +10,129 @@
 <atom:link href="https://shixiangwang.github.io/index.xml" rel="self" type="application/rss+xml"/>
 <description>Reasoning is a blog dedicated to exploring the intersection of data science, bioinformatics, and personal insights.</description>
 <generator>quarto-1.5.57</generator>
-<lastBuildDate>Thu, 20 Feb 2025 16:00:00 GMT</lastBuildDate>
+<lastBuildDate>Sat, 22 Feb 2025 16:00:00 GMT</lastBuildDate>
+<item>
+  <title>肿瘤生信，研究科学还是技术？</title>
+  <dc:creator>Shixiang Wang</dc:creator>
+  <link>https://shixiangwang.github.io/posts/2025-02-23-science-or-tech-in-cancer-bioinformatics/</link>
+  <description><![CDATA[ 
+
+
+
+
+
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+提问
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>作为一个肿瘤生物信息学研究者，你觉得把研究精力和重点放在科学还是放在技术？</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-caution callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+深度思考
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>嗯，用户问的是作为肿瘤生物信息学研究者，应该把研究精力和重点放在科学还是技术上。首先，我需要理解这个问题的背景。肿瘤生物信息学结合了生物学、医学和信息学，特别是数据分析、算法开发等。科学和技术在这里可能指的是基础研究与应用技术之间的平衡。</p>
+<p>用户可能是一位刚进入该领域的研究者，或者正在规划研究方向的人。他们可能在纠结是深入探索生物学机制（科学）还是开发新的技术方法（技术）。需要考虑到两者的互补性，但也要根据个人兴趣、资源、职业目标来决定。</p>
+<p>接下来，我需要分析科学和技术的不同侧重点。科学方面可能包括发现新的肿瘤标志物、理解肿瘤发生机制等；技术方面可能涉及开发新的算法、工具，提高数据处理能力。同时，要考虑到肿瘤研究的复杂性，可能需要两者结合，比如用新技术解决科学问题。</p>
+<p>还要考虑当前领域的发展趋势。现在很多研究都强调转化医学，即从实验室到临床的应用，这可能需要技术和科学并重。另外，数据量的增加使得技术手段变得更重要，但科学问题仍然是核心。</p>
+<p>用户可能没有明确说出的是，他们可能担心侧重某一方面会影响职业发展，或者不知道哪个方向更有前景。需要指出两者的重要性，以及如何根据具体情况平衡，比如团队合作、跨学科合作的重要性。</p>
+<p>最后，总结时应该强调没有绝对答案，需根据个人情况、项目需求来决定，同时保持灵活，根据领域发展调整方向。可能还需要提到资金和资源的获取，技术可能更容易获得短期成果，而科学问题可能影响深远。</p>
+</div>
+</div>
+</div>
+<p>在肿瘤生物信息学领域，科学（生物学/医学问题）与技术（方法学/工具开发）的平衡是研究能否取得突破的关键。以下从不同角度分析这一问题的核心矛盾与解决思路：</p>
+<hr>
+<section id="科学是驱动技术的根本" class="level3">
+<h3 class="anchored" data-anchor-id="科学是驱动技术的根本"><strong>1. 科学是驱动技术的根本</strong></h3>
+<ul>
+<li><strong>科学问题的优先级</strong>：肿瘤研究的终极目标是理解疾病机制、开发诊疗手段。例如，单细胞测序技术的爆发式发展，本质上是因科学界对肿瘤异质性的探索需求驱动。</li>
+<li><strong>技术为科学服务</strong>：若脱离生物学意义，单纯优化算法（如提高1%的预测准确率）可能沦为“技术内卷”。例如，TCGA数据库的建立直接推动了癌症基因组学的范式变革。</li>
+<li><strong>临床转化的瓶颈</strong>：许多技术（如液体活检）因缺乏对肿瘤生物学（如ctDNA释放机制）的深入理解，导致临床应用受限。</li>
+</ul>
+<hr>
+</section>
+<section id="技术是突破科学边界的工具" class="level3">
+<h3 class="anchored" data-anchor-id="技术是突破科学边界的工具"><strong>2. 技术是突破科学边界的工具</strong></h3>
+<ul>
+<li><strong>技术决定科学上限</strong>：CRISPR技术彻底改变了功能基因组学研究，空间转录组技术让肿瘤微环境研究进入三维时代。没有技术支撑，科学问题可能长期停滞。</li>
+<li><strong>数据洪流倒逼技术创新</strong>：肿瘤多组学数据的复杂性（如10^6维度的单细胞数据）迫使研究者开发新的降维、整合算法。</li>
+<li><strong>技术先行的案例</strong>：AlphaFold虽非为肿瘤设计，但其对蛋白结构的预测能力直接加速了靶向药物开发。</li>
+</ul>
+<hr>
+</section>
+<section id="动态平衡策略" class="level3">
+<h3 class="anchored" data-anchor-id="动态平衡策略"><strong>3. 动态平衡策略</strong></h3>
+<section id="阶段化侧重" class="level4">
+<h4 class="anchored" data-anchor-id="阶段化侧重"><strong>（1）阶段化侧重</strong></h4>
+<ul>
+<li><strong>早期研究者</strong>：优先掌握核心技术（如单细胞分析流程、AI模型构建），建立方法论护城河。</li>
+<li><strong>成熟团队</strong>：需以重大科学问题为导向（如“肿瘤免疫逃逸的时空演化”），牵引技术定制化开发。</li>
+</ul>
+</section>
+<section id="选择战场" class="level4">
+<h4 class="anchored" data-anchor-id="选择战场"><strong>（2）选择战场</strong></h4>
+<ul>
+<li><strong>技术密集型领域</strong>：如空间多组学数据分析工具开发，需保持技术敏锐度。</li>
+<li><strong>科学攻坚领域</strong>：如非编码RNA在肿瘤代谢重编程中的作用，需深耕生物学机制。</li>
+</ul>
+</section>
+<section id="建立反馈闭环" class="level4">
+<h4 class="anchored" data-anchor-id="建立反馈闭环"><strong>（3）建立反馈闭环</strong></h4>
+<ul>
+<li><strong>从技术到科学</strong>：开发新型单细胞轨迹推断算法 → 揭示肿瘤干细胞分化路径。</li>
+<li><strong>从科学到技术</strong>：发现环状RNA促癌新机制 → 设计特异性circRNA检测工具。</li>
+</ul>
+<hr>
+</section>
+</section>
+<section id="避免常见误区" class="level3">
+<h3 class="anchored" data-anchor-id="避免常见误区"><strong>4. 避免常见误区</strong></h3>
+<ul>
+<li><strong>技术陷阱</strong>：盲目追求复杂模型（如过度使用深度学习），却无法解释生物学意义。</li>
+<li><strong>科学短视</strong>：重复已有实验设计，忽视技术创新带来的范式变革机会。</li>
+<li><strong>评价体系错位</strong>：纯技术论文可能获得高引用，但缺乏生物学洞见的研究难以推动临床进展。</li>
+</ul>
+<hr>
+</section>
+<section id="未来趋势判断" class="level3">
+<h3 class="anchored" data-anchor-id="未来趋势判断"><strong>5. 未来趋势判断</strong></h3>
+<ul>
+<li><strong>融合性领域崛起</strong>：空间多组学+AI驱动的肿瘤进化树构建，需同时突破技术和理论。</li>
+<li><strong>技术民主化挑战</strong>：云计算/AutoML降低技术门槛，科学问题的提出能力将更关键。</li>
+<li><strong>临床需求倒逼创新</strong>：CAR-T治疗耐药机制的解析需要结合单细胞测序（技术）与免疫代谢（科学）。</li>
+</ul>
+<hr>
+</section>
+<section id="结论构建科学-技术-临床三位一体模式" class="level3">
+<h3 class="anchored" data-anchor-id="结论构建科学-技术-临床三位一体模式"><strong>结论：构建“科学-技术-临床”三位一体模式</strong></h3>
+<p>建议采用“科学问题为锚点，技术创新为引擎，临床价值为终点”的策略。例如： 1. <strong>科学锚点</strong>：解析肿瘤耐药性演化规律<br>
+2. <strong>技术引擎</strong>：开发耐药克隆追踪算法（基于WGS+单细胞数据）<br>
+3. <strong>临床终点</strong>：设计动态监测治疗方案</p>
+<p>最终，研究者的核心价值在于：<strong>用技术解决别人看不到的科学问题，或用科学需求推动别人想不到的技术革新</strong>。</p>
+
+
+</section>
+
+ ]]></description>
+  <category>AI</category>
+  <guid>https://shixiangwang.github.io/posts/2025-02-23-science-or-tech-in-cancer-bioinformatics/</guid>
+  <pubDate>Sat, 22 Feb 2025 16:00:00 GMT</pubDate>
+</item>
 <item>
   <title>LLM 能否自举以及在生信结构数据中应用</title>
   <dc:creator>Shixiang Wang</dc:creator>
@@ -5496,758 +5618,6 @@ font-style: inherit;">=</span> [0. 1.]</span></code></pre></div>
   <category>journal</category>
   <guid>https://shixiangwang.github.io/posts/2024-04-29-random/</guid>
   <pubDate>Sun, 28 Apr 2024 16:00:00 GMT</pubDate>
-</item>
-<item>
-  <title>sratools networking issue</title>
-  <dc:creator>Shixiang Wang</dc:creator>
-  <link>https://shixiangwang.github.io/posts/2024-04-22-sratools-networking-issue/</link>
-  <description><![CDATA[ 
-
-
-
-
-
-<p>在使用 sratools 的 fastq-dump 时出现了成片的问题信息：</p>
-<div class="sourceCode" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">2024-04-22T01:38:42</span> fastq-dump.2.9.2 sys: connection failed while opening file within cryptographic module <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">-</span> mbedtls_ssl_handshake returned <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">-9984</span> <span class="er" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">(</span> <span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">X509</span> <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">-</span> Certificate verification failed, e.g. CRL, CA or signature check failed <span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">)</span></span>
-<span id="cb1-2"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">2024-04-22T01:38:42</span> fastq-dump.2.9.2 sys: mbedtls_ssl_get_verify_result returned 0x4008 <span class="er" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">(</span>  <span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">!!</span> The certificate is not correctly signed by the trusted CA  !! The certificate is signed with an unacceptable hash.  <span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">)</span></span>
-<span id="cb1-3"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">2024-04-22T01:38:42</span> fastq-dump.2.9.2 sys: connection failed while opening file within cryptographic module <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">-</span> ktls_handshake failed while accessing <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">'130.14.29.110'</span> from <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">'192.168.120.54'</span></span>
-<span id="cb1-4"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">2024-04-22T01:38:42</span> fastq-dump.2.9.2 sys: connection failed while opening file within cryptographic module <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">-</span> Failed to create TLS stream for <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">'www.ncbi.nlm.nih.gov'</span> <span class="er" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">(</span><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">130.14.29.110</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">)</span> <span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">from</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">'192.168.120.54'</span></span>
-<span id="cb1-5"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">2024-04-22T01:38:42</span> fastq-dump.2.9.2 err: item not found while constructing within virtual database module <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">-</span> the path <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">'ERR5242993'</span> cannot be opened as database or table</span></code></pre></div>
-<p>问题指向了证书。但谷歌后依然不得其解，一是很久没有动过这个服务器的配置，怎么会出现证书之类的搞不清的问题呢？二是 按照网络上的方法检查了证书也还是没有找到原因。</p>
-<p>后续将问题的研究转向 sratools 本身，发现<a href="https://blog.csdn.net/qq_68453356/article/details/137791450">这个帖子</a>给了非常有用的提示：fastq-dump的版本和sratools本身的版本不一致。</p>
-<p>我检查后发现的确如此：</p>
-<div class="sourceCode" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">(</span><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">base</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">)</span> <span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">[wsx@xu2</span> debug]$ prefetch <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">--help</span></span>
-<span id="cb2-2"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">Usage:</span></span>
-<span id="cb2-3">  <span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">prefetch</span> <span class="pp" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">[</span><span class="ss" style="color: #20794D;
-background-color: null;
-font-style: inherit;">options</span><span class="pp" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">]</span> <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&lt;</span>SRA accession<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&gt;</span> <span class="pp" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">[</span><span class="ss" style="color: #20794D;
-background-color: null;
-font-style: inherit;">...</span><span class="pp" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">]</span></span>
-<span id="cb2-4">  <span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">Download</span> SRA files and their dependencies</span>
-<span id="cb2-5"></span>
-<span id="cb2-6">  <span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">prefetch</span> <span class="pp" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">[</span><span class="ss" style="color: #20794D;
-background-color: null;
-font-style: inherit;">options</span><span class="pp" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">]</span> <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">--cart</span> <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&lt;</span>kart file<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&gt;</span></span>
-<span id="cb2-7">  <span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">Download</span> cart file</span>
-<span id="cb2-8"></span>
-<span id="cb2-9">  <span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">prefetch</span> <span class="pp" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">[</span><span class="ss" style="color: #20794D;
-background-color: null;
-font-style: inherit;">options</span><span class="pp" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">]</span> <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&lt;</span>URL<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&gt;</span> --output-file <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&lt;</span>FILE<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&gt;</span></span>
-<span id="cb2-10">  <span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">Download</span> URL to FILE</span>
-<span id="cb2-11"></span>
-<span id="cb2-12">  <span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">prefetch</span> <span class="pp" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">[</span><span class="ss" style="color: #20794D;
-background-color: null;
-font-style: inherit;">options</span><span class="pp" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">]</span> <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&lt;</span>URL<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&gt;</span> <span class="pp" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">[</span><span class="ss" style="color: #20794D;
-background-color: null;
-font-style: inherit;">...</span><span class="pp" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">]</span> <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">--output-directory</span> <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&lt;</span>DIRECTORY<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&gt;</span></span>
-<span id="cb2-13">  <span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">Download</span> URL or URL-s to DIRECTORY</span>
-<span id="cb2-14"></span>
-<span id="cb2-15">  <span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">prefetch</span> <span class="pp" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">[</span><span class="ss" style="color: #20794D;
-background-color: null;
-font-style: inherit;">options</span><span class="pp" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">]</span> <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&lt;</span>SRA file<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&gt;</span> <span class="pp" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">[</span><span class="ss" style="color: #20794D;
-background-color: null;
-font-style: inherit;">...</span><span class="pp" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">]</span></span>
-<span id="cb2-16">  <span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">Check</span> SRA file for missed dependencies and download them</span>
-<span id="cb2-17"></span>
-<span id="cb2-18"></span>
-<span id="cb2-19"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">Options:</span></span>
-<span id="cb2-20">  <span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">-T</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">|</span><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">--type</span> <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&lt;</span>value<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&gt;</span>                Specify file type to download. Default: sra </span>
-<span id="cb2-21">  <span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">-t</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">|</span><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">--transport</span> <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&lt;</span>http<span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">|</span><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">fasp</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">|</span><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">both</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&gt;</span>  Transport: one of: fasp<span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">;</span> <span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">http</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">;</span> <span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">both</span> </span>
-<span id="cb2-22">                                   <span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">[default].</span> <span class="er" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">(</span><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">fasp</span> only<span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">;</span> <span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">http</span> only<span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">;</span> <span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">first</span> try </span>
-<span id="cb2-23">                                   <span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">fasp</span> <span class="er" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">(</span><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">ascp</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">)</span><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">,</span> use http if cannot download </span>
-<span id="cb2-24">                                   <span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">using</span> fasp<span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">)</span><span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">.</span> </span>
-<span id="cb2-25">  <span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">--location</span> <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&lt;</span>value<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&gt;</span>               Location of data. </span>
-<span id="cb2-26"></span>
-<span id="cb2-27">  <span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">-N</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">|</span><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">--min-size</span> <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&lt;</span>size<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&gt;</span>             Minimum file size to download in KB </span>
-<span id="cb2-28">                                   <span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">(</span><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">inclusive</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">)</span><span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">.</span> </span>
-<span id="cb2-29">  <span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">-X</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">|</span><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">--max-size</span> <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&lt;</span>size<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&gt;</span>             Maximum file size to download in KB </span>
-<span id="cb2-30">                                   <span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">(</span><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">exclusive</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">)</span><span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">.</span> Default: 20G </span>
-<span id="cb2-31">  <span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">-f</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">|</span><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">--force</span> <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&lt;</span>yes<span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">|</span><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">no</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">|</span><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">all</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">|</span><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">ALL</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&gt;</span>      Force object download: one of: no, yes, </span>
-<span id="cb2-32">                                   <span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">all,</span> ALL. no <span class="pp" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">[</span><span class="ss" style="color: #20794D;
-background-color: null;
-font-style: inherit;">default</span><span class="pp" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">]</span>: skip download if the </span>
-<span id="cb2-33">                                   <span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">object</span> if found and complete<span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">;</span> <span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">yes:</span> download </span>
-<span id="cb2-34">                                   <span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">it</span> even if it is found and is complete<span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">;</span> <span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">all:</span> </span>
-<span id="cb2-35">                                   <span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">ignore</span> lock files <span class="er" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">(</span><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">stale</span> locks or it is </span>
-<span id="cb2-36">                                   <span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">being</span> downloaded by another process use </span>
-<span id="cb2-37">                                   <span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">at</span> your own risk!<span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">);</span> <span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">ALL:</span> ignore lock files, </span>
-<span id="cb2-38">                                   <span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">restart</span> download from beginning. </span>
-<span id="cb2-39">  <span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">-r</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">|</span><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">--resume</span> <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&lt;</span>yes<span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">|</span><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">no</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&gt;</span>             Resume partial downloads: one of: no, yes </span>
-<span id="cb2-40">                                   <span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">[default].</span> </span>
-<span id="cb2-41">  <span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">-C</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">|</span><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">--verify</span> <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&lt;</span>yes<span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">|</span><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">no</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&gt;</span>             Verify after download: one of: no, yes </span>
-<span id="cb2-42">                                   <span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">[default].</span> </span>
-<span id="cb2-43">  <span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">-p</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">|</span><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">--progress</span>                    Show progress. </span>
-<span id="cb2-44">  <span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">-H</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">|</span><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">--heartbeat</span> <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&lt;</span>value<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&gt;</span>           Time period in minutes to display download </span>
-<span id="cb2-45">                                   <span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">progress.</span> <span class="er" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">(</span><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">0:</span> no progress<span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">)</span><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">,</span> default: 1 </span>
-<span id="cb2-46"></span>
-<span id="cb2-47">  <span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">--eliminate-quals</span>                Don<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">'t download QUALITY column. </span></span>
-<span id="cb2-48"><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">  -c|--check-all                   Double-check all refseqs. </span></span>
-<span id="cb2-49"><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">  -S|--check-rs &lt;yes|no|smart&gt;     Check for refseqs in downloaded files: one </span></span>
-<span id="cb2-50"><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">                                   of: no, yes, smart [default]. Smart: skip </span></span>
-<span id="cb2-51"><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">                                   check for large encrypted non-sra files. </span></span>
-<span id="cb2-52"><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">  -o|--order &lt;kart|size&gt;           Kart prefetch order when downloading </span></span>
-<span id="cb2-53"><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">                                   kart: one of: kart, size. (in kart order, by </span></span>
-<span id="cb2-54"><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">                                   file size: smallest first), default: size. </span></span>
-<span id="cb2-55"><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">  -R|--rows &lt;rows&gt;                 Kart rows to download (default all). Row </span></span>
-<span id="cb2-56"><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">                                   list should be ordered. </span></span>
-<span id="cb2-57"><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">  --perm &lt;PATH&gt;                    PATH to jwt cart file. </span></span>
-<span id="cb2-58"><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">  --ngc &lt;PATH&gt;                     PATH to ngc file. </span></span>
-<span id="cb2-59"><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">  --cart &lt;PATH&gt;                    To read kart file. </span></span>
-<span id="cb2-60"></span>
-<span id="cb2-61"><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">  -a|--ascp-path &lt;ascp-binary|private-key-file&gt;  Path to ascp program and </span></span>
-<span id="cb2-62"><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">                                   private key file (asperaweb_id_dsa.putty) </span></span>
-<span id="cb2-63"><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">  --ascp-options &lt;value&gt;           Arbitrary options to pass to ascp command </span></span>
-<span id="cb2-64"><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">                                   line. </span></span>
-<span id="cb2-65"></span>
-<span id="cb2-66"><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">  -o|--output-file &lt;FILE&gt;          Write file to FILE when downloading </span></span>
-<span id="cb2-67"><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">                                   single file. </span></span>
-<span id="cb2-68"><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">  -O|--output-directory &lt;DIRECTORY&gt;  Save files to DIRECTORY/ </span></span>
-<span id="cb2-69"></span>
-<span id="cb2-70"><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">  -h|--help                        Output brief explanation for the program. </span></span>
-<span id="cb2-71"><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">  -V|--version                     Display the version of the program then </span></span>
-<span id="cb2-72"><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">                                   quit. </span></span>
-<span id="cb2-73"><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">  -L|--log-level &lt;level&gt;           Logging level as number or enum string. One </span></span>
-<span id="cb2-74"><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">                                   of (fatal|sys|int|err|warn|info|debug) or </span></span>
-<span id="cb2-75"><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">                                   (0-6) Current/default is warn </span></span>
-<span id="cb2-76"><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">  -v|--verbose                     Increase the verbosity of the program </span></span>
-<span id="cb2-77"><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">                                   status messages. Use multiple times for more </span></span>
-<span id="cb2-78"><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">                                   verbosity. Negates quiet. </span></span>
-<span id="cb2-79"><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">  -q|--quiet                       Turn off all status messages for the </span></span>
-<span id="cb2-80"><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">                                   program. Negated by verbose. </span></span>
-<span id="cb2-81"><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">  --option-file &lt;file&gt;             Read more options and parameters from the </span></span>
-<span id="cb2-82"><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">                                   file. </span></span>
-<span id="cb2-83"></span>
-<span id="cb2-84"><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">prefetch : 3.0.2</span></span>
-<span id="cb2-85"></span>
-<span id="cb2-86"><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">(base) [wsx@xu2 debug]$ which fast</span></span>
-<span id="cb2-87"><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">fasterq-dump             fasterq-dump-orig.3.0.2  fastq-dump.3.0.2         fastq-load.3             </span></span>
-<span id="cb2-88"><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">fasterq-dump.3           fastq-dump               fastq-dump-orig.3.0.2    fastq-load.3.0.2         </span></span>
-<span id="cb2-89"><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">fasterq-dump.3.0.2       fastq-dump.3             fastq-load               </span></span>
-<span id="cb2-90"><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">(base) [wsx@xu2 debug]$ fastq-dump --version</span></span>
-<span id="cb2-91"></span>
-<span id="cb2-92"><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">fastq-dump : 2.9.2</span></span></code></pre></div>
-<p>继续查看了 <code>~/.bashrc</code> 和环境变量：</p>
-<div class="sourceCode" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">$</span> echo <span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">$PATH</span></span>
-<span id="cb3-2"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">/data3/wsx/miniconda3/bin:/usr/local/bin:/data3/wsx/miniconda3/condabin:/data3/wsx/bin:/data3/wsx/soft/sratoolkit/bin:/usr/lib64/qt-3.3/bin:/usr/local/bin:/usr/local/bin:/usr/local/bin:/usr/local/bin:/usr/local/bin:/usr/local/bin:/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/usr/lib/rstudio-server/bin/quarto/bin:/usr/lib/rstudio-server/bin/postback/postback:/usr/lib/rstudio-server/bin/postback/postback:/usr/lib/rstudio-server/bin/postback/postback:/usr/lib/rstudio-server/bin/postback/postback:/usr/lib/rstudio-server/bin/postback/postback:/usr/lib/rstudio-server/bin/postback/postback:/usr/lib/rstudio-server/bin/postback/postback:/usr/bin:/data3/wsx/.local/bin:/data3/wsx/bin</span></span></code></pre></div>
-<p>发现环境变量很有问题，在 <code>~/.bashrc</code> 的设置逻辑里 <code>/data3/wsx/soft/sratoolkit/bin</code> 应该是很靠前的， 但 conda 的激活将 <code>/usr/local/bin</code> 提前了，这就导致了 fastq-dump 使用的是系统的一个版本，从而产生了这种不一致的情况。</p>
-<pre><code>[wsx@xu2 share]$ which fastq-dump
-/usr/local/bin/fastq-dump</code></pre>
-<p>我的解决办法就是在 dump 数据前，显式地运行 <code>export PATH=$HOME/soft/sratoolkit/bin:$PATH</code> 命令将正确的路径前提。</p>
-<p>在脚本中的使用情况如下：</p>
-<div class="sourceCode" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">#!/bin/bash</span></span>
-<span id="cb5-2"><span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">cd</span> /data3/wsx/share/gcap_debug</span>
-<span id="cb5-3"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">mkdir</span> <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">-p</span> /data3/wsx/share/gcap_debug/temp</span>
-<span id="cb5-4"></span>
-<span id="cb5-5"><span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">export</span> <span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">PATH</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">$HOME</span>/soft/sratoolkit/bin:<span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">$PATH</span></span>
-<span id="cb5-6"></span>
-<span id="cb5-7"><span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">for</span> i <span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">in</span> ERR5242993 ERR5243012</span>
-<span id="cb5-8"><span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">do</span></span>
-<span id="cb5-9">  <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">echo</span> handling <span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">$i</span></span>
-<span id="cb5-10">  <span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">parallel-fastq-dump</span> <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">-t</span> 20 <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">--tmpdir</span> temp <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">-O</span> gcap_debug/ <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">--split-3</span>  <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">--gzip</span> <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">-s</span> <span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">$i</span></span>
-<span id="cb5-11"><span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">done</span></span></code></pre></div>
-<p>这样去运行就没有这个问题了：</p>
-<div class="sourceCode" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">$</span> bash 0-dump-sra.sh </span>
-<span id="cb6-2"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">handling</span> ERR5242993</span>
-<span id="cb6-3"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">SRR</span> ids: <span class="pp" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">[</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">'ERR5242993'</span><span class="pp" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">]</span></span>
-<span id="cb6-4"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">extra</span> args: [<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">'--split-3'</span>, <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">'--gzip'</span>]</span>
-<span id="cb6-5"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">tempdir:</span> temp/pfd_ocitp7xi</span>
-<span id="cb6-6"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">ERR5242993</span> spots: 31931880</span>
-<span id="cb6-7"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">blocks:</span> [[1, 1596594], [1596595, 3193188], [3193189, 4789782], [4789783, 6386376], [6386377, 7982970], [7982971, 9579564], [9579565, 11176158], [11176159, 12772752], [12772753, 14369346], [14369347, 15965940], [15965941, 17562534], [17562535, 19159128], [19159129, 20755722], [20755723, 22352316], [22352317, 23948910], [23948911, 25545504], [25545505, 27142098], [27142099, 28738692], [28738693, 30335286], [30335287, 31931880]]</span>
-<span id="cb6-8"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">Failed</span> to call external services.</span>
-<span id="cb6-9"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">Read</span> 1596594 spots for ERR5242993</span>
-<span id="cb6-10"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">Written</span> 1596594 spots for ERR5242993</span>
-<span id="cb6-11"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">Read</span> 1596594 spots for ERR5242993</span>
-<span id="cb6-12"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">Written</span> 1596594 spots for ERR5242993</span>
-<span id="cb6-13"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">Read</span> 1596594 spots for ERR5242993</span></code></pre></div>
-<p>总结下来是：报错信息和错误的根源有时候南辕北辙。除了从问题本身思考，也要从其他可能得角度去探索。</p>
-
-
-
- ]]></description>
-  <category>bioinformatics</category>
-  <guid>https://shixiangwang.github.io/posts/2024-04-22-sratools-networking-issue/</guid>
-  <pubDate>Sun, 21 Apr 2024 16:00:00 GMT</pubDate>
 </item>
 </channel>
 </rss>
