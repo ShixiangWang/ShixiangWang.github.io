@@ -1,0 +1,18 @@
+---
+title: random
+author: Shixiang Wang
+date: 2025-03-12
+categories: [journal]
+draft: false
+description: ''
+
+toc: true
+
+format:
+  html:
+    code-fold: false
+    code-overflow: wrap
+    code-tools: false
+---
+
+世界本质上是什么东西？生命本质上是什么东西？生物信息学本质上是什么东西？我又是个什么东西？

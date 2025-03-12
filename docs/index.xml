@@ -10,7 +10,26 @@
 <atom:link href="https://shixiangwang.github.io/index.xml" rel="self" type="application/rss+xml"/>
 <description>Reasoning is a blog dedicated to exploring the intersection of data science, bioinformatics, and personal insights.</description>
 <generator>quarto-1.5.57</generator>
-<lastBuildDate>Sat, 22 Feb 2025 16:00:00 GMT</lastBuildDate>
+<lastBuildDate>Tue, 11 Mar 2025 16:00:00 GMT</lastBuildDate>
+<item>
+  <title>random</title>
+  <dc:creator>Shixiang Wang</dc:creator>
+  <link>https://shixiangwang.github.io/posts/2025-03-12-random/</link>
+  <description><![CDATA[ 
+
+
+
+
+
+<p>世界本质上是什么东西？生命本质上是什么东西？生物信息学本质上是什么东西？我又是个什么东西？</p>
+
+
+
+ ]]></description>
+  <category>journal</category>
+  <guid>https://shixiangwang.github.io/posts/2025-03-12-random/</guid>
+  <pubDate>Tue, 11 Mar 2025 16:00:00 GMT</pubDate>
+</item>
 <item>
   <title>肿瘤生信，研究科学还是技术？</title>
   <dc:creator>Shixiang Wang</dc:creator>
@@ -5588,36 +5607,6 @@ font-style: inherit;">=</span> [0. 1.]</span></code></pre></div>
   <category>journal</category>
   <guid>https://shixiangwang.github.io/posts/2024-05-03-random/</guid>
   <pubDate>Thu, 02 May 2024 16:00:00 GMT</pubDate>
-</item>
-<item>
-  <title>近期摘录</title>
-  <dc:creator>Shixiang Wang</dc:creator>
-  <link>https://shixiangwang.github.io/posts/2024-04-29-random/</link>
-  <description><![CDATA[ 
-
-
-
-
-
-<p>当技术变得隐形时才是最强大的。</p>
-<p>“如果你想走得快，就独自走；如果你想走得远，就一起走。”</p>
-<p>——— 《宝贵的人生建议》</p>
-<hr>
-<p>“别把焦点只放在‘你的事业’上，这是你为自己的事业所做的最好的一件事”</p>
-<p>“把问题交给合适的人来负责，而不是绞尽脑汁地亲力亲为，你才能有更多机会收获更好的解决方案。”</p>
-<p>“先人后事”意味着始终敞开招贤纳士的大门，始终保持高度开放的态度，时刻准备着在任何可能的地方遇到绝妙的人才。”</p>
-<p>“想想自己生活中的“人运”。它可能是偶遇一位改变自己人生的导师，可能是结交一位挚友或者遇到理想的生活伴侣，遇到一位绝佳的上司或工作搭档，也可能是不经意间招聘到绝妙的人才。”</p>
-<p>“直到后来的某一天，我终于恍然大悟。我决定不再只关注自己的事业前途。相反，我决心照顾好自己的下属。接下来，一切都不一样了。他们反过来照顾我，不允许失败发生在我身上！”</p>
-<p>“要照顾你的下属，而不是你的前途”</p>
-<p>“我们不可能用奖励把不合适的人变成合适的人”</p>
-<p>—— 《从优秀到卓越》</p>
-
-
-
- ]]></description>
-  <category>journal</category>
-  <guid>https://shixiangwang.github.io/posts/2024-04-29-random/</guid>
-  <pubDate>Sun, 28 Apr 2024 16:00:00 GMT</pubDate>
 </item>
 </channel>
 </rss>
