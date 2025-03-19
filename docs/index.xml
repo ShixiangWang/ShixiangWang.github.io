@@ -10,7 +10,126 @@
 <atom:link href="https://shixiangwang.github.io/index.xml" rel="self" type="application/rss+xml"/>
 <description>Reasoning is a blog dedicated to exploring the intersection of data science, bioinformatics, and personal insights.</description>
 <generator>quarto-1.5.57</generator>
-<lastBuildDate>Tue, 11 Mar 2025 16:00:00 GMT</lastBuildDate>
+<lastBuildDate>Tue, 18 Mar 2025 16:00:00 GMT</lastBuildDate>
+<item>
+  <title>Bizard 项目成员招募与说明</title>
+  <dc:creator>Shixiang Wang</dc:creator>
+  <link>https://shixiangwang.github.io/posts/2025-03-19-bizard-recruit/</link>
+  <description><![CDATA[ 
+
+
+
+
+
+<p>前几天，我们正式官宣了「<a href="https://mp.weixin.qq.com/s/WtcxNFB0NyyZDv0UWhDFcw">Bizard（白泽）：生物医学可视化开源图鉴——一个社区项目的招募与探索</a>」，引发了一些反响，许多朋友和粉丝进行了分享转发，有的朋友提供了项目方向的宝贵建议，有的小伙伴提出了参与的想法，我们也初步邀请了一些老师和公众号参与。这篇推文的目的是就上次未尽之处加以说明，另外也诚挚地邀请符合要求的老师/同学积极参与贡献。</p>
+<section id="项目内容与初步目标" class="level2">
+<h2 class="anchored" data-anchor-id="项目内容与初步目标">项目内容与初步目标</h2>
+<p>项目的初步目标是建立一个基于R的可视化知识库，大体分为3大类：basics, omics, clinics，每类下面按不同的图形绘制分为中英文版本，中英文会在官方网站显示，中文会不断通过公众号推送更新；并不断根据想法和意见迭代更新，基本满足以后生物医学领域研究者的需求（未来也可以作为大语言模型的可靠知识基础）。</p>
+</section>
+<section id="贡献方式设计" class="level2">
+<h2 class="anchored" data-anchor-id="贡献方式设计">贡献方式设计</h2>
+<p>招募参与者的工作主要集中在图文教程的撰写和更新补充，其他事务主要由发起人及其学生团队负责，以保障项目的可靠运行。</p>
+<p>因此，我们未来考虑系统化梳理需要处理的图文教程，参与者也可以参与补充和设计，然后以自由任务的形式下发通知项目成员，成员根据自己的兴趣、时间安排领取任务和进行处理。 针对一些参与者没有申领的任务，我们也会通过学生团队进行处理完成。</p>
+<p>其他包括但不仅限于以下一些贡献类型：提供有效评论/建议；完成图文翻译任务；完成公众号推文编辑审核；提供重要指导意见；负责网站运维更新；负责贡献记录更新；负责推文运维更新。后面几类任务当前考虑由学生团队负责，以更好保证项目推进。</p>
+</section>
+<section id="贡献记录机制" class="level2">
+<h2 class="anchored" data-anchor-id="贡献记录机制">贡献记录机制</h2>
+<p>大概以一年为一个周期，记录参与创作者的贡献信息，按<strong>积分制</strong>。积分规则每年根据项目发起人和负责人商量确定。贡献者记录按「GitHub/微信ID/姓名」进行标注。贡献排名靠前者投稿时经讨论纳入共同第一作者，贡献排名靠后者经讨论纳入参与作者或致谢。如果长期提供指导性意见的贡献者经讨论纳入共同通讯作者。在对外宣传和文档记录时，积分排序也将作为主要参考依据。</p>
+<p>「提供有效评论/建议」不仅限于项目参与者，在网站/公众号文章下方留言，我们觉得有意就会针对性加分统计！</p>
+</section>
+<section id="我们期待这样的参与者" class="level2">
+<h2 class="anchored" data-anchor-id="我们期待这样的参与者">我们期待这样的参与者</h2>
+<ol type="1">
+<li>有一定的时间（至少平均每周愿意投入1-2小时）并对该项目有兴趣。</li>
+<li>开源、共享、协作精神和意识。</li>
+<li>掌握 R 可视化与编程；有长期输出R及可视化博客/公众号经历 优先。</li>
+</ol>
+</section>
+<section id="联系方式" class="level2">
+<h2 class="anchored" data-anchor-id="联系方式">联系方式</h2>
+<ul>
+<li>罗鹏（<a href="mailto:luopeng@smu.edu.cn" class="email">luopeng@smu.edu.cn</a>）</li>
+<li>王诗翔（<a href="mailto:wangshx@csu.edu.cn" class="email">wangshx@csu.edu.cn</a>）或通过「生信协作组」公众号后台交流添加老师微信，说明下参与 Bizard 项目</li>
+</ul>
+<p>感谢！请大家多支持！</p>
+
+
+</section>
+
+ ]]></description>
+  <category>Bizard</category>
+  <guid>https://shixiangwang.github.io/posts/2025-03-19-bizard-recruit/</guid>
+  <pubDate>Tue, 18 Mar 2025 16:00:00 GMT</pubDate>
+</item>
+<item>
+  <title>Bizard（白泽）：生物医学可视化开源图鉴——一个社区项目的招募与探索</title>
+  <dc:creator>Shixiang Wang</dc:creator>
+  <link>https://shixiangwang.github.io/posts/2025-03-19-bizard/</link>
+  <description><![CDATA[ 
+
+
+
+
+
+<p>发起人：罗鹏、王诗翔、李剑峰、曾健明</p>
+<p><strong>可视化</strong>是数据与科学研究故事的桥梁，是探寻科学数据规律、挖掘和解释创新发现的重要参考，在当今数据驱动的生物医学研究时代，利用代码指令完成数据可视化的能力已成为生物医学领域研究人员的核心技能之一。虽然当前领域内已经有许多成熟的图形界面软件以及生信云平台，但是促进生物医学数据的可重复研究既是科学研究的潮流，也是提升课题研究质量的重要途径。然而，对于众多生物医学研究的初学者而言，编程、绘图学习曲线陡峭，特别是在将代码应用于实际研究场景时往往面临诸多挑战，有用的资料散落在互联网各处。为此，我们发起<strong>Bizard白泽</strong>项目，旨在搭建<strong>协作组主导、社区参与的生物医学可视化开源项目</strong>，为学习、利用和讨论数据可视化提供一体化的平台和协作社区，希望构建国内/国际别树一帜的生物信息学基础设施。</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://weekly-1301043367.cos.ap-shanghai.myqcloud.com/20250312123338539.png" class="img-fluid figure-img"></p>
+<figcaption>Bizard项目Logo</figcaption>
+</figure>
+</div>
+<blockquote class="blockquote">
+<p>项目名来源小帖士：白泽是上古时代传说中的神兽，号称上知天文地理，下知鸡毛蒜皮，能说人言，曾应黄帝所求作鬼神图鉴。白泽的这些能力体现了对知识的广泛掌握和对信息的可视化表达。取名白泽既体现我们国内同行对于传统、知识的尊崇，也借此表达我们对于项目的目标定位与学术追求。英文名取音译Bizard。我们注意到复旦有个学术团队名为whitzard，这里我们也以作区分。所以我们的项目全称为：<strong>Bizard（白泽）：生物医学可视化开源图鉴</strong>。</p>
+</blockquote>
+<p>Bizard项目初步以R语言为基础（未来也考虑其他可能的编程语言和方向），从最基本的数据可视化入手，基于<a href="https://r-graph-gallery.com/" title="The R Graph Gallery">The R Graph Gallery</a>的经典案例，结合实际生物医学研究场景，为初学者提供详实的绘图代码教程。每个教程将不仅包含完整的代码解析和预览，而且会附带相应的生物学背景说明和使用场景说明，帮助学习者理解代码在研究中的实际应用效果和价值。这种理论与实践相结合的方式，将大大降低生物医学研究人员的学习门槛。<strong>为了构建可持续发展的社区生态，我们计划联合国内外具有创造力、热衷于数据可视化的学习者、开发者和共享者，共同打造一个充满活力的社群。在这个社群中，成员可以自由交流可视化技术与经验，共同探讨与协作。同时，我们也会与<a href="https://github.com/openbiox/weekly" title="Openbiox生信开源社区">Openbiox生信开源社区</a>深度绑定运作，多方位促进知识累积和项目迭代。我们相信，只有通过持续的交流与协作，才能激发更多创新思维，推动项目的长期发展。</strong></p>
+<p><img src="https://weekly-1301043367.cos.ap-shanghai.myqcloud.com/20250312123444988.png" class="img-fluid"></p>
+<p><strong>Bizard项目采用开放和透明的运作机制</strong>，所有代码和文档都将在GitHub平台上（当前项目仓库：<a href="https://github.com/DrRobinLuo/Bizard" class="uri">https://github.com/DrRobinLuo/Bizard</a>）进行维护。所有的教程会统一整理发布于网站<a href="https://genaimed.org/Bizard/" class="uri">https://genaimed.org/Bizard/</a>，并定期通过推文发布更新。每个具体教程都会有对应的GitHub源文档和讨论区，方便社群中代码/文档贡献者和其他人进行深入讨论和协作。为了确保内容的可持续性，我们会为所有图文教程建立完整的markdown文档、分类标记。同时，<strong>项目将以预印本形式每半年到一年更新一次，确保内容的时效性和连续性。另外，我们计划每1-2年以原创性论著的形式发表项目更新，系统且持续地改进</strong>，不断提升该项目对生物医学数据分析可视化领域的贡献。项目成果将共享给项目贡献者，作者署名将按照实际贡献度进行综合排序，以此鼓励社群成员的积极参与（预期第一期作者在30-40个人左右）。我们期待形成一种定期的成员、贡献、成果更新机制，稳定地展示项目的阶段性学术与社会价值，持续推进未来发展。</p>
+<p>目前已通过预印本平台arXiv（<a href="https://arxiv.org/abs/2503.06845" class="uri">https://arxiv.org/abs/2503.06845</a>）发布对项目的整体设计和预想的首期手稿。</p>
+<p><img src="https://weekly-1301043367.cos.ap-shanghai.myqcloud.com/20250312124452997.png" class="img-fluid"></p>
+<p>我们诚挚地邀请对生物医学数据可视化、开源协作、开放科学感兴趣的小伙伴加入和贡献我们的早期项目。无论您是经验丰富的开发者，还是刚刚起步的学习者，我们都希望您可以在这里找到参与集体贡献的路径并有所收获。</p>
+<p>申请联系方式：请将申请说明及简历通过邮箱发送至罗鹏（luopeng@smu.edu.cn）和王诗翔（wangshx@csu.edu.cn）。</p>
+<p>我们希望通过构建这样一个开放、协作、交流、创新的平台，推动R、Python等数据科学编程语言在生物医学研究中的深入应用，为整个领域的发展贡献一份力量。让我们积极参与、携手贡献、持续探讨，共筑梦想，共享未来。</p>
+<hr>
+<p><strong>我们后续将发布一系列推文，推进社区运维和知识库建设，请大家保持关注</strong>！</p>
+<hr>
+<p>当前的Bizard项目组成员列表： 李柯馨、杨泓、石盈、彭玉洁、柴银盈、黄可昕、王春阳、林安琪、李剑峰、曾健明、罗鹏、王诗翔。</p>
+<p>2025年3月</p>
+
+
+
+ ]]></description>
+  <category>Bizard</category>
+  <guid>https://shixiangwang.github.io/posts/2025-03-19-bizard/</guid>
+  <pubDate>Tue, 18 Mar 2025 16:00:00 GMT</pubDate>
+</item>
+<item>
+  <title>PPT 安装快捷访问栏</title>
+  <dc:creator>Shixiang Wang</dc:creator>
+  <link>https://shixiangwang.github.io/posts/2025-03-19-ppt-quick-access-toolbar-in-mac/</link>
+  <description><![CDATA[ 
+
+
+
+
+
+<p>Mac 下步骤：</p>
+<ol type="1">
+<li>下载并解压 <a href="PowerPoint.officeUI">PowerPoint.officeUI 自定义文件</a></li>
+<li>退出 PowerPoint</li>
+<li>打开查找器</li>
+<li>点击菜单栏中的“前往”，然后选择“前往文件夹…”</li>
+<li>复制并粘贴以下位置，然后点击“前往”按钮： <code>~/Library/Containers/com.microsoft.Powerpoint/Data/Library/Preferences</code> 将 PowerPoint.officeUI 自定义文件移动到这个文件夹。</li>
+</ol>
+<p>Windows 下可以下载 <a href="PowerPoint.exportedUI">PowerPoint.exportedUI</a> 然后导入。</p>
+
+
+
+ ]]></description>
+  <category>Office</category>
+  <guid>https://shixiangwang.github.io/posts/2025-03-19-ppt-quick-access-toolbar-in-mac/</guid>
+  <pubDate>Tue, 18 Mar 2025 16:00:00 GMT</pubDate>
+</item>
 <item>
   <title>random</title>
   <dc:creator>Shixiang Wang</dc:creator>
@@ -5351,262 +5470,6 @@ font-style: inherit;">"Click"</span>)</span>
   <category>journal</category>
   <guid>https://shixiangwang.github.io/posts/2024-11-11-random/</guid>
   <pubDate>Sun, 10 Nov 2024 16:00:00 GMT</pubDate>
-</item>
-<item>
-  <title>sigmoid 的数学与计算实现</title>
-  <dc:creator>Shixiang Wang</dc:creator>
-  <link>https://shixiangwang.github.io/posts/2024-10-21-sigmoid_2ways/</link>
-  <description><![CDATA[ 
-
-
-
-
-
-<p>深度学习中的 Sigmoid 激活函数的定义公式为：</p>
-<p><img src="https://latex.codecogs.com/png.latex?%0Ay_k%20=%20%5Cfrac%7Bexp(a_k)%7D%7B%5Csum_%7Bi=1%7D%5E%7Bn%7Dexp(a_i)%7D%0A"></p>
-<p>在计算实现上优化后的公式为：</p>
-<p><img src="https://latex.codecogs.com/png.latex?%0Ay_k%20=%20%5Cfrac%7Bexp(a_k%20+%20C)%7D%7B%5Csum_%7Bi=1%7D%5E%7Bn%7Dexp(a_i%20+%20C)%7D%0A"></p>
-<p>将 C 设定为 <img src="https://latex.codecogs.com/png.latex?exp(a_i)"> 的最大值，就可以规避计算机计算溢出问题。</p>
-<div class="sourceCode" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">import</span> numpy <span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">as</span> np</span>
-<span id="cb1-2"></span>
-<span id="cb1-3"><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">def</span> softmax(a):</span>
-<span id="cb1-4">    exp_a <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> np.exp(a)</span>
-<span id="cb1-5">    sum_exp_a <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> np.<span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">sum</span>(exp_a)</span>
-<span id="cb1-6">    y <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> exp_a <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">/</span> sum_exp_a</span>
-<span id="cb1-7"></span>
-<span id="cb1-8">    <span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">return</span> y</span>
-<span id="cb1-9"></span>
-<span id="cb1-10"><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">def</span> softmax2(a):</span>
-<span id="cb1-11">    c <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> np.<span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">max</span>(a)</span>
-<span id="cb1-12">    exp_a <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> np.exp(a <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">-</span> c)  <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># 溢出对策</span></span>
-<span id="cb1-13">    sum_exp_a <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> np.<span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">sum</span>(exp_a)</span>
-<span id="cb1-14">    y <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> exp_a <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">/</span> sum_exp_a</span>
-<span id="cb1-15"></span>
-<span id="cb1-16">    <span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">return</span> y</span>
-<span id="cb1-17"></span>
-<span id="cb1-18"><span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">print</span>(<span class="ss" style="color: #20794D;
-background-color: null;
-font-style: inherit;">f"softmax(10) = </span><span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">{</span>softmax(np.array([<span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">1</span>, <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">10</span>]))<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">}</span><span class="ss" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"</span>)</span>
-<span id="cb1-19"><span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">print</span>(<span class="ss" style="color: #20794D;
-background-color: null;
-font-style: inherit;">f"softmax(1000) = </span><span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">{</span>softmax(np.array([<span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">1</span>, <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">1000</span>]))<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">}</span><span class="ss" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"</span>)</span>
-<span id="cb1-20"></span>
-<span id="cb1-21"><span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">print</span>(<span class="ss" style="color: #20794D;
-background-color: null;
-font-style: inherit;">f"softmax2(10) = </span><span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">{</span>softmax2(np.array([<span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">1</span>, <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">10</span>]))<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">}</span><span class="ss" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"</span>)</span>
-<span id="cb1-22"><span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">print</span>(<span class="ss" style="color: #20794D;
-background-color: null;
-font-style: inherit;">f"softmax2(1000) = </span><span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">{</span>softmax2(np.array([<span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">1</span>, <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">1000</span>]))<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">}</span><span class="ss" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"</span>)</span></code></pre></div>
-<p>结果：</p>
-<div class="sourceCode" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">❯</span> python sigmoid_2ways.py</span>
-<span id="cb2-2"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">softmax</span><span class="er" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">(</span><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">10</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">)</span> <span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">=</span> [1.23394576e-04 9.99876605e-01]</span>
-<span id="cb2-3"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">/Users/family/Library/CloudStorage/OneDrive-shanghaitech.edu.cn/Learn/deeplearning/deep_learning_demo/ch03/sigmoid_2ways.py:4:</span> RuntimeWarning: overflow encountered in exp</span>
-<span id="cb2-4">  <span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">exp_a</span> = np.exp<span class="er" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">(</span><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">a</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">)</span></span>
-<span id="cb2-5"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">/Users/family/Library/CloudStorage/OneDrive-shanghaitech.edu.cn/Learn/deeplearning/deep_learning_demo/ch03/sigmoid_2ways.py:6:</span> RuntimeWarning: invalid value encountered in divide</span>
-<span id="cb2-6">  <span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">y</span> = exp_a / sum_exp_a</span>
-<span id="cb2-7"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">softmax</span><span class="er" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">(</span><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">1000</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">)</span> <span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">=</span> [ 0. nan]</span>
-<span id="cb2-8"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">softmax2</span><span class="er" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">(</span><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">10</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">)</span> <span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">=</span> [1.23394576e-04 9.99876605e-01]</span>
-<span id="cb2-9"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">softmax2</span><span class="er" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">(</span><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">1000</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">)</span> <span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">=</span> [0. 1.]</span></code></pre></div>
-
-
-
- ]]></description>
-  <category>Python</category>
-  <category>machine-learning</category>
-  <guid>https://shixiangwang.github.io/posts/2024-10-21-sigmoid_2ways/</guid>
-  <pubDate>Sun, 20 Oct 2024 16:00:00 GMT</pubDate>
-</item>
-<item>
-  <title>准备CNS阅读简记</title>
-  <dc:creator>Shixiang Wang</dc:creator>
-  <link>https://shixiangwang.github.io/posts/2024-10-15-cns-note/</link>
-  <description><![CDATA[ 
-
-
-
-
-
-<p>准备系统地弄一些文献阅读的计划，增强下自己的内在功底，针对性的写/记录一些笔记。</p>
-
-
-
- ]]></description>
-  <category>CNS-note</category>
-  <guid>https://shixiangwang.github.io/posts/2024-10-15-cns-note/</guid>
-  <pubDate>Mon, 14 Oct 2024 16:00:00 GMT</pubDate>
-</item>
-<item>
-  <title>随想</title>
-  <dc:creator>Shixiang Wang</dc:creator>
-  <link>https://shixiangwang.github.io/posts/2024-05-03-random/</link>
-  <description><![CDATA[ 
-
-
-
-
-
-<p>了解的越多，才知道懂的不多。</p>
-<p>懂的再多，做的不一定要多。</p>
-
-
-
- ]]></description>
-  <category>journal</category>
-  <guid>https://shixiangwang.github.io/posts/2024-05-03-random/</guid>
-  <pubDate>Thu, 02 May 2024 16:00:00 GMT</pubDate>
 </item>
 </channel>
 </rss>

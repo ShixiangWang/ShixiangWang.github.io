@@ -1,0 +1,27 @@
+---
+title: PPT 安装快捷访问栏
+author: Shixiang Wang
+date: 2025-03-19
+categories: [Office]
+draft: false
+description: ''
+
+toc: true
+
+format:
+  html:
+    code-fold: false
+    code-overflow: wrap
+    code-tools: false
+---
+
+Mac 下步骤：
+
+1. 下载并解压 [PowerPoint.officeUI 自定义文件](PowerPoint.officeUI)
+2. 退出 PowerPoint
+3. 打开查找器
+4. 点击菜单栏中的“前往”，然后选择“前往文件夹…”
+5. 复制并粘贴以下位置，然后点击“前往”按钮： `~/Library/Containers/com.microsoft.Powerpoint/Data/Library/Preferences`
+将 PowerPoint.officeUI 自定义文件移动到这个文件夹。
+
+Windows 下可以下载 [PowerPoint.exportedUI](PowerPoint.exportedUI) 然后导入。
