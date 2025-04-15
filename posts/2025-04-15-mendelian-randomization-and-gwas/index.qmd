@@ -2,7 +2,7 @@
 title: Mendelian randomization 和 GWAS
 author: Shixiang Wang
 date: 2025-04-15
-categories: [AI]
+categories: [AI, bioinformatics]
 draft: false
 description: ''
 

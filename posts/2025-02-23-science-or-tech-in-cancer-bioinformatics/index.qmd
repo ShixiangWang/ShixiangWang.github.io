@@ -2,7 +2,7 @@
 title: 肿瘤生信，研究科学还是技术？
 author: Shixiang Wang
 date: 2025-02-23
-categories: [AI]
+categories: [AI, bioinformatics]
 draft: false
 description: ''
 
