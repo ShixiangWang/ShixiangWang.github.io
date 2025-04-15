@@ -1,5 +1,5 @@
 ---
-title: "Write programs that do one thing and do it well."
+title: "Nothing as profoundly exciting as to glimpse for the first time some new and basic truth"
 listing:
   contents: posts
   sort: "date desc"
