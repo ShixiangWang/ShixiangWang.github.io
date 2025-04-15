@@ -10,7 +10,246 @@
 <atom:link href="https://shixiangwang.github.io/index.xml" rel="self" type="application/rss+xml"/>
 <description>Reasoning is a blog dedicated to exploring the intersection of data science, bioinformatics, and personal insights.</description>
 <generator>quarto-1.5.57</generator>
-<lastBuildDate>Tue, 18 Mar 2025 16:00:00 GMT</lastBuildDate>
+<lastBuildDate>Mon, 14 Apr 2025 16:00:00 GMT</lastBuildDate>
+<item>
+  <title>Mendelian randomization 和 GWAS</title>
+  <dc:creator>Shixiang Wang</dc:creator>
+  <link>https://shixiangwang.github.io/posts/2025-04-15-mendelian-randomization-and-gwas/</link>
+  <description><![CDATA[ 
+
+
+
+
+
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+提问
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>孟德尔随机化与gwas区别</p>
+</div>
+</div>
+<section id="孟德尔随机化与全基因组关联分析" class="level2">
+<h2 class="anchored" data-anchor-id="孟德尔随机化与全基因组关联分析">孟德尔随机化与全基因组关联分析</h2>
+<p>孟德尔随机化（Mendelian Randomization, MR）和全基因组关联分析（Genome-wide association study, GWAS）是两种在遗传流行病学研究中常用的方法，它们在目的、数据来源、分析流程、假设条件、结果解释以及应用场景等方面存在一些区别：</p>
+<section id="定义与目的" class="level3">
+<h3 class="anchored" data-anchor-id="定义与目的">定义与目的</h3>
+<ul>
+<li><strong>GWAS</strong>：是一种用于识别与复杂性状（如疾病、性状等）相关的遗传变异的方法。通过对大规模人群进行基因组扫描，GWAS可以发现单核苷酸多态性（SNP）与某一性状的关联。</li>
+<li><strong>孟德尔随机化</strong>：是一种利用遗传变异作为工具变量来研究因果关系的方法。它的基本思想是利用随机分配的基因型来消除混杂因素的影响，从而评估某一暴露（如生活方式、饮食习惯等）与结果（如疾病）的因果关系。</li>
+</ul>
+</section>
+<section id="数据来源" class="level3">
+<h3 class="anchored" data-anchor-id="数据来源">数据来源</h3>
+<ul>
+<li><strong>GWAS</strong>：需要大量的样本数据，通常包括病例组和对照组，通过基因分型技术获取个体的基因型数据，并收集相关的表型信息。</li>
+<li><strong>孟德尔随机化</strong>：主要依赖于GWAS的结果数据，即已经识别出的与暴露和结果相关的SNP及其关联统计量（如效应大小、P值等）。</li>
+</ul>
+</section>
+<section id="分析流程" class="level3">
+<h3 class="anchored" data-anchor-id="分析流程">分析流程</h3>
+<ul>
+<li><strong>GWAS</strong>：首先对原始数据进行质量控制，包括去除缺失率高的 SNP 和样本、排除偏离哈迪-温伯格平衡的 SNP 等；然后进行关联分析，计算每个 SNP 与表型之间的关联 P 值，并绘制曼哈顿图和 QQ 图等进行可视化。</li>
+<li><strong>孟德尔随机化</strong>：首先从 GWAS 数据中挑选工具变量，即与暴露因素强相关的 SNP；然后进行两样本孟德尔随机化分析，利用工具变量估计暴露与结果之间的因果效应，常用的估计方法有逆方差加权法、MR Egger 回归法等。</li>
+</ul>
+</section>
+<section id="假设条件" class="level3">
+<h3 class="anchored" data-anchor-id="假设条件">假设条件</h3>
+<ul>
+<li><strong>GWAS</strong>：主要假设是基因型与表型之间存在关联，且这种关联在统计学上是显著的。</li>
+<li><strong>孟德尔随机化</strong>：需要满足三大假设，即关联性假设（SNP 与暴露因素之间是强相关的）、独立性假设（SNP 与混杂因素之间是独立的）和排他性假设（SNP 只能通过暴露因素对结局产生作用）。</li>
+</ul>
+</section>
+<section id="结果解释" class="level3">
+<h3 class="anchored" data-anchor-id="结果解释">结果解释</h3>
+<ul>
+<li><strong>GWAS</strong>：结果表明某个 SNP 与某个性状存在关联，但这种关联并不一定是因果关系，可能受到混杂因素和反向因果关系的影响。</li>
+<li><strong>孟德尔随机化</strong>：结果可以推断暴露因素与结果之间是否存在因果关系，以及因果效应的大小和方向，为后续的干预研究和政策制定提供依据。</li>
+</ul>
+</section>
+<section id="应用场景" class="level3">
+<h3 class="anchored" data-anchor-id="应用场景">应用场景</h3>
+<ul>
+<li><strong>GWAS</strong>：适用于探索性研究，用于发现与复杂性状相关的遗传变异，为后续的功能研究和机制探讨提供线索。</li>
+<li><strong>孟德尔随机化</strong>：适用于在观察性研究中评估因果关系，特别是在无法进行随机对照试验的情况下，如评估生活方式、环境暴露等因素对疾病的影响。</li>
+</ul>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+提问
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>能形象地介绍孟德尔随机化并举例么</p>
+</div>
+</div>
+<p>孟德尔随机化（Mendelian Randomization, MR）是一种利用遗传变异作为工具变量的方法，用于评估暴露因素（如生活方式、环境因素等）与结果（如疾病）之间的因果关系。它的核心思想是利用基因的随机分配特性来减少混杂因素的影响，从而更可靠地推断因果关系。下面通过一个形象的比喻和具体例子来解释。</p>
+</section>
+<section id="形象比喻基因是天生的随机试验" class="level3">
+<h3 class="anchored" data-anchor-id="形象比喻基因是天生的随机试验"><strong>形象比喻：基因是“天生的随机试验”</strong></h3>
+<p>想象你正在进行一项研究，想弄清楚“喝咖啡是否会导致高血压”。在传统的观察性研究中，你可能会发现喝咖啡多的人更容易得高血压，但这并不一定是因果关系。也许喝咖啡多的人同时有其他习惯（比如吸烟、熬夜），这些习惯才是高血压的真正原因。</p>
+<p>孟德尔随机化就像一个“天生的随机试验”。基因在受精卵形成时是随机分配的，这种随机性类似于随机对照试验（RCT）中的随机分组。如果某个基因与喝咖啡的行为相关（比如这个基因让人更喜欢咖啡的味道），那么这个基因就像一个“标签”，可以帮助我们研究喝咖啡与高血压之间的因果关系，而不受其他混杂因素的干扰。</p>
+</section>
+<section id="具体例子饮酒与心血管疾病" class="level3">
+<h3 class="anchored" data-anchor-id="具体例子饮酒与心血管疾病"><strong>具体例子：饮酒与心血管疾病</strong></h3>
+<p>假设你想研究“饮酒是否会导致心血管疾病”。传统的观察性研究可能会发现饮酒多的人更容易得心血管疾病，但这可能是由于饮酒者的生活方式（如吸烟、不运动）或其他因素的影响。</p>
+<section id="孟德尔随机化的步骤" class="level4">
+<h4 class="anchored" data-anchor-id="孟德尔随机化的步骤"><strong>孟德尔随机化的步骤：</strong></h4>
+<ol type="1">
+<li><strong>找到工具变量</strong>：假设科学家发现了一个基因（比如某个单核苷酸多态性，SNP），这个基因与饮酒行为相关。携带这个基因的人更倾向于饮酒，而这个基因本身与心血管疾病无关（除了通过饮酒间接影响）。</li>
+<li><strong>关联分析</strong>：
+<ul>
+<li>首先，研究这个基因与饮酒行为的关联（工具变量与暴露因素的关联）。</li>
+<li>然后，研究这个基因与心血管疾病的关联（工具变量与结果的关联）。</li>
+</ul></li>
+<li><strong>因果推断</strong>：如果基因与饮酒行为强相关，而基因与心血管疾病也有显著关联，那么可以推断饮酒与心血管疾病之间可能存在因果关系。</li>
+</ol>
+</section>
+<section id="假设条件-1" class="level4">
+<h4 class="anchored" data-anchor-id="假设条件-1"><strong>假设条件：</strong></h4>
+<ul>
+<li><strong>关联性</strong>：基因必须与饮酒行为强相关。</li>
+<li><strong>独立性</strong>：基因不能与混杂因素（如吸烟、饮食习惯）相关。</li>
+<li><strong>排他性</strong>：基因只能通过饮酒行为影响心血管疾病，而不能通过其他途径（如直接影响胆固醇水平）。</li>
+</ul>
+</section>
+</section>
+<section id="总结" class="level3">
+<h3 class="anchored" data-anchor-id="总结"><strong>总结：</strong></h3>
+<p>孟德尔随机化就像一个“天然的实验设计”，通过利用基因的随机分配特性，帮助我们更准确地评估因果关系，避免传统观察性研究中混杂因素的干扰。它特别适用于那些无法进行随机对照试验的情况（如研究生活方式或环境暴露对健康的影响）。</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+提问
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>在你的例子中，开始说 基因本身与心血管疾病无关，但关联分析时又需要发现基因与心血管疾病的关联，怎么区分和理解？</p>
+</div>
+</div>
+<p>在孟德尔随机化中，基因与结果（如心血管疾病）的关联是间接的，而不是直接的。这种关联是通过暴露因素（如饮酒行为）实现的。为了更好地理解这一点，我们需要明确孟德尔随机化的三大假设，并结合因果推断的逻辑来解释。</p>
+</section>
+<section id="基因与结果的关联是间接的" class="level3">
+<h3 class="anchored" data-anchor-id="基因与结果的关联是间接的"><strong>1. 基因与结果的关联是间接的</strong></h3>
+<ul>
+<li><strong>假设条件</strong>：在孟德尔随机化中，工具变量（基因）必须满足以下条件：
+<ol type="1">
+<li><strong>关联性</strong>：基因必须与暴露因素（如饮酒行为）强相关。</li>
+<li><strong>独立性</strong>：基因不能与混杂因素（如吸烟、饮食习惯）相关。</li>
+<li><strong>排他性</strong>：基因只能通过暴露因素（饮酒行为）影响结果（心血管疾病），而不能通过其他途径（如直接影响胆固醇水平）。</li>
+</ol></li>
+<li><strong>关键点</strong>：基因本身并不直接作用于结果（心血管疾病），而是通过暴露因素（饮酒行为）间接影响结果。因此，基因与结果的关联是间接的，而不是直接的。</li>
+</ul>
+</section>
+<section id="如何理解基因与结果的关联" class="level3">
+<h3 class="anchored" data-anchor-id="如何理解基因与结果的关联"><strong>2. 如何理解基因与结果的关联</strong></h3>
+<p>假设我们发现基因 ( G ) 与饮酒行为强相关（关联性假设成立），并且基因 ( G ) 与心血管疾病也有显著关联。这种关联的出现是因为： - 基因 ( G ) → 饮酒行为 → 心血管疾病</p>
+<p>如果基因 ( G ) 与心血管疾病的关联是通过饮酒行为实现的，那么我们可以推断饮酒行为与心血管疾病之间存在因果关系。</p>
+</section>
+<section id="为什么需要基因与结果的关联" class="level3">
+<h3 class="anchored" data-anchor-id="为什么需要基因与结果的关联"><strong>3. 为什么需要基因与结果的关联</strong></h3>
+<ul>
+<li><p><strong>因果推断的逻辑</strong>：如果基因 ( G ) 与饮酒行为强相关，并且基因 ( G ) 与心血管疾病也有显著关联，那么这种关联只能通过饮酒行为来解释。因为基因 ( G ) 不能直接作用于心血管疾病（排他性假设成立），所以基因与结果的关联必须是通过饮酒行为实现的。</p></li>
+<li><p><strong>结论</strong>：基因与结果的关联是因果推断的关键证据。如果基因与结果没有关联，那么即使基因与暴露因素强相关，也无法证明暴露因素对有结果因果作用。</p></li>
+</ul>
+</section>
+<section id="总结基因与结果的关联是间接的" class="level3">
+<h3 class="anchored" data-anchor-id="总结基因与结果的关联是间接的"><strong>4. 总结：基因与结果的关联是间接的</strong></h3>
+<ul>
+<li><strong>基因本身与结果无关</strong>：基因不能直接作用于结果（如心血管疾病），这是排他性假设的核心。</li>
+<li><strong>基因与结果的关联是间接的</strong>：基因通过暴露因素（如饮酒行为）间接影响结果，因此基因与结果的关联是因果推断的。</li>
+</ul>
+</section>
+<section id="具体例子饮酒与心血管疾病-1" class="level3">
+<h3 class="anchored" data-anchor-id="具体例子饮酒与心血管疾病-1"><strong>具体例子：饮酒与心血管疾病</strong></h3>
+<ul>
+<li><strong>假设</strong>：
+<ul>
+<li>基因 ( G ) 与饮酒行为强相关（关联性假设成立）。</li>
+<li>基因 ( G ) 与心血管疾病有显著关联（基因与结果的关联）。</li>
+<li>基因 ( G ) 不能通过其他途径（如直接影响胆固醇水平）作用于心血管疾病（排他性假设成立）。</li>
+</ul></li>
+<li><strong>结论</strong>：如果基因 ( G ) 与饮酒行为强相关，并且基因 ( G ) 与心血管疾病也有显著关联，那么可以推断饮酒行为与心血管疾病之间存在因果关系。</li>
+</ul>
+</section>
+<section id="形象比喻桥梁" class="level3">
+<h3 class="anchored" data-anchor-id="形象比喻桥梁"><strong>形象比喻：桥梁</strong></h3>
+<ul>
+<li>想象基因 ( G ) 是一座桥梁的起点，饮酒行为是桥梁本身，心血管疾病是桥梁的终点。基因 ( G ) 不能直接到达终点（心血管疾病），但它可以通过桥梁（饮酒行为）间接影响终点。如果桥梁（饮酒行为）被破坏（例如，通过干预减少饮酒），那么基因 ( G ) 与终点（心血管疾病）的关联也会消失。</li>
+</ul>
+<p>通过这种方式，孟德尔随机化利用基因的随机分配特性，帮助我们更可靠地评估因果关系，而不受传统观察性研究中混杂因素的干扰。</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+提问
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>如何在实际分析中满足排他性：基因只能通过暴露因素（饮酒行为）影响结果（心血管疾病），而不能通过其他途径（如直接影响胆固醇水平）。</p>
+</div>
+</div>
+<p>在孟德尔随机化中，确保基因（工具变量）只能通过暴露因素（如饮酒行为）影响结果（如心血管疾病），而不能通过其他途径（如直接影响胆固醇水平），是满足排他性假设的关键。以下是实现这一目标的具体方法和注意事项：</p>
+</section>
+<section id="选择合适的工具变量" class="level3">
+<h3 class="anchored" data-anchor-id="选择合适的工具变量"><strong>1. 选择合适的工具变量</strong></h3>
+<ul>
+<li><strong>避免多效性</strong>：选择的基因变异应仅与暴露因素（如饮酒行为）相关，而不与其他可能影响结果的途径相关。例如，ALDH2基因变异（影响酒精代谢）是一个常用的工具变量，因为它主要通过改变饮酒行为间接影响心血管疾病，而没有其他已知的途径直接影响心血管健康。</li>
+<li><strong>文献回顾</strong>：通过查阅已有的生物学研究和遗传学文献，确保所选基因变异的生物学机制仅通过暴露因素起作用。</li>
+</ul>
+</section>
+<section id="验证排他性假设" class="level3">
+<h3 class="anchored" data-anchor-id="验证排他性假设"><strong>2. 验证排他性假设</strong></h3>
+<ul>
+<li><strong>分层分析</strong>：在某些亚组中验证基因与结果的关联是否仅通过暴露因素实现。例如，在饮酒行为较低的人群（如女性）中，如果基因与结果的关联消失，则说明排他性假设成立。</li>
+<li><strong>负向控制分析</strong>：在与暴露因素无关的亚组中进行分析。例如，研究饮酒对心血管疾病的影响时，可以分析基因与结果的关联在不饮酒人群中是否显著。如果不显著，则支持排他性假设。</li>
+</ul>
+</section>
+<section id="敏感性分析" class="level3">
+<h3 class="anchored" data-anchor-id="敏感性分析"><strong>3. 敏感性分析</strong></h3>
+<ul>
+<li><strong>多效性检测</strong>：使用统计方法（如PCMR分析）检测工具变量是否存在水平多效性（即基因通过其他途径影响结果）。如果检测到多效性，可以排除这些变异或调整分析方法。</li>
+<li><strong>异质性检验</strong>：通过分析工具变量对结果的异质性，判断是否存在其他潜在路径。</li>
+</ul>
+</section>
+<section id="结合生物学机制" class="level3">
+<h3 class="anchored" data-anchor-id="结合生物学机制"><strong>4. 结合生物学机制</strong></h3>
+<ul>
+<li><strong>生物学验证</strong>：利用已知的生物学机制验证基因变异是否仅通过暴露因素影响结果。例如，ALDH2基因变异通过影响酒精代谢改变饮酒行为，而不会直接影响胆固醇水平或其他心血管疾病风险因素。</li>
+</ul>
+</section>
+<section id="使用多基因评分" class="level3">
+<h3 class="anchored" data-anchor-id="使用多基因评分"><strong>5. 使用多基因评分</strong></h3>
+<ul>
+<li><strong>增强工具变量的关联性</strong>：通过合并多个基因变异（多基因评分），可以增强工具变量与暴露因素的关联性，从而提高分析的统计功效，并减少多效性的影响。</li>
+</ul>
+</section>
+<section id="总结-1" class="level3">
+<h3 class="anchored" data-anchor-id="总结-1"><strong>总结</strong></h3>
+<p>在实际分析中，满足排他性假设需要综合考虑工具变量的选择、验证方法和生物学机制。通过避免多效性、验证基因与结果的关联是否仅通过暴露因素实现，以及结合敏感性分析，可以提高孟德尔随机化分析的可靠性，从而更准确地推断因果关系。</p>
+
+
+</section>
+</section>
+
+ ]]></description>
+  <category>AI</category>
+  <guid>https://shixiangwang.github.io/posts/2025-04-15-mendelian-randomization-and-gwas/</guid>
+  <pubDate>Mon, 14 Apr 2025 16:00:00 GMT</pubDate>
+</item>
 <item>
   <title>Bizard 项目成员招募与说明</title>
   <dc:creator>Shixiang Wang</dc:creator>
@@ -5393,83 +5632,6 @@ font-style: inherit;">"Click"</span>)</span>
   <category>AI</category>
   <guid>https://shixiangwang.github.io/posts/2024-11-14-zero-shot/</guid>
   <pubDate>Wed, 13 Nov 2024 16:00:00 GMT</pubDate>
-</item>
-<item>
-  <title>我记得</title>
-  <dc:creator>Shixiang Wang</dc:creator>
-  <link>https://shixiangwang.github.io/posts/2024-11-11-random/</link>
-  <description><![CDATA[ 
-
-
-
-
-
-<p>记忆是那么不牢固，我们一辈子又深陷其中，它追溯到我们来的时候，去往我们不可预知又必然而然的终点。</p>
-<p>我越来越觉得，世界上美的东西，是难以描述和述说的，那是种主观的感受和体验。真正重要的文字和言语，是对这种体验的启发。</p>
-<p>来去的意义、学习的意义、工作的意义、生活的意义、安稳的意义、名利的意义，有时候在我的脑海中时沉时浮，它们是“意义”，也是“活着”的目的和证明，但真正能代表我们这一生的痕迹吗？</p>
-<p>在寻找工作，填写项目时，我一遍又一遍填写我的简历内容，好像生平已经被这些一两百字的描述吸收殆尽，我突然有一种惶恐，世人有可能会从这些文字中了解我吗？就如同我小时学习的那些诗人生平一般？</p>
-<p>死亡，真是一种阴影！</p>
-<hr>
-<iframe width="560" height="315" src="https://www.youtube.com/embed/MmMvMF3ZC4o?si=Ct79YECsfQYotj6R" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen="">
-</iframe>
-<hr>
-<blockquote class="blockquote">
-<p>《我记得》歌词</p>
-</blockquote>
-<p>我带着比身体重的行李</p>
-<p>游入尼罗河底</p>
-<p>经过几道闪电 看到一堆光圈</p>
-<p>不确定是不是这里</p>
-<p>我看到几个人站在一起</p>
-<p>他们拿着剪刀摘走我的行李</p>
-<p>擦拭我的脑袋 没有机会返回去</p>
-<p>直到我听见一个声音 我确定是你</p>
-<p>可你怎记得我</p>
-<p>我带来了另界的消息</p>
-<p>可我怎么告知你</p>
-<p>注定失忆着相遇</p>
-<p>我记得这里是片树林 后面有个山坡</p>
-<p>山坡上的枣树每当秋天到来</p>
-<p>我们把枣装满口袋</p>
-<p>我记得除了朋友我还 做过你的叔父</p>
-<p>你总喜欢跟在我的屁股后面</p>
-<p>只是为了那几个铜钱</p>
-<p>我记得我们曾是恋人 后来战争爆发</p>
-<p>你上战场后就再也没有回来</p>
-<p>直到收不到你的信</p>
-<p>我们总这样重复分离 却要重新开始</p>
-<p>相互送别对方 说着来世再见</p>
-<p>再次失忆着相聚</p>
-<p>呜 呜 呜 呜</p>
-<p>快来抱抱 快来抱抱我</p>
-<p>呜 呜 呜 呜</p>
-<p>快来抱抱 快来抱抱我</p>
-<p>呜 呜 呜 呜</p>
-<p>快来抱抱 快来抱抱我</p>
-<p>呜 呜 呜 呜</p>
-<p>快来抱抱 快来抱抱我</p>
-<p>在路上我遇到了一位故去多年的人</p>
-<p>她是如此年轻 扎着过肩马尾</p>
-<p>露出和你一样的笑</p>
-<p>她和我讲了很多关于你成长的故事</p>
-<p>在星空另一端 思念从未停止</p>
-<p>如同墓碑上的名字</p>
-<p>不要哭我最亲爱的人 我最好的玩伴</p>
-<p>时空是个圆圈 直行或是转弯</p>
-<p>我们最终都会相见</p>
-<p>在城池的某个拐角处 在夕阳西下时</p>
-<p>在万家灯火的某一扇窗纱里</p>
-<p>人们失忆着相聚</p>
-<p>呜 快来抱抱 快来抱抱我</p>
-<p>呜 快来抱抱 快来抱抱我</p>
-<p>我终于找到你</p>
-
-
-
- ]]></description>
-  <category>journal</category>
-  <guid>https://shixiangwang.github.io/posts/2024-11-11-random/</guid>
-  <pubDate>Sun, 10 Nov 2024 16:00:00 GMT</pubDate>
 </item>
 </channel>
 </rss>
