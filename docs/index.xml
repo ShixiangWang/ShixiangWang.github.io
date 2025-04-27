@@ -10,7 +10,78 @@
 <atom:link href="https://shixiangwang.github.io/index.xml" rel="self" type="application/rss+xml"/>
 <description>Reasoning is a blog dedicated to exploring the intersection of data science, bioinformatics, and personal insights.</description>
 <generator>quarto-1.5.57</generator>
-<lastBuildDate>Mon, 14 Apr 2025 16:00:00 GMT</lastBuildDate>
+<lastBuildDate>Sun, 27 Apr 2025 16:00:00 GMT</lastBuildDate>
+<item>
+  <title>开源之夏：生物医学可视化开源图鉴Bizard项目拓展</title>
+  <dc:creator>Shixiang Wang</dc:creator>
+  <link>https://shixiangwang.github.io/posts/2025-04-28-ospp-bizard-openbiox/</link>
+  <description><![CDATA[ 
+
+
+
+
+
+<p>又是一年开源之夏项目（https://summer-ospp.ac.cn/）到了，今年我们基于 Bizard 项目依托 Openbiox 社区进行了项目申请，目前已经通过组委会的审核正式发布。欢迎感兴趣且有空（项目的主要执行期在暑假期间）的<strong>在校同学</strong>了解和参与报名！在初步写好申请书之后可以联系导师沟通交流，项目申请最后会筛选出一位实际中选人。</p>
+<p><img src="https://weekly-1301043367.cos.ap-shanghai.myqcloud.com/20250427234023588.png" class="img-fluid"></p>
+<section id="项目简述" class="level2">
+<h2 class="anchored" data-anchor-id="项目简述">项目简述</h2>
+<ul>
+<li>项目编号：2551d0158</li>
+<li>官方发布地址: https://summer-ospp.ac.cn/org/prodetail/2551d0158?list=org&amp;navpage=org</li>
+<li>导师联系邮箱: shixiang1994wang@gmail.com （王诗翔）</li>
+<li>技术领域：Programming Language, Data Science, Scientific Computing</li>
+<li>编程语言：R</li>
+<li>开源协议：Apache</li>
+</ul>
+<p>可视化图形作为连接数据与知识的桥梁，是探寻自然客观规律、挖掘和解释科学发现的重要媒介。在当今数据驱动的生物医学研究时代，利用数据可视化相关的编程语言、图形化交互平台或其他人工智能技术完成各类数据挖掘任务已成为生物医学领域研究人员的核心技能之一。</p>
+<p>目前，指令式数据分析软件包、图形界面软件以及云平台已逐渐成为提升科学研究效率的重要基础设施。如何进一步提高生物医学数据分析相关研究的重复性是科学社区面临的重要挑战之一。另外一方面，对于众多生物医学研究的初学者而言，编程语言、绘图工具的学习曲线陡峭，特别是在将编程代码应用于实际科学研究场景时往往四处碰壁，大量有用有益的指南手册、编程语言函数或示例散落在互联网各处，仍未被充分整合利用、验证和推广。为此，我们发起 <strong>Bizard 白泽项目（https://github.com/openbiox/Bizard），旨在搭建协作组主导、社区参与的生物医学可视化开源项目</strong>，为学习、利用和讨论数据可视化、促进可视化数据分析相关软件开发提供一体化的平台和协作社区，希望构建国内/国际别树一帜的生物信息学基础设施。</p>
+<section id="项目产出要求" class="level3">
+<h3 class="anchored" data-anchor-id="项目产出要求">项目产出要求</h3>
+<ol type="1">
+<li>按照 Bizard 项目文档要求，使用 Quarto 文档（https://quarto.org/）完成 50-100 个 Hiplot 插件的开源可视化教程撰写【Hiplot (org)图表整理https://kdocs.cn/l/cvqDqGQBQL25 】；</li>
+<li>进行 Bizard 项目网站的优化（https://openbiox.github.io/Bizard/），增强教程文档的展示效果和易用性；</li>
+<li>整理/构建10-20个生物医学领域常用的/精简数据集，方便可视化探索和教程撰写。</li>
+</ol>
+</section>
+<section id="项目技术要求" class="level3">
+<h3 class="anchored" data-anchor-id="项目技术要求">项目技术要求</h3>
+<ol type="1">
+<li>熟悉 R 语言基础操作，可以独立完成 R 语言函数的编写和调试；</li>
+<li>熟练使用 Git/GitHub 等代码管理软件和协作开发平台；</li>
+<li>有数据和计算科学相关学科背景优先；</li>
+<li>有可视化相关开源项目开发经验优先。</li>
+</ol>
+</section>
+<section id="项目成果仓库" class="level3">
+<h3 class="anchored" data-anchor-id="项目成果仓库">项目成果仓库</h3>
+<ul>
+<li>https://github.com/openbiox/Bizard</li>
+</ul>
+</section>
+</section>
+<section id="开源之夏活动流程" class="level2">
+<h2 class="anchored" data-anchor-id="开源之夏活动流程">开源之夏活动流程</h2>
+<p>学生需要通过 https://summer-ospp.ac.cn/ 进行学生注册和登录。</p>
+<p><img src="https://weekly-1301043367.cos.ap-shanghai.myqcloud.com/20250427223608315.png" class="img-fluid"></p>
+</section>
+<section id="一些历史资料" class="level2">
+<h2 class="anchored" data-anchor-id="一些历史资料">一些历史资料</h2>
+<ol type="1">
+<li>癌症多组学数据挖掘软件 UCSCXenaShiny v2.0 开发项目申请书：https://summer-ospp.ac.cn/2023/previewPdf/1975</li>
+<li>Openbiox 2023 开源之夏项目中选公示：https://mp.weixin.qq.com/s/kUFixYFDaynYzIWxb3pSFw</li>
+<li>OSPP | 癌症多组学数据挖掘软件 UCSCXenaShiny 2.0 项目结项报告：https://mp.weixin.qq.com/s/W52xfBA1aH9ZFWDdxYEgYg</li>
+<li>项目经验分享｜Openbiox 社区李申锁 ：开源 shiny 网页玩转生信数据分析：https://mp.weixin.qq.com/s/R1MEkgPZD32mpzg-VBK2UQ</li>
+<li>王诗翔/周建国/陈素君联合团队研发肿瘤公共多组学交互式分析工具UCSCXenaShiny新版本：https://mp.weixin.qq.com/s/YM0xEXywjNFx9iZMZaO9mA</li>
+</ol>
+
+
+</section>
+
+ ]]></description>
+  <category>Bizard</category>
+  <guid>https://shixiangwang.github.io/posts/2025-04-28-ospp-bizard-openbiox/</guid>
+  <pubDate>Sun, 27 Apr 2025 16:00:00 GMT</pubDate>
+</item>
 <item>
   <title>Mendelian randomization 和 GWAS</title>
   <dc:creator>Shixiang Wang</dc:creator>
@@ -5614,26 +5685,6 @@ font-style: inherit;">"Click"</span>)</span>
   <category>edu</category>
   <guid>https://shixiangwang.github.io/posts/2024-11-17-random/</guid>
   <pubDate>Sat, 16 Nov 2024 16:00:00 GMT</pubDate>
-</item>
-<item>
-  <title>Zero Shot, One Shot 和 Few Shot</title>
-  <dc:creator>Shixiang Wang</dc:creator>
-  <link>https://shixiangwang.github.io/posts/2024-11-14-zero-shot/</link>
-  <description><![CDATA[ 
-
-
-
-
-
-<p>在大语言模型中有这几个相似的概念，区别在于，传统的模型需要通过梯度下降等方式来更新和预测新的任务，而针对大语言模型，更针对的说是预训练模型，我们在实际使用时给出一些例子，会让结果更好。</p>
-<p>Zero shot 就是完全不提供任何例子，直接给出任务以及数据，如中英文翻译，然后给出想要翻译的词。One shot即先给出一个实例，再给出想要翻译的词。Few shot即给出多个实例，一般3-10个。</p>
-
-
-
- ]]></description>
-  <category>AI</category>
-  <guid>https://shixiangwang.github.io/posts/2024-11-14-zero-shot/</guid>
-  <pubDate>Wed, 13 Nov 2024 16:00:00 GMT</pubDate>
 </item>
 </channel>
 </rss>
