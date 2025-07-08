@@ -1,0 +1,161 @@
+---
+title: slurm 管理记录
+author: Shixiang Wang
+date: 2025-07-08
+categories: [Linux, bioinformatics]
+draft: false
+description: ''
+
+toc: true
+
+format:
+  html:
+    code-fold: false
+    code-overflow: wrap
+    code-tools: false
+---
+
+## 相关 services
+
+Master:
+
+- munge
+- slurmctld
+
+Node(s)
+
+- munge
+- slurmd
+
+查看状态：
+
+```sh
+systemctl status slurmctld
+systemctl status slurmd
+systemctl status munge
+```
+
+## 节点测试
+
+```sh
+srun -w node1 hostname
+#node1
+```
+
+io 检查
+
+```sh
+nfsiostat /data 5
+```
+
+io 测试
+
+```sh
+fio --name=nfs-test --ioengine=libaio --rw=randrw --bs=4k     --size=1G --numjobs=16 --runtime=60 --group_reporting     --directory=/data
+```
+
+
+## 节点状态查看和修改
+
+```sh
+scontrol show master
+scontrol show node
+scontrol show node node1
+```
+
+```sh
+scontrol update NodeName=node[1-4] State=RESUME
+```
+
+节点批量运行命令
+
+```sh
+pdsh -w master,node[1-4] "id wsx"
+```
+
+## 创建用户
+
+> bioinfo, gid, 密码等需要根据注意
+
+### 外部
+
+```sh
+#!/bin/bash
+
+user=$1
+gid=1000  # bioinfo
+shared_home=/data/home/${user}
+
+# get 10 开头的最大 uid
+max_uid=$(awk -F: '{print $3}' /etc/passwd | grep 10 | sort -n | tail -1)
+
+# 将最大的 UID 加 1
+uid=$((max_uid + 1))
+
+pdsh -w master,node[1-4] "/opt/create_user_in.sh ${user} ${uid} ${gid} no"
+
+# 设置无缝 ssh
+username=$user
+# Create SSH key pair for the new user, and input an empty passphrase
+sudo -u $username ssh-keygen -t rsa -N "" -f $shared_home/.ssh/id_rsa
+
+# Copy the public key to the new user's authorized_keys file to enable passwordless login
+cat $shared_home/.ssh/id_rsa.pub >> $shared_home/.ssh/authorized_keys
+chown $username:bioinfo $shared_home/.ssh/authorized_keys && chmod 600 $shared_home/.ssh/authorized_keys
+
+echo "User $username created successfully."
+```
+
+
+### 内部
+
+```sh
+cat create_user_in.sh 
+#!/bin/bash
+# 参数校验
+if [ $# -ne 4 ]; then
+  echo "用法：$0 用户名 UID GID 是否管理员(yes/no)"
+  exit 1
+fi
+
+USERNAME=$1
+CUSTOM_UID=$2
+CUSTOM_GID=$3
+IS_ADMIN=$4
+
+# 检查UID/GID是否被占用
+if getent passwd $CUSTOM_UID &>/dev/null; then
+  echo "错误：UID $CUSTOM_UID 已被占用" >&2
+  exit 1
+fi
+
+if ! getent group $CUSTOM_GID &>/dev/null; then
+  echo "错误：GID $CUSTOM_GID 不存在，请先创建组" >&2
+  exit 1
+fi
+
+# 创建用户
+useradd -m -d /data/home/$USERNAME \
+  -u $CUSTOM_UID \
+  -g $CUSTOM_GID \
+  -s /bin/bash $USERNAME || exit 1
+
+# 设置初始密码
+echo "设置初始密码..."
+echo "$USERNAME:xxx" | chpasswd || {
+  echo "密码设置失败！"; exit 1
+}
+
+# 强制首次修改密码
+#chage -d 0 $USERNAME  # [1,5](@ref)
+
+# 设置管理员权限
+if [ "$IS_ADMIN" = "yes" ]; then
+  usermod -aG sudo $USERNAME
+fi
+
+# 验证信息
+echo "用户创建成功！"
+echo "用户名: $USERNAME | UID: $CUSTOM_UID | GID: $CUSTOM_GID"
+echo "家目录: /data/home/$USERNAME"
+```

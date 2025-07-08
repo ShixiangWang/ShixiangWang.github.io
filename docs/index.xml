@@ -10,7 +10,649 @@
 <atom:link href="https://shixiangwang.github.io/index.xml" rel="self" type="application/rss+xml"/>
 <description>Reasoning is a blog dedicated to exploring the intersection of data science, bioinformatics, and personal insights.</description>
 <generator>quarto-1.5.57</generator>
-<lastBuildDate>Tue, 10 Jun 2025 16:00:00 GMT</lastBuildDate>
+<lastBuildDate>Mon, 07 Jul 2025 16:00:00 GMT</lastBuildDate>
+<item>
+  <title>slurm 管理记录</title>
+  <dc:creator>Shixiang Wang</dc:creator>
+  <link>https://shixiangwang.github.io/posts/2025-07-08-slurm-manage/</link>
+  <description><![CDATA[ 
+
+
+
+
+
+<section id="相关-services" class="level2">
+<h2 class="anchored" data-anchor-id="相关-services">相关 services</h2>
+<p>Master:</p>
+<ul>
+<li>munge</li>
+<li>slurmctld</li>
+</ul>
+<p>Node(s)</p>
+<ul>
+<li>munge</li>
+<li>slurmd</li>
+</ul>
+<p>查看状态：</p>
+<div class="sourceCode" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><span class="ex" style="color: null;
+background-color: null;
+font-style: inherit;">systemctl</span> status slurmctld</span>
+<span id="cb1-2"><span class="ex" style="color: null;
+background-color: null;
+font-style: inherit;">systemctl</span> status slurmd</span>
+<span id="cb1-3"><span class="ex" style="color: null;
+background-color: null;
+font-style: inherit;">systemctl</span> status munge</span></code></pre></div>
+</section>
+<section id="节点测试" class="level2">
+<h2 class="anchored" data-anchor-id="节点测试">节点测试</h2>
+<div class="sourceCode" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><span class="ex" style="color: null;
+background-color: null;
+font-style: inherit;">srun</span> <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">-w</span> node1 hostname</span>
+<span id="cb2-2"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#node1</span></span></code></pre></div>
+<p>io 检查</p>
+<div class="sourceCode" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><span class="ex" style="color: null;
+background-color: null;
+font-style: inherit;">nfsiostat</span> /data 5</span></code></pre></div>
+<p>io 测试</p>
+<div class="sourceCode" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><span class="ex" style="color: null;
+background-color: null;
+font-style: inherit;">fio</span> <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">--name</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>nfs-test <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">--ioengine</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>libaio <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">--rw</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>randrw <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">--bs</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>4k     <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">--size</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>1G <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">--numjobs</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>16 <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">--runtime</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>60 <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">--group_reporting</span>     <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">--directory</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>/data</span></code></pre></div>
+</section>
+<section id="节点状态查看和修改" class="level2">
+<h2 class="anchored" data-anchor-id="节点状态查看和修改">节点状态查看和修改</h2>
+<div class="sourceCode" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><span class="ex" style="color: null;
+background-color: null;
+font-style: inherit;">scontrol</span> show master</span>
+<span id="cb5-2"><span class="ex" style="color: null;
+background-color: null;
+font-style: inherit;">scontrol</span> show node</span>
+<span id="cb5-3"><span class="ex" style="color: null;
+background-color: null;
+font-style: inherit;">scontrol</span> show node node1</span></code></pre></div>
+<div class="sourceCode" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><span class="ex" style="color: null;
+background-color: null;
+font-style: inherit;">scontrol</span> update NodeName=node<span class="pp" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">[</span><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">1</span><span class="pp" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">-</span><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">4</span><span class="pp" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">]</span> State=RESUME</span></code></pre></div>
+<p>节点批量运行命令</p>
+<div class="sourceCode" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><span class="ex" style="color: null;
+background-color: null;
+font-style: inherit;">pdsh</span> <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">-w</span> master,node<span class="pp" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">[</span><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">1</span><span class="pp" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">-</span><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">4</span><span class="pp" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">]</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"id wsx"</span></span></code></pre></div>
+</section>
+<section id="创建用户" class="level2">
+<h2 class="anchored" data-anchor-id="创建用户">创建用户</h2>
+<blockquote class="blockquote">
+<p>bioinfo, gid, 密码等需要根据注意</p>
+</blockquote>
+<section id="外部" class="level3">
+<h3 class="anchored" data-anchor-id="外部">外部</h3>
+<div class="sourceCode" id="cb8" style="background: #f1f3f5;"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#!/bin/bash</span></span>
+<span id="cb8-2"></span>
+<span id="cb8-3"><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">user</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">$1</span></span>
+<span id="cb8-4"><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">gid</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>1000  <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># bioinfo</span></span>
+<span id="cb8-5"><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">shared_home</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>/data/home/<span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">${user}</span></span>
+<span id="cb8-6"></span>
+<span id="cb8-7"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># get 10 开头的最大 uid</span></span>
+<span id="cb8-8"><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">max_uid</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">$(</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">awk</span> <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">-F:</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'{print $3}'</span> /etc/passwd <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">|</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">grep</span> 10 <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">|</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">sort</span> <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">-n</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">|</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">tail</span> <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">-1</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">)</span></span>
+<span id="cb8-9"></span>
+<span id="cb8-10"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># 将最大的 UID 加 1</span></span>
+<span id="cb8-11"><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">uid</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">$((max_uid</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">))</span></span>
+<span id="cb8-12"></span>
+<span id="cb8-13"><span class="ex" style="color: null;
+background-color: null;
+font-style: inherit;">pdsh</span> <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">-w</span> master,node<span class="pp" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">[</span><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">1</span><span class="pp" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">-</span><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">4</span><span class="pp" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">]</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"/opt/create_user_in.sh </span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">${user}</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;"> </span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">${uid}</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;"> </span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">${gid}</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;"> no"</span></span>
+<span id="cb8-14"></span>
+<span id="cb8-15"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># 设置无缝 ssh</span></span>
+<span id="cb8-16"><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">username</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">$user</span></span>
+<span id="cb8-17"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Create SSH key pair for the new user, and input an empty passphrase</span></span>
+<span id="cb8-18"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">sudo</span> <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">-u</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">$username</span> ssh-keygen <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">-t</span> rsa <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">-N</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">""</span> <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">-f</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">$shared_home</span>/.ssh/id_rsa</span>
+<span id="cb8-19"></span>
+<span id="cb8-20"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Copy the public key to the new user's authorized_keys file to enable passwordless login</span></span>
+<span id="cb8-21"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">cat</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">$shared_home</span>/.ssh/id_rsa.pub <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&gt;&gt;</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">$shared_home</span>/.ssh/authorized_keys</span>
+<span id="cb8-22"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">chown</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">$username</span>:bioinfo <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">$shared_home</span>/.ssh/authorized_keys <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">&amp;&amp;</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">chmod</span> 600 <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">$shared_home</span>/.ssh/authorized_keys</span>
+<span id="cb8-23"></span>
+<span id="cb8-24"><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">echo</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"User </span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">$username</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;"> created successfully."</span></span></code></pre></div>
+</section>
+<section id="内部" class="level3">
+<h3 class="anchored" data-anchor-id="内部">内部</h3>
+<div class="sourceCode" id="cb9" style="background: #f1f3f5;"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb9-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">cat</span> create_user_in.sh </span>
+<span id="cb9-2"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#!/bin/bash</span></span>
+<span id="cb9-3"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># 参数校验</span></span>
+<span id="cb9-4"><span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">if</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">[</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">$#</span> <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">-ne</span> 4 <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">]</span><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">;</span> <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">then</span></span>
+<span id="cb9-5">  <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">echo</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"用法：</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">$0</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;"> 用户名 UID GID 是否管理员(yes/no)"</span></span>
+<span id="cb9-6">  <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">exit</span> 1</span>
+<span id="cb9-7"><span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">fi</span></span>
+<span id="cb9-8"></span>
+<span id="cb9-9"><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">USERNAME</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">$1</span></span>
+<span id="cb9-10"><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">CUSTOM_UID</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">$2</span></span>
+<span id="cb9-11"><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">CUSTOM_GID</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">$3</span></span>
+<span id="cb9-12"><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">IS_ADMIN</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">$4</span></span>
+<span id="cb9-13"></span>
+<span id="cb9-14"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># 检查UID/GID是否被占用</span></span>
+<span id="cb9-15"><span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">if</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">getent</span> passwd <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">$CUSTOM_UID</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&amp;&gt;</span>/dev/null<span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">;</span> <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">then</span></span>
+<span id="cb9-16">  <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">echo</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"错误：UID </span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">$CUSTOM_UID</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;"> 已被占用"</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&gt;&amp;</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span></span>
+<span id="cb9-17">  <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">exit</span> 1</span>
+<span id="cb9-18"><span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">fi</span></span>
+<span id="cb9-19"></span>
+<span id="cb9-20"><span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">if</span> <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">! </span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">getent</span> group <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">$CUSTOM_GID</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&amp;&gt;</span>/dev/null<span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">;</span> <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">then</span></span>
+<span id="cb9-21">  <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">echo</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"错误：GID </span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">$CUSTOM_GID</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;"> 不存在，请先创建组"</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&gt;&amp;</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span></span>
+<span id="cb9-22">  <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">exit</span> 1</span>
+<span id="cb9-23"><span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">fi</span></span>
+<span id="cb9-24"></span>
+<span id="cb9-25"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># 创建用户</span></span>
+<span id="cb9-26"><span class="ex" style="color: null;
+background-color: null;
+font-style: inherit;">useradd</span> <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">-m</span> <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">-d</span> /data/home/<span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">$USERNAME</span> <span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">\</span></span>
+<span id="cb9-27">  <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">-u</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">$CUSTOM_UID</span> <span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">\</span></span>
+<span id="cb9-28">  <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">-g</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">$CUSTOM_GID</span> <span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">\</span></span>
+<span id="cb9-29">  <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">-s</span> /bin/bash <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">$USERNAME</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">||</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">exit</span> 1</span>
+<span id="cb9-30"></span>
+<span id="cb9-31"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># 设置初始密码</span></span>
+<span id="cb9-32"><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">echo</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"设置初始密码..."</span></span>
+<span id="cb9-33"><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">echo</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">$USERNAME</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">:xxx"</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">|</span> <span class="ex" style="color: null;
+background-color: null;
+font-style: inherit;">chpasswd</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">||</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">{</span></span>
+<span id="cb9-34">  <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">echo</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"密码设置失败！"</span><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">;</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">exit</span> 1</span>
+<span id="cb9-35"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">}</span></span>
+<span id="cb9-36"></span>
+<span id="cb9-37"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># 强制首次修改密码</span></span>
+<span id="cb9-38"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#chage -d 0 $USERNAME  # [1,5](@ref)</span></span>
+<span id="cb9-39"></span>
+<span id="cb9-40"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># 设置管理员权限</span></span>
+<span id="cb9-41"><span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">if</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">[</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">$IS_ADMIN</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"</span> <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">=</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"yes"</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">]</span><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">;</span> <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">then</span></span>
+<span id="cb9-42">  <span class="ex" style="color: null;
+background-color: null;
+font-style: inherit;">usermod</span> <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">-aG</span> sudo <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">$USERNAME</span></span>
+<span id="cb9-43"><span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">fi</span></span>
+<span id="cb9-44"></span>
+<span id="cb9-45"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># 验证信息</span></span>
+<span id="cb9-46"><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">echo</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"用户创建成功！"</span></span>
+<span id="cb9-47"><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">echo</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"用户名: </span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">$USERNAME</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;"> | UID: </span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">$CUSTOM_UID</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;"> | GID: </span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">$CUSTOM_GID</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"</span></span>
+<span id="cb9-48"><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">echo</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"家目录: /data/home/</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">$USERNAME</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"</span></span></code></pre></div>
+
+
+</section>
+</section>
+
+ ]]></description>
+  <category>Linux</category>
+  <category>bioinformatics</category>
+  <guid>https://shixiangwang.github.io/posts/2025-07-08-slurm-manage/</guid>
+  <pubDate>Mon, 07 Jul 2025 16:00:00 GMT</pubDate>
+</item>
 <item>
   <title>理解 lmer(Reaction ~ Days + (Days | Subject), sleepstudy)</title>
   <dc:creator>Shixiang Wang</dc:creator>
@@ -6068,31 +6710,6 @@ font-style: inherit;">"Click"</span>)</span>
   <category>note</category>
   <guid>https://shixiangwang.github.io/posts/2024-11-20-gql-and-rest/</guid>
   <pubDate>Tue, 19 Nov 2024 16:00:00 GMT</pubDate>
-</item>
-<item>
-  <title>random - 书摘</title>
-  <dc:creator>Shixiang Wang</dc:creator>
-  <link>https://shixiangwang.github.io/posts/2024-11-18-random/</link>
-  <description><![CDATA[ 
-
-
-
-
-
-<p>道可顿悟，事须渐修。</p>
-<hr>
-<ul>
-<li>复杂的事情复杂说，是<strong>压力</strong>。</li>
-<li>复杂的事情简单说，是<strong>能力</strong>。</li>
-<li>复杂的事情有趣说，是<strong>魅力</strong>。</li>
-</ul>
-
-
-
- ]]></description>
-  <category>journal</category>
-  <guid>https://shixiangwang.github.io/posts/2024-11-18-random/</guid>
-  <pubDate>Sun, 17 Nov 2024 16:00:00 GMT</pubDate>
 </item>
 </channel>
 </rss>
