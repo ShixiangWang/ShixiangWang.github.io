@@ -1,0 +1,54 @@
+---
+title: 用来测试端口 work 的Demo app
+author: Shixiang Wang
+date: 2025-07-09
+categories: [Python]
+draft: false
+description: ''
+
+toc: true
+
+format:
+  html:
+    code-fold: false
+    code-overflow: wrap
+    code-tools: false
+---
+
+Python 自带就能 run，方便测试端口和映射是否能 work。
+
+
+```python
+import http.server
+import socketserver
+import argparse
+
+class DemoHandler(http.server.SimpleHTTPRequestHandler):
+    def do_GET(self):
+        if self.path == '/':
+            self.send_response(200)
+            self.send_header('Content-type', 'text/html')
+            self.end_headers()
+            self.wfile.write(b'Hello, World! This is a demo app.')
+        elif self.path == '/about':
+            self.send_response(200)
+            self.send_header('Content-type', 'text/html')
+            self.end_headers()
+            self.wfile.write(b'This is a simple demo application.')
+        else:
+            super().do_GET()
+
+def run(port):
+    with socketserver.TCPServer(("", port), DemoHandler) as httpd:
+        print(f"Serving at port {port}")
+        httpd.serve_forever()
+
+def main():
+    parser = argparse.ArgumentParser(description='Run the demo app on a specified port.')
+    parser.add_argument('--port', type=int, default=8000, help='Port to run the server on')
+    args = parser.parse_args()
+    run(args.port)
+
+if __name__ == '__main__':
+    main()
+```

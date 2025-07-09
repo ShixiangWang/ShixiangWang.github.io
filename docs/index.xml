@@ -10,7 +10,185 @@
 <atom:link href="https://shixiangwang.github.io/index.xml" rel="self" type="application/rss+xml"/>
 <description>Reasoning is a blog dedicated to exploring the intersection of data science, bioinformatics, and personal insights.</description>
 <generator>quarto-1.5.57</generator>
-<lastBuildDate>Mon, 07 Jul 2025 16:00:00 GMT</lastBuildDate>
+<lastBuildDate>Tue, 08 Jul 2025 16:00:00 GMT</lastBuildDate>
+<item>
+  <title>用来测试端口 work 的Demo app</title>
+  <dc:creator>Shixiang Wang</dc:creator>
+  <link>https://shixiangwang.github.io/posts/2025-07-09-python-web-demo-app/</link>
+  <description><![CDATA[ 
+
+
+
+
+
+<p>Python 自带就能 run，方便测试端口和映射是否能 work。</p>
+<div class="sourceCode" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> http.server</span>
+<span id="cb1-2"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> socketserver</span>
+<span id="cb1-3"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> argparse</span>
+<span id="cb1-4"></span>
+<span id="cb1-5"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">class</span> DemoHandler(http.server.SimpleHTTPRequestHandler):</span>
+<span id="cb1-6">    <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">def</span> do_GET(<span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>):</span>
+<span id="cb1-7">        <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">if</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.path <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">==</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'/'</span>:</span>
+<span id="cb1-8">            <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.send_response(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">200</span>)</span>
+<span id="cb1-9">            <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.send_header(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'Content-type'</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'text/html'</span>)</span>
+<span id="cb1-10">            <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.end_headers()</span>
+<span id="cb1-11">            <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.wfile.write(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">b'Hello, World! This is a demo app.'</span>)</span>
+<span id="cb1-12">        <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">elif</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.path <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">==</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'/about'</span>:</span>
+<span id="cb1-13">            <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.send_response(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">200</span>)</span>
+<span id="cb1-14">            <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.send_header(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'Content-type'</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'text/html'</span>)</span>
+<span id="cb1-15">            <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.end_headers()</span>
+<span id="cb1-16">            <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.wfile.write(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">b'This is a simple demo application.'</span>)</span>
+<span id="cb1-17">        <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">else</span>:</span>
+<span id="cb1-18">            <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">super</span>().do_GET()</span>
+<span id="cb1-19"></span>
+<span id="cb1-20"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">def</span> run(port):</span>
+<span id="cb1-21">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">with</span> socketserver.TCPServer((<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">""</span>, port), DemoHandler) <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">as</span> httpd:</span>
+<span id="cb1-22">        <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">print</span>(<span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">f"Serving at port </span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span>port<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">}</span><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"</span>)</span>
+<span id="cb1-23">        httpd.serve_forever()</span>
+<span id="cb1-24"></span>
+<span id="cb1-25"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">def</span> main():</span>
+<span id="cb1-26">    parser <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> argparse.ArgumentParser(description<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'Run the demo app on a specified port.'</span>)</span>
+<span id="cb1-27">    parser.add_argument(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'--port'</span>, <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">type</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">int</span>, default<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">8000</span>, <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">help</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'Port to run the server on'</span>)</span>
+<span id="cb1-28">    args <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> parser.parse_args()</span>
+<span id="cb1-29">    run(args.port)</span>
+<span id="cb1-30"></span>
+<span id="cb1-31"><span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">if</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">__name__</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">==</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'__main__'</span>:</span>
+<span id="cb1-32">    main()</span></code></pre></div>
+
+
+
+ ]]></description>
+  <category>Python</category>
+  <guid>https://shixiangwang.github.io/posts/2025-07-09-python-web-demo-app/</guid>
+  <pubDate>Tue, 08 Jul 2025 16:00:00 GMT</pubDate>
+</item>
 <item>
   <title>slurm 管理记录</title>
   <dc:creator>Shixiang Wang</dc:creator>
@@ -6630,85 +6808,6 @@ font-style: inherit;">"Click"</span>)</span>
   <category>edu</category>
   <category>note</category>
   <guid>https://shixiangwang.github.io/posts/2024-11-20-learn-english-by-chunk/</guid>
-  <pubDate>Tue, 19 Nov 2024 16:00:00 GMT</pubDate>
-</item>
-<item>
-  <title>REST API 和 GraphQL API的异同？</title>
-  <dc:creator>Shixiang Wang</dc:creator>
-  <link>https://shixiangwang.github.io/posts/2024-11-20-gql-and-rest/</link>
-  <description><![CDATA[ 
-
-
-
-
-
-<p>在学习的过程中有该疑问，询问 AI 和记录下。</p>
-<blockquote class="blockquote">
-<p>From Kimi</p>
-</blockquote>
-<p>REST API 和 GraphQL API 都是客户端与服务器交互的方式，但它们在设计和数据交换格式上有显著的不同。以下是它们的一些主要异同点：</p>
-<section id="相同点" class="level3">
-<h3 class="anchored" data-anchor-id="相同点">相同点：</h3>
-<ol type="1">
-<li><strong>客户端-服务器模型</strong>：两者都遵循客户端-服务器架构，客户端发送请求，服务器处理请求并返回响应。</li>
-<li><strong>HTTP协议</strong>：两者通常都使用HTTP协议进行通信，尽管GraphQL也可以使用其他协议。</li>
-<li><strong>状态无关性</strong>：每个请求都应该是独立的，不依赖于之前的请求状态。</li>
-<li><strong>使用JSON</strong>：两者通常使用JSON格式来序列化数据，使其易于在客户端和服务器之间传输。</li>
-</ol>
-</section>
-<section id="不同点" class="level3">
-<h3 class="anchored" data-anchor-id="不同点">不同点：</h3>
-<ol type="1">
-<li><strong>数据请求方式</strong>：
-<ul>
-<li><strong>REST</strong>：客户端请求静态定义的资源，通常通过URL路径来指定。每个资源都有一个固定的端点（Endpoint），客户端请求整个资源。</li>
-<li><strong>GraphQL</strong>：客户端通过一个端点发送查询请求，可以精确指定需要哪些数据。GraphQL服务器返回客户端请求的确切数据结构。</li>
-</ul></li>
-<li><strong>数据结构</strong>：
-<ul>
-<li><strong>REST</strong>：数据通常以资源集合的形式提供，如列表或单个资源。资源通常包含客户端可能不需要的额外数据。</li>
-<li><strong>GraphQL</strong>：数据以类型系统的形式提供，客户端可以请求它们需要的确切数据结构，减少了不必要的数据传输。</li>
-</ul></li>
-<li><strong>端点数量</strong>：
-<ul>
-<li><strong>REST</strong>：通常需要多个端点来处理不同的资源和操作（如获取列表、创建、更新、删除）。</li>
-<li><strong>GraphQL</strong>：通常只需要一个端点来处理所有类型的请求，客户端在查询中指定所需的操作。</li>
-</ul></li>
-<li><strong>版本控制</strong>：
-<ul>
-<li><strong>REST</strong>：版本控制通常通过URL（如 <code>/v1/users</code>）或请求头来管理。</li>
-<li><strong>GraphQL</strong>：可以在同一个查询中处理多个版本的数据，不需要额外的端点。</li>
-</ul></li>
-<li><strong>性能</strong>：
-<ul>
-<li><strong>REST</strong>：可能需要多个请求来获取相关数据，这可能导致额外的延迟和带宽使用。</li>
-<li><strong>GraphQL</strong>：由于客户端可以请求所需的确切数据，通常可以减少请求数量和数据传输量。</li>
-</ul></li>
-<li><strong>灵活性</strong>：
-<ul>
-<li><strong>REST</strong>：设计时需要预定义资源和操作，这可能限制了API的灵活性。</li>
-<li><strong>GraphQL</strong>：提供了更高的灵活性，因为客户端可以构建几乎任何类型的查询。</li>
-</ul></li>
-<li><strong>复杂性</strong>：
-<ul>
-<li><strong>REST</strong>：API设计相对简单，易于理解和实现。</li>
-<li><strong>GraphQL</strong>：引入了类型系统和自己的查询语言，可能需要更多的学习和实现工作。</li>
-</ul></li>
-<li><strong>工具和生态系统</strong>：
-<ul>
-<li><strong>REST</strong>：有广泛的工具和库支持，社区和生态系统非常成熟。</li>
-<li><strong>GraphQL</strong>：相对较新，但正在迅速增长，拥有越来越多的工具和库。</li>
-</ul></li>
-</ol>
-<p>总的来说，REST API 适合于结构化和标准化的API设计，而 GraphQL API 适合于需要高度灵活和优化数据传输的应用程序。选择哪种API取决于项目需求、团队熟悉度以及预期的客户端-服务器交互模式。</p>
-
-
-</section>
-
- ]]></description>
-  <category>Web-dev</category>
-  <category>note</category>
-  <guid>https://shixiangwang.github.io/posts/2024-11-20-gql-and-rest/</guid>
   <pubDate>Tue, 19 Nov 2024 16:00:00 GMT</pubDate>
 </item>
 </channel>
