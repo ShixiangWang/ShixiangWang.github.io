@@ -10,7 +10,65 @@
 <atom:link href="https://shixiangwang.github.io/index.xml" rel="self" type="application/rss+xml"/>
 <description>Reasoning is a blog dedicated to exploring the intersection of data science, bioinformatics, and personal insights.</description>
 <generator>quarto-1.5.57</generator>
-<lastBuildDate>Tue, 08 Jul 2025 16:00:00 GMT</lastBuildDate>
+<lastBuildDate>Thu, 17 Jul 2025 16:00:00 GMT</lastBuildDate>
+<item>
+  <title>R 并行时怎么输出消息</title>
+  <dc:creator>Shixiang Wang</dc:creator>
+  <link>https://shixiangwang.github.io/posts/2025-07-18-echo-in-shell-for-r-parallel/</link>
+  <description><![CDATA[ 
+
+
+
+
+
+<p>并行计算可以加快一些耗时流程的分析，但 R 如果调用如 <code>mclapply()</code> 等进行并行计算， 无法输出调用函数内部的打印信息，这里有一个小技巧，记录一下。</p>
+<p>构建一个新的消息函数，在调用函数内部进行使用，用来打印提示信息。</p>
+<div class="sourceCode" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#' Function which prints a message using shell echo; useful for printing messages from inside mclapply when running in Rstudio</span></span>
+<span id="cb1-2">message_parallel <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">function</span>(...){</span>
+<span id="cb1-3">  <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">system</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">sprintf</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'echo "</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">\n</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">%s</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">\n</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"'</span>, <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">paste0</span>(..., <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">collapse=</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">""</span>)))</span>
+<span id="cb1-4">}</span></code></pre></div>
+<blockquote class="blockquote">
+<p>这里多个 <code>\n</code> 可根据情况进行去除。</p>
+</blockquote>
+<hr>
+<blockquote class="blockquote">
+<p>来源：<a href="https://stackoverflow.com/questions/17345837/printing-from-mclapply-in-r-studio" class="uri">https://stackoverflow.com/questions/17345837/printing-from-mclapply-in-r-studio</a></p>
+</blockquote>
+
+
+
+ ]]></description>
+  <category>R</category>
+  <guid>https://shixiangwang.github.io/posts/2025-07-18-echo-in-shell-for-r-parallel/</guid>
+  <pubDate>Thu, 17 Jul 2025 16:00:00 GMT</pubDate>
+</item>
 <item>
   <title>用来测试端口 work 的Demo app</title>
   <dc:creator>Shixiang Wang</dc:creator>
@@ -6780,35 +6838,6 @@ font-style: inherit;">"Click"</span>)</span>
   <category>note</category>
   <guid>https://shixiangwang.github.io/posts/2024-11-22-unfashionable-pursuits/</guid>
   <pubDate>Thu, 21 Nov 2024 16:00:00 GMT</pubDate>
-</item>
-<item>
-  <title>Learn English by Chunk</title>
-  <dc:creator>Shixiang Wang</dc:creator>
-  <link>https://shixiangwang.github.io/posts/2024-11-20-learn-english-by-chunk/</link>
-  <description><![CDATA[ 
-
-
-
-
-
-<p>在接触英文的学习中，不应该不断重复地单独去学习单个单词，而是以词组（块）的形式去学习、阅读、理解英文。从发音来说，也就是要学习连读发音。</p>
-<p>记忆是最低级的学习，要在实际中通过分析、应用、评估和创造等高级的学习方式学习，高级的学习方式完全可以同时完成低级的学习。</p>
-<p>通过英文块的学习构建自己的单词库。</p>
-<iframe width="560" height="315" src="https://www.youtube.com/embed/b4vbS4mJfRY?si=QIFA-VDN0roZXtU7" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen="">
-</iframe>
-<iframe width="560" height="315" src="https://www.youtube.com/embed/921Oi8wT-wI?si=xQWhcE5hPrkC8yTD" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen="">
-</iframe>
-<hr>
-<p>在了解的过程中，我总结到除了语言学习，知识的学习也遵循类似的规律。在学习的最低级阶段，学习基本的概念、定义有其必要性，但一定不能花过多的时间纠结于此， 而是尽快越过低级的学习方式，进入高级的学习方式去探索和应用知识，从科研看，许多知识的定义并不总是对的或者准确的，应该在应用过程中形成自我的认知。</p>
-
-
-
- ]]></description>
-  <category>thought</category>
-  <category>edu</category>
-  <category>note</category>
-  <guid>https://shixiangwang.github.io/posts/2024-11-20-learn-english-by-chunk/</guid>
-  <pubDate>Tue, 19 Nov 2024 16:00:00 GMT</pubDate>
 </item>
 </channel>
 </rss>

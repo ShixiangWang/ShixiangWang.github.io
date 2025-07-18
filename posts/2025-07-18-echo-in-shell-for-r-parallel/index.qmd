@@ -1,0 +1,35 @@
+---
+title: R 并行时怎么输出消息
+author: Shixiang Wang
+date: 2025-07-18
+categories: [R]
+draft: false
+description: ''
+
+toc: true
+
+format:
+  html:
+    code-fold: false
+    code-overflow: wrap
+    code-tools: false
+---
+
+并行计算可以加快一些耗时流程的分析，但 R 如果调用如 `mclapply()` 等进行并行计算，
+无法输出调用函数内部的打印信息，这里有一个小技巧，记录一下。
+
+构建一个新的消息函数，在调用函数内部进行使用，用来打印提示信息。
+
+```r
+#' Function which prints a message using shell echo; useful for printing messages from inside mclapply when running in Rstudio
+message_parallel <- function(...){
+  system(sprintf('echo "\n%s\n"', paste0(..., collapse="")))
+}
+```
+
+>这里多个 `\n` 可根据情况进行去除。
+
+
+---------
+
+>来源：<https://stackoverflow.com/questions/17345837/printing-from-mclapply-in-r-studio>
