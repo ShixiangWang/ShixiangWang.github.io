@@ -20,8 +20,10 @@ website:
             file: resource.qmd
     right:
     # https://icons.getbootstrap.com/ for icon list
-      - text: Resume
-        href: https://shixiangwang.github.io/cv-shixiang/
+      - text: Academic Profile
+        href: https://scholar.google.com/citations?user=FvNp0NkAAAAJ  #https://shixiangwang.github.io/cv-shixiang/
+      - text: Wang Lab
+        href: https://github.com/WangLabCSU
       - icon: wechat
         href: https://shixiangwang.github.io/home/logo/qrcode.jpg
       - icon: quora
