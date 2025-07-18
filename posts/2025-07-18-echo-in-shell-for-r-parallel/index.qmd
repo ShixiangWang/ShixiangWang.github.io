@@ -29,7 +29,22 @@ message_parallel <- function(...){
 
 >这里多个 `\n` 可根据情况进行去除。
 
+### mcprogress
+
+找到一个包[mcprogress](https://github.com/myles-lewis/mcprogress)可以直接解决这个问题。
+
+```r
+library(mcprogress)
+
+# toy example
+res <- pmclapply(letters[1:20], function(i) {
+                 Sys.sleep(0.2 + runif(1) * 0.1)
+                 setNames(rnorm(5), paste0(i, 1:5))
+                 }, mc.cores = 2, title = "Working")
+```
+
+最核心的输出技术还是和上面的函数是相同的。
 
 ---------
 
->来源：<https://stackoverflow.com/questions/17345837/printing-from-mclapply-in-r-studio>
+>参考：<https://stackoverflow.com/questions/17345837/printing-from-mclapply-in-r-studio>

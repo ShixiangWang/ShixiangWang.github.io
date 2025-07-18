@@ -1299,6 +1299,6 @@
     "href": "posts/2025-07-18-echo-in-shell-for-r-parallel/index.html",
     "title": "R 并行时怎么输出消息",
     "section": "",
-    "text": "并行计算可以加快一些耗时流程的分析，但 R 如果调用如 mclapply() 等进行并行计算， 无法输出调用函数内部的打印信息，这里有一个小技巧，记录一下。\n构建一个新的消息函数，在调用函数内部进行使用，用来打印提示信息。\n#' Function which prints a message using shell echo; useful for printing messages from inside mclapply when running in Rstudio\nmessage_parallel &lt;- function(...){\n  system(sprintf('echo \"\\n%s\\n\"', paste0(..., collapse=\"\")))\n}\n\n这里多个 \\n 可根据情况进行去除。\n\n\n\n来源：https://stackoverflow.com/questions/17345837/printing-from-mclapply-in-r-studio"
+    "text": "并行计算可以加快一些耗时流程的分析，但 R 如果调用如 mclapply() 等进行并行计算， 无法输出调用函数内部的打印信息，这里有一个小技巧，记录一下。\n构建一个新的消息函数，在调用函数内部进行使用，用来打印提示信息。\n#' Function which prints a message using shell echo; useful for printing messages from inside mclapply when running in Rstudio\nmessage_parallel &lt;- function(...){\n  system(sprintf('echo \"\\n%s\\n\"', paste0(..., collapse=\"\")))\n}\n\n这里多个 \\n 可根据情况进行去除。\n\n\nmcprogress\n找到一个包mcprogress可以直接解决这个问题。\nlibrary(mcprogress)\n\n# toy example\nres &lt;- pmclapply(letters[1:20], function(i) {\n                 Sys.sleep(0.2 + runif(1) * 0.1)\n                 setNames(rnorm(5), paste0(i, 1:5))\n                 }, mc.cores = 2, title = \"Working\")\n最核心的输出技术还是和上面的函数是相同的。\n\n\n参考：https://stackoverflow.com/questions/17345837/printing-from-mclapply-in-r-studio"
   }
 ]
