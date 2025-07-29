@@ -1,0 +1,137 @@
+---
+title: 结合micromamba和module管理集群软件
+author: Shixiang Wang
+date: 2025-07-29
+categories: [bioinformatics, Linux]
+draft: false
+description: ''
+
+toc: true
+
+format:
+  html:
+    code-fold: false
+    code-overflow: wrap
+    code-tools: false
+---
+
+## micromamba 安装
+
+带一些自定义设置。
+
+```sh
+# 可以指定安装 mamba 构建基础的软件
+# https://mamba.readthedocs.io/en/latest/installation/micromamba-installation.html
+# 这样后续安装软件比编译安装会更快
+curl -Ls https://micro.mamba.pm/api/micromamba/linux-64/latest | tar -xvj bin/micromamba
+./bin/micromamba shell init -s bash -r /data/modules/micromamba
+```
+
+
+## 软件安装
+
+构建了2个环境分别安装常见生信软件和Python数据科学的一些包。
+
+```sh
+# https://bioconda.github.io/
+micromamba config append channels bioconda
+micromamba config append channels conda-forge
+micromamba config set channel_priority strict
+
+micromamba create -n biosoft fastqc multiqc fastp bedtools bwa minimap2 samtools bcftools star star-fusion bowtie bowtie2 
+micromamba install -n biosoft  gatk4 picard spades
+micromamba install -n biosoft flye raven hisat2 stringtie 
+micromamba install -n biosoft salmon kallisto plink admixture
+
+micromamba create -n pyds python=3.9 ipython numpy pandas matplotlib scikit-learn scipy
+micromamba activate pyds
+pip install pyds seaborn statsmodels xgboost catboost lightgbm 
+pip install keras torch torchvision torchaudio plotly --extra-index-url https://download.pytorch.org/whl/cpu 
+pip install transformers fastapi lightning blis nltk 
+pip install jupyter jupyterlab jupyterlab-git jupyterlab-lsp polars dash
+```
+
+
+## module
+
+通过 module，可以简单的释放给所有用户访问使用
+
+## 安装 module
+
+```sh
+# 默认环境变量文件 /etc/environment-modules/modulespath
+# 添加 /opt/modulefiles (每个节点都要加)
+#
+# https://blog.csdn.net/m0_37201243/article/details/129632603
+#
+# Install module
+# https://modules.readthedocs.io/en/latest/INSTALL.html
+cd /opt
+curl -LJO https://github.com/envmodules/modules/releases/download/v5.5.0/modules-5.5.0.tar.gz
+tar xfz modules-5.5.0.tar.gz
+
+cd modules-5.5.0
+./configure
+# ./configure --prefix=/data/modules  # 自定义软件安装目录
+make && make install
+```
+
+### modulefile
+
+```sh
+#%Module1.0######################################################################
+##
+## pyds modulefile
+##
+proc ModulesHelp { } {
+    puts stderr "\tThe pyds Module\n"
+    puts stderr "\tpyds: a list of predefined python data science software (installed by mamba)"
+}
+
+module-whatis   "adds micromamba and an env of a list of python data science software to your PATH environment variable"
+
+append-path     PATH            /data/modules/bin
+append-path     PATH            /data/modules/micromamba/envs/pyds/bin
+setenv     MAMBA_ROOT_PREFIX /data/modules/micromamba
+
+
+set BASHRC [file join [getenv HOME] ".bashrc"]
+set PATTERN "MAMBA_ROOT_PREFIX"
+
+# 检查是否已经初始化
+if { [catch {exec grep -q $PATTERN $BASHRC} result] } {
+    # 如果未初始化，执行初始化
+    exec /data/modules/bin/micromamba shell init -s bash
+    puts stderr "Initialized micromamba in your ~/.bashrc"
+} else {
+    puts stderr "micromamba is already initialized in your ~/.bashrc"
+}
+
+# 输出激活命令，提示用户在 shell 中执行
+puts stderr "To activate the 'pyds' environment, run the following command in your shell:"
+puts stderr ""
+puts stderr "micromamba activate pyds"
+puts stderr ""
+puts stderr "deactivate with 'micromamba deactivate'"
+```
+
+### 测试
+
+```sh
+[wsx@master ~]$ module load pyds
+micromamba is already initialized in your ~/.bashrc
+To activate the 'pyds' environment, run the following command in your shell:
+micromamba activate pyds
+[wsx@master ~]$ micromamba activate pyds
+(pyds) [wsx@master ~]$ ipython
+Python 3.9.15 | packaged by conda-forge | (main, Nov 22 2022, 08:45:29) 
+Type 'copyright', 'credits' or 'license' for more information
+IPython 8.18.1 -- An enhanced Interactive Python. Type '?' for help.
+
+In [1]: import pandas
+
+In [2]: import torch
+
+In [3]: import transformers
+```
+
