@@ -10,7 +10,75 @@
 <atom:link href="https://shixiangwang.github.io/index.xml" rel="self" type="application/rss+xml"/>
 <description>Reasoning is a blog dedicated to exploring the intersection of data science, bioinformatics, and personal insights.</description>
 <generator>quarto-1.5.57</generator>
-<lastBuildDate>Mon, 28 Jul 2025 16:00:00 GMT</lastBuildDate>
+<lastBuildDate>Mon, 04 Aug 2025 16:00:00 GMT</lastBuildDate>
+<item>
+  <title>Shiny session 和 namespace</title>
+  <dc:creator>Shixiang Wang</dc:creator>
+  <link>https://shixiangwang.github.io/posts/2025-08-05-shiny-session-and-namespace/</link>
+  <description><![CDATA[ 
+
+
+
+
+
+<blockquote class="blockquote">
+<p>记录下我对这个问题的提问和AI的回答，相对而言还是容易理解的。</p>
+</blockquote>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+提问
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>如何理解Shiny中的session 和 namespace及其区别？</p>
+</div>
+</div>
+<hr>
+<p>在 Shiny 中，<code>session</code> 和 <code>namespace</code> 是两个重要的概念，它们在构建 Shiny 应用程序时发挥着不同的作用，以下是对其的理解及其区别的说明：</p>
+<section id="session" class="level3">
+<h3 class="anchored" data-anchor-id="session">session</h3>
+<ul>
+<li><p><strong>概念</strong> ：在 Shiny 应用中，<code>session</code> 表示用户与应用之间的一次会话。当用户访问 Shiny 应用时，会创建一个 <code>session</code> 对象，该对象包含了与当前会话相关的信息和状态，如用户输入、输出、会话 ID、用户代理等。</p></li>
+<li><p><strong>作用</strong> ：</p>
+<ul>
+<li><strong>管理用户状态</strong> ：可用于存储和管理用户特定的状态信息，如用户的偏好设置、登录状态等。通过 <code>session$userData</code> 可以存储和访问用户私有的数据，这些数据在会话期间可以被服务器逻辑中的各个部分共享和使用。</li>
+<li><strong>处理并发</strong> ：在多用户并发访问 Shiny 应用时，每个用户都有自己独立的 <code>session</code>，这确保了不同用户之间的操作和数据相互隔离，不会相互干扰。</li>
+<li><strong>实现高级功能</strong> ：如实现页面导航、条件面板显示、动态 UI 更新等功能时，<code>session</code> 对象提供了相关的方法和回调函数，允许开发者根据用户的交互和会话状态来动态地修改 UI 和服务器逻辑。</li>
+</ul></li>
+</ul>
+</section>
+<section id="namespace" class="level3">
+<h3 class="anchored" data-anchor-id="namespace">namespace</h3>
+<ul>
+<li><p><strong>概念</strong> ：<code>namespace</code> 是一种用于解决 Shiny 应用中命名冲突的机制，尤其是在使用模块化开发时。它通过为 UI 组件和服务器端对象创建一个独立的作用域，使得不同模块或组件之间的名称不会相互干扰。</p></li>
+<li><p><strong>作用</strong> ：</p>
+<ul>
+<li><strong>避免命名冲突</strong> ：在大型复杂的 Shiny 应用中，可能会有多个模块或组件使用相同的名字来定义输入控件、输出对象等。通过使用 <code>namespace</code>，可以为每个模块或组件生成唯一的名称前缀，从而避免了这些命名冲突。</li>
+<li><strong>模块化开发</strong> ：在构建可重用的模块时，<code>namespace</code> 是必不可少的。它确保了模块内部的 UI 和服务器逻辑可以独立于外部作用域进行定义和运行，使得模块可以在不同的应用或不同的部分中重复使用，而不会出现名称冲突或相互依赖的问题。</li>
+<li><strong>组织代码结构</strong> ：使用 <code>namespace</code> 可以帮助开发者更好地组织和管理代码结构，将相关的 UI 和服务器逻辑封装在一个独立的命名空间中，提高代码的可读性和可维护性。</li>
+</ul></li>
+</ul>
+</section>
+<section id="两者的区别" class="level3">
+<h3 class="anchored" data-anchor-id="两者的区别">两者的区别</h3>
+<ul>
+<li><strong>关注点不同</strong> ：<code>session</code> 主要关注于用户与应用之间的会话管理和状态维护，而 <code>namespace</code> 则侧重于解决命名冲突和实现模块化开发。</li>
+<li><strong>适用场景不同</strong> ：<code>session</code> 通常用于需要处理用户特定数据、管理会话状态、实现页面导航等场景；<code>namespace</code> 则多用于构建大型复杂应用、开发可重用模块以及避免命名冲突等场景。</li>
+<li><strong>使用方式不同</strong> ：<code>session</code> 是 Shiny 应用自动创建的对象，开发者可以通过在服务器函数的参数中获取它来使用其相关功能；而 <code>namespace</code> 需要开发者通过调用 <code>NS</code> 函数来创建和使用，通常在定义模块的 UI 和服务器逻辑时使用，将 UI 组件的 <code>id</code> 和服务器端对象的名称等传递给 <code>NS</code> 函数进行封装，以生成带有命名空间前缀的唯一名称。</li>
+</ul>
+
+
+</section>
+
+ ]]></description>
+  <category>shiny</category>
+  <guid>https://shixiangwang.github.io/posts/2025-08-05-shiny-session-and-namespace/</guid>
+  <pubDate>Mon, 04 Aug 2025 16:00:00 GMT</pubDate>
+</item>
 <item>
   <title>结合micromamba和module管理集群软件</title>
   <dc:creator>Shixiang Wang</dc:creator>
@@ -7265,35 +7333,6 @@ font-style: inherit;">"Click"</span>)</span>
   <category>Web-dev</category>
   <guid>https://shixiangwang.github.io/posts/2024-12-03-rhino-and-shiny-dev-note/</guid>
   <pubDate>Mon, 02 Dec 2024 16:00:00 GMT</pubDate>
-</item>
-<item>
-  <title>读《自我突围》</title>
-  <dc:creator>Shixiang Wang</dc:creator>
-  <link>https://shixiangwang.github.io/posts/2024-11-27-ziwotuwei/</link>
-  <description><![CDATA[ 
-
-
-
-
-
-<p>最近在读施一公院士的首部作品《自我突围》，这本书介绍了他的人生经历、所思所想、建言献策等，是一部了解他人生观，以及相关人物的不错作品。通过这本图书，我也是首次走进了施一公先生的人生图景，旁观了他对于三观的体验与感悟。</p>
-<p>整体阅读下来，收获还是颇多的，特别是对于我这种职业真正意义上刚起步的人来说，有莫大的调解与安慰效果，也从中学习到了很多实际的经验。当然了，施一公先生关于人才的表述我觉得很有必要记录一下：当前我国是人才大国，但不是人才强国，我们国家的应试教育培养出来的人才“均值高”但“方差小”，所以实际上当前完全不缺处理某个专业事务的“项目人才”，而是缺乏“高层次”、“领军”人才推动领域和国家的发展。反思自身，虽然我还处于青椒的播种期，做的和想的还比较low、比较局限，但思想上一定要跳脱出当前“唯人才”、“唯项目”等等焦躁的社会文化环境，脚踏实地仰望星空，一步一个脚印地往前走，做科研，面对不确定是常态，也是应当学会的能力，心中有大局，做好自己能做的，在有能力的时候再进行发挥。如果确实走不下去，那也是精精彩彩地体验过了。</p>
-<p>最后记录下对于教研（无论是老师还是学生）直接有益的几篇文章，方便备查和阅读：</p>
-<ol type="1">
-<li><a href="https://mp.weixin.qq.com/s/O_8hc3U_aLUhA4eFCFG4vw">做诚实的学问，做正直的人</a> | <a href="https://mp.weixin.qq.com/s/_xSP2XdK5WCs3CKxXwTWFg">视频</a></li>
-<li><a href="https://mp.weixin.qq.com/s/qK3KFQFHxOuhfzdl6jvs9w">学生如何提高专业英文阅读能力？</a></li>
-<li><a href="https://mp.weixin.qq.com/s/pm0Rny5AQTqna5HN61RnSA">如何提高英文的科研写作能力?</a></li>
-</ol>
-<p>最后感谢有思想、理想的现实主义者、科学大家施一公先生。</p>
-
-
-
- ]]></description>
-  <category>note</category>
-  <category>academic</category>
-  <category>edu</category>
-  <guid>https://shixiangwang.github.io/posts/2024-11-27-ziwotuwei/</guid>
-  <pubDate>Tue, 26 Nov 2024 16:00:00 GMT</pubDate>
 </item>
 </channel>
 </rss>
