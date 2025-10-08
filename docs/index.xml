@@ -10,7 +10,71 @@
 <atom:link href="https://shixiangwang.github.io/index.xml" rel="self" type="application/rss+xml"/>
 <description>Reasoning is a blog dedicated to exploring the intersection of data science, bioinformatics, and personal insights.</description>
 <generator>quarto-1.5.57</generator>
-<lastBuildDate>Fri, 12 Sep 2025 16:00:00 GMT</lastBuildDate>
+<lastBuildDate>Tue, 07 Oct 2025 16:00:00 GMT</lastBuildDate>
+<item>
+  <title>霍莉的职业规划框架</title>
+  <dc:creator>Shixiang Wang</dc:creator>
+  <link>https://shixiangwang.github.io/posts/2025-10-08-holly-post/</link>
+  <description><![CDATA[ 
+
+
+
+
+
+<section id="保留舍弃增加职业规划框架" class="level3">
+<h3 class="anchored" data-anchor-id="保留舍弃增加职业规划框架">1.&nbsp;<strong>“保留、舍弃、增加”职业规划框架</strong></h3>
+<ul>
+<li><p><strong>提出者</strong>：英国伯明翰大学职业指导从业者霍莉·普雷斯科特（Holly Prescott）。</p></li>
+<li><p><strong>核心内容</strong>：</p>
+<ul>
+<li><p><strong>保留（Keep）</strong>：思考当前角色中你热爱的部分，比如日常任务、工作环境、合作的人或工作生活平衡等。</p></li>
+<li><p><strong>舍弃（Lose）</strong>：识别你不喜欢的元素，可能是重复性劳动、孤独的工作方式或不符合你价值观的任务。</p></li>
+<li><p><strong>增加（Add）</strong>：想象你希望在工作中引入但目前没有机会做的事情，比如教学、公共演讲或跨学科合作。</p></li>
+</ul></li>
+<li><p><strong>目的</strong>：通过定期反思这些问题，帮助研究人员主动处理当前经历的信息，理解自己希望更多或更少地从事什么，从而逐步向理想职业靠近，而不是被动地基于逃避做出决定。</p></li>
+</ul>
+</section>
+<section id="计划性偶然性理论planned-happstance" class="level3">
+<h3 class="anchored" data-anchor-id="计划性偶然性理论planned-happstance">2.&nbsp;<strong>计划性偶然性理论（Planned Happstance）</strong></h3>
+<ul>
+<li><p><strong>核心观点</strong>：职业道路很少是线性的，应停止将运气视为随机，而是培养把握偶然机会的技能。</p></li>
+<li><p><strong>五个关键品质</strong>：</p>
+<ul>
+<li><p><strong>好奇心</strong>：探索新领域。</p></li>
+<li><p><strong>坚持</strong>：在事情停滞时继续努力。</p></li>
+<li><p><strong>灵活性</strong>：适应变化。</p></li>
+<li><p><strong>乐观</strong>：看到可能性。</p></li>
+<li><p><strong>冒险精神</strong>：在不确定的情况下迈出步伐。</p></li>
+</ul></li>
+<li><p><strong>实践建议</strong>：不要试图完美规划一切，而是期待并准备迎接意外，通过培养上述技能来抓住偶然出现的机会。</p></li>
+</ul>
+</section>
+<section id="对传统职业规划方法的反思" class="level3">
+<h3 class="anchored" data-anchor-id="对传统职业规划方法的反思">3.&nbsp;<strong>对传统职业规划方法的反思</strong></h3>
+<ul>
+<li><p><strong>问题</strong>：传统的“设定目标—制定计划—朝着目标前进”方法在快速变化的世界中可能不再适用，因为未来难以预测，新技术、生活事件等可能带来新机会。</p></li>
+<li><p><strong>新思路</strong>：更注重培养适应变化的能力，而不是僵化地坚持一个长期目标。例如，不设定一个具体的职位目标，而是专注于发展可转移的技能和保持开放的心态，以便能够灵活调整方向。</p></li>
+</ul>
+</section>
+<section id="实际案例分享" class="level3">
+<h3 class="anchored" data-anchor-id="实际案例分享">4.&nbsp;<strong>实际案例分享</strong></h3>
+<ul>
+<li><p><strong>托马斯·奥克斯兰德（Thomas Oxland）的经历</strong>：</p>
+<ul>
+<li><p>他最初计划在工业界发展，但偶然获得读硕士的机会，从而对研究产生热情，继续攻读博士学位。</p></li>
+<li><p>在职业选择中，他不断评估自己的技能和兴趣，比如在工业界工作几年后又回到学术界，强调在职业发展中保持与学术界的联系、探索不同路径的重要性。</p></li>
+<li><p>他的故事体现了计划性偶然性理论的实际应用，即通过不断评估和抓住机遇，找到符合自己价值观和技能的职位。</p></li>
+</ul></li>
+</ul>
+
+
+</section>
+
+ ]]></description>
+  <category>journal</category>
+  <guid>https://shixiangwang.github.io/posts/2025-10-08-holly-post/</guid>
+  <pubDate>Tue, 07 Oct 2025 16:00:00 GMT</pubDate>
+</item>
 <item>
   <title>生命科学学院2025级研究生入院教育发言</title>
   <dc:creator>Shixiang Wang</dc:creator>
@@ -2953,173 +3017,6 @@ font-style: inherit;">=</span> model.generate_insights()</span></code></pre></di
   <category>academic</category>
   <guid>https://shixiangwang.github.io/posts/2025-01-02-nsf-progress-issue/</guid>
   <pubDate>Wed, 01 Jan 2025 16:00:00 GMT</pubDate>
-</item>
-<item>
-  <title>Ubuntu 限制服务器用户计算资源</title>
-  <dc:creator>Shixiang Wang</dc:creator>
-  <link>https://shixiangwang.github.io/posts/2024-12-23-limit-resource-of-user-in-ubuntu/</link>
-  <description><![CDATA[ 
-
-
-
-
-
-<p>服务器是公共计算资源，在管理自己的服务器时发现学生可能会使用过多资源，从而影响其他人，这不太好。因此，检索了网络上当前在这一块怎么进行配置的情况，我使用的是 Ubuntu，实际测试后发现很多设计cgroup的教程都没起到作用（搞不清为啥），最后在一篇博文找到了合适的配置方式，这里记录下。</p>
-<p>首先创建所谓的用户 slice 配置目录：</p>
-<div class="sourceCode" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">mkdir</span> <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">-p</span> /etc/systemd/system/user-.slice.d</span></code></pre></div>
-<p>然后创建文件 <code>/etc/systemd/system/user-.slice.d/50-memory.conf</code>（<code>50-memory</code>是自定义的），输入以下内容：</p>
-<div class="sourceCode" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">[Slice]</span></span>
-<span id="cb2-2"><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">MemoryMax</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span>512G</span>
-<span id="cb2-3"><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">CPUQuota</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span>10000%</span></code></pre></div>
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Note
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>这里根据自己的需求进行配置，CPU是按<code>100%</code>进行设置的，这里<code>10000%</code>就是100线程了。</p>
-</div>
-</div>
-<p>重载守护进程：</p>
-<div class="sourceCode" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">systemctl</span> daemon-reload</span></code></pre></div>
-<p>可以检查配置的生效，如：</p>
-<div class="sourceCode" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">cat</span> /sys/fs/cgroup/user.slice/user-1006.slice/memory.max</span>
-<span id="cb4-2"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">cat</span> /sys/fs/cgroup/user.slice/user-1006.slice/cpu.max</span>
-<span id="cb4-3"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">cat</span> /etc/systemd/system/user-.slice.d/50-memory.conf</span></code></pre></div>
-<p>我还用 AI 生成了一段测试代码 <code>test_limit.sh</code>：</p>
-<div class="sourceCode" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">#!/bin/bash</span></span>
-<span id="cb5-2"></span>
-<span id="cb5-3"><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">function</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;"> cpu_load</span> <span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">{</span></span>
-<span id="cb5-4">    <span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">end</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">$((SECONDS</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">+</span><span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">60</span><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">))</span></span>
-<span id="cb5-5">    <span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">while</span> <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">[</span> <span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">$SECONDS</span> <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">-lt</span> <span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">$end</span> <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">]</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">;</span> <span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">do</span></span>
-<span id="cb5-6">        <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">:</span> <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># Do nothing and burn up CPU by going around the loop as fast as possible</span></span>
-<span id="cb5-7">    <span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">done</span> <span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">&amp;</span></span>
-<span id="cb5-8"><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">}</span></span>
-<span id="cb5-9"></span>
-<span id="cb5-10"><span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">for</span> i <span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">in</span> <span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">{</span><span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">1</span><span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">..</span><span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">180</span><span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">}</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">;</span> <span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">do</span></span>
-<span id="cb5-11">    <span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">cpu_load</span></span>
-<span id="cb5-12"><span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">done</span></span>
-<span id="cb5-13"></span>
-<span id="cb5-14"><span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">wait</span></span></code></pre></div>
-<ul>
-<li>参考：<a href="https://pavlokhmel.com/cgroup-v2-limit-memory-and-cpu-usage-for-all-users-on-linux.html" class="uri">https://pavlokhmel.com/cgroup-v2-limit-memory-and-cpu-usage-for-all-users-on-linux.html</a></li>
-</ul>
-
-
-
- ]]></description>
-  <category>Linux</category>
-  <guid>https://shixiangwang.github.io/posts/2024-12-23-limit-resource-of-user-in-ubuntu/</guid>
-  <pubDate>Sun, 22 Dec 2024 16:00:00 GMT</pubDate>
 </item>
 </channel>
 </rss>
