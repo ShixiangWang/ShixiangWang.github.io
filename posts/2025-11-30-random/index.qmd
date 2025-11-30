@@ -1,0 +1,22 @@
+---
+title: 随笔
+author: Shixiang Wang
+date: 2025-11-30
+categories: [journal]
+draft: false
+description: ''
+
+toc: true
+
+format:
+  html:
+    code-fold: false
+    code-overflow: wrap
+    code-tools: false
+---
+
+角色不同，仔细回头突然感觉到过去的不适应。
+过去别人认识到我的工作，主要是通过技术，而我的时间却在远离技术，
+我所谓的工作生命。那我工作的生命力是什么？
+
+
