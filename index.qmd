@@ -1,5 +1,5 @@
 ---
-title: "Nothing as profoundly exciting as to glimpse for the first time some new and basic truth"
+title: Nothing as profoundly exciting as to glimpse for the first time some new and basic truth
 listing:
   contents: posts
   sort: "date desc"
@@ -13,3 +13,7 @@ page-layout: full
 title-block-banner: true
 include-in-header: meta.html
 ---
+
+**罗素说：幸福的秘诀是，尽可能怀着善意而非敌意，关切尽可能多的人和物。聪明的人绝不会因为妒忌别人拥有的东西，而停止享受自己已有的东西。**
+
+----
