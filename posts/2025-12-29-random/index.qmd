@@ -1,0 +1,19 @@
+---
+title: random
+author: Shixiang Wang
+date: 2025-12-29
+categories: [journal]
+draft: false
+description: ''
+
+toc: true
+
+format:
+  html:
+    code-fold: false
+    code-overflow: wrap
+    code-tools: false
+---
+
+数学是描述，物理化学是观察，编程是模拟。
+

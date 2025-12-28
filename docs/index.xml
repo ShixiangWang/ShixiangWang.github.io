@@ -10,7 +10,26 @@
 <atom:link href="https://shixiangwang.github.io/index.xml" rel="self" type="application/rss+xml"/>
 <description>Reasoning is a blog dedicated to exploring the intersection of data science, bioinformatics, and personal insights.</description>
 <generator>quarto-1.5.57</generator>
-<lastBuildDate>Sat, 20 Dec 2025 16:00:00 GMT</lastBuildDate>
+<lastBuildDate>Sun, 28 Dec 2025 16:00:00 GMT</lastBuildDate>
+<item>
+  <title>random</title>
+  <dc:creator>Shixiang Wang</dc:creator>
+  <link>https://shixiangwang.github.io/posts/2025-12-29-random/</link>
+  <description><![CDATA[ 
+
+
+
+
+
+<p>数学是描述，物理化学是观察，编程是模拟。</p>
+
+
+
+ ]]></description>
+  <category>journal</category>
+  <guid>https://shixiangwang.github.io/posts/2025-12-29-random/</guid>
+  <pubDate>Sun, 28 Dec 2025 16:00:00 GMT</pubDate>
+</item>
 <item>
   <title>乙巳年题冬至</title>
   <dc:creator>Shixiang Wang</dc:creator>
@@ -3042,25 +3061,6 @@ font-style: inherit;">=</span> model.generate_insights()</span></code></pre></di
   <category>目标</category>
   <guid>https://shixiangwang.github.io/posts/2025-01-29-random/</guid>
   <pubDate>Tue, 28 Jan 2025 16:00:00 GMT</pubDate>
-</item>
-<item>
-  <title>随笔</title>
-  <dc:creator>Shixiang Wang</dc:creator>
-  <link>https://shixiangwang.github.io/posts/2025-01-05-random/</link>
-  <description><![CDATA[ 
-
-
-
-
-
-<p>人不是逻辑的机器，而是情感的奴隶。</p>
-
-
-
- ]]></description>
-  <category>journal</category>
-  <guid>https://shixiangwang.github.io/posts/2025-01-05-random/</guid>
-  <pubDate>Sat, 04 Jan 2025 16:00:00 GMT</pubDate>
 </item>
 </channel>
 </rss>
