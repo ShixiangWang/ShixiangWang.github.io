@@ -1,0 +1,41 @@
+---
+title: Terminal IDE Fresh
+author: Shixiang Wang
+date: 2025-12-29
+categories: [Linux]
+draft: false
+description: ''
+
+toc: true
+
+format:
+  html:
+    code-fold: false
+    code-overflow: wrap
+    code-tools: false
+---
+
+[Fresh](https://sinelaw.github.io/fresh/) (GitHub: <https://github.com/sinelaw/fresh>) 将 VS Code 和 Sublime Text 等编辑器的直观、传统的用户界面体验带入终端。
+
+对于习惯使用模态、高度专业化的操作流程的高级用户来说，像 Emacs 和 Vim 这样的老牌编辑器，以及新出现的 Neovim 和 Helix 等编辑器都非常优秀。但它们对于习惯标准 GUI 交互的用户来说，通常学习曲线较为陡峭。Fresh 是为那些希望获得直观、非模态体验的开发者而设计的，无需牺牲命令行的速度和可移植性。键盘快捷键、鼠标支持、菜单、命令面板等所有功能都设计为对大多数现代用户来说非常熟悉。
+
+![](https://sinelaw.github.io/fresh/docs/assets/hero.png)
+
+![](https://github.com/sinelaw/fresh/raw/master/docs/screenshot1.png)
+
+![](https://github.com/sinelaw/fresh/raw/master/docs/screenshot2.png)
+
+![](https://github.com/sinelaw/fresh/raw/master/docs/screenshot3.png)
+
+安装：
+
+```
+curl https://ghfast.top/https://raw.githubusercontent.com/sinelaw/fresh/refs/heads/master/scripts/install.sh | sh
+```
+
+> 上面加了 GitHub Proxy加速（<https://ghfast.top/>），可以删除和更改。
+
+另外可以电脑直接通过 release 下载安装。
+
+- [releases](https://github.com/sinelaw/fresh/releases)
+

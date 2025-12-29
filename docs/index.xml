@@ -31,6 +31,39 @@
   <pubDate>Sun, 28 Dec 2025 16:00:00 GMT</pubDate>
 </item>
 <item>
+  <title>Terminal IDE Fresh</title>
+  <dc:creator>Shixiang Wang</dc:creator>
+  <link>https://shixiangwang.github.io/posts/2025-12-29-fresh-terminal-ide/</link>
+  <description><![CDATA[ 
+
+
+
+
+
+<p><a href="https://sinelaw.github.io/fresh/">Fresh</a> (GitHub: <a href="https://github.com/sinelaw/fresh" class="uri">https://github.com/sinelaw/fresh</a>) 将 VS Code 和 Sublime Text 等编辑器的直观、传统的用户界面体验带入终端。</p>
+<p>对于习惯使用模态、高度专业化的操作流程的高级用户来说，像 Emacs 和 Vim 这样的老牌编辑器，以及新出现的 Neovim 和 Helix 等编辑器都非常优秀。但它们对于习惯标准 GUI 交互的用户来说，通常学习曲线较为陡峭。Fresh 是为那些希望获得直观、非模态体验的开发者而设计的，无需牺牲命令行的速度和可移植性。键盘快捷键、鼠标支持、菜单、命令面板等所有功能都设计为对大多数现代用户来说非常熟悉。</p>
+<p><img src="https://sinelaw.github.io/fresh/docs/assets/hero.png" class="img-fluid"></p>
+<p><img src="https://github.com/sinelaw/fresh/raw/master/docs/screenshot1.png" class="img-fluid"></p>
+<p><img src="https://github.com/sinelaw/fresh/raw/master/docs/screenshot2.png" class="img-fluid"></p>
+<p><img src="https://github.com/sinelaw/fresh/raw/master/docs/screenshot3.png" class="img-fluid"></p>
+<p>安装：</p>
+<pre><code>curl https://ghfast.top/https://raw.githubusercontent.com/sinelaw/fresh/refs/heads/master/scripts/install.sh | sh</code></pre>
+<blockquote class="blockquote">
+<p>上面加了 GitHub Proxy加速（<a href="https://ghfast.top/" class="uri">https://ghfast.top/</a>），可以删除和更改。</p>
+</blockquote>
+<p>另外可以电脑直接通过 release 下载安装。</p>
+<ul>
+<li><a href="https://github.com/sinelaw/fresh/releases">releases</a></li>
+</ul>
+
+
+
+ ]]></description>
+  <category>Linux</category>
+  <guid>https://shixiangwang.github.io/posts/2025-12-29-fresh-terminal-ide/</guid>
+  <pubDate>Sun, 28 Dec 2025 16:00:00 GMT</pubDate>
+</item>
+<item>
   <title>乙巳年题冬至</title>
   <dc:creator>Shixiang Wang</dc:creator>
   <link>https://shixiangwang.github.io/posts/2025-12-21-dongzhi/</link>
@@ -3024,43 +3057,6 @@ font-style: inherit;">=</span> model.generate_insights()</span></code></pre></di
   <category>AI</category>
   <guid>https://shixiangwang.github.io/posts/2025-02-21-llm-and-me/</guid>
   <pubDate>Thu, 20 Feb 2025 16:00:00 GMT</pubDate>
-</item>
-<item>
-  <title>新年想法与目标</title>
-  <dc:creator>Shixiang Wang</dc:creator>
-  <link>https://shixiangwang.github.io/posts/2025-01-29-random/</link>
-  <description><![CDATA[ 
-
-
-
-
-
-<p>今天是大年初一，2025 年的 1 月也基本上要结束了。新年新气象，给懒惰的自己（许多天没有使用电脑了）清理下脑子，梳理下目标，提下干劲。</p>
-<p>最近的好消息是拿到了湖南省的优秀青年基金资助，现在也叫青年B类了，这是一个合理的预期结果（特别是有许多老师朋友的支持帮助），不过真正能拿到心里也是非常高兴的。 从侧面也说明了我来到长沙这个新城市后，这边科研圈子对我过往工作的一种认可。未来还是需要再接再厉的。</p>
-<p>三到五年的基本目标：</p>
-<ul>
-<li>三年内稳定拿到国自然面上项目，这是职称稳定的核心指标，也是申请博导的基础。</li>
-<li>争取三年完成聘期合同的论文目标，能够申请向上考核。</li>
-<li>五年内尽力拉起一支真正能从事比较原创的计算肿瘤学的团队，争取拿到国家优青（B类青年）基金的资助，在国内能真正树立旗帜。</li>
-</ul>
-<p>2025年内的想法：</p>
-<ul>
-<li>阅读 20 本左右的专业图书。</li>
-<li>基本完成过往整理资料（上千博文/推文）的阅读和标记。</li>
-<li>基本完成已标记的 CNS 论文的基本阅读。</li>
-<li>以主要作者发表 3-5 篇 SCI 论文，以学校为单位申请一项软著，尽力结束当前已发起的项目或者拿到初步结果的论文发表。</li>
-<li>争取在下半年能够主要负责一门选修课程，想法是 R 包的开发。</li>
-<li>在编程（特别是专业级开发）的熟练和精通方面有所突破。</li>
-<li>能够基本掌握以单细胞为基础的高精度组学研究、和以深度学习为基础的模型方法学研究思路。</li>
-</ul>
-
-
-
- ]]></description>
-  <category>journal</category>
-  <category>目标</category>
-  <guid>https://shixiangwang.github.io/posts/2025-01-29-random/</guid>
-  <pubDate>Tue, 28 Jan 2025 16:00:00 GMT</pubDate>
 </item>
 </channel>
 </rss>
