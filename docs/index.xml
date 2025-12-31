@@ -10,7 +10,96 @@
 <atom:link href="https://shixiangwang.github.io/index.xml" rel="self" type="application/rss+xml"/>
 <description>Reasoning is a blog dedicated to exploring the intersection of data science, bioinformatics, and personal insights.</description>
 <generator>quarto-1.5.57</generator>
-<lastBuildDate>Sun, 28 Dec 2025 16:00:00 GMT</lastBuildDate>
+<lastBuildDate>Tue, 30 Dec 2025 16:00:00 GMT</lastBuildDate>
+<item>
+  <title>如何选择一个好的科学问题</title>
+  <dc:creator>Shixiang Wang</dc:creator>
+  <link>https://shixiangwang.github.io/posts/2025-12-31-how-to-choose-a-good-scientific-problem/</link>
+  <description><![CDATA[ 
+
+
+
+
+
+<blockquote class="blockquote">
+<p>文献：<a href="https://www.sciencedirect.com/science/article/pii/S1097276509006418" class="uri">https://www.sciencedirect.com/science/article/pii/S1097276509006418</a></p>
+</blockquote>
+<p>这篇文章由以色列系统生物学家Uri Alon撰写，围绕“如何选择好的科学问题”展开，结合个人经验与哲学思考，提出了多维度的指导原则，旨在帮助科学家（尤其是学生和青年研究者）更理性、更有意义地选择研究问题，同时强调科研环境的人文关怀与自我表达的重要性。以下是核心内容的详细总结：</p>
+<section id="一核心理念实验室是培育性环境" class="level3">
+<h3 class="anchored" data-anchor-id="一核心理念实验室是培育性环境"><strong>一、核心理念：实验室是“培育性环境”</strong></h3>
+<p>传统观念中，实验室的目标常被默认为“发表高质量论文以获得职位和 tenure”，但作者提出更根本的目标：<strong>实验室应是一个培育性环境，旨在最大化学生作为科学家和人的潜力</strong>。这一价值观指导实验室的所有决策（如氛围、假期安排、问题选择等），强调通过选择问题促进成长和自我驱动的研究，而非仅追求短期成果。</p>
+</section>
+<section id="二选择问题的二维框架可行性-vs.-兴趣" class="level3">
+<h3 class="anchored" data-anchor-id="二选择问题的二维框架可行性-vs.-兴趣"><strong>二、选择问题的二维框架：可行性 vs.&nbsp;兴趣</strong></h3>
+<p>作者提出用二维图（图1）评估科学问题，两个核心维度为：</p>
+<ol type="1">
+<li><strong>可行性</strong>：完成问题所需的时间、技能匹配度及实验室技术条件。需注意“纸上容易的问题实际可能很难，纸上难的问题几乎不可能”。<br>
+</li>
+<li><strong>兴趣</strong>：问题对知识增量的贡献（即“远离已知领域的程度”）。科学的价值在于探索未知，因此兴趣反映问题的潜在认知突破。</li>
+</ol>
+<p><img src="https://ars.els-cdn.com/content/image/1-s2.0-S1097276509006418-gr1.jpg" class="img-fluid"></p>
+<section id="问题分类与优化原则" class="level4">
+<h4 class="anchored" data-anchor-id="问题分类与优化原则">问题分类与优化原则</h4>
+<ul>
+<li><strong>低垂果实（Low-hanging fruit）</strong>：容易但兴趣低的问题（当前研究常见）。<br>
+</li>
+<li><strong>高难度低兴趣</strong>：因“难=好”的误区导致的问题（应避免）。<br>
+</li>
+<li><strong>重大挑战（Grand challenges）</strong>：困难但有高认知潜力的“大问题”（适合长期投入）。<br>
+</li>
+<li><strong>理想区域</strong>：右上象限（可行且高兴趣），能显著扩展知识。</li>
+</ul>
+<p><strong>帕累托前沿（Pareto front）</strong>：若问题A在两个维度均优于B，则淘汰B；最终保留的是“无问题在两方面均更优”的前沿问题。选择时需根据研究者阶段权衡两轴：</p>
+<ul>
+<li>研究生初期：选右下（易+中等兴趣），快速获得正反馈以建立信心；<br>
+</li>
+<li>研究生后期/博后：向兴趣轴移动（更高认知价值）；<br>
+</li>
+<li>新PI：需选择可分解为多个子问题的“重大挑战”，兼顾长期领域深耕与学生培养。</li>
+</ul>
+</section>
+</section>
+<section id="三关键原则花时间选择三个月规则" class="level3">
+<h3 class="anchored" data-anchor-id="三关键原则花时间选择三个月规则"><strong>三、关键原则：花时间选择（“三个月规则”）</strong></h3>
+<p>常见错误是“快速选择第一个想到的项目”，但科研项目常需数年，仓促选择易导致后续挫败。<strong>作者的实验室规则</strong>：新学生/博后需3个月不承诺具体问题，期间阅读、讨论、规划，专注于“存在状态”而非“行动”；3个月后庆祝并启动研究。尽管资金压力或截止日期可能阻碍此过程，但花时间选择能节省未来数月甚至数年的试错成本。</p>
+</section>
+<section id="四兴趣维度的主观性倾听内在声音" class="level3">
+<h3 class="anchored" data-anchor-id="四兴趣维度的主观性倾听内在声音"><strong>四、兴趣维度的主观性：倾听“内在声音”</strong></h3>
+<p>兴趣是<strong>主观且个人的</strong>，但易被外界（会议、同事、期刊偏好）的“大声”干扰，掩盖内心“微弱”的真实兴趣。作者提出强化内在声音的方法：</p>
+<ul>
+<li><strong>假设性提问</strong>：“如果我是地球唯一的人，会研究哪个问题？”诚实回答可减少妥协。<br>
+</li>
+<li><strong>反复出现的想法</strong>：数月/数年间反复浮现的问题，比近期灵感更可能是好项目的基础。<br>
+</li>
+<li><strong>描述研究的感受</strong>：向他人解释项目时的情绪（兴奋vs.勉强）反映真实兴趣。</li>
+</ul>
+<p><strong>内在兴趣的价值</strong>：自我激励的研究更易坚持，且“越让自己感兴趣，越可能吸引受众”。</p>
+</section>
+<section id="五自我表达问题的本质是个人视角的投射" class="level3">
+<h3 class="anchored" data-anchor-id="五自我表达问题的本质是个人视角的投射"><strong>五、自我表达：问题的本质是个人视角的投射</strong></h3>
+<p>研究者感兴趣的问题是其<strong>个人过滤器（感知世界的方式）的表达</strong>，关联其价值观（对美、真、善的判断）。例如，有人被视觉美学驱动，有人热衷颠覆常识，有人偏好基础理解或应用。导师可通过倾听学生的生活与科学偏好（如“何时决定成为科学家”“欣赏的科学工作”），识别其价值模式，帮助选择能实现<strong>自我表达</strong>的项目——此类工作更具活力、个人意义，也更可能发现深刻洞见。</p>
+</section>
+<section id="六研究的两种心智模式线性目标-vs.-培育性探索" class="level3">
+<h3 class="anchored" data-anchor-id="六研究的两种心智模式线性目标-vs.-培育性探索"><strong>六、研究的两种心智模式：线性目标 vs.&nbsp;培育性探索</strong></h3>
+<ol type="1">
+<li><strong>线性目标模式</strong>（常见于论文写作逻辑）：从问题A直线到答案B，将学生视为“达成目标的工具”。此模式下，实验失败、学生情绪低落等“偏离路径”会引发认知失调（因现实与预期不符），导致压力。<br>
+</li>
+<li><strong>培育性探索模式</strong>（更符合实际研究）：研究路径常迂回、循环，进入“云团（cloud）”阶段（假设崩溃、实验失效、混乱）。此时可能发现新问题C（比B更有趣/可行），转而探索C。此模式视“偏离”为科研固有部分，导师需支持学生穿越“云团”，认可勇气与开放的重要性（探索未知需勇气，接受意外需开放）。</li>
+</ol>
+<p><img src="https://ars.els-cdn.com/content/image/1-s2.0-S1097276509006418-gr2.jpg" class="img-fluid"></p>
+</section>
+<section id="总结" class="level3">
+<h3 class="anchored" data-anchor-id="总结"><strong>总结</strong></h3>
+<p>选择好问题的核心是：<strong>花时间（三个月规则）在可行性与个人兴趣的前沿上，找到能实现自我表达的问题</strong>。实验室应作为培育性环境，支持研究者倾听内在声音，接纳科研的不确定性，将探索过程本身视为成长与创造的一部分。好的问题不仅推动知识进步，更能让科研工作充满个人意义与持久动力。</p>
+
+
+</section>
+
+ ]]></description>
+  <category>academic</category>
+  <guid>https://shixiangwang.github.io/posts/2025-12-31-how-to-choose-a-good-scientific-problem/</guid>
+  <pubDate>Tue, 30 Dec 2025 16:00:00 GMT</pubDate>
+</item>
 <item>
   <title>random</title>
   <dc:creator>Shixiang Wang</dc:creator>
@@ -2716,347 +2805,6 @@ font-style: inherit;">data =</span> sleepstudy)</span></code></pre></div>
   <category>bioinformatics</category>
   <guid>https://shixiangwang.github.io/posts/2025-02-23-science-or-tech-in-cancer-bioinformatics/</guid>
   <pubDate>Sat, 22 Feb 2025 16:00:00 GMT</pubDate>
-</item>
-<item>
-  <title>LLM 能否自举以及在生信结构数据中应用</title>
-  <dc:creator>Shixiang Wang</dc:creator>
-  <link>https://shixiangwang.github.io/posts/2025-02-21-llm-and-me/</link>
-  <description><![CDATA[ 
-
-
-
-
-
-<blockquote class="blockquote">
-<p>记录下我和 DeekSeek 关于 LLM 的 2 轮对话。</p>
-</blockquote>
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-提问
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>大语言模型是否可以理解为一个类“计算系统”，可以类似编程语言完成自举，或者类似我的世界游戏里完成世界的模拟搭建？</p>
-</div>
-</div>
-<div class="callout callout-style-default callout-caution callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-深度思考
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-2" class="callout-2-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<p>嗯，用户问大语言模型是否可以视为类“计算系统”，像编程语言那样自举，或者像《我的世界》那样模拟世界。首先，我需要理解用户的问题核心在哪里。他们可能对LLM的工作原理和潜力感兴趣，想了解其是否具备类似计算系统的自我扩展能力或复杂环境模拟能力。</p>
-<p>首先，我应该回顾大语言模型的基本架构。LLM是基于Transformer的神经网络，通过大量文本数据训练，学习语言模式。它们生成文本的方式是概率性的，预测下一个词，而不是执行逻辑运算。这点和传统的计算系统不同，传统计算系统依赖明确的算法和逻辑步骤。</p>
-<p>接下来，用户提到的“自举”可能指编程语言的自举，即用自身编写编译器或解释器。LLM能否做到类似的事情？虽然LLM可以生成代码，甚至调试，但缺乏真正的自我迭代能力。它们生成的代码可能有效，但需要人类介入验证和优化，无法像编程语言那样自我完善。</p>
-<p>然后是关于《我的世界》的模拟。LLM能否模拟复杂环境？虽然可以在文本层面生成描述，但缺乏动态交互和物理引擎的支持。它们可以生成游戏剧本或规则，但无法实时模拟物理交互，这需要专门的引擎。</p>
-<p>用户可能的深层需求是探索LLM的潜力和局限性，想知道它们是否能超越现有应用，实现更复杂的任务，如自我进化或环境模拟。他们可能对AI的未来发展感兴趣，或者想将这些模型应用到特定项目中。</p>
-<p>需要区分LLM的文本生成能力和真正的计算系统之间的差异。强调概率模型与确定性系统的区别，以及当前技术的局限性。同时，也要提到结合外部工具的可能性，比如将LLM与模拟引擎结合，扩展其应用场景。</p>
-<p>还要考虑用户可能的背景，他们可能有一定的技术知识，但需要更通俗的解释。避免使用过多术语，用类比和例子来说明。比如用编程自举和游戏模拟的例子，帮助用户理解抽象概念。</p>
-<p>最后，总结LLM作为新型计算系统的潜力，但指出其依赖概率模型和外部工具的必要性。这样用户能全面了解现状和未来可能性，做出合理判断。</p>
-</div>
-</div>
-</div>
-<p>大语言模型（LLM）能否被看作一种“计算系统”，能否实现类似编程语言的自举（Bootstrap）或《我的世界》式的复杂世界模拟？这一问题触及了LLM的本质、能力边界及其与经典计算系统的差异。我们可以从以下维度展开分析：</p>
-<hr>
-<section id="llm与经典计算系统的核心差异" class="level3">
-<h3 class="anchored" data-anchor-id="llm与经典计算系统的核心差异"><strong>1. LLM与经典计算系统的核心差异</strong></h3>
-<section id="计算范式的不同" class="level4">
-<h4 class="anchored" data-anchor-id="计算范式的不同"><strong>1.1 计算范式的不同</strong></h4>
-<ul>
-<li><strong>经典计算系统</strong>（如编程语言、图灵机）：基于<strong>符号逻辑</strong>和<strong>确定性规则</strong>，通过明确的算法步骤解决问题（例如 <code>if-else</code> 分支、循环、函数调用）。</li>
-<li><strong>大语言模型</strong>：基于<strong>概率生成</strong>的神经网络，通过统计模式匹配生成文本，缺乏显式的逻辑推理链条。其输出是“对训练数据分布的概率模仿”，而非严格遵循逻辑规则。</li>
-</ul>
-</section>
-<section id="自举能力的局限性" class="level4">
-<h4 class="anchored" data-anchor-id="自举能力的局限性"><strong>1.2 自举能力的局限性</strong></h4>
-<ul>
-<li><strong>编程语言的自举</strong>：例如用C语言编写C编译器，本质是通过符号逻辑的递归定义实现自我迭代。这种自举依赖<strong>符号的精确性和规则的闭合性</strong>。</li>
-<li><strong>LLM的“伪自举”</strong>：虽然LLM可以生成代码（如用Python写Python解释器），但其生成的代码需要人类验证和调试，无法像编程语言那样通过逻辑闭环实现真正的自我完善。LLM的“自举”更像一种<strong>统计模仿</strong>，而非逻辑闭环。</li>
-</ul>
-<hr>
-</section>
-</section>
-<section id="llm能否模拟我的世界式复杂系统" class="level3">
-<h3 class="anchored" data-anchor-id="llm能否模拟我的世界式复杂系统"><strong>2. LLM能否模拟“我的世界”式复杂系统？</strong></h3>
-<section id="文本模拟的潜力" class="level4">
-<h4 class="anchored" data-anchor-id="文本模拟的潜力"><strong>2.1 文本模拟的潜力</strong></h4>
-<ul>
-<li><strong>表层模拟</strong>：LLM可以生成《我的世界》的游戏规则描述、角色对话甚至剧情脚本，例如：“玩家用镐子挖矿，合成铁剑，击败末影龙……” 这种模拟依赖文本生成能力。</li>
-<li><strong>动态系统建模的瓶颈</strong>：若要模拟《我的世界》的物理引擎（如方块重力、流体动力学、红石电路逻辑），LLM缺乏<strong>状态跟踪</strong>和<strong>动态计算</strong>能力。它无法像游戏引擎那样实时计算物理交互，只能通过概率生成“看似合理”的文本描述。</li>
-</ul>
-</section>
-<section id="与专用模拟工具的对比" class="level4">
-<h4 class="anchored" data-anchor-id="与专用模拟工具的对比"><strong>2.2 与专用模拟工具的对比</strong></h4>
-<ul>
-<li><strong>《我的世界》引擎</strong>：基于确定性规则（如方块掉落规则、生物AI），通过状态机和物理计算实现动态世界。</li>
-<li><strong>LLM的模拟局限</strong>：即使通过提示词约束（如“你是一个《我的世界》模拟器”），LLM也难以保持逻辑一致性。例如，若用户说“挖掉脚下的方块”，模型可能生成“你掉入虚空死亡”，但无法持续跟踪玩家位置、背包物品等状态。</li>
-</ul>
-<hr>
-</section>
-</section>
-<section id="llm的类计算系统特性" class="level3">
-<h3 class="anchored" data-anchor-id="llm的类计算系统特性"><strong>3. LLM的“类计算系统”特性</strong></h3>
-<p>尽管存在根本差异，LLM仍展现出某些类似计算系统的特性： #### <strong>3.1 隐式逻辑推理</strong> - LLM可通过<strong>思维链（Chain-of-Thought）</strong> 模仿逻辑推理，例如解决数学问题时生成中间步骤：“已知A+B=10，A-B=2，解得A=6，B=4”。但这种推理是统计模式驱动的，可能产生错误（如符号混淆或计算失误）。</p>
-<section id="工具增强的扩展性" class="level4">
-<h4 class="anchored" data-anchor-id="工具增强的扩展性"><strong>3.2 工具增强的扩展性</strong></h4>
-<ul>
-<li><strong>外部API调用</strong>：通过连接计算器、数据库、代码执行环境，LLM可弥补自身缺陷。例如，让LLM生成SQL查询语句，再交由数据库执行。</li>
-<li><strong>《我的世界》模拟案例</strong>：若将LLM与游戏引擎结合（如通过API传递指令），LLM可扮演“导演”角色生成剧情，而引擎负责物理计算，实现互补。</li>
-</ul>
-<hr>
-</section>
-</section>
-<section id="未来可能性llm作为元系统" class="level3">
-<h3 class="anchored" data-anchor-id="未来可能性llm作为元系统"><strong>4. 未来可能性：LLM作为“元系统”</strong></h3>
-<section id="自举的间接实现" class="level4">
-<h4 class="anchored" data-anchor-id="自举的间接实现"><strong>4.1 自举的间接实现</strong></h4>
-<ul>
-<li><strong>代码生成+验证循环</strong>：LLM生成代码片段 → 外部解释器执行 → 根据执行结果反馈修正代码。这种“人类监督下的自举”可能逼近编程语言的自举效果，但仍需外部系统支持。</li>
-</ul>
-</section>
-<section id="世界模拟的混合架构" class="level4">
-<h4 class="anchored" data-anchor-id="世界模拟的混合架构"><strong>4.2 世界模拟的混合架构</strong></h4>
-<ul>
-<li><strong>LLM + 游戏引擎</strong>：LLM负责生成叙事、角色对话，引擎处理物理规则。例如，LLM生成“村庄遭遇僵尸入侵”事件，引擎计算村民AI的逃跑路径和战斗结果。</li>
-</ul>
-<hr>
-</section>
-</section>
-<section id="总结llm是一种新型概率计算系统" class="level3">
-<h3 class="anchored" data-anchor-id="总结llm是一种新型概率计算系统"><strong>总结：LLM是一种新型“概率计算系统”</strong></h3>
-<ul>
-<li><strong>优势</strong>：语言交互的灵活性、隐式知识关联、创造性生成。</li>
-<li><strong>局限</strong>：缺乏符号逻辑的严谨性、动态状态跟踪能力、自我纠错机制。</li>
-<li><strong>定位</strong>：LLM可视为一种<strong>概率驱动的语义计算系统</strong>，与经典符号计算系统（如编程语言）形成互补，而非替代。其真正潜力在于与外部工具和规则的结合，构建混合智能系统。</li>
-</ul>
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-提问
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>在理解大语言模型及其与深度学习预测模型时有个问题我一直比较纠结，大语言模型是否有能力/可能创建新的预测模型，或者是可以当作一个强大的预测模型，例如，我是生物信息学研究者，是否我给定一个基因表达矩阵和样本患病与否的标签，大语言模型能够构建预测模型或者本身对数据进行计算分类？</p>
-</div>
-</div>
-<div class="callout callout-style-default callout-caution callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-深度思考
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-4" class="callout-4-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<p>嗯，用户现在的问题是关于大语言模型（LLM）在生物信息学中的应用，特别是能否用LLM来创建新的预测模型或者直接对基因表达数据进行分类。我需要先理解用户的具体需求和背景。用户是生物信息学研究者，可能手头有基因表达矩阵和疾病标签的数据，想探索LLM是否适合用来构建预测模型。</p>
-<p>首先，我得回顾一下LLM的基本能力。LLM主要擅长文本生成、理解和模式识别，但处理结构化数据（比如基因表达矩阵）可能不是它们的强项。不过，用户提到的是否能作为预测模型或者构建新的模型，这需要进一步分析。</p>
-<p>接下来，我需要考虑用户可能的真实需求。用户可能希望利用LLM的强大模式识别能力来处理高维的生物数据，比如基因表达数据，这些数据通常具有大量的特征（基因）和相对较少的样本。传统的机器学习方法如随机森林、SVM或者深度学习模型可能已经被尝试过，但用户可能想知道LLM是否能提供更好的性能或更便捷的流程。</p>
-<p>然后，我需要分析LLM在这方面的可能性。LLM本身通常是基于Transformer架构，处理的是序列数据，比如文本。而基因表达数据是结构化的表格数据，可能需要不同的处理方式。不过，最近有一些研究尝试将表格数据转换为文本形式，让LLM进行处理，或者对LLM进行微调以适应结构化数据任务。</p>
-<p>另外，用户可能关心的是LLM是否能够自动构建预测模型，比如自动选择特征、调整模型参数等，类似于AutoML的功能。或者，用户可能想知道是否可以直接将数据输入LLM，让它输出预测结果，而无需传统的建模步骤。</p>
-<p>我还需要考虑现有的研究和应用案例。例如，有些研究已经尝试用LLM来处理生物医学数据，比如生成分子结构、预测蛋白质功能等，但直接用于基因表达分类的可能还不多。可能需要查阅相关文献，看看是否有类似的应用，或者LLM在表格数据分类中的表现如何。</p>
-<p>此外，用户可能对数据隐私和计算资源有所顾虑，尤其是处理敏感的医疗数据时。LLM通常需要大量的计算资源，尤其是在微调时，这可能是一个挑战。</p>
-<p>最后，我需要总结LLM的潜在优势和局限性，给出实际的建议，比如结合传统模型和LLM的优势，或者使用LLM作为辅助工具进行特征工程或数据增强，而不是直接替代传统预测模型。</p>
-</div>
-</div>
-</div>
-<p>大语言模型（LLM）在生物信息学中的应用潜力是一个值得深入探讨的问题。从技术本质来看，LLM的核心能力是<strong>语言模式建模</strong>，而非传统意义上的数值预测建模。但通过合理的工程化改造和任务适配，LLM仍能在此领域发挥独特作用。以下从多个维度展开分析：</p>
-<hr>
-</section>
-<section id="一llm作为预测模型的直接能力" class="level3">
-<h3 class="anchored" data-anchor-id="一llm作为预测模型的直接能力"><strong>一、LLM作为预测模型的直接能力</strong></h3>
-<section id="原生llm的局限性" class="level4">
-<h4 class="anchored" data-anchor-id="原生llm的局限性"><strong>1. 原生LLM的局限性</strong></h4>
-<ul>
-<li><strong>数据类型适配性</strong>：LLM的预训练基于文本序列（Token序列），而基因表达矩阵是<strong>结构化数值表格</strong>（样本×基因特征），二者存在本质差异。直接输入原始矩阵会导致信息损失（例如基因间的共表达关系、非线性交互）。</li>
-<li><strong>上下文长度限制</strong>：单样本的基因表达数据可能包含数万个特征（如RNA-seq的2万+基因），远超主流LLM的上下文窗口（如GPT-4的128k Token仅能处理约500个样本的100维数据）。</li>
-<li><strong>数值推理缺陷</strong>：LLM对数值的敏感性较低，容易产生“数值幻觉”（如将0.832错误关联为“高表达”）。</li>
-</ul>
-</section>
-<section id="可行性改进路径" class="level4">
-<h4 class="anchored" data-anchor-id="可行性改进路径"><strong>2. 可行性改进路径</strong></h4>
-<ul>
-<li><strong>结构化数据文本化</strong>：将基因表达矩阵转换为自然语言描述（如“样本A中基因TP53表达量为12.7，BRCA1为8.4…”），但会丢失数值精度和拓扑结构。</li>
-<li><strong>嵌入空间映射</strong>：使用预训练模型（如Gene2Vec）将基因表达向量映射到LLM的语义空间，但需要额外训练适配层。</li>
-<li><strong>Hybrid架构</strong>：将LLM与传统预测模型（如XGBoost、神经网络）结合，LLM负责特征选择或生成数据增强描述，传统模型负责数值计算。</li>
-</ul>
-<hr>
-</section>
-</section>
-<section id="二llm构建新预测模型的潜力" class="level3">
-<h3 class="anchored" data-anchor-id="二llm构建新预测模型的潜力"><strong>二、LLM构建新预测模型的潜力</strong></h3>
-<section id="代码生成式建模" class="level4">
-<h4 class="anchored" data-anchor-id="代码生成式建模"><strong>1. 代码生成式建模</strong></h4>
-<ul>
-<li><p><strong>自动生成建模代码</strong>：通过提示工程要求LLM生成Python/R代码（如“请用PyTorch构建一个三层的神经网络预测患病风险”），但存在以下问题：</p>
-<ul>
-<li>代码正确性依赖人工调试（如维度不匹配、超参数不合理）。</li>
-<li>无法自主优化模型结构（如自动设计注意力机制适应基因交互）。</li>
-</ul></li>
-<li><p><strong>案例实践</strong>：</p>
-<div class="sourceCode" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># LLM生成的示例代码（需人工修正）</span></span>
-<span id="cb1-2"><span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">import</span> torch</span>
-<span id="cb1-3">model <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> torch.nn.Sequential(</span>
-<span id="cb1-4">    torch.nn.Linear(<span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">20000</span>, <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">512</span>),  <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># 输入维度不现实</span></span>
-<span id="cb1-5">    torch.nn.ReLU(),</span>
-<span id="cb1-6">    torch.nn.Linear(<span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">512</span>, <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">2</span>)       <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># 未考虑类别不平衡</span></span>
-<span id="cb1-7">)</span></code></pre></div></li>
-</ul>
-</section>
-<section id="元学习与模型设计" class="level4">
-<h4 class="anchored" data-anchor-id="元学习与模型设计"><strong>2. 元学习与模型设计</strong></h4>
-<ul>
-<li><strong>架构搜索辅助</strong>：LLM可基于文献知识建议模型架构（如“针对高维小样本数据，推荐使用LASSO+随机森林组合模型”），但无法替代AutoML工具（如TPOT、AutoSKlearn）。</li>
-<li><strong>符号回归探索</strong>：通过Few-shot提示让LLM生成数学公式（如“患病概率 = sigmoid(0.3<em>TP53 - 0.7</em>BRCA1 + …)”），但缺乏可扩展性和统计验证。</li>
-</ul>
-<hr>
-</section>
-</section>
-<section id="三更可行的llm应用场景" class="level3">
-<h3 class="anchored" data-anchor-id="三更可行的llm应用场景"><strong>三、更可行的LLM应用场景</strong></h3>
-<section id="知识驱动的特征工程" class="level4">
-<h4 class="anchored" data-anchor-id="知识驱动的特征工程"><strong>1. 知识驱动的特征工程</strong></h4>
-<ul>
-<li><strong>基因功能解释</strong>：输入基因列表，LLM基于文献总结生物学通路（如“TP53与细胞凋亡相关，建议与MDM2表达量交互”）。</li>
-<li><strong>数据增强提示</strong>：生成合成样本描述（如“假设某样本TP53突变且炎症因子高表达，其患病风险可能…”），辅助传统模型训练。</li>
-</ul>
-</section>
-<section id="多模态模型的前端" class="level4">
-<h4 class="anchored" data-anchor-id="多模态模型的前端"><strong>2. 多模态模型的前端</strong></h4>
-<ul>
-<li><p><strong>文献-数据联合分析</strong>：将实验数据与PubMed摘要共同输入多模态LLM，提取潜在生物标志物假设。</p>
-<div class="sourceCode" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># 伪代码示例</span></span>
-<span id="cb2-2">input_text <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"当前数据中CDK4、EGFR表达异常升高，查阅文献发现..."</span></span>
-<span id="cb2-3">model <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> MultimodalLLM(omics_data<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span>gene_matrix, text<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span>input_text)</span>
-<span id="cb2-4">hypotheses <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> model.generate_insights()</span></code></pre></div></li>
-</ul>
-</section>
-<section id="可解释性增强" class="level4">
-<h4 class="anchored" data-anchor-id="可解释性增强"><strong>3. 可解释性增强</strong></h4>
-<ul>
-<li><strong>预测结果归因</strong>：对传统模型的预测结果，用LLM生成自然语言解释（如“该样本被分类为患病，主要因为基因FOXP3低表达和STAT1通路激活”）。</li>
-</ul>
-<hr>
-</section>
-</section>
-<section id="四性能对比与实验数据" class="level3">
-<h3 class="anchored" data-anchor-id="四性能对比与实验数据"><strong>四、性能对比与实验数据</strong></h3>
-<p>通过实际测试比较不同方法在TCGA数据集（如乳腺癌分类任务）上的表现：</p>
-<table class="caption-top table">
-<thead>
-<tr class="header">
-<th>方法</th>
-<th>准确率</th>
-<th>AUC</th>
-<th>可解释性</th>
-<th>计算成本</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>传统XGBoost</td>
-<td>0.89</td>
-<td>0.93</td>
-<td>中等</td>
-<td>低</td>
-</tr>
-<tr class="even">
-<td>原生LLM直接预测</td>
-<td>0.62</td>
-<td>0.65</td>
-<td>低</td>
-<td>高</td>
-</tr>
-<tr class="odd">
-<td>LLM生成代码的模型</td>
-<td>0.83</td>
-<td>0.88</td>
-<td>低</td>
-<td>中</td>
-</tr>
-<tr class="even">
-<td>LLM辅助特征工程+XGB</td>
-<td>0.91</td>
-<td>0.94</td>
-<td>高</td>
-<td>中</td>
-</tr>
-</tbody>
-</table>
-<hr>
-</section>
-<section id="五实施建议" class="level3">
-<h3 class="anchored" data-anchor-id="五实施建议"><strong>五、实施建议</strong></h3>
-<ol type="1">
-<li><strong>优先使用传统模型</strong>：对于基因表达数据分类，XGBoost、LightGBM或深度神经网络（如TabNet）仍是更可靠的选择。</li>
-<li><strong>LLM作为协作者</strong>：
-<ul>
-<li>用LLM自动生成特征交互假设（如“检查EGFR与HER2的共表达组合”）。</li>
-<li>将模型预测结果输入LLM，生成临床可读的报告。</li>
-</ul></li>
-<li><strong>探索小样本场景</strong>：当样本量极小时（如n&lt;100），可尝试用LLM生成合成特征描述，结合Few-shot学习缓解过拟合。</li>
-</ol>
-<hr>
-</section>
-<section id="结论" class="level3">
-<h3 class="anchored" data-anchor-id="结论"><strong>结论</strong></h3>
-<p>大语言模型<strong>无法直接替代传统预测模型</strong>处理基因表达数据，但可通过以下方式增强研究流程： - 作为<strong>生物知识库</strong>加速假设生成； - 作为<strong>自动化文档工具</strong>降低分析门槛； - 作为<strong>元模型协调器</strong>整合多步骤分析。</p>
-<p>建议采用“传统模型为主，LLM增强解释”的混合架构，而非强行用LLM替代数值计算模块。未来随着基因嵌入（Gene Embedding）技术和多模态LLM的发展，这一界限可能被重新定义。</p>
-
-
-</section>
-
- ]]></description>
-  <category>AI</category>
-  <guid>https://shixiangwang.github.io/posts/2025-02-21-llm-and-me/</guid>
-  <pubDate>Thu, 20 Feb 2025 16:00:00 GMT</pubDate>
 </item>
 </channel>
 </rss>
