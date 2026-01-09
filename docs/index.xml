@@ -10,7 +10,71 @@
 <atom:link href="https://shixiangwang.github.io/index.xml" rel="self" type="application/rss+xml"/>
 <description>Reasoning is a blog dedicated to exploring the intersection of data science, bioinformatics, and personal insights.</description>
 <generator>quarto-1.5.57</generator>
-<lastBuildDate>Tue, 30 Dec 2025 16:00:00 GMT</lastBuildDate>
+<lastBuildDate>Fri, 09 Jan 2026 16:00:00 GMT</lastBuildDate>
+<item>
+  <title>random</title>
+  <dc:creator>Shixiang Wang</dc:creator>
+  <link>https://shixiangwang.github.io/posts/2026-01-10-random/</link>
+  <description><![CDATA[ 
+
+
+
+
+
+<p>昨天用AI生成音乐，让AI以一首之前写的小诗改编，再去生成，简单一两轮对话，十分钟就生成了一首我个人听起来不错的歌。实在是太惊艳了。感觉2026年AI会在它触手能及，工业界盈利和兴趣能及的所有行业和生活场景中有大的突破，像水电一样嵌入人类社会。在科学方面，虽然比不上日常生活场景，私以为也会有类似的突破和规模效应，可能自己科研大部分工作被取代的可能性在未来两三年内很高，三五年普通研究人员指挥智能体和机器人进行计算实证研究的课题会变得可行可用。</p>
+<p>AI生成音乐《我们这座城市》：</p>
+<p><a href="https://i.y.qq.com/v8/playsong.html?songid=632785621#webchat_redirect" class="uri">https://i.y.qq.com/v8/playsong.html?songid=632785621#webchat_redirect</a></p>
+<p>阳光混着氧气填满这座城</p>
+<p>和世界上千万座城没什么不同</p>
+<p>看得见的光缠着看不见的空</p>
+<p>喂饱了城里人潮的梦</p>
+<p>百万千万数字背后藏着谁的痛</p>
+<p>我们像蚂蚁筑着高楼的缝</p>
+<p>也像蚂蚁忙着却像过客的风</p>
+<p>我们单纯地想活着就像</p>
+<p>想在黑暗甬道找到下一扇窗</p>
+<p>可还是跟着路牌往前闯</p>
+<p>不由自主被人潮推上那节车厢</p>
+<p>毫无畏惧开往下一个黑地方</p>
+<p>前进啊像列车擦着铁轨响</p>
+<p>我们和城市撞啊撞融啊融</p>
+<p>到最后分不清它是青春还是我们的样</p>
+<p>霓虹混着尘埃落满这条路</p>
+<p>和地图上千万条路没什么出路</p>
+<p>握得住的票根缠着握不住的苦</p>
+<p>撑着日子一天天重复</p>
+<p>早班晚班钟摆背后藏着谁的孤独</p>
+<p>我们像齿轮咬着明天的雾</p>
+<p>也像齿轮转着却像停摆的钟鼓</p>
+<p>我们用力地想活着就像</p>
+<p>想在茫茫人海抓住一根稻草</p>
+<p>可还是跟着人群往前跑</p>
+<p>身不由己被时间卷进那座人潮</p>
+<p>毫无犹豫挤向下一个老地方</p>
+<p>坚持啊像陀螺转着不肯投降</p>
+<p>我们和城市磨啊磨耗啊耗</p>
+<p>到最后才发现它是伤疤也是我们的家</p>
+<p>我们用青春砌着城市的墙</p>
+<p>城市用回忆埋着我们的伤</p>
+<p>我们用梦想换着三餐的汤</p>
+<p>城市用灯火照着我们的慌</p>
+<p>毫无畏惧开往下一个黑地方</p>
+<p>前进啊像列车擦着铁轨响</p>
+<p>我们和城市撞啊撞融啊融</p>
+<p>到最后分不清它是青春还是我们的样</p>
+<p>毫无犹豫挤向下一个老地方</p>
+<p>坚持啊像陀螺转着不肯投降</p>
+<p>我们和城市磨啊磨耗啊耗</p>
+<p>到最后才发现它是伤疤也是我们的家</p>
+
+
+
+ ]]></description>
+  <category>journal</category>
+  <category>AI</category>
+  <guid>https://shixiangwang.github.io/posts/2026-01-10-random/</guid>
+  <pubDate>Fri, 09 Jan 2026 16:00:00 GMT</pubDate>
+</item>
 <item>
   <title>如何选择一个好的科学问题</title>
   <dc:creator>Shixiang Wang</dc:creator>
@@ -2682,129 +2746,6 @@ font-style: inherit;">data =</span> sleepstudy)</span></code></pre></div>
   <category>journal</category>
   <guid>https://shixiangwang.github.io/posts/2025-03-12-random/</guid>
   <pubDate>Tue, 11 Mar 2025 16:00:00 GMT</pubDate>
-</item>
-<item>
-  <title>肿瘤生信，研究科学还是技术？</title>
-  <dc:creator>Shixiang Wang</dc:creator>
-  <link>https://shixiangwang.github.io/posts/2025-02-23-science-or-tech-in-cancer-bioinformatics/</link>
-  <description><![CDATA[ 
-
-
-
-
-
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-提问
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>作为一个肿瘤生物信息学研究者，你觉得把研究精力和重点放在科学还是放在技术？</p>
-</div>
-</div>
-<div class="callout callout-style-default callout-caution callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-深度思考
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-2" class="callout-2-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<p>嗯，用户问的是作为肿瘤生物信息学研究者，应该把研究精力和重点放在科学还是技术上。首先，我需要理解这个问题的背景。肿瘤生物信息学结合了生物学、医学和信息学，特别是数据分析、算法开发等。科学和技术在这里可能指的是基础研究与应用技术之间的平衡。</p>
-<p>用户可能是一位刚进入该领域的研究者，或者正在规划研究方向的人。他们可能在纠结是深入探索生物学机制（科学）还是开发新的技术方法（技术）。需要考虑到两者的互补性，但也要根据个人兴趣、资源、职业目标来决定。</p>
-<p>接下来，我需要分析科学和技术的不同侧重点。科学方面可能包括发现新的肿瘤标志物、理解肿瘤发生机制等；技术方面可能涉及开发新的算法、工具，提高数据处理能力。同时，要考虑到肿瘤研究的复杂性，可能需要两者结合，比如用新技术解决科学问题。</p>
-<p>还要考虑当前领域的发展趋势。现在很多研究都强调转化医学，即从实验室到临床的应用，这可能需要技术和科学并重。另外，数据量的增加使得技术手段变得更重要，但科学问题仍然是核心。</p>
-<p>用户可能没有明确说出的是，他们可能担心侧重某一方面会影响职业发展，或者不知道哪个方向更有前景。需要指出两者的重要性，以及如何根据具体情况平衡，比如团队合作、跨学科合作的重要性。</p>
-<p>最后，总结时应该强调没有绝对答案，需根据个人情况、项目需求来决定，同时保持灵活，根据领域发展调整方向。可能还需要提到资金和资源的获取，技术可能更容易获得短期成果，而科学问题可能影响深远。</p>
-</div>
-</div>
-</div>
-<p>在肿瘤生物信息学领域，科学（生物学/医学问题）与技术（方法学/工具开发）的平衡是研究能否取得突破的关键。以下从不同角度分析这一问题的核心矛盾与解决思路：</p>
-<hr>
-<section id="科学是驱动技术的根本" class="level3">
-<h3 class="anchored" data-anchor-id="科学是驱动技术的根本"><strong>1. 科学是驱动技术的根本</strong></h3>
-<ul>
-<li><strong>科学问题的优先级</strong>：肿瘤研究的终极目标是理解疾病机制、开发诊疗手段。例如，单细胞测序技术的爆发式发展，本质上是因科学界对肿瘤异质性的探索需求驱动。</li>
-<li><strong>技术为科学服务</strong>：若脱离生物学意义，单纯优化算法（如提高1%的预测准确率）可能沦为“技术内卷”。例如，TCGA数据库的建立直接推动了癌症基因组学的范式变革。</li>
-<li><strong>临床转化的瓶颈</strong>：许多技术（如液体活检）因缺乏对肿瘤生物学（如ctDNA释放机制）的深入理解，导致临床应用受限。</li>
-</ul>
-<hr>
-</section>
-<section id="技术是突破科学边界的工具" class="level3">
-<h3 class="anchored" data-anchor-id="技术是突破科学边界的工具"><strong>2. 技术是突破科学边界的工具</strong></h3>
-<ul>
-<li><strong>技术决定科学上限</strong>：CRISPR技术彻底改变了功能基因组学研究，空间转录组技术让肿瘤微环境研究进入三维时代。没有技术支撑，科学问题可能长期停滞。</li>
-<li><strong>数据洪流倒逼技术创新</strong>：肿瘤多组学数据的复杂性（如10^6维度的单细胞数据）迫使研究者开发新的降维、整合算法。</li>
-<li><strong>技术先行的案例</strong>：AlphaFold虽非为肿瘤设计，但其对蛋白结构的预测能力直接加速了靶向药物开发。</li>
-</ul>
-<hr>
-</section>
-<section id="动态平衡策略" class="level3">
-<h3 class="anchored" data-anchor-id="动态平衡策略"><strong>3. 动态平衡策略</strong></h3>
-<section id="阶段化侧重" class="level4">
-<h4 class="anchored" data-anchor-id="阶段化侧重"><strong>（1）阶段化侧重</strong></h4>
-<ul>
-<li><strong>早期研究者</strong>：优先掌握核心技术（如单细胞分析流程、AI模型构建），建立方法论护城河。</li>
-<li><strong>成熟团队</strong>：需以重大科学问题为导向（如“肿瘤免疫逃逸的时空演化”），牵引技术定制化开发。</li>
-</ul>
-</section>
-<section id="选择战场" class="level4">
-<h4 class="anchored" data-anchor-id="选择战场"><strong>（2）选择战场</strong></h4>
-<ul>
-<li><strong>技术密集型领域</strong>：如空间多组学数据分析工具开发，需保持技术敏锐度。</li>
-<li><strong>科学攻坚领域</strong>：如非编码RNA在肿瘤代谢重编程中的作用，需深耕生物学机制。</li>
-</ul>
-</section>
-<section id="建立反馈闭环" class="level4">
-<h4 class="anchored" data-anchor-id="建立反馈闭环"><strong>（3）建立反馈闭环</strong></h4>
-<ul>
-<li><strong>从技术到科学</strong>：开发新型单细胞轨迹推断算法 → 揭示肿瘤干细胞分化路径。</li>
-<li><strong>从科学到技术</strong>：发现环状RNA促癌新机制 → 设计特异性circRNA检测工具。</li>
-</ul>
-<hr>
-</section>
-</section>
-<section id="避免常见误区" class="level3">
-<h3 class="anchored" data-anchor-id="避免常见误区"><strong>4. 避免常见误区</strong></h3>
-<ul>
-<li><strong>技术陷阱</strong>：盲目追求复杂模型（如过度使用深度学习），却无法解释生物学意义。</li>
-<li><strong>科学短视</strong>：重复已有实验设计，忽视技术创新带来的范式变革机会。</li>
-<li><strong>评价体系错位</strong>：纯技术论文可能获得高引用，但缺乏生物学洞见的研究难以推动临床进展。</li>
-</ul>
-<hr>
-</section>
-<section id="未来趋势判断" class="level3">
-<h3 class="anchored" data-anchor-id="未来趋势判断"><strong>5. 未来趋势判断</strong></h3>
-<ul>
-<li><strong>融合性领域崛起</strong>：空间多组学+AI驱动的肿瘤进化树构建，需同时突破技术和理论。</li>
-<li><strong>技术民主化挑战</strong>：云计算/AutoML降低技术门槛，科学问题的提出能力将更关键。</li>
-<li><strong>临床需求倒逼创新</strong>：CAR-T治疗耐药机制的解析需要结合单细胞测序（技术）与免疫代谢（科学）。</li>
-</ul>
-<hr>
-</section>
-<section id="结论构建科学-技术-临床三位一体模式" class="level3">
-<h3 class="anchored" data-anchor-id="结论构建科学-技术-临床三位一体模式"><strong>结论：构建“科学-技术-临床”三位一体模式</strong></h3>
-<p>建议采用“科学问题为锚点，技术创新为引擎，临床价值为终点”的策略。例如： 1. <strong>科学锚点</strong>：解析肿瘤耐药性演化规律<br>
-2. <strong>技术引擎</strong>：开发耐药克隆追踪算法（基于WGS+单细胞数据）<br>
-3. <strong>临床终点</strong>：设计动态监测治疗方案</p>
-<p>最终，研究者的核心价值在于：<strong>用技术解决别人看不到的科学问题，或用科学需求推动别人想不到的技术革新</strong>。</p>
-
-
-</section>
-
- ]]></description>
-  <category>AI</category>
-  <category>bioinformatics</category>
-  <guid>https://shixiangwang.github.io/posts/2025-02-23-science-or-tech-in-cancer-bioinformatics/</guid>
-  <pubDate>Sat, 22 Feb 2025 16:00:00 GMT</pubDate>
 </item>
 </channel>
 </rss>
