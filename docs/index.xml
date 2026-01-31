@@ -10,7 +10,26 @@
 <atom:link href="https://shixiangwang.github.io/index.xml" rel="self" type="application/rss+xml"/>
 <description>Reasoning is a blog dedicated to exploring the intersection of data science, bioinformatics, and personal insights.</description>
 <generator>quarto-1.5.57</generator>
-<lastBuildDate>Fri, 09 Jan 2026 16:00:00 GMT</lastBuildDate>
+<lastBuildDate>Sat, 31 Jan 2026 16:00:00 GMT</lastBuildDate>
+<item>
+  <title>random</title>
+  <dc:creator>Shixiang Wang</dc:creator>
+  <link>https://shixiangwang.github.io/posts/2026-02-01-random/</link>
+  <description><![CDATA[ 
+
+
+
+
+
+<p>互动促进选择，选择决定下一步状态和命运。万物如此，生命亦如此。是否这就是自然的最普适性规律？也许，宇宙的起源，不是一个“奇点”，而是两个偶然“奇点”互作的必然？</p>
+
+
+
+ ]]></description>
+  <category>journal</category>
+  <guid>https://shixiangwang.github.io/posts/2026-02-01-random/</guid>
+  <pubDate>Sat, 31 Jan 2026 16:00:00 GMT</pubDate>
+</item>
 <item>
   <title>random</title>
   <dc:creator>Shixiang Wang</dc:creator>
@@ -2727,25 +2746,6 @@ font-style: inherit;">data =</span> sleepstudy)</span></code></pre></div>
   <category>Office</category>
   <guid>https://shixiangwang.github.io/posts/2025-03-19-ppt-quick-access-toolbar-in-mac/</guid>
   <pubDate>Tue, 18 Mar 2025 16:00:00 GMT</pubDate>
-</item>
-<item>
-  <title>random</title>
-  <dc:creator>Shixiang Wang</dc:creator>
-  <link>https://shixiangwang.github.io/posts/2025-03-12-random/</link>
-  <description><![CDATA[ 
-
-
-
-
-
-<p>世界本质上是什么东西？生命本质上是什么东西？生物信息学本质上是什么东西？我又是个什么东西？</p>
-
-
-
- ]]></description>
-  <category>journal</category>
-  <guid>https://shixiangwang.github.io/posts/2025-03-12-random/</guid>
-  <pubDate>Tue, 11 Mar 2025 16:00:00 GMT</pubDate>
 </item>
 </channel>
 </rss>

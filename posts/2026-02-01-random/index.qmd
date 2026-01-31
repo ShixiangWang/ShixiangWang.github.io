@@ -1,0 +1,18 @@
+---
+title: random
+author: Shixiang Wang
+date: 2026-02-01
+categories: [journal]
+draft: false
+description: ''
+
+toc: true
+
+format:
+  html:
+    code-fold: false
+    code-overflow: wrap
+    code-tools: false
+---
+
+互动促进选择，选择决定下一步状态和命运。万物如此，生命亦如此。是否这就是自然的最普适性规律？也许，宇宙的起源，不是一个“奇点”，而是两个偶然“奇点”互作的必然？
