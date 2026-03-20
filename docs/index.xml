@@ -9,8 +9,184 @@
 <link>https://shixiangwang.github.io/</link>
 <atom:link href="https://shixiangwang.github.io/index.xml" rel="self" type="application/rss+xml"/>
 <description>Reasoning is a blog dedicated to exploring the intersection of data science, bioinformatics, and personal insights.</description>
-<generator>quarto-1.5.57</generator>
-<lastBuildDate>Sat, 31 Jan 2026 16:00:00 GMT</lastBuildDate>
+<generator>quarto-1.9.36</generator>
+<lastBuildDate>Thu, 19 Mar 2026 16:00:00 GMT</lastBuildDate>
+<item>
+  <title>r安装了系统依赖还是找不到，导致无法安装包</title>
+  <dc:creator>Shixiang Wang</dc:creator>
+  <link>https://shixiangwang.github.io/posts/2026-03-20-r-install-with-configure/</link>
+  <description><![CDATA[ 
+
+
+
+
+
+<blockquote class="blockquote">
+<p>by Kimi</p>
+</blockquote>
+<p>这是一个典型的 R 包安装时找不到系统库的问题。虽然 <code>udunits2-devel</code> 已经安装，但 R 的 configure 脚本没能找到它的<strong>头文件</strong>和<strong>库文件</strong>路径。</p>
+<p>在 Rocky Linux 9 (EL9) 上，这两个文件通常位于： - 头文件：<code>/usr/include/udunits2/udunits2.h</code> - 库文件：<code>/usr/lib64/libudunits2.so</code></p>
+<p>以下是几种解决方案，按推荐程度排序：</p>
+<section id="方案-1临时设置环境变量推荐最干净" class="level2">
+<h2 class="anchored" data-anchor-id="方案-1临时设置环境变量推荐最干净">方案 1：临时设置环境变量（推荐，最干净）</h2>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># 查找确切路径（确认位置）</span></span>
+<span id="cb1-2"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">find</span> /usr <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">-name</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"udunits2.h"</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&gt;</span>/dev/null</span>
+<span id="cb1-3"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">find</span> /usr <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">-name</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"libudunits2.so"</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&gt;</span>/dev/null</span>
+<span id="cb1-4"></span>
+<span id="cb1-5"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># 设置环境变量后安装</span></span>
+<span id="cb1-6"><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">export</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">UDUNITS2_INCLUDE</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>/usr/include/udunits2</span>
+<span id="cb1-7"><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">export</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">UDUNITS2_LIBS</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"-L/usr/lib64 -ludunits2"</span></span>
+<span id="cb1-8"></span>
+<span id="cb1-9"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># 然后在 R 中安装</span></span>
+<span id="cb1-10"><span class="ex" style="color: null;
+background-color: null;
+font-style: inherit;">R</span> <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">-e</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"install.packages('units', repos='https://cran.r-project.org')"</span></span></code></pre></div></div>
+</section>
+<section id="方案-2使用-with-configure-args" class="level2">
+<h2 class="anchored" data-anchor-id="方案-2使用-with-configure-args">方案 2：使用 with-configure-args</h2>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># 在 R 控制台中</span></span>
+<span id="cb2-2"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">install.packages</span>(</span>
+<span id="cb2-3">  <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"units"</span>,</span>
+<span id="cb2-4">  <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">configure.args =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(</span>
+<span id="cb2-5">    <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"--with-udunits2-include=/usr/include/udunits2"</span>,</span>
+<span id="cb2-6">    <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"--with-udunits2-lib=/usr/lib64"</span></span>
+<span id="cb2-7">  )</span>
+<span id="cb2-8">)</span></code></pre></div></div>
+</section>
+<section id="方案-3检查-pkg-config根本问题排查" class="level2">
+<h2 class="anchored" data-anchor-id="方案-3检查-pkg-config根本问题排查">方案 3：检查 pkg-config（根本问题排查）</h2>
+<p>如果上述不行，可能是 <code>pkg-config</code> 没找到配置文件：</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># 检查 pkg-config 是否能找到 udunits2</span></span>
+<span id="cb3-2"><span class="ex" style="color: null;
+background-color: null;
+font-style: inherit;">pkg-config</span> <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">--exists</span> udunits2 <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">&amp;&amp;</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">echo</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Found"</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">||</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">echo</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Not found"</span></span>
+<span id="cb3-3"></span>
+<span id="cb3-4"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># 如果显示 Not found，手动指定 PKG_CONFIG_PATH</span></span>
+<span id="cb3-5"><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">export</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">PKG_CONFIG_PATH</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>/usr/lib64/pkgconfig:<span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">$PKG_CONFIG_PATH</span></span>
+<span id="cb3-6"></span>
+<span id="cb3-7"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># 然后再试 R 安装</span></span></code></pre></div></div>
+</section>
+<section id="方案-4永久解决方案写入-.bashrc" class="level2">
+<h2 class="anchored" data-anchor-id="方案-4永久解决方案写入-.bashrc">方案 4：永久解决方案（写入 ~/.bashrc）</h2>
+<p>如果您经常需要安装这个包：</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">echo</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'export UDUNITS2_INCLUDE=/usr/include/udunits2'</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&gt;&gt;</span> ~/.bashrc</span>
+<span id="cb4-2"><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">echo</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'export UDUNITS2_LIBS="-L/usr/lib64 -ludunits2"'</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&gt;&gt;</span> ~/.bashrc</span>
+<span id="cb4-3"><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">source</span> ~/.bashrc</span></code></pre></div></div>
+<p><strong>最可能的情况</strong>：EL9 系统的库路径在 <code>/usr/lib64</code> 而不是标准的 <code>/usr/lib</code>，导致 R 的自动检测失败。建议先尝试<strong>方案 1</strong>，如果报错信息变成 <code>cannot find -ludunits2</code>，则改用<strong>方案 2</strong> 明确指定库路径。</p>
+<p>安装成功后，您应该能看到：</p>
+<pre><code>checking for udunits2/udunits2.h... yes
+checking for ut_read_xml in -ludunits2... yes</code></pre>
+
+
+</section>
+
+ ]]></description>
+  <category>R</category>
+  <guid>https://shixiangwang.github.io/posts/2026-03-20-r-install-with-configure/</guid>
+  <pubDate>Thu, 19 Mar 2026 16:00:00 GMT</pubDate>
+</item>
 <item>
   <title>random</title>
   <dc:creator>Shixiang Wang</dc:creator>
@@ -2718,33 +2894,6 @@ font-style: inherit;">data =</span> sleepstudy)</span></code></pre></div>
  ]]></description>
   <category>Bizard</category>
   <guid>https://shixiangwang.github.io/posts/2025-03-19-bizard/</guid>
-  <pubDate>Tue, 18 Mar 2025 16:00:00 GMT</pubDate>
-</item>
-<item>
-  <title>PPT 安装快捷访问栏</title>
-  <dc:creator>Shixiang Wang</dc:creator>
-  <link>https://shixiangwang.github.io/posts/2025-03-19-ppt-quick-access-toolbar-in-mac/</link>
-  <description><![CDATA[ 
-
-
-
-
-
-<p>Mac 下步骤：</p>
-<ol type="1">
-<li>下载并解压 <a href="PowerPoint.officeUI">PowerPoint.officeUI 自定义文件</a></li>
-<li>退出 PowerPoint</li>
-<li>打开查找器</li>
-<li>点击菜单栏中的“前往”，然后选择“前往文件夹…”</li>
-<li>复制并粘贴以下位置，然后点击“前往”按钮： <code>~/Library/Containers/com.microsoft.Powerpoint/Data/Library/Preferences</code> 将 PowerPoint.officeUI 自定义文件移动到这个文件夹。</li>
-</ol>
-<p>Windows 下可以下载 <a href="PowerPoint.exportedUI">PowerPoint.exportedUI</a> 然后导入。</p>
-
-
-
- ]]></description>
-  <category>Office</category>
-  <guid>https://shixiangwang.github.io/posts/2025-03-19-ppt-quick-access-toolbar-in-mac/</guid>
   <pubDate>Tue, 18 Mar 2025 16:00:00 GMT</pubDate>
 </item>
 </channel>

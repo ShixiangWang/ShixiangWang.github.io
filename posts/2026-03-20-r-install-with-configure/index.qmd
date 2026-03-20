@@ -1,0 +1,86 @@
+---
+title: r安装了系统依赖还是找不到，导致无法安装包
+author: Shixiang Wang
+date: 2026-03-20
+categories: [R]
+draft: false
+description: ''
+
+toc: true
+
+format:
+  html:
+    code-fold: false
+    code-overflow: wrap
+    code-tools: false
+---
+
+> by Kimi
+
+这是一个典型的 R 包安装时找不到系统库的问题。虽然 `udunits2-devel` 已经安装，但 R 的 configure 脚本没能找到它的**头文件**和**库文件**路径。
+
+在 Rocky Linux 9 (EL9) 上，这两个文件通常位于：
+- 头文件：`/usr/include/udunits2/udunits2.h`
+- 库文件：`/usr/lib64/libudunits2.so`
+
+以下是几种解决方案，按推荐程度排序：
+
+## 方案 1：临时设置环境变量（推荐，最干净）
+
+```bash
+# 查找确切路径（确认位置）
+find /usr -name "udunits2.h" 2>/dev/null
+find /usr -name "libudunits2.so" 2>/dev/null
+
+# 设置环境变量后安装
+export UDUNITS2_INCLUDE=/usr/include/udunits2
+export UDUNITS2_LIBS="-L/usr/lib64 -ludunits2"
+
+# 然后在 R 中安装
+R -e "install.packages('units', repos='https://cran.r-project.org')"
+```
+
+## 方案 2：使用 with-configure-args
+
+```r
+# 在 R 控制台中
+install.packages(
+  "units",
+  configure.args = c(
+    "--with-udunits2-include=/usr/include/udunits2",
+    "--with-udunits2-lib=/usr/lib64"
+  )
+)
+```
+
+## 方案 3：检查 pkg-config（根本问题排查）
+
+如果上述不行，可能是 `pkg-config` 没找到配置文件：
+
+```bash
+# 检查 pkg-config 是否能找到 udunits2
+pkg-config --exists udunits2 && echo "Found" || echo "Not found"
+
+# 如果显示 Not found，手动指定 PKG_CONFIG_PATH
+export PKG_CONFIG_PATH=/usr/lib64/pkgconfig:$PKG_CONFIG_PATH
+
+# 然后再试 R 安装
+```
+
+## 方案 4：永久解决方案（写入 ~/.bashrc）
+
+如果您经常需要安装这个包：
+
+```bash
+echo 'export UDUNITS2_INCLUDE=/usr/include/udunits2' >> ~/.bashrc
+echo 'export UDUNITS2_LIBS="-L/usr/lib64 -ludunits2"' >> ~/.bashrc
+source ~/.bashrc
+```
+
+**最可能的情况**：EL9 系统的库路径在 `/usr/lib64` 而不是标准的 `/usr/lib`，导致 R 的自动检测失败。建议先尝试**方案 1**，如果报错信息变成 `cannot find -ludunits2`，则改用**方案 2** 明确指定库路径。
+
+安装成功后，您应该能看到：
+```
+checking for udunits2/udunits2.h... yes
+checking for ut_read_xml in -ludunits2... yes
+```
