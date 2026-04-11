@@ -1,0 +1,62 @@
+---
+title: claude code + ollama
+author: Shixiang Wang
+date: 2026-04-12
+categories: [journal]
+draft: false
+description: ''
+
+toc: true
+
+format:
+  html:
+    code-fold: false
+    code-overflow: wrap
+    code-tools: false
+---
+
+1. nodejs
+
+```sh
+$ pixi global install nodejs
+└── nodejs: 25.8.2 (installed)
+    └─ exposes: node, npm, npx
+
+$ npm config set registry https://registry.npmmirror.com
+```
+
+2. Claude Code 
+
+```sh
+$ npm install -g @anthropic-ai/claude-code@latest
+
+added 3 packages in 2s
+
+2 packages are looking for funding
+  run `npm fund` for details
+```
+
+
+3. Config 
+
+`~/.bashrc`:
+
+```sh
+export ANTHROPIC_AUTH_TOKEN=ollama
+export ANTHROPIC_BASE_URL=http://localhost:11434
+```
+
+4. Start
+
+```sh
+# 启动 Claude Code 并指定本地模型
+# export PATH=/data/home/wsx/.pixi/envs/nodejs/bin:$PATH
+claude --model qwen2.5-coder:7b
+```
+
+## References
+
+1. <https://cloud.tencent.com/developer/article/2623815>
+
+2. <https://juejin.cn/post/7611158381475610650>
+

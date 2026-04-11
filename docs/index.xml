@@ -10,7 +10,114 @@
 <atom:link href="https://shixiangwang.github.io/index.xml" rel="self" type="application/rss+xml"/>
 <description>Reasoning is a blog dedicated to exploring the intersection of data science, bioinformatics, and personal insights.</description>
 <generator>quarto-1.9.36</generator>
-<lastBuildDate>Thu, 19 Mar 2026 16:00:00 GMT</lastBuildDate>
+<lastBuildDate>Sat, 11 Apr 2026 16:00:00 GMT</lastBuildDate>
+<item>
+  <title>claude code + ollama</title>
+  <dc:creator>Shixiang Wang</dc:creator>
+  <link>https://shixiangwang.github.io/posts/2026-04-12-claudecode-plus-ollama/</link>
+  <description><![CDATA[ 
+
+
+
+
+
+<ol type="1">
+<li>nodejs</li>
+</ol>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><span class="ex" style="color: null;
+background-color: null;
+font-style: inherit;">$</span> pixi global install nodejs</span>
+<span id="cb1-2"><span class="ex" style="color: null;
+background-color: null;
+font-style: inherit;">└──</span> nodejs: 25.8.2 <span class="er" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">(</span><span class="ex" style="color: null;
+background-color: null;
+font-style: inherit;">installed</span><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">)</span></span>
+<span id="cb1-3">    <span class="ex" style="color: null;
+background-color: null;
+font-style: inherit;">└─</span> exposes: node, npm, npx</span>
+<span id="cb1-4"></span>
+<span id="cb1-5"><span class="ex" style="color: null;
+background-color: null;
+font-style: inherit;">$</span> npm config set registry https://registry.npmmirror.com</span></code></pre></div></div>
+<ol start="2" type="1">
+<li>Claude Code</li>
+</ol>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><span class="ex" style="color: null;
+background-color: null;
+font-style: inherit;">$</span> npm install <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">-g</span> @anthropic-ai/claude-code@latest</span>
+<span id="cb2-2"></span>
+<span id="cb2-3"><span class="ex" style="color: null;
+background-color: null;
+font-style: inherit;">added</span> 3 packages in 2s</span>
+<span id="cb2-4"></span>
+<span id="cb2-5"><span class="ex" style="color: null;
+background-color: null;
+font-style: inherit;">2</span> packages are looking for funding</span>
+<span id="cb2-6">  <span class="ex" style="color: null;
+background-color: null;
+font-style: inherit;">run</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">`</span><span class="ex" style="color: null;
+background-color: null;
+font-style: inherit;">npm</span> fund<span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">`</span> for details</span></code></pre></div></div>
+<ol start="3" type="1">
+<li>Config</li>
+</ol>
+<p><code>~/.bashrc</code>:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">export</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">ANTHROPIC_AUTH_TOKEN</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>ollama</span>
+<span id="cb3-2"><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">export</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">ANTHROPIC_BASE_URL</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>http://localhost:11434</span></code></pre></div></div>
+<ol start="4" type="1">
+<li>Start</li>
+</ol>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># 启动 Claude Code 并指定本地模型</span></span>
+<span id="cb4-2"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># export PATH=/data/home/wsx/.pixi/envs/nodejs/bin:$PATH</span></span>
+<span id="cb4-3"><span class="ex" style="color: null;
+background-color: null;
+font-style: inherit;">claude</span> <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">--model</span> qwen2.5-coder:7b</span></code></pre></div></div>
+<section id="references" class="level2">
+<h2 class="anchored" data-anchor-id="references">References</h2>
+<ol type="1">
+<li><p><a href="https://cloud.tencent.com/developer/article/2623815" class="uri">https://cloud.tencent.com/developer/article/2623815</a></p></li>
+<li><p><a href="https://juejin.cn/post/7611158381475610650" class="uri">https://juejin.cn/post/7611158381475610650</a></p></li>
+</ol>
+
+
+</section>
+
+ ]]></description>
+  <category>journal</category>
+  <guid>https://shixiangwang.github.io/posts/2026-04-12-claudecode-plus-ollama/</guid>
+  <pubDate>Sat, 11 Apr 2026 16:00:00 GMT</pubDate>
+</item>
 <item>
   <title>r安装了系统依赖还是找不到，导致无法安装包</title>
   <dc:creator>Shixiang Wang</dc:creator>
@@ -2852,48 +2959,6 @@ font-style: inherit;">data =</span> sleepstudy)</span></code></pre></div>
  ]]></description>
   <category>Bizard</category>
   <guid>https://shixiangwang.github.io/posts/2025-03-19-bizard-recruit/</guid>
-  <pubDate>Tue, 18 Mar 2025 16:00:00 GMT</pubDate>
-</item>
-<item>
-  <title>Bizard（白泽）：生物医学可视化开源图鉴——一个社区项目的招募与探索</title>
-  <dc:creator>Shixiang Wang</dc:creator>
-  <link>https://shixiangwang.github.io/posts/2025-03-19-bizard/</link>
-  <description><![CDATA[ 
-
-
-
-
-
-<p>发起人：罗鹏、王诗翔、李剑峰、曾健明</p>
-<p><strong>可视化</strong>是数据与科学研究故事的桥梁，是探寻科学数据规律、挖掘和解释创新发现的重要参考，在当今数据驱动的生物医学研究时代，利用代码指令完成数据可视化的能力已成为生物医学领域研究人员的核心技能之一。虽然当前领域内已经有许多成熟的图形界面软件以及生信云平台，但是促进生物医学数据的可重复研究既是科学研究的潮流，也是提升课题研究质量的重要途径。然而，对于众多生物医学研究的初学者而言，编程、绘图学习曲线陡峭，特别是在将代码应用于实际研究场景时往往面临诸多挑战，有用的资料散落在互联网各处。为此，我们发起<strong>Bizard白泽</strong>项目，旨在搭建<strong>协作组主导、社区参与的生物医学可视化开源项目</strong>，为学习、利用和讨论数据可视化提供一体化的平台和协作社区，希望构建国内/国际别树一帜的生物信息学基础设施。</p>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="https://weekly-1301043367.cos.ap-shanghai.myqcloud.com/20250312123338539.png" class="img-fluid figure-img"></p>
-<figcaption>Bizard项目Logo</figcaption>
-</figure>
-</div>
-<blockquote class="blockquote">
-<p>项目名来源小帖士：白泽是上古时代传说中的神兽，号称上知天文地理，下知鸡毛蒜皮，能说人言，曾应黄帝所求作鬼神图鉴。白泽的这些能力体现了对知识的广泛掌握和对信息的可视化表达。取名白泽既体现我们国内同行对于传统、知识的尊崇，也借此表达我们对于项目的目标定位与学术追求。英文名取音译Bizard。我们注意到复旦有个学术团队名为whitzard，这里我们也以作区分。所以我们的项目全称为：<strong>Bizard（白泽）：生物医学可视化开源图鉴</strong>。</p>
-</blockquote>
-<p>Bizard项目初步以R语言为基础（未来也考虑其他可能的编程语言和方向），从最基本的数据可视化入手，基于<a href="https://r-graph-gallery.com/" title="The R Graph Gallery">The R Graph Gallery</a>的经典案例，结合实际生物医学研究场景，为初学者提供详实的绘图代码教程。每个教程将不仅包含完整的代码解析和预览，而且会附带相应的生物学背景说明和使用场景说明，帮助学习者理解代码在研究中的实际应用效果和价值。这种理论与实践相结合的方式，将大大降低生物医学研究人员的学习门槛。<strong>为了构建可持续发展的社区生态，我们计划联合国内外具有创造力、热衷于数据可视化的学习者、开发者和共享者，共同打造一个充满活力的社群。在这个社群中，成员可以自由交流可视化技术与经验，共同探讨与协作。同时，我们也会与<a href="https://github.com/openbiox/weekly" title="Openbiox生信开源社区">Openbiox生信开源社区</a>深度绑定运作，多方位促进知识累积和项目迭代。我们相信，只有通过持续的交流与协作，才能激发更多创新思维，推动项目的长期发展。</strong></p>
-<p><img src="https://weekly-1301043367.cos.ap-shanghai.myqcloud.com/20250312123444988.png" class="img-fluid"></p>
-<p><strong>Bizard项目采用开放和透明的运作机制</strong>，所有代码和文档都将在GitHub平台上（当前项目仓库：<a href="https://github.com/DrRobinLuo/Bizard" class="uri">https://github.com/DrRobinLuo/Bizard</a>）进行维护。所有的教程会统一整理发布于网站<a href="https://genaimed.org/Bizard/" class="uri">https://genaimed.org/Bizard/</a>，并定期通过推文发布更新。每个具体教程都会有对应的GitHub源文档和讨论区，方便社群中代码/文档贡献者和其他人进行深入讨论和协作。为了确保内容的可持续性，我们会为所有图文教程建立完整的markdown文档、分类标记。同时，<strong>项目将以预印本形式每半年到一年更新一次，确保内容的时效性和连续性。另外，我们计划每1-2年以原创性论著的形式发表项目更新，系统且持续地改进</strong>，不断提升该项目对生物医学数据分析可视化领域的贡献。项目成果将共享给项目贡献者，作者署名将按照实际贡献度进行综合排序，以此鼓励社群成员的积极参与（预期第一期作者在30-40个人左右）。我们期待形成一种定期的成员、贡献、成果更新机制，稳定地展示项目的阶段性学术与社会价值，持续推进未来发展。</p>
-<p>目前已通过预印本平台arXiv（<a href="https://arxiv.org/abs/2503.06845" class="uri">https://arxiv.org/abs/2503.06845</a>）发布对项目的整体设计和预想的首期手稿。</p>
-<p><img src="https://weekly-1301043367.cos.ap-shanghai.myqcloud.com/20250312124452997.png" class="img-fluid"></p>
-<p>我们诚挚地邀请对生物医学数据可视化、开源协作、开放科学感兴趣的小伙伴加入和贡献我们的早期项目。无论您是经验丰富的开发者，还是刚刚起步的学习者，我们都希望您可以在这里找到参与集体贡献的路径并有所收获。</p>
-<p>申请联系方式：请将申请说明及简历通过邮箱发送至罗鹏（luopeng@smu.edu.cn）和王诗翔（wangshx@csu.edu.cn）。</p>
-<p>我们希望通过构建这样一个开放、协作、交流、创新的平台，推动R、Python等数据科学编程语言在生物医学研究中的深入应用，为整个领域的发展贡献一份力量。让我们积极参与、携手贡献、持续探讨，共筑梦想，共享未来。</p>
-<hr>
-<p><strong>我们后续将发布一系列推文，推进社区运维和知识库建设，请大家保持关注</strong>！</p>
-<hr>
-<p>当前的Bizard项目组成员列表： 李柯馨、杨泓、石盈、彭玉洁、柴银盈、黄可昕、王春阳、林安琪、李剑峰、曾健明、罗鹏、王诗翔。</p>
-<p>2025年3月</p>
-
-
-
- ]]></description>
-  <category>Bizard</category>
-  <guid>https://shixiangwang.github.io/posts/2025-03-19-bizard/</guid>
   <pubDate>Tue, 18 Mar 2025 16:00:00 GMT</pubDate>
 </item>
 </channel>
