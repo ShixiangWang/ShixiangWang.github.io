@@ -1,0 +1,22 @@
+---
+title: 归乡有感
+author: Shixiang Wang
+date: 2026-04-21
+categories: [poem]
+draft: false
+description: ''
+
+toc: true
+
+format:
+  html:
+    code-fold: false
+    code-overflow: wrap
+    code-tools: false
+---
+
+![](微信图片_2026-04-21_204633_789.jpg)
+
+青山白云间，震感莫能言。
+
+​何能文字述，人复得自然。
