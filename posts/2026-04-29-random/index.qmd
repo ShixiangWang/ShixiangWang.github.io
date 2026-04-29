@@ -1,0 +1,23 @@
+---
+title: random
+author: Shixiang Wang
+date: 2026-04-29
+categories: [journal]
+draft: false
+description: ''
+
+toc: true
+
+format:
+  html:
+    code-fold: false
+    code-overflow: wrap
+    code-tools: false
+---
+
+为什么世界存在？
+
+为什么人类存在？
+
+为什么存在我？
+
