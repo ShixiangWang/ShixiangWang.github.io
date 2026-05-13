@@ -1,0 +1,25 @@
+---
+title: ML 系统的核心原则 ORISI
+author: Shixiang Wang
+date: 2026-05-13
+categories: [machine-learning]
+draft: false
+description: ''
+
+toc: true
+
+format:
+  html:
+    code-fold: false
+    code-overflow: wrap
+    code-tools: false
+---
+
+ORISI:
+
+- 可观察性（Observability）
+- 可再现性（Reproducibility）
+- 互操作性（Interoperability）
+- 可拓展性（Scalability）
+- 可改进性（Improvability）
+
